@@ -46,11 +46,11 @@ if test "$BUILD_DMAKE" != "NO"; then
     fi
 fi
 
-mkdir -p "$SOLARENV/$OUTPATH/bin"
+mkdir -p "$SOLARENV/$OUTPATH_FOR_BUILD/bin"
 if test "$BUILD_DMAKE" != "NO"; then
-    cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
+    cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH_FOR_BUILD/bin" || exit
     echo ""
-    echo "dmake copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+    echo "dmake copied to $SOLARENV/$OUTPATH_FOR_BUILD/bin/dmake$EXEEXT"
 fi
 
 #make sure build.pl is executable 
@@ -60,10 +60,10 @@ chmod +x "$SRC_ROOT/solenv/bin/build_client.pl"
 chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
 chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 
-# fetch or update external tarballs
-if [ ! -d $SRC_ROOT/src ] ; then
-    mkdir $SRC_ROOT/src
-fi
-if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
-	$SRC_ROOT/download $SRC_ROOT/ooo.lst
-fi
+# Local Variables:
+# mode: shell-script
+# tab-width: 4
+# indent-tabs-mode: nil
+# End:
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -1692,20 +1692,21 @@ m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
 if test "$cross_compiling" = "yes"; then
   AC_MSG_CHECKING([for BUILD platform configuration])
   echo
-  export tmpdir=`mktemp -d conf-for-build.XXXXXX`
+  rm -rf CONF-FOR-BUILD Env.Build.sh
+  mkdir CONF-FOR-BUILD
   tar cf - \
 	configure \
 	config.guess \
 	oowintool \
 	solenv/inc/minor.mk \
 	solenv/inc/postset.mk \
+	solenv/inc/langlist.mk \
 	set_soenv.in \
 	bootstrap.1 \
 	post_download.in \
 	ooo.lst.in \
 	Makefile.in \
-	makefile.rc \
-	bin/repo-list.in | (cd $tmpdir && tar xf -)
+	bin/repo-list.in | (cd CONF-FOR-BUILD && tar xf -)
   (
     unset COM GUI GUIBASE OS CPU CPUNAME
     unset CC CXX CFLAGS
@@ -1713,18 +1714,20 @@ if test "$cross_compiling" = "yes"; then
     test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
     test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
-    cd $tmpdir
+    cd CONF-FOR-BUILD
     sub_conf_opts=""
-    test -n $with_ant_home && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
+    test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
+    test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     ./configure \
 	--disable-mozilla \
 	--disable-build-mozilla \
         $sub_conf_opts \
 	2>&1 | sed -e 's/^/    /'
     test -f ./*Env.Set.sh 2>/dev/null || exit
+    cp *Env.Set.sh ../Env.Build.sh
     . ./*Env.Set.sh
-    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET; do
+    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH; do
       VV='$'$V
       VV=`eval "echo $VV"`
       if test -n "$VV"; then
@@ -1732,12 +1735,23 @@ if test "$cross_compiling" = "yes"; then
         echo "$line" >>build-config
       fi
     done
+
+    for V in OUTDIR PATH SOLARINC SOLARLIB WORKDIR; do
+      VV='$'$V
+      VV=`eval "echo $VV"`
+      VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
+      if test -n "$VV"; then
+	line="${V}_FOR_BUILD='$VV'"
+        echo "$line" >>build-config
+      fi
+    done
   )
-  test -f $tmpdir/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see $tmpdir/config.log])
-  eval `cat $tmpdir/build-config`
+  test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
+  test -f Env.Build.sh || AC_MSG_ERROR([A file called Env.Build.sh was supposed to have been copied here, but it isn't found])
+  perl -pi -e 's,/CONF-FOR-BUILD,,g' Env.Build.sh
+  eval `cat CONF-FOR-BUILD/build-config`
   AC_MSG_RESULT([checking for BUILD platform configuration... done])
-  rm -rf $tmpdir
-  unset tmpdir
+  rm -rf CONF-FOR-BUILD
 else
   CC_FOR_BUILD="$CC"
   CXX_FOR_BUILD="$CXX"
@@ -1751,7 +1765,15 @@ AC_SUBST(CPUNAME_FOR_BUILD)
 AC_SUBST(CC_FOR_BUILD)
 AC_SUBST(CXX_FOR_BUILD)
 AC_SUBST(GXX_INCLUDE_PATH_FOR_BUILD)
+AC_SUBST(INPATH_FOR_BUILD)
+AC_SUBST(OUTPATH_FOR_BUILD)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
+
+AC_SUBST(OUTDIR_FOR_BUILD)
+AC_SUBST(PATH_FOR_BUILD)
+AC_SUBST(SOLARINC_FOR_BUILD)
+AC_SUBST(SOLARLIB_FOR_BUILD)
+AC_SUBST(WORKDIR_FOR_BUILD)
 
 if test -e solenv/inc/minor.mk; then
    # Get UPD number from ./solenv/inc/minor.mk

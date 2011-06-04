@@ -807,16 +807,6 @@ $SRC_ROOT = PathFormat($SRC_ROOT);
 CheckPathExist( $SRC_ROOT );
 
 
-#-----------------------------------------------------------------------------------------------------
-# Copy top level makefile from config_office/ to $SRC_ROOT
-#-----------------------------------------------------------------------------------------------------
-if (! -e "makefile.rc")
-{  AddWarning( "set_soenv", "makefile.rc not found in config_office/. Could not copy to SRC_ROOT." );
-}
-else
-{  `cp -f makefile.rc $SRC_ROOT/makefile.mk`;
-}
-
 # 2. Java home directory.
 # JAVA_HOME as argument from autoconf.
 $JAVA_HOME = PathFormat('@JAVA_HOME@') ;
@@ -1736,7 +1726,15 @@ if ( '@JDK@' ne '' )
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
 ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
-ToFile( "PATH",              $PATH,              "e" );
+if ( '@CROSS_COMPILING@' ne '' )
+{
+   # Obviously we shouldn't set PATH to contain host binaries
+   ToFile( "PATH",           "@PATH_FOR_BUILD@", "e" );
+}
+else
+{
+   ToFile( "PATH",           $PATH,              "e" );
+}
 ToFile( "SOLARLIB",          $SOLARLIB,          "e" );
 ToFile( "JAVALIB",           $JAVALIB,           "e" );
 ToFile( "SOLARINC",          $SOLARINC,          "e" );
@@ -1765,7 +1763,13 @@ if ( '@CROSS_COMPILING@' ne '' )
    ToFile( "CC_FOR_BUILD",      "@CC_FOR_BUILD@",   "e" );
    ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
+   ToFile( "INPATH_FOR_BUILD",  "@INPATH_FOR_BUILD@", "e" );
+   ToFile( "OUTPATH_FOR_BUILD", "@OUTPATH_FOR_BUILD@", "e" );
    ToFile( "MACOSX_DEPLOYMENT_TARGET_FOR_BUILD", "@MACOSX_DEPLOYMENT_TARGET_FOR_BUILD@", "e" );
+   ToFile( "OUTDIR_FOR_BUILD",  "@OUTDIR_FOR_BUILD@", "e");
+   ToFile( "SOLARINC_FOR_BUILD", "@SOLARINC_FOR_BUILD@", "e");
+   ToFile( "SOLARLIB_FOR_BUILD", "@SOLARLIB_FOR_BUILD@", "e");
+   ToFile( "WORKDIR_FOR_BUILD", "@WORKDIR_FOR_BUILD@", "e");
    ToFile( "ICU_NATIVE_BUILD_ROOT", "@ICU_NATIVE_BUILD_ROOT@", "e");
 }
 else
@@ -1779,6 +1783,13 @@ else
    ToFile( "CC_FOR_BUILD",      $CC,             "e" );
    ToFile( "CXX_FOR_BUILD",     $CXX,            "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", PathFormat("@GXX_INCLUDE_PATH@"), "e" );
+   ToFile( "INPATH_FOR_BUILD",  $INPATH,         "e" );
+   ToFile( "OUTPATH_FOR_BUILD", $OUTPATH,        "e" );
+   ToFile( "OUTDIR_FOR_BUILD",  $OUTDIR,         "e" );
+   ToFile( "PATH_FOR_BUILD",    $PATH,           "e" );
+   ToFile( "SOLARINC_FOR_BUILD", $SOLARINC,      "e" );
+   ToFile( "SOLARLIB_FOR_BUILD", $SOLARLIB,      "e" );
+   ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
 ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );
 ToFile( "SIZEOF_INT",           "@SIZEOF_INT@",  "e" );
