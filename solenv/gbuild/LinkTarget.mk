@@ -569,7 +569,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
 $(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_GenCxxObject_get_target,$(2)) : CXXFLAGS += $(3) $(gb_COMPILEROPTFLAGS)
+$(call gb_GenCxxObject_get_target,$(2)) : CXXFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -629,7 +629,7 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
 endef
 
 define gb_LinkTarget_add_generated_exception_object
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS))
 endef
 
 define gb_LinkTarget_add_generated_exception_objects
