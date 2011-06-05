@@ -57,7 +57,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
     SfxSingleTabDialog(&pVw->GetViewFrame()->GetWindow(), 0, 0),
     pSh(pVw->GetWrtShellPtr())
 {
-    // TabPage erzeugen
+    // create TabPage
     SetTabPage(SwLineNumberingPage::Create(this, *(SfxItemSet*)0));
 
     GetOKButton()->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
@@ -123,7 +123,7 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     FreeResource();
     SwLineNumberingDlg *pDlg = (SwLineNumberingDlg *)GetParent();
     pSh = pDlg->GetWrtShell();
-    // Zeichenvorlagen
+    // char styles
     ::FillCharStyleListBox(aCharStyleLB, pSh->GetView().GetDocShell());
 }
 
@@ -155,31 +155,31 @@ void SwLineNumberingPage::Reset( const SfxItemSet&  )
         }
     }
 
-    // Format
+    // format
     sal_uInt16 nSelFmt = rInf.GetNumType().GetNumberingType();
 
     aFormatLB.SelectNumberingType(nSelFmt);
 
-    // Position
+    // position
     aPosLB.SelectEntryPos((sal_uInt16)rInf.GetPos());
 
-    // Offset
+    // offset
     sal_uInt16 nOffset = rInf.GetPosFromLeft();
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
     aOffsetMF.SetValue(aOffsetMF.Normalize(nOffset), FUNIT_TWIP);
 
-    // Numerierungsoffset
+    // numbering offset
     aNumIntervalNF.SetValue(rInf.GetCountBy());
 
-    // Teiler
+    // divider
     aDivisorED.SetText(rInf.GetDivider());
 
-    // Teileroffset
+    // divider offset
     aDivIntervalNF.SetValue(rInf.GetDividerCountBy());
 
-    // Zaehlen
+    // count
     aCountEmptyLinesCB.Check(rInf.IsCountBlankLines());
     aCountFrameLinesCB.Check(rInf.IsCountInFlys());
     aRestartEachPageCB.Check(rInf.IsRestartEachPage());
@@ -193,7 +193,7 @@ void SwLineNumberingPage::Reset( const SfxItemSet&  )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Modify
+    Description: modify
  --------------------------------------------------------------------*/
 IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 {
@@ -207,7 +207,7 @@ IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: On/Off
+    Description: On/Off
  --------------------------------------------------------------------*/
 IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
 {
@@ -243,7 +243,7 @@ sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
-    // Zeichenvorlagen
+    // char styles
     String sCharFmtName(aCharStyleLB.GetSelectEntry());
     SwCharFmt *pCharFmt = pSh->FindCharFmtByName(sCharFmtName);
 
@@ -260,27 +260,27 @@ sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
     if (pCharFmt)
         aInf.SetCharFmt(pCharFmt);
 
-    // Format
+    // format
     SvxNumberType aType;
     aType.SetNumberingType(aFormatLB.GetSelectedNumberingType());
     aInf.SetNumType(aType);
 
-    // Position
+    // position
     aInf.SetPos((LineNumberPosition)aPosLB.GetSelectEntryPos());
 
-    // Offset
+    // offset
     aInf.SetPosFromLeft((sal_uInt16)aOffsetMF.Denormalize(aOffsetMF.GetValue(FUNIT_TWIP)));
 
-    // Numerierungsoffset
+    // numbering offset
     aInf.SetCountBy((sal_uInt16)aNumIntervalNF.GetValue());
 
-    // Teiler
+    // divider
     aInf.SetDivider(aDivisorED.GetText());
 
-    // Teileroffset
+    // divider offset
     aInf.SetDividerCountBy((sal_uInt16)aDivIntervalNF.GetValue());
 
-    // Zaehlen
+    // count
     aInf.SetCountBlankLines(aCountEmptyLinesCB.IsChecked());
     aInf.SetCountInFlys(aCountFrameLinesCB.IsChecked());
     aInf.SetRestartEachPage(aRestartEachPageCB.IsChecked());

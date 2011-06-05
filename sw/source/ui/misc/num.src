@@ -36,7 +36,7 @@
 
 /**************************************************************************/
 /*                                                                        */
-/*  TabPage Positionen                                                    */
+/*  TabPage positions                                                 */
 /*                                                                        */
 /**************************************************************************/
 TabPage TP_NUM_POSITION
@@ -296,7 +296,7 @@ TabPage TP_NUM_POSITION
 
 /**************************************************************************/
 /*                                                                        */
-/*  Dialog fuer Test der Svx-Implementation                               */
+/*  dialog for Svx-implementation's test                                  */
 /*                                                                        */
 /**************************************************************************/
 TabDialog DLG_SVXTEST_NUM_BULLET

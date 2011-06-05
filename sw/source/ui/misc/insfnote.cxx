@@ -56,7 +56,7 @@
 static sal_Bool bFootnote = sal_True;
 
 /*------------------------------------------------------------------------
- Beschreibung:  Einfuegen der Fussnote durch OK
+ Description:   inserting a footnote with OK
 ------------------------------------------------------------------------*/
 
 void SwInsFootNoteDlg::Apply()
@@ -170,7 +170,7 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
 {
     Apply();
 
-    // Hier zur naechsten Fuss/Endnote wandern
+    // go to the next foot/endnote here
     rSh.ResetSelect(0, sal_False);
     if (pBtn == &aNextBT)
         rSh.GotoNextFtnAnchor();

@@ -95,8 +95,7 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Fuer Tabellenselektion sel. Zeilen und Spalten
-                    feststellen
+     Description: determine lines and columns for table selection
  --------------------------------------------------------------------*/
 sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
@@ -106,7 +105,7 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 
     _FndBox aFndBox( 0, 0 );
 
-    // suche alle Boxen / Lines
+    // look for all boxes / lines
     {
         SwSelBoxes aSelBoxes;
         ::GetTblSel( rSh, aSelBoxes );
@@ -123,7 +122,7 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Init-Liste
+     Description: init list
  --------------------------------------------------------------------*/
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
@@ -212,7 +211,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
         aColLbl.SetText(aColTxt);
     }
 
-    // Initialisieren
+    // initialise
     Link aLk = LINK(this,SwSortDlg, CheckHdl);
     aKeyCB1.SetClickHdl( aLk );
     aKeyCB2.SetClickHdl( aLk );
@@ -313,12 +312,11 @@ sal_Unicode SwSortDlg::GetDelimChar() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: An die Core weiterreichen
+    Description: pass on to the Core
  --------------------------------------------------------------------*/
 void SwSortDlg::Apply()
 {
-    // Alte Einstellung speichern
-    //
+    // save all settings
     bCheck1 = aKeyCB1.IsChecked();
     bCheck2 = aKeyCB2.IsChecked();
     bCheck3 = aKeyCB3.IsChecked();

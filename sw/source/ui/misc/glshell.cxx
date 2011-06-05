@@ -52,7 +52,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
-#include <initui.hxx>                   // fuer ::GetGlossaries()
+#include <initui.hxx>                   // for ::GetGlossaries()
 #include <cmdid.h>
 #include <swerror.h>
 #include <misc.hrc>
@@ -216,8 +216,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
     SwTextBlocks* pGroup = GetGroupDoc( rGroup );
     if( pGroup && pGroup->GetCount() )
     {
-        // erfrage welche View registriert ist. Im WebWriter gibts es keine
-        // normale View
+        // query which view is registered. In WebWriter there is no normal view
         sal_uInt16 nViewId = 0 != &SwView::Factory() ? 2 : 6;
         String sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
@@ -240,7 +239,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
             pDocSh->SetGroupName( rGroup );
         }
 
-        // Dokumenttitel setzen
+        // set document title
         SfxViewFrame* pFrame = bShow ? SfxViewFrame::LoadDocument( *xDocSh, nViewId ) : SfxViewFrame::LoadHiddenDocument( *xDocSh, nViewId );
         String aDocTitle(SW_RES( STR_GLOSSARY ));
         aDocTitle += ' ';
@@ -253,8 +252,8 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         xDocSh->GetWrtShell()->InsertGlossary( *pGroup, rShortName );
         if( !xDocSh->GetDoc()->getPrinter( false ) )
         {
-            // wir erzeugen einen default SfxPrinter.
-            // Das ItemSet wird vom Sfx geloescht!
+            // we create a default SfxPrinter.
+            // ItemSet is deleted by Sfx!
             SfxItemSet *pSet = new SfxItemSet( xDocSh->GetDoc()->GetAttrPool(),
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
@@ -262,7 +261,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
                         0 );
             SfxPrinter* pPrinter = new SfxPrinter( pSet );
 
-            // und haengen ihn ans Dokument.
+            // and append it to the document.
             xDocSh->GetDoc()->setPrinter( pPrinter, true, true );
         }
 

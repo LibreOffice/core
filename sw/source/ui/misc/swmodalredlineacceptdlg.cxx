@@ -76,14 +76,14 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     pImplDlg = new SwRedlineAcceptDlg(this, sal_True);
 
     pImplDlg->Initialize(GetExtraData());
-    pImplDlg->Activate();   // Zur Initialisierung der Daten
+    pImplDlg->Activate();   // for data's initialisation
 
     FreeResource();
 }
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    AcceptAll(sal_False);   // Alles uebriggebliebene ablehnen
+    AcceptAll(sal_False);   // refuse everything remaining
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
@@ -106,7 +106,7 @@ void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
     {
-        pFilterTP->CheckDate(sal_False);    // Alle Filter abschalten
+        pFilterTP->CheckDate(sal_False);    // turn off all filters
         pFilterTP->CheckAuthor(sal_False);
         pFilterTP->CheckRange(sal_False);
         pFilterTP->CheckAction(sal_False);

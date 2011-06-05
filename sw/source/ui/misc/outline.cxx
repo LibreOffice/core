@@ -60,7 +60,7 @@
 #include <viewopt.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <helpid.h>
-#include <globals.hrc>      // fuer Vorlagenname 'keins'
+#include <globals.hrc>      // for template name 'none'
 #include <misc.hrc>
 #include <outline.hrc>
 #include <paratr.hxx>
@@ -100,7 +100,7 @@ public:
 };
 
 /*------------------------------------------------------------------------
- Beschreibung:  selektierten Eintrag merken
+ Description:  remember selected entry
 ------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 {
@@ -111,9 +111,9 @@ IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 IMPL_LINK_INLINE_END( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Setzen der vom Benutzer vergebenen Namen
- Parameter:     Liste der vom Benutzer vergebenen Namen;
-                nicht vom Benutzer benannte Positionen sind 0.
+ Description:  set user defined names
+ Parameter:    list of user defined names;
+               unknown positions for the user are 0.
 ------------------------------------------------------------------------*/
 void SwNumNamesDlg::SetUserNames(const String *pList[])
 {
@@ -133,7 +133,7 @@ void SwNumNamesDlg::SetUserNames(const String *pList[])
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  OK-Button freischalten, wenn Text im Edit steht.
+ Description:  unlock OK-Button when text is in Edit
 ------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 {
@@ -143,7 +143,7 @@ IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 
 /*------------------------------------------------------------------------
- Beschreibung:  DoubleClickHdl
+ Description:  DoubleClickHdl
 ------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwNumNamesDlg, DoubleClickHdl, ListBox *, EMPTYARG )
 {
@@ -183,7 +183,7 @@ sal_uInt16 SwOutlineTabDialog::nNumLevel = 1;
 SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &rSh) :
-                                    //der UserString wird danach richtig gesetzt
+                                    // the UserString is set correctly afterwards
         SfxTabDialog(pParent, SW_RES(DLG_TAB_OUTLINE), pSwItemSet, sal_False, &aEmptyStr),
         aNullStr(C2S("____")),
         aFormMenu(SW_RES(MN_FORM)),
@@ -211,14 +211,14 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
 
     for( i = 0; i < MAXLEVEL; ++i )
     {
-        // wurde die Vorlage noch nicht angelegt, dann ist sie noch an dieserPosition
+        // if the style wasn't created yet, it's still at this position
         if( !rWrtSh.GetParaStyle( sHeadline =
             SwStyleNameMapper::GetUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                           sHeadline )) )
             aCollNames[i] = sHeadline;
     }
 
-    // Erfragen der Gliederungsebenen der Textvorlagen
+    // query the text templates' outlining levels
     const sal_uInt16 nCount = rWrtSh.GetTxtFmtCollCount();
     for(i = 0; i < nCount; ++i )
     {
@@ -265,7 +265,7 @@ IMPL_LINK( SwOutlineTabDialog, CancelHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
 {
-    //PopupMenu auffuellen
+    // fill PopupMenu
     for( sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i )
     {
         const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);
@@ -352,9 +352,8 @@ sal_uInt16  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
 short SwOutlineTabDialog::Ok()
 {
     SfxTabDialog::Ok();
-    // bei allen erzeugten Vorlagen die Ebenen setzen, muss
-    // geschehen, um evtl. aufgehobene Zuordnungen
-    // auch wieder zu loeschen
+    // set levels for all created templates; has to be done in order to
+    // delete possibly cancelled assignments again.
 
     // #130443#
     // encapsulate changes into a action to avoid effects on the current cursor
@@ -482,8 +481,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
 
 void    SwOutlineSettingsTabPage::Update()
 {
-        // falls eine Vorlage fuer diese Ebene bereits selektiert wurde,
-        // diese in der ListBox auswaehlean
+        // if a template was already selected for this level, select it in the ListBox
     aCollBox.Enable(USHRT_MAX != nActLevel);
     if(USHRT_MAX == nActLevel)
     {
@@ -637,7 +635,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     sal_uInt8 i;
 
     const String aCollName(pBox->GetSelectEntry());
-    //0xFFFF darf hier nicht sein (disable)
+    //0xFFFF not allowed here (disable)
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
     String sOldName( pCollNames[nTmpLevel] );
 
@@ -649,7 +647,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     else
     {
         pCollNames[nTmpLevel] = aCollName;
-                // wird die Vorlage bereits verwendet ?
+                // template already in use?
         for( i = 0; i < MAXLEVEL; ++i)
             if(i != nTmpLevel && pCollNames[i] == aCollName )
                 pCollNames[i] = aEmptyStr;
@@ -789,18 +787,18 @@ SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
 void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {
     pSh = pShell;
-    // Erfragen der NumRules dieses Dokumentes
+    // query this document's NumRules
     pNumRule = ((SwOutlineTabDialog*)GetTabDialog())->GetNumRule();
     pCollNames = ((SwOutlineTabDialog*)GetTabDialog())->GetCollNames();
 
     aPreviewWIN.SetNumRule(pNumRule);
     aPreviewWIN.SetOutlineNames(pCollNames);
-    // Startwert setzen - nActLevel muss hier 1 sein
+    // set start value - nActLevel must be 1 here
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
     const SwNumFmt& rNumFmt = pNumRule->Get( nTmpLevel );
     aStartEdit.SetValue( rNumFmt.GetStart() );
 
-    // Poolformate fuer Ueberschriften anlegen
+    // create pool formats for headlines
     String sStr;
     sal_uInt16 i;
     for( i = 0; i < MAXLEVEL; ++i )
@@ -813,7 +811,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     sStr += String::CreateFromInt32(MAXLEVEL);
     aLevelLB.InsertEntry( sStr );
 
-    // Erfragen der Gliederungsebenen der Textvorlagen
+    // query the texttemplates' outlining levels
     const sal_uInt16 nCount = pSh->GetTxtFmtCollCount();
     for( i = 0; i < nCount; ++i )
     {
@@ -835,11 +833,11 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     }
     aLevelLB.SelectEntryPos(nTmp-1);//nTmp);//#outline level,zhaojianwei
 
-    // Zeichenvorlagen sammeln
+    // collect char styles
     aCharFmtLB.Clear();
     aCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
 
-    // Zeichenvorlagen
+    // char styles
     ::FillCharStyleListBox(aCharFmtLB,
                         pSh->GetView().GetDocShell());
     Update();
@@ -929,7 +927,7 @@ sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, sal_uInt1
 }
 
 /*--------------------------------------------------
-    Vorschau der Numerierung painten
+    paint numbering's preview
 --------------------------------------------------*/
 void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
@@ -957,9 +955,9 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 nWidthRelation = nWidthRelation / 4;
         }
         else
-            nWidthRelation = 30; // Kapiteldialog
+            nWidthRelation = 30; // chapter dialog
 
-        //Hoehe pro Ebene
+        // height per level
         sal_uInt16 nXStep = sal_uInt16(aSize.Width() / (3 * MAXLEVEL));
         if(MAXLEVEL < 10)
             nXStep /= 2;
@@ -986,7 +984,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
             {
                 nStart++;
             }
-            if(nStart) // damit moeglichs Vorgaenger und Nachfolger gezeigt werden
+            if(nStart) // so that possible predecessors and successors are showed
                 nStart--;
 
             SwNumberTree::tNumberVector aNumVector;

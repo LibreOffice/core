@@ -68,7 +68,7 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->SetDoubleClickHdl(LINK(this, SwInsertGrfRulerDlg, DoubleClickHdl));
     pExampleVS->GrabFocus();
 
-    // Grafiknamen ermitteln
+    // determine graphic name
     GalleryExplorer::BeginLocking(GALLERY_THEME_RULERS);
     GalleryExplorer::FillObjList( GALLERY_THEME_RULERS, aGrfNames );
     pExampleVS->SetHelpId(HID_VS_RULER);
@@ -126,7 +126,7 @@ void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
-    // Itemzaehlung beginnt bei 1, und die 1. ist die einfache Linie
+    // item count starts with 1 and the 1st is the simple line
     if(nItemId > 1)
     {
         Graphic aGraphic;
@@ -170,7 +170,7 @@ void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        // Text fuer einfache Linie painten
+        // paint text for simple line
         Font aOldFont = pDev->GetFont();
         Font aFont = pDev->GetFont();
         Size aSize = aFont.GetSize();

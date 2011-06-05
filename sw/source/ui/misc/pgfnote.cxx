@@ -67,9 +67,8 @@ static sal_uInt16 aPageRg[] = {
 };
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler fuer umschalten zwischen den unterschiedlichen
-                Arten, wie die Hoehe des Fussnotenbereiches angegeben
-                werden kann.
+ Description:  handler to switch between the different possibilities
+               how the footnote region's height can be set.
 ------------------------------------------------------------------------*/
 IMPL_LINK_INLINE_START( SwFootNotePage, HeightPage, Button *, EMPTYARG )
 {
@@ -88,7 +87,7 @@ IMPL_LINK_INLINE_START( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler Grenzwerte
+ Description:   handler limit values
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
 {
@@ -178,8 +177,7 @@ SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet &rSet)
 
 void SwFootNotePage::Reset(const SfxItemSet &rSet)
 {
-    // Falls noch kein Bsp vorhanden Init hier sonst im Activate
-    //
+    // if no example exists, otherwise Init here in Activate
     SwPageFtnInfo* pDefFtnInfo = 0;
     const SwPageFtnInfo* pFtnInfo;
     const SfxPoolItem* pItem = SfxTabPage::GetItem(rSet, FN_PARAM_FTN_INFO);
@@ -189,12 +187,12 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     }
     else
     {
-        // wenn "Standard" betaetigt wird, wird das Fussnotenitem geloescht,
-        // deswegen muss hier eine Fussnotenstruktur erzeugt werden
+        // when "standard" is being activated the footnote item is deleted,
+        // that's why a footnote structure has to be created here
         pDefFtnInfo = new SwPageFtnInfo();
         pFtnInfo = pDefFtnInfo;
     }
-        // Hoehe Fussnotenbereich
+        // footnote area's height
     SwTwips lHeight = pFtnInfo->GetHeight();
     if(lHeight)
     {
@@ -270,15 +268,15 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     aLineTypeBox.SetColor( pFtnInfo->GetLineColor() );
 
 
-    // Position
+    // position
     aLinePosBox.SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );
 
-        // Breite
+        // width
     Fraction aTmp( 100, 1 );
     aTmp *= pFtnInfo->GetWidth();
     aLineLengthEdit.SetValue( static_cast<long>(aTmp) );
 
-        // Abstand Fussnotenbereich
+        // gap footnote area
     aDistEdit.SetValue(aDistEdit.Normalize(pFtnInfo->GetTopDist()),FUNIT_TWIP);
     aLineDistEdit.SetValue(
         aLineDistEdit.Normalize(pFtnInfo->GetBottomDist()), FUNIT_TWIP);
@@ -287,23 +285,23 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Attribute in den Set stopfen bei OK
+    Description:    stuff attributes into the set, when OK
  --------------------------------------------------------------------*/
 sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 {
     SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));
 
-    // Das ist das Original
+    // that's the original
     SwPageFtnInfo &rFtnInfo = aItem.GetPageFtnInfo();
 
-        // Hoehe Fussnotenbereich
+        // footnote area's height
     if(aMaxHeightBtn.IsChecked())
         rFtnInfo.SetHeight( static_cast< SwTwips >(
                 aMaxHeightEdit.Denormalize(aMaxHeightEdit.GetValue(FUNIT_TWIP))));
     else
         rFtnInfo.SetHeight(0);
 
-        // Abstand Fussnotenbereich
+        // gap footnote area
     rFtnInfo.SetTopDist(  static_cast< SwTwips >(
             aDistEdit.Denormalize(aDistEdit.GetValue(FUNIT_TWIP))));
     rFtnInfo.SetBottomDist(  static_cast< SwTwips >(
@@ -380,7 +378,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     lMaxHeight *= 8;
     lMaxHeight /= 10;
 
-    // Maximalwerte setzen
+    // set maximum values
     HeightModify(0);
 }
 

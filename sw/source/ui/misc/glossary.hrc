@@ -26,7 +26,7 @@
  ************************************************************************/
 
 
-// Box Textbausteine
+// Box text blocks
 #define FT_SHORTNAME        1
 #define ED_SHORTNAME        2
 #define FT_NAME             3
@@ -63,7 +63,7 @@
 #define FN_GL_REPLACE_TEXT  78
 #define WIN_EXAMPLE_DUMMY   79
 
-// Box Bibliothek Textbausteine
+// Box library text blocks
 #define FL_EDIT                         1
 #define FL_BIB                          2
 #define ED_BIB              3
@@ -73,10 +73,10 @@
 
 #define BT_OK               100
 
-// beide
+// both
 #define LB_BIB              80
 
-// Dialog Namensaenderung
+// Dialog name changing
 #define   FT_ON              1
 #define   FT_OS              2
 #define   FT_NN              3

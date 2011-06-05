@@ -166,7 +166,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     aRelativeCB.SetClickHdl(LINK(this, SwNumPositionTabPage, RelativeHdl));
     aStandardPB.SetClickHdl(LINK(this, SwNumPositionTabPage, StandardHdl));
 
-    // Ebenen einfuegen
+    // insert levels
     for(sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         aLevelLB.InsertEntry(String::CreateFromInt32(i));
     String sEntry(String::CreateFromAscii("1 - "));
@@ -294,7 +294,7 @@ void SwNumPositionTabPage::InitControls()
 
     if(bSameAdjust)
     {
-        sal_uInt16 nPos = 1; // zentriert
+        sal_uInt16 nPos = 1; // centered
         if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_LEFT)
             nPos = 0;
         else if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
@@ -685,7 +685,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
             }
             else if(pFld == &aIndentMF)
             {
-                //jetzt muss mit dem FirstLineOffset auch der AbsLSpace veraendert werden
+                // now AbsLSpace also has to be modified by FirstLineOffset
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 long nAbsLSpace = aNumFmt.GetAbsLSpace();
                 aNumFmt.SetAbsLSpace(sal_uInt16(nAbsLSpace + nDiff));
@@ -957,7 +957,7 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 
 void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
 {
-    //Namen der Vorlagen und Metric setzen
+    // set styles' names and metric
     String sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
@@ -985,7 +985,7 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            // Zeichenvorlagen sammeln
+            // collect char styles
             ListBox rCharFmtLB(this);
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
