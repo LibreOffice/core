@@ -34,12 +34,12 @@
 #include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"
 #include <svx/fmmodel.hxx>
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "galobj.hxx"
 
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -203,21 +203,15 @@ uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
     return aTypes;
 }
 
-// ------------------------------------------------------------------------------
+namespace
+{
+    class theGalleryItemImplementationId : public rtl::Static< UnoTunnelIdInit, theGalleryItemImplementationId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
     throw(uno::RuntimeException)
 {
-    const SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGalleryItemImplementationId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------

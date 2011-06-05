@@ -38,7 +38,6 @@
 #include <sot/clsids.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <sfx2/objsh.hxx>
 #include <svx/svdpool.hxx>

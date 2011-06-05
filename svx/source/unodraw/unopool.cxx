@@ -32,7 +32,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 
 #include <comphelper/propertysetinfo.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "svx/unopool.hxx"
@@ -387,18 +387,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSvxUnoDrawPoolImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoDrawPoolImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawPool::getImplementationId()
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoDrawPoolImplementationId::get().getSeq();
 }
 
 // XServiceInfo

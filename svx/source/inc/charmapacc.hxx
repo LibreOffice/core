@@ -30,7 +30,6 @@
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include <vcl/image.hxx>
-#include <rtl/uuid.h>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 

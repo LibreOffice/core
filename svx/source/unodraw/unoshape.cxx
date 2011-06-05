@@ -43,12 +43,12 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/extract.hxx>
 #include "svx/shapepropertynotifier.hxx"
+#include <comphelper/extract.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <toolkit/unohlp.hxx>
-#include <comphelper/serviceinfohelper.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
@@ -106,7 +106,6 @@
 #include "svx/extrud3d.hxx"
 #include "unopolyhelper.hxx"
 
-#include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
 
 using ::rtl::OUString;
@@ -341,21 +340,14 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType ) throw (un
     return SvxShape_UnoImplHelper::queryAggregation(rType);
 }
 
-//----------------------------------------------------------------------
+namespace
+{
+    class theSvxShapeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxShapeUnoTunnelId > {};
+}
+
 const ::com::sun::star::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() throw()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvxShapeUnoTunnelId::get().getSeq();
 }
 
 //----------------------------------------------------------------------

@@ -38,6 +38,7 @@
 #include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/implbase2.hxx>
@@ -302,15 +303,14 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  ) throw(uno::
     return maTypeSequence;
 }
 
+namespace
+{
+    class theSvxUnoDrawingModelImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoDrawingModelImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawingModel::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoDrawingModelImplementationId::get().getSeq();
 }
 
 void SAL_CALL SvxUnoDrawingModel::lockControllers(  )

@@ -59,6 +59,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18npool/lang.h>
@@ -4691,21 +4692,14 @@ sal_Int64 SAL_CALL FmXFilterCell::getSomething( const Sequence< sal_Int8 >& _rId
     return nReturn;
 }
 
-//------------------------------------------------------------------------------
+namespace
+{
+    class theFmXFilterCellUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theFmXFilterCellUnoTunnelId > {};
+}
+
 const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theFmXFilterCellUnoTunnelId::get().getSeq();
 }
 
 //------------------------------------------------------------------------------

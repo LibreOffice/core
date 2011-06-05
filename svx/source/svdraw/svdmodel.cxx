@@ -31,7 +31,6 @@
 
 #include <svx/svdmodel.hxx>
 
-#include <rtl/uuid.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
@@ -83,6 +82,7 @@
 #include "editeng/forbiddencharacterstable.hxx"
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // #90477#
 #include <tools/tenccvt.hxx>
@@ -2146,20 +2146,14 @@ void SdrModel::SetAllowShapePropertyChangeListener( bool bAllow )
     }
 }
 
+namespace
+{
+    class theSdrModelUnoTunnelImplementationId : public rtl::Static< UnoTunnelIdInit, theSdrModelUnoTunnelImplementationId > {};
+}
+
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSdrModelUnoTunnelImplementationId::get().getSeq();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

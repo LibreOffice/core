@@ -42,7 +42,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 

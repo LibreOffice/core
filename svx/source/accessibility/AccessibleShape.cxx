@@ -32,7 +32,6 @@
 #include "svx/DescriptionGenerator.hxx"
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <rtl/uuid.h>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -59,6 +58,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/svdview.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 
 using namespace ::com::sun::star;
@@ -907,30 +907,18 @@ void SAL_CALL
     }
 }
 
-
-
-
 //=====  lang::XUnoTunnel  ================================================
+
+namespace
+{
+    class theAccessibleShapeImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleShapeImplementationId > {};
+}
 
 const uno::Sequence< sal_Int8 >&
     AccessibleShape::getUnoTunnelImplementationId()
     throw()
 {
-    static uno::Sequence< sal_Int8 >* pSeq = 0;
-
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*) aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-
-    return( *pSeq );
+    return theAccessibleShapeImplementationId::get().getSeq();
 }
 
 //------------------------------------------------------------------------------

@@ -61,6 +61,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1182,21 +1183,14 @@ FmXGridPeer::~FmXGridPeer()
     delete m_pGridListener;
 }
 
-//------------------------------------------------------------------------------
+namespace
+{
+    class theFmXGridPeerImplementationId : public rtl::Static< UnoTunnelIdInit, theFmXGridPeerImplementationId > {};
+}
+
 const Sequence< sal_Int8 >& FmXGridPeer::getUnoTunnelImplementationId() throw()
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theFmXGridPeerImplementationId::get().getSeq();
 }
 
 //------------------------------------------------------------------------------

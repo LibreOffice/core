@@ -49,7 +49,6 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <svx/svdpool.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <tools/urlobj.hxx>
 
@@ -72,6 +71,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+
+#include <comphelper/servicehelper.hxx>
 
 using ::rtl::OUString;
 using namespace ::osl;
@@ -152,16 +153,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxShapeGroup::getTypes()
     return SvxShape::getTypes();
 }
 
+namespace
+{
+    class theSvxShapeGroupImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxShapeGroupImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxShapeGroupImplementationId::get().getSeq();
 }
 
 // ::com::sun::star::drawing::XShape
@@ -426,16 +426,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
     return SvxShape::getTypes();
 }
 
+namespace
+{
+    class theSvxShapeConnectorImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxShapeConnectorImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxShapeConnectorImplementationId::get().getSeq();
 }
 
 // ::com::sun::star::drawing::XShape
@@ -594,16 +593,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
     return SvxShape::getTypes();
 }
 
+namespace
+{
+    class theSvxShapeControlImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxShapeControlImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxShapeControlImplementationId::get().getSeq();
 }
 
 // ::com::sun::star::drawing::XShape
@@ -1939,16 +1937,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
     return SvxShapeText::getTypes();
 }
 
+namespace
+{
+    class theSvxCustomShapeImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxCustomShapeImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxCustomShapeImplementationId::get().getSeq();
 }
 
 // ::com::sun::star::drawing::XShape

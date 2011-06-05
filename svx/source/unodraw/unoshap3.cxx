@@ -37,9 +37,9 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <svx/svdpool.hxx>
 #include <svx/unoshape.hxx>
@@ -135,16 +135,15 @@ uno::Sequence< uno::Type > SAL_CALL Svx3DSceneObject::getTypes()
     return SvxShape::getTypes();
 }
 
+namespace
+{
+    class theSvx3DSceneObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSvx3DSceneObjectImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvx3DSceneObjectImplementationId::get().getSeq();
 }
 
 //----------------------------------------------------------------------

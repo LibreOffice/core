@@ -32,10 +32,10 @@
 #include "unogalthemeprovider.hxx"
 #include "unogaltheme.hxx"
 #include "svx/gallery1.hxx"
-#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -155,21 +155,15 @@ uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
     return aTypes;
 }
 
-// ------------------------------------------------------------------------------
+namespace
+{
+    class theGalleryThemeProviderImplementationId : public rtl::Static< UnoTunnelIdInit, theGalleryThemeProviderImplementationId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
     throw(uno::RuntimeException)
 {
-    const SolarMutexGuard aGuard;
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGalleryThemeProviderImplementationId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------
