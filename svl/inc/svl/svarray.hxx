@@ -140,12 +140,12 @@ void Insert( const nm *pI, sal_uInt16 nP,\
 #define _SVVARARR_IMPL_GET_OP_INLINE( nm, ArrElem )\
 ArrElem& nm::operator[](sal_uInt16 nP) const\
 {\
-    DBG_ASSERT( pData && nP < nA,"Op[]");\
+    OSL_ENSURE( pData && nP < nA,"Op[]");\
     return *(pData+nP);\
 }\
 void nm::Insert( const nm *pI, sal_uInt16 nP, sal_uInt16 nStt, sal_uInt16 nE)\
 {\
-    DBG_ASSERT(nP<=nA,"Ins,Ar[Start.End]");\
+    OSL_ENSURE(nP<=nA,"Ins,Ar[Start.End]");\
     if( USHRT_MAX == nE ) \
         nE = pI->nA; \
     if( nStt < nE ) \
@@ -219,7 +219,7 @@ nm::nm( sal_uInt16 nInit, sal_uInt8 )\
     if( nInit )\
     {\
         pData = (AE*)(rtl_allocateMemory(sizeof(AE) * nInit));\
-        DBG_ASSERT( pData, "CTOR, allocate");\
+        OSL_ENSURE( pData, "CTOR, allocate");\
     }\
 }\
 \
@@ -236,7 +236,7 @@ void nm::_resize (size_t n)\
 \
 void nm::Insert( const AERef aE, sal_uInt16 nP )\
 {\
-    DBG_ASSERT(nP <= nA && nA < USHRT_MAX, "Ins 1");\
+    OSL_ENSURE(nP <= nA && nA < USHRT_MAX, "Ins 1");\
     if (nFree < 1)\
         _resize (nA + ((nA > 1) ? nA : 1));\
     if( pData && nP < nA )\
@@ -247,7 +247,7 @@ void nm::Insert( const AERef aE, sal_uInt16 nP )\
 \
 void nm::Insert( const AE* pE, sal_uInt16 nL, sal_uInt16 nP )\
 {\
-    DBG_ASSERT(nP<=nA && ((long)nA+nL)<USHRT_MAX,"Ins n");\
+    OSL_ENSURE(nP<=nA && ((long)nA+nL)<USHRT_MAX,"Ins n");\
     if (nFree < nL)\
         _resize (nA + ((nA > nL) ? nA : nL));\
     if( pData && nP < nA )\
@@ -290,7 +290,7 @@ void nm::Remove( sal_uInt16 nP, sal_uInt16 nL )\
 {\
     if( !nL )\
         return;\
-    DBG_ASSERT( nP < nA && nP + nL <= nA,"Del");\
+    OSL_ENSURE( nP < nA && nP + nL <= nA,"Del");\
     if( pData && nP+1 < nA )\
         memmove( pData+nP, pData+nP+nL, (nA-nP-nL) * sizeof( AE ));\
     nA = nA - nL; nFree = nFree + nL;\
@@ -441,7 +441,7 @@ SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, vis)
 void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 { \
     if( nL ) {\
-        DBG_ASSERT( nP < nA && nP + nL <= nA,"Del");\
+        OSL_ENSURE( nP < nA && nP + nL <= nA,"Del");\
         for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
             delete *((AE*)pData+n); \
         Base::Remove( nP, nL ); \
@@ -718,7 +718,7 @@ _SV_DECL_VARARR_SORT(nm, AE, IS, GS, vis)
 _SV_IMPL_SORTAR_ALG( nm,AE )\
     void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
         if( nL ) {\
-            DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
+            OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
             for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
                 delete *((AE*)pData+n); \
             SvPtrarr::Remove( nP, nL ); \
@@ -730,7 +730,7 @@ _SV_SEEK_PTR( nm, AE )
 _SV_IMPL_SORTAR_ALG( nm,AE )\
     void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
         if( nL ) {\
-            DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
+            OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
             for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
                 delete *((AE*)pData+n); \
             SvPtrarr::Remove( nP, nL ); \
