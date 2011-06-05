@@ -29,9 +29,11 @@ $(eval $(call gb_Module_add_targets,sm,\
     Package_uiconfig \
 ))
 
+ifneq ($(OS),OPENBSD)
 $(eval $(call gb_Module_add_check_targets,sm,\
     CppunitTest_starmath_qa_cppunit \
 ))
+endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sm,\
     JunitTest_starmath_unoapi \
