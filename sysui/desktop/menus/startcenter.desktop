@@ -9,3 +9,40 @@ MimeType=application/vnd.openofficeorg.extension;
 Name=%PRODUCTNAME 
 GenericName=Office 
 Comment=The office productivity suite compatible to the open and standardized ODF document format. Supported by The Document Foundation.
+
+X-Ayatana-Desktop-Shortcuts=Writer;Calc;Impress;Draw;Base;Math;Global
+
+[Writer Shortcut Group]
+Name=%PRODUCTNAME Writer
+Exec=${UNIXBASISROOTNAME} --writer %U
+TargetEnvironment=Unity
+
+[Calc Shortcut Group]
+Name=%PRODUCTNAME Calc
+Exec=${UNIXBASISROOTNAME} --calc %U
+TargetEnvironment=Unity
+
+[Impress Shortcut Group]
+Name=%PRODUCTNAME Impress
+Exec=${UNIXBASISROOTNAME} --impress %U
+TargetEnvironment=Unity
+
+[Draw Shortcut Group]
+Name=%PRODUCTNAME Draw
+Exec=${UNIXBASISROOTNAME} --draw %U
+TargetEnvironment=Unity
+
+[Base Shortcut Group]
+Name=%PRODUCTNAME Base
+Exec=${UNIXBASISROOTNAME} --math %U
+TargetEnvironment=Unity
+
+[Math Shortcut Group]
+Name=%PRODUCTNAME Math
+Exec=${UNIXBASISROOTNAME} --math %U
+TargetEnvironment=Unity
+
+[Global Shortcut Group]
+Name=%PRODUCTNAME Global
+Exec=${UNIXBASISROOTNAME} --global %U
+TargetEnvironment=Unity
