@@ -25,6 +25,7 @@ cross-build-toolset:
 	(cd udkapi && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
 	(cd offapi && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
 	(cd oovbaapi && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
+	(cd codemaker && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
 	(cd ridljar && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl)
 endif
 
