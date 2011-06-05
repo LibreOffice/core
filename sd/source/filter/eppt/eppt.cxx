@@ -456,8 +456,6 @@ PPTWriter::~PPTWriter()
     while( aStyleSheetIter < maStyleSheetList.end() )
         delete *aStyleSheetIter++;
 
-    for ( pPtr = maSlideNameList.First(); pPtr; pPtr = maSlideNameList.Next() )
-        delete (::rtl::OUString*)pPtr;
     for ( pPtr = maHyperlink.First(); pPtr; pPtr = maHyperlink.Next() )
         delete (EPPTHyperlink*)pPtr;
     for ( pPtr = maExOleObj.First(); pPtr; pPtr = maExOleObj.Next() )
@@ -751,13 +749,9 @@ sal_Bool PPTWriter::ImplCreateDocument()
             aXName( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
 
         if ( aXName.is() )
-        {
-            ::rtl::OUString aStr = aXName->getName();
-            ::rtl::OUString *pUStr = new ::rtl::OUString( aStr );
-            maSlideNameList.Insert( pUStr, LIST_APPEND );
-        }
+            maSlideNameList.push_back( aXName->getName() );
         else
-            maSlideNameList.Insert( new ::rtl::OUString(), LIST_APPEND );
+            maSlideNameList.push_back( ::rtl::OUString() );
     }
     mpPptEscherEx->CloseContainer();    // EPP_SlideListWithText
 
@@ -814,20 +808,16 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) )
                     {
                         ::rtl::OUString aSlideName( *(::rtl::OUString*)mAny.getValue() );
-                        ::rtl::OUString* pStr;
-                        for ( pStr = (::rtl::OUString*)maSlideNameList.First(); pStr;
-                                    pStr = (::rtl::OUString*)maSlideNameList.Next(), nStartSlide++ )
+
+                        std::vector<rtl::OUString>::const_iterator pIter = std::find(
+                                    maSlideNameList.begin(),maSlideNameList.end(),aSlideName);
+
+                        if (pIter != maSlideNameList.end())
                         {
-                            if ( *pStr == aSlideName )
-                            {
-                                nStartSlide++;
-                                nFlags |= 4;
-                                nEndSlide = (sal_uInt16)mnPages;
-                                break;
-                            }
+                            nStartSlide = pIter - maSlideNameList.begin() + 1;
+                            nFlags |= 4;
+                            nEndSlide = (sal_uInt16)mnPages;
                         }
-                        if ( !pStr )
-                            nStartSlide = 0;
                     }
                 }
 
@@ -923,16 +913,13 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                                         if ( aXName.is() )
                                                         {
                                                             ::rtl::OUString aSlideName( aXName->getName() );
-                                                            sal_uInt32 nPageNumber = 0;
-                                                            for ( ::rtl::OUString* pSlideName = (::rtl::OUString*)maSlideNameList.First();
-                                                                pSlideName;
-                                                                pSlideName = (::rtl::OUString*)maSlideNameList.Next(), nPageNumber++ )
+                                                            std::vector<rtl::OUString>::const_iterator pIter = std::find(
+                                                                        maSlideNameList.begin(),maSlideNameList.end(),aSlideName);
+
+                                                            if (pIter != maSlideNameList.end())
                                                             {
-                                                                if ( *pSlideName == aSlideName )
-                                                                {
-                                                                    *mpStrm << (sal_uInt32)( nPageNumber + 0x100 ); // unique slide id
-                                                                    break;
-                                                                }
+                                                                sal_uInt32 nPageNumber = pIter - maSlideNameList.begin();
+                                                                *mpStrm << (sal_uInt32)( nPageNumber + 0x100 ); // unique slide id
                                                             }
                                                         }
                                                     }

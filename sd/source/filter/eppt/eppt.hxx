@@ -179,7 +179,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32                      mnLatestStatValue;
 
         EscherGraphicProvider*          mpGraphicProvider;
-        List                            maSlideNameList;
+        std::vector<rtl::OUString>      maSlideNameList;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText >             mXText;             // TextRef des globalen Text
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >             mXCursor;

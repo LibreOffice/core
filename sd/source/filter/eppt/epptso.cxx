@@ -1216,16 +1216,19 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             {
                                 String aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
                                 aPage.Erase( 0, 1 );
-                                for ( String* pStr = (String*)maSlideNameList.First(); pStr; pStr = (String*)maSlideNameList.Next(), nPageIndex++ )
+
+                                rtl::OUString aUPage(aPage);
+                                std::vector<rtl::OUString>::const_iterator pIter = std::find(
+                                            maSlideNameList.begin(),maSlideNameList.end(),aUPage);
+
+                                if ( pIter != maSlideNameList.end() )
                                 {
-                                    if ( *pStr == aPage )
-                                    {
-                                        aPageUrl = UniString::CreateFromInt32( 256 + nPageIndex );
-                                        aPageUrl.Append( String( RTL_CONSTASCII_USTRINGPARAM( "," ) ) );
-                                        aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
-                                        aPageUrl.Append( String( RTL_CONSTASCII_USTRINGPARAM( ",Slide " ) ) );
-                                        aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
-                                    }
+                                    nPageIndex = pIter - maSlideNameList.begin();
+                                    aPageUrl = UniString::CreateFromInt32( 256 + nPageIndex );
+                                    aPageUrl.Append( String( RTL_CONSTASCII_USTRINGPARAM( "," ) ) );
+                                    aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
+                                    aPageUrl.Append( String( RTL_CONSTASCII_USTRINGPARAM( ",Slide " ) ) );
+                                    aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
                                 }
                             }
                             sal_uInt32 nHyperId;
@@ -2034,11 +2037,12 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         {
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) ) ) )
             {
-                String  aBookmark( *(::rtl::OUString*)mAny.getValue() );
+                rtl::OUString  aBookmark( *(::rtl::OUString*)mAny.getValue() );
                 sal_uInt32 nIndex = 0;
-                for ( String* pStr = (String*)maSlideNameList.First(); pStr; pStr = (String*)maSlideNameList.Next(), nIndex++ )
+                std::vector<rtl::OUString>::const_iterator pIter;
+                for ( pIter = maSlideNameList.begin(); pIter != maSlideNameList.end(); ++pIter, nIndex++ )
                 {
-                    if ( *pStr == aBookmark )
+                    if ( *pIter == aBookmark )
                     {
                         // Bookmark ist ein link zu einer Dokumentseite
                         nAction = 4;
