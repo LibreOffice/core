@@ -137,11 +137,10 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 .EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
+CONFIGURE_ACTION=.$/configure
 .IF "$(OS)"=="IOS"
-CONFIGURE_ACTION=autoconf; .$/configure
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
-CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
 # do not enable grddl parser (#i93768#)
