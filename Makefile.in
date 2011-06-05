@@ -8,10 +8,6 @@ else
 GBUILD_OPT:=--gmake
 endif
 
-prefix = @prefix@
-exec_prefix = @exec_prefix@
-libdir = @libdir@
-
 ifeq (@CROSS_COMPILING@,YES)
 all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded cross-build-toolset
 else
@@ -34,11 +30,11 @@ endif
 
 install:
 	@. ./*Env.Set.sh && \
-	echo "Installing in $${libdir:-@libdir@}/@INSTALL_DIRNAME@..." && \
-	ooinstall "$${libdir:-@libdir@}/@INSTALL_DIRNAME@" && \
+	echo "Installing in $${prefix:-@prefix@}..." && \
+	ooinstall "$${prefix:-@prefix@}" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
-	echo "$${libdir:-@libdir@}/@INSTALL_DIRNAME@/program/soffice"
+	echo "$${prefix:-@prefix@}/program/soffice"
 
 dev-install:
 	@. ./*Env.Set.sh && \
@@ -51,7 +47,7 @@ dev-install:
 	@if test `uname -s` = Darwin; then \
 		echo open install/LibreOffice.app; \
 	else \
-	        echo "cd @abs_builddir@/install/program" && \
+		echo "cd @abs_builddir@/install/program" && \
 		echo ". ooenv" && \
 		echo "./soffice.bin"; \
 	fi
