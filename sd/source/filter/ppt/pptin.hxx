@@ -61,7 +61,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
     SvStorage&      mrStorage;
 //  SvStream*       mpPicStream;
     DffRecordHeader maDocHd;
-    List            maSlideNameList;
+    std::vector<String> maSlideNameList;
     sal_Bool            mbDocumentFound;
     sal_uInt32      mnFilterOptions;
     SdDrawDocument* mpDoc;

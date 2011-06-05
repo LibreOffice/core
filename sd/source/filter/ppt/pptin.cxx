@@ -239,8 +239,6 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
 
 ImplSdPPTImport::~ImplSdPPTImport()
 {
-    for ( void* pPtr = maSlideNameList.First(); pPtr; pPtr = maSlideNameList.Next() )
-        delete (String*)pPtr;
     delete pStData;
 }
 
@@ -344,22 +342,19 @@ sal_Bool ImplSdPPTImport::Import()
                                 {
                                     if ( !aPropItem.Read( aUString, nType, sal_False ) )
                                         break;
-                                    String* pString = new String( aUString );
-                                    if ( pString->EqualsAscii( "No Slide Title" ))
-                                        *pString = String();
+
+                                    String aString( aUString );
+                                    if ( aString.EqualsAscii( "No Slide Title" ))
+                                        aString = String();
                                     else
                                     {
-                                        void* pPtr;
-                                        for ( pPtr = maSlideNameList.First(); pPtr; pPtr = maSlideNameList.Next() )
-                                        {
-                                            if ( *((String*)pPtr ) == *pString )
-                                            {
-                                                *pString = String();
-                                                break;
-                                            }
-                                        }
+                                        std::vector<String>::const_iterator pIter =
+                                                std::find(maSlideNameList.begin(),maSlideNameList.end(),aString);
+
+                                        if (pIter != maSlideNameList.end())
+                                            aString = String();
                                     }
-                                    maSlideNameList.Insert( pString, LIST_APPEND );
+                                    maSlideNameList.push_back( aString );
                                 }
                             }
                         }
@@ -469,14 +464,13 @@ sal_Bool ImplSdPPTImport::Import()
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
                                                     String aToken( aString.GetToken( nToken, (sal_Unicode)',' ) );
-                                                    for ( void* pPtr = maSlideNameList.First(); pPtr; pPtr = maSlideNameList.Next() )
+                                                    std::vector<String>::const_iterator pIter =
+                                                            std::find(maSlideNameList.begin(),maSlideNameList.end(),aToken);
+
+                                                    if (pIter != maSlideNameList.end())
                                                     {
-                                                        if ( *(String*)pPtr == aToken )
-                                                        {
-                                                            nPageNumber = maSlideNameList.GetCurPos();
-                                                            bSucceeded = sal_True;
-                                                            break;
-                                                        }
+                                                        nPageNumber = pIter - maSlideNameList.begin();
+                                                        bSucceeded = sal_True;
                                                     }
                                                 }
                                             }
@@ -498,8 +492,8 @@ sal_Bool ImplSdPPTImport::Import()
                                             }
                                             if ( bSucceeded )
                                             {
-                                                if ( nPageNumber < maSlideNameList.Count() )
-                                                    pHyperlink->aConvSubString = *(String*)maSlideNameList.GetObject( nPageNumber );
+                                                if ( nPageNumber < maSlideNameList.size() )
+                                                    pHyperlink->aConvSubString = maSlideNameList[ nPageNumber ];
                                                 if ( !pHyperlink->aConvSubString.Len() )
                                                 {
                                                     pHyperlink->aConvSubString = String( SdResId( STR_PAGE ) );
@@ -1191,16 +1185,16 @@ sal_Bool ImplSdPPTImport::Import()
     }
 
     sal_uInt32 nSlideCount = GetPageCount();
-    for ( i = 0; ( i < nSlideCount) && ( i < maSlideNameList.Count() ); i++ )
+    for ( i = 0; ( i < nSlideCount) && ( i < maSlideNameList.size() ); i++ )
     {
         SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
-        String* pName = (String*)maSlideNameList.GetObject( i );
-        if ( pPage && pName )
+        String &aName = maSlideNameList[ i ];
+        if ( pPage )
         {
-            if ( pName->Len() )
-                pPage->SetName( *pName );
+            if ( aName.Len() )
+                pPage->SetName( aName );
             else
-                *pName = pPage->GetName();
+                aName = pPage->GetName();
         }
     }
     if ( mbDocumentFound )
