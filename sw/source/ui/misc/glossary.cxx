@@ -68,7 +68,7 @@
 #include <glossary.hxx>
 #include <gloshdl.hxx>
 #include <glosbib.hxx>
-#include <initui.hxx>                   // fuer ::GetGlossaries()
+#include <initui.hxx>                   // for ::GetGlossaries()
 #include <glosdoc.hxx>
 #include <macassgn.hxx>
 #include <swevent.hxx>
@@ -134,7 +134,7 @@ struct GroupUserData
 };
 
 /*------------------------------------------------------------------------
- Beschreibung:  Dialog fuer neuen Bausteinnamen
+ Description:   dialog for new block name
 ------------------------------------------------------------------------*/
 class SwNewGlosNameDlg : public ModalDialog
 {
@@ -192,7 +192,7 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  aktuell eingestellte Gruppe erfragen / setzen
+ Description:   query / set currently set group
 ------------------------------------------------------------------------*/
 String SwGlossaryDlg::GetCurrGroup()
 {
@@ -249,7 +249,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 {
     SvtLinguConfig aLocalLinguConfig;
 
-    // Static-Pointer initialisieren
+    // initialise static-pointer
     if( !::GetCurrGlosGroup() )
         ::SetCurrGlosGroup(new String);//(SwGlossaries::GetDefName());
 
@@ -284,7 +284,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.SetHelpId(HID_MD_GLOS_CATEGORY);
     aCategoryBox.SetStyle(aCategoryBox.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
-    aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
+    aCategoryBox.SetHighlightRange();   // select over full width
     aCategoryBox.SetNodeDefaultImages( );
     aCategoryBox.SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
     aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
@@ -304,7 +304,7 @@ SwGlossaryDlg::~SwGlossaryDlg()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Auswahl neue Gruppe
+ Description:   select new group
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
 {
@@ -318,7 +318,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     (*pGlosGroup) += GLOS_DELIM;
     (*pGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
     pGlossaryHdl->SetCurGroup(*pGlosGroup);
-    // Aktuellen Textbaustein setzen
+    // set current text block
     bReadOnly = pGlossaryHdl->IsReadOnly();
     EnableShortName( !bReadOnly );
     aEditBtn.Enable(!bReadOnly);
@@ -334,13 +334,13 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     }
     else
         ShowAutoText(aEmptyStr, aEmptyStr);
-    //Controls aktualisieren
+    // update controls
     NameModify(&aShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
         String sTemp(*::GetCurrGlosGroup());
-        // der nullte Pfad wird nicht aufgezeichnet!
+        // the zeroth path is not being recorded!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
             sTemp = sTemp.GetToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
@@ -357,7 +357,7 @@ void SwGlossaryDlg::Apply()
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
         String sTemp(*::GetCurrGlosGroup());
-        // der nullte Pfad wird nicht aufgezeichnet!
+        // the zeroth path is not being recorded!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
             sTemp = sTemp.GetToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, sTemp));
@@ -373,12 +373,12 @@ void SwGlossaryDlg::Apply()
 }
 
 /* --------------------------------------------------
- * existiert der Titel in der ausgewaehlten Gruppe?
+ * does the title exist in the selected group?
  * --------------------------------------------------*/
 SvLBoxEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
                 const String& rShort)
 {
-    //evtl. vorhandenen Eintrag in der TreeListBox suchen
+    // look for possible entry in TreeListBox
     SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
     if(pEntry)
     {
@@ -415,8 +415,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     sal_Bool bNotFound = !DoesBlockExist(aName, sShortSearch);
     if(bNameED)
     {
-            // ist der Text durch einen Klick in die Listbox in das
-            // Edit gekommem?
+            // did the text get in to the Listbbox in the Edit with a click?
         if(bNotFound)
         {
             aShortNameEdit.SetText( lcl_GetValidShortCut( aName ) );
@@ -490,7 +489,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         break;
         case FN_GL_DEFINE_TEXT:
             bNoAttr = sal_True;
-            // Kein break!!!
+            // no break!!!
         case FN_GL_DEFINE:
         {
             const String aStr(aNameED.GetText());
@@ -512,13 +511,13 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 pChild->SetUserData(new String(aShortName));
                 aNameED.SetText(aStr);
                 aShortNameEdit.SetText(aShortName);
-                NameModify(&aNameED);       // fuer Schalten der Buttons
+                NameModify(&aNameED);       // for toggling the buttons
 
                 if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
                 {
                     SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
                     String sTemp(*::GetCurrGlosGroup());
-                    // der nullte Pfad wird nicht aufgezeichnet!
+                    // the zeroth path is not being recorded!
                     if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
                         sTemp = sTemp.GetToken(0, GLOS_DELIM);
                     aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
@@ -659,7 +658,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Dialog Verwaltung Bereiche
+     Description:   dialog manage regions
  --------------------------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
 {
@@ -736,13 +735,13 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Initialisierung; aus Ctor und nach Bearbeiten Bereiche
+ Description:   initialisation; from Ctor and after editing regions
 ------------------------------------------------------------------------*/
 void SwGlossaryDlg::Init()
 {
     aCategoryBox.SetUpdateMode( sal_False );
     aCategoryBox.Clear();
-    // Textbausteinbereiche anzeigen
+    // display text block regions
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvLBoxEntry* pSelEntry = 0;
     const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM));
@@ -772,7 +771,7 @@ void SwGlossaryDlg::Init()
         if(sSelStr == pData->sGroupName && nSelPath == nPath)
             pSelEntry = pEntry;
 
-        //Eintraege fuer die Gruppen auffuellen
+        // fill entries for the groups
         {
             pGlossaryHdl->SetCurGroup(sGroupName, sal_False, sal_True);
             const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
@@ -785,7 +784,7 @@ void SwGlossaryDlg::Init()
             }
         }
     }
-        // Aktuelle Gruppe setzen und Textbausteine anzeigen
+        // set current group and display text blocks
     if(!pSelEntry)
     {
         //find a non-readonly group
@@ -834,7 +833,7 @@ void SwGlossaryDlg::Init()
 
 IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 {
-//EndDialog darf nicht im MenuHdl aufgerufen werden
+// EndDialog must not be called in MenuHdl
     if(aEditBtn.GetCurItemId() == FN_GL_EDIT )
     {
         SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
@@ -848,7 +847,7 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  KeyInput fuer ShortName - Edits ohne Spaces
+ Description:   KeyInput for ShortName - Edits without Spaces
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 {
@@ -895,7 +894,7 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 }
 
 /* --------------------------------------------------
- * TreeListBox fuer Gruppen und Bausteine
+ * TreeListBox for groups and blocks
  * --------------------------------------------------*/
 SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId) :
     SvTreeListBox(pParent, rResId),
@@ -924,7 +923,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
     SvLBoxEntry* pEntry = GetEntry( aPos );
-    // Hilfe gibt es nur fuer die Gruppennamen
+    // there's only help for groups' names
     if(pEntry)
     {
         SvLBoxTab* pTab;
@@ -1003,7 +1002,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
 
 sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
-    // TODO: Readonly - Ueberpruefung fehlt noch!
+    // TODO: Readonly - check still missing!
     SvLBoxEntry* pSrcParent = GetParent(pEntry) ? GetParent(pEntry) : pEntry;
     SvLBoxEntry* pDestParent =
         GetParent(pDragEntry ) ? GetParent(pDragEntry ) : pDragEntry ;
@@ -1018,12 +1017,12 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
                                 )
 {
     pDragEntry = 0;
-    if(!pTarget) //An den Anfang verschieben
+    if(!pTarget) // move to the beginning
     {
         pTarget = GetEntry(0);
     }
-    // 1. wird in verschiedene Gruppen verschoben?
-    // 2. darf in beiden Gruppen geschrieben werden?
+    // 1. move to different groups?
+    // 2. allowed to write in both groups?
     SvLBoxEntry* pSrcParent = GetParent(pEntry);
     SvLBoxEntry* pDestParent =
         GetParent(pTarget) ? GetParent(pTarget) : pTarget;
@@ -1054,7 +1053,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
             GetModel()->Remove(pEntry);
         }
     }
-    return sal_False; //sonst wird der Eintrag automatisch vorgenommen
+    return sal_False; // otherwise the entry is being set automatically
 }
 
 sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
@@ -1064,9 +1063,9 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
                                 )
 {
     pDragEntry = 0;
-    // 1. wird in verschiedene Gruppen verschoben?
-    // 2. darf in beiden Gruppen geschrieben werden?
-    if(!pTarget) //An den Anfang verschieben
+    // 1. move in different groups?
+    // 2. allowed to write to both groups?
+    if(!pTarget) // move to the beginning
     {
         pTarget = GetEntry(0);
     }
@@ -1101,7 +1100,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
             pChild->SetUserData(new String(sShortName));
         }
     }
-    return sal_False; //sonst wird der Eintrag automatisch vorgenommen
+    return sal_False; // otherwise the entry is being set automatically
 }
 
 String SwGlossaryDlg::GetCurrGrpName() const

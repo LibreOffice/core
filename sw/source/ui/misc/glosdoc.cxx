@@ -105,7 +105,7 @@ String lcl_CheckFileName( const String& rNewFilePath,
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert den Namen der Default-Gruppe
+    Description: supplies the default group's name
 ------------------------------------------------------------------------*/
 String  SwGlossaries::GetDefName()
 {
@@ -114,7 +114,7 @@ String  SwGlossaries::GetDefName()
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert die Anzahl der Textbausteingruppen
+    Description: supplies the number of text block groups
 ------------------------------------------------------------------------*/
 sal_uInt16 SwGlossaries::GetGroupCnt()
 {
@@ -122,12 +122,12 @@ sal_uInt16 SwGlossaries::GetGroupCnt()
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert den Gruppennamen
+    Description: supplies the group's name
 ------------------------------------------------------------------------*/
 sal_Bool SwGlossaries::FindGroupName(String & rGroup)
 {
-    //  enthaelt der Gruppenname keinen Pfad, kann hier ein passender
-    // Gruppeneintrag gesucht werden;
+    // if the group name doesn't contain a path, a suitable group entry
+    // can the searched for here;
     sal_uInt16 nCount = GetGroupCnt();
     sal_uInt16 i;
     for(i= 0; i < nCount; i++)
@@ -139,8 +139,8 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
             return sal_True;
         }
     }
-    //man darf zweimal suchen, denn bei mehreren Verzeichnissen koennte
-    //der caseinsensitive Name mehrfach auftreten
+    // you can search two times because for more directories the case sensitive
+    // name could occur multiple times
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     for(i = 0; i < nCount; i++)
     {
@@ -179,12 +179,12 @@ String  SwGlossaries::GetGroupTitle( const String& rGroupName )
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert das Textbaustein-Dokument der Gruppe rName
+    Description: supplies the group rName's text block document
 ------------------------------------------------------------------------*/
 SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
                                         sal_Bool bCreate) const
 {
-        // gfs. in die Liste der Textbausteine eintragen
+        // insert to the list of text blocks if applicable
     if(bCreate && m_pGlosArr)
     {
         const String aName(rName);
@@ -198,7 +198,7 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
                 break;
         }
         if(i == nCount)
-        {   // Baustein nicht in der Liste
+        {   // block not in the list
             String *pTmp = new String(aName);
             m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
         }
@@ -207,16 +207,16 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Loeschen Textblock
+ Description:   delete a text block
 ------------------------------------------------------------------------*/
 void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
     delete pBlock;
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung:   Erzeugt ein neues Dokument mit dem Gruppenname
-                    Wird temp. auch als File angelegt, damit die
-                    Gruppen auch spaeter (ohne Zugriff) vorhanden sind.
+    Description:   Creates a new document with the group name. temporarly
+                   also created as file so that groups remain there later
+                   (without access).
 ------------------------------------------------------------------------*/
 sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 {
@@ -300,7 +300,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Loescht eine Textbausteingruppe
+    Description: Deletes a text block group
 ------------------------------------------------------------------------*/
 sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 {
@@ -316,9 +316,9 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
     aTmp += SwGlossaries::GetExtension();
     sFileURL += INET_PATH_TOKEN;
     sFileURL += aTmp;
-        // Auch, wenn das File nicht existiert, muss es aus der Liste
-        // der Textbausteinbereiche entfernt werden
-    // Kein && wegen CFfront
+        // Even if the file doesn't exist it hast to be deleted from
+        // the list of text block regions
+    // no && because of CFfront
     sal_Bool bRemoved = SWUnoHelper::UCB_DeleteFile( sFileURL );
     OSL_ENSURE(bRemoved, "file has not been removed");
     RemoveFileFromList( aName );
@@ -326,7 +326,7 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: DTOR
+    Description: DTOR
 ------------------------------------------------------------------------*/
 SwGlossaries::~SwGlossaries()
 {
@@ -351,7 +351,7 @@ SwGlossaries::~SwGlossaries()
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Bausteindokument einlesen
+    Description: read a block document
 ------------------------------------------------------------------------*/
 SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) const
 {
@@ -388,7 +388,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Zugriff auf die Liste der Name; diese wird gfs. eingelesen
+    Description: access to the list of names; read in if applicable
 ------------------------------------------------------------------------*/
 SvStrings* SwGlossaries::GetNameList()
 {
@@ -417,7 +417,7 @@ SvStrings* SwGlossaries::GetNameList()
         }
         if(!m_pGlosArr->Count())
         {
-            // Der Standard-Baustein steht im ersten Teil des Pfades
+            // the standard block is inside of the path's first part
             String *pTmp = new String( SwGlossaries::GetDefName() );
             (*pTmp) += GLOS_DELIM;
             (*pTmp) += '0';
@@ -428,7 +428,7 @@ SvStrings* SwGlossaries::GetNameList()
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: CTOR
+    Description: CTOR
 ------------------------------------------------------------------------*/
 SwGlossaries::SwGlossaries() :
     m_pPathArr(0),
@@ -439,11 +439,11 @@ SwGlossaries::SwGlossaries() :
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Neuen Pfad einstellen und internes Array neu aufbauen
+    Description: set new path and recreate internal array
 ------------------------------------------------------------------------*/
 
 /* --------------------------------------------------
-*   #61050# Doppelte Pfade fuehren zu Verwirrung - als raus damit
+*   #61050# double paths cause irritation - get rid of it
  * --------------------------------------------------*/
 sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
 {
@@ -499,7 +499,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             (m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath)) )
         {
             m_sOldErrPath = m_sErrPath;
-            // Falscher Pfad, d.h. AutoText-Verzeichnis existiert nicht
+            // wrong path, that means AutoText directory doesn't exist
 
             ErrorHandler::HandleError( *new StringErrorInfo(
                                     ERR_AUTOPATH_ERROR, m_sErrPath,
@@ -597,7 +597,7 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
 String SwGlossaries::GetCompleteGroupName( const rtl::OUString& GroupName )
 {
     sal_uInt16 nCount = GetGroupCnt();
-    //wenn der Gruppenname intern erzeugt wurde, dann steht auch hier der Pfad drin
+    // when the group name was created internally the path is here as well
     String sGroup(GroupName);
     String sGroupName(sGroup.GetToken(0, GLOS_DELIM));
     String sPath = sGroup.GetToken(1, GLOS_DELIM);

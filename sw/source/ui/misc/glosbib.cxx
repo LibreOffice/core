@@ -180,8 +180,7 @@ void SwGlossaryGroupDlg::Apply()
             const String sDelGroup = pDelEntry->GetToken(0, '\t');
             if( sDelGroup == aActGroup )
             {
-                //soll die aktuelle Gruppe geloescht werden, muss die akt. Gruppe
-                //umgesetzt werden
+                //when the current group is deleted, the current group has to be relocated
                 if(aGroupTLB.GetEntryCount())
                 {
                     SvLBoxEntry* pFirst = aGroupTLB.First();
@@ -202,7 +201,7 @@ void SwGlossaryGroupDlg::Apply()
         }
 
     }
-    //erst umbenennen, falls es schon eins gab
+    //don't rename before there was one
     if(pRenamedArr && pRenamedArr->Count())
     {
         sal_uInt16 nCount = pRenamedArr->Count();
@@ -295,8 +294,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     }
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
     String sEntry(pUserData->sGroupName);
-    // befindet sich der zu loeschende Name schon unter den
-    // den neuen - dann weg damit
+    // if the name to be deleted is among the new ones - get rid of it
     sal_Bool bDelete = sal_True;
     if(pInsertedArr && pInsertedArr->Count())
     {
@@ -313,7 +311,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
 
         }
     }
-    // moeglicherweise sollte es schon umbenannt werden?
+    // it should probably be renamed?
     if(bDelete)
     {
         if(pRenamedArr && pRenamedArr->Count())
@@ -364,8 +362,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     sNewName += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
-    // befindet sich der umzubenennende Name unter den
-    // den neuen - dann austauschen
+    // if the name to be renamed is among the new ones - replace
     sal_Bool bDone = sal_False;
     if(pInsertedArr && pInsertedArr->Count())
     {
@@ -426,7 +423,7 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
 
 
         nPos = aGroupTLB.GetEntryPos(sEntry, 0);
-        //ist es nicht case sensitive muss man selbst suchen
+        //if it's not case sensitive you have to search for yourself
         if( 0xffffffff == nPos)
         {
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
@@ -468,9 +465,9 @@ sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
 {
     sal_Bool bDel = (!pGlosHdl->IsReadOnly(&rGroup));
 
-    // OM: befindet sich der Name unter den den neuen Bereichsnamen,
-    // dann ist er auch loeschbar! Bei noch nicht existenten Bereichsnamen
-    // liefert ReadOnly naemlich sal_True.
+    // OM: if the name is among the new region name, it is deletable
+    // as well! Because for non existing region names ReadOnly issues
+    // sal_True.
 
     if(pInsertedArr && pInsertedArr->Count())
     {

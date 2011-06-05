@@ -184,7 +184,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     else
     {
         const SwFtnInfo &rInf = pSh->GetFtnInfo();
-        // Position (Seite, Kapitel) setzen
+        // set position (page, chapter)
         if ( rInf.ePos == FTNPOS_PAGE )
         {
             aPosPageBox.Check();
@@ -198,16 +198,16 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
             aNumCountBox.RemoveEntry(aNumChapter);
             bPosDoc = sal_True;
         }
-            // Verweistexte
+            // reference tests
         aContEdit.SetText(rInf.aQuoVadis);
         aContFromEdit.SetText(rInf.aErgoSum);
 
-            // gesammelt wo
+            // collected
         SelectNumbering(rInf.eNum);
     }
 
-        // Numerierung
-        // Art
+        // numbering
+        // art
     aNumViewBox.SelectNumberingType( pInf->aFmt.GetNumberingType());
     aOffsetFld.SetValue(pInf->nFtnOffset + 1);
     aPrefixED.SetText(pInf->GetPrefix());
@@ -222,8 +222,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     aFtnCharAnchorTemplBox.SelectEntry( pCharFmt->GetName() );
     aFtnCharAnchorTemplBox.SaveValue();
 
-        // Vorlagen - Sonderbereiche
-        // Absatz
+        // styles   special regions
+        // paragraph
     SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
     pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SWSTYLEBIT_EXTRA);
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
@@ -255,7 +255,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         }
     }
 
-        // Seite
+        // page
     for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
         aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
 
@@ -281,10 +281,9 @@ SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Unterschiedliche Arten der Numerierung; da die Listbox
-                unterschiedlich viele Eintraege hat, hier Funktionen
-                fuer das Setzen und Erfragen der gemeinten Art
-                der Numerierung.
+ Description:  Different kinds of numbering; because the Listbox has
+               varying numbers of entries, here are functions to
+               set and query the intended kind of numbering.
 ------------------------------------------------------------------------*/
 void SwEndNoteOptionPage::SelectNumbering(int eNum)
 {
@@ -320,7 +319,7 @@ int SwEndNoteOptionPage::GetNumbering() const
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
     pSh = &rShell;
-    // Zeichenvorlagen sammeln
+    // collect character templates
     aFtnCharTextTemplBox.Clear();
     aFtnCharAnchorTemplBox.Clear();
     ::FillCharStyleListBox(aFtnCharTextTemplBox,
@@ -331,10 +330,8 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
-                auf der Seite.
-                In diesem Fall koennen alle Numerierungsarten verwendet
-                werden.
+ Description:  Handler behind the button to collect the footnote at the
+               page. In this case all kinds of numbering can be used.
 ------------------------------------------------------------------------*/
 
 
@@ -368,10 +365,9 @@ IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
-                am Kapitel oder Dokumentende.
-                In diesem Fall kann keine seitenweise Numerierung verwendet
-                werden.
+ Description:  Handler behind the button to collect the footnote at the
+               chapter or end of the document. In this case no pagewise
+               numbering can be used.
 ------------------------------------------------------------------------*/
 
 
@@ -428,7 +424,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     pInf->SetAnchorCharFmt( lcl_GetCharFormat( pSh,
                         aFtnCharAnchorTemplBox.GetSelectEntry() ) );
 
-    // Absatzvorlage
+    // paragraph template
     sal_uInt16 nPos = aParaTemplBox.GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -438,7 +434,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
         pInf->SetFtnTxtColl(*pColl);
     }
 
-    // Seitenvorlage
+    // page template
     pInf->ChgPageDesc( pSh->FindPageDescByName(
                                 aPageTemplBox.GetSelectEntry(), sal_True ) );
 
