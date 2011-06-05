@@ -256,11 +256,11 @@ void HTMLOption::GetColor( Color& rColor ) const
 
     String aTmp( aValue );
     aTmp.ToUpperAscii();
-    sal_uLong nColor = ULONG_MAX;
+    sal_uInt32 nColor = SAL_MAX_UINT32;
     if( '#'!=aTmp.GetChar( 0 ) )
         nColor = GetHTMLColor( aTmp );
 
-    if( ULONG_MAX == nColor )
+    if( SAL_MAX_UINT32 == nColor )
     {
         nColor = 0;
         xub_StrLen nPos = 0;
