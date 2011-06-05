@@ -285,7 +285,9 @@ public:
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
+#if !defined(__OpenBSD__)
     CPPUNIT_TEST(testCVEs);
+#endif
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST_SUITE_END();
 
