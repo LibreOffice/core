@@ -35,11 +35,6 @@ noadjust=TRUE
 nodep=true
 ENABLE_EXCEPTIONS=TRUE
 
-# "mkdepend" is written in K&R style C. Modern compilers will generate
-# lots of warning. There is no point in cleaning this up, so we just
-# ignore warnings
-EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
-
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE : settings.mk
 
