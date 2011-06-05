@@ -64,6 +64,15 @@ FRAMEWORK=-framework CoreFoundation
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
 
+.IF "$(OS)"=="MACOSX" && "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= \
+    glib_cv_stack_grows=no \
+    glib_cv_uscore=yes \
+    ac_cv_func_posix_getpwuid_r=yes \
+    ac_cv_func_posix_getgrgid_r=yes \
+    ac_cv_func__NSGetEnviron=yes
+.ENDIF
+
 CONFIGURE_FLAGS+=--prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)
 CONFIGURE_FLAGS+=--disable-fam
 CONFIGURE_FLAGS+=CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS) -DBUILD_OS_APPLEOSX"
