@@ -1287,7 +1287,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
                 "CSS1-Ausruck kann keine Farbe sein" );
 
     sal_Bool bRet = sal_False;
-    sal_uLong nColor = ULONG_MAX;
+    sal_uInt32 nColor = SAL_MAX_UINT32;
 
     switch( eType )
     {
@@ -1357,7 +1357,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
             String aTmp( aValue );
             aTmp.ToUpperAscii();
             nColor = GetHTMLColor( aTmp );
-            bRet = nColor != ULONG_MAX;
+            bRet = nColor != SAL_MAX_UINT32;
         }
         if( bRet || CSS1_STRING != eType || !aValue.Len() ||
             aValue.GetChar( 0 )!='#' )
@@ -1402,7 +1402,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
     }
 
 
-    if( bRet && nColor!=ULONG_MAX )
+    if( bRet && nColor!=SAL_MAX_UINT32 )
     {
         rColor.SetRed( (sal_uInt8)((nColor & 0x00ff0000UL) >> 16) );
         rColor.SetGreen( (sal_uInt8)((nColor & 0x0000ff00UL) >> 8) );
