@@ -30,8 +30,8 @@
 #include "precompiled_accessibility.hxx"
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
 #include <svtools/accessibletableprovider.hxx>
-#include <rtl/uuid.h>
-//
+#include <comphelper/servicehelper.hxx>
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -344,13 +344,15 @@ void SAL_CALL AccessibleBrowseBoxBase::removeEventListener(
 
 // XTypeProvider --------------------------------------------------------------
 
+namespace
+{
+    class theAccessibleBrowseBoxBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleBrowseBoxBaseImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleBrowseBoxBaseImplementationId::get().getSeq();
 }
 
 // XServiceInfo ---------------------------------------------------------------
@@ -508,17 +510,7 @@ void AccessibleBrowseBoxBase::commitEvent(
 
     AccessibleEventNotifier::addEvent( getClientId( ), aEvent );
 }
-// -----------------------------------------------------------------------------
 
-void AccessibleBrowseBoxBase::implCreateUuid( Sequence< sal_Int8 >& rId )
-{
-    if( !rId.hasElements() )
-    {
-        rId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( rId.getArray() ), 0, sal_True );
-    }
-}
-// -----------------------------------------------------------------------------
 sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     throw ( uno::RuntimeException )
 {

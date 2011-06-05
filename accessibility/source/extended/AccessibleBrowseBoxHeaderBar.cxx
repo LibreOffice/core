@@ -32,6 +32,7 @@
 
 #include "accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx"
 #include <svtools/accessibletableprovider.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // ============================================================================
 
@@ -344,13 +345,15 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationName()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar" ) );
 }
 
+namespace
+{
+    class theAccessibleBrowseBoxHeaderBarImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleBrowseBoxHeaderBarImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleBrowseBoxHeaderBarImplementationId::get().getSeq();
 }
 
 // internal virtual methods ---------------------------------------------------

@@ -34,6 +34,7 @@
 #include <svtools/accessibletableprovider.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // ============================================================================
 
@@ -206,13 +207,15 @@ Sequence< uno::Type > SAL_CALL AccessibleBrowseBoxTableBase::getTypes()
         AccessibleBrowseBoxTableImplHelper::getTypes() );
 }
 
+namespace
+{
+    class theAccessibleBrowseBoxTableBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleBrowseBoxTableBaseImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxTableBase::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleBrowseBoxTableBaseImplementationId::get().getSeq();
 }
 
 // internal virtual methods ---------------------------------------------------
