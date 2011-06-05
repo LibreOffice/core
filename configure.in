@@ -4978,8 +4978,6 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
    AC_MSG_RESULT([external])
    SYSTEM_CURL=YES
 
-   test $_os = Darwin && CURLCONFIG=/Developer/SDKs/MacOSX10.4u.sdk/usr/bin/curl-config
-
    curl_version=""
    if test "$cross_compiling" = "yes"; then
       dnl At least the OBS mingw32-libcurl-devel package
