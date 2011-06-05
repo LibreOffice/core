@@ -863,6 +863,6 @@ void SwFrmChangesLeave::Leave()
         SwProtocol::Record( pFrm, PROT_FRMCHANGES, 0, &aFrm );
 }
 
-#endif // DBG_UTIL
+#endif // OSL_DEBUG_LEVEL > 1
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

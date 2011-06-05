@@ -83,7 +83,6 @@ sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
 
 SvStringsDtor* SwFieldType::pFldNames = 0;
 
-DBG_NAME(SwFieldType)
 
     sal_uInt16 aTypeTab[] = {
     /* RES_DBFLD            */      TYP_DBFLD,
@@ -152,17 +151,7 @@ SwFieldType::SwFieldType( sal_uInt16 nWhichId )
     : SwModify(0),
     nWhich( nWhichId )
 {
-    DBG_CTOR( SwFieldType, 0 );
 }
-
-#if OSL_DEBUG_LEVEL > 1
-
-SwFieldType::~SwFieldType()
-{
-    DBG_DTOR( SwFieldType, 0 );
-}
-
-#endif
 
 const String& SwFieldType::GetName() const
 {

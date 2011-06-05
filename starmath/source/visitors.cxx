@@ -727,7 +727,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     aTmp.Top( )    += nTmpBorderWidth;
     aTmp.Bottom( ) -= nTmpBorderWidth;
 
-    DBG_ASSERT( aTmp.GetHeight( ) > 0  &&  aTmp.GetWidth( ) > 0,
+    OSL_ENSURE( aTmp.GetHeight( ) > 0  &&  aTmp.GetWidth( ) > 0,
                "Sm: leeres Rechteck" );
 
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly

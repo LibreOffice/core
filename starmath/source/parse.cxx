@@ -501,7 +501,7 @@ void SmParser::NextToken()
 #if OSL_DEBUG_LEVEL > 1
         if (!IsDelimiter( m_aBufferString, static_cast< xub_StrLen >(aRes.EndPos) ))
         {
-            DBG_WARNING( "identifier really finished? (compatibility!)" );
+            OSL_FAIL( "identifier really finished? (compatibility!)" );
         }
 #endif
     }
@@ -541,7 +541,7 @@ void SmParser::NextToken()
 #if OSL_DEBUG_LEVEL > 1
             if (!IsDelimiter( m_aBufferString, static_cast< xub_StrLen >(aRes.EndPos) ))
             {
-                DBG_WARNING( "identifier really finished? (compatibility!)" );
+                OSL_FAIL( "identifier really finished? (compatibility!)" );
             }
 #endif
         }

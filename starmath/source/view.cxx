@@ -171,7 +171,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     // set formula-cursor and selection of edit window according to the
     // position clicked at
     //
-    DBG_ASSERT(rMEvt.GetClicks() > 0, "Sm : 0 clicks");
+    OSL_ENSURE(rMEvt.GetClicks() > 0, "Sm : 0 clicks");
     if ( rMEvt.IsLeft() )
     {
         // get click position relativ to formula
@@ -878,7 +878,7 @@ IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
     }
     catch (uno::Exception &)
     {
-        DBG_ASSERT( 0, "failed to properly set initial focus to edit window" );
+        OSL_FAIL( "failed to properly set initial focus to edit window" );
     }
     return 0;
 }

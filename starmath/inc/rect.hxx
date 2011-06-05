@@ -234,7 +234,7 @@ inline void SmRect::CopyMBL(const SmRect &rRect)
 
 inline long SmRect::GetBaseline() const
 {
-    DBG_ASSERT(HasBaseline(), "Sm: Baseline nicht vorhanden");
+    OSL_ENSURE(HasBaseline(), "Sm: Baseline nicht vorhanden");
     return nBaseline;
 }
 

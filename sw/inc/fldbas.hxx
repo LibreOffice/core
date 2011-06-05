@@ -252,9 +252,6 @@ protected:
 
 public:
 
-#if OSL_DEBUG_LEVEL > 1
-    virtual ~SwFieldType();
-#endif
     static  const String&   GetTypeStr( sal_uInt16 nTypeId );
 
     // Only in derived classes.

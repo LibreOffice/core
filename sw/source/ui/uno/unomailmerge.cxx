@@ -240,7 +240,6 @@ namespace
         DelayedFileDeletion& operator=( const DelayedFileDeletion& );       // never implemented
     };
 
-    DBG_NAME( DelayedFileDeletion )
     //------------------------------------------------------
     DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const String& _rTemporaryFile )
         :
@@ -248,8 +247,6 @@ namespace
         ,m_sTemporaryFile( _rTemporaryFile )
         ,m_nPendingDeleteAttempts( 0 )
     {
-        DBG_CTOR( DelayedFileDeletion, NULL );
-
         osl_incrementInterlockedCount( &m_refCount );
         try
         {
@@ -364,7 +361,6 @@ namespace
     //------------------------------------------------------
     DelayedFileDeletion::~DelayedFileDeletion( )
     {
-        DBG_DTOR( DelayedFileDeletion, NULL );
     }
 }
 

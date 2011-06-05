@@ -646,7 +646,7 @@ void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, in
 
 long SmNode::GetFormulaBaseline() const
 {
-    DBG_ASSERT( 0, "This dummy implementation should not have been called." );
+    OSL_FAIL( "This dummy implementation should not have been called." );
     return 0;
 }
 

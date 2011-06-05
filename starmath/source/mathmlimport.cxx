@@ -1835,7 +1835,7 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
     if ( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_META) )
     {
-        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+        OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
     }
     else if ( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_SETTINGS) )

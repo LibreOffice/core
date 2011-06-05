@@ -218,7 +218,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
     OSL_ENSURE( bAdded, "failed to add symbol" );
         if (bAdded)
             m_bModified = true;
-        DBG_ASSERT( bAdded || (pFound && !bSymbolConflict), "AddOrReplaceSymbol: unresolved symbol conflict" );
+        OSL_ENSURE( bAdded || (pFound && !bSymbolConflict), "AddOrReplaceSymbol: unresolved symbol conflict" );
     }
 
     return bAdded;
