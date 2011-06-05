@@ -31,7 +31,6 @@
 
 
 #include <unoevtlstnr.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 

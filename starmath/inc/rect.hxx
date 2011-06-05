@@ -34,7 +34,6 @@
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
-#include <tools/debug.hxx>
 
 #include "format.hxx"
 

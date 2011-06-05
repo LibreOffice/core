@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
-#include <tools/debug.hxx>
 #include "swtypes.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"

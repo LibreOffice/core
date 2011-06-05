@@ -30,8 +30,6 @@
 #define TYPES_HXX
 
 #include <sal/types.h>
-#include <tools/debug.hxx>
-
 #define FONTNAME_MATH   "OpenSymbol"
 
 /////////////////////////////////////////////////////////////////

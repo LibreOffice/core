@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <tools/debug.hxx>
 #include <swcache.hxx>
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);

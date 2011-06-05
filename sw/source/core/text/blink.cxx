@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <tools/debug.hxx>
 #include "viewsh.hxx"
 #include "rootfrm.hxx"  // GetOleShell()
 #include "txtfrm.hxx"   // FindRootFrm()

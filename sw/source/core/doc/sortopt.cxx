@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <tools/debug.hxx>
 #include <i18npool/lang.h>
 #include <sortopt.hxx>
 

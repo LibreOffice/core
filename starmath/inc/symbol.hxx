@@ -30,7 +30,6 @@
 #define SYMBOL_HXX
 
 #include <vcl/font.hxx>
-#include <tools/debug.hxx>
 #include <tools/dynary.hxx>
 #include <svl/lstner.hxx>
 #include <svl/svarray.hxx>
