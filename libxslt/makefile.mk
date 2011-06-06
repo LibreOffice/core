@@ -123,7 +123,7 @@ CONFIGURE_FLAGS=--disable-shared
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
 CONFIGURE_FLAGS+=--enable-ipv6=no --without-crypto --without-python --with-sax1=yes
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)

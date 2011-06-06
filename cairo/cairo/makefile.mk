@@ -109,7 +109,7 @@ cairo_CPPFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
 CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 cairo_CPPFLAGS+=$(EXTRA_CDEFS)
@@ -154,7 +154,7 @@ CONFIGURE_FLAGS=--disable-shared
 CONFIGURE_FLAGS=--disable-static --enable-xlib
 .ENDIF
 CONFIGURE_FLAGS+=--enable-ft --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 BUILD_ACTION=$(GNUMAKE)

@@ -57,7 +57,7 @@ CONFIGURE_ACTION=./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) $(eq,$(VERB
 CONFIGURE_FLAGS=--disable-dependeny-tracking --disable-acl --disable-curses --without-emacs --without-git --disable-java
 CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 

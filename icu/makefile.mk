@@ -110,7 +110,7 @@ STATIC_OR_SHARED=--enable-static --disable-shared
 STATIC_OR_SHARED=--disable-static --enable-shared
 .ENDIF
 
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 # We require that the cross-build-toolset target from the top Makefile(.in) has bee built
 BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(posix_PWD)/$(INPATH_FOR_BUILD)/misc/build/icu/source
 .ENDIF

@@ -110,7 +110,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .IF "$(debug)"!=""
 CONFIGURE_FLAGS+=--with-mem-debug --with-run-debug
 .ENDIF
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 .ENDIF
