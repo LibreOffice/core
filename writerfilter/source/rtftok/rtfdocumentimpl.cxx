@@ -1117,7 +1117,7 @@ int RTFDocumentImpl::popState()
     else if (bListOverrideEntryEnd)
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-        m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_num, pValue));
+        m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_num, pValue));
     }
 
     return 0;
