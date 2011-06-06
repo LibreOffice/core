@@ -1030,6 +1030,7 @@ int RTFDocumentImpl::popState()
     std::multimap<Id, RTFValue::Pointer_t> aSprms;
     std::multimap<Id, RTFValue::Pointer_t> aAttributes;
     bool bListEntryEnd = false;
+    bool bListLevelEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -1074,6 +1075,12 @@ int RTFDocumentImpl::popState()
         aSprms = m_aStates.top().aSprms;
         bListEntryEnd = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_LISTLEVEL)
+    {
+        aAttributes = m_aStates.top().aAttributes;
+        aSprms = m_aStates.top().aSprms;
+        bListLevelEnd = true;
+    }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
         OUString aOUStr(OStringToOUString(m_aStates.top().aFieldInstruction.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
@@ -1092,6 +1099,11 @@ int RTFDocumentImpl::popState()
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_abstractNum, pValue));
+    }
+    else if (bListLevelEnd)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_AbstractNum_lvl, pValue));
     }
 
     return 0;
