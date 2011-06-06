@@ -85,14 +85,10 @@ $(DLLDEST)$/%.py: %.py
     cp $? $@
 .ENDIF # L10N_framework
 
-ALLTAR : $(MISC)/pythonloader.component $(eq,$(OS),MACOSX $(MISC)/installname_loader $(NULL))
+ALLTAR : $(MISC)/pythonloader.component
 
 $(MISC)/pythonloader.component .ERRREMOVE : \
         $(SOLARENV)/bin/createcomponent.xslt pythonloader.component
     $(XSLTPROC) --nonet --stringparam uri \
         'vnd.sun.star.expand:$$OOO_BASE_DIR/program/$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt pythonloader.component
-
-$(MISC)/installname_loader : $(LB)/$(TARGET)$(DLLPOST)
-	install_name_tool -change $(PYTHON_MAKEINSTALLDIR)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython @loader_path/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython $<
-	touch $@

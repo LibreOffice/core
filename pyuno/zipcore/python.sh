@@ -30,7 +30,7 @@
 sd_cwd="`pwd`"
 if [ -h "$0" ] ; then
     sd_basename=`basename "$0"`
-     sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"`
+    sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"`
     cd "`dirname "$0"`"
     cd "`dirname "$sd_script"`"
 else
@@ -56,6 +56,7 @@ export UNO_PATH
 : ${URE_BOOTSTRAP=vnd.sun.star.pathname:$sd_prog/fundamentalrc}
 export URE_BOOTSTRAP
 
+NONMACSECTION
 PYTHONPATH=$sd_prog/../basis-link/program:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/lib-dynload:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/lib-tk:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/site-packages${PYTHONPATH+:$PYTHONPATH}
 export PYTHONPATH
 PYTHONHOME=$sd_prog/../basis-link/program/python-core-%%PYVERSION%%
@@ -63,3 +64,13 @@ export PYTHONHOME
 
 # execute binary
 exec "$sd_prog/../basis-link/program/python.bin" "$@"
+MACSECTION
+PYTHONHOME=$sd_prog/../basis-link/program/OOoPython.framework
+export PYTHONHOME
+
+pybasislibdir=$PYTHONHOME/Versions/%%PYVERSION%%/lib/python%%PYVERSION%%
+PYTHONPATH=$sd_prog/../basis-link/program:$pybasislibdir:$pybasislibdir/lib-dynload:$pybasislibdir/lib-tk:$pybasislibdir/site-packages${PYTHONPATH+:$PYTHONPATH}
+export PYTHONPATH
+
+# execute binary
+exec "$PYTHONHOME/Versions/%%PYVERSION%%/Resources/Python.app/Contents/MacOS/OOoPython" "$@"

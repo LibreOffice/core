@@ -1,0 +1,23 @@
+--- pyuno/source/module/makefile.mk
++++ pyuno/source/module/makefile.mk
+@@ -120,7 +120,7 @@
+ $(LB)$/lib$(TARGET).a: $(MISC)$/$(TARGET).def
+     dlltool --dllname $(TARGET)$(DLLPOST) --input-def=$(MISC)$/$(TARGET).def --kill-at --output-lib=$(LB)$/lib$(TARGET).a
+ .ELSE
+-ALLTAR : \
++ALLTAR : $(eq,$(OS),MACOSX $(MISC)/installname_module $(NULL)) \
+     $(DLLDEST)$/uno.py 		\
+     $(DLLDEST)$/unohelper.py	\
+     $(PYUNO_MODULE)			\
+@@ -157,6 +157,11 @@
+     @+source $(MISC)$/$(@:b).cmd
+ .ENDIF
+ 
++$(MISC)/installname_module : $(LB)/$(DLLPRE)$(TARGET)$(DLLPOST)
++	install_name_tool -change $(PYTHON_MAKEINSTALLDIR)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython @loader_path/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython $<
++	# hack to make checkdll happy
++	ln -sf $(SOLARLIBDIR)/OOoPython.framework $(LB)/OOoPython.framework
++	touch $@
+ 
+ $(MISC)$/$(PYUNORC) : pyuno
+     -rm -f $@

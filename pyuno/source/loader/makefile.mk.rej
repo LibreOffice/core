@@ -1,0 +1,20 @@
+--- pyuno/source/loader/makefile.mk
++++ pyuno/source/loader/makefile.mk
+@@ -89,11 +89,17 @@
+     $(DLLDEST)$/pyuno_services.rdb
+ .ENDIF # L10N_framework
+ 
++ALLTAR: $(eq,$(OS),MACOSX $(MISC)/installname_loader $(NULL))
++
+ .INCLUDE :  target.mk
+ .IF "$(L10N_framework)"==""
+ $(DLLDEST)$/%.py: %.py
+     cp $? $@
+ 
++$(MISC)/installname_loader : $(LB)/$(TARGET)$(DLLPOST)
++	install_name_tool -change $(PYTHON_MAKEINSTALLDIR)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython @loader_path/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython $<
++	touch $@
++
+ $(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLLPOST)
+     -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
+     cd $(DLLDEST) && $(REGCOMP) -register -r pyuno_services.tmp -wop $(foreach,i,$(COMPONENTS) -c $(i))
