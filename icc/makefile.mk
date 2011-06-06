@@ -34,7 +34,10 @@ TARGET=icc
 
 .INCLUDE :	settings.mk
 
-.IF "$(OS)"!="IOS"
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -58,8 +61,5 @@ BUILD_ACTION=dmake &&  cd Contrib$/CmdLine$/create_sRGB_profile && $(AUGMENT_LIB
 
 .INCLUDE :	set_ext.mk
 
-.ENDIF
 .INCLUDE :	target.mk
-.IF "$(OS)"!="IOS"
 .INCLUDE :	tg_ext.mk
-.ENDIF
