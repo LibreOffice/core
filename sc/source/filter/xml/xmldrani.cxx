@@ -499,6 +499,9 @@ void ScXMLDatabaseRangeContext::EndElement()
 
         if (pData.get())
         {
+            ScRange aRange;
+            pData->GetArea(aRange);
+
             if (setAutoFilterFlags(*pDoc, *pData))
                 pDoc->SetAnonymousDBData(aRange.aStart.Tab(), pData.release());
             else
