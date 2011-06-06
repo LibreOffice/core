@@ -144,6 +144,10 @@ sub generate_lo_piece_blacklist($)
     print BLACKLIST "config.parms\n";
     print BLACKLIST "git-hooks\n";
     print BLACKLIST "Linux*Env.Set.sh\n";
+    print BLACKLIST "src/tmp*\n";
+    print BLACKLIST "src/fetch.log\n";
+    print BLACKLIST "src/libreoffice-*.tar.bz2\n";
+    print BLACKLIST "src/????????????????????????????????-*\n";
     print BLACKLIST "warn\n";
 
     close BLACKLIST;
