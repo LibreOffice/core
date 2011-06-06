@@ -75,6 +75,7 @@ foreach $file (@todo)
         if (m'^\s*(@.+/([^/]+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$')
         {
             my $full = $1;
+            next if ($full eq '@loader_path/OOoPython.framework/Versions/2.6/OOoPython');
             my $loc = locate($2);
             if (defined $loc)
             {
