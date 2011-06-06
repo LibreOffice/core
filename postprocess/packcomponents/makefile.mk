@@ -179,6 +179,7 @@ my_components = \
     uui \
     vbaevents \
     vclcanvas \
+    visiofilter \
     wpft \
     wpgfilter \
     xcr \
