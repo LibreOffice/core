@@ -49,7 +49,7 @@ CFLAGSCXX+=-Wno-unused-parameter -Wno-return-type
 
 SLOFILES=
 
-.IF "$(CPU)"=="I" && "$(CROSS_COMPILING)"==""
+.IF "$(CPU)"=="I" && "$(CROSS_COMPILING)"!="YES"
 
 SLOFILES+=\
         $(SLO)$/CheckTokenMembership.obj\

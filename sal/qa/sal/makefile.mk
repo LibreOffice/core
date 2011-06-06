@@ -33,7 +33,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(CROSS_COMPILING)"==""
+.IF "$(CROSS_COMPILING)"!="YES"
 
 SHL1TARGET = $(TARGET)_types
 SHL1OBJS = $(SLO)$/test_types.obj
