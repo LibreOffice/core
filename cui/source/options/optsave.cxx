@@ -544,7 +544,6 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
         {
             aAutoSaveEdit.Enable();
             aMinuteFT.Enable();
-            aAutoSaveEdit.GrabFocus();
         }
         else
         {
