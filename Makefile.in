@@ -20,6 +20,7 @@ endif
 ifeq (@CROSS_COMPILING@,YES)
 cross-build-toolset:
 	. ./Env.Build.sh && \
+	(cd autodoc && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
 	(cd idlc && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
 	(cd icu && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@) && \
 	(cd udkapi && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
