@@ -455,10 +455,10 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
 
 namespace {
 
-void setAutoFilterFlags(ScDocument& rDoc, const ScDBData& rData)
+bool setAutoFilterFlags(ScDocument& rDoc, const ScDBData& rData)
 {
     if (!rData.HasAutoFilter())
-        return;
+        return false;
 
     // Set autofilter flags so that the buttons get displayed.
     ScRange aRange;
@@ -466,6 +466,7 @@ void setAutoFilterFlags(ScDocument& rDoc, const ScDBData& rData)
     rDoc.ApplyFlagsTab(
         aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aStart.Row(),
         aRange.aStart.Tab(), SC_MF_AUTO);
+    return false;
 }
 
 }
@@ -498,8 +499,10 @@ void ScXMLDatabaseRangeContext::EndElement()
 
         if (pData.get())
         {
-            setAutoFilterFlags(*pDoc, *pData);
-            pDoc->GetDBCollection()->getAnonDBs().insert(pData.release());
+            if (setAutoFilterFlags(*pDoc, *pData))
+                pDoc->SetAnonymousDBData(aRange.aStart.Tab(), pData.release());
+            else
+                pDoc->GetDBCollection()->getAnonDBs().insert(pData.release());
         }
         return;
     }

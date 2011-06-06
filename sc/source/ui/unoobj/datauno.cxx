@@ -2418,7 +2418,7 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
         throw uno::RuntimeException();      // no other exceptions specified
 }
 
-uno::Any ScUnnamedDatabaseRangesObj::getByTable( const sal_Int32 nTab )
+uno::Any ScUnnamedDatabaseRangesObj::getByTable( sal_Int32 nTab )
                                 throw(uno::RuntimeException,
                                     lang::IndexOutOfBoundsException,
                                     container::NoSuchElementException)
@@ -2428,7 +2428,8 @@ uno::Any ScUnnamedDatabaseRangesObj::getByTable( const sal_Int32 nTab )
     {
         if ( pDocShell->GetDocument()->GetTableCount() <= nTab )
             throw lang::IndexOutOfBoundsException();
-        uno::Reference<sheet::XDatabaseRange> xRange( new ScDatabaseRangeObj(pDocShell, (SCTAB) nTab) );
+        uno::Reference<sheet::XDatabaseRange> xRange(
+            new ScDatabaseRangeObj(pDocShell, static_cast<SCTAB>(nTab)));
         if (xRange.is())
             return uno::makeAny(xRange);
         else
