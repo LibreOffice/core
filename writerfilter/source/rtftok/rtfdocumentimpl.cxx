@@ -774,21 +774,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_LISTID:
-            if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
             {
-                std::multimap<Id, RTFValue::Pointer_t> aAttributes;
-                RTFValue::Pointer_t pInnerValue(new RTFValue(nParam));
-                aAttributes.insert(make_pair(NS_rtf::LN_LSID, pInnerValue));
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
-                m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_abstractNum, pValue));
-            }
-            else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
-            {
-                std::multimap<Id, RTFValue::Pointer_t> aAttributes;
-                RTFValue::Pointer_t pInnerValue(new RTFValue(nParam));
-                aAttributes.insert(make_pair(NS_rtf::LN_LSID, pInnerValue));
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
-                m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_num, pValue));
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aAttributes.insert(make_pair(NS_rtf::LN_LSID, pValue));
             }
             break;
         default:
@@ -1033,6 +1021,9 @@ int RTFDocumentImpl::popState()
     RTFReferenceTable::Entry_t aEntry;
     bool bFontEntryEnd = false;
     bool bStyleEntryEnd = false;
+    std::multimap<Id, RTFValue::Pointer_t> aSprms;
+    std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+    bool bListEntryEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -1046,8 +1037,8 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDETABLE)
     {
-        std::multimap<Id, RTFValue::Pointer_t> aAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aAttributes, m_aListTableSprms));
+        std::multimap<Id, RTFValue::Pointer_t> aDummyAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aDummyAttributes, m_aListTableSprms));
         RTFReferenceTable::Entries_t aListTableEntries;
         aListTableEntries.insert(make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
@@ -1071,6 +1062,12 @@ int RTFDocumentImpl::popState()
         aEntry.first = m_aStates.top().nCurrentStyleIndex;
         aEntry.second = pProp;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
+    {
+        aAttributes = m_aStates.top().aAttributes;
+        aSprms = m_aStates.top().aSprms;
+        bListEntryEnd = true;
+    }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
         OUString aOUStr(OStringToOUString(m_aStates.top().aFieldInstruction.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
@@ -1085,6 +1082,11 @@ int RTFDocumentImpl::popState()
         m_aStates.top().aFontTableEntries.insert(make_pair(aEntry.first, aEntry.second));
     else if (bStyleEntryEnd)
         m_aStates.top().aStyleTableEntries.insert(make_pair(aEntry.first, aEntry.second));
+    else if (bListEntryEnd)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_abstractNum, pValue));
+    }
 
     return 0;
 }
