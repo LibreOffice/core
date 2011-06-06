@@ -35,9 +35,8 @@ PACKAGE = complex/connectivity
 
 #----- compile .java files -----------------------------------------
 
-JAVAFILES       :=  $(shell @$(FIND) complex -name "*.java")
-
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JAVAFILES       :=  $(shell @$(FIND) complex -name "*.java")
 
 .IF "$(SYSTEM_HSQLDB)" == "YES"
 EXTRAJARFILES = $(HSQLDB_JAR)

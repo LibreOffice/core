@@ -69,5 +69,5 @@ PRODUCTNAME.oxygenoffice = OxygenOffice
 PRODUCTVERSION.oxygenoffice = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.oxygenoffice = $(PRODUCTVERSIONSHORT)
 PKGVERSION.oxygenoffice = $(PKGVERSION)
-UNIXFILENAME.oxygenoffice = $(PRODUCTNAME.oxygenoffice:l)
+UNIXFILENAME.oxygenoffice = $(PRODUCTNAME.oxygenoffice:l)$(PRODUCTVERSION.oxygenoffice)
 ICONPREFIX.oxygenoffice = $(UNIXFILENAME.oxygenoffice:s/.//g)
