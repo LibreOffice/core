@@ -584,7 +584,7 @@ public:
     SC_DLLPUBLIC sal_Bool           RenameTab( SCTAB nTab, const String& rName,
                                 sal_Bool bUpdateRef = sal_True,
                                 sal_Bool bExternalDocument = false );
-    sal_Bool            MoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    sal_Bool            MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = NULL );
     sal_Bool            CopyTab( SCTAB nOldPos, SCTAB nNewPos,
                                 const ScMarkData* pOnlyMarked = NULL );
     SC_DLLPUBLIC sal_uLong          TransferTab(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,

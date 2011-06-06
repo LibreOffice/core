@@ -49,6 +49,7 @@
 #include "chgtrack.hxx"
 #include "tabprotection.hxx"
 #include "viewdata.hxx"
+#include "progress.hxx"
 
 // for ScUndoRenameObject - might me moved to another file later
 #include <svx/svditer.hxx>
@@ -553,14 +554,17 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
 
     if (bUndo)                                      // UnDo
     {
-        for (size_t i = mpNewTabs->size(); i > 0; --i)
+        size_t i = mpNewTabs->size();
+        ScProgress* pProgress = new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+                                                i * pDoc->GetCodeCount());
+        for (; i > 0; --i)
         {
             SCTAB nDestTab = (*mpNewTabs)[i-1];
             SCTAB nOldTab = (*mpOldTabs)[i-1];
             if (nDestTab > MAXTAB)                          // angehaengt ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
-            pDoc->MoveTab( nDestTab, nOldTab );
+            pDoc->MoveTab( nDestTab, nOldTab, pProgress );
             pViewShell->GetViewData()->MoveTab( nDestTab, nOldTab );
             pViewShell->SetTabNo( nOldTab, true );
             if (mpOldNames)
@@ -569,10 +573,14 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
                 pDoc->RenameTab(nOldTab, rOldName);
             }
         }
+        delete pProgress;
     }
     else
     {
-        for (size_t i = 0, n = mpNewTabs->size(); i < n; ++i)
+        size_t n = mpNewTabs->size();
+        ScProgress* pProgress = new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+                                                n * pDoc->GetCodeCount());
+        for (size_t i = 0; i < n; ++i)
         {
             SCTAB nDestTab = (*mpNewTabs)[i];
             SCTAB nNewTab = nDestTab;
@@ -580,7 +588,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
             if (nDestTab > MAXTAB)                          // angehaengt ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
-            pDoc->MoveTab( nOldTab, nNewTab );
+            pDoc->MoveTab( nOldTab, nNewTab, pProgress );
             pViewShell->GetViewData()->MoveTab( nOldTab, nNewTab );
             pViewShell->SetTabNo( nDestTab, true );
             if (mpNewNames)
@@ -589,6 +597,7 @@ void ScUndoMoveTab::DoChange( sal_Bool bUndo ) const
                 pDoc->RenameTab(nNewTab, rNewName);
             }
         }
+        delete pProgress;
     }
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator

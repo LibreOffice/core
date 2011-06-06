@@ -729,23 +729,21 @@ sal_Bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRo
     return false;
 }
 
-sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
+sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
 {
     if (nOldPos == nNewPos) return false;
     sal_Bool bValid = false;
-    if (VALIDTAB(nOldPos) && nOldPos < static_cast<SCTAB>(pTab.size()))
+    SCTAB nTabCount = static_cast<SCTAB>(pTab.size());
+    if (VALIDTAB(nOldPos) && nOldPos < nTabCount )
     {
         if (pTab[nOldPos])
         {
-            SCTAB nTabCount = static_cast<SCTAB>(pTab.size());
             if (nTabCount > 1)
             {
                 sal_Bool bOldAutoCalc = GetAutoCalc();
                 SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
                 SetNoListening( sal_True );
-                ScProgress* pProgress = new ScProgress( GetDocumentShell(),
-                    ScGlobal::GetRscString(STR_UNDO_MOVE_TAB), GetCodeCount() );
-                if (nNewPos == SC_TAB_APPEND || nNewPos >= static_cast<SCTAB>(pTab.size()))
+                if (nNewPos == SC_TAB_APPEND || nNewPos >= nTabCount)
                     nNewPos = nTabCount-1;
 
                 //  Referenz-Updaterei
@@ -777,10 +775,9 @@ sal_Bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 pTab.erase(pTab.begin()+nOldPos);
                 pTab.insert(pTab.begin()+nNewPos, pSaveTab);
                 TableContainer::iterator it = pTab.begin();
-                for (SCTAB i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
+                for (SCTAB i = 0; i < nTabCount; i++)
                     if (pTab[i])
-                        pTab[i]->UpdateMoveTab( nOldPos, nNewPos, i, *pProgress );
-                delete pProgress;   // freimachen fuer evtl. andere
+                        pTab[i]->UpdateMoveTab( nOldPos, nNewPos, i, pProgress );
                 it = pTab.begin();
                 for (; it != pTab.end(); ++it)
                     if (*it)

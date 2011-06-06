@@ -414,7 +414,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, sal_Bool bClear ) c
         pList->Append( aMarkRange );
 }
 
-void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const//TODO:FIXME
+void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
 {
     if (!pList)
         return;

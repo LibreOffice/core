@@ -1424,13 +1424,14 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo
 }
 
 void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
-        ScProgress& rProgress )
+        ScProgress* pProgress )
 {
     nTab = nTabNo;
     for ( SCCOL i=0; i <= MAXCOL; i++ )
     {
         aCol[i].UpdateMoveTab( nOldPos, nNewPos, nTabNo );
-        rProgress.SetState( rProgress.GetState() + aCol[i].GetCodeCount() );
+        if (pProgress)
+            pProgress->SetState(pProgress->GetState() + aCol[i].GetCodeCount());
     }
 
     if (IsStreamValid())
