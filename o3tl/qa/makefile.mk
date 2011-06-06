@@ -36,7 +36,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"!="IOS"
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
@@ -69,8 +72,6 @@ SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 .ENDIF 		# L10N_framework
-
-.ENDIF
 
 .INCLUDE : target.mk
 
