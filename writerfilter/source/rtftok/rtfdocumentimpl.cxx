@@ -277,6 +277,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_LISTLEVEL:
             m_aStates.top().nDestinationState = DESTINATION_LISTLEVEL;
             break;
+        case RTF_LISTTEXT:
+            // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             // Make sure we skip destinations (even without \*) till we don't handle them
