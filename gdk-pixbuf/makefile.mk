@@ -64,6 +64,10 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  --with-included-loaders=ani,icns,pcx,ras,tga,png,pnm,wbmp,xbm,xpm,qtif,bmp,gif,ico,jpeg \
                  --disable-glibtest --without-libtiff --without-libjasper
 
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no
+.ENDIF
+
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
                 
