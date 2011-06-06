@@ -74,13 +74,13 @@ ModalDialog RID_SCDLG_DAPITYPE
     RadioButton BTN_NAMED_RANGE
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Named range";
     };
     ListBox LB_NAMED_RANGE
     {
-        Pos = MAP_APPFONT ( 90 , 31 ) ;
+        Pos = MAP_APPFONT ( 100 , 31 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
