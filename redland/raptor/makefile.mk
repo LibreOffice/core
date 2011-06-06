@@ -59,7 +59,7 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.win32 \
     raptor-aix.patch
 
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 OOO_PATCH_FILES += \
     $(TARFILE_NAME).patch.cross
 .ENDIF
@@ -145,7 +145,7 @@ CONFIGURE_FLAGS=--disable-static
 .ENDIF
 # do not enable grddl parser (#i93768#)
 CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
-.IF "$(CROSS_COMPILING)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 BUILD_ACTION=$(GNUMAKE)

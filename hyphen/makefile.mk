@@ -99,8 +99,8 @@ BUILD_ACTION=dmake
 OUT2INC += hyphen.h
 .ENDIF # "$(GUI)"=="WNT"
 
-.IF "$(CROSS_COMPILING)"!=""
-CONFIGURE_FLAGS+= --build="$(BUILD_PLATFORM)" --host="$(HOST_PLATFORM)"
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 
 # --- Targets ------------------------------------------------------

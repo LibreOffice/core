@@ -11,7 +11,7 @@ TARGET=gcc3_specific
 
 .IF "$(GUI)" == "WNT"
 
-.IF "$(CROSS_COMPILING)" == ""
+.IF "$(CROSS_COMPILING)" != "YES"
 # Don't do any of this weird and presumably obsolete crack when
 # cross-compiling
 

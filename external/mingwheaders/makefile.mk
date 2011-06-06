@@ -33,7 +33,7 @@ TARGET=mingwheaders
 
 .IF "$(OS)$(COM)" == "WNTGCC"
 
-.IF "$(CROSS_COMPILING)" == ""
+.IF "$(CROSS_COMPILING)" != "YES"
 # Don't do any of this weird and presumably obsolete crack when
 # cross-compiling
 
