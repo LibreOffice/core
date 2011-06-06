@@ -306,7 +306,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 Mapper().endParagraphGroup();
                 // start new one
                 Mapper().startParagraphGroup();
-                // but don't emit properties yet, since they may change till the first text token pops up
+                // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
             }
             break;
@@ -1031,6 +1031,7 @@ int RTFDocumentImpl::popState()
     std::multimap<Id, RTFValue::Pointer_t> aAttributes;
     bool bListEntryEnd = false;
     bool bListLevelEnd = false;
+    bool bListOverrideEntryEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -1081,6 +1082,12 @@ int RTFDocumentImpl::popState()
         aSprms = m_aStates.top().aSprms;
         bListLevelEnd = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
+    {
+        aAttributes = m_aStates.top().aAttributes;
+        aSprms = m_aStates.top().aSprms;
+        bListOverrideEntryEnd = true;
+    }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
         OUString aOUStr(OStringToOUString(m_aStates.top().aFieldInstruction.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
@@ -1095,6 +1102,7 @@ int RTFDocumentImpl::popState()
         m_aStates.top().aFontTableEntries.insert(make_pair(aEntry.first, aEntry.second));
     else if (bStyleEntryEnd)
         m_aStates.top().aStyleTableEntries.insert(make_pair(aEntry.first, aEntry.second));
+    // list table
     else if (bListEntryEnd)
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
@@ -1104,6 +1112,12 @@ int RTFDocumentImpl::popState()
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_AbstractNum_lvl, pValue));
+    }
+    // list override table
+    else if (bListOverrideEntryEnd)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_num, pValue));
     }
 
     return 0;
