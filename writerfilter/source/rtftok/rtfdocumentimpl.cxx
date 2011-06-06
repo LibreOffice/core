@@ -779,6 +779,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aAttributes.insert(make_pair(NS_rtf::LN_LSID, pValue));
             }
             break;
+        case RTF_LEVELSTARTAT:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms.insert(make_pair(NS_rtf::LN_ISTARTAT, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
