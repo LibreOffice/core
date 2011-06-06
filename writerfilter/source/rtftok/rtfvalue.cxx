@@ -57,7 +57,10 @@ int RTFValue::getInt() const
 
 OUString RTFValue::getString() const
 {
-    return m_sValue;
+    if (m_sValue.getLength() > 0)
+        return m_sValue;
+    else
+        return OUString::valueOf(sal_Int32(m_nValue));
 }
 
 uno::Any RTFValue::getAny() const
