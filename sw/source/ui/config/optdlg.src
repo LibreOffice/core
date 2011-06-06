@@ -471,7 +471,7 @@ TabPage TP_STD_FONT
     FixedText FT_SIZE
     {
         Pos = MAP_APPFONT ( 204 , 14 ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text [ en-US ] = "Size";
     };
     MetricBox LB_STANDARD_SIZE
