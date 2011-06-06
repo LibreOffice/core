@@ -211,7 +211,7 @@ ScDBData* ScDBFunc::GetAnonymousDBData()
 
 //  Datenbankbereiche aendern (Dialog)
 
-void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList )
+void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::vector<ScRange> &rDelAreaList )
 {
 
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
@@ -222,21 +222,16 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List&
     ScDBCollection* pRedoColl = NULL;
     const sal_Bool bRecord (pDoc->IsUndoEnabled());
 
-    long nDelCount = rDelAreaList.Count();
-    for (long nDelPos=0; nDelPos<nDelCount; nDelPos++)
+    std::vector<ScRange>::const_iterator iter;
+    for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
     {
-        ScRange* pEntry = (ScRange*) rDelAreaList.GetObject(nDelPos);
+        //  Targets am SBA abmelden nicht mehr noetig
+        const ScAddress& rStart = iter->aStart;
+        const ScAddress& rEnd   = iter->aEnd;
+        pDocShell->DBAreaDeleted( rStart.Tab(),
+                                  rStart.Col(), rStart.Row(),
+                                  rEnd.Col(),   rEnd.Row() );
 
-        if ( pEntry )
-        {
-            ScAddress& rStart = pEntry->aStart;
-            ScAddress& rEnd   = pEntry->aEnd;
-            pDocShell->DBAreaDeleted( rStart.Tab(),
-                                       rStart.Col(), rStart.Row(),
-                                       rEnd.Col(),   rEnd.Row() );
-
-            //  Targets am SBA abmelden nicht mehr noetig
-        }
     }
 
     if (bRecord)
