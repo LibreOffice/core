@@ -7,11 +7,15 @@ PYVERSION=$(PYMAJOR).$(PYMINOR).$(PYMICRO)
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "MACOSX"
-PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dylib
+PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).a
+PYTHONLIB=-F$(SOLARLIBDIR) -framework OOoPython
+CFLAGS+=-I$(SOLARLIBDIR)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/include/python$(PYMAJOR).$(PYMINOR)
+# needed to fix install_name in pyuno
+PYTHON_MAKEINSTALLDIR=%%replaceme%%
 .ELSE
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).so.1.0
-.ENDIF
 PYTHONLIB=-lpython$(PYMAJOR).$(PYMINOR)
+.ENDIF
 .ELSE
 .IF "$(COM)" == "GCC"
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dll

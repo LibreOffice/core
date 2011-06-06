@@ -40,8 +40,8 @@ TARGET=so_python
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
 all:
-    @echo "An already available installation of python should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of python should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -81,14 +81,27 @@ python_LDFLAGS+=$(ARCH_FLAGS)
 python_CFLAGS=-g0
 .ENDIF
 
-CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
+
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
+
+.IF "$(OS)" == "MACOSX"
+PATCH_FILES+=Python-2.6.1-py8067.patch
+# don't build dual-arch version as OOo itself is not universal binary either
+PATCH_FILES+=Python-2.6.1-arch_$(eq,$(CPU),I i386 ppc).patch
+
+MACDEVSDK*=/Developer/SDKs/MacOSX10.4u.sdk
+CONFIGURE_ACTION+=--enable-universalsdk=$(MACDEVSDK) --with-universal-archs=32-bit --enable-framework=/python-inst --with-framework-name=OOoPython
+ALLTAR: $(MISC)/OOoPython.framework.zip
+
+.ENDIF
+
 .IF "$(OS)"=="AIX"
 CONFIGURE_ACTION += --disable-ipv6 --with-threads
 .ENDIF
-BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install && chmod -R ug+w $(MYCWD)/python-inst && chmod g+w Include
+BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install DESTDIR=$(MYCWD) && chmod -R ug+w $(MYCWD)/python-inst && chmod g+w Include
 .ELSE
 # ----------------------------------
 # WINDOWS
@@ -182,9 +195,47 @@ $(PYCONFIG) : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
 ALLTAR : $(PYVERSIONFILE)
 .ENDIF          # "$(L10N_framework)"==""
 
+# rule to allow relocating the whole framework, removing reference to buildinstallation directory
+$(PACKAGE_DIR)/fixscripts: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+	@echo remove build installdir from scripts
+	$(COMMAND_ECHO)for file in \
+	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/2to3 \
+	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/idle$(PYMAJOR).$(PYMINOR) \
+	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/pydoc$(PYMAJOR).$(PYMINOR) \
+	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/python$(PYMAJOR).$(PYMINOR)-config \
+	        $(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/bin/smtpd$(PYMAJOR).$(PYMINOR).py ; do \
+	{{ rm "$$file" && awk '\
+		BEGIN {{print "\
+#!/bin/bash\n\
+origpath=$$(pwd)\n\
+bindir=$$(cd $$(dirname \"$$0\") ; pwd)\n\
+cd \"$$origpath\"\n\
+\"$$bindir/../Resources/Python.app/Contents/MacOS/OOoPython\" - $$@ <<EOF"}} \
+		FNR==1{{next}} \
+		      {{print}} \
+		END   {{print "EOF"}}' > "$$file" ; }} < "$$file" ; chmod +x "$$file" ; done
+	@touch $@
+
+$(PACKAGE_DIR)/fixinstallnames: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+	@echo remove build installdir from OOoPython
+	$(COMMAND_ECHO)install_name_tool -change \
+		/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython \
+		@executable_path/../../../../OOoPython \
+		$(MYCWD)/python-inst/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/Resources/Python.app/Contents/MacOS/OOoPython
+	@touch $@
+
+$(MISC)/OOoPython.framework.zip: $(PACKAGE_DIR)/fixinstallnames $(PACKAGE_DIR)/fixscripts
+	@-rm -f $@
+	@echo creating $@
+	$(COMMAND_ECHO)cd $(MISC)/build/python-inst && find OOoPython.framework \
+		-not -type l -not -name Info.plist.in \
+		-not -name pythonw$(PYMAJOR).$(PYMINOR) \
+		-not -name python$(PYMAJOR).$(PYMINOR) -print0 | \
+		xargs -0 zip $(ZIP_VERBOSITY) ../../$(@:f)
 
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
-    -rm -f $@
-    cat $? > $@
+	@-rm -f $@
+	@echo process $@
+	$(COMMAND_ECHO)sed 's#%%replaceme%%#$(MYCWD)/python-inst#g' < pyversion.mk > $@
 
 .ENDIF # DISABLE_PYTHON != TRUE

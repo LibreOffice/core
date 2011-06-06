@@ -1,3 +1,14 @@
+# MACOSX - start
+mkdir: %_DEST%\lib\OOoPython.framework\Versions\2.6\include\python2.6
+
+..\%__SRC%\misc\build\python-inst\OOoPython.framework\OOoPython %_DEST%\lib\OOoPython.framework\OOoPython
+..\%__SRC%\misc\build\python-inst\OOoPython.framework\Versions\2.6\* %_DEST%\lib\OOoPython.framework\Versions\2.6\*
+..\%__SRC%\misc\build\python-inst\OOoPython.framework\Versions\2.6\include\python2.6\* %_DEST%\lib\OOoPython.framework\Versions\2.6\include\python2.6\*
+..\%__SRC%\misc\OOoPython.framework.zip %_DEST%\bin\OOoPython.framework.zip
+# MACOSX - end
+
+..\%__SRC%\misc\pyversion.mk %_DEST%\inc\pyversion.mk
+
 mkdir: %_DEST%\lib\python
 mkdir: %_DEST%\lib\python\lib-old
 mkdir: %_DEST%\lib\python\lib-tk
@@ -69,8 +80,6 @@ mkdir: %_DEST%\lib\python\ctypes\macholib
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\ctypes\macholib\* %_DEST%\lib\python\ctypes\macholib\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\xml\etree\* %_DEST%\lib\python\xml\etree
 
-..\pyversion.mk %_DEST%\inc\pyversion.mk
-
 ..\%__SRC%\misc\build\Python-2.6.1\Include\* %_DEST%\inc\python\*
 
 #unix ONLY !
@@ -80,9 +89,6 @@ mkdir: %_DEST%\lib\python\ctypes\macholib
 ..\%__SRC%\misc\build\python-inst\bin\python2.6 %_DEST%\bin\python
 ..\%__SRC%\misc\build\python-inst\lib\libpython2.6.so.1.0 %_DEST%\lib\libpython2.6.so.1.0
 symlink: %_DEST%\lib\libpython2.6.so.1.0 %_DEST%\lib\libpython2.6.so
-
-# MacOS X
-..\%__SRC%\misc\build\python-inst\lib\libpython2.6.dylib %_DEST%\lib\libpython2.6.dylib
 
 #MingW ONLY !
 ..\%__SRC%\misc\build\python-inst\bin\python.exe %_DEST%\bin\python.exe

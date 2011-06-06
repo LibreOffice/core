@@ -1,0 +1,12 @@
+http://bugs.python.org/issue8067 - needed for building on Mac OSX >= 10.6
+--- misc/Python-2.6.1/configure	2010-05-06 20:59:52.000000000 +0200
++++ misc/build/Python-2.6.1/configure	2010-05-06 20:59:46.000000000 +0200
+@@ -2120,6 +2120,8 @@
+   # has no effect, don't bother defining them
+   Darwin/[6789].*)
+     define_xopen_source=no;;
++  Darwin/1[0-9].*)
++    define_xopen_source=no;;
+   # On AIX 4 and 5.1, mbstate_t is defined only when _XOPEN_SOURCE == 500 but
+   # used in wcsnrtombs() and mbsnrtowcs() even if _XOPEN_SOURCE is not defined
+   # or has another value. By not (re)defining it, the defaults come in place.
