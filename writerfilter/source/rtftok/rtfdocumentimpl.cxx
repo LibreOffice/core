@@ -788,6 +788,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aSprms.insert(make_pair(NS_rtf::LN_ISTARTAT, pValue));
             }
             break;
+        case RTF_LS:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
+                    m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_Num_numId, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
