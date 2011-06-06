@@ -9,8 +9,8 @@ namespace rtftok {
 using rtl::OString;
 using rtl::OUString;
 
-RTFValue::RTFValue(int nValue, rtl::OUString sValue, std::map<Id, RTFValue::Pointer_t> rAttributes,
-        std::map<Id, RTFValue::Pointer_t> rSprms)
+RTFValue::RTFValue(int nValue, rtl::OUString sValue, std::multimap<Id, RTFValue::Pointer_t> rAttributes,
+        std::multimap<Id, RTFValue::Pointer_t> rSprms)
     : m_nValue(nValue),
     m_sValue(sValue),
     m_rAttributes(rAttributes),
@@ -34,7 +34,7 @@ RTFValue::RTFValue(OUString sValue)
 {
 }
 
-RTFValue::RTFValue(std::map<Id, RTFValue::Pointer_t> rAttributes)
+RTFValue::RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes)
     : m_nValue(),
     m_sValue(),
     m_rAttributes(rAttributes),
@@ -42,7 +42,7 @@ RTFValue::RTFValue(std::map<Id, RTFValue::Pointer_t> rAttributes)
 {
 }
 
-RTFValue::RTFValue(std::map<Id, RTFValue::Pointer_t> rAttributes, std::map<Id, RTFValue::Pointer_t> rSprms)
+RTFValue::RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes, std::multimap<Id, RTFValue::Pointer_t> rSprms)
     : m_nValue(),
     m_sValue(),
     m_rAttributes(rAttributes),
@@ -101,12 +101,12 @@ RTFValue* RTFValue::Clone()
     return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms);
 }
 
-std::map<Id, RTFValue::Pointer_t>& RTFValue::getAttributes()
+std::multimap<Id, RTFValue::Pointer_t>& RTFValue::getAttributes()
 {
     return m_rAttributes;
 }
 
-std::map<Id, RTFValue::Pointer_t>& RTFValue::getSprms()
+std::multimap<Id, RTFValue::Pointer_t>& RTFValue::getSprms()
 {
     return m_rSprms;
 }
