@@ -76,6 +76,10 @@ CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
 
 CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
 
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE) $(!eq,$(VERBOSE),$(NULL) V=1) -j$(MAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
