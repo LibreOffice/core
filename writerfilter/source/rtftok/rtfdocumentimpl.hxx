@@ -138,7 +138,7 @@ namespace writerfilter {
                 bool m_bFirstRun;
                 bool m_bNeedPap;
                 /// The list table and list override table combined.
-                RTFReferenceTable::Entries_t m_aListTableEntries;
+                std::multimap<Id, RTFValue::Pointer_t> m_aListTableSprms;
         };
     } // namespace rtftok
 } // namespace writerfilter

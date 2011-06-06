@@ -60,7 +60,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputS
     m_aColorTable(),
     m_bFirstRun(true),
     m_bNeedPap(false),
-    m_aListTableEntries()
+    m_aListTableSprms()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -770,6 +770,24 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 rAttributes.insert(make_pair(NS_ooxml::LN_CT_TabStop_pos, pTabposValue));
             }
             break;
+        case RTF_LISTID:
+            if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
+            {
+                std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+                RTFValue::Pointer_t pInnerValue(new RTFValue(nParam));
+                aAttributes.insert(make_pair(NS_rtf::LN_LSID, pInnerValue));
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+                m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_abstractNum, pValue));
+            }
+            else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
+            {
+                std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+                RTFValue::Pointer_t pInnerValue(new RTFValue(nParam));
+                aAttributes.insert(make_pair(NS_rtf::LN_LSID, pInnerValue));
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+                m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_num, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -1025,7 +1043,11 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDETABLE)
     {
-        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aListTableEntries));
+        std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aAttributes, m_aListTableSprms));
+        RTFReferenceTable::Entries_t aListTableEntries;
+        aListTableEntries.insert(make_pair(0, pProp));
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
         Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
