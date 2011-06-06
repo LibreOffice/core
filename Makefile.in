@@ -28,7 +28,8 @@ cross-build-toolset:
 	(cd codemaker && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
 	(cd ridljar && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
 	(cd glib && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd gettext && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl)
+	(cd gettext && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
+	(cd dictionaries && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@)
 endif
 
 install:
