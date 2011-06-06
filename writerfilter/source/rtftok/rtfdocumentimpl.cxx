@@ -265,8 +265,14 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_LISTTABLE:
             m_aStates.top().nDestinationState = DESTINATION_LISTTABLE;
             break;
+        case RTF_LIST:
+            m_aStates.top().nDestinationState = DESTINATION_LISTENTRY;
+            break;
         case RTF_LISTOVERRIDETABLE:
             m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDETABLE;
+            break;
+        case RTF_LISTOVERRIDE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDEENTRY;
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
