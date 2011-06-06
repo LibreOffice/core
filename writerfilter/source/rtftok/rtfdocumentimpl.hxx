@@ -35,7 +35,8 @@ namespace writerfilter {
             DESTINATION_LISTTABLE,
             DESTINATION_LISTENTRY,
             DESTINATION_LISTOVERRIDETABLE,
-            DESTINATION_LISTOVERRIDEENTRY
+            DESTINATION_LISTOVERRIDEENTRY,
+            DESTINATION_LISTLEVEL
         };
 
         enum RTFErrors
