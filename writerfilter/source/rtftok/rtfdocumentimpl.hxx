@@ -31,7 +31,9 @@ namespace writerfilter {
             DESTINATION_STYLESHEET,
             DESTINATION_STYLEENTRY,
             DESTINATION_FIELDINSTRUCTION,
-            DESTINATION_FIELDRESULT
+            DESTINATION_FIELDRESULT,
+            DESTINATION_LISTTABLE,
+            DESTINATION_LISTOVERRIDETABLE
         };
 
         enum RTFErrors
@@ -84,6 +86,8 @@ namespace writerfilter {
                 rtl_TextEncoding nCurrentEncoding;
 
                 rtl::OStringBuffer aFieldInstruction;
+
+                RTFReferenceTable::Entries_t aListTableEntries;
         };
 
         /// Implementation of the RTFDocument interface.

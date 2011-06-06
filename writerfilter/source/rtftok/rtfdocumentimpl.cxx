@@ -260,6 +260,12 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FLDRSLT:
             m_aStates.top().nDestinationState = DESTINATION_FIELDRESULT;
             break;
+        case RTF_LISTTABLE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTTABLE;
+            break;
+        case RTF_LISTOVERRIDETABLE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDETABLE;
+            break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -1009,6 +1015,11 @@ int RTFDocumentImpl::popState()
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aStyleTableEntries));
         Mapper().table(NS_rtf::LN_STYLESHEET, pTable);
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDETABLE)
+    {
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aListTableEntries));
+        Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
+    }
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
         bFontEntryEnd = true;
@@ -1145,7 +1156,8 @@ RTFParserState::RTFParserState()
     aStyleTableEntries(),
     nCurrentStyleIndex(0),
     nCurrentEncoding(0),
-    aFieldInstruction()
+    aFieldInstruction(),
+    aListTableEntries()
 {
 }
 
