@@ -861,7 +861,7 @@ OUString XclXmlUtils::ToOUString( const char* s )
 
 OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sal_Int32 nLength )
 {
-    if( nLength == -1 || ( nLength > (rBuf.size() - nStart) ) )
+    if( nLength == -1 || ( nLength > ((sal_Int32)rBuf.size() - nStart) ) )
         nLength = (rBuf.size() - nStart);
 
     return (nLength > 0) ? OUString( &rBuf[nStart], nLength ) : OUString();
