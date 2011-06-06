@@ -85,8 +85,6 @@ namespace writerfilter {
                 rtl_TextEncoding nCurrentEncoding;
 
                 rtl::OStringBuffer aFieldInstruction;
-
-                RTFReferenceTable::Entries_t aListTableEntries;
         };
 
         /// Implementation of the RTFDocument interface.
@@ -137,6 +135,8 @@ namespace writerfilter {
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
                 bool m_bNeedPap;
+                /// The list table and list override table combined.
+                RTFReferenceTable::Entries_t m_aListTableEntries;
         };
     } // namespace rtftok
 } // namespace writerfilter

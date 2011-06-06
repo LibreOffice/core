@@ -59,7 +59,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputS
     m_aFontEncodings(),
     m_aColorTable(),
     m_bFirstRun(true),
-    m_bNeedPap(false)
+    m_bNeedPap(false),
+    m_aListTableEntries()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -1018,7 +1019,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDETABLE)
     {
-        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aListTableEntries));
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aListTableEntries));
         Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
@@ -1157,8 +1158,7 @@ RTFParserState::RTFParserState()
     aStyleTableEntries(),
     nCurrentStyleIndex(0),
     nCurrentEncoding(0),
-    aFieldInstruction(),
-    aListTableEntries()
+    aFieldInstruction()
 {
 }
 
