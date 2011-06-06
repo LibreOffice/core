@@ -534,6 +534,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_RIN: nSprm = 0x845d; break;
         case RTF_SB: nSprm = NS_sprm::LN_PDyaBefore; break;
         case RTF_SA: nSprm = NS_sprm::LN_PDyaAfter; break;
+        case RTF_ILVL: nSprm = NS_sprm::LN_PIlvl; break;
         default: break;
     }
     if (nSprm > 0)
@@ -797,6 +798,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
                     m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_Num_numId, pValue));
+                else
+                    m_aStates.top().aSprms.insert(make_pair(NS_sprm::LN_PIlfo, pValue));
             }
             break;
         default:
