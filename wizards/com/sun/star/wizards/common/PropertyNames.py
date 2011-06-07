@@ -1,0 +1,15 @@
+class PropertyNames:
+    PROPERTY_ENABLED = "Enabled"
+    PROPERTY_HEIGHT = "Height"
+    PROPERTY_HELPURL = "HelpURL"
+    PROPERTY_POSITION_X = "PositionX"
+    PROPERTY_POSITION_Y = "PositionY"
+    PROPERTY_LABEL = "Label"
+    PROPERTY_MULTILINE = "MultiLine"
+    PROPERTY_NAME = "Name"
+    PROPERTY_STEP = "Step"
+    PROPERTY_WIDTH = "Width"
+    PROPERTY_TABINDEX = "TabIndex"
+    PROPERTY_STATE = "State"
+    PROPERTY_IMAGEURL = "ImageURL"
+
