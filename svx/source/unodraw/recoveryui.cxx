@@ -42,6 +42,8 @@
 
 #include <vcl/svapp.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //===============================================
 // const
 
@@ -312,29 +314,28 @@ void RecoveryUI::impl_doRecovery()
 
     // create all needed dialogs for this operation
     // and bind it to the used core service
-    svxdr::TabDialog4Recovery* pWizard = new svxdr::TabDialog4Recovery   (m_pParentWindow);
-    svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog       (pWizard, pCore );
+    boost::scoped_ptr<svxdr::TabDialog4Recovery> xWizard(new svxdr::TabDialog4Recovery(m_pParentWindow));
+    svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog(xWizard.get(), pCore );
     svxdr::IExtendedTabPage*   pPage2  = 0;
     svxdr::IExtendedTabPage*   pPage3  = 0;
 
-    pWizard->addTabPage(pPage1);
+    xWizard->addTabPage(pPage1);
     if ( !bRecoveryOnly && new_crash_pending() )
     {
-        pPage2 = new svxdr::ErrorRepWelcomeDialog(pWizard        );
-        pPage3 = new svxdr::ErrorRepSendDialog   (pWizard        );
-        pWizard->addTabPage(pPage2);
-        pWizard->addTabPage(pPage3);
+        pPage2 = new svxdr::ErrorRepWelcomeDialog(xWizard.get());
+        pPage3 = new svxdr::ErrorRepSendDialog(xWizard.get());
+        xWizard->addTabPage(pPage2);
+        xWizard->addTabPage(pPage3);
     }
 
     // start the wizard
-    pWizard->Execute();
+    xWizard->Execute();
 
     impl_showAllRecoveredDocs();
 
     delete pPage3 ;
     delete pPage2 ;
     delete pPage1 ;
-    delete pWizard;
 
     delete_pending_crash();
 }
