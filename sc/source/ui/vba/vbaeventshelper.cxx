@@ -69,7 +69,7 @@ SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nInde
     VbaEventsHelperBase::checkArgument( rArgs, nIndex );
 
     // first try to extract a sheet index
-    sal_Int32 nTab = -1;
+    sal_Int16 nTab = -1;
     if( rArgs[ nIndex ] >>= nTab )
     {
         if( (nTab < 0) || (nTab > MAXTAB) )
