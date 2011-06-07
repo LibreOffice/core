@@ -75,14 +75,14 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                     aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
                 }
 
-                catch ( CommandAbortedException& )
+                catch ( const CommandAbortedException& )
                 {
                     // couldn't truncate/delete
                 }
-                catch ( ContentCreationException& )
+                catch ( const ContentCreationException& )
                 {
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
             }
@@ -107,14 +107,14 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                 }
 
                 // it is NOT an error when the stream already exists and no truncation was desired
-                catch ( CommandAbortedException& )
+                catch ( const CommandAbortedException& )
                 {
                     // currently never an error is detected !
                 }
-                catch ( ContentCreationException& )
+                catch ( const ContentCreationException& )
                 {
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
             }
@@ -133,13 +133,13 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                 pStream->SetError( xLockBytes->GetError() );
             }
         }
-        catch ( CommandAbortedException& )
+        catch ( const CommandAbortedException& )
         {
         }
-        catch ( ContentCreationException& )
+        catch ( const ContentCreationException& )
         {
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
     }
