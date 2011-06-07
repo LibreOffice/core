@@ -64,6 +64,7 @@
 #include "unonames.hxx"
 #include "inputopt.hxx"
 #include "viewutil.hxx"
+#include "stlalgorithm.hxx"
 #include <xmloff/xmluconv.hxx>
 #include "ViewSettingsSequenceDefines.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -435,6 +436,8 @@ ScViewData::~ScViewData()
 {
     KillEditView();
     delete pOptions;
+    ::std::for_each(
+        maTabData.begin(), maTabData.end(), ScDeleteObjectByPtr<ScViewDataTable>());
 }
 
 void ScViewData::UpdateCurrentTab()

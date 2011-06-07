@@ -42,6 +42,7 @@
 #include "refupdat.hxx"
 #include "rechead.hxx"
 #include "compiler.hxx"
+#include "stlalgorithm.hxx"
 
 using ::std::vector;
 using ::std::advance;
@@ -90,15 +91,6 @@ public:
     }
 private:
     vector<ScRange*>& mrRanges;
-};
-
-template<typename T>
-struct DeleteObject : public ::std::unary_function<void, T*>
-{
-    void operator() (T* p)
-    {
-        delete p;
-    }
 };
 
 class CountCells : public ::std::unary_function<void, const ScRange*>
@@ -470,7 +462,7 @@ ScRange* ScRangeList::Remove(size_t nPos)
 
 void ScRangeList::RemoveAll()
 {
-    for_each(maRanges.begin(), maRanges.end(), DeleteObject<ScRange>());
+    for_each(maRanges.begin(), maRanges.end(), ScDeleteObjectByPtr<ScRange>());
     maRanges.clear();
 }
 
@@ -523,7 +515,7 @@ void ScRangeList::push_back(ScRange* p)
 
 ScRangePairList::~ScRangePairList()
 {
-    for_each( maPairs.begin(), maPairs.end(), DeleteObject<ScRangePair>() );
+    for_each( maPairs.begin(), maPairs.end(), ScDeleteObjectByPtr<ScRangePair>() );
     maPairs.clear();
 }
 

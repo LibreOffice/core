@@ -151,7 +151,6 @@ private:
     bool            mbOldCursorValid;           // "virtuelle" Cursorpos. bei zusammengefassten
 
                     ScViewDataTable();
-                    ~ScViewDataTable();
 
     void            WriteUserDataSequence(
                         com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
@@ -160,6 +159,8 @@ private:
     void            ReadUserDataSequence(
                         const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
                         ScViewData& rViewData, SCTAB nTab, bool& rHasZoom);
+public:
+    ~ScViewDataTable();
 };
 
 // ---------------------------------------------------------------------------

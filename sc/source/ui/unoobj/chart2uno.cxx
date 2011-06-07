@@ -43,6 +43,7 @@
 #include "compiler.hxx"
 #include "reftokenhelper.hxx"
 #include "chartlis.hxx"
+#include "stlalgorithm.hxx"
 
 #include <sfx2/objsh.hxx>
 #include <tools/table.hxx>
@@ -156,20 +157,6 @@ uno::Reference< sheet::XSpreadsheetDocument > lcl_GetSpreadSheetDocument( ScDocu
     return uno::Reference< sheet::XSpreadsheetDocument >( lcl_GetXModel( pDoc ), uno::UNO_QUERY );
 }
 
-// ============================================================================
-
-namespace {
-
-struct DeleteInstance : public unary_function<FormulaToken*, void>
-{
-    void operator() (FormulaToken* p) const
-    {
-        delete p;
-    }
-};
-
-}
-
 struct TokenTable
 {
     SCROW mnRowCount;
@@ -184,7 +171,7 @@ struct TokenTable
     }
     void clear()
     {
-        ::std::for_each(maTokens.begin(), maTokens.end(), DeleteInstance());
+        ::std::for_each(maTokens.begin(), maTokens.end(), ScDeleteObjectByPtr<FormulaToken>());
     }
 
     void push_back( FormulaToken* pToken )
