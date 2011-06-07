@@ -182,8 +182,6 @@ Docu_Display::do_Process(const ary::doc::Documentation & i_rData)
 void
 Docu_Display::Display_StdTag( const StdTag & i_rData )
 {
-    csv_assert( uintt(i_rData.Std_Id()) < uintt(ary::info::C_eAtTag_NrOfClasses) );
-
     const ary::info::DocuText::TokenList &
         rText = i_rData.CText().Tokens();
     typedef ary::info::DocuText::TokenList::const_iterator TokenIterator;
