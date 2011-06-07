@@ -39,6 +39,7 @@
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/ole/olestorage.hxx"
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 namespace oox {
 namespace core {
@@ -57,8 +58,8 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-FilterDetectDocHandler::FilterDetectDocHandler( OUString& rFilterName ) :
-    mrFilterName( rFilterName )
+FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName ) :
+    mrFilterName( rFilterName ), mxContext( rxContext )
 {
     maContextStack.reserve( 2 );
 }
@@ -163,7 +164,24 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
     if( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) ) )
-        maTargetPath = OUString( sal_Unicode( '/' ) ) + rAttribs.getString( XML_Target, OUString() );
+    {
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  com::sun::star::uri::UriReferenceFactory::create( mxContext );
+        try
+        {
+             // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
+             // keep the XUriReference implementation happy )
+             Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("file:///" ) ) );
+
+             Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  rAttribs.getString( XML_Target, OUString() ) );
+             Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True,  com::sun::star::uri::RelativeUriExcessParentSegments::RelativeUriExcessParentSegments_RETAIN );
+
+             if ( xAbs.is() )
+                 maTargetPath = xAbs->getPath();
+        }
+        catch( Exception& e)
+        {
+        }
+    }
 }
 
 OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType ) const
@@ -663,7 +681,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_packageRel );
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
-            aParser.setDocumentHandler( new FilterDetectDocHandler( aFilterName ) );
+            aParser.setDocumentHandler( new FilterDetectDocHandler( mxContext, aFilterName ) );
 
             /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
                 to determine the content type of the part at the target path. */
@@ -671,7 +689,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.parseStream( aZipStorage, CREATE_OUSTRING( "[Content_Types].xml" ) );
         }
     }
-    catch( Exception& )
+    catch( Exception& e )
     {
     }
 
