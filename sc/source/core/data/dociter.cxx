@@ -93,7 +93,7 @@ ScDocumentIterator::~ScDocumentIterator()
 
 sal_Bool ScDocumentIterator::GetThisCol()
 {
-    ScTable*        pTab;
+    ScTable*        pTab = NULL;
     while ( nTab < pDoc->GetTableCount() && (pTab = pDoc->pTab[nTab]) == NULL )
     {
         if ( nTab == nEndTab )
@@ -103,6 +103,11 @@ sal_Bool ScDocumentIterator::GetThisCol()
             return false;
         }
         ++nTab;
+    }
+    if (pTab == NULL)
+    {
+        OSL_FAIL("no table in document?");
+        return false;
     }
     ScColumn*       pCol = &pTab->aCol[nCol];
     ScAttrArray*    pAtt = pCol->pAttrArray;
