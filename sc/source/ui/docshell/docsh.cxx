@@ -547,7 +547,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 for (SCTAB i = 0; i < rScHint.GetTab2(); ++i)
                 {
                     uno::Sequence< uno::Any > aArgs( 1 );
-                    aArgs[0] <<= rScHint.GetTab1() + i;
+                    aArgs[0] <<= static_cast<sal_Int16>(rScHint.GetTab1() + i);
                     xVbaEvents->processVbaEvent( WORKBOOK_NEWSHEET, aArgs );
                 }
             }
