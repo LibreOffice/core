@@ -576,6 +576,21 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
         implts_dispatch(aParams);
 }
 
+void AutoRecovery::ListenerInformer::start()
+{
+    m_rRecovery.implts_informListener(m_eJob,
+        AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_START, NULL));
+}
+
+void AutoRecovery::ListenerInformer::stop()
+{
+    if (m_bStopped)
+        return;
+    m_rRecovery.implts_informListener(m_eJob,
+        AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_STOP, NULL));
+    m_bStopped = true;
+}
+
 //-----------------------------------------------
 void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 {
@@ -599,8 +614,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
     implts_stopTimer();
     implts_stopListening();
 
-    implts_informListener(eJob,
-        AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_START, NULL));
+    ListenerInformer aListenerInformer(*this, eJob);
+    aListenerInformer.start();
 
     try
     {
@@ -676,13 +691,14 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             )
             implts_cleanUpWorkingEntry(aParams);
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
         {} // TODO better error handling
 
-    implts_informListener(eJob,
-        AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_STOP, NULL));
+    aListenerInformer.stop();
 
     // SAFE -> ----------------------------------
     aWriteLock.lock();
@@ -1304,8 +1320,8 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
                 xModify->insertByName(sID, css::uno::makeAny(xSet));
         }
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         {} // ??? can it happen that a full disc let these set of operations fail too ???
 
@@ -1627,7 +1643,13 @@ IMPL_LINK(AutoRecovery, implts_asyncDispatch, void*, EMPTYARG)
     aWriteLock.unlock();
     // <- SAFE
 
-    implts_dispatch(aParams);
+    try
+    {
+        implts_dispatch(aParams);
+    }
+    catch (...)
+    {
+    }
     return 0;
 }
 

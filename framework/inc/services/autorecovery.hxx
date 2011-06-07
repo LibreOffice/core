@@ -861,6 +861,26 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                                                                             const ::rtl::OUString&             sEventType,
                                                                                   AutoRecovery::TDocumentInfo* pInfo     );
 
+
+        class ListenerInformer
+        {
+        private:
+            AutoRecovery &m_rRecovery;
+            sal_Int32 m_eJob;
+            bool m_bStopped;
+        public:
+            ListenerInformer(AutoRecovery &rRecovery, sal_Int32 eJob)
+                : m_rRecovery(rRecovery), m_eJob(eJob), m_bStopped(false)
+            {
+            }
+            void start();
+            void stop();
+            ~ListenerInformer()
+            {
+                stop();
+            }
+        };
+
         //---------------------------------------
 
         // TODO document me
