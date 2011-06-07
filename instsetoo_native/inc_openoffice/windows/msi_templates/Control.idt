@@ -81,7 +81,7 @@ CustomSetup	InstallLabel	Text	8	190	220	10	3		OOO_CONTROL_57
 CustomSetup	ItemDescription	Text	241	80	120	65	3		OOO_CONTROL_58		
 CustomSetup	Location	Text	8	203	154	20	3		OOO_CONTROL_59		
 CustomSetup	Next	PushButton	230	243	66	17	3		OOO_CONTROL_60	Cancel	
-CustomSetup	Size	Text	241	133	120	65	3		OOO_CONTROL_61		
+CustomSetup	Size	Text	241	148	120	65	3		OOO_CONTROL_61		
 CustomSetup	Tree	SelectionTree	8	70	220	118	7	_BrowseProperty		ChangeFolder	
 CustomSetupTips	Banner	Bitmap	297	0	77	44	1		BannerBmp		
 CustomSetupTips	BannerLine	Line	0	44	374	0	1				
