@@ -138,11 +138,7 @@ CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror
 
-# Once all modules on this platform compile without warnings, set
-# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
-# settings.mk):
-MODULES_WITH_WARNINGS := \
-    lotuswordpro
+COMPILER_WARN_ERRORS=TRUE
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
