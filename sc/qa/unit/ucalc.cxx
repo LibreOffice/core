@@ -277,9 +277,7 @@ public:
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testDataPilotFilters);
     CPPUNIT_TEST(testSheetCopy);
-#if 0 // Disabled, first problem with ScProgress in ScDocument::MoveTab must be solved
     CPPUNIT_TEST(testSheetMove);
-#endif
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
