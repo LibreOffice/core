@@ -436,7 +436,7 @@ namespace sdr
 
                             SfxItemSet* pNewSet = &CreateObjectSpecificItemSet(pNewModel->GetItemPool());
 
-                            std::vector<const SfxItemSet*>::const_reverse_iterator riter;
+                            std::vector<const SfxItemSet*>::reverse_iterator riter;
                             for (riter = aSetList.rbegin(); riter != aSetList.rend(); ++riter)
                                 pNewSet->Put(*(*riter));
 
