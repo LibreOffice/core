@@ -30,6 +30,10 @@
 
 #include <functional>
 
+/**
+ * Function object to allow deleting instances stored in STL containers as
+ * pointers.
+ */
 template<typename T>
 struct ScDeleteObjectByPtr : public ::std::unary_function<T*, void>
 {
