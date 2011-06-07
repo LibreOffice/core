@@ -437,24 +437,16 @@ ScViewData::~ScViewData()
     delete pOptions;
 }
 
-void ScViewData::UpdateThis()
+void ScViewData::UpdateCurrentTab()
 {
-    do
+    pThisTab = maTabData[nTabNo];
+    while (!pThisTab)
     {
-        pThisTab = maTabData[nTabNo];
-        if (!pThisTab)
-        {
-            if (nTabNo>0)
-                --nTabNo;
-            else
-            {
-                pThisTab = maTabData[0] = new ScViewDataTable();
-            }
-
-                // hier keine Assertion, weil sonst Paints kommen, bevor alles initialisiert ist!
-        }
+        if (nTabNo > 0)
+            pThisTab = maTabData[--nTabNo];
+        else
+            pThisTab = maTabData[0] = new ScViewDataTable;
     }
-    while (!pThisTab);
 }
 
 void ScViewData::InsertTab( SCTAB nTab )
@@ -465,7 +457,7 @@ void ScViewData::InsertTab( SCTAB nTab )
         maTabData.insert( maTabData.begin() + nTab, NULL );
     CreateTabData( nTab );
 
-    UpdateThis();
+    UpdateCurrentTab();
     aMarkData.InsertTab( nTab );
 }
 
@@ -482,7 +474,7 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
         CreateTabData( i );
         aMarkData.InsertTab( i );
     }
-    UpdateThis();
+    UpdateCurrentTab();
 }
 
 void ScViewData::DeleteTab( SCTAB nTab )
@@ -490,7 +482,7 @@ void ScViewData::DeleteTab( SCTAB nTab )
     delete maTabData.at(nTab);
 
     maTabData.erase(maTabData.begin() + nTab);
-    UpdateThis();
+    UpdateCurrentTab();
     aMarkData.DeleteTab( nTab );
 }
 
@@ -503,8 +495,7 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
     }
 
     maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
-    UpdateThis();
-
+    UpdateCurrentTab();
 }
 
 void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
@@ -528,7 +519,7 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
     else
         maTabData.insert(maTabData.begin() + nDestTab, NULL);
 
-    UpdateThis();
+    UpdateCurrentTab();
     aMarkData.InsertTab( nDestTab );
 }
 
@@ -551,7 +542,7 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
         maTabData[nDestTab] = pTab;
     }
 
-    UpdateThis();
+    UpdateCurrentTab();
     aMarkData.DeleteTab( nSrcTab );
     aMarkData.InsertTab( nDestTab );            // ggf. angepasst
 }

@@ -237,6 +237,7 @@ private:
     SC_DLLPRIVATE void          CreateTabData( std::vector< SCTAB >& rvTabs );
     SC_DLLPRIVATE void          CreateSelectedTabData();
     SC_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
+    SC_DLLPRIVATE void          UpdateCurrentTab();
 
 public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
@@ -274,8 +275,6 @@ public:
 
     sal_Bool            IsActive() const            { return bActive; }
     void            Activate(sal_Bool bActivate)    { bActive = bActivate; }
-
-    void            UpdateThis();
 
     void            InsertTab( SCTAB nTab );
     void            InsertTabs( SCTAB nTab, SCTAB nNewSheets );
