@@ -1636,6 +1636,9 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
 {
     SdrModel aModel;
+    SfxItemPool& rPool = aModel.GetItemPool();
+    rPool.FreezeIdRanges();
+
     SdrPage aSdrPage( aModel );
 
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
