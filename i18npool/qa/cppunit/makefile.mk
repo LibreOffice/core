@@ -37,6 +37,11 @@ my_components = qa_i18npool
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 
