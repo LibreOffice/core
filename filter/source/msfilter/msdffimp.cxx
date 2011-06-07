@@ -1580,7 +1580,7 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
             }
         }
     }
-    if ( !rShadeColors.size() )
+    if ( rShadeColors.empty() )
     {
         rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ), 0 ) );
         rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ), 1 ) );
@@ -2615,7 +2615,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         aHandlePropVec.push_back( aProp );
                     }
                 }
-                if ( aHandlePropVec.size() )
+                if ( !aHandlePropVec.empty() )
                 {
                     PropSeq aHandlePropSeq( aHandlePropVec.size() );
                     aIter = aHandlePropVec.begin();
@@ -2931,7 +2931,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aPathPropVec.push_back( aProp );
         }
         // pushing the whole Path element
-        if ( aPathPropVec.size() )
+        if ( !aPathPropVec.empty() )
         {
             const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
             PropSeq aPathPropSeq( aPathPropVec.size() );
