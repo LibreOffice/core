@@ -477,17 +477,17 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
     {
         maTabData.insert( maTabData.begin() + nTab, nNewSheets, NULL );
     }
-    for (SCTAB aTab = nTab; aTab < nTab + nNewSheets; ++aTab)
+    for (SCTAB i = nTab; i < nTab + nNewSheets; ++i)
     {
-        CreateTabData( aTab );
-        aMarkData.InsertTab( aTab );
+        CreateTabData( i );
+        aMarkData.InsertTab( i );
     }
     UpdateThis();
 }
 
 void ScViewData::DeleteTab( SCTAB nTab )
 {
-    delete maTabData[nTab];
+    delete maTabData.at(nTab);
 
     maTabData.erase(maTabData.begin() + nTab);
     UpdateThis();
@@ -496,10 +496,10 @@ void ScViewData::DeleteTab( SCTAB nTab )
 
 void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 {
-    for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
+    for (SCTAB i = 0; i < nSheets; ++i)
     {
-        aMarkData.DeleteTab( nTab + aTab );
-        delete maTabData[nTab + aTab];
+        aMarkData.DeleteTab( nTab + i );
+        delete maTabData.at(nTab + i);
     }
 
     maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
@@ -521,8 +521,8 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
     if (nSrcTab >= static_cast<SCTAB>(maTabData.size()))
         OSL_FAIL("pTabData out of bounds, FIX IT");
 
-    while( nDestTab >= static_cast<SCTAB>(maTabData.size()))
-        maTabData.push_back(NULL);
+    EnsureTabDataSize(nDestTab + 1);
+
     if ( maTabData[nSrcTab] )
         maTabData.insert(maTabData.begin() + nDestTab, new ScViewDataTable( *maTabData[nSrcTab] ));
     else
@@ -536,22 +536,19 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = pDoc->GetTableCount() - 1;
-    ScViewDataTable* pTab;
+    ScViewDataTable* pTab = NULL;
     if (nSrcTab < static_cast<SCTAB>(maTabData.size()))
     {
         pTab = maTabData[nSrcTab];
         maTabData.erase( maTabData.begin() + nSrcTab );
     }
-    else
-        pTab = NULL;
 
     if (nDestTab < static_cast<SCTAB>(maTabData.size()))
         maTabData.insert( maTabData.begin() + nDestTab, pTab );
     else
     {
-        while (nDestTab > static_cast<SCTAB>(maTabData.size()))
-            maTabData.push_back(NULL);
-        maTabData.push_back(pTab);
+        EnsureTabDataSize(nDestTab + 1);
+        maTabData[nDestTab] = pTab;
     }
 
     UpdateThis();
@@ -563,8 +560,7 @@ void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
 {
     std::vector< SCTAB >::iterator it_end = rvTabs.end();
     for ( std::vector< SCTAB >::iterator it = rvTabs.begin(); it != it_end; ++it )
-        if ( !maTabData[*it] )
-            CreateTabData( *it );
+        CreateTabData(*it);
 }
 
 void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
@@ -590,7 +586,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
         for ( ; it != it_end; ++it )
         {
             SCTAB i = *it;
-            if ( *it < static_cast<SCTAB>(maTabData.size()) && maTabData[i] )
+            if ( i < static_cast<SCTAB>(maTabData.size()) && maTabData[i] )
                 maTabData[i]->eZoomType = eNew;
         }
     }
@@ -1428,8 +1424,8 @@ void ScViewData::GetEditView( ScSplitPos eWhich, EditView*& rViewPtr, SCCOL& rCo
 
 void ScViewData::CreateTabData( SCTAB nNewTab )
 {
-    while(nNewTab >= static_cast<SCTAB>(maTabData.size()))
-        maTabData.push_back(NULL);
+    EnsureTabDataSize(nNewTab + 1);
+
     if (!maTabData[nNewTab])
     {
         maTabData[nNewTab] = new ScViewDataTable;
@@ -1446,8 +1442,8 @@ void ScViewData::CreateSelectedTabData()
 {
     SCTAB nTabCount = aMarkData.GetLastSelected();
     for (SCTAB i=0; i<nTabCount; i++)
-        if ( aMarkData.GetTableSelect(i) && !maTabData[i] )
-            CreateTabData( i );
+        if ( aMarkData.GetTableSelect(i))
+            CreateTabData(i);
 }
 
 void ScViewData::EnsureTabDataSize(size_t nSize)
@@ -2310,10 +2306,7 @@ void ScViewData::ReadUserData(const String& rData)
     while ( nCount > nPos+nTabStart )
     {
         aTabOpt = rData.GetToken(static_cast<xub_StrLen>(nPos+nTabStart));
-        while(nPos >= static_cast<SCTAB>(maTabData.size()))
-        {
-            maTabData.push_back(NULL);
-        }
+        EnsureTabDataSize(nPos + 1);
         if (!maTabData[nPos])
             maTabData[nPos] = new ScViewDataTable;
 
