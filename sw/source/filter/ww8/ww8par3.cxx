@@ -2138,88 +2138,118 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     SvStream *pDataStream)
 {
     sal_uInt8 nField;
-    // nHeaderBype == version
-    sal_uInt32 nHeaderByte;
+    sal_uInt8 nHeaderByte;
 
-    // The following is a FFData structure as described in
-    // Microsoft's DOC specification (chapter 2.9.78)
-
+    int nType=0;
     *pDataStream >> nHeaderByte;
+    if (nHeaderByte == 0xFF) //Guesswork time, difference between 97 and 95 ?
+    {
+        pDataStream->SeekRel(3);
+        *pDataStream >> nHeaderByte;
+        nType=1;
+    }
+    fUnknown = nHeaderByte & 0x3;
+    fDropdownIndex = (nHeaderByte & 0x7C) >> 2;
+    *pDataStream >> nField;
+    fToolTip = nField & 0x01;
+    fNoMark = (nField & 0x02)>>1;
+    fUseSize = (nField & 0x04)>>2;
+    fNumbersOnly= (nField & 0x08)>>3;
+    fDateOnly = (nField & 0x10)>>4;
+    fUnused = (nField & 0xE0)>>5;
+    *pDataStream >> nSize;
 
-    // wouldn't it be better to read the bits as a 16 bit word ( like it is in the spec.
-    // certainly easier to follow.
-    sal_uInt8 bits1;
-    *pDataStream >> bits1;
-    sal_uInt8 bits2;
-    *pDataStream >> bits2;
-
-    sal_uInt8 iType = ( bits1 & 0x3 );
-
-    // we should verify that bits.iType & nWhich concur
-    OSL_ENSURE( iType == nWhich, "something wrong, expect control type read from stream doesn't match nWhich passed in");
-    if ( !( iType == nWhich ) )
-        return; // bail out
-
-    sal_uInt8 iRes = (bits1 & 0x7C) >> 2;
-
-    sal_uInt16 cch;
-    *pDataStream >> cch;
-
-    sal_uInt16 hps;
-    *pDataStream >> hps;
+    *pDataStream >> hpsCheckBox;
+    if (nType == 0)
+        pDataStream->SeekRel(2); //Guess
 
     rtl_TextEncoding eEnc = rRdr.eStructCharSet;
+    sTitle = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
+                    : WW8Read_xstz(*pDataStream, 0, true);
 
-    // xstzName
-    sTitle = WW8Read_xstz(*pDataStream, 0, true);
+    if (nWhich == WW8_CT_CHECKBOX)
+    {
+        *pDataStream >> nDefaultChecked;
+        nChecked = nDefaultChecked;
 
-    if (nWhich == WW8_CT_EDIT)
-    {   // Field is a textbox
-        // Default text
-        // xstzTextDef
-        sDefault = WW8Read_xstz(*pDataStream, 0, true);
+        sal_uInt8 iRes = (nHeaderByte >> 2) & 0x1F;
+        switch (iRes)
+        {
+            case 1:  //checked
+                nChecked = true;
+                break;
+            case 25: //undefined, Undefined checkboxes are treated as unchecked
+                     //but it appear that both visually and the value are picked up from the default in that case
+                break;
+            case 0:  //unchecked
+                nChecked = false;
+                break;
+            default:
+                OSL_ENSURE(!this, "unknown option, please report to cmc");
+                break;
+        }
+        if ( nDefaultChecked )
+            sDefault = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("1") );
+        else
+            sDefault = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("0") );
     }
+    else if (nWhich == WW8_CT_DROPDOWN)
+        *pDataStream >> nChecked;
     else
     {
-        // CheckBox or ComboBox
-        sal_uInt16 wDef = 0;
-        *pDataStream >> wDef;
-        nChecked = wDef; // default
-        if (nWhich == WW8_CT_CHECKBOX)
-        {
-            if ( iRes != 25 )
-                nChecked = iRes;
-            sDefault = ( wDef == 0 ) ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("0") ) :  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("1") );
-        }
+        sDefault = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
+                          : WW8Read_xstz(*pDataStream, 0, true);
     }
-    // xstzTextFormat
-    sFormatting = WW8Read_xstz(*pDataStream, 0, true);
-    // xstzHelpText
-    sHelp = WW8Read_xstz(*pDataStream, 0, true);
-    // xstzStatText
-    sToolTip = WW8Read_xstz(*pDataStream, 0, true);
 
-    String sEntryMacro = WW8Read_xstz(*pDataStream, 0, true);
-    String sExitMcr = WW8Read_xstz(*pDataStream, 0, true);
+    sFormatting = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
+                         : WW8Read_xstz(*pDataStream, 0, true);
+
+    sHelp = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
+                   : WW8Read_xstz(*pDataStream, 0, true);
+
+    if (nWhich == WW8_CT_DROPDOWN)      //is this the case ?
+        fToolTip = true;
+
+    if( fToolTip )
+    {
+        sToolTip = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
+                          : WW8Read_xstz(*pDataStream, 0, true);
+    }
 
     if (nWhich == WW8_CT_DROPDOWN)
     {
         bool bAllOk = true;
-        // SSTB (see Spec. 2.2.4)
-        sal_uInt16 fExtend;
-        *pDataStream >> fExtend;
-        sal_uInt16 nNoStrings;
-
-        // Isn't it that if fExtend isn't 0xFFFF then fExtend actually
-        // doesn't exist and we really have just read nNoStrings ( or cData )?
-        if (fExtend != 0xFFFF)
-            bAllOk = false;
-        *pDataStream >> nNoStrings;
-
-        // I guess this should be zero ( and we should ensure that )
-        sal_uInt16 cbExtra;
-        *pDataStream >> cbExtra;
-
+        pDataStream->SeekRel(4 * (nType ? 2 : 1));
+        sal_uInt16 nDummy;
+        *pDataStream >> nDummy;
+        sal_uInt32 nNoStrings;
+        if (!nType)
+        {
+            sal_uInt16 nWord95NoStrings;
+            *pDataStream >> nWord95NoStrings;
+            nNoStrings = nWord95NoStrings;
+            *pDataStream >> nWord95NoStrings;
+            if (nNoStrings != nWord95NoStrings)
+                bAllOk = false;
+            nNoStrings = nWord95NoStrings;
+            sal_uInt16 nDummy2;
+            *pDataStream >> nDummy2;
+            if (nDummy2 != 0)
+                bAllOk = false;
+            *pDataStream >> nDummy2;
+            if (nDummy2 != 0xA)
+                bAllOk = false;
+            if (!bAllOk)    //Not as expected, don't risk it at all.
+                nNoStrings = 0;
+            for (sal_uInt16 nI = 0; nI < nNoStrings; ++nI)
+                pDataStream->SeekRel(2);
+        }
+        else
+        {
+            if (nDummy != 0xFFFF)
+                bAllOk = false;
+            *pDataStream >> nNoStrings;
+        }
         OSL_ENSURE(bAllOk,
             "Unknown formfield dropdown list structure. Report to cmc");
         if (!bAllOk)    //Not as expected, don't risk it at all.
@@ -2227,19 +2257,11 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         maListEntries.reserve(nNoStrings);
         for (sal_uInt32 nI = 0; nI < nNoStrings; ++nI)
         {
-            String sEntry =  WW8Read_xstz(*pDataStream, 0, false);
+            String sEntry = !nType ? WW8ReadPString(*pDataStream, eEnc, false)
+                           : WW8Read_xstz(*pDataStream, 0, false);
             maListEntries.push_back(sEntry);
         }
     }
-    fDropdownIndex = iRes;
-
-    nField = bits2;
-    fToolTip = nField & 0x01;
-    fNoMark = (nField & 0x02)>>1;
-    fUseSize = (nField & 0x04)>>2;
-    fNumbersOnly= (nField & 0x08)>>3;
-    fDateOnly = (nField & 0x10)>>4;
-    fUnused = (nField & 0xE0)>>5;
 }
 
 WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
