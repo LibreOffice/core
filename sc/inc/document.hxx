@@ -640,7 +640,7 @@ public:
     bool            HasDdeLinks() const;
     bool            HasAreaLinks() const;
     void            UpdateExternalRefLinks(Window* pWin);
-    void            UpdateDdeLinks();
+    void            UpdateDdeLinks(Window* pWin);
     void            UpdateAreaLinks();
 
                     // originating DDE links

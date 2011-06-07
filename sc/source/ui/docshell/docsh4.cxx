@@ -493,7 +493,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     ReloadTabLinks();
                     aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
-                    aDocument.UpdateDdeLinks();
+                    aDocument.UpdateDdeLinks(GetActiveDialogParent());
                     aDocument.UpdateAreaLinks();
 
                     //! Test, ob Fehler

@@ -1070,7 +1070,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
     }
 }
 
-void ScDocument::UpdateDdeLinks()
+void ScDocument::UpdateDdeLinks(Window* pWin)
 {
     if (GetLinkManager())
     {
@@ -1080,14 +1080,34 @@ void ScDocument::UpdateDdeLinks()
 
         //  falls das Updaten laenger dauert, erstmal alle Werte
         //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
-        sal_Bool bAny = false;
+        bool bAny = false;
         for (i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
+            ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
+            if (pDdeLink)
             {
-                ((ScDdeLink*)pBase)->ResetValue();
-                bAny = sal_True;
+                if (pDdeLink->Update())
+                    bAny = true;
+                else
+                {
+                    // Update failed.  Notify the user.
+                    rtl::OUString aFile = pDdeLink->GetTopic();
+                    rtl::OUString aElem = pDdeLink->GetItem();
+                    rtl::OUString aType = pDdeLink->GetAppl();
+
+                    rtl::OUStringBuffer aBuf;
+                    aBuf.append(String(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
+                    aBuf.appendAscii("\n\n");
+                    aBuf.appendAscii("Source : ");
+                    aBuf.append(aFile);
+                    aBuf.appendAscii("\nElement : ");
+                    aBuf.append(aElem);
+                    aBuf.appendAscii("\nType : ");
+                    aBuf.append(aType);
+                    ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+                    aBox.Execute();
+                }
             }
         }
         if (bAny)
@@ -1101,13 +1121,6 @@ void ScDocument::UpdateDdeLinks()
             //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
         }
 
-        //  nun wirklich updaten...
-        for (i=0; i<nCount; i++)
-        {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-                ((ScDdeLink*)pBase)->TryUpdate();       // bei DDE-Links TryUpdate statt Update
-        }
         pLinkManager->CloseCachedComps();
     }
 }
