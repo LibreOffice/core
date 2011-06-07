@@ -326,10 +326,10 @@ MY_MISC_CXXFILES := $(foreach,i,$(DEPOBJFILES) $(MISC)/$(i:b).cxx)
 
 .INCLUDE :  target.mk
 
-$(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST) $(MISC)/saxparser.rdb
+$(MY_MISC_CXXFILES) : $(OUT_FOR_BUILD)$/bin$/saxparser$(EXECPOST) $(MISC)/saxparser.rdb
 
 $(MISC)$/localedata_%.cxx : %.xml
-    $(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(BIN)$/saxparser $* $< $@ \
+    $(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(OUT_FOR_BUILD)$/bin$/saxparser $* $< $@ \
         $(my_file)$(PWD)/$(MISC)/saxparser.rdb $(SOLARBINDIR)$/types.rdb \
         -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(SOLARSHAREDBIN)
     $(RM) $(BIN)$/$(@:b).rdb
