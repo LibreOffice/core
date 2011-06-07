@@ -78,6 +78,9 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
+    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, bool bExpected);
+    bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+
     bool testLoad(const rtl::OUString &rFilter,
         const rtl::OUString &rUserData,
         const rtl::OUString &rURL);
@@ -97,6 +100,43 @@ private:
     uno::Reference<uno::XInterface> m_xWriterComponent;
     ::rtl::OUString m_aSrcRoot;
 };
+
+bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
+    const rtl::OUString &rUserData)
+{
+    SfxFilter aFilter(
+        rFilter,
+        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+        rUserData, rtl::OUString() );
+
+    SwDocShellRef xDocShRef = new SwDocShell;
+    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
+    aSrcMed.SetFilter(&aFilter);
+    return xDocShRef->DoLoad(&aSrcMed);
+}
+
+void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, bool bExpected)
+{
+    osl::Directory aDir(rURL);
+
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
+    osl::DirectoryItem aItem;
+    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+    {
+        aItem.getFileStatus(aFileStatus);
+        rtl::OUString sURL = aFileStatus.getFileURL();
+        if (aFileStatus.getFileType() == osl::FileStatus::Directory)
+            recursiveScan(rFilter, sURL, rUserData, bExpected);
+        else
+        {
+            bool bRes = load(rFilter, sURL, rUserData);
+            rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
+        }
+    }
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
+}
 
 bool FiltersTest::testLoad(const rtl::OUString &rFilter,
     const rtl::OUString &rUserData,
@@ -118,62 +158,18 @@ void FiltersTest::testCVEs()
 //To-Do: I know this works on Linux, please check if this test works under
 //windows and enable it if so
 #ifndef WNT
-    bool bResult;
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/xml/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), true);
 
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice XML (Writer)")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2006-3117-1.sxw")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2006-3117 regression", bResult == false);
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/xml/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), false);
 
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2007-0245-1.rtf")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2007-0245 regression", bResult == true);
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/rtf/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")), true);
 
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-0200-1.doc")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2009-0200 regression", bResult == true);
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/rtf/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")), false);
 
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-0201-1.doc")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2009-0201 regression", bResult == true);
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), true);
 
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-3301-1.doc")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2009-3301 regression", bResult == true);
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);
 
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-3302-1.doc")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2009-3302 regression", bResult == true);
-
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-3302-2.doc")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2009-3302 regression", bResult == true);
-
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3451-1.rtf")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2010-3451 regression", bResult == false);
-
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3452-1.rtf")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2010-3452 regression", bResult == true);
-
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3453-1.doc")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2010-3453 regression", bResult == true);
-
-    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3454-1.doc")));
-    CPPUNIT_ASSERT_MESSAGE("CVE-2010-3454 regression", bResult == true);
 #endif
 }
 
