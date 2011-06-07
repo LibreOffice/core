@@ -612,7 +612,6 @@ void SplineCalculater::CalculateCubicSplines(
         // information to calculate each point of the curve
         double fXDerivation;
         double fYDerivation;
-        double fZDerivation;
         lcl_SplineCalculation* aSplineX;
         lcl_SplineCalculation* aSplineY;
         // lcl_SplineCalculation* aSplineZ; the z-coordinates of all points in
@@ -634,10 +633,8 @@ void SplineCalculater::CalculateCubicSplines(
             ::rtl::math::setInf( &fInfty, sal_False );
             fXDerivation = fInfty;
             fYDerivation = fInfty;
-            fZDerivation = fInfty;
             aSplineX = new lcl_SplineCalculation( aInputX, fXDerivation, fXDerivation );
             aSplineY = new lcl_SplineCalculation( aInputY, fYDerivation, fYDerivation );
-            // aSplineZ = new lcl_SplineCalculation( aInputZ, fZDerivation, fZDerivation );
         }
 
         // fill result polygon with calculated values
