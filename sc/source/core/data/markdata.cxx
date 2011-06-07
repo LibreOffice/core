@@ -603,7 +603,6 @@ sal_Bool ScMarkData::HasAnyMultiMarks() const
 void ScMarkData::InsertTab( SCTAB nTab )
 {
     std::set<SCTAB> tabMarked(maTabMarked.begin(), maTabMarked.upper_bound(nTab));
-    tabMarked.insert( nTab );
     std::set<SCTAB>::iterator it = maTabMarked.upper_bound(nTab);
     for (; it != maTabMarked.end(); ++it)
         tabMarked.insert(*it + 1);
