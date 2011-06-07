@@ -1973,70 +1973,46 @@ sal_Bool ScViewFunc::InsertTable( const String& rName, SCTAB nTab, sal_Bool bRec
 //----------------------------------------------------------------------------
 //  Insert tables
 
-sal_Bool ScViewFunc::InsertTables(SvStrings *pNames, SCTAB nTab,
+sal_Bool ScViewFunc::InsertTables(std::vector<rtl::OUString>& aNames, SCTAB nTab,
                                             SCTAB nCount, sal_Bool bRecord )
 {
-    ScDocShell* pDocSh  = GetViewData()->GetDocShell();
-    ScDocument* pDoc    = pDocSh->GetDocument();
+    ScDocShell* pDocSh    = GetViewData()->GetDocShell();
+    ScDocument* pDoc     = pDocSh->GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-
-    SvStrings *pNameList= NULL;
 
     WaitObject aWait( GetFrameWin() );
 
     if (bRecord)
     {
-        pNameList= new SvStrings;
-        pDoc->BeginDrawUndo();                          //  InsertTab creates a SdrUndoNewPage
+        pDoc->BeginDrawUndo();                            //    InsertTab creates a SdrUndoNewPage
     }
 
-    sal_Bool bFlag=false;
+    bool bFlag=false;
 
-    String aValTabName;
-    String *pStr;
-
-    for(SCTAB i=0;i<nCount;i++)
+    if(aNames.empty())
     {
-        if(pNames!=NULL)
-        {
-            pStr=pNames->GetObject(static_cast<sal_uInt16>(i));
-        }
-        else
-        {
-            aValTabName.Erase();
-            pDoc->CreateValidTabName( aValTabName);
-            pStr=&aValTabName;
-        }
-
-        if(pDoc->InsertTab( nTab+i,*pStr))
-        {
-            bFlag=sal_True;
-            pDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab+i ) );
-        }
-        else
-        {
-            break;
-        }
-
-        if(pNameList!=NULL)
-            pNameList->Insert(new String(*pStr),pNameList->Count());
-
+        pDoc->CreateValidTabNames(aNames, nCount);
+    }
+    if (pDoc->InsertTabs(nTab, aNames, false))
+    {
+        pDocSh->Broadcast( ScTablesHint( SC_TABS_INSERTED, nTab, nCount ) );
+        bFlag = true;
     }
 
     if (bFlag)
     {
         if (bRecord)
             pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoInsertTables( pDocSh, nTab, false, pNameList));
+                        new ScUndoInsertTables( pDocSh, nTab, false, aNames));
 
-        //  Update views
+        //    Update views
 
-        SetTabNo( nTab, sal_True );
+        SetTabNo( nTab, true );
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
-        return sal_True;
+        return true;
     }
     else
     {
@@ -2097,11 +2073,54 @@ sal_Bool ScViewFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord )
     return bSuccess;
 }
 
+//only use this method for undo for now, all sheets must be connected
+//this method doesn't support undo for now, merge it when it with the other method later
+bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
+{
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc    = pDocSh->GetDocument();
+    bool bVbaEnabled = pDoc->IsInVBAMode();
+    SCTAB       nNewTab = nTab;
+    WaitObject aWait( GetFrameWin() );
+
+    while ( nNewTab > 0 && !pDoc->IsVisible( nNewTab ) )
+        --nNewTab;
+
+    if (pDoc->DeleteTabs(nTab, nSheets, NULL))
+    {
+        if( bVbaEnabled )
+        {
+            for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
+            {
+                String sCodeName;
+                bool bHasCodeName = pDoc->GetCodeName( nTab + aTab, sCodeName );
+                if ( bHasCodeName )
+                    VBA_DeleteModule( *pDocSh, sCodeName );
+            }
+        }
+
+        pDocSh->Broadcast( ScTablesHint( SC_TABS_DELETED, nTab, nSheets ) );
+        if ( nNewTab >= pDoc->GetTableCount() )
+            nNewTab = pDoc->GetTableCount() - 1;
+        SetTabNo( nNewTab, sal_True );
+
+        pDocSh->PostPaintExtras();
+        pDocSh->SetDocumentModified();
+
+        SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+        return true;
+    }
+    return false;
+}
+
 sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord )
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
-    sal_Bool bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : false;
+    sal_Bool bVbaEnabled = pDoc->IsInVBAMode();
     SCTAB       nNewTab = TheTabs[0];
     WaitObject aWait( GetFrameWin() );
     if (bRecord && !pDoc->IsUndoEnabled())

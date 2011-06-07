@@ -49,6 +49,7 @@
 #include <map>
 #include <set>
 #include <list>
+#include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace editeng { class SvxBorderLine; }
@@ -185,6 +186,7 @@ namespace com { namespace sun { namespace star {
 #define SC_ASIANCOMPRESSION_INVALID     0xff
 #define SC_ASIANKERNING_INVALID         0xff
 
+typedef ::std::vector<ScTable*> TableContainer;
 
 enum ScDocumentMode
     {
@@ -239,7 +241,7 @@ private:
     ScConditionalFormatList* pCondFormList;             // conditional formats
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
-    ScTable*            pTab[MAXTABCOUNT];
+    ::std::vector<ScTable*> pTab;
     mutable ScRangeName* pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
@@ -470,7 +472,7 @@ public:
     SC_DLLPUBLIC ScRangeName* GetRangeName() const;
     void SetRangeName(SCTAB nTab, ScRangeName* pNew);
     void SetRangeName( ScRangeName* pNewRangeName );
-    SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }
+    SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(pTab.size()) - 1; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
 
     ScRangePairList*    GetColNameRanges() { return &xColNameRanges; }
@@ -533,7 +535,7 @@ public:
     SC_DLLPUBLIC void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData*       GetAnonymousDBData(SCTAB nTab);
 
-    SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
+    SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return static_cast<SCTAB>(pTab.size()); }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 
     SC_DLLPUBLIC ScDocProtection* GetDocProtection() const;
@@ -571,14 +573,19 @@ public:
     static SC_DLLPUBLIC bool ValidTabName( const String& rName );
 
     SC_DLLPUBLIC sal_Bool           ValidNewTabName( const String& rName ) const;
+    SC_DLLPUBLIC bool               ValidNewTabName( const std::vector<String>& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
+    SC_DLLPUBLIC void           CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const;
     SC_DLLPUBLIC sal_Bool           InsertTab( SCTAB nPos, const String& rName,
                                 sal_Bool bExternalDocument = false );
+    SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rNames,
+                                bool bExternalDocument = false, bool bNamesValid = false );
+    SC_DLLPUBLIC bool           DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc = NULL );
     SC_DLLPUBLIC sal_Bool            DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc = NULL );
     SC_DLLPUBLIC sal_Bool           RenameTab( SCTAB nTab, const String& rName,
                                 sal_Bool bUpdateRef = sal_True,
                                 sal_Bool bExternalDocument = false );
-    sal_Bool            MoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    sal_Bool            MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = NULL );
     sal_Bool            CopyTab( SCTAB nOldPos, SCTAB nNewPos,
                                 const ScMarkData* pOnlyMarked = NULL );
     SC_DLLPUBLIC sal_uLong          TransferTab(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,

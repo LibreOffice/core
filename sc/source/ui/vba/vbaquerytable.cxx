@@ -59,9 +59,9 @@ ScVbaQueryTable::Refresh( const ::com::sun::star::uno::Any& /*aBackgroundQuery*/
 {
 
     //Get parent Info
-    sal_Int32 nRow = m_pParent->getRow();
-    sal_Int32 nClm = m_pParent->getColumn();
-    sal_Int16 nTab = m_pParent->getWorksheet()->getIndex() - 1; //The vba index begin from 1.
+    SCROW nRow = m_pParent->getRow();
+    SCCOL nClm = m_pParent->getColumn();
+    SCTAB nTab = m_pParent->getWorksheet()->getIndex() - 1; //The vba index begin from 1.
     ScAddress crrRngAddr(nClm, nRow, nTab);
 
     //Get link info

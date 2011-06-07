@@ -116,7 +116,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
     {
         SCTAB nTab = rHint.GetAddress().Tab();
-        if (pTab[nTab] && pTab[nTab]->IsStreamValid())
+        if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->IsStreamValid())
             pTab[nTab]->SetStreamValid(false);
     }
 }
@@ -193,7 +193,7 @@ void ScDocument::StartListeningCell( const ScAddress& rAddress,
 {
     OSL_ENSURE(pListener, "StartListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (pTab[nTab])
+    if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         pTab[nTab]->StartListening( rAddress, pListener );
 }
 
@@ -202,7 +202,7 @@ void ScDocument::EndListeningCell( const ScAddress& rAddress,
 {
     OSL_ENSURE(pListener, "EndListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (pTab[nTab])
+    if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
         pTab[nTab]->EndListening( rAddress, pListener );
 }
 
@@ -488,7 +488,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
 
 void ScDocument::StartAllListeners()
 {
-    for ( SCTAB i = 0; i <= MAXTAB; ++i )
+    for ( SCTAB i = 0; i < static_cast<SCTAB>(pTab.size()); ++i )
         if ( pTab[i] )
             pTab[i]->StartAllListeners();
 }

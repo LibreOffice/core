@@ -169,7 +169,7 @@ void ScXMLTableRowContext::EndElement()
             GetScImport().GetTables().AddRow();
         OSL_FAIL("it seems here is a nonvalid file; possible missing of table:table-cell element");
     }
-    sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+    SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(xSheet.is())
@@ -202,7 +202,7 @@ void ScXMLTableRowContext::EndElement()
                                 if ( nSheet != pStyle->GetLastSheet() )
                                 {
                                     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
-                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, (SCROW)nFirstRow, (SCTAB)nSheet ) );
+                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, (SCROW)nFirstRow, nSheet ) );
                                     pStyle->SetLastSheet(nSheet);
                                 }
                             }
@@ -343,14 +343,14 @@ void ScXMLTableRowsContext::EndElement()
     else if (bGroup)
     {
         nGroupEndRow = rXMLImport.GetTables().GetCurrentRow();
-        sal_Int32 nSheet(rXMLImport.GetTables().GetCurrentSheet());
+        SCTAB nSheet(rXMLImport.GetTables().GetCurrentSheet());
         if (nGroupStartRow <= nGroupEndRow)
         {
             ScDocument* pDoc(GetScImport().GetDocument());
             if (pDoc)
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());
-                ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True));
+                ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nSheet, sal_True));
                 ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
                 sal_Bool bResized;
                 pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);

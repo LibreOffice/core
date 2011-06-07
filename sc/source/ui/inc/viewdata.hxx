@@ -170,7 +170,7 @@ class SC_DLLPUBLIC ScViewData
 private:
     double              nPPTX, nPPTY;               // Scaling-Faktoren
 
-    ScViewDataTable*    pTabData[MAXTABCOUNT];
+    ::std::vector<ScViewDataTable*> pTabData;
     ScViewDataTable*    pThisTab;                   // Daten der angezeigten Tabelle
     ScDocShell*         pDocShell;
     ScDocument*         pDoc;
@@ -277,7 +277,9 @@ public:
     void            UpdateThis();
 
     void            InsertTab( SCTAB nTab );
+    void            InsertTabs( SCTAB nTab, SCTAB nNewSheets );
     void            DeleteTab( SCTAB nTab );
+    void            DeleteTabs( SCTAB nTab, SCTAB nSheets );
     void            CopyTab( SCTAB nSrcTab, SCTAB nDestTab );
     void            MoveTab( SCTAB nSrcTab, SCTAB nDestTab );
 

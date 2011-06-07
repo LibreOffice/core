@@ -4482,11 +4482,11 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
 }
 
 
-ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
+ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName , SCTAB nNewSheets)
 {
     ScRangeData* pRangeData = NULL;
     SCTAB nPosTab = aPos.Tab();     // _after_ incremented!
-    SCTAB nOldPosTab = ((nPosTab > nTable) ? (nPosTab - 1) : nPosTab);
+    SCTAB nOldPosTab = ((nPosTab > nTable) ? (nPosTab - nNewSheets) : nPosTab);
     sal_Bool bIsRel = false;
     ScToken* t;
     pArr->Reset();
@@ -4517,7 +4517,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
                         rRef.nTab = sal::static_int_cast<SCsTAB>( rRef.nTab + pDoc->GetTableCount() );  // was a wrap
                 }
                 if (nTable <= rRef.nTab)
-                    ++rRef.nTab;
+                    rRef.nTab += nNewSheets;
                 rRef.nRelTab = rRef.nTab - nPosTab;
             }
             else
@@ -4534,7 +4534,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
                             rRef.nTab = sal::static_int_cast<SCsTAB>( rRef.nTab + pDoc->GetTableCount() );  // was a wrap
                     }
                     if (nTable <= rRef.nTab)
-                        ++rRef.nTab;
+                        rRef.nTab += nNewSheets;
                     rRef.nRelTab = rRef.nTab - nPosTab;
                 }
                 else
@@ -4565,7 +4565,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
                             rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + pDoc->GetTableCount() );  // was a wrap
                     }
                     if (nTable <= rRef1.nTab)
-                        ++rRef1.nTab;
+                        rRef1.nTab += nNewSheets;
                     rRef1.nRelTab = rRef1.nTab - nPosTab;
                 }
                 if ( t->GetType() == svDoubleRef )
@@ -4580,7 +4580,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
                                 rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab + pDoc->GetTableCount() );  // was a wrap
                         }
                         if (nTable <= rRef2.nTab)
-                            ++rRef2.nTab;
+                            rRef2.nTab += nNewSheets;
                         rRef2.nRelTab = rRef2.nTab - nPosTab;
                     }
                 }
@@ -4591,12 +4591,12 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, sal_Bool bIsName )
 }
 
 ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, sal_Bool bIsName,
-                                 sal_Bool& rChanged)
+                                 sal_Bool& rChanged, SCTAB nSheets)
 {
     ScRangeData* pRangeData = NULL;
     SCTAB nTab, nTab2;
     SCTAB nPosTab = aPos.Tab();          // _after_ decremented!
-    SCTAB nOldPosTab = ((nPosTab >= nTable) ? (nPosTab + 1) : nPosTab);
+    SCTAB nOldPosTab = ((nPosTab >= nTable) ? (nPosTab + nSheets) : nPosTab);
     rChanged = false;
     sal_Bool bIsRel = false;
     ScToken* t;
@@ -4628,7 +4628,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                     nTab = rRef.nTab;
                 if ( nTable < nTab )
                 {
-                    rRef.nTab = nTab - 1;
+                    rRef.nTab = nTab - nSheets;
                     rChanged = sal_True;
                 }
                 else if ( nTable == nTab )
@@ -4641,7 +4641,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                         else
                             nTab2 = rRef2.nTab;
                         if ( nTab == nTab2
-                          || (nTab+1) >= pDoc->GetTableCount() )
+                          || (nTab+nSheets) >= pDoc->GetTableCount() )
                         {
                             rRef.nTab = MAXTAB+1;
                             rRef.SetTabDeleted( sal_True );
@@ -4671,13 +4671,13 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                         nTab = rRef.nTab;
                     if ( nTable < nTab )
                     {
-                        rRef.nTab = nTab - 1;
+                        rRef.nTab = nTab - nSheets;
                         rChanged = sal_True;
                     }
                     else if ( nTable == nTab )
                     {
                         if ( !t->GetDoubleRef().Ref1.IsTabDeleted() )
-                            rRef.nTab = nTab - 1;   // shrink area
+                            rRef.nTab = nTab - nSheets;   // shrink area
                         else
                         {
                             rRef.nTab = MAXTAB+1;
@@ -4714,7 +4714,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                         nTab = rRef1.nTab;
                     if ( nTable < nTab )
                     {
-                        rRef1.nTab = nTab - 1;
+                        rRef1.nTab = nTab - nSheets;
                         rChanged = sal_True;
                     }
                     else if ( nTable == nTab )
@@ -4755,13 +4755,13 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, sal_Bool /* bIsMove */, s
                             nTab = rRef2.nTab;
                         if ( nTable < nTab )
                         {
-                            rRef2.nTab = nTab - 1;
+                            rRef2.nTab = nTab - nSheets;
                             rChanged = sal_True;
                         }
                         else if ( nTable == nTab )
                         {
                             if ( !rRef1.IsTabDeleted() )
-                                rRef2.nTab = nTab - 1;  // shrink area
+                                rRef2.nTab = nTab - nSheets;  // shrink area
                             else
                             {
                                 rRef2.nTab = MAXTAB+1;

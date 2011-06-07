@@ -102,7 +102,7 @@ class XMLTableStyleContext : public XMLPropStyleContext
     std::vector<ScXMLMapContent>    aMaps;
     com::sun::star::uno::Any    aConditionalFormat;
     sal_Int32                   nNumberFormat;
-    sal_Int32                   nLastSheet;
+    SCTAB                       nLastSheet;
     sal_Bool                    bConditionalFormatCreated;
     sal_Bool                    bParentSet;
 
@@ -160,8 +160,8 @@ public:
 
     sal_Int32 GetNumberFormat();// { return nNumberFormat; }
 
-    sal_Int32 GetLastSheet() const       { return nLastSheet; }
-    void SetLastSheet(sal_Int32 nNew)    { nLastSheet = nNew; }
+    SCTAB GetLastSheet() const       { return nLastSheet; }
+    void SetLastSheet(SCTAB nNew)    { nLastSheet = nNew; }
 
 private:
     using XMLPropStyleContext::SetStyle;

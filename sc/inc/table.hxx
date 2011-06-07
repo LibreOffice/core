@@ -476,9 +476,9 @@ public:
 
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void        UpdateInsertTab(SCTAB nTable);
-    void        UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo = NULL );
-    void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress& );
+    void        UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
+    void        UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo = NULL, SCTAB nSheets = 1 );
+    void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress* pProgress );
     void        UpdateCompile( sal_Bool bForceIfNameInUse = false );
     void        SetTabNo(SCTAB nNewTab);
     sal_Bool        IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

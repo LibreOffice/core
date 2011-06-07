@@ -128,7 +128,7 @@ class ScSheetSaveData
     std::vector<bool>          maBlocked;
     std::vector<ScStreamEntry> maStreamEntries;
     std::vector<ScStreamEntry> maSaveEntries;
-    sal_Int32   mnStartTab;
+    SCTAB   mnStartTab;
     sal_Int32   mnStartOffset;
 
     ScNoteStyleEntry    maPreviousNote;
@@ -149,20 +149,20 @@ public:
 
     void        AddTextStyle( const rtl::OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
 
-    void        BlockSheet( sal_Int32 nTab );
-    bool        IsSheetBlocked( sal_Int32 nTab ) const;
+    void        BlockSheet( SCTAB nTab );
+    bool        IsSheetBlocked( SCTAB nTab ) const;
 
-    void        AddStreamPos( sal_Int32 nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset );
-    void        GetStreamPos( sal_Int32 nTab, sal_Int32& rStartOffset, sal_Int32& rEndOffset ) const;
-    bool        HasStreamPos( sal_Int32 nTab ) const;
+    void        AddStreamPos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset );
+    void        GetStreamPos( SCTAB nTab, sal_Int32& rStartOffset, sal_Int32& rEndOffset ) const;
+    bool        HasStreamPos( SCTAB nTab ) const;
 
-    void        StartStreamPos( sal_Int32 nTab, sal_Int32 nStartOffset );
+    void        StartStreamPos( SCTAB nTab, sal_Int32 nStartOffset );
     void        EndStreamPos( sal_Int32 nEndOffset );
 
     bool        HasStartPos() const { return mnStartTab >= 0; }
 
     void        ResetSaveEntries();
-    void        AddSavePos( sal_Int32 nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset );
+    void        AddSavePos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset );
     void        UseSaveEntries();
 
     void        StoreInitialNamespaces( const SvXMLNamespaceMap& rNamespaces );

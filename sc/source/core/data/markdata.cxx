@@ -42,26 +42,22 @@
 //------------------------------------------------------------------------
 
 ScMarkData::ScMarkData() :
-    pMultiSel( NULL )
+    pMultiSel( NULL ),
+    maTabMarked()
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        bTabMarked[i] = false;
-
     ResetMark();
 }
 
 ScMarkData::ScMarkData(const ScMarkData& rData) :
     aMarkRange( rData.aMarkRange ),
     aMultiRange( rData.aMultiRange ),
-    pMultiSel( NULL )
+    pMultiSel( NULL ),
+    maTabMarked( rData.maTabMarked )
 {
     bMarked      = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
     bMarking     = rData.bMarking;
     bMarkIsNeg   = rData.bMarkIsNeg;
-
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        bTabMarked[i] = rData.bTabMarked[i];
 
     if (rData.pMultiSel)
     {
@@ -86,8 +82,7 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
     bMarking     = rData.bMarking;
     bMarkIsNeg   = rData.bMarkIsNeg;
 
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        bTabMarked[i] = rData.bTabMarked[i];
+    maTabMarked = std::set<SCTAB>(rData.maTabMarked);
 
     if (rData.pMultiSel)
     {
@@ -123,7 +118,7 @@ void ScMarkData::SetMarkArea( const ScRange& rRange )
         // may query (default) attributes although no sheet is marked yet.
         // => mark that one.
         if ( !GetSelectCount() )
-            bTabMarked[ aMarkRange.aStart.Tab() ] = sal_True;
+            maTabMarked.insert( aMarkRange.aStart.Tab() );
         bMarked = sal_True;
     }
 }
@@ -189,29 +184,49 @@ void ScMarkData::SetAreaTab( SCTAB nTab )
     aMultiRange.aEnd.SetTab(nTab);
 }
 
+void ScMarkData::SelectTable( SCTAB nTab, bool bNew )
+{
+    if ( bNew )
+    {
+        maTabMarked.insert( nTab );
+    }
+    else
+    {
+        maTabMarked.erase( nTab );
+    }
+}
+
+bool ScMarkData::GetTableSelect( SCTAB nTab ) const
+{
+    return (maTabMarked.find( nTab ) != maTabMarked.end());
+}
+
 void ScMarkData::SelectOneTable( SCTAB nTab )
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        bTabMarked[i] = ( nTab == i );
+    maTabMarked.clear();
+    maTabMarked.insert( nTab );
 }
 
 SCTAB ScMarkData::GetSelectCount() const
 {
-    SCTAB nCount = 0;
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        if (bTabMarked[i])
-            ++nCount;
-
-    return nCount;
+    return static_cast<SCTAB> ( maTabMarked.size() );
 }
 
 SCTAB ScMarkData::GetFirstSelected() const
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        if (bTabMarked[i])
-            return i;
+    if (maTabMarked.size() > 0)
+        return (*maTabMarked.begin());
 
     OSL_FAIL("GetFirstSelected: keine markiert");
+    return 0;
+}
+
+SCTAB ScMarkData::GetLastSelected() const
+{
+    if (maTabMarked.size() > 0)
+        return (*maTabMarked.rbegin());
+
+    OSL_FAIL("GetLastSelected: keine markiert");
     return 0;
 }
 
@@ -338,8 +353,7 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, sal_Bool bReset )
 {
     if (bReset)
     {
-        for (SCTAB i=0; i<=MAXTAB; i++)
-            bTabMarked[i] = false;              // Tabellen sind nicht in ResetMark
+        maTabMarked.clear();
         ResetMark();
     }
 
@@ -406,16 +420,14 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
     ScRangeList aOldList(*pList);
     pList->RemoveAll();                 //! oder die vorhandenen unten weglassen
 
-    for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
-        if (bTabMarked[nTab])
+    std::set<SCTAB>::iterator it = maTabMarked.begin();
+    for (; it != maTabMarked.end(); ++it)
+        for ( size_t i=0, nCount = aOldList.size(); i<nCount; i++)
         {
-            for ( size_t i=0, nCount = aOldList.size(); i<nCount; i++)
-            {
-                ScRange aRange = *aOldList[ i ];
-                aRange.aStart.SetTab(nTab);
-                aRange.aEnd.SetTab(nTab);
-                pList->Append( aRange );
-            }
+            ScRange aRange = *aOldList[ i ];
+            aRange.aStart.SetTab(*it);
+            aRange.aEnd.SetTab(*it);
+            pList->Append( aRange );
         }
 }
 
@@ -588,16 +600,21 @@ sal_Bool ScMarkData::HasAnyMultiMarks() const
 
 void ScMarkData::InsertTab( SCTAB nTab )
 {
-    for (SCTAB i=MAXTAB; i>nTab; i--)
-        bTabMarked[i] = bTabMarked[i-1];
-    bTabMarked[nTab] = false;
+    std::set<SCTAB> tabMarked(maTabMarked.begin(), maTabMarked.upper_bound(nTab));
+    std::set<SCTAB>::iterator it = maTabMarked.upper_bound(nTab);
+    for (; it != maTabMarked.end(); ++it)
+        tabMarked.insert(*it + 1);
+    maTabMarked.swap(tabMarked);
 }
 
 void ScMarkData::DeleteTab( SCTAB nTab )
 {
-    for (SCTAB i=nTab; i<MAXTAB; i++)
-        bTabMarked[i] = bTabMarked[i+1];
-    bTabMarked[MAXTAB] = false;
+    std::set<SCTAB> tabMarked(maTabMarked.begin(), maTabMarked.find(nTab));
+    tabMarked.erase( nTab );
+    std::set<SCTAB>::iterator it = maTabMarked.find(nTab);
+    for (; it != maTabMarked.end(); ++it)
+        tabMarked.insert(*it + 1);
+    maTabMarked.swap(tabMarked);
 }
 
 

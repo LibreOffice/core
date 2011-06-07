@@ -59,6 +59,7 @@
 #include "dbdocfun.hxx"
 #include "consoli.hxx"
 #include "dbdata.hxx"
+#include "progress.hxx"
 #include "olinetab.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
@@ -973,8 +974,14 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
             return sal_True;    // nothing to do, but valid
         }
 
-        if (!aDocument.MoveTab( nSrcTab, nDestTab ))
+        ScProgress* pProgress = new ScProgress(this, ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+                                                aDocument.GetCodeCount());
+        bool bDone = aDocument.MoveTab( nSrcTab, nDestTab, pProgress );
+        delete pProgress;
+        if (!bDone)
+        {
             return false;
+        }
         else if (bRecord)
         {
             auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));

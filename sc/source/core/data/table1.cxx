@@ -1398,47 +1398,48 @@ void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         aCol[i].UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
-void ScTable::UpdateInsertTab(SCTAB nTable)
+void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 {
     if (nTab >= nTable)
     {
-        nTab++;
+        nTab += nNewSheets;
         if (pDBDataNoName)
             pDBDataNoName->UpdateMoveTab(nTab - 1 ,nTab);
     }
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable);
+    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable, nNewSheets);
 
     if (IsStreamValid())
         SetStreamValid(false);
 }
 
-void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo )
+void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo, SCTAB nSheets )
 {
     if (nTab > nTable)
     {
-        nTab--;
+        nTab -= nSheets;
         if (pDBDataNoName)
             pDBDataNoName->UpdateMoveTab(nTab + 1,nTab);
     }
 
     SCCOL i;
     if (pRefUndo)
-        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, &pRefUndo->aCol[i]);
+        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, &pRefUndo->aCol[i], nSheets);
     else
-        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL);
+        for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL, nSheets);
 
     if (IsStreamValid())
         SetStreamValid(false);
 }
 
 void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
-        ScProgress& rProgress )
+        ScProgress* pProgress )
 {
     nTab = nTabNo;
     for ( SCCOL i=0; i <= MAXCOL; i++ )
     {
         aCol[i].UpdateMoveTab( nOldPos, nNewPos, nTabNo );
-        rProgress.SetState( rProgress.GetState() + aCol[i].GetCodeCount() );
+        if (pProgress)
+            pProgress->SetState(pProgress->GetState() + aCol[i].GetCodeCount());
     }
 
     if (IsStreamValid())

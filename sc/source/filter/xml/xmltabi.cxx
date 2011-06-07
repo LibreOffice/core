@@ -285,8 +285,8 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         ScDocument* pDoc = GetScImport().GetDocument();
         if (pDoc)
         {
-            sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
-            ScRangeName* pRN = pDoc->GetRangeName(static_cast<SCTAB>(nTab));
+            SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+            ScRangeName* pRN = pDoc->GetRangeName(nTab);
             if (pRN)
             {
                 pContext = new ScXMLNamedExpressionsContext(
@@ -381,7 +381,7 @@ void ScXMLTableContext::EndElement()
     if (!pDoc)
         return;
 
-    SCTAB nCurTab = static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet());
+    SCTAB nCurTab = GetScImport().GetTables().GetCurrentSheet();
     if (sPrintRanges.getLength())
     {
         Reference< sheet::XPrintAreas > xPrintAreas(
@@ -446,7 +446,7 @@ void ScXMLTableContext::EndElement()
     if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
     {
         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
-        sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
+        SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
         // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
         pSheetData->StartStreamPos( nTab, nStartOffset );
     }

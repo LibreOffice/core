@@ -1723,16 +1723,19 @@ void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 }
 
 
-void ScColumn::UpdateInsertTab( SCTAB nTable)
+void ScColumn::UpdateInsertTab( SCTAB nTable, SCTAB nNewSheets )
 {
     if (nTab >= nTable)
-        pAttrArray->SetTab(++nTab);
+    {
+        nTab += nNewSheets;
+        pAttrArray->SetTab(nTab);
+    }
     if( pItems )
-        UpdateInsertTabOnlyCells( nTable );
+        UpdateInsertTabOnlyCells( nTable, nNewSheets );
 }
 
 
-void ScColumn::UpdateInsertTabOnlyCells( SCTAB nTable)
+void ScColumn::UpdateInsertTabOnlyCells( SCTAB nTable, SCTAB nNewSheets )
 {
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1741,7 +1744,7 @@ void ScColumn::UpdateInsertTabOnlyCells( SCTAB nTable)
             if( pCell->GetCellType() == CELLTYPE_FORMULA)
             {
                 SCROW nRow = pItems[i].nRow;
-                pCell->UpdateInsertTab(nTable);
+                pCell->UpdateInsertTab(nTable, nNewSheets);
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
             }
@@ -1766,10 +1769,13 @@ void ScColumn::UpdateInsertTabAbs(SCTAB nTable)
 }
 
 
-void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo )
+void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo, SCTAB nSheets )
 {
     if (nTab > nTable)
-        pAttrArray->SetTab(--nTab);
+    {
+        nTab -= nSheets;
+        pAttrArray->SetTab(nTab);
+    }
 
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1782,7 +1788,7 @@ void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo )
                     back the formula cell while keeping the original note. */
                 ScBaseCell* pSave = pRefUndo ? pOld->CloneWithoutNote( *pDocument ) : 0;
 
-                bool bChanged = pOld->UpdateDeleteTab(nTable, bIsMove);
+                bool bChanged = pOld->UpdateDeleteTab(nTable, bIsMove, nSheets);
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
 

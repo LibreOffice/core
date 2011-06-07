@@ -617,7 +617,7 @@ class SolarMutexGuard;
 
 struct tScMyCellRange
 {
-    sal_Int16 Sheet;
+    SCTAB Sheet;
     sal_Int32 StartColumn, EndColumn;
     sal_Int32 StartRow, EndRow;
 };
@@ -1009,7 +1009,7 @@ public:
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
-    sal_Int32   GetVisibleSheet();
+    SCTAB   GetVisibleSheet();
     /** Extracts the formula string, the formula grammar namespace URL, and a
         grammar enum value from the passed formula attribute value.
 

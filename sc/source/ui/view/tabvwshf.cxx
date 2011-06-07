@@ -252,21 +252,20 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         if (pDlg->GetTablesFromFile())
                         {
-                            SCTAB nTabs[MAXTABCOUNT];
-                            SCTAB nCount = 0;
+                            std::vector<SCTAB> nTabs;
                             sal_uInt16 n = 0;
                             const String* pStr = pDlg->GetFirstTable( &n );
                             while ( pStr )
                             {
-                                nTabs[nCount++] = static_cast<SCTAB>(n);
+                                nTabs.push_back( static_cast<SCTAB>(n) );
                                 pStr = pDlg->GetNextTable( &n );
                             }
                             sal_Bool bLink = pDlg->GetTablesAsLink();
-                            if (nCount != 0)
+                            if (0 < nTabs.size())
                             {
                                 if(pDlg->IsTableBefore())
                                 {
-                                    ImportTables( pDlg->GetDocShellTables(), nCount, nTabs,
+                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), &nTabs[0],
                                                 bLink,nTabNr );
                                 }
                                 else
@@ -282,7 +281,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                         }
                                     }
 
-                                    ImportTables( pDlg->GetDocShellTables(), nCount, nTabs,
+                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), &nTabs[0],
                                                 bLink,nTabAfter );
                                 }
                             }
@@ -301,20 +300,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                     InsertTable( *pDlg->GetFirstTable(), nTabNr );
                                 }
                                 else
-                                    InsertTables( NULL, nTabNr,nCount );
+                                {
+                                    std::vector<rtl::OUString> aNames(0);
+                                    InsertTables( aNames, nTabNr,nCount );
+                                }
                             }
                             else
                             {
                                 SCTAB   nTabAfter    = nTabNr+1;
-                                SCTAB nSelHigh=0;
-
-                                for(SCTAB i=0;i<nTabCount;i++)
-                                {
-                                    if(rMark.GetTableSelect(i))
-                                    {
-                                        nSelHigh=i;
-                                    }
-                                }
+                                SCTAB nSelHigh = rMark.GetLastSelected();
 
                                 for(SCTAB j=nSelHigh+1;j<nTabCount;j++)
                                 {
@@ -337,7 +331,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    InsertTables( NULL, nTabAfter,nCount);
+                                    std::vector<rtl::OUString> aNames(0);
+                                    InsertTables( aNames, nTabAfter,nCount);
                                 }
                             }
                         }

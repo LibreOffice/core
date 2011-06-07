@@ -121,7 +121,7 @@ SvXMLImportContext *ScXMLTableColContext::CreateChildContext( sal_uInt16 nPrefix
 void ScXMLTableColContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
-    sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+    SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColumn();
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(xSheet.is())
@@ -151,7 +151,7 @@ void ScXMLTableColContext::EndElement()
                             if ( nSheet != pStyle->GetLastSheet() )
                             {
                                 ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
-                                pSheetData->AddColumnStyle( sStyleName, ScAddress( (SCCOL)nCurrentColumn, 0, (SCTAB)nSheet ) );
+                                pSheetData->AddColumnStyle( sStyleName, ScAddress( (SCCOL)nCurrentColumn, 0, nSheet ) );
                                 pStyle->SetLastSheet(nSheet);
                             }
                         }
@@ -288,7 +288,7 @@ void ScXMLTableColsContext::EndElement()
     }
     else if (bGroup)
     {
-        sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+        SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
         nGroupEndCol = rXMLImport.GetTables().GetCurrentColumn();
         nGroupEndCol--;
         if (nGroupStartCol <= nGroupEndCol)
@@ -297,7 +297,7 @@ void ScXMLTableColsContext::EndElement()
             if (pDoc)
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());
-                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True);
+                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
                 ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
                 if (pColArray)
                 {

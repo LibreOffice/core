@@ -3006,7 +3006,7 @@ void ScXMLImport::ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc)
     }
 }
 
-sal_Int32 ScXMLImport::GetVisibleSheet()
+SCTAB ScXMLImport::GetVisibleSheet()
 {
     // Get the visible sheet number from model's view data (after settings were loaded),
     // or 0 (default: first sheet) if no settings available.

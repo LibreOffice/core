@@ -260,13 +260,14 @@ public:
     void            TabOp( const ScTabOpParam& rParam,  sal_Bool bRecord = sal_True );
 
     sal_Bool            InsertTable( const String& rName, SCTAB nTabNr, sal_Bool bRecord = sal_True );
-    sal_Bool            InsertTables(SvStrings *pNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
+    sal_Bool            InsertTables(std::vector<rtl::OUString>& aNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
 
 
     sal_Bool            AppendTable( const String& rName, sal_Bool bRecord = sal_True );
 
     sal_Bool            DeleteTable( SCTAB nTabNr, sal_Bool bRecord = true );
     sal_Bool            DeleteTables(const std::vector<SCTAB>& TheTabs, sal_Bool bRecord = true );
+    bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     sal_Bool            RenameTable( const String& rName, SCTAB nTabNr );
     void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, sal_Bool bCopy, const String* pNewTabName = NULL );

@@ -1059,14 +1059,14 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
     if (pCellImp)
     {
         ScAddress aPos = pCellImp->GetCellObj().GetPosition();
-        if ( static_cast<sal_Int32>(aPos.Tab()) != nLastSheet )
+        if ( aPos.Tab() != nLastSheet )
         {
             ESelection aSel = pCellImp->GetSelection();
 
             ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
             pSheetData->AddTextStyle( GetName(), aPos, aSel );
 
-            nLastSheet = static_cast<sal_Int32>(aPos.Tab());
+            nLastSheet = aPos.Tab();
         }
     }
     else if ( rXMLImport.GetTables().GetCurrentSheet() != nLastSheet )

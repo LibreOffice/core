@@ -48,6 +48,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     aSelection( rStatus ),
     pDocSh( pD ),
     nTotalPages( 0 ),
+    nPages(),
+    nFirstAttr(),
     bLocInitialized( false )
 {
     //  page count uses the stored cell widths for the printer anyway,
@@ -77,12 +79,12 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
 
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
-            nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
+            nFirstAttr.push_back( aFunc.GetFirstPageNo() );         // from page style or previous sheet
         }
         else
-            nFirstAttr[nTab] = nAttrPage;
+            nFirstAttr.push_back( nAttrPage );
 
-        nPages[nTab] = nThisTab;
+        nPages.push_back( nThisTab );
         nTotalPages += nThisTab;
     }
 }
@@ -175,7 +177,7 @@ SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
 long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 {
     long nRet = 0;
-    for ( SCTAB i=0; i<nTab; i++ )
+    for ( SCTAB i=0; i<nTab&& i < static_cast<SCTAB>(nPages.size()); i++ )
         nRet += nPages[i];
     return nRet;
 }
@@ -191,7 +193,12 @@ long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
         if ( pDoc->NeedPageResetAfterTab(i) )
             nDisplayStart = 0;
         else
-            nDisplayStart += nPages[i];
+        {
+            if ( i < static_cast<SCTAB>(nPages.size()) )
+                nDisplayStart += nPages[i];
+            else
+                OSL_FAIL("nPages out of bounds, FIX IT!");
+        }
     }
     return nDisplayStart;
 }

@@ -247,7 +247,7 @@ struct Sc10BlockRect
 struct Sc10DataBaseRec
 {
     sal_Char        Name[32];
-    sal_Int16           Tab;
+    SCTAB           Tab;
     Sc10BlockRect   Block;
     sal_uInt8           RowHeader;
     sal_Int16           SortField0;
@@ -319,7 +319,7 @@ struct Sc10PageFormat
     sal_Char            PrintAreaName[32];
     Sc10BlockRect       PrintArea;
     sal_Char            PrnZoom[6]; // Pascal 6 Byte Realzahl
-    sal_uInt16              FirstPageNo;
+    SCTAB               FirstPageNo;
     sal_Int16               RowRepeatStart;
     sal_Int16               RowRepeatEnd;
     sal_Int16               ColRepeatStart;
@@ -731,7 +731,7 @@ class Sc10Import
     Sc10PatternCollection*  pPatternCollection;
     Sc10DataBaseCollection* pDataBaseCollection;
     sal_uLong                   nError;
-    sal_Int16                   TabCount;
+    SCTAB                   TabCount;
     SCTAB                   nShowTab;
     ScViewOptions           aSc30ViewOpt;
     ScfStreamProgressBar*   pPrgrsBar;

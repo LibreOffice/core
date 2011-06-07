@@ -1129,7 +1129,7 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     return bCellStateChanged;
 }
 
-void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
+void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 {
     sal_Bool bPosChanged = ( aPos.Tab() >= nTable ? sal_True : false );
     pCode->Reset();
@@ -1142,7 +1142,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
         ScRangeData* pRangeData;
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pRangeData = aComp.UpdateInsertTab( nTable, false );
+        pRangeData = aComp.UpdateInsertTab( nTable, false, nNewSheets );
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
             sal_Bool bRefChanged;
@@ -1152,10 +1152,10 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
-            aComp2.UpdateInsertTab( nTable, false );
+            aComp2.UpdateInsertTab( nTable, false, nNewSheets );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
-            aComp2.UpdateDeleteTab( nTable, false, sal_True, bRefChanged );
+            aComp2.UpdateDeleteTab( nTable, false, sal_True, bRefChanged, nNewSheets );
             bCompile = sal_True;
         }
         // kein StartListeningTo weil pTab[nTab] noch nicht existiert!
@@ -1164,21 +1164,21 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
         aPos.IncTab();
 }
 
-sal_Bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove)
+sal_Bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove, SCTAB nSheets)
 {
     sal_Bool bRefChanged = false;
-    sal_Bool bPosChanged = ( aPos.Tab() > nTable ? sal_True : false );
+    sal_Bool bPosChanged = ( aPos.Tab() > nTable + nSheets ? sal_True : false );
     pCode->Reset();
     if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
     {
         EndListeningTo( pDocument );
         // IncTab _nach_ EndListeningTo und _vor_ Compiler UpdateDeleteTab !
         if ( bPosChanged )
-            aPos.IncTab(-1);
+            aPos.IncTab(-1*nSheets);
         ScRangeData* pRangeData;
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
-        pRangeData = aComp.UpdateDeleteTab(nTable, bIsMove, false, bRefChanged);
+        pRangeData = aComp.UpdateDeleteTab(nTable, bIsMove, false, bRefChanged, nSheets);
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
             pDocument->RemoveFromFormulaTree( this );   // update formula count
@@ -1188,10 +1188,10 @@ sal_Bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove)
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
-            aComp2.UpdateDeleteTab( nTable, false, false, bRefChanged );
+            aComp2.UpdateDeleteTab( nTable, false, false, bRefChanged, nSheets );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
-            aComp2.UpdateInsertTab( nTable,sal_True );
+            aComp2.UpdateInsertTab( nTable,sal_True, nSheets );
             // bRefChanged kann beim letzten UpdateDeleteTab zurueckgesetzt worden sein
             bRefChanged = sal_True;
             bCompile = sal_True;
@@ -1199,7 +1199,7 @@ sal_Bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove)
         // kein StartListeningTo weil pTab[nTab] noch nicht korrekt!
     }
     else if ( bPosChanged )
-        aPos.IncTab(-1);
+        aPos.IncTab(-1*nSheets);
 
     return bRefChanged;
 }

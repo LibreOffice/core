@@ -290,9 +290,9 @@ public:
                                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                      ScDocument* pUndoDoc = NULL );
-    void        UpdateInsertTab( SCTAB nTable);
-    void        UpdateInsertTabOnlyCells( SCTAB nTable);
-    void        UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo = NULL );
+    void        UpdateInsertTab( SCTAB nTable, SCTAB nNewSheets = 1);
+    void        UpdateInsertTabOnlyCells( SCTAB nTable, SCTAB nNewSheets = 1);
+    void        UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo = NULL, SCTAB nSheets = 1 );
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void        UpdateCompile( bool bForceIfNameInUse = false );
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,

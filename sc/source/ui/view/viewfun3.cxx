@@ -1268,7 +1268,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     // #i68690# ExtendMerge for the clip doc must be called with the clipboard's sheet numbers.
     // The same end column/row can be used for all calls because the clip doc doesn't contain
     // content outside the clip area.
-    for (SCTAB nClipTab=0; nClipTab<=MAXTAB; nClipTab++)
+    for (SCTAB nClipTab=0; nClipTab < pClipDoc->GetTableCount(); nClipTab++)
         if ( pClipDoc->HasTable(nClipTab) )
             if ( pClipDoc->ExtendMerge( nClipStartX,nClipStartY, nUndoEndCol,nUndoEndRow, nClipTab, false ) )
                 bClipOver = sal_True;
@@ -1604,7 +1604,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     // Determine the first and last selected sheet numbers.
     SCTAB nTab1 = aMark.GetFirstSelected();
     SCTAB nTab2 = nTab1;
-    for (SCTAB i = nTab1+1; i <= MAXTAB; ++i)
+    for (SCTAB i = nTab1+1; i < aMark.GetLastSelected(); ++i)
         if (aMark.GetTableSelect(i))
             nTab2 = i;
 

@@ -46,8 +46,8 @@ public:
     void        SetDefaults();
 
     // Set or get the initial tab count for new spreadsheet, it is used by VBA API currently.
-    void    SetTabCountInNewSpreadsheet( sal_Int16 nCount )  { nTabCountInNewSpreadsheet = nCount; }
-    sal_Int16   GetTabCountInNewSpreadsheet() const              { return nTabCountInNewSpreadsheet;   }
+    void    SetTabCountInNewSpreadsheet( SCTAB nCount )  { nTabCountInNewSpreadsheet = nCount; }
+    SCTAB   GetTabCountInNewSpreadsheet() const              { return nTabCountInNewSpreadsheet;   }
 
     void        SetAppMetric( FieldUnit eUnit ) { eMetric = eUnit;      }
     FieldUnit   GetAppMetric() const            { return eMetric;       }
@@ -92,7 +92,7 @@ public:
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
 
 private:
-    sal_Int16   nTabCountInNewSpreadsheet;
+    SCTAB   nTabCountInNewSpreadsheet;
     FieldUnit   eMetric;
     sal_uInt16      nLRUFuncCount;
     sal_uInt16*     pLRUList;

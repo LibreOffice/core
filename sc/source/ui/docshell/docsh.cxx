@@ -246,9 +246,7 @@ SCTAB ScDocShell::GetSaveTab()
     if (pSh)
     {
         const ScMarkData& rMark = pSh->GetViewData()->GetMarkData();
-        for ( nTab = 0; nTab <= MAXTAB; nTab++ )    // erste markierte Tabelle
-            if ( rMark.GetTableSelect( nTab ) )
-                break;
+        nTab = rMark.GetFirstSelected();
     }
     return nTab;
 }
@@ -543,6 +541,15 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 uno::Sequence< uno::Any > aArgs( 1 );
                 aArgs[0] <<= rScHint.GetTab1();
                 xVbaEvents->processVbaEvent( WORKBOOK_NEWSHEET, aArgs );
+            }
+            else if (rScHint.GetId() == SC_TABS_INSERTED)
+            {
+                for (SCTAB i = 0; i < rScHint.GetTab2(); ++i)
+                {
+                    uno::Sequence< uno::Any > aArgs( 1 );
+                    aArgs[0] <<= rScHint.GetTab1() + i;
+                    xVbaEvents->processVbaEvent( WORKBOOK_NEWSHEET, aArgs );
+                }
             }
         }
         else if ( rHint.ISA( SfxEventHint ) )

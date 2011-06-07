@@ -442,9 +442,9 @@ public:
 
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void            UpdateInsertTab(SCTAB nTable);
+    void            UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
     void            UpdateInsertTabAbs(SCTAB nTable);
-    sal_Bool            UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove = false);
+    sal_Bool            UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove = false, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void            UpdateRenameTab(SCTAB nTable, const String& rName);
     sal_Bool            TestTabRefAbs(SCTAB nTable);
