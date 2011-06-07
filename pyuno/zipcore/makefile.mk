@@ -86,7 +86,7 @@ STRIPNONMAC=-e '/^NONMACSECTION/,/^MACSECTION/d'
 
 $(BIN)$/python.sh : python.sh
 	$(COMMAND_ECHO)sed -e 's/%%PYVERSION%%/$(eq,$(OS),MACOSX $(PYMAJOR).$(PYMINOR) $(PYVERSION))/g' -e 's/%%OOO_LIBRARY_PATH_VAR%%/$(OOO_LIBRARY_PATH_VAR)/g' \
-		$(!eq,$(OS),MACOSX $(STRIPNONMAC) $(STRIPMAC)) < $? > $@
+		$(eq,$(OS),MACOSX $(STRIPNONMAC) $(STRIPMAC)) < $? > $@
 	@chmod +x $@
 .ENDIF
 
