@@ -69,19 +69,19 @@ CustomSetup	BannerLine	Line	0	44	374	0	1
 CustomSetup	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
 CustomSetup	Branding2	Text	3	228	88	13	65537		[ProductName]		
 CustomSetup	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_49	Tree	
-CustomSetup	ChangeFolder	PushButton	301	203	66	17	3		OOO_CONTROL_50	Help	
+CustomSetup	ChangeFolder	PushButton	164	203	66	17	3		OOO_CONTROL_50	Help	
 CustomSetup	Details	PushButton	93	243	66	17	3		OOO_CONTROL_51	Back	
 CustomSetup	DlgDesc	Text	17	23	276	25	65539		OOO_CONTROL_52		
 CustomSetup	DlgLine	Line	90	234	284	0	1				
-CustomSetup	DlgText	Text	9	51	360	10	3		OOO_CONTROL_53		
+CustomSetup	DlgText	Text	9	47	360	20	3		OOO_CONTROL_53		
 CustomSetup	DlgTitle	Text	9	6	284	25	65539		OOO_CONTROL_54		
-CustomSetup	FeatureGroup	GroupBox	235	67	131	120	1		OOO_CONTROL_55		
+CustomSetup	FeatureGroup	GroupBox	235	67	131	152	1		OOO_CONTROL_55		
 CustomSetup	Help	PushButton	22	243	66	17	3		OOO_CONTROL_56	Details	
-CustomSetup	InstallLabel	Text	8	190	360	10	3		OOO_CONTROL_57		
-CustomSetup	ItemDescription	Text	241	80	120	50	3		OOO_CONTROL_58		
-CustomSetup	Location	Text	8	203	291	20	3		OOO_CONTROL_59		
+CustomSetup	InstallLabel	Text	8	190	220	10	3		OOO_CONTROL_57		
+CustomSetup	ItemDescription	Text	241	80	120	65	3		OOO_CONTROL_58		
+CustomSetup	Location	Text	8	203	154	20	3		OOO_CONTROL_59		
 CustomSetup	Next	PushButton	230	243	66	17	3		OOO_CONTROL_60	Cancel	
-CustomSetup	Size	Text	241	133	120	50	3		OOO_CONTROL_61		
+CustomSetup	Size	Text	241	133	120	65	3		OOO_CONTROL_61		
 CustomSetup	Tree	SelectionTree	8	70	220	118	7	_BrowseProperty		ChangeFolder	
 CustomSetupTips	Banner	Bitmap	297	0	77	44	1		BannerBmp		
 CustomSetupTips	BannerLine	Line	0	44	374	0	1				
