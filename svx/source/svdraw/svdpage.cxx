@@ -686,17 +686,6 @@ void SdrObjList::NbcReformatAllTextObjects()
     sal_uIntPtr nAnz=GetObjCount();
     sal_uIntPtr nNum=0;
 
-    Printer* pPrinter = NULL;
-
-    if (pModel)
-    {
-        if (pModel->GetRefDevice() && pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
-        {
-            // Kein RefDevice oder RefDevice kein Printer
-            pPrinter = (Printer*) pModel->GetRefDevice();
-        }
-    }
-
     while (nNum<nAnz)
     {
         SdrObject* pObj = GetObj(nNum);
