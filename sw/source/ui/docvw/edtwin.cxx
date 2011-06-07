@@ -700,6 +700,105 @@ sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const 
     return (0 <= nCTLScriptPos && nCTLScriptPos <= rText.Len());
 }
 
+//return INVALID_HINT if language should not be explictly overridden, the correct
+//HintId to use for the eBufferLanguage otherwise
+sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView& rView,
+    const String &rInBuffer)
+{
+    sal_uInt16 nWhich = INVALID_HINT;
+    bool bLang = true;
+    if(eBufferLanguage != LANGUAGE_DONTKNOW)
+    {
+        switch( GetI18NScriptTypeOfLanguage( eBufferLanguage ))
+        {
+            case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
+            case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+            case  i18n::ScriptType::LATIN:     nWhich = RES_CHRATR_LANGUAGE; break;
+            default: bLang = false;
+        }
+        if(bLang)
+        {
+            SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
+            SwWrtShell& rSh = rView.GetWrtShell();
+            rSh.GetCurAttr(aLangSet);
+            if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, sal_True))
+            {
+                LanguageType eLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
+                if ( eLang == eBufferLanguage )
+                {
+                    // current language attribute equal to language reported from system
+                    bLang = false;
+                }
+                else if ( !bInputLanguageSwitched && RES_CHRATR_LANGUAGE == nWhich )
+                {
+                    // special case: switching between two "LATIN" languages
+                    // In case the current keyboard setting might be suitable
+                    // for both languages we can't safely assume that the user
+                    // wants to use the language reported from the system,
+                    // except if we knew that it was explicitly switched (thus
+                    // the check for "bInputLangeSwitched").
+                    //
+                    // The language reported by the system could be just the
+                    // system default language that the user is not even aware
+                    // of, because no language selection tool is installed at
+                    // all. In this case the OOo language should get preference
+                    // as it might have been selected by the user explicitly.
+                    //
+                    // Usually this case happens if the OOo language is
+                    // different to the system language but the system keyboard
+                    // is still suitable for the OOo language (e.g. writing
+                    // English texts with a German keyboard).
+                    //
+                    // For non-latin keyboards overwriting the attribute is
+                    // still valid. We do this for kyrillic and greek ATM.  In
+                    // future versions of OOo this should be replaced by a
+                    // configuration switch that allows to give the preference
+                    // to the OOo setting or the system setting explicitly
+                    // and/or a better handling of the script type.
+                    i18n::UnicodeScript eType = rInBuffer.Len() ?
+                        (i18n::UnicodeScript)GetAppCharClass().getScript( rInBuffer, 0 ) :
+                        i18n::UnicodeScript_kScriptCount;
+
+                    bool bSystemIsNonLatin = false, bOOoLangIsNonLatin = false;
+                    switch ( eType )
+                    {
+                        case i18n::UnicodeScript_kGreek:
+                        case i18n::UnicodeScript_kCyrillic:
+                            // in case other UnicodeScripts require special
+                            // keyboards they can be added here
+                            bSystemIsNonLatin = true;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    switch ( eLang )
+                    {
+                        case LANGUAGE_AZERI_CYRILLIC:
+                        case LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
+                        case LANGUAGE_BULGARIAN:
+                        case LANGUAGE_GREEK:
+                        case LANGUAGE_RUSSIAN:
+                        case LANGUAGE_RUSSIAN_MOLDOVA:
+                        case LANGUAGE_SERBIAN_CYRILLIC:
+                        case LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
+                        case LANGUAGE_UZBEK_CYRILLIC:
+                        case LANGUAGE_UKRAINIAN:
+                        case LANGUAGE_BELARUSIAN:
+                            bOOoLangIsNonLatin = true;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    bLang = (bSystemIsNonLatin != bOOoLangIsNonLatin);
+                }
+            }
+        }
+    }
+    return bLang ? nWhich : INVALID_HINT;
+}
+
 /*--------------------------------------------------------------------
      Description:  character buffer is inserted into the document
  --------------------------------------------------------------------*/
@@ -827,83 +926,12 @@ void SwEditWin::FlushInBuffer()
                 aReq.Done();
             }
         }
-        sal_Bool bLang = true;
-        if(eBufferLanguage != LANGUAGE_DONTKNOW)
+
+        sal_uInt16 nWhich = lcl_isNonDefaultLanguage(eBufferLanguage, rView, aInBuffer);
+        if (nWhich != INVALID_HINT )
         {
-            sal_uInt16 nWhich = 0;
-            switch( GetI18NScriptTypeOfLanguage( eBufferLanguage ))
-            {
-                case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
-                case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
-                case  i18n::ScriptType::LATIN:     nWhich = RES_CHRATR_LANGUAGE; break;
-                default: bLang = sal_False;
-            }
-            if(bLang)
-            {
-                SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
-                rSh.GetCurAttr(aLangSet);
-                if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, sal_True))
-                {
-                    LanguageType eLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
-                    if ( eLang == eBufferLanguage )
-                        // current language attribute equal to language reported from system
-                        bLang = sal_False;
-                    else if ( !bInputLanguageSwitched && RES_CHRATR_LANGUAGE == nWhich )
-                    {
-                        // special case: switching between two "LATIN" languages
-                        // In case the current keyboard setting might be suitable for both languages we can't safely assume that the user
-                        // wants to use the language reported from the system, except if we knew that it was explicitly switched (thus the check for "bInputLangeSwitched").
-                        // The language reported by the system could be just the system default language that the user is not even aware of,
-                        // because no language selection tool is installed at all. In this case the OOo language should get preference as
-                        // it might have been selected by the user explicitly.
-                        // Usually this case happens if the OOo language is different to the system language but the system keyboard is still suitable
-                        // for the OOo language (e.g. writing English texts with a German keyboard).
-                        // For non-latin keyboards overwriting the attribute is still valid. We do this for kyrillic and greek ATM.
-                        // In future versions of OOo this should be replaced by a configuration switch that allows to give the preference to
-                        // the OOo setting or the system setting explicitly and/or a better handling of the script type.
-                        sal_Int16 nScript = GetAppCharClass().getScript( aInBuffer, 0 );
-                        i18n::UnicodeScript eType = (i18n::UnicodeScript) nScript;
-
-                        bool bSystemIsNonLatin = false, bOOoLangIsNonLatin = false;
-                        switch ( eType )
-                        {
-                            case i18n::UnicodeScript_kGreek:
-                            case i18n::UnicodeScript_kCyrillic:
-                                // in case other UnicodeScripts require special keyboards they can be added here
-                                bSystemIsNonLatin = true;
-                                break;
-                            default:
-                                break;
-                        }
-
-                        switch ( eLang )
-                        {
-                            case LANGUAGE_AZERI_CYRILLIC:
-                            case LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
-                            case LANGUAGE_BULGARIAN:
-                            case LANGUAGE_GREEK:
-                            case LANGUAGE_RUSSIAN:
-                            case LANGUAGE_RUSSIAN_MOLDOVA:
-                            case LANGUAGE_SERBIAN_CYRILLIC:
-                            case LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
-                            case LANGUAGE_UZBEK_CYRILLIC:
-                            case LANGUAGE_UKRAINIAN:
-                            case LANGUAGE_BELARUSIAN:
-                                bOOoLangIsNonLatin = true;
-                                break;
-                            default:
-                                break;
-                        }
-
-                        bLang = (bSystemIsNonLatin != bOOoLangIsNonLatin);
-                    }
-                }
-                if(bLang)
-                {
-                    SvxLanguageItem aLangItem( eBufferLanguage, nWhich );
-                    rSh.SetAttr( aLangItem );
-                }
-            }
+            SvxLanguageItem aLangItem( eBufferLanguage, nWhich );
+            rSh.SetAttr( aLangItem );
         }
 
         rSh.Insert( aInBuffer );
@@ -5412,7 +5440,18 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
                                 EXTTEXTINPUT_ATTR_HIGHLIGHT;
         pCETID = new CommandExtTextInputData( sStr, pAttrs, nL,
                                                 0, 0, 0, sal_False );
-        rSh.CreateExtTextInput(rWin.GetInputLanguage());
+
+        //fdo#33092. If the current input language is the default
+        //language that text would appear in if typed, then don't
+        //force a language on for the ExtTextInput.
+        LanguageType eInputLanguage = rWin.GetInputLanguage();
+        if (lcl_isNonDefaultLanguage(eInputLanguage,
+            rSh.GetView(), sStr) == INVALID_HINT)
+        {
+            eInputLanguage = LANGUAGE_DONTKNOW;
+        }
+
+        rSh.CreateExtTextInput(eInputLanguage);
         rSh.SetExtTextInputData( *pCETID );
     }
 }
