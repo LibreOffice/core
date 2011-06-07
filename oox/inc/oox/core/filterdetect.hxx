@@ -59,7 +59,7 @@ namespace core {
 class FilterDetectDocHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastDocumentHandler >
 {
 public:
-    explicit            FilterDetectDocHandler( ::rtl::OUString& rFilter );
+    explicit            FilterDetectDocHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, ::rtl::OUString& rFilter );
     virtual             ~FilterDetectDocHandler();
 
     // XFastDocumentHandler
@@ -91,6 +91,7 @@ private:
     ::rtl::OUString&    mrFilterName;
     ContextVector       maContextStack;
     ::rtl::OUString     maTargetPath;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 };
 
 // ============================================================================
