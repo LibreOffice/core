@@ -281,6 +281,18 @@ void ResMgrContainer::init()
     MsLangId::convertLanguageToLocale(nLang, m_aDefLocale);
 }
 
+namespace
+{
+    bool isAlreadyPureenUS(const com::sun::star::lang::Locale &rLocale)
+    {
+        return (
+                 rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("en")) &&
+                 rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("US")) &&
+                 rLocale.Variant.getLength() == 0
+               );
+    }
+}
+
 InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
                                             com::sun::star::lang::Locale& rLocale,
                                             bool bForceNewInstance
@@ -331,7 +343,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             }
             break;
         }
-        if( nTries == 0 && !aLocale.Language.equalsIgnoreAsciiCaseAscii( "en" ) )
+        if( nTries == 0 && !isAlreadyPureenUS(aLocale) )
         {
             // locale fallback failed
             // fallback to en-US locale
@@ -448,7 +460,7 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
         aLocale.Variant = OUString();
     else if( aLocale.Country.getLength() )
         aLocale.Country = OUString();
-    else if( ! aLocale.Language.equalsIgnoreAsciiCaseAscii( "en" ) )
+    else if( !isAlreadyPureenUS(aLocale) )
     {
         aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         aLocale.Country = OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) );
