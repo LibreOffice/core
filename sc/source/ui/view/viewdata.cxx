@@ -96,7 +96,7 @@ ScViewDataTable::ScViewDataTable() :
                 nCurX( 0 ),
                 nCurY( 0 ),
                 bShowGrid( true ),
-                bOldCurValid( false )
+                mbOldCursorValid( false )
 {
     nPosX[0]=nPosX[1]=0;
     nPosY[0]=nPosY[1]=0;
@@ -313,10 +313,10 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nRefTabNo   ( 0 ),
         nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( SC_SPLIT_BOTTOMLEFT ),
-        bActive     ( sal_True ),                   //! wie initialisieren?
+        nFillMode   ( SC_FILL_NONE ),
+        bActive     ( true ),                   //! wie initialisieren?
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
-        nFillMode   ( SC_FILL_NONE ),
         bPagebreak  ( false ),
         bSelCtrlMouseClick( false )
 {
@@ -382,10 +382,10 @@ ScViewData::ScViewData( const ScViewData& rViewData ) :
         nTabNo      ( rViewData.nTabNo ),
         nRefTabNo   ( rViewData.nTabNo ),           // kein RefMode
         eEditActivePart( rViewData.eEditActivePart ),
-        bActive     ( sal_True ),                               //! wie initialisieren?
+        nFillMode   ( SC_FILL_NONE ),
+        bActive     ( true ),                               //! wie initialisieren?
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
-        nFillMode   ( SC_FILL_NONE ),
         bPagebreak  ( rViewData.bPagebreak ),
         bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick )
 {
@@ -704,7 +704,7 @@ void ScViewData::RefreshZoom()
     aLogicMode.SetScaleY( GetZoomY() );
 }
 
-void ScViewData::SetPagebreakMode( sal_Bool bSet )
+void ScViewData::SetPagebreakMode( bool bSet )
 {
     bPagebreak = bSet;
 
@@ -866,7 +866,7 @@ void ScViewData::GetFillData( SCCOL& rStartCol, SCROW& rStartRow,
 
 SCCOL ScViewData::GetOldCurX() const
 {
-    if (pThisTab->bOldCurValid)
+    if (pThisTab->mbOldCursorValid)
         return pThisTab->nOldCurX;
     else
         return pThisTab->nCurX;
@@ -874,7 +874,7 @@ SCCOL ScViewData::GetOldCurX() const
 
 SCROW ScViewData::GetOldCurY() const
 {
-    if (pThisTab->bOldCurValid)
+    if (pThisTab->mbOldCursorValid)
         return pThisTab->nOldCurY;
     else
         return pThisTab->nCurY;
@@ -884,12 +884,12 @@ void ScViewData::SetOldCursor( SCCOL nNewX, SCROW nNewY )
 {
     pThisTab->nOldCurX = nNewX;
     pThisTab->nOldCurY = nNewY;
-    pThisTab->bOldCurValid = sal_True;
+    pThisTab->mbOldCursorValid = true;
 }
 
 void ScViewData::ResetOldCursor()
 {
-    pThisTab->bOldCurValid = false;
+    pThisTab->mbOldCursorValid = false;
 }
 
 Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
@@ -937,7 +937,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     sal_uLong nVC = pEditView[eWhich]->GetControlWord();
     pEditView[eWhich]->SetControlWord(nVC & ~EV_CNTRL_AUTOSCROLL);
 
-    bEditActive[eWhich] = sal_True;
+    bEditActive[eWhich] = true;
 
     const ScPatternAttr* pPattern = pDoc->GetPattern( nNewX, nNewY, nTabNo );
     SvxCellHorJustify eJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)

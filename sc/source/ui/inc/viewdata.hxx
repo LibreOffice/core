@@ -148,8 +148,7 @@ private:
     SCROW           nPosY[2];
 
     bool            bShowGrid;                  // per-sheet show grid-lines option.
-
-    sal_Bool            bOldCurValid;               // "virtuelle" Cursorpos. bei zusammengefassten
+    bool            mbOldCursorValid;           // "virtuelle" Cursorpos. bei zusammengefassten
 
                     ScViewDataTable();
                     ~ScViewDataTable();
@@ -220,14 +219,13 @@ private:
     ScPasteFlags        nPasteFlags;
 
     ScSplitPos          eEditActivePart;            // the part that was active when edit mode was started
-    sal_Bool                bEditActive[4];             // aktiv?
-    sal_Bool                bActive;                    // aktives Fenster ?
-    sal_Bool                bIsRefMode;                 // Referenzeingabe
-    sal_Bool                bDelMarkValid;              // nur gueltig bei SC_REFTYPE_FILL
-    sal_uInt8               nFillMode;                  // Modus
-    sal_Bool                bPagebreak;                 // Seitenumbruch-Vorschaumodus
-
-    sal_Bool                bSelCtrlMouseClick;         // special selection handling for ctrl-mouse-click
+    sal_uInt8           nFillMode;                  // Modus
+    bool                bEditActive[4];             // aktiv?
+    bool                bActive:1;                  // aktives Fenster ?
+    bool                bIsRefMode:1;               // Referenzeingabe
+    bool                bDelMarkValid:1;            // nur gueltig bei SC_REFTYPE_FILL
+    bool                bPagebreak:1;               // Seitenumbruch-Vorschaumodus
+    bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
 
     SC_DLLPRIVATE DECL_LINK (EmptyEditHdl, EditStatus*);
     SC_DLLPRIVATE DECL_LINK (EditEngineHdl, EditStatus*);
@@ -273,8 +271,8 @@ public:
 
     ScDocument*     GetDocument() const;
 
-    sal_Bool            IsActive() const            { return bActive; }
-    void            Activate(sal_Bool bActivate)    { bActive = bActivate; }
+    bool            IsActive() const            { return bActive; }
+    void            Activate(bool bActivate)    { bActive = bActivate; }
 
     void            InsertTab( SCTAB nTab );
     void            InsertTabs( SCTAB nTab, SCTAB nNewSheets );
@@ -292,7 +290,7 @@ public:
     SCROW           GetPosY( ScVSplitPos eWhich ) const     { return pThisTab->nPosY[eWhich]; }
     SCCOL           GetCurX() const                         { return pThisTab->nCurX; }
     SCROW           GetCurY() const                         { return pThisTab->nCurY; }
-    sal_Bool            HasOldCursor() const                    { return pThisTab->bOldCurValid; }
+    bool            HasOldCursor() const                    { return pThisTab->mbOldCursorValid; }
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
@@ -301,7 +299,7 @@ public:
     long            GetVSplitPos() const                    { return pThisTab->nVSplitPos; }
     SCCOL           GetFixPosX() const                      { return pThisTab->nFixPosX; }
     SCROW           GetFixPosY() const                      { return pThisTab->nFixPosY; }
-    sal_Bool            IsPagebreakMode() const                 { return bPagebreak; }
+    bool            IsPagebreakMode() const                 { return bPagebreak; }
     bool            IsPasteMode() const                     { return nPasteFlags & SC_PASTE_MODE; }
     bool            ShowPasteSource() const                 { return nPasteFlags & SC_PASTE_BORDER; }
 
@@ -317,7 +315,7 @@ public:
     void            SetVSplitPos( long nPos )                       { pThisTab->nVSplitPos = nPos; }
     void            SetFixPosX( SCCOL nPos )                        { pThisTab->nFixPosX = nPos; }
     void            SetFixPosY( SCROW nPos )                        { pThisTab->nFixPosY = nPos; }
-    void            SetPagebreakMode( sal_Bool bSet );
+    void            SetPagebreakMode( bool bSet );
     void            SetPasteMode ( ScPasteFlags nFlags )            { nPasteFlags = nFlags; }
 
     void            SetZoomType( SvxZoomType eNew, sal_Bool bAll );
@@ -326,7 +324,7 @@ public:
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool bAll );
     void            RefreshZoom();
 
-    void            SetSelCtrlMouseClick( sal_Bool bTmp ) { bSelCtrlMouseClick = bTmp; }
+    void            SetSelCtrlMouseClick( bool bTmp ) { bSelCtrlMouseClick = bTmp; }
 
     SvxZoomType     GetZoomType() const     { return pThisTab->eZoomType; }
     const Fraction& GetZoomX() const        { return bPagebreak ? pThisTab->aPageZoomX : pThisTab->aZoomX; }
@@ -375,7 +373,7 @@ public:
     void            GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
                                         SCsCOL nPosX, SCsROW nPosY, sal_Bool& rLeft, sal_Bool& rTop );
 
-    sal_Bool            IsRefMode() const                       { return bIsRefMode; }
+    bool            IsRefMode() const                       { return bIsRefMode; }
     ScRefType       GetRefType() const                      { return eRefType; }
     SCCOL           GetRefStartX() const                    { return nRefStartX; }
     SCROW           GetRefStartY() const                    { return nRefStartY; }
@@ -384,7 +382,7 @@ public:
     SCROW           GetRefEndY() const                      { return nRefEndY; }
     SCTAB           GetRefEndZ() const                      { return nRefEndZ; }
 
-    void            SetRefMode( sal_Bool bNewMode, ScRefType eNewType )
+    void            SetRefMode( bool bNewMode, ScRefType eNewType )
                                     { bIsRefMode = bNewMode; eRefType = eNewType; }
 
     void            SetRefStart( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ )
@@ -394,9 +392,9 @@ public:
 
     void            ResetDelMark()                          { bDelMarkValid = false; }
     void            SetDelMark( const ScRange& rRange )
-                            { aDelRange = rRange; bDelMarkValid = sal_True; }
+                            { aDelRange = rRange; bDelMarkValid = true; }
 
-    sal_Bool            GetDelMark( ScRange& rRange ) const
+    bool            GetDelMark( ScRange& rRange ) const
                             { rRange = aDelRange; return bDelMarkValid; }
 
     inline void     GetMoveCursor( SCCOL& rCurX, SCROW& rCurY );
@@ -425,7 +423,7 @@ public:
                                     ScEditEngineDefaulter* pNewEngine,
                                     Window* pWin, SCCOL nNewX, SCROW nNewY );
     void            GetEditView( ScSplitPos eWhich, EditView*& rViewPtr, SCCOL& rCol, SCROW& rRow );
-    sal_Bool            HasEditView( ScSplitPos eWhich ) const
+    bool            HasEditView( ScSplitPos eWhich ) const
                                         { return pEditView[eWhich] && bEditActive[eWhich]; }
     EditView*       GetEditView( ScSplitPos eWhich ) const
                                         { return pEditView[eWhich]; }
@@ -491,7 +489,7 @@ public:
     const Size&     GetScenButSize() const              { return aScenButSize; }
     void            SetScenButSize(const Size& rNew)    { aScenButSize = rNew; }
 
-    sal_Bool            IsSelCtrlMouseClick() { return bSelCtrlMouseClick; }
+    bool            IsSelCtrlMouseClick() { return bSelCtrlMouseClick; }
 
     static inline long ToPixel( sal_uInt16 nTwips, double nFactor );
 
