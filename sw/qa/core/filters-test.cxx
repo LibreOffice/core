@@ -26,30 +26,34 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include "precompiled_sw.hxx"
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <sal/cppunit.h>
 
+#include <sal/config.h>
 #include <osl/file.hxx>
 #include <osl/process.h>
+
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
+
 #include <comphelper/processfactory.hxx>
+
+#include <i18npool/mslangid.hxx>
+
+#include <tools/urlobj.hxx>
+
+#include <unotools/tempfile.hxx>
+#include <unotools/syslocaleoptions.hxx>
+
 #include <vcl/svapp.hxx>
+
+#include <ucbhelper/contentbroker.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-
-#include <tools/urlobj.hxx>
-#include <unotools/tempfile.hxx>
-#include <ucbhelper/contentbroker.hxx>
 
 #include "init.hxx"
 #include "swtypes.hxx"
@@ -62,11 +66,6 @@ SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
 
 using namespace ::com::sun::star;
-
-static sal_uInt16 aWndFunc(Window *, sal_uInt16, const String &, const String &)
-{
-    return ERRCODE_BUTTON_OK;
-}
 
 /* Implementation of Filters test */
 
@@ -96,7 +95,7 @@ private:
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     uno::Reference<uno::XInterface> m_xWriterComponent;
-    ::rtl::OUString m_aPWDURL;
+    ::rtl::OUString m_aSrcRoot;
 };
 
 bool FiltersTest::testLoad(const rtl::OUString &rFilter,
@@ -123,62 +122,63 @@ void FiltersTest::testCVEs()
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice XML (Writer)")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2006-3117-1.sxw")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2006-3117-1.sxw")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2006-3117 regression", bResult == false);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-0245-1.rtf")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2007-0245-1.rtf")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2007-0245 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-0200-1.doc")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-0200-1.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2009-0200 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-0201-1.doc")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-0201-1.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2009-0201 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-3301-1.doc")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-3301-1.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2009-3301 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-3302-1.doc")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-3302-1.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2009-3302 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2009-3302-2.doc")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2009-3302-2.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2009-3302 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2010-3451-1.rtf")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3451-1.rtf")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2010-3451 regression", bResult == false);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2010-3452-1.rtf")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3452-1.rtf")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2010-3452 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2010-3453-1.doc")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3453-1.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2010-3453 regression", bResult == true);
 
     bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")),
-        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2010-3454-1.doc")));
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/CVE/CVE-2010-3454-1.doc")));
     CPPUNIT_ASSERT_MESSAGE("CVE-2010-3454 regression", bResult == true);
 #endif
 }
 
 FiltersTest::FiltersTest()
+    : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();
@@ -203,20 +203,35 @@ FiltersTest::FiltersTest()
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
     xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
 
+    // force locale (and resource files loaded) to en-US
+    const LanguageType eLang=LANGUAGE_ENGLISH_US;
+
+    rtl::OUString aLang, aCountry;
+    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
+    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
+    ResMgr::SetDefaultLocale( aLocale );
+
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetUILocaleConfigString(
+        MsLangId::convertLanguageToIsoString( eLang ) );
 
     InitVCL(xSM);
 
-    //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure, which is
-    //a private symbol to us, gets called
+    //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
+    //which is a private symbol to us, gets called
     m_xWriterComponent =
         xSM->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.TextDocument")));
-    CPPUNIT_ASSERT_MESSAGE("no PWD!", m_xWriterComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
 
-    ErrorHandler::RegisterDisplay(&aWndFunc);
+    const char* pSrcRoot = getenv( "SRC_ROOT" );
+    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
 
-    oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
-    CPPUNIT_ASSERT_MESSAGE("no PWD!", err == osl_Process_E_None);
+#ifdef WNT
+    if (pSrcRoot[1] == ':')
+        m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
+#endif
+    m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
 }
 
 void FiltersTest::setUp()
@@ -225,6 +240,7 @@ void FiltersTest::setUp()
 
 FiltersTest::~FiltersTest()
 {
+    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void FiltersTest::tearDown()
