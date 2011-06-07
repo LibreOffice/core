@@ -1450,6 +1450,15 @@ void ScViewData::CreateSelectedTabData()
             CreateTabData( i );
 }
 
+void ScViewData::EnsureTabDataSize(size_t nSize)
+{
+    if (nSize >= maTabData.size())
+    {
+        size_t n = nSize - maTabData.size() + 1;
+        maTabData.insert(maTabData.end(), n, NULL);
+    }
+}
+
 void ScViewData::SetTabNo( SCTAB nNewTab )
 {
     if (!ValidTab(nNewTab))
@@ -2758,7 +2767,10 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                         uno::Sequence<beans::PropertyValue> aTabSettings;
                         if (aAny >>= aTabSettings)
                         {
-                            maTabData[nTab] = new ScViewDataTable;
+                            EnsureTabDataSize(nTab + 1);
+                            if (!maTabData[nTab])
+                                maTabData[nTab] = new ScViewDataTable;
+
                             bool bHasZoom = false;
                             maTabData[nTab]->ReadUserDataSequence(aTabSettings, *this, nTab, bHasZoom);
                             aHasZoomVect[nTab] = bHasZoom;

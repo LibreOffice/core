@@ -236,6 +236,7 @@ private:
     SC_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );
     SC_DLLPRIVATE void          CreateTabData( std::vector< SCTAB >& rvTabs );
     SC_DLLPRIVATE void          CreateSelectedTabData();
+    SC_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
 
 public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
