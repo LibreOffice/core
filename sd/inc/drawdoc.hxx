@@ -111,6 +111,7 @@ SV_DECL_REF(DrawDocShell)
 class DrawDocShell;
 class UndoManager;
 class ShapeList;
+class FrameView;
 }
 
 class ImpDrawPageListWatcher;
@@ -167,7 +168,7 @@ private:
     Timer*              mpOnlineSpellingTimer;
     sd::ShapeList*      mpOnlineSpellingList;
     SvxSearchItem*      mpOnlineSearchItem;
-    List*               mpFrameViewList;
+    std::vector<sd::FrameView*> maFrameViewList;
     List*               mpCustomShowList;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
@@ -407,7 +408,7 @@ public:
 
     sal_uLong               GetLinkCount();
 
-    List*               GetFrameViewList() const { return mpFrameViewList; }
+    std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
     SD_DLLPUBLIC List*  GetCustomShowList(sal_Bool bCreate = sal_False);
 
     void                NbcSetChanged(sal_Bool bFlag = sal_True);
@@ -426,8 +427,7 @@ public:
     sal_Bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     ::sd::FrameView* GetFrameView(sal_uLong nPos) {
-        return static_cast< ::sd::FrameView*>(
-            mpFrameViewList->GetObject(nPos));}
+        return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : NULL; }
 
     /** deprecated*/
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;

@@ -618,9 +618,9 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
     if( !xRet.is() )
     {
-        List* pFrameViewList = mpDoc->GetFrameViewList();
+        const std::vector<sd::FrameView*> &rList = mpDoc->GetFrameViewList();
 
-        if( pFrameViewList && pFrameViewList->Count() )
+        if( !rList.empty() )
         {
             xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"))));
 
@@ -629,19 +629,13 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
             DBG_ASSERT( xCont.is(), "SdXImpressDocument::getViewData() failed for OLE object" );
             if( xCont.is() )
             {
-                sal_uInt32 i;
-                for( i = 0; i < pFrameViewList->Count(); i++ )
+                for( sal_uInt32 i = 0, n = rList.size(); i < n; i++ )
                 {
-                    ::sd::FrameView* pFrameView =
-                          static_cast< ::sd::FrameView*>(
-                              pFrameViewList->GetObject(i));
+                    ::sd::FrameView* pFrameView = rList[ i ];
 
-                    if(pFrameView)
-                    {
-                        uno::Sequence< beans::PropertyValue > aSeq;
-                        pFrameView->WriteUserDataSequence( aSeq );
-                        xCont->insertByIndex( i, uno::makeAny( aSeq ) );
-                    }
+                    uno::Sequence< beans::PropertyValue > aSeq;
+                    pFrameView->WriteUserDataSequence( aSeq );
+                    xCont->insertByIndex( i, uno::makeAny( aSeq ) );
                 }
             }
         }
@@ -662,36 +656,24 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
     {
         const sal_Int32 nCount = xData->getCount();
 
-        List* pFrameViewList = mpDoc->GetFrameViewList();
+        std::vector<sd::FrameView*>::iterator pIter;
+        std::vector<sd::FrameView*> &rViews = mpDoc->GetFrameViewList();
 
-        DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
-        if( pFrameViewList )
+        for ( pIter = rViews.begin(); pIter != rViews.end(); ++pIter )
+            delete *pIter;
+
+        rViews.clear();
+
+        ::sd::FrameView* pFrameView;
+        uno::Sequence< beans::PropertyValue > aSeq;
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            ::sd::FrameView* pFrameView;
-
-            sal_uInt32 i;
-            for ( i = 0; i < pFrameViewList->Count(); i++)
+            if( xData->getByIndex( nIndex ) >>= aSeq )
             {
-                // Ggf. FrameViews loeschen
-                pFrameView = static_cast< ::sd::FrameView*>(
-                    pFrameViewList->GetObject(i));
+                pFrameView = new ::sd::FrameView( mpDoc );
 
-                if (pFrameView)
-                    delete pFrameView;
-            }
-
-            pFrameViewList->Clear();
-
-            uno::Sequence< beans::PropertyValue > aSeq;
-            sal_Int32 nIndex;
-            for( nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                if( xData->getByIndex( nIndex ) >>= aSeq )
-                {
-                    pFrameView = new ::sd::FrameView( mpDoc );
-                    pFrameView->ReadUserDataSequence( aSeq );
-                    pFrameViewList->Insert( pFrameView );
-                }
+                pFrameView->ReadUserDataSequence( aSeq );
+                rViews.push_back( pFrameView );
             }
         }
     }

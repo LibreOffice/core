@@ -1211,13 +1211,9 @@ sal_Bool ImplSdPPTImport::Import()
             ::sd::FrameView* pFrameView = mpDoc->GetFrameView( 0 );
             if ( !pFrameView )
             {
-                List* pFrameViewList = mpDoc->GetFrameViewList();
-                if ( pFrameViewList )
-                {
-                    pFrameView = new ::sd::FrameView( mpDoc );
-                    if ( pFrameView )
-                        pFrameViewList->Insert( pFrameView );
-                }
+                std::vector<sd::FrameView*> &rViews = mpDoc->GetFrameViewList();
+                pFrameView = new ::sd::FrameView( mpDoc );
+                rViews.push_back( pFrameView );
             }
             if ( pFrameView )
             {

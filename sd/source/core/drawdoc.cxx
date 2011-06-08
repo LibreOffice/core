@@ -156,7 +156,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpOnlineSpellingTimer(NULL)
 , mpOnlineSpellingList(NULL)
 , mpOnlineSearchItem(NULL)
-, mpFrameViewList( new List() )
 , mpCustomShowList(NULL)
 , mpDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh))
 , mpCreatingTransferable( NULL )
@@ -412,20 +411,9 @@ SdDrawDocument::~SdDrawDocument()
         pLinkManager = NULL;
     }
 
-    ::sd::FrameView* pFrameView = NULL;
-
-    for (sal_uLong i = 0; i < mpFrameViewList->Count(); i++)
-    {
-        // Ggf. FrameViews loeschen
-        pFrameView =
-            static_cast< ::sd::FrameView*>(mpFrameViewList->GetObject(i));
-
-        if (pFrameView)
-            delete pFrameView;
-    }
-
-    delete mpFrameViewList;
-    mpFrameViewList = NULL;
+    std::vector<sd::FrameView*>::iterator pIter;
+    for ( pIter = maFrameViewList.begin(); pIter != maFrameViewList.end(); ++pIter )
+        delete *pIter;
 
     if (mpCustomShowList)
     {
