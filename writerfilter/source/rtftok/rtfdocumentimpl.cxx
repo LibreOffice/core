@@ -193,6 +193,14 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 void RTFDocumentImpl::text(OUString& rString)
 {
+    if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
+    {
+        OSL_TRACE("found text in leveltext destination");
+        RTFValue::Pointer_t pValue(new RTFValue(rString));
+        m_aStates.top().aAttributes.insert(make_pair(NS_ooxml::LN_CT_LevelText_val, pValue));
+        return;
+    }
+
     writerfilter::Reference<Properties>::Pointer_t const pProperties(
             new RTFReferenceProperties(m_aStates.top().aAttributes, m_aStates.top().aSprms)
             );
@@ -285,6 +293,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            break;
+        case RTF_LEVELTEXT:
+            OSL_TRACE("entered leveltext destination");
+            m_aStates.top().nDestinationState = DESTINATION_LEVELTEXT;
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -1063,6 +1075,7 @@ int RTFDocumentImpl::popState()
     bool bListEntryEnd = false;
     bool bListLevelEnd = false;
     bool bListOverrideEntryEnd = false;
+    bool bLevelTextEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -1124,6 +1137,11 @@ int RTFDocumentImpl::popState()
         OUString aOUStr(OStringToOUString(m_aStates.top().aFieldInstruction.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
         text(aOUStr);
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
+    {
+        aAttributes = m_aStates.top().aAttributes;
+        bLevelTextEnd = true;
+    }
 
     m_aStates.pop();
 
@@ -1149,6 +1167,11 @@ int RTFDocumentImpl::popState()
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_aListTableSprms.insert(make_pair(NS_ooxml::LN_CT_Numbering_num, pValue));
+    }
+    else if (bLevelTextEnd)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+        m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_Lvl_lvlText, pValue));
     }
 
     return 0;
