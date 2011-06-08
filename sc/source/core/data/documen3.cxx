@@ -91,13 +91,13 @@ using namespace com::sun::star;
 void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 {
     ScRangeName::TabNameCopyMap aNames;
-    for (SCTAB i = 0; i < static_cast<SCTAB>(pTab.size()); ++i)
+    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
-        if (!pTab[i])
+        if (!maTabs[i])
             // no more tables to iterate through.
             break;
 
-        const ScRangeName* p = pTab[i]->GetRangeName();
+        const ScRangeName* p = maTabs[i]->GetRangeName();
         if (!p || p->empty())
             // ignore empty ones.
             continue;
@@ -110,13 +110,13 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 void ScDocument::SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rNames)
 {
     // Remove all existing range names first.
-    for (SCTAB i = 0; i < static_cast<SCTAB>(pTab.size()); ++i)
+    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
-        if (!pTab[i])
+        if (!maTabs[i])
             // no more tables to iterate through.
             break;
 
-        pTab[i]->SetRangeName(NULL);
+        maTabs[i]->SetRangeName(NULL);
     }
 
     ScRangeName::TabNameCopyMap::const_iterator itr = rNames.begin(), itrEnd = rNames.end();
@@ -126,10 +126,10 @@ void ScDocument::SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rNames)
 
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
 {
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab])
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return NULL;
 
-    return pTab[nTab]->GetRangeName();
+    return maTabs[nTab]->GetRangeName();
 }
 
 ScRangeName* ScDocument::GetRangeName() const
@@ -141,10 +141,10 @@ ScRangeName* ScDocument::GetRangeName() const
 
 void ScDocument::SetRangeName(SCTAB nTab, ScRangeName* pNew)
 {
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab])
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return;
 
-    return pTab[nTab]->SetRangeName(pNew);
+    return maTabs[nTab]->SetRangeName(pNew);
 }
 
 void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
@@ -326,66 +326,66 @@ void ScDocument::SetChartListenerCollection(
 
 void ScDocument::SetScenario( SCTAB nTab, sal_Bool bFlag )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->SetScenario(bFlag);
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetScenario(bFlag);
 }
 
 sal_Bool ScDocument::IsScenario( SCTAB nTab ) const
 {
-    return ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] &&pTab[nTab]->IsScenario();
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] &&maTabs[nTab]->IsScenario();
 }
 
 void ScDocument::SetScenarioData( SCTAB nTab, const String& rComment,
                                         const Color& rColor, sal_uInt16 nFlags )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->IsScenario())
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
     {
-        pTab[nTab]->SetScenarioComment( rComment );
-        pTab[nTab]->SetScenarioColor( rColor );
-        pTab[nTab]->SetScenarioFlags( nFlags );
+        maTabs[nTab]->SetScenarioComment( rComment );
+        maTabs[nTab]->SetScenarioColor( rColor );
+        maTabs[nTab]->SetScenarioFlags( nFlags );
     }
 }
 
 Color ScDocument::GetTabBgColor( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetTabBgColor();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetTabBgColor();
     return Color(COL_AUTO);
 }
 
 void ScDocument::SetTabBgColor( SCTAB nTab, const Color& rColor )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->SetTabBgColor(rColor);
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetTabBgColor(rColor);
 }
 
 bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetTabBgColor() == COL_AUTO;
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetTabBgColor() == COL_AUTO;
     return true;
 }
 
 void ScDocument::GetScenarioData( SCTAB nTab, String& rComment,
                                         Color& rColor, sal_uInt16& rFlags ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->IsScenario())
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
     {
-        pTab[nTab]->GetScenarioComment( rComment );
-        rColor = pTab[nTab]->GetScenarioColor();
-        rFlags = pTab[nTab]->GetScenarioFlags();
+        maTabs[nTab]->GetScenarioComment( rComment );
+        rColor = maTabs[nTab]->GetScenarioColor();
+        rFlags = maTabs[nTab]->GetScenarioFlags();
     }
 }
 
 void ScDocument::GetScenarioFlags( SCTAB nTab, sal_uInt16& rFlags ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->IsScenario())
-        rFlags = pTab[nTab]->GetScenarioFlags();
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
+        rFlags = maTabs[nTab]->GetScenarioFlags();
 }
 
 sal_Bool ScDocument::IsLinked( SCTAB nTab ) const
 {
-    return ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->IsLinked();
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsLinked();
     // euqivalent to
     //if (ValidTab(nTab) && pTab[nTab])
     //  return pTab[nTab]->IsLinked();
@@ -409,43 +409,43 @@ void ScDocument::SetGrammar( formula::FormulaGrammar::Grammar eGram )
 
 sal_Bool ScDocument::GetLinkMode( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetLinkMode();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetLinkMode();
     return SC_LINK_NONE;
 }
 
 const String& ScDocument::GetLinkDoc( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetLinkDoc();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetLinkDoc();
     return EMPTY_STRING;
 }
 
 const String& ScDocument::GetLinkFlt( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetLinkFlt();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetLinkFlt();
     return EMPTY_STRING;
 }
 
 const String& ScDocument::GetLinkOpt( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetLinkOpt();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetLinkOpt();
     return EMPTY_STRING;
 }
 
 const String& ScDocument::GetLinkTab( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetLinkTab();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetLinkTab();
     return EMPTY_STRING;
 }
 
 sal_uLong ScDocument::GetLinkRefreshDelay( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetLinkRefreshDelay();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetLinkRefreshDelay();
     return 0;
 }
 
@@ -453,19 +453,19 @@ void ScDocument::SetLink( SCTAB nTab, sal_uInt8 nMode, const String& rDoc,
                             const String& rFilter, const String& rOptions,
                             const String& rTabName, sal_uLong nRefreshDelay )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->SetLink( nMode, rDoc, rFilter, rOptions, rTabName, nRefreshDelay );
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetLink( nMode, rDoc, rFilter, rOptions, rTabName, nRefreshDelay );
 }
 
 sal_Bool ScDocument::HasLink( const String& rDoc,
                             const String& rFilter, const String& rOptions ) const
 {
-    SCTAB nCount = static_cast<SCTAB>(pTab.size());
+    SCTAB nCount = static_cast<SCTAB>(maTabs.size());
     for (SCTAB i=0; i<nCount; i++)
-        if (pTab[i]->IsLinked()
-                && pTab[i]->GetLinkDoc() == rDoc
-                && pTab[i]->GetLinkFlt() == rFilter
-                && pTab[i]->GetLinkOpt() == rOptions)
+        if (maTabs[i]->IsLinked()
+                && maTabs[i]->GetLinkDoc() == rDoc
+                && maTabs[i]->GetLinkFlt() == rFilter
+                && maTabs[i]->GetLinkOpt() == rOptions)
             return sal_True;
 
     return false;
@@ -561,23 +561,23 @@ ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
 
 const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetSheetEvents();
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetSheetEvents();
     return NULL;
 }
 
 void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->SetSheetEvents( pNew );
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetSheetEvents( pNew );
 }
 
 bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents ) const
 {
-    if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
+    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
         // check if any event handler script has been configured
-        const ScSheetEvents* pEvents = pTab[nTab]->GetSheetEvents();
+        const ScSheetEvents* pEvents = maTabs[nTab]->GetSheetEvents();
         if ( pEvents && pEvents->GetScript( nEvent ) )
             return true;
         // check if VBA event handlers exist
@@ -598,7 +598,7 @@ bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVb
 
 bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents ) const
 {
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pTab.size()); nTab++)
+    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
         if (HasSheetEventScript( nTab, nEvent, bWithVbaEvents ))
             return true;
     return false;
@@ -606,46 +606,46 @@ bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents )
 
 bool ScDocument::HasAnyCalcNotification() const
 {
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pTab.size()); nTab++)
-        if (pTab[nTab] && pTab[nTab]->GetCalcNotification())
+    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+        if (maTabs[nTab] && maTabs[nTab]->GetCalcNotification())
             return true;
     return false;
 }
 
 sal_Bool ScDocument::HasCalcNotification( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetCalcNotification();
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetCalcNotification();
     return false;
 }
 
 void ScDocument::SetCalcNotification( SCTAB nTab )
 {
     // set only if not set before
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && !pTab[nTab]->GetCalcNotification())
-        pTab[nTab]->SetCalcNotification(sal_True);
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && !maTabs[nTab]->GetCalcNotification())
+        maTabs[nTab]->SetCalcNotification(sal_True);
 }
 
 void ScDocument::ResetCalcNotifications()
 {
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pTab.size()); nTab++)
-        if (pTab[nTab] && pTab[nTab]->GetCalcNotification())
-            pTab[nTab]->SetCalcNotification(false);
+    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+        if (maTabs[nTab] && maTabs[nTab]->GetCalcNotification())
+            maTabs[nTab]->SetCalcNotification(false);
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, sal_Bool bCreate )
 {
     ScOutlineTable* pVal = NULL;
 
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()))
-        if (pTab[nTab])
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+        if (maTabs[nTab])
         {
-            pVal = pTab[nTab]->GetOutlineTable();
+            pVal = maTabs[nTab]->GetOutlineTable();
             if (!pVal)
                 if (bCreate)
                 {
-                    pTab[nTab]->StartOutlineTable();
-                    pVal = pTab[nTab]->GetOutlineTable();
+                    maTabs[nTab]->StartOutlineTable();
+                    pVal = maTabs[nTab]->GetOutlineTable();
                 }
         }
 
@@ -654,30 +654,30 @@ ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, sal_Bool bCreate )
 
 sal_Bool ScDocument::SetOutlineTable( SCTAB nTab, const ScOutlineTable* pNewOutline )
 {
-    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->SetOutlineTable(pNewOutline);
+    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->SetOutlineTable(pNewOutline);
 }
 
 void ScDocument::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->DoAutoOutline( nStartCol, nStartRow, nEndCol, nEndRow );
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->DoAutoOutline( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 sal_Bool ScDocument::TestRemoveSubTotals( SCTAB nTab, const ScSubTotalParam& rParam )
 {
-    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->TestRemoveSubTotals( rParam );
+    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->TestRemoveSubTotals( rParam );
 }
 
 void ScDocument::RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 {
-    if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        pTab[nTab]->RemoveSubTotals( rParam );
+    if ( VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        maTabs[nTab]->RemoveSubTotals( rParam );
 }
 
 sal_Bool ScDocument::DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 {
-    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->DoSubTotals( rParam );
+    return VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->DoSubTotals( rParam );
 }
 
 sal_Bool ScDocument::HasSubTotalCells( const ScRange& rRange )
@@ -699,51 +699,51 @@ sal_Bool ScDocument::HasSubTotalCells( const ScRange& rRange )
 
 void ScDocument::CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc )
 {
-    SCTAB nCount = static_cast<SCTAB>(pTab.size());
+    SCTAB nCount = static_cast<SCTAB>(maTabs.size());
     for (SCTAB nTab=0; nTab<nCount; nTab++)
-        if (pTab[nTab] && pPosDoc->pTab[nTab] && pDestDoc->pTab[nTab])
-            pTab[nTab]->CopyUpdated( pPosDoc->pTab[nTab], pDestDoc->pTab[nTab] );
+        if (maTabs[nTab] && pPosDoc->maTabs[nTab] && pDestDoc->maTabs[nTab])
+            maTabs[nTab]->CopyUpdated( pPosDoc->maTabs[nTab], pDestDoc->maTabs[nTab] );
 }
 
 void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bNewScenario )
 {
-    if (ValidTab(nSrcTab) && ValidTab(nDestTab) && nSrcTab < static_cast<SCTAB>(pTab.size())
-                && nDestTab < static_cast<SCTAB>(pTab.size()) && pTab[nSrcTab] && pTab[nDestTab])
+    if (ValidTab(nSrcTab) && ValidTab(nDestTab) && nSrcTab < static_cast<SCTAB>(maTabs.size())
+                && nDestTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab] && maTabs[nDestTab])
     {
         //  Flags fuer aktive Szenarios richtig setzen
         //  und aktuelle Werte in bisher aktive Szenarios zurueckschreiben
 
-        ScRangeList aRanges = *pTab[nSrcTab]->GetScenarioRanges();
+        ScRangeList aRanges = *maTabs[nSrcTab]->GetScenarioRanges();
 
         //  nDestTab ist die Zieltabelle
         for ( SCTAB nTab = nDestTab+1;
-                nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->IsScenario();
+                nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario();
                 nTab++ )
         {
-            if ( pTab[nTab]->IsActiveScenario() )       // auch wenn's dasselbe Szenario ist
+            if ( maTabs[nTab]->IsActiveScenario() )     // auch wenn's dasselbe Szenario ist
             {
                 sal_Bool bTouched = false;
                 for ( size_t nR=0, nRangeCount = aRanges.size(); nR < nRangeCount && !bTouched; nR++ )
                 {
                     const ScRange* pRange = aRanges[ nR ];
-                    if ( pTab[nTab]->HasScenarioRange( *pRange ) )
+                    if ( maTabs[nTab]->HasScenarioRange( *pRange ) )
                         bTouched = sal_True;
                 }
                 if (bTouched)
                 {
-                    pTab[nTab]->SetActiveScenario(false);
-                    if ( pTab[nTab]->GetScenarioFlags() & SC_SCENARIO_TWOWAY )
-                        pTab[nTab]->CopyScenarioFrom( pTab[nDestTab] );
+                    maTabs[nTab]->SetActiveScenario(false);
+                    if ( maTabs[nTab]->GetScenarioFlags() & SC_SCENARIO_TWOWAY )
+                        maTabs[nTab]->CopyScenarioFrom( maTabs[nDestTab] );
                 }
             }
         }
 
-        pTab[nSrcTab]->SetActiveScenario(sal_True);     // da kommt's her...
+        maTabs[nSrcTab]->SetActiveScenario(sal_True);       // da kommt's her...
         if (!bNewScenario)                          // Daten aus dem ausgewaehlten Szenario kopieren
         {
             sal_Bool bOldAutoCalc = GetAutoCalc();
             SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
-            pTab[nSrcTab]->CopyScenarioTo( pTab[nDestTab] );
+            maTabs[nSrcTab]->CopyScenarioTo( maTabs[nDestTab] );
             SetDirty();
             SetAutoCalc( bOldAutoCalc );
         }
@@ -756,41 +756,41 @@ void ScDocument::MarkScenario( SCTAB nSrcTab, SCTAB nDestTab, ScMarkData& rDestM
     if (bResetMark)
         rDestMark.ResetMark();
 
-    if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(pTab.size()) && pTab[nSrcTab])
-        pTab[nSrcTab]->MarkScenarioIn( rDestMark, nNeededBits );
+    if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
+        maTabs[nSrcTab]->MarkScenarioIn( rDestMark, nNeededBits );
 
     rDestMark.SetAreaTab( nDestTab );
 }
 
 sal_Bool ScDocument::HasScenarioRange( SCTAB nTab, const ScRange& rRange ) const
 {
-    return ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->HasScenarioRange( rRange );
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->HasScenarioRange( rRange );
 }
 
 const ScRangeList* ScDocument::GetScenarioRanges( SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetScenarioRanges();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetScenarioRanges();
 
     return NULL;
 }
 
 sal_Bool ScDocument::IsActiveScenario( SCTAB nTab ) const
 {
-    return ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->IsActiveScenario(  );
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsActiveScenario(  );
 }
 
 void ScDocument::SetActiveScenario( SCTAB nTab, sal_Bool bActive )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->SetActiveScenario( bActive );
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetActiveScenario( bActive );
 }
 
 sal_Bool ScDocument::TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const
 {
-    if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(pTab.size())
-                && nDestTab < static_cast<SCTAB>(pTab.size())&& ValidTab(nDestTab))
-        return pTab[nSrcTab]->TestCopyScenarioTo( pTab[nDestTab] );
+    if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size())
+                && nDestTab < static_cast<SCTAB>(maTabs.size())&& ValidTab(nDestTab))
+        return maTabs[nSrcTab]->TestCopyScenarioTo( maTabs[nDestTab] );
 
     OSL_FAIL("falsche Tabelle bei TestCopyScenario");
     return false;
@@ -956,11 +956,11 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
                 pUnoBroadcaster->Broadcast( ScUpdateRefHint(
                                     eUpdateRefMode, aRange, nDx, nDy, nDz ) );
             i = 0;
-            iMax = static_cast<SCTAB>(pTab.size())-1;
+            iMax = static_cast<SCTAB>(maTabs.size())-1;
         }
-        for ( ; i<=iMax && i < static_cast<SCTAB>(pTab.size()); i++)
-            if (pTab[i])
-                pTab[i]->UpdateReference(
+        for ( ; i<=iMax && i < static_cast<SCTAB>(maTabs.size()); i++)
+            if (maTabs[i])
+                maTabs[i]->UpdateReference(
                     eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
                     nDx, nDy, nDz, pUndoDoc, bIncludeDraw, bUpdateNoteCaptionPos );
 
@@ -1008,10 +1008,10 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;
-    for (SCTAB nDestTab=0; nDestTab< static_cast<SCTAB>(pTab.size()) && pTab[nDestTab]; nDestTab++)
+    for (SCTAB nDestTab=0; nDestTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nDestTab]; nDestTab++)
         if (rMark.GetTableSelect(nDestTab))
         {
-            while (!pClipDoc->pTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
+            while (!pClipDoc->maTabs[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
             aSource.aStart.SetTab( nClipTab );
             aSource.aEnd.SetTab( nClipTab );
             aDest.SetTab( nDestTab );
@@ -1019,9 +1019,9 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
             //  wie UpdateReference
             if (pRangeName)
                 pRangeName->UpdateTranspose( aSource, aDest );      // vor den Zellen!
-            for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()); i++)
-                if (pTab[i])
-                    pTab[i]->UpdateTranspose( aSource, aDest, pUndoDoc );
+            for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
+                if (maTabs[i])
+                    maTabs[i]->UpdateTranspose( aSource, aDest, pUndoDoc );
 
             nClipTab = (nClipTab+1) % (MAXTAB+1);
         }
@@ -1036,8 +1036,8 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     if (pRangeName)
         pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );
 
-    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()) && pTab[i]; i++)
-        pTab[i]->UpdateGrow( rArea, nGrowX, nGrowY );
+    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()) && maTabs[i]; i++)
+        maTabs[i]->UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
 void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
@@ -1046,10 +1046,10 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const 
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
-    for (SCTAB i=0; i < static_cast<SCTAB>(pTab.size()); i++)
-        if (pTab[i])
+    for (SCTAB i=0; i < static_cast<SCTAB>(maTabs.size()); i++)
+        if (maTabs[i])
             if (rMark.GetTableSelect(i))
-                pTab[i]->Fill(nCol1, nRow1, nCol2, nRow2,
+                maTabs[i]->Fill(nCol1, nRow1, nCol2, nRow2,
                                 nFillCount, eFillDir, eFillCmd, eFillDateCmd,
                                 nStepValue, nMaxValue);
 }
@@ -1057,8 +1057,8 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const 
 String ScDocument::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
 {
     SCTAB nTab = rSource.aStart.Tab();
-    if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetAutoFillPreview( rSource, nEndX, nEndY );
+    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetAutoFillPreview( rSource, nEndX, nEndY );
 
     return EMPTY_STRING;
 }
@@ -1068,22 +1068,22 @@ void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 {
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
-    for (SCTAB i=0; i < static_cast<SCTAB>(pTab.size()); i++)
-        if (pTab[i])
+    for (SCTAB i=0; i < static_cast<SCTAB>(maTabs.size()); i++)
+        if (maTabs[i])
             if (rMark.GetTableSelect(i))
-                pTab[i]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
+                maTabs[i]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
 }
 
 void ScDocument::GetAutoFormatData(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     ScAutoFormatData& rData)
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()))
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
     {
-        if (pTab[nTab])
+        if (maTabs[nTab])
         {
             PutInOrder(nStartCol, nEndCol);
             PutInOrder(nStartRow, nEndRow);
-            pTab[nTab]->GetAutoFormatData(nStartCol, nStartRow, nEndCol, nEndRow, rData);
+            maTabs[nTab]->GetAutoFormatData(nStartCol, nStartRow, nEndCol, nEndRow, rData);
         }
     }
 }
@@ -1184,7 +1184,7 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
     rMark.MarkToMulti();
 
     sal_Bool bFound = false;
-    if (rTab >= static_cast<SCTAB>(pTab.size()))
+    if (rTab >= static_cast<SCTAB>(maTabs.size()))
         OSL_FAIL("table out of range");
     if (VALIDTAB(rTab))
     {
@@ -1195,14 +1195,14 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
         if ( nCommand == SVX_SEARCHCMD_FIND_ALL ||
              nCommand == SVX_SEARCHCMD_REPLACE_ALL )
         {
-            for (nTab = 0; nTab < static_cast<SCTAB>(pTab.size()); nTab++)
-                if (pTab[nTab])
+            for (nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+                if (maTabs[nTab])
                 {
                     if (rMark.GetTableSelect(nTab))
                     {
                         nCol = 0;
                         nRow = 0;
-                        bFound |= pTab[nTab]->SearchAndReplace(
+                        bFound |= maTabs[nTab]->SearchAndReplace(
                                     rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
                     }
                 }
@@ -1216,11 +1216,11 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
             if (rSearchItem.GetBackward())
             {
                 for (nTab = rTab; ((SCsTAB)nTab >= 0) && !bFound; nTab--)
-                    if (pTab[nTab])
+                    if (maTabs[nTab])
                     {
                         if (rMark.GetTableSelect(nTab))
                         {
-                            bFound = pTab[nTab]->SearchAndReplace(
+                            bFound = maTabs[nTab]->SearchAndReplace(
                                         rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
                             if (bFound)
                             {
@@ -1236,12 +1236,12 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
             }
             else
             {
-                for (nTab = rTab; (nTab < static_cast<SCTAB>(pTab.size())) && !bFound; nTab++)
-                    if (pTab[nTab])
+                for (nTab = rTab; (nTab < static_cast<SCTAB>(maTabs.size())) && !bFound; nTab++)
+                    if (maTabs[nTab])
                     {
                         if (rMark.GetTableSelect(nTab))
                         {
-                            bFound = pTab[nTab]->SearchAndReplace(
+                            bFound = maTabs[nTab]->SearchAndReplace(
                                         rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
                             if (bFound)
                             {
@@ -1264,8 +1264,8 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
 
 sal_Bool ScDocument::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, sal_Bool bShow )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        return pTab[nTab]->UpdateOutlineCol( nStartCol, nEndCol, bShow );
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        return maTabs[nTab]->UpdateOutlineCol( nStartCol, nEndCol, bShow );
 
     OSL_FAIL("missing tab");
     return false;
@@ -1273,8 +1273,8 @@ sal_Bool ScDocument::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTa
 
 sal_Bool ScDocument::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_Bool bShow )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        return pTab[nTab]->UpdateOutlineRow( nStartRow, nEndRow, bShow );
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        return maTabs[nTab]->UpdateOutlineRow( nStartRow, nEndRow, bShow );
 
     OSL_FAIL("missing tab");
     return false;
@@ -1282,19 +1282,19 @@ sal_Bool ScDocument::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTa
 
 void ScDocument::Sort(SCTAB nTab, const ScSortParam& rSortParam, sal_Bool bKeepQuery)
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         sal_Bool bOldDisableIdle = IsIdleDisabled();
         DisableIdle( sal_True );
-        pTab[nTab]->Sort(rSortParam, bKeepQuery);
+        maTabs[nTab]->Sort(rSortParam, bKeepQuery);
         DisableIdle( bOldDisableIdle );
     }
 }
 
 SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, sal_Bool bKeepSub)
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        return pTab[nTab]->Query((ScQueryParam&)rQueryParam, bKeepSub);
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        return maTabs[nTab]->Query((ScQueryParam&)rQueryParam, bKeepSub);
 
     OSL_FAIL("missing tab");
     return 0;
@@ -1303,16 +1303,16 @@ SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, sal_Bool b
 
 void ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr)
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        pTab[nTab]->GetUpperCellString( nCol, nRow, rStr );
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        maTabs[nTab]->GetUpperCellString( nCol, nRow, rStr );
     else
         rStr.Erase();
 }
 
 sal_Bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab, ScQueryParam& rQueryParam)
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        return pTab[nTab]->CreateQueryParam(nCol1, nRow1, nCol2, nRow2, rQueryParam);
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        return maTabs[nTab]->CreateQueryParam(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
     OSL_FAIL("missing tab");
     return false;
@@ -1355,13 +1355,13 @@ bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 sal_Bool ScDocument::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab )
 {
-    return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->HasColHeader( nStartCol, nStartRow, nEndCol, nEndRow );
+    return VALIDTAB(nTab) && maTabs[nTab] && maTabs[nTab]->HasColHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 sal_Bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab )
 {
-    return VALIDTAB(nTab) && pTab[nTab] && pTab[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
+    return VALIDTAB(nTab) && maTabs[nTab] && maTabs[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 //
@@ -1371,7 +1371,7 @@ sal_Bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndC
 sal_Bool ScDocument::GetFilterEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates)
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pDBCollection )
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
         ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, false);  //!??
         if (pDBData)
@@ -1408,11 +1408,11 @@ sal_Bool ScDocument::GetFilterEntries(
 
             if ( bFilter )
             {
-                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings, rHasDates );
+                maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings, rHasDates );
             }
             else
             {
-                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
+                maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
             }
 
             return sal_True;
@@ -1429,9 +1429,9 @@ sal_Bool ScDocument::GetFilterEntries(
 sal_Bool ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
                                         SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
-        pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
+        maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
         return sal_True;
     }
 
@@ -1459,7 +1459,7 @@ sal_Bool ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
     }
 
-    return ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] && pTab[nTab]->GetDataEntries( nCol, nRow, rStrings, bLimit );
+    return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->GetDataEntries( nCol, nRow, rStrings, bLimit );
 }
 
 //
@@ -1549,8 +1549,8 @@ Rectangle ScDocument::GetEmbeddedRect() const                       // 1/100 mm
 {
     Rectangle aRect;
     ScTable* pTable = NULL;
-    if ( aEmbedRange.aStart.Tab() < static_cast<SCTAB>(pTab.size()) )
-        pTable = pTab[aEmbedRange.aStart.Tab()];
+    if ( aEmbedRange.aStart.Tab() < static_cast<SCTAB>(maTabs.size()) )
+        pTable = maTabs[aEmbedRange.aStart.Tab()];
     else
         OSL_FAIL("table out of range");
     if (!pTable)
@@ -1641,8 +1641,8 @@ bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEn
 ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
 {
     ScTable* pTable = NULL;
-    if (nTab < static_cast<SCTAB>(pTab.size()))
-        pTable = pTab[nTab];
+    if (nTab < static_cast<SCTAB>(maTabs.size()))
+        pTable = maTabs[nTab];
     else
         OSL_FAIL("table out of range");
     if (!pTable)
@@ -1779,8 +1779,8 @@ void lcl_SnapVer( ScTable* pTable, long& rVal, SCROW& rStartRow )
 void ScDocument::SnapVisArea( Rectangle& rRect ) const
 {
     ScTable* pTable = NULL;
-    if (nVisibleTab < static_cast<SCTAB>(pTab.size()))
-        pTable = pTab[nVisibleTab];
+    if (nVisibleTab < static_cast<SCTAB>(maTabs.size()))
+        pTable = maTabs[nVisibleTab];
     else
         OSL_FAIL("table out of range");
     if (!pTable)
@@ -1833,8 +1833,8 @@ sal_Bool ScDocument::IsDocEditable() const
 
 sal_Bool ScDocument::IsTabProtected( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->IsProtected();
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->IsProtected();
 
     OSL_FAIL("Falsche Tabellennummer");
     return false;
@@ -1842,26 +1842,26 @@ sal_Bool ScDocument::IsTabProtected( SCTAB nTab ) const
 
 ScTableProtection* ScDocument::GetTabProtection( SCTAB nTab ) const
 {
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetProtection();
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetProtection();
 
     return NULL;
 }
 
 void ScDocument::SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect)
 {
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()))
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()))
         return;
 
-    pTab[nTab]->SetProtection(pProtect);
+    maTabs[nTab]->SetProtection(pProtect);
 }
 
 void ScDocument::CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest)
 {
-    if (!ValidTab(nTabSrc) || nTabSrc >= static_cast<SCTAB>(pTab.size()) || nTabDest >= static_cast<SCTAB>(pTab.size()) || !ValidTab(nTabDest))
+    if (!ValidTab(nTabSrc) || nTabSrc >= static_cast<SCTAB>(maTabs.size()) || nTabDest >= static_cast<SCTAB>(maTabs.size()) || !ValidTab(nTabDest))
         return;
 
-    pTab[nTabDest]->SetProtection( pTab[nTabSrc]->GetProtection() );
+    maTabs[nTabDest]->SetProtection( maTabs[nTabSrc]->GetProtection() );
 }
 
 const ScDocOptions& ScDocument::GetDocOptions() const
@@ -1948,7 +1948,7 @@ void ScDocument::SetDrawDefaults()
 
 Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const
 {
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab])
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
     {
         OSL_FAIL("GetMMRect: falsche Tabelle");
         return Rectangle(0,0,0,0);
@@ -2052,20 +2052,20 @@ void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 void ScDocument::ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
                     SCCOL nStartCol, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        pTab[nTab]->ExtendPrintArea( pDev, nStartCol, nStartRow, rEndCol, nEndRow );
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        maTabs[nTab]->ExtendPrintArea( pDev, nStartCol, nStartRow, rEndCol, nEndRow );
 }
 
 void ScDocument::IncSizeRecalcLevel( SCTAB nTab )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        pTab[nTab]->IncRecalcLevel();
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        maTabs[nTab]->IncRecalcLevel();
 }
 
 void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-        pTab[nTab]->DecRecalcLevel( bUpdateNoteCaptionPos );
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        maTabs[nTab]->DecRecalcLevel( bUpdateNoteCaptionPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

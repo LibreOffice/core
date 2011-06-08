@@ -163,7 +163,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             SCTAB nTab, double nScaleX, double nScaleY,
                             sal_Bool bPageMode, sal_Bool bFormulaMode, const ScMarkData* pMarkData )
 {
-    OSL_ENSURE( pTab[nTab], "Tabelle existiert nicht" );
+    OSL_ENSURE( maTabs[nTab], "Tabelle existiert nicht" );
 
     sal_Bool bLayoutRTL = IsLayoutRTL( nTab );
 
@@ -385,7 +385,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                 pRowInfo[0].pCellInfo[nArrX].nWidth = nThisWidth;           //! dies sollte reichen
 
-                ScColumn* pThisCol = &pTab[nTab]->aCol[nX];                 // Spalten-Daten
+                ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Spalten-Daten
 
                 nArrY = 1;
                 SCSIZE nUIndex;

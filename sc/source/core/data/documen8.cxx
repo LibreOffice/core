@@ -267,8 +267,8 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                     InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
 
                 for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
-                    if (pTab[nTab] && pTab[nTab]->IsStreamValid())
-                        pTab[nTab]->SetStreamValid( false );
+                    if (maTabs[nTab] && maTabs[nTab]->IsStreamValid())
+                        maTabs[nTab]->SetStreamValid( false );
 
                 sal_uLong nOldFormat =
                     ((const SfxUInt32Item*)&rSet.Get(
@@ -327,8 +327,8 @@ void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 void ScDocument::InvalidateTextWidth( const String& rStyleName )
 {
     const SCTAB nCount = GetTableCount();
-    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
-        if ( pTab[i]->GetPageStyle() == rStyleName )
+    for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
+        if ( maTabs[i]->GetPageStyle() == rStyleName )
             InvalidateTextWidth( i );
 }
 
@@ -349,8 +349,8 @@ sal_Bool ScDocument::IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTa
     const SCTAB nCount = GetTableCount();
     SCTAB i;
 
-    for ( i = 0; !bInUse && i < nCount && pTab[i]; i++ )
-        bInUse = ( pTab[i]->GetPageStyle() == rStrPageStyle );
+    for ( i = 0; !bInUse && i < nCount && maTabs[i]; i++ )
+        bInUse = ( maTabs[i]->GetPageStyle() == rStrPageStyle );
 
     if ( pInTab )
         *pInTab = i-1;
@@ -365,11 +365,11 @@ sal_Bool ScDocument::RemovePageStyleInUse( const String& rStyle )
     sal_Bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
 
-    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
-        if ( pTab[i]->GetPageStyle() == rStyle )
+    for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
+        if ( maTabs[i]->GetPageStyle() == rStyle )
         {
             bWasInUse = sal_True;
-            pTab[i]->SetPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+            maTabs[i]->SetPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         }
 
     return bWasInUse;
@@ -380,11 +380,11 @@ sal_Bool ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNe
     sal_Bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
 
-    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
-        if ( pTab[i]->GetPageStyle() == rOld )
+    for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
+        if ( maTabs[i]->GetPageStyle() == rOld )
         {
             bWasInUse = sal_True;
-            pTab[i]->SetPageStyle( rNew );
+            maTabs[i]->SetPageStyle( rNew );
         }
 
     return bWasInUse;
@@ -431,17 +431,17 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
     {
         const SCTAB nTab = pAdrFrom->Tab();
 
-        if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab] )
-            pTab[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bNumFormatChanged, bBroadcast );
+        if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+            maTabs[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bNumFormatChanged, bBroadcast );
     }
     else
     {
         const SCTAB nTabStart = pAdrFrom ? pAdrFrom->Tab() : 0;
         const SCTAB nTabEnd   = pAdrTo   ? pAdrTo->Tab()   : MAXTAB;
 
-        for ( SCTAB nTab=nTabStart; nTab<=nTabEnd && nTab < static_cast<SCTAB>(pTab.size()); nTab++ )
-            if ( pTab[nTab] )
-                pTab[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bNumFormatChanged, bBroadcast );
+        for ( SCTAB nTab=nTabStart; nTab<=nTabEnd && nTab < static_cast<SCTAB>(maTabs.size()); nTab++ )
+            if ( maTabs[nTab] )
+                maTabs[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bNumFormatChanged, bBroadcast );
     }
 }
 
@@ -474,7 +474,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
         nRow = 0, nCol--;
     if ( nCol < 0 )
         nCol = MAXCOL, nTab++;
-    if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
+    if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
         nTab = 0;
 
     //  SearchMask/Family muss gemerkt werden,
@@ -485,7 +485,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
     sal_uInt16 nOldMask = pStylePool->GetSearchMask();
     SfxStyleFamily eOldFam = pStylePool->GetSearchFamily();
 
-    pTable = pTab[nTab];
+    pTable = maTabs[nTab];
     pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL );
     pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                               SFX_STYLE_FAMILY_PAGE );
@@ -553,7 +553,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                     bNewTab = sal_True;
                 }
 
-                if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
+                if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
                 {
                     nTab = 0;
                     nRestart++;
@@ -564,7 +564,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                 {
                     if ( bNewTab )
                     {
-                        pTable = pTab[nTab];
+                        pTable = maTabs[nTab];
                         pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                                                   SFX_STYLE_FAMILY_PAGE );
 
@@ -673,11 +673,11 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
     SCCOL nCol = rSpellRange.aStart.Col();      // iterator always starts on the left edge
     SCROW nRow = rSpellPos.Row();
     SCTAB nTab = rSpellPos.Tab();
-    if ( nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )                           // sheet deleted?
+    if ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )                           // sheet deleted?
     {
         nTab = rSpellRange.aStart.Tab();
         nRow = rSpellRange.aStart.Row();
-        if ( nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
+        if ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
         {
             //  may happen for visible range
             return false;
@@ -798,7 +798,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
     if (!pCell)         // end of range reached -> next sheet
     {
         ++nTab;
-        if ( nTab > rSpellRange.aEnd.Tab() || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab] )
+        if ( nTab > rSpellRange.aEnd.Tab() || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
             nTab = rSpellRange.aStart.Tab();
         nCol = rSpellRange.aStart.Col();
         nRow = rSpellRange.aStart.Row();
@@ -890,8 +890,8 @@ void ScDocument::RemoveAutoSpellObj()
 {
     //  alle Spelling-Informationen entfernen
 
-    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab]; nTab++)
-        pTab[nTab]->RemoveAutoSpellObj();
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++)
+        maTabs[nTab]->RemoveAutoSpellObj();
 }
 
 void ScDocument::RepaintRange( const ScRange& rRange )
@@ -1575,7 +1575,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
     SCTAB nCount = GetTableCount();
     for (SCTAB nTab = 0; nTab < nCount; nTab++)
-        if ( pTab[nTab] && rMultiMark.GetTableSelect(nTab) )
+        if ( maTabs[nTab] && rMultiMark.GetTableSelect(nTab) )
         {
             SCCOL nCol = 0;
             SCROW nRow = 0;

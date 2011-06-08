@@ -70,8 +70,8 @@ sal_Bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
     nX = 0.0;
     if (ValidColRow(nFCol, nFRow) && ValidColRow(nVCol, nVRow) &&
         VALIDTAB(nFTab) && VALIDTAB(nVTab) &&
-        nFTab < static_cast<SCTAB>(pTab.size()) && pTab[nFTab] &&
-        nVTab < static_cast<SCTAB>(pTab.size()) && pTab[nVTab])
+        nFTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nFTab] &&
+        nVTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nVTab])
     {
         CellType eFType, eVType;
         GetCellType(nFCol, nFRow, nFTab, eFType);
@@ -138,9 +138,9 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     SCROW k;
     i = 0;
     bool bStop = false;
-    for (;i < static_cast<SCTAB>(pTab.size()); ++i)
+    for (;i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
-        if (pTab[i] && rMark.GetTableSelect(i))
+        if (maTabs[i] && rMark.GetTableSelect(i))
         {
             bStop = true;
             break;
@@ -161,14 +161,14 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     else
         pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
-    for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
+    for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
     {
-        if (pTab[i] && rMark.GetTableSelect(i))
+        if (maTabs[i] && rMark.GetTableSelect(i))
         {
             if (i == nTab1)
-                pTab[i]->PutCell(nCol1, nRow1, pCell);
+                maTabs[i]->PutCell(nCol1, nRow1, pCell);
             else
-                pTab[i]->PutCell(nCol1, nRow1, pCell->CloneWithoutNote(*this, ScAddress( nCol1, nRow1, i), SC_CLONECELL_STARTLISTENING));
+                maTabs[i]->PutCell(nCol1, nRow1, pCell->CloneWithoutNote(*this, ScAddress( nCol1, nRow1, i), SC_CLONECELL_STARTLISTENING));
         }
     }
 
@@ -185,11 +185,11 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScTokenArray aArr;
     ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference( aRefData));
 
-    for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
+    for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
     {
-        if (pTab[i] && rMark.GetTableSelect(i))
+        if (maTabs[i] && rMark.GetTableSelect(i))
         {
-            pTab[i]->DoColResize( nCol1, nCol2, static_cast<SCSIZE>(nRow2 - nRow1 + 1) );
+            maTabs[i]->DoColResize( nCol1, nCol2, static_cast<SCSIZE>(nRow2 - nRow1 + 1) );
             if (i != nTab1)
             {
                 aRefData.nTab = i;
@@ -207,7 +207,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                         aPos = ScAddress( j, k, i );
                         t->CalcRelFromAbs( aPos );
                         pCell = new ScFormulaCell( this, aPos, aArr.Clone(), eGram, MM_REFERENCE );
-                        pTab[i]->PutCell(j, k, (ScBaseCell*) pCell);
+                        maTabs[i]->PutCell(j, k, (ScBaseCell*) pCell);
                     }
                 }
             }
@@ -226,9 +226,9 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     SCROW k;
     i = 0;
     bool bStop = false;
-    for (;i < static_cast<SCTAB>(pTab.size()); ++i)
+    for (;i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
-        if (pTab[i] && rMark.GetTableSelect(i))
+        if (maTabs[i] && rMark.GetTableSelect(i))
         {
             bStop = true;
             break;
@@ -295,9 +295,9 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
            formula::FormulaGrammar::GRAM_NATIVE, MM_NONE );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
-            for (i = 0; i < static_cast<SCTAB>(pTab.size()); i++)
-                if( pTab[i] && rMark.GetTableSelect(i) )
-                    pTab[i]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, i ), SC_CLONECELL_STARTLISTENING ) );
+            for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
+                if( maTabs[i] && rMark.GetTableSelect(i) )
+                    maTabs[i]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, i ), SC_CLONECELL_STARTLISTENING ) );
 }
 
 namespace {
@@ -374,8 +374,8 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
 sal_Bool ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
                         sal_Bool bInSel, const ScMarkData& rMark) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetNextSpellingCell( nCol, nRow, bInSel, rMark );
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetNextSpellingCell( nCol, nRow, bInSel, rMark );
     else
         return false;
 }
@@ -383,8 +383,8 @@ sal_Bool ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
 sal_Bool ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
                                         const ScMarkData& rMark )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetNextMarkedCell( rCol, rRow, rMark );
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetNextMarkedCell( rCol, rRow, rMark );
     else
         return false;
 }
@@ -394,16 +394,16 @@ sal_Bool ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               ScMarkData& rMark,
                               sal_Bool bIsUndoP)
 {
-    if (nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
+    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
     else
         return false;
 }
 
 void ScDocument::CompileDBFormula()
 {
-    TableContainer::iterator it = pTab.begin();
-    for (;it != pTab.end(); ++it)
+    TableContainer::iterator it = maTabs.begin();
+    for (;it != maTabs.end(); ++it)
     {
         if (*it)
             (*it)->CompileDBFormula();
@@ -412,8 +412,8 @@ void ScDocument::CompileDBFormula()
 
 void ScDocument::CompileDBFormula( sal_Bool bCreateFormulaString )
 {
-    TableContainer::iterator it = pTab.begin();
-    for (;it != pTab.end(); ++it)
+    TableContainer::iterator it = maTabs.begin();
+    for (;it != maTabs.end(); ++it)
     {
         if (*it)
             (*it)->CompileDBFormula( bCreateFormulaString );
@@ -425,8 +425,8 @@ void ScDocument::CompileNameFormula( sal_Bool bCreateFormulaString )
     if ( pCondFormList )
         pCondFormList->CompileAll();    // nach ScNameDlg noetig
 
-    TableContainer::iterator it = pTab.begin();
-    for (;it != pTab.end(); ++it)
+    TableContainer::iterator it = maTabs.begin();
+    for (;it != maTabs.end(); ++it)
     {
         if (*it)
             (*it)->CompileNameFormula( bCreateFormulaString );
@@ -435,8 +435,8 @@ void ScDocument::CompileNameFormula( sal_Bool bCreateFormulaString )
 
 void ScDocument::CompileColRowNameFormula()
 {
-    TableContainer::iterator it = pTab.begin();
-    for (;it != pTab.end(); ++it)
+    TableContainer::iterator it = maTabs.begin();
+    for (;it != maTabs.end(); ++it)
     {
         if (*it)
             (*it)->CompileColRowNameFormula();
@@ -445,8 +445,8 @@ void ScDocument::CompileColRowNameFormula()
 
 void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->DoColResize( nCol1, nCol2, nAdd );
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->DoColResize( nCol1, nCol2, nAdd );
     else
     {
         OSL_FAIL("DoColResize: falsche Tabelle");
@@ -455,8 +455,8 @@ void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd 
 
 void ScDocument::InvalidateTableArea()
 {
-    TableContainer::iterator it = pTab.begin();
-    for (;it != pTab.end() && *it; ++it)
+    TableContainer::iterator it = maTabs.begin();
+    for (;it != maTabs.end() && *it; ++it)
     {
         (*it)->InvalidateTableArea();
         if ( (*it)->IsScenario() )
@@ -467,8 +467,8 @@ void ScDocument::InvalidateTableArea()
 sal_Int32 ScDocument::GetMaxStringLen( SCTAB nTab, SCCOL nCol,
         SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetMaxStringLen( nCol, nRowStart, nRowEnd, eCharSet );
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetMaxStringLen( nCol, nRowStart, nRowEnd, eCharSet );
     else
         return 0;
 }
@@ -477,8 +477,8 @@ xub_StrLen ScDocument::GetMaxNumberStringLen( sal_uInt16& nPrecision, SCTAB nTab
                                     SCCOL nCol,
                                     SCROW nRowStart, SCROW nRowEnd ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        return pTab[nTab]->GetMaxNumberStringLen( nPrecision, nCol,
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetMaxNumberStringLen( nPrecision, nCol,
             nRowStart, nRowEnd );
     else
         return 0;
@@ -499,9 +499,9 @@ sal_Bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     SCCOL nEndCol = aSingle.aEnd.Col();
     SCROW nEndRow = aSingle.aEnd.Row();
 
-    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && !aData.bError; nTab++)
-        if (pTab[nTab] && rMark.GetTableSelect(nTab))
-            pTab[nTab]->UpdateSelectionFunction( aData,
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && !aData.bError; nTab++)
+        if (maTabs[nTab] && rMark.GetTableSelect(nTab))
+            maTabs[nTab]->UpdateSelectionFunction( aData,
                             nStartCol, nStartRow, nEndCol, nEndRow, rMark );
 
             //! rMark an UpdateSelectionFunction uebergeben !!!!!
@@ -725,14 +725,14 @@ const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
 
 void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges )
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(pTab.size()) && pTab[i]; i++)
-        pTab[i]->FindConditionalFormat( nKey, rRanges );
+    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()) && maTabs[i]; i++)
+        maTabs[i]->FindConditionalFormat( nKey, rRanges );
 }
 
 void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab )
 {
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
-        pTab[nTab]->FindConditionalFormat( nKey, rRanges );
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->FindConditionalFormat( nKey, rRanges );
 }
 
 void ScDocument::ConditionalChanged( sal_uLong nKey )

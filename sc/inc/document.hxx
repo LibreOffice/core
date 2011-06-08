@@ -186,8 +186,6 @@ namespace com { namespace sun { namespace star {
 #define SC_ASIANCOMPRESSION_INVALID     0xff
 #define SC_ASIANKERNING_INVALID         0xff
 
-typedef ::std::vector<ScTable*> TableContainer;
-
 enum ScDocumentMode
     {
         SCDOCMODE_DOCUMENT,
@@ -224,6 +222,7 @@ friend class ScAttrRectIterator;
 friend class ScDocShell;
 friend class ScDocRowHeightUpdater;
 
+    typedef ::std::vector<ScTable*> TableContainer;
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
 
@@ -241,7 +240,7 @@ private:
     ScConditionalFormatList* pCondFormList;             // conditional formats
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
-    ::std::vector<ScTable*> pTab;
+    TableContainer maTabs;
     mutable ScRangeName* pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
@@ -472,7 +471,7 @@ public:
     SC_DLLPUBLIC ScRangeName* GetRangeName() const;
     void SetRangeName(SCTAB nTab, ScRangeName* pNew);
     void SetRangeName( ScRangeName* pNewRangeName );
-    SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(pTab.size()) - 1; }
+    SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
 
     ScRangePairList*    GetColNameRanges() { return &xColNameRanges; }
@@ -535,7 +534,7 @@ public:
     SC_DLLPUBLIC void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData*       GetAnonymousDBData(SCTAB nTab);
 
-    SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return static_cast<SCTAB>(pTab.size()); }
+    SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return static_cast<SCTAB>(maTabs.size()); }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 
     SC_DLLPUBLIC ScDocProtection* GetDocProtection() const;

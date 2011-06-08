@@ -154,20 +154,20 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
         SCTAB nDrawPages = 0;
         SCTAB nTab;
-        for (nTab=0; nTab < static_cast<SCTAB>(pTab.size()); nTab++)
-            if (pTab[nTab])
+        for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
+            if (maTabs[nTab])
                 nDrawPages = nTab + 1;          // needed number of pages
 
-        for (nTab=0; nTab<nDrawPages && nTab < static_cast<SCTAB>(pTab.size()); nTab++)
+        for (nTab=0; nTab<nDrawPages && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
         {
             pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
-            if (pTab[nTab])
+            if (maTabs[nTab])
             {
                 String aTabName;
-                pTab[nTab]->GetName(aTabName);
+                maTabs[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
-                pTab[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
+                maTabs[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
             }
         }
 
@@ -219,10 +219,10 @@ void ScDocument::UpdateDrawPrinter()
 
 void ScDocument::SetDrawPageSize(SCTAB nTab)
 {
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(pTab.size()) || !pTab[nTab])
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return;
 
-    pTab[nTab]->SetDrawPageSize();
+    maTabs[nTab]->SetDrawPageSize();
 }
 
 sal_Bool ScDocument::IsChart( const SdrObject* pObject )
@@ -277,7 +277,7 @@ void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 
     SCTAB nTabCount = GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-        if (pTab[nTab] && rMark.GetTableSelect(nTab))
+        if (maTabs[nTab] && rMark.GetTableSelect(nTab))
             pDrawLayer->DeleteObjectsInArea( nTab, nCol1, nRow1, nCol2, nRow2 );
 }
 
@@ -297,7 +297,7 @@ sal_Bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkDat
         return false;
 
     SCTAB nStartTab = 0;
-    SCTAB nEndTab = static_cast<SCTAB>(pTab.size());
+    SCTAB nEndTab = static_cast<SCTAB>(maTabs.size());
     if ( !pTabMark )
     {
         nStartTab = rRange.aStart.Tab();
@@ -426,7 +426,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
     //  fuer Drag&Drop auf Zeichenobjekt
 
     SdrObject* pFound = NULL;
-    if (pDrawLayer && nTab < static_cast<SCTAB>(pTab.size()) && pTab[nTab])
+    if (pDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
         SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Page ?");
@@ -526,10 +526,10 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
 void ScDocument::Clear( sal_Bool bFromDestructor )
 {
-    TableContainer::iterator it = pTab.begin();
-    for (;it != pTab.end(); ++it)
+    TableContainer::iterator it = maTabs.begin();
+    for (;it != maTabs.end(); ++it)
         delete *it;
-    pTab.clear();
+    maTabs.clear();
     delete pSelectionAttr;
     pSelectionAttr = NULL;
 
@@ -677,8 +677,8 @@ bool ScDocument::IsLoadingMedium() const
 void ScDocument::SetLoadingMedium( bool bVal )
 {
     bLoadingMedium = bVal;
-    TableContainer::iterator it = pTab.begin();
-    for (; it != pTab.end(); ++it)
+    TableContainer::iterator it = maTabs.begin();
+    for (; it != maTabs.end(); ++it)
     {
         if (!*it)
             return;
@@ -697,10 +697,10 @@ void ScDocument::SetImportingXML( bool bVal )
     {
         // #i57869# after loading, do the real RTL mirroring for the sheets that have the LoadingRTL flag set
 
-        for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(pTab.size()) && pTab[nTab]; nTab++ )
-            if ( pTab[nTab]->IsLoadingRTL() )
+        for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++ )
+            if ( maTabs[nTab]->IsLoadingRTL() )
             {
-                pTab[nTab]->SetLoadingRTL( false );
+                maTabs[nTab]->SetLoadingRTL( false );
                 SetLayoutRTL( nTab, sal_True );             // includes mirroring; bImportingXML must be cleared first
             }
     }
