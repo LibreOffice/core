@@ -204,7 +204,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 
     SwFieldHint aHint( pPaM );
     SwClientIter aIter( *pType );
-    for ( SwClient* pClient = aIter.GoStart(); pClient; aIter++ )
+    for ( SwClient* pClient = aIter.GoStart(); pClient; pClient = aIter++ )
     {
         pPaM->DeleteMark();
         pClient->SwClientNotifyCall( *pType, aHint );
