@@ -820,6 +820,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 rSprms.insert(make_pair(NS_sprm::LN_PIlvl, pValue));
             }
+        case RTF_LISTTEMPLATEID:
         case RTF_LISTID:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
