@@ -136,7 +136,12 @@ int RTFDocumentImpl::resolveChars(char ch)
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
-            aBuf.append(ch);
+        {
+            if (m_aStates.top().nCharsToSkip == 0)
+                aBuf.append(ch);
+            else
+                m_aStates.top().nCharsToSkip--;
+        }
         // read a single char if we're in hex mode
         if (m_aStates.top().nInternalState == INTERNAL_HEX)
             break;
@@ -803,6 +808,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     m_aStates.top().aSprms.insert(make_pair(NS_sprm::LN_PIlfo, pValue));
             }
             break;
+        case RTF_U:
+            if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_INT16))
+            {
+                OUString aStr(static_cast<sal_Unicode>(nParam));
+                text(aStr);
+                m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -1242,7 +1255,9 @@ RTFParserState::RTFParserState()
     aStyleTableEntries(),
     nCurrentStyleIndex(0),
     nCurrentEncoding(0),
-    aFieldInstruction()
+    aFieldInstruction(),
+    nUc(1),
+    nCharsToSkip(0)
 {
 }
 
