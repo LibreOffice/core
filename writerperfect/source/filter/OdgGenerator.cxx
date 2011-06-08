@@ -68,6 +68,10 @@ public:
     std::vector<DocumentElement *> mGraphicsGradientStyles;
     std::vector<DocumentElement *> mGraphicsAutomaticStyles;
 
+    // page styles
+    std::vector<DocumentElement *> mPageAutomaticStyles;
+    std::vector<DocumentElement *> mPageMasterStyles;
+
     OdfDocumentHandler *mpHandler;
 
     ::WPXPropertyList mxStyle;
@@ -75,6 +79,7 @@ public:
     int miGradientIndex;
     int miDashIndex;
     int miGraphicsStyleIndex;
+    int miPageIndex;
     double mfWidth;
     double mfHeight;
 
@@ -86,6 +91,7 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     miGradientIndex(1),
     miDashIndex(1),
     miGraphicsStyleIndex(1),
+    miPageIndex(1),
     mfWidth(0.0),
     mfHeight(0.0),
     mxStreamType(streamType)
@@ -118,33 +124,23 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
     {
         delete((*iterGraphicsGradientStyles));
     }
+
+    for (std::vector<DocumentElement *>::iterator iterPageAutomaticStyles = mPageAutomaticStyles.begin();
+        iterPageAutomaticStyles != mPageAutomaticStyles.end(); iterPageAutomaticStyles++)
+    {
+        delete((*iterPageAutomaticStyles));
+    }
+
+    for (std::vector<DocumentElement *>::iterator iterPageMasterStyles = mPageMasterStyles.begin();
+        iterPageMasterStyles != mPageMasterStyles.end(); iterPageMasterStyles++)
+    {
+        delete((*iterPageMasterStyles));
+    }
 }
 
 OdgGenerator::OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType):
     mpImpl(new OdgGeneratorPrivate(pHandler, streamType))
 {
-}
-
-OdgGenerator::~OdgGenerator()
-{
-    if (mpImpl)
-        delete mpImpl;
-}
-
-void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
-{
-    mpImpl->miGradientIndex = 1;
-    mpImpl->miDashIndex = 1;
-    mpImpl->miGraphicsStyleIndex = 1;
-    mpImpl->mfWidth = 0.0;
-    mpImpl->mfHeight = 0.0;
-
-    if (propList["svg:width"])
-        mpImpl->mfWidth = propList["svg:width"]->getDouble();
-
-    if (propList["svg:height"])
-        mpImpl->mfHeight = propList["svg:height"]->getDouble();
-
     mpImpl->mpHandler->startDocument();
     TagOpenElement tmpOfficeDocumentContent(
         (mpImpl->mxStreamType == ODF_FLAT_XML) ? "office:document" : (
@@ -165,8 +161,110 @@ void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
     if (mpImpl->mxStreamType == ODF_FLAT_XML)
         tmpOfficeDocumentContent.addAttribute("office:mimetype", "application/vnd.oasis.opendocument.graphics");
     tmpOfficeDocumentContent.write(mpImpl->mpHandler);
+}
 
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_SETTINGS_XML))
+OdgGenerator::~OdgGenerator()
+{
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
+    {
+        TagOpenElement("office:styles").write(mpImpl->mpHandler);
+
+        for (std::vector<DocumentElement *>::const_iterator iterGraphicsStrokeDashStyles = mpImpl->mGraphicsStrokeDashStyles.begin();
+            iterGraphicsStrokeDashStyles != mpImpl->mGraphicsStrokeDashStyles.end(); iterGraphicsStrokeDashStyles++)
+        {
+            (*iterGraphicsStrokeDashStyles)->write(mpImpl->mpHandler);
+        }
+
+        for (std::vector<DocumentElement *>::const_iterator iterGraphicsGradientStyles = mpImpl->mGraphicsGradientStyles.begin();
+            iterGraphicsGradientStyles != mpImpl->mGraphicsGradientStyles.end(); iterGraphicsGradientStyles++)
+        {
+            (*iterGraphicsGradientStyles)->write(mpImpl->mpHandler);
+        }
+
+        mpImpl->mpHandler->endElement("office:styles");
+    }
+
+
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
+    {
+        TagOpenElement("office:automatic-styles").write(mpImpl->mpHandler);
+    }
+
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML))
+    {
+        // writing out the graphics automatic styles
+        for (std::vector<DocumentElement *>::iterator iterGraphicsAutomaticStyles = mpImpl->mGraphicsAutomaticStyles.begin();
+            iterGraphicsAutomaticStyles != mpImpl->mGraphicsAutomaticStyles.end(); iterGraphicsAutomaticStyles++)
+        {
+            (*iterGraphicsAutomaticStyles)->write(mpImpl->mpHandler);
+        }
+    }
+
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
+    {
+        // writing out the page automatic styles
+        for (std::vector<DocumentElement *>::iterator iterPageAutomaticStyles = mpImpl->mPageAutomaticStyles.begin();
+            iterPageAutomaticStyles != mpImpl->mPageAutomaticStyles.end(); iterPageAutomaticStyles++)
+        {
+            (*iterPageAutomaticStyles)->write(mpImpl->mpHandler);
+        }
+    }
+
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
+    {
+        mpImpl->mpHandler->endElement("office:automatic-styles");
+    }
+
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
+    {
+        TagOpenElement("office:master-styles").write(mpImpl->mpHandler);
+
+        for (std::vector<DocumentElement *>::const_iterator pageMasterIter = mpImpl->mPageMasterStyles.begin();
+            pageMasterIter != mpImpl->mPageMasterStyles.end(); pageMasterIter++)
+        {
+            (*pageMasterIter)->write(mpImpl->mpHandler);
+        }
+        mpImpl->mpHandler->endElement("office:master-styles");
+    }
+
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML))
+    {
+        TagOpenElement("office:body").write(mpImpl->mpHandler);
+
+        TagOpenElement("office:drawing").write(mpImpl->mpHandler);
+
+        for (std::vector<DocumentElement *>::const_iterator bodyIter = mpImpl->mBodyElements.begin();
+            bodyIter != mpImpl->mBodyElements.end(); bodyIter++)
+        {
+            (*bodyIter)->write(mpImpl->mpHandler);
+        }
+
+        mpImpl->mpHandler->endElement("office:drawing");
+        mpImpl->mpHandler->endElement("office:body");
+    }
+
+    mpImpl->mpHandler->endElement(
+        (mpImpl->mxStreamType == ODF_FLAT_XML) ? "office:document" : (
+        (mpImpl->mxStreamType == ODF_CONTENT_XML) ? "office:document-content" : (
+        (mpImpl->mxStreamType == ODF_STYLES_XML) ? "office:document-styles" : (
+        (mpImpl->mxStreamType == ODF_SETTINGS_XML) ? "office:document-settings" : (
+        (mpImpl->mxStreamType == ODF_META_XML) ? "office:document-meta" : "office:document" )))));
+
+    mpImpl->mpHandler->endDocument();
+
+    if (mpImpl)
+        delete mpImpl;
+}
+
+void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
+{
+    if (propList["svg:width"])
+        mpImpl->mfWidth = propList["svg:width"]->getDouble();
+
+    if (propList["svg:height"])
+        mpImpl->mfHeight = propList["svg:height"]->getDouble();
+
+    if (mpImpl->miPageIndex == 1 && ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_SETTINGS_XML)))
     {
         TagOpenElement("office:settings").write(mpImpl->mpHandler);
 
@@ -206,134 +304,73 @@ void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
 
         mpImpl->mpHandler->endElement("office:settings");
     }
+
+
+    TagOpenElement *pStyleMasterPageOpenElement = new TagOpenElement("style:master-page");
+
+    TagOpenElement *pDrawPageOpenElement = new TagOpenElement("draw:page");
+
+    TagOpenElement *pStylePageLayoutOpenElement = new TagOpenElement("style:page-layout");
+
+    WPXString sValue;
+    sValue.sprintf("page%i", mpImpl->miPageIndex);
+    pDrawPageOpenElement->addAttribute("draw:name", sValue);
+
+    sValue.sprintf("PM%i", mpImpl->miPageIndex);
+    pStyleMasterPageOpenElement->addAttribute("style:page-layout-name", sValue);
+    pStylePageLayoutOpenElement->addAttribute("style:name", "PM1");
+
+    mpImpl->mPageAutomaticStyles.push_back(pStylePageLayoutOpenElement);
+
+    TagOpenElement *pStylePageLayoutPropertiesOpenElement = new TagOpenElement("style:page-layout-properties");
+    pStylePageLayoutPropertiesOpenElement->addAttribute("fo:margin-top", "0in");
+    pStylePageLayoutPropertiesOpenElement->addAttribute("fo:margin-bottom", "0in");
+    pStylePageLayoutPropertiesOpenElement->addAttribute("fo:margin-left", "0in");
+    pStylePageLayoutPropertiesOpenElement->addAttribute("fo:margin-right", "0in");
+    sValue.sprintf("%s%s", doubleToString(mpImpl->mfWidth).cstr(), "in");
+    pStylePageLayoutPropertiesOpenElement->addAttribute("fo:page-width", sValue);
+    sValue.sprintf("%s%s", doubleToString(mpImpl->mfHeight).cstr(), "in");
+    pStylePageLayoutPropertiesOpenElement->addAttribute("fo:page-height", sValue);
+    pStylePageLayoutPropertiesOpenElement->addAttribute("style:print-orientation", "portrait");
+    mpImpl->mPageAutomaticStyles.push_back(pStylePageLayoutPropertiesOpenElement);
+
+    mpImpl->mPageAutomaticStyles.push_back(new TagCloseElement("style:page-layout-properties"));
+
+    mpImpl->mPageAutomaticStyles.push_back(new TagCloseElement("style:page-layout"));
+
+    sValue.sprintf("dp%i", mpImpl->miPageIndex);
+    pDrawPageOpenElement->addAttribute("draw:style-name", sValue);
+    pStyleMasterPageOpenElement->addAttribute("draw:style-name", sValue);
+
+    TagOpenElement *pStyleStyleOpenElement = new TagOpenElement("style:style");
+    pStyleStyleOpenElement->addAttribute("style:name", sValue);
+    pStyleStyleOpenElement->addAttribute("style:family", "drawing-page");
+    mpImpl->mPageAutomaticStyles.push_back(pStyleStyleOpenElement);
+
+    sValue.sprintf("Page%i", mpImpl->miPageIndex);
+    pDrawPageOpenElement->addAttribute("draw:master-page-name", sValue);
+    pStyleMasterPageOpenElement->addAttribute("style:name", sValue);
+
+    mpImpl->mBodyElements.push_back(pDrawPageOpenElement);
+
+    mpImpl->mPageMasterStyles.push_back(pStyleMasterPageOpenElement);
+    mpImpl->mPageMasterStyles.push_back(new TagCloseElement("style:master-page"));
+
+
+    TagOpenElement *pStyleDrawingPagePropertiesOpenElement = new TagOpenElement("style:drawing-page-properties");
+    // pStyleDrawingPagePropertiesOpenElement->addAttribute("draw:background-size", "border");
+    pStyleDrawingPagePropertiesOpenElement->addAttribute("draw:fill", "none");
+    mpImpl->mPageAutomaticStyles.push_back(pStyleDrawingPagePropertiesOpenElement);
+
+    mpImpl->mPageAutomaticStyles.push_back(new TagCloseElement("style:drawing-page-properties"));
+
+    mpImpl->mPageAutomaticStyles.push_back(new TagCloseElement("style:style"));
 }
 
 void OdgGenerator::endGraphics()
 {
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
-    {
-        TagOpenElement("office:styles").write(mpImpl->mpHandler);
-
-        for (std::vector<DocumentElement *>::const_iterator iterGraphicsStrokeDashStyles = mpImpl->mGraphicsStrokeDashStyles.begin();
-            iterGraphicsStrokeDashStyles != mpImpl->mGraphicsStrokeDashStyles.end(); iterGraphicsStrokeDashStyles++)
-        {
-            (*iterGraphicsStrokeDashStyles)->write(mpImpl->mpHandler);
-        }
-
-        for (std::vector<DocumentElement *>::const_iterator iterGraphicsGradientStyles = mpImpl->mGraphicsGradientStyles.begin();
-            iterGraphicsGradientStyles != mpImpl->mGraphicsGradientStyles.end(); iterGraphicsGradientStyles++)
-        {
-            (*iterGraphicsGradientStyles)->write(mpImpl->mpHandler);
-        }
-
-        mpImpl->mpHandler->endElement("office:styles");
-    }
-
-
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
-    {
-        TagOpenElement("office:automatic-styles").write(mpImpl->mpHandler);
-    }
-
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML))
-    {
-        // writing out the graphics automatic styles
-        for (std::vector<DocumentElement *>::iterator iterGraphicsAutomaticStyles = mpImpl->mGraphicsAutomaticStyles.begin();
-            iterGraphicsAutomaticStyles != mpImpl->mGraphicsAutomaticStyles.end(); iterGraphicsAutomaticStyles++)
-        {
-            (*iterGraphicsAutomaticStyles)->write(mpImpl->mpHandler);
-        }
-    }
-
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
-    {
-        TagOpenElement tmpStylePageLayoutOpenElement("style:page-layout");
-        tmpStylePageLayoutOpenElement.addAttribute("style:name", "PM0");
-        tmpStylePageLayoutOpenElement.write(mpImpl->mpHandler);
-
-        TagOpenElement tmpStylePageLayoutPropertiesOpenElement("style:page-layout-properties");
-        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-top", "0in");
-        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-bottom", "0in");
-        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-left", "0in");
-        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-right", "0in");
-        WPXString sValue;
-        sValue = doubleToString(mpImpl->mfWidth); sValue.append("in");
-        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:page-width", sValue);
-        sValue = doubleToString(mpImpl->mfHeight); sValue.append("in");
-        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:page-height", sValue);
-        tmpStylePageLayoutPropertiesOpenElement.addAttribute("style:print-orientation", "portrait");
-        tmpStylePageLayoutPropertiesOpenElement.write(mpImpl->mpHandler);
-
-        mpImpl->mpHandler->endElement("style:page-layout-properties");
-
-        mpImpl->mpHandler->endElement("style:page-layout");
-
-        TagOpenElement tmpStyleStyleOpenElement("style:style");
-        tmpStyleStyleOpenElement.addAttribute("style:name", "dp1");
-        tmpStyleStyleOpenElement.addAttribute("style:family", "drawing-page");
-        tmpStyleStyleOpenElement.write(mpImpl->mpHandler);
-
-        TagOpenElement tmpStyleDrawingPagePropertiesOpenElement("style:drawing-page-properties");
-        // tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:background-size", "border");
-        tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:fill", "none");
-        tmpStyleDrawingPagePropertiesOpenElement.write(mpImpl->mpHandler);
-
-        mpImpl->mpHandler->endElement("style:drawing-page-properties");
-
-        mpImpl->mpHandler->endElement("style:style");
-    }
-
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
-    {
-        mpImpl->mpHandler->endElement("office:automatic-styles");
-    }
-
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
-    {
-        TagOpenElement("office:master-styles").write(mpImpl->mpHandler);
-
-        TagOpenElement tmpStyleMasterPageOpenElement("style:master-page");
-        tmpStyleMasterPageOpenElement.addAttribute("style:name", "Default");
-        tmpStyleMasterPageOpenElement.addAttribute("style:page-layout-name", "PM0");
-        tmpStyleMasterPageOpenElement.addAttribute("draw:style-name", "dp1");
-        tmpStyleMasterPageOpenElement.write(mpImpl->mpHandler);
-
-        mpImpl->mpHandler->endElement("style:master-page");
-
-        mpImpl->mpHandler->endElement("office:master-styles");
-    }
-
-    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML))
-    {
-        TagOpenElement("office:body").write(mpImpl->mpHandler);
-
-        TagOpenElement("office:drawing").write(mpImpl->mpHandler);
-
-        TagOpenElement tmpDrawPageOpenElement("draw:page");
-        tmpDrawPageOpenElement.addAttribute("draw:name", "page1");
-        tmpDrawPageOpenElement.addAttribute("draw:style-name", "dp1");
-        tmpDrawPageOpenElement.addAttribute("draw:master-page-name", "Default");
-        tmpDrawPageOpenElement.write(mpImpl->mpHandler);
-
-        for (std::vector<DocumentElement *>::const_iterator bodyIter = mpImpl->mBodyElements.begin();
-            bodyIter != mpImpl->mBodyElements.end(); bodyIter++)
-        {
-            (*bodyIter)->write(mpImpl->mpHandler);
-        }
-
-        mpImpl->mpHandler->endElement("draw:page");
-        mpImpl->mpHandler->endElement("office:drawing");
-        mpImpl->mpHandler->endElement("office:body");
-    }
-
-    mpImpl->mpHandler->endElement(
-        (mpImpl->mxStreamType == ODF_FLAT_XML) ? "office:document" : (
-        (mpImpl->mxStreamType == ODF_CONTENT_XML) ? "office:document-content" : (
-        (mpImpl->mxStreamType == ODF_STYLES_XML) ? "office:document-styles" : (
-        (mpImpl->mxStreamType == ODF_SETTINGS_XML) ? "office:document-settings" : (
-        (mpImpl->mxStreamType == ODF_META_XML) ? "office:document-meta" : "office:document" )))));
-
-    mpImpl->mpHandler->endDocument();
+    mpImpl->mBodyElements.push_back(new TagCloseElement("draw:page"));
+    mpImpl->miPageIndex++;
 }
 
 void OdgGenerator::setStyle(const ::WPXPropertyList & propList, const ::WPXPropertyListVector& gradient)
