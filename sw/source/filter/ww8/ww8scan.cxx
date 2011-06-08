@@ -1918,7 +1918,7 @@ String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
 
 String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
 {
-    sal_uInt16 b;
+    sal_uInt16 b(0);
 
     if( nChars )
         b = nChars;
