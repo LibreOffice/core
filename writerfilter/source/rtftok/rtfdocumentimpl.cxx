@@ -51,6 +51,21 @@ std::multimap<Id, RTFValue::Pointer_t>& lcl_getTabsTab(std::stack<RTFParserState
     return itTab->second->getAttributes();
 }
 
+std::multimap<Id, RTFValue::Pointer_t>& lcl_getNumPr(std::stack<RTFParserState>& aStates)
+{
+    // insert the numpr sprm if necessary
+    std::multimap<Id, RTFValue::Pointer_t>::iterator it = aStates.top().aSprms.find(NS_ooxml::LN_CT_PPrBase_numPr);
+    if (it == aStates.top().aSprms.end())
+    {
+        std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+        std::multimap<Id, RTFValue::Pointer_t> aSprms;
+        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_PPrBase_numPr, pValue));
+        it = aStates.top().aSprms.find(NS_ooxml::LN_CT_PPrBase_numPr);
+    }
+    return it->second->getSprms();
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
     : m_nGroup(0),
     m_aDefaultState(),
@@ -553,7 +568,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_RIN: nSprm = 0x845d; break;
         case RTF_SB: nSprm = NS_sprm::LN_PDyaBefore; break;
         case RTF_SA: nSprm = NS_sprm::LN_PDyaAfter; break;
-        case RTF_ILVL: nSprm = NS_sprm::LN_PIlvl; break;
         case RTF_LANG: nSprm = NS_sprm::LN_CRgLid0; break;
         default: break;
     }
@@ -798,6 +812,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 rAttributes.insert(make_pair(NS_ooxml::LN_CT_TabStop_pos, pTabposValue));
             }
             break;
+        case RTF_ILVL:
+            {
+                std::multimap<Id, RTFValue::Pointer_t>& rSprms = lcl_getNumPr(m_aStates);
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                rSprms.insert(make_pair(NS_sprm::LN_PIlvl, pValue));
+            }
         case RTF_LISTID:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
