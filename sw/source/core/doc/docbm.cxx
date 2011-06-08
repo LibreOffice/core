@@ -715,7 +715,11 @@ namespace sw { namespace mark
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(ppMark->get());
         if(pDdeBookmark)
             pDdeBookmark->DeregisterFromDoc(m_pDoc);
-        m_vMarks.erase(m_vMarks.begin() + (ppMark - m_vMarks.begin())); // clumsy const-cast
+        //Effective STL Item 27, get a non-const iterator aI at the same
+        //position as const iterator ppMark was
+        iterator_t aI = m_vMarks.begin();
+        std::advance(aI, std::distance<const_iterator_t>(aI, ppMark));
+        m_vMarks.erase(aI);
     }
 
     void MarkManager::deleteMark(const IMark* const pMark)
