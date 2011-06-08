@@ -354,10 +354,6 @@ DBG_LEVEL=$(dbglevel)
 nodebug=$(NODEBUG)
 .ENDIF
 
-.IF "$(hbtoolkit)"!=""
-HBTOOLKIT=$(hbtoolkit)
-.ENDIF
-
 .IF "$(PRODUCT)"!=""
 product*=$(PRODUCT)
 .ENDIF
@@ -571,11 +567,6 @@ ROUT=$(OUTPATH).bnd
 OUT=$(PRJ)/$(OUTPATH).tt
 OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).tt
 ROUT=$(OUTPATH).tt
-.ENDIF
-.IF "$(hbtoolkit)"!=""
-OUT=$(PRJ)/$(OUTPATH).tlk
-OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).tlk
-ROUT=$(OUTPATH).tlk
 .ENDIF
 
 .IF "$(PRJ)"!="."
