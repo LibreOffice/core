@@ -130,6 +130,12 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             recursiveScan(rFilter, sURL, rUserData, bExpected);
         else
         {
+            sal_Int32 nGitIndex = sURL.lastIndexOfAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(".gitignore"));
+
+            if (nGitIndex == sURL.getLength() - RTL_CONSTASCII_LENGTH(".gitignore"))
+                continue;
+
             bool bRes = load(rFilter, sURL, rUserData);
             rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
             CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
