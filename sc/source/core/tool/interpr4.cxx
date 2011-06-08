@@ -3130,13 +3130,7 @@ void ScInterpreter::ScMacro()
     aMacroStr += pMethod->GetName();
     String aBasicStr;
     if (pObject->GetParent())
-    {
         aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
-        const SfxFilter* pFilter = NULL;
-        SfxMedium* pMedium = pDok->GetDocumentShell()->GetMedium();
-        if ( pMedium )
-            pFilter = pMedium->GetFilter();
-    }
     else
         aBasicStr = SFX_APP()->GetName();               // Applikationsbasic
 
