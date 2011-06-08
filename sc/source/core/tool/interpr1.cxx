@@ -2510,25 +2510,43 @@ void ScInterpreter::ScIsOdd()
     PushInt( !IsEven() );
 }
 
-
 void ScInterpreter::ScN()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScN" );
-    sal_uInt16 nErr = nGlobalError;
-    nGlobalError = 0;
-    // Temporarily override the ConvertStringToValue() error for
-    // GetCellValue() / GetCellValueOrZero()
-    sal_uInt16 nSErr = mnStringNoValueError;
-    mnStringNoValueError = errCellNoValue;
-    double fVal = GetDouble();
-    mnStringNoValueError = nSErr;
-    if ( nGlobalError == NOTAVAILABLE || nGlobalError == errCellNoValue )
-        nGlobalError = 0;       // N(#NA) and N("text") are ok
-    if ( !nGlobalError && nErr != NOTAVAILABLE )
-        nGlobalError = nErr;
-    PushDouble( fVal );
-}
+    switch (GetRawStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat = GetMatrix();
+            SCSIZE nC, nR;
+            pMat->GetDimensions(nC, nR);
+            if (!nC || !nR)
+                PushDouble(0);
+            else
+                PushDouble(pMat->GetDouble(0, 0));
+            return;
+        }
+        case svString:
+            PushDouble(0);
+            return;
+        default:
+            ;
+    }
 
+    // Default action
+    double fVal = GetDouble();
+    if (nGlobalError)
+    {
+        // Don't propagate the error. Push 0 instead.
+        nGlobalError = 0;
+        PushDouble(0);
+        return;
+    }
+    PushDouble(fVal);
+}
 
 void ScInterpreter::ScTrim()
 {   // Doesn't only trim but writes out twice!
