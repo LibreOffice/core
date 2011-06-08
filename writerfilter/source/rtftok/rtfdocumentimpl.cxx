@@ -1202,6 +1202,7 @@ int RTFDocumentImpl::resolveParse()
                                     return ERROR_HEX_INVALID;
                                 b += (char) ch - 'A';
                             }
+                            b += 10;
                         }
                         count--;
                         if (!count)
