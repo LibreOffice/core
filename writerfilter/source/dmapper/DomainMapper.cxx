@@ -1968,7 +1968,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     break;
                     case NS_sprm::LN_CFDStrike : /*sprmCFDStrike double strike through*/
                         rContext->Insert(ePropertyId, true,
-                                         uno::makeAny( awt::FontStrikeout::DOUBLE ) );
+                                         uno::makeAny( nIntValue ? awt::FontStrikeout::DOUBLE : awt::FontStrikeout::NONE ) );
                     break;
                     case NS_sprm::LN_CFOutline: /*sprmCFOutline*/
                     case NS_sprm::LN_CFShadow: /*sprmCFShadow*/
