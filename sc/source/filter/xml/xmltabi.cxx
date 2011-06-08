@@ -282,18 +282,10 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     {
     case XML_TOK_TABLE_NAMED_EXPRESSIONS:
     {
-        ScDocument* pDoc = GetScImport().GetDocument();
-        if (pDoc)
-        {
-            sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
-            ScRangeName* pRN = pDoc->GetRangeName(static_cast<SCTAB>(nTab));
-            if (pRN)
-            {
-                pContext = new ScXMLNamedExpressionsContext(
-                    GetScImport(), nPrefix, rLName, xAttrList,
-                    new ScXMLNamedExpressionsContext::SheetLocalInserter(pDoc, *pRN));
-            }
-        }
+        SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+        pContext = new ScXMLNamedExpressionsContext(
+            GetScImport(), nPrefix, rLName, xAttrList,
+            new ScXMLNamedExpressionsContext::SheetLocalInserter(GetScImport(), nTab));
     }
         break;
     case XML_TOK_TABLE_COL_GROUP:
