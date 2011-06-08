@@ -173,7 +173,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
              Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("file:///" ) ) );
 
              Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  rAttribs.getString( XML_Target, OUString() ) );
-             Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True,  com::sun::star::uri::RelativeUriExcessParentSegments::RelativeUriExcessParentSegments_RETAIN );
+             Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True,  com::sun::star::uri::RelativeUriExcessParentSegments_RETAIN );
 
              if ( xAbs.is() )
                  maTargetPath = xAbs->getPath();
