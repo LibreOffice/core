@@ -55,6 +55,7 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_list.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class ScRangeList;
 class ScMyStyleNumberFormats;
@@ -674,6 +675,8 @@ class ScMyStylesImportHelper;
 class ScXMLImport: public SvXMLImport
 {
     typedef ::boost::unordered_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >   CellTypeMap;
+    typedef ::boost::ptr_map<SCTAB, ScMyNamedExpressions> SheetNamedExpMap;
+
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
@@ -763,6 +766,8 @@ class ScXMLImport: public SvXMLImport
     ScMyTables              aTables;
 
     ScMyNamedExpressions*   pMyNamedExpressions;
+    SheetNamedExpMap maSheetNamedExpressions;
+
     ScMyLabelRanges*        pMyLabelRanges;
     ScMyImportValidations*  pValidations;
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
@@ -918,6 +923,8 @@ public:
 
     ScMyNamedExpressions* GetNamedExpressions() { return pMyNamedExpressions; }
 
+    void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
+
     void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {
         if (!pMyLabelRanges)
             pMyLabelRanges = new ScMyLabelRanges();
@@ -1006,6 +1013,7 @@ public:
 
     sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
     void SetNamedRanges();
+    void SetSheetNamedRanges();
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
