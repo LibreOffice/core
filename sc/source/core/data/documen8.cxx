@@ -62,6 +62,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+
 #include "inputopt.hxx"
 #include "global.hxx"
 #include "table.hxx"
@@ -1512,57 +1514,6 @@ SfxBindings* ScDocument::GetViewBindings()
 
 //------------------------------------------------------------------------
 
-void lcl_TransliterateEditEngine( ScEditEngineDefaulter& rEngine,
-                                utl::TransliterationWrapper& rTranslitarationWrapper,
-                                sal_Bool bConsiderLanguage, ScDocument* pDoc )
-{
-    //! should use TransliterateText method of EditEngine instead, when available!
-
-    sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
-
-    sal_uInt16 nParCount = rEngine.GetParagraphCount();
-    for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
-    {
-        SvUShorts aPortions;
-        rEngine.GetPortions( (sal_uInt16)nPar, aPortions );
-
-        for ( sal_uInt16 nPos = aPortions.Count(); nPos; )
-        {
-            --nPos;
-            sal_uInt16 nEnd = aPortions.GetObject( nPos );
-            sal_uInt16 nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
-
-            ESelection aSel( nPar, nStart, nPar, nEnd );
-            String aOldStr = rEngine.GetText( aSel );
-            SfxItemSet aAttr = rEngine.GetAttribs( aSel );
-
-            if ( aAttr.GetItemState( EE_FEATURE_FIELD ) != SFX_ITEM_ON )    // fields are not touched
-            {
-                if ( bConsiderLanguage )
-                {
-                    sal_uInt8 nScript = pDoc->GetStringScriptType( aOldStr );
-                    sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_LANGUAGE_CJK :
-                                    ( ( nScript == SCRIPTTYPE_COMPLEX ) ? EE_CHAR_LANGUAGE_CTL :
-                                                                            EE_CHAR_LANGUAGE );
-                    nLanguage = ((const SvxLanguageItem&)aAttr.Get(nWhich)).GetValue();
-                }
-
-                com::sun::star::uno::Sequence<sal_Int32> aOffsets;
-                String aNewStr = rTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, aOldStr.Len(), &aOffsets );
-
-                if ( aNewStr != aOldStr )
-                {
-                    // replace string, keep attributes
-
-                    rEngine.QuickInsertText( aNewStr, aSel );
-                    aSel.nEndPos = aSel.nStartPos + aNewStr.Len();
-                    rEngine.QuickSetAttribs( aAttr, aSel );
-                }
-            }
-        }
-    }
-}
-
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
 {
     OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
@@ -1571,7 +1522,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
     sal_Bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
-    ScEditEngineDefaulter* pEngine = NULL;      // not using pEditEngine member because of defaults
+    ScEditEngineDefaulter* pEngine = NULL;        // not using pEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
     for (SCTAB nTab = 0; nTab < nCount; nTab++)
@@ -1588,29 +1539,12 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
             {
                 const ScBaseCell* pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
                 CellType eType = pCell ? pCell->GetCellType() : CELLTYPE_NONE;
-
-                if ( eType == CELLTYPE_STRING )
-                {
-                    String aOldStr;
-                    ((const ScStringCell*)pCell)->GetString(aOldStr);
-                    xub_StrLen nOldLen = aOldStr.Len();
-
-                    if ( bConsiderLanguage )
-                    {
-                        sal_uInt8 nScript = GetStringScriptType( aOldStr );     //! cell script type?
-                        sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
-                                        ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
-                                                                                ATTR_FONT_LANGUAGE );
-                        nLanguage = ((const SvxLanguageItem*)GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
-                    }
-
-                    com::sun::star::uno::Sequence<sal_Int32> aOffsets;
-                    String aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
-
-                    if ( aNewStr != aOldStr )
-                        PutCell( nCol, nRow, nTab, new ScStringCell( aNewStr ) );
-                }
-                else if ( eType == CELLTYPE_EDIT )
+                // fdo#32786 TITLE_CASE/SENTENCE_CASE need the extra handling in EditEngine (loop over words/sentences).
+                // Still use TransliterationWrapper directly for text cells with other transliteration types,
+                // for performance reasons.
+                if ( eType == CELLTYPE_EDIT ||
+                     ( eType == CELLTYPE_STRING && ( nType == com::sun::star::i18n::TransliterationModulesExtra::SENTENCE_CASE ||
+                                                     nType == com::sun::star::i18n::TransliterationModulesExtra::TITLE_CASE ) ) )
                 {
                     if (!pEngine)
                         pEngine = new ScFieldEditEngine( GetEnginePool(), GetEditPool() );
@@ -1621,12 +1555,22 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     pPattern->FillEditItemSet( pDefaults );
                     pEngine->SetDefaults( pDefaults, sal_True );
 
-                    const EditTextObject* pData = ((const ScEditCell*)pCell)->GetData();
-                    pEngine->SetText( *pData );
-
+                    if ( eType == CELLTYPE_STRING )
+                        pEngine->SetText( static_cast<const ScStringCell*>(pCell)->GetString() );
+                    else
+                    {
+                        const EditTextObject* pData = static_cast<const ScEditCell*>(pCell)->GetData();
+                        pEngine->SetText( *pData );
+                    }
                     pEngine->ClearModifyFlag();
 
-                    lcl_TransliterateEditEngine( *pEngine, aTranslitarationWrapper, bConsiderLanguage, this );
+                    sal_uInt16 nLastPar = pEngine->GetParagraphCount();
+                    if (nLastPar)
+                        --nLastPar;
+                    xub_StrLen nTxtLen = pEngine->GetTextLen(nLastPar);
+                    ESelection aSelAll( 0, 0, nLastPar, nTxtLen );
+
+                    pEngine->TransliterateText( aSelAll, nType );
 
                     if ( pEngine->IsModified() )
                     {
@@ -1650,10 +1594,30 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     }
                 }
 
+                else if ( eType == CELLTYPE_STRING )
+                {
+                    String aOldStr;
+                    ((const ScStringCell*)pCell)->GetString(aOldStr);
+                    xub_StrLen nOldLen = aOldStr.Len();
+
+                    if ( bConsiderLanguage )
+                    {
+                        sal_uInt8 nScript = GetStringScriptType( aOldStr );        //! cell script type?
+                        sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
+                                        ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
+                                                                                ATTR_FONT_LANGUAGE );
+                        nLanguage = ((const SvxLanguageItem*)GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
+                    }
+
+                    com::sun::star::uno::Sequence<sal_Int32> aOffsets;
+                    String aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
+
+                    if ( aNewStr != aOldStr )
+                        PutCell( nCol, nRow, nTab, new ScStringCell( aNewStr ) );
+                }
                 bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
             }
         }
-
     delete pEngine;
 }
 
