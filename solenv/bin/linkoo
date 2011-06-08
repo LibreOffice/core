@@ -49,6 +49,7 @@ export PATH="$thisdir/:$thisdir/../basis-link/program:$thisdir/../basis-link/ure
 export GNOME_DISABLE_CRASH_DIALOG=1
 export STAR_RESOURCEPATH=$thisdir/../basis-link/program/resource
 # debugging assistance
+export SAL_DISABLE_FLOATGRAB=1
 export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
 export OOO_DISABLE_RECOVERY=1
