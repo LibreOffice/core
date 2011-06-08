@@ -909,7 +909,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
 
     const sal_Char* pChar;
-    sal_uInt16 nWidthPixel;
     sal_uInt16 nHeightPixel;
 
     const ScMergeAttr& rMergeAttr = (const ScMergeAttr&) pAttr->GetItem( ATTR_MERGE, pCondItemSet );
@@ -929,10 +928,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             nC = nC + nCol;
             for ( jC=nCol, v=0; jC<nC; jC++ )
                 v += pDoc->GetColWidth( jC, nTab );
-            nWidthPixel = ToPixel( static_cast< sal_uInt16 >( v ) );
         }
-        else
-            nWidthPixel = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
 
         if ( pGraphEntry )
             nR = Max( SCROW(pGraphEntry->aRange.aEnd.Row() - nRow + 1),
@@ -950,15 +946,8 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
     }
     else
-    {
-        nWidthPixel = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
         nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
-    }
 
-#if 0 // No point - this is already defined in ColGroup
-    if ( bTableDataWidth )
-        ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += "=\"") += ByteString::CreateFromInt32( nWidthPixel )) += '"';
-#endif
     if ( bTableDataHeight )
         ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += "=\"") += ByteString::CreateFromInt32( nHeightPixel )) += '"';
 
