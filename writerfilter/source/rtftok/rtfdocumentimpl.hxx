@@ -75,8 +75,12 @@ namespace writerfilter {
                 RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
-                std::multimap<Id, RTFValue::Pointer_t> aSprms;
-                std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+                std::multimap<Id, RTFValue::Pointer_t> aTableSprms;
+                std::multimap<Id, RTFValue::Pointer_t> aTableAttributes;
+                std::multimap<Id, RTFValue::Pointer_t> aCharacterSprms;
+                std::multimap<Id, RTFValue::Pointer_t> aCharacterAttributes;
+                std::multimap<Id, RTFValue::Pointer_t> aParagraphSprms;
+                std::multimap<Id, RTFValue::Pointer_t> aParagraphAttributes;
 
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
