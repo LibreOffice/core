@@ -813,6 +813,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aSprms.insert(make_pair(NS_rtf::LN_ISTARTAT, pValue));
             }
             break;
+        case RTF_LEVELNFC:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aSprms.insert(make_pair(NS_rtf::LN_NFC, pValue));
+            }
+            break;
         case RTF_LS:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
