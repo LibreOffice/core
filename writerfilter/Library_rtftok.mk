@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,rtftok,\
     ucbhelper \
     utl \
     tl \
+    resourcemodel \
     $(gb_STDLIBS) \
 ))
 

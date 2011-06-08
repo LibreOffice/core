@@ -1,6 +1,8 @@
 #include <rtfsprm.hxx>
 #include <rtl/strbuf.hxx>
 
+#include <resourcemodel/QNameToString.hxx>
+
 using rtl::OStringBuffer;
 
 namespace writerfilter {
@@ -51,8 +53,15 @@ std::string RTFSprm::toString() const
 {
     OStringBuffer aBuf("RTFSprm");
 
+    std::string sResult = (*QNameToString::Instance())(m_nKeyword);
+    if (sResult.length() == 0)
+        sResult = (*SprmIdToString::Instance())(m_nKeyword);
+
     aBuf.append(" ('");
-    aBuf.append(sal_Int32(m_nKeyword));
+    if (sResult.length() == 0)
+        aBuf.append(sal_Int32(m_nKeyword));
+    else
+        aBuf.append(sResult.c_str());
     aBuf.append("', '");
     aBuf.append(m_pValue->toString().c_str());
     aBuf.append("')");
