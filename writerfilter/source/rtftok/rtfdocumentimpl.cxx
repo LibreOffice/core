@@ -517,8 +517,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_ANSI:
             m_aStates.top().nCurrentEncoding = RTL_TEXTENCODING_MS_1252;
             break;
+        case RTF_PLAIN:
+            m_aStates.top().aCharacterSprms = m_aDefaultState.aCharacterSprms;
+            m_aStates.top().aCharacterAttributes = m_aDefaultState.aCharacterAttributes;
+            break;
         case RTF_PARD:
-            m_aStates.top() = m_aDefaultState;
+            m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
+            m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
             break;
         case RTF_NOWIDCTLPAR:
             {
