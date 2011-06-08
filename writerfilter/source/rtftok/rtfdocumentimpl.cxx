@@ -149,6 +149,8 @@ int RTFDocumentImpl::resolveChars(char ch)
     }
     if (m_aStates.top().nInternalState != INTERNAL_HEX && !Strm().IsEof())
         Strm().SeekRel(-1);
+    if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
+        return 0;
     OString aStr = aBuf.makeStringAndClear();
     OSL_TRACE("%s: collected '%s'", OSL_THIS_FUNC, aStr.getStr());
 
