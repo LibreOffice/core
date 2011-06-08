@@ -1726,7 +1726,7 @@ if ( '@JDK@' ne '' )
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
 ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
-if ( '@CROSS_COMPILING@' ne '' )
+if ( '@CROSS_COMPILING@' eq 'YES' )
 {
    # Obviously we shouldn't set PATH to contain host binaries
    ToFile( "PATH",           "@PATH_FOR_BUILD@", "e" );
@@ -1752,7 +1752,7 @@ ToFile( "STRIP",             "@STRIP@",          "e" );
 ToFile( "WINDRES",           "@WINDRES@",        "e" );
 ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
 ToFile( "HOST_PLATFORM",     "@host@",           "e" );
-if ( '@CROSS_COMPILING@' ne '' )
+if ( '@CROSS_COMPILING@' eq 'YES' )
 {
    ToFile( "COM_FOR_BUILD",     "@COM_FOR_BUILD@",  "e" );
    ToFile( "GUI_FOR_BUILD",     "@GUI_FOR_BUILD@",  "e" );
