@@ -533,6 +533,7 @@ TARGETTYPE=CUI
 # profile has to be first for not getting the .pro extension
 .IF "$(profile)"!=""
 OUT=$(PRJ)/$(OUTPATH).cap
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).cap
 ROUT=$(OUTPATH).cap
 .ELSE
 
@@ -544,15 +545,18 @@ ROUT=$(OUTPATH).pro
 .ELSE
 .IF "$(profile)"!=""
 OUT=$(PRJ)/$(OUTPATH).cap
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).cap
 ROUT=$(OUTPATH).cap
 .ENDIF
 .IF "$(dbcs)"!=""
 OUT=$(PRJ)/$(OUTPATH).w
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).w
 ROUT=$(OUTPATH).w
 .ENDIF
 # could already be set by makefile.mk
 .IF "$(OUT)" == ""
 OUT*=$(PRJ)/$(OUTPATH)
+OUT_FOR_BUILD*=$(PRJ)/$(OUTPATH_FOR_BUILD)
 ROUT*=$(OUTPATH)
 .ENDIF
 .ENDIF
@@ -560,14 +564,17 @@ ROUT*=$(OUTPATH)
 
 .IF "$(bndchk)" != ""
 OUT:=$(PRJ)/$(OUTPATH).bnd
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).bnd
 ROUT=$(OUTPATH).bnd
 .ENDIF
 .IF "$(truetime)" != ""
 OUT=$(PRJ)/$(OUTPATH).tt
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).tt
 ROUT=$(OUTPATH).tt
 .ENDIF
 .IF "$(hbtoolkit)"!=""
 OUT=$(PRJ)/$(OUTPATH).tlk
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).tlk
 ROUT=$(OUTPATH).tlk
 .ENDIF
 
