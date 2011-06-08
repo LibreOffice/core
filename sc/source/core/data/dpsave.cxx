@@ -966,7 +966,10 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
     {
         if (pDim == &(*it))
         {
-            aDimList.erase(it);
+            // Tell ptr_vector to give up ownership of this element.  Don't
+            // delete this instance as it is re-inserted into the container
+            // later.
+            aDimList.release(it).release();
             break;
         }
     }
