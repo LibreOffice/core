@@ -1218,6 +1218,9 @@ int RTFDocumentImpl::popState()
     {
         aAttributes = m_aStates.top().aTableAttributes;
         aSprms = m_aStates.top().aTableSprms;
+        for (std::multimap<Id, RTFValue::Pointer_t>::iterator i = m_aStates.top().aListLevelEntries.begin();
+                i != m_aStates.top().aListLevelEntries.end(); ++i)
+            aSprms.insert(make_pair(i->first, i->second));
         bListEntryEnd = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTLEVEL)
@@ -1263,7 +1266,7 @@ int RTFDocumentImpl::popState()
         aAttributes.insert(make_pair(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue));
 
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-        m_aStates.top().aTableSprms.insert(make_pair(NS_ooxml::LN_CT_AbstractNum_lvl, pValue));
+        m_aStates.top().aListLevelEntries.insert(make_pair(NS_ooxml::LN_CT_AbstractNum_lvl, pValue));
     }
     // list override table
     else if (bListOverrideEntryEnd)
@@ -1388,7 +1391,8 @@ RTFParserState::RTFParserState()
     aFieldInstruction(),
     nUc(1),
     nCharsToSkip(0),
-    nListLevelNum(0)
+    nListLevelNum(0),
+    aListLevelEntries()
 {
 }
 

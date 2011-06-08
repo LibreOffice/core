@@ -101,6 +101,8 @@ namespace writerfilter {
 
                 /// Next list level index to use when parsing list table.
                 int nListLevelNum;
+                /// List level entries, which will form a list entry later.
+                std::multimap<Id, RTFValue::Pointer_t> aListLevelEntries;
         };
 
         /// Implementation of the RTFDocument interface.
