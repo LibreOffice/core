@@ -845,7 +845,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
                     m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_Num_numId, pValue));
                 else
-                    m_aStates.top().aSprms.insert(make_pair(NS_sprm::LN_PIlfo, pValue));
+                {
+                    std::multimap<Id, RTFValue::Pointer_t>& rSprms = lcl_getNumPr(m_aStates);
+                    rSprms.insert(make_pair(NS_sprm::LN_PIlfo, pValue));
+                }
             }
             break;
         case RTF_U:
