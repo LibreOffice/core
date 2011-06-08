@@ -569,6 +569,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_SB: nSprm = NS_sprm::LN_PDyaBefore; break;
         case RTF_SA: nSprm = NS_sprm::LN_PDyaAfter; break;
         case RTF_LANG: nSprm = NS_sprm::LN_CRgLid0; break;
+        case RTF_LANGFE: nSprm = NS_sprm::LN_CRgLid1; break;
         default: break;
     }
     if (nSprm > 0)
