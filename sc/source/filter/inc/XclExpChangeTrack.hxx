@@ -64,18 +64,26 @@ public:
 //___________________________________________________________________
 // XclExpUserBViewList - list of UserBView records
 
-class XclExpUserBViewList : public ExcEmptyRec, private List
+class XclExpUserBViewList : public ExcEmptyRec
 {
 private:
-    inline XclExpUserBView*     _First()    { return (XclExpUserBView*) List::First(); }
-    inline XclExpUserBView*     _Next()     { return (XclExpUserBView*) List::Next(); }
+    std::vector<XclExpUserBView*> aViews;
 
 public:
+
+    typedef std::vector<XclExpUserBView*>::iterator iterator;
+    typedef std::vector<XclExpUserBView*>::const_iterator const_iterator;
+
                                 XclExpUserBViewList( const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpUserBViewList();
 
-    inline const XclExpUserBView* First()   { return (const XclExpUserBView*) List::First(); }
-    inline const XclExpUserBView* Next()    { return (const XclExpUserBView*) List::Next(); }
+    inline iterator begin () { return aViews.begin(); }
+
+    inline iterator end () { return aViews.end(); }
+
+    inline const_iterator begin () const { return aViews.begin(); }
+
+    inline const_iterator end () const { return aViews.end(); }
 
     virtual void                Save( XclExpStream& rStrm );
 };

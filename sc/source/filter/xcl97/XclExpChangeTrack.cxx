@@ -151,25 +151,26 @@ XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
     sal_uInt8 aGUID[ 16 ];
     sal_Bool bValidGUID = false;
     const ScStrCollection& rStrColl = rChangeTrack.GetUserCollection();
+    aViews.reserve(rChangeTrack.GetUserCollection().GetCount());
     for( sal_uInt16 nIndex = 0; nIndex < rStrColl.GetCount(); nIndex++ )
     {
         const StrData* pStrData = (const StrData*) rStrColl.At( nIndex );
         lcl_GenerateGUID( aGUID, bValidGUID );
         if( pStrData )
-            List::Insert( new XclExpUserBView( pStrData->GetString(), aGUID ), LIST_APPEND );
+            aViews.push_back( new XclExpUserBView( pStrData->GetString(), aGUID ) );
     }
 }
 
 XclExpUserBViewList::~XclExpUserBViewList()
 {
-    for( XclExpUserBView* pRec = _First(); pRec; pRec = _Next() )
-        delete pRec;
+    for( iterator iter = aViews.begin(); iter != aViews.end(); ++iter )
+        delete *iter;
 }
 
 void XclExpUserBViewList::Save( XclExpStream& rStrm )
 {
-    for( XclExpUserBView* pRec = _First(); pRec; pRec = _Next() )
-        pRec->Save( rStrm );
+   for( iterator iter = aViews.begin(); iter != aViews.end(); ++iter )
+        (*iter)->Save( rStrm );
 }
 
 //___________________________________________________________________

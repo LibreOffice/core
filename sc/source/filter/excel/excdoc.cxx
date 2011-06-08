@@ -530,9 +530,10 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
     // change tracking
     if( rR.pUserBViewList )
     {
-        for( const XclExpUserBView* pBView = rR.pUserBViewList->First(); pBView; pBView = rR.pUserBViewList->Next() )
+        XclExpUserBViewList::const_iterator iter;
+        for ( iter = rR.pUserBViewList->begin(); iter != rR.pUserBViewList->end(); ++iter)
         {
-            Add( new XclExpUsersViewBegin( pBView->GetGUID(), nExcTab ) );
+            Add( new XclExpUsersViewBegin( (*iter)->GetGUID(), nExcTab ) );
             Add( new XclExpUsersViewEnd );
         }
     }
@@ -619,9 +620,10 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
     // change tracking
     if( rR.pUserBViewList )
     {
-        for( const XclExpUserBView* pBView = rR.pUserBViewList->First(); pBView; pBView = rR.pUserBViewList->Next() )
+        XclExpUserBViewList::const_iterator iter;
+        for ( iter = rR.pUserBViewList->begin(); iter != rR.pUserBViewList->end(); ++iter )
         {
-            Add( new XclExpUsersViewBegin( pBView->GetGUID(), nExcTab ) );
+            Add( new XclExpUsersViewBegin( (*iter)->GetGUID(), nExcTab ) );
             Add( new XclExpUsersViewEnd );
         }
     }
