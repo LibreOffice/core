@@ -572,6 +572,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LANGFE: nSprm = NS_sprm::LN_CRgLid1; break;
         case RTF_LEVELJC: nSprm = NS_ooxml::LN_CT_Lvl_lvlJc; break;
         case RTF_LEVELNFC: nSprm = NS_rtf::LN_NFC; break;
+        case RTF_LEVELSTARTAT: nSprm = NS_rtf::LN_ISTARTAT; break;
         default: break;
     }
     if (nSprm > 0)
@@ -829,12 +830,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     m_aStates.top().aAttributes.insert(make_pair(NS_ooxml::LN_CT_AbstractNum_abstractNumId, pValue));
                 else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
                     m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_Num_abstractNumId, pValue));
-            }
-            break;
-        case RTF_LEVELSTARTAT:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aSprms.insert(make_pair(NS_rtf::LN_ISTARTAT, pValue));
             }
             break;
         case RTF_LS:
