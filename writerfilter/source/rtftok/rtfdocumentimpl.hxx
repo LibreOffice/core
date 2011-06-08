@@ -94,6 +94,9 @@ namespace writerfilter {
                 int nUc;
                 /// Characters to skip, set to nUc by \u.
                 int nCharsToSkip;
+
+                /// Next list level index to use when parsing list table.
+                int nListLevelNum;
         };
 
         /// Implementation of the RTFDocument interface.

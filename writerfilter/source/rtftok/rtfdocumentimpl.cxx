@@ -1190,6 +1190,9 @@ int RTFDocumentImpl::popState()
     }
     else if (bListLevelEnd)
     {
+        RTFValue::Pointer_t pInnerValue(new RTFValue(m_aStates.top().nListLevelNum++));
+        aAttributes.insert(make_pair(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue));
+
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_aStates.top().aSprms.insert(make_pair(NS_ooxml::LN_CT_AbstractNum_lvl, pValue));
     }
@@ -1311,7 +1314,8 @@ RTFParserState::RTFParserState()
     nCurrentEncoding(0),
     aFieldInstruction(),
     nUc(1),
-    nCharsToSkip(0)
+    nCharsToSkip(0),
+    nListLevelNum(0)
 {
 }
 
