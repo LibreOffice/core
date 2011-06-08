@@ -860,6 +860,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().nCharsToSkip = m_aStates.top().nUc;
             }
             break;
+        case RTF_LEVELFOLLOW:
+            // Ignore it for now, the exporter always emits with this a zero parameter.
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
