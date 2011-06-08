@@ -119,6 +119,8 @@ namespace writerfilter {
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
                 Id getBorderTable(sal_uInt32 nIndex);
                 void skipDestination(bool bParsed);
+                std::multimap<Id, RTFValue::Pointer_t> mergeSprms();
+                std::multimap<Id, RTFValue::Pointer_t> mergeAttributes();
             private:
                 int resolveParse();
                 int resolveKeyword();

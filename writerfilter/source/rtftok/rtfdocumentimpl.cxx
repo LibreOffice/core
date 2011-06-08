@@ -1128,6 +1128,36 @@ int RTFDocumentImpl::pushState()
     return 0;
 }
 
+std::multimap<Id, RTFValue::Pointer_t> RTFDocumentImpl::mergeSprms()
+{
+    std::multimap<Id, RTFValue::Pointer_t> aSprms;
+    for (std::multimap<Id, RTFValue::Pointer_t>::iterator i = m_aStates.top().aTableSprms.begin();
+            i != m_aStates.top().aTableSprms.end(); ++i)
+        aSprms.insert(make_pair(i->first, i->second));
+    for (std::multimap<Id, RTFValue::Pointer_t>::iterator i = m_aStates.top().aCharacterSprms.begin();
+            i != m_aStates.top().aCharacterSprms.end(); ++i)
+        aSprms.insert(make_pair(i->first, i->second));
+    for (std::multimap<Id, RTFValue::Pointer_t>::iterator i = m_aStates.top().aParagraphSprms.begin();
+            i != m_aStates.top().aParagraphSprms.end(); ++i)
+        aSprms.insert(make_pair(i->first, i->second));
+    return aSprms;
+}
+
+std::multimap<Id, RTFValue::Pointer_t> RTFDocumentImpl::mergeAttributes()
+{
+    std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+    for (std::multimap<Id, RTFValue::Pointer_t>::iterator i = m_aStates.top().aTableAttributes.begin();
+            i != m_aStates.top().aTableAttributes.end(); ++i)
+        aAttributes.insert(make_pair(i->first, i->second));
+    for (std::multimap<Id, RTFValue::Pointer_t>::iterator i = m_aStates.top().aCharacterAttributes.begin();
+            i != m_aStates.top().aCharacterAttributes.end(); ++i)
+        aAttributes.insert(make_pair(i->first, i->second));
+    for (std::multimap<Id, RTFValue::Pointer_t>::iterator i = m_aStates.top().aParagraphAttributes.begin();
+            i != m_aStates.top().aParagraphAttributes.end(); ++i)
+        aAttributes.insert(make_pair(i->first, i->second));
+    return aAttributes;
+}
+
 int RTFDocumentImpl::popState()
 {
     //OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
@@ -1170,12 +1200,11 @@ int RTFDocumentImpl::popState()
         aEntry.first = m_aStates.top().nCurrentFontIndex;
         aEntry.second = pProp;
     }
-    // FIXME here we have to collect character and paragraph properties as well
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
     {
         bStyleEntryEnd = true;
         writerfilter::Reference<Properties>::Pointer_t const pProp(
-                new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)
+                new RTFReferenceProperties(mergeAttributes(), mergeSprms())
                 );
         aEntry.first = m_aStates.top().nCurrentStyleIndex;
         aEntry.second = pProp;
