@@ -3367,7 +3367,7 @@ sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDIC
     sal_uInt16 nCol = 0;
     if( pActBand && pActBand->pTCs)
     {
-        for( sal_uInt16 iCol = 1; iCol <= nAktCol; ++iCol )
+        for( sal_uInt16 iCol = 1; iCol <= nAktCol && iCol <= pActBand->nWwCols; ++iCol )
         {
             if( !pActBand->pTCs[ iCol-1 ].bMerged )
                 ++nCol;
