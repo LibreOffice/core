@@ -1095,13 +1095,10 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
         if ( pSrcShell )
         {
-            StarBASIC* pStarBASIC = pSrcShell->GetBasic();
-            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-            if ( pSrcShell->GetBasicManager()->GetName().Len() > 0 )
-            {
+            String aLibName(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+            const BasicManager *pBasicManager = pSrcShell->GetBasicManager();
+            if (pBasicManager && pBasicManager->GetName().Len() > 0)
                 aLibName = pSrcShell->GetBasicManager()->GetName();
-                pStarBASIC = pSrcShell->GetBasicManager()->GetLib( aLibName );
-            }
 
             String sCodeName;
             String sSource;
@@ -1109,7 +1106,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             uno::Reference< container::XNameContainer > xLib;
             if( xLibContainer.is() )
             {
-                uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                uno::Any aLibAny = xLibContainer->getByName(aLibName);
                 aLibAny >>= xLib;
             }
 
