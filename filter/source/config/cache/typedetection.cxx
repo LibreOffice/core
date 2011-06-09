@@ -816,6 +816,8 @@ namespace
             return false;
         if (rA.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
             return true;
+        if (rB.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
+            return false;
         return rA < rB;
     }
 }
