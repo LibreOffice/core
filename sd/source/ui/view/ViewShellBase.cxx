@@ -1545,7 +1545,6 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
 {
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
-    sal_Bool bShowToolPanel = sal_True;
     toolpanel::PanelId nPanelId (
         toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
@@ -1554,13 +1553,6 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (pArgs)
     {
-        if ((pArgs->Count() == 1) || (pArgs->Count() == 2))
-        {
-            SFX_REQUEST_ARG (rRequest, pIsPanelVisible,
-                SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
-            if (pIsPanelVisible != NULL)
-                bShowToolPanel = pIsPanelVisible->GetValue();
-        }
         if (pArgs->Count() == 2)
         {
             SFX_REQUEST_ARG (rRequest, pPanelId, SfxUInt32Item,

@@ -538,16 +538,6 @@ public:
         @param sNotesPageName
             Name of the standard page.  An empty string leads to using an
             automatically created name.
-        @param eStandardLayout
-            Layout to use for the new standard page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a standard page.  In this case the layout is taken from the
-            standard page associated with <argument>pCurrentPage</argument>.
-        @param eNotesLayout
-            Layout to use for the new notes page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a notes page.  In this case the layout is taken from the
-            notes page associated with <argument>pCurrentPage</argument>.
         @param bIsPageBack
             This flag indicates whether to show the background shape.
         @param bIsPageObj
@@ -565,8 +555,6 @@ public:
         PageKind ePageKind,
         const String& sStandardPageName,
         const String& sNotesPageName,
-        AutoLayout eStandardLayout,
-        AutoLayout eNotesLayout,
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj,
         const sal_Int32 nInsertPosition = -1);
@@ -609,16 +597,6 @@ private:
         @param sNotesPageName
             Name of the standard page.  An empty string leads to using an
             automatically created name.
-        @param eStandardLayout
-            Layout to use for the new standard page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a standard page.  In this case the layout is taken from the
-            standard page associated with <argument>pCurrentPage</argument>.
-        @param eNotesLayout
-            Layout to use for the new notes page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a notes page.  In this case the layout is taken from the
-            notes page associated with <argument>pCurrentPage</argument>.
         @param bIsPageBack
             This flag indicates whether to show the background shape.
         @param bIsPageObj
@@ -640,8 +618,6 @@ private:
         PageKind ePageKind,
         const String& sStandardPageName,
         const String& sNotesPageName,
-        AutoLayout eStandardLayout,
-        AutoLayout eNotesLayout,
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj,
         SdPage* pStandardPage,

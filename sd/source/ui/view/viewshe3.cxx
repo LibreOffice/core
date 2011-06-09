@@ -394,8 +394,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     ePageKind,
                     aStandardPageName,
                     aNotesPageName,
-                    eStandardLayout,
-                    eNotesLayout,
                     bIsPageBack,
                     bIsPageObj,
                     nInsertPosition);

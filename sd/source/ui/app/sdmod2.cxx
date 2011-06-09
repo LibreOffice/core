@@ -554,7 +554,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     sal_Bool bNewPrintOptions = sal_False;
     sal_Bool bMiscOptions = sal_False;
 
-    ::sd::FrameView* pFrameView = NULL;
     ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
     // Hier wird der DocType vom Optionsdialog gesetzt (nicht Dokument!)
@@ -567,11 +566,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     if (pDocSh)
     {
         pDoc = pDocSh->GetDoc();
-
-        // Wenn der Optionsdialog zum Dokumenttyp identisch ist,
-        // kann auch die FrameView mit uebergeben werden:
-        if( pDoc && eDocType == pDoc->GetDocumentType() )
-            pFrameView = pDocSh->GetFrameView();
 
         pViewShell = pDocSh->GetViewShell();
         if (pViewShell != NULL)

@@ -1377,8 +1377,6 @@ sal_uInt16 SdDrawDocument::CreatePage (
         ePageKind,
         sStandardPageName,
         sNotesPageName,
-        eStandardLayout,
-        eNotesLayout,
         bIsPageBack,
         bIsPageObj,
         pStandardPage,
@@ -1402,14 +1400,10 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
     sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
-    // Get layout from current page.
-    AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
-
     return DuplicatePage (
         pActualPage, ePageKind,
         // No names for the new slides.
         String(), String(),
-        eAutoLayout, eAutoLayout,
         aVisibleLayers.IsSet(aBckgrnd),
         aVisibleLayers.IsSet(aBckgrndObj));
 }
@@ -1422,8 +1416,6 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
     PageKind ePageKind,
     const String& sStandardPageName,
     const String& sNotesPageName,
-    AutoLayout eStandardLayout,
-    AutoLayout eNotesLayout,
     sal_Bool bIsPageBack,
     sal_Bool bIsPageObj,
     const sal_Int32 nInsertPosition)
@@ -1457,8 +1449,6 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
         ePageKind,
         sStandardPageName,
         sNotesPageName,
-        eStandardLayout,
-        eNotesLayout,
         bIsPageBack,
         bIsPageObj,
         pStandardPage,
@@ -1474,8 +1464,6 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     PageKind ePageKind,
     const String& sStandardPageName,
     const String& sNotesPageName,
-    AutoLayout eStandardLayout,
-    AutoLayout eNotesLayout,
     sal_Bool bIsPageBack,
     sal_Bool bIsPageObj,
     SdPage* pStandardPage,
@@ -1498,7 +1486,6 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
         nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
         pPreviousStandardPage = (SdPage*) GetPage(nNotesPageNum - 3);
         nStandardPageNum = nNotesPageNum - 1;
-        eStandardLayout = pPreviousStandardPage->GetAutoLayout();
     }
     else
     {
@@ -1507,7 +1494,6 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
         pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
         nNotesPageNum = nStandardPageNum + 1;
         aNotesPageName = aStandardPageName;
-        eNotesLayout = pPreviousNotesPage->GetAutoLayout();
     }
 
     OSL_ASSERT(nNotesPageNum==nStandardPageNum+1);

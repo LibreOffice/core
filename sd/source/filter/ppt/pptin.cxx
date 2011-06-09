@@ -300,8 +300,6 @@ sal_Bool ImplSdPPTImport::Import()
                     if ( nSlideCount && pSection->GetProperty( PID_HEADINGPAIR, aPropItem ) )
                     {
                         sal_uInt32  nSlideTitleIndex = 0, nSlideTitleCount = 0;
-                        sal_uInt32  nFontIndex, nFontCount = 0;
-                        sal_uInt32  nDesignTemplateIndex, nDesignTemplateCount = 0;
                         sal_uInt32  i, nTemp, nEntryCount = 0;
 
                         String aUString;
@@ -325,16 +323,6 @@ sal_Bool ImplSdPPTImport::Import()
                                 {
                                     nSlideTitleCount = nTemp;
                                     nSlideTitleIndex = nEntryCount;
-                                }
-                                else if ( aUString.EqualsAscii("Fonts Used") )
-                                {
-                                    nFontCount = nTemp;
-                                    nFontIndex = nEntryCount;
-                                }
-                                else if ( aUString.EqualsAscii("Design Template") )
-                                {
-                                    nDesignTemplateCount = nTemp;
-                                    nDesignTemplateIndex = nEntryCount;
                                 }
                                 nEntryCount += nTemp;
                             }

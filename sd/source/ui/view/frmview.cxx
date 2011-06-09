@@ -643,10 +643,6 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
         sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().GetNumerator();
         sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().GetDenominator();
 
-        EditMode eStandardEditMode;
-        EditMode eNotesEditMode;
-        EditMode eHandoutEditMode;
-
         const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
         for (sal_Int16 i = 0 ; i < nLength; i++, pValue++ )
         {
@@ -751,7 +747,6 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_STANDARD );
-                    eStandardEditMode = (EditMode)nInt32;
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EditModeNotes ) ) )
@@ -761,7 +756,6 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_NOTES );
-                    eNotesEditMode = (EditMode)nInt32;
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EditModeHandout ) ) )
@@ -771,7 +765,6 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_HANDOUT );
-                    eHandoutEditMode = (EditMode)nInt32;
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaTop ) ) )
