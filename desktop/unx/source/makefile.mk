@@ -32,6 +32,12 @@ NO_DEFAULT_STL=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(OS)"=="MACOSX"
+dummy:
+    @echo "Not building oosplash.bin for Mac."
+
+.ELSE
+
 .IF "$(ENABLE_QUICKSTART_LIBPNG)"=="TRUE"
 CFLAGS+=-DENABLE_QUICKSTART_LIBPNG
 CFLAGS+=$(LIBPNG_CFLAGS)
@@ -42,13 +48,9 @@ STDLIB=
 OBJFILES= \
     $(OBJ)$/splashx.obj \
     $(OBJ)$/start.obj \
-    $(OBJ)$/args.obj
-
-.IF "$(OS)"!="MACOSX"
-OBJFILES += \
+    $(OBJ)$/args.obj \
     $(OBJ)$/pagein.obj \
     $(OBJ)$/file_image_unx.obj
-.ENDIF
 
 APP1TARGET = $(TARGET)
 APP1RPATH  = BRAND
@@ -61,6 +63,8 @@ APP1STDLIBS += $(LIBPNG_LIBS)
 .ENDIF
 .IF "$(OS)"=="SOLARIS"
 APP1STDLIBS+= -lsocket
+.ENDIF
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------
