@@ -57,7 +57,8 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpSVGWriter( NULL ),
     mpDefaultSdrPage( NULL ),
     mpSdrModel( NULL ),
-    mbPresentation( sal_False )
+    mbPresentation( sal_False ),
+    mpObjects( NULL )
 {
 }
 
