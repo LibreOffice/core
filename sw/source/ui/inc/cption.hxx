@@ -118,6 +118,7 @@ class SwCaptionDialog : public SvxStandardDialog
     void    CheckButtonWidth();
     void    ApplyCaptionOrder(); //#i61007# order of captions
 
+    static String our_aSepTextSave; // Save caption separator text
 public:
      SwCaptionDialog( Window *pParent, SwView &rV );
     ~SwCaptionDialog();

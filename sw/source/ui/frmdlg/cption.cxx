@@ -112,6 +112,8 @@ public:
     String  GetCharacterStyle() const;
 };
 
+String SwCaptionDialog::our_aSepTextSave = String::CreateFromAscii(": "); // Caption separator text
+
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
 
     SvxStandardDialog( pParent, SW_RES(DLG_CAPTION) ),
@@ -282,6 +284,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     FreeResource();
 
     CheckButtonWidth();
+    aSepEdit.SetText(our_aSepTextSave);
     aTextEdit.GrabFocus();
     DrawSample();
 }
@@ -308,6 +311,7 @@ void SwCaptionDialog::Apply()
     aOpt.CopyAttributes() = bCopyAttributes;
     aOpt.SetCharacterStyle( sCharacterStyle );
     rView.InsertCaption( &aOpt );
+    our_aSepTextSave = aSepEdit.GetText();
 }
 
 IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
