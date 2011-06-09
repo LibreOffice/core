@@ -214,10 +214,12 @@ void oldtestfile::test_file_003()
                             CPPUNIT_ASSERT_MESSAGE("failure #4",  target.getLength() >= dir.getLength() );
                             if( target.getLength() >= dir.getLength() )
                             {
-                                                            int j;
-                                                            for( j = dir.getLength() ;
-                                     j < target.getLength() &&
-                                         aSource3[i+1][j-dir.getLength()] == target[j]  ; j++ );
+                                int j = dir.getLength();
+                                while (j < target.getLength() &&
+                                         aSource3[i+1][j-dir.getLength()] == target[j])
+                                {
+                                     ++j;
+                                }
                                 CPPUNIT_ASSERT_MESSAGE("failure #5",  j == target.getLength() );
                             }
                         }
