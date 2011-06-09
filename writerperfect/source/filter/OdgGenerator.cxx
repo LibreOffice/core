@@ -35,6 +35,11 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+// Workaround for the incapacity of draw to have multiple page
+// sizes in the same document. Once that limitation is lifted,
+// remove this
+#define MULTIPAGE_WORKAROUND 1
+
 static WPXString doubleToString(const double value)
 {
     WPXString tempString;
@@ -80,8 +85,8 @@ public:
     int miDashIndex;
     int miGraphicsStyleIndex;
     int miPageIndex;
-    double mfWidth;
-    double mfHeight;
+    double mfWidth, mfMaxWidth;
+    double mfHeight, mfMaxHeight;
 
     const OdfStreamType mxStreamType;
 };
@@ -93,7 +98,9 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     miGraphicsStyleIndex(1),
     miPageIndex(1),
     mfWidth(0.0),
+    mfMaxWidth(0.0),
     mfHeight(0.0),
+    mfMaxHeight(0.0),
     mxStreamType(streamType)
 {
 }
@@ -165,6 +172,48 @@ OdgGenerator::OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType str
 
 OdgGenerator::~OdgGenerator()
 {
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_SETTINGS_XML))
+    {
+        TagOpenElement("office:settings").write(mpImpl->mpHandler);
+
+        TagOpenElement configItemSetOpenElement("config:config-item-set");
+        configItemSetOpenElement.addAttribute("config:name", "ooo:view-settings");
+        configItemSetOpenElement.write(mpImpl->mpHandler);
+
+        TagOpenElement configItemOpenElement("config:config-item");
+
+        configItemOpenElement.addAttribute("config:name", "VisibleAreaTop");
+        configItemOpenElement.addAttribute("config:type", "int");
+        configItemOpenElement.write(mpImpl->mpHandler);
+        mpImpl->mpHandler->characters("0");
+        mpImpl->mpHandler->endElement("config:config-item");
+
+        configItemOpenElement.addAttribute("config:name", "VisibleAreaLeft");
+        configItemOpenElement.addAttribute("config:type", "int");
+        configItemOpenElement.write(mpImpl->mpHandler);
+        mpImpl->mpHandler->characters("0");
+        mpImpl->mpHandler->endElement("config:config-item");
+
+        configItemOpenElement.addAttribute("config:name", "VisibleAreaWidth");
+        configItemOpenElement.addAttribute("config:type", "int");
+        configItemOpenElement.write(mpImpl->mpHandler);
+        WPXString sWidth; sWidth.sprintf("%li", (unsigned long)(2540 * mpImpl->mfMaxWidth));
+        mpImpl->mpHandler->characters(sWidth);
+        mpImpl->mpHandler->endElement("config:config-item");
+
+        configItemOpenElement.addAttribute("config:name", "VisibleAreaHeight");
+        configItemOpenElement.addAttribute("config:type", "int");
+        configItemOpenElement.write(mpImpl->mpHandler);
+        WPXString sHeight; sHeight.sprintf("%li", (unsigned long)(2540 * mpImpl->mfMaxHeight));
+        mpImpl->mpHandler->characters(sHeight);
+        mpImpl->mpHandler->endElement("config:config-item");
+
+        mpImpl->mpHandler->endElement("config:config-item-set");
+
+        mpImpl->mpHandler->endElement("office:settings");
+    }
+
+
     if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
     {
         TagOpenElement("office:styles").write(mpImpl->mpHandler);
@@ -199,7 +248,45 @@ OdgGenerator::~OdgGenerator()
             (*iterGraphicsAutomaticStyles)->write(mpImpl->mpHandler);
         }
     }
+#ifdef MULTIPAGE_WORKAROUND
+    if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
+    {
+        TagOpenElement tmpStylePageLayoutOpenElement("style:page-layout");
+        tmpStylePageLayoutOpenElement.addAttribute("style:name", "PM0");
+        tmpStylePageLayoutOpenElement.write(mpImpl->mpHandler);
 
+        TagOpenElement tmpStylePageLayoutPropertiesOpenElement("style:page-layout-properties");
+        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-top", "0in");
+        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-bottom", "0in");
+        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-left", "0in");
+        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:margin-right", "0in");
+        WPXString sValue;
+        sValue = doubleToString(mpImpl->mfMaxWidth); sValue.append("in");
+        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:page-width", sValue);
+        sValue = doubleToString(mpImpl->mfMaxHeight); sValue.append("in");
+        tmpStylePageLayoutPropertiesOpenElement.addAttribute("fo:page-height", sValue);
+        tmpStylePageLayoutPropertiesOpenElement.addAttribute("style:print-orientation", "portrait");
+        tmpStylePageLayoutPropertiesOpenElement.write(mpImpl->mpHandler);
+
+        mpImpl->mpHandler->endElement("style:page-layout-properties");
+
+        mpImpl->mpHandler->endElement("style:page-layout");
+
+        TagOpenElement tmpStyleStyleOpenElement("style:style");
+        tmpStyleStyleOpenElement.addAttribute("style:name", "dp1");
+        tmpStyleStyleOpenElement.addAttribute("style:family", "drawing-page");
+        tmpStyleStyleOpenElement.write(mpImpl->mpHandler);
+
+        TagOpenElement tmpStyleDrawingPagePropertiesOpenElement("style:drawing-page-properties");
+        // tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:background-size", "border");
+        tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:fill", "none");
+        tmpStyleDrawingPagePropertiesOpenElement.write(mpImpl->mpHandler);
+
+        mpImpl->mpHandler->endElement("style:drawing-page-properties");
+
+        mpImpl->mpHandler->endElement("style:style");
+    }
+#else
     if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
     {
         // writing out the page automatic styles
@@ -209,7 +296,7 @@ OdgGenerator::~OdgGenerator()
             (*iterPageAutomaticStyles)->write(mpImpl->mpHandler);
         }
     }
-
+#endif
     if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
     {
         mpImpl->mpHandler->endElement("office:automatic-styles");
@@ -259,52 +346,16 @@ OdgGenerator::~OdgGenerator()
 void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
 {
     if (propList["svg:width"])
-        mpImpl->mfWidth = propList["svg:width"]->getDouble();
-
-    if (propList["svg:height"])
-        mpImpl->mfHeight = propList["svg:height"]->getDouble();
-
-    if (mpImpl->miPageIndex == 1 && ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_SETTINGS_XML)))
     {
-        TagOpenElement("office:settings").write(mpImpl->mpHandler);
-
-        TagOpenElement configItemSetOpenElement("config:config-item-set");
-        configItemSetOpenElement.addAttribute("config:name", "ooo:view-settings");
-        configItemSetOpenElement.write(mpImpl->mpHandler);
-
-        TagOpenElement configItemOpenElement("config:config-item");
-
-        configItemOpenElement.addAttribute("config:name", "VisibleAreaTop");
-        configItemOpenElement.addAttribute("config:type", "int");
-        configItemOpenElement.write(mpImpl->mpHandler);
-        mpImpl->mpHandler->characters("0");
-        mpImpl->mpHandler->endElement("config:config-item");
-
-        configItemOpenElement.addAttribute("config:name", "VisibleAreaLeft");
-        configItemOpenElement.addAttribute("config:type", "int");
-        configItemOpenElement.write(mpImpl->mpHandler);
-        mpImpl->mpHandler->characters("0");
-        mpImpl->mpHandler->endElement("config:config-item");
-
-        configItemOpenElement.addAttribute("config:name", "VisibleAreaWidth");
-        configItemOpenElement.addAttribute("config:type", "int");
-        configItemOpenElement.write(mpImpl->mpHandler);
-        WPXString sWidth; sWidth.sprintf("%li", (unsigned long)(2540 * mpImpl->mfWidth));
-        mpImpl->mpHandler->characters(sWidth);
-        mpImpl->mpHandler->endElement("config:config-item");
-
-        configItemOpenElement.addAttribute("config:name", "VisibleAreaHeight");
-        configItemOpenElement.addAttribute("config:type", "int");
-        configItemOpenElement.write(mpImpl->mpHandler);
-        WPXString sHeight; sHeight.sprintf("%li", (unsigned long)(2540 * mpImpl->mfHeight));
-        mpImpl->mpHandler->characters(sHeight);
-        mpImpl->mpHandler->endElement("config:config-item");
-
-        mpImpl->mpHandler->endElement("config:config-item-set");
-
-        mpImpl->mpHandler->endElement("office:settings");
+        mpImpl->mfWidth = propList["svg:width"]->getDouble();
+        mpImpl->mfMaxWidth = mpImpl->mfMaxWidth < mpImpl->mfWidth ? mpImpl->mfWidth : mpImpl->mfMaxWidth;
     }
 
+    if (propList["svg:height"])
+    {
+        mpImpl->mfHeight = propList["svg:height"]->getDouble();
+        mpImpl->mfMaxHeight = mpImpl->mfMaxHeight < mpImpl->mfHeight ? mpImpl->mfHeight : mpImpl->mfMaxHeight;
+    }
 
     TagOpenElement *pStyleMasterPageOpenElement = new TagOpenElement("style:master-page");
 
@@ -315,10 +366,14 @@ void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
     WPXString sValue;
     sValue.sprintf("page%i", mpImpl->miPageIndex);
     pDrawPageOpenElement->addAttribute("draw:name", sValue);
-
+#ifdef MULTIPAGE_WORKAROUND
+    pStyleMasterPageOpenElement->addAttribute("style:page-layout-name", "PM0");
+    pStylePageLayoutOpenElement->addAttribute("style:page-layout-name", "PM0");
+#else
     sValue.sprintf("PM%i", mpImpl->miPageIndex);
     pStyleMasterPageOpenElement->addAttribute("style:page-layout-name", sValue);
-    pStylePageLayoutOpenElement->addAttribute("style:name", "PM1");
+    pStylePageLayoutOpenElement->addAttribute("style:name", sValue);
+#endif
 
     mpImpl->mPageAutomaticStyles.push_back(pStylePageLayoutOpenElement);
 
@@ -338,18 +393,28 @@ void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
 
     mpImpl->mPageAutomaticStyles.push_back(new TagCloseElement("style:page-layout"));
 
+#ifdef MULTIPAGE_WORKAROUND
+    pDrawPageOpenElement->addAttribute("draw:style-name", "dp1");
+    pStyleMasterPageOpenElement->addAttribute("draw:style-name", "dp1");
+#else
     sValue.sprintf("dp%i", mpImpl->miPageIndex);
     pDrawPageOpenElement->addAttribute("draw:style-name", sValue);
     pStyleMasterPageOpenElement->addAttribute("draw:style-name", sValue);
+#endif
 
     TagOpenElement *pStyleStyleOpenElement = new TagOpenElement("style:style");
     pStyleStyleOpenElement->addAttribute("style:name", sValue);
     pStyleStyleOpenElement->addAttribute("style:family", "drawing-page");
     mpImpl->mPageAutomaticStyles.push_back(pStyleStyleOpenElement);
 
+#ifdef MULTIPAGE_WORKAROUND
+    pDrawPageOpenElement->addAttribute("draw:master-page-name", "Default");
+    pStyleMasterPageOpenElement->addAttribute("style:name", "Default");
+#else
     sValue.sprintf("Page%i", mpImpl->miPageIndex);
     pDrawPageOpenElement->addAttribute("draw:master-page-name", sValue);
     pStyleMasterPageOpenElement->addAttribute("style:name", sValue);
+#endif
 
     mpImpl->mBodyElements.push_back(pDrawPageOpenElement);
 
