@@ -466,9 +466,9 @@ void Test::testCellFunctions()
         m_pDoc->SetString(1, 7, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(0)")));
         m_pDoc->SetString(1, 8, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(1)")));
         m_pDoc->SetString(1, 9, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(-1)")));
-        m_pDoc->SetString(1, 10, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(12.3)")));
+        m_pDoc->SetString(1, 10, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(123)")));
         m_pDoc->SetString(1, 11, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"\")")));
-        m_pDoc->SetString(1, 12, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"1.2\")")));
+        m_pDoc->SetString(1, 12, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"12\")")));
         m_pDoc->SetString(1, 13, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=N(\"foo\")")));
 
         // Range references
@@ -481,7 +481,7 @@ void Test::testCellFunctions()
         m_pDoc->CalcAll();
         double checks[] = {
             0, 0,  0,    1, -1, 12.3, 0, // cell reference
-            0, 1, -1, 12.3,  0,    0, 0, // in-line values
+            0, 1, -1, 123,  0,    0, 0, // in-line values
             0, 1, 12.3, 0                // range references
         };
         for (size_t i = 0; i < SAL_N_ELEMENTS(checks); ++i)
