@@ -1661,9 +1661,11 @@ void ScInterpreter::ScIsEmpty()
                 nRes = 1;
         }
         break;
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )

@@ -572,10 +572,15 @@ ScMatrixRef ScInterpreter::GetMatrix()
                 pMat = new ScMatrix(1, 1);
                 pMat->PutDouble(pToken->GetDouble(), 0, 0);
             }
-            else
+            else if (pToken->GetType() == svString)
             {
                 pMat = new ScMatrix(1, 1);
                 pMat->PutString(pToken->GetString(), 0, 0);
+            }
+            else
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutEmpty(0, 0);
             }
         }
         break;
