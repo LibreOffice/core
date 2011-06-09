@@ -79,7 +79,6 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     SolarMutexGuard aGuard;
     Window*     pFocusWindow = Application::GetFocusWindow();
-    sal_Int16   nCurrentPageNumber = -1;
     sal_Bool    bRet;
 
     if( pFocusWindow )
@@ -90,6 +89,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     else
     if( mxSrcDoc.is() )
     {
+        sal_Int16   nCurrentPageNumber = -1;
         uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
                                                     uno::UNO_QUERY);
         if( xDesktop.is() )

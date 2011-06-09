@@ -310,7 +310,7 @@ namespace XSLT
         ::std::map<const char*, OString> pmap = m_transformer->getParameters();
         ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
         int paramIndex = 0;
-        for (pit = pmap.begin(); pit != pmap.end(); pit++)
+        for (pit = pmap.begin(); pit != pmap.end(); ++pit)
             {
                 params[paramIndex++] = (*pit).first;
                 params[paramIndex++] = (*pit).second.getStr();
