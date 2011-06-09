@@ -370,8 +370,8 @@ public:
                                             Ucs2UIntMap& rUnicodeEnc );
     virtual int             GetMinKashidaWidth();
 
-    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual sal_Bool                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual sal_Bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
+    virtual sal_Bool                    GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );
