@@ -64,7 +64,7 @@ OUT2INC += include/openssl/*
 
 UNAME=$(shell uname)
 
-.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "ANDROID"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8o.map \
