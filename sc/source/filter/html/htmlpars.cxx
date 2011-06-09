@@ -1832,7 +1832,7 @@ public:
         @param pTableMap  Pointer to the table map (is allowed to be NULL). */
     explicit            ScHTMLTableIterator( const ScHTMLTableMap* pTableMap );
 
-    inline bool         is() const { return maIter != maEnd; }
+    inline bool         is() const { return mpTableMap && maIter != maEnd; }
     inline ScHTMLTable* operator->() { return maIter->second.get(); }
     inline ScHTMLTable& operator*() { return *maIter->second; }
     inline ScHTMLTableIterator& operator++() { ++maIter; return *this; }
@@ -1840,9 +1840,11 @@ public:
 private:
     ScHTMLTableMap::const_iterator maIter;
     ScHTMLTableMap::const_iterator maEnd;
+    const ScHTMLTableMap* mpTableMap;
 };
 
-ScHTMLTableIterator::ScHTMLTableIterator( const ScHTMLTableMap* pTableMap )
+ScHTMLTableIterator::ScHTMLTableIterator( const ScHTMLTableMap* pTableMap ) :
+    mpTableMap(pTableMap)
 {
     if( pTableMap )
     {
