@@ -103,6 +103,9 @@ namespace writerfilter {
                 int nListLevelNum;
                 /// List level entries, which will form a list entry later.
                 std::multimap<Id, RTFValue::Pointer_t> aListLevelEntries;
+
+                /// Text from leveltext destination.
+                rtl::OUStringBuffer aLevelText;
         };
 
         /// Implementation of the RTFDocument interface.

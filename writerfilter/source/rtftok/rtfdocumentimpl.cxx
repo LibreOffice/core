@@ -171,7 +171,8 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
-    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
+            || m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
         text(aOUStr);
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
@@ -212,8 +213,7 @@ void RTFDocumentImpl::text(OUString& rString)
 {
     if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(rString));
-        m_aStates.top().aTableAttributes.insert(make_pair(NS_ooxml::LN_CT_LevelText_val, pValue));
+        m_aStates.top().aLevelText.append(rString);
         return;
     }
 
@@ -1241,6 +1241,16 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
     {
+        OUString aStr = m_aStates.top().aLevelText.makeStringAndClear();
+
+        //OSL_TRACE("collected leveltext: '%s'", OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
+        // The first character is the length of the string (the rest should be ignored).
+        sal_Int32 nLength(aStr.toChar());
+        OUString aValue = aStr.copy(1, nLength);
+        //OSL_TRACE("length: %d, used part: '%s'", nLength, OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr());
+        RTFValue::Pointer_t pValue(new RTFValue(aValue));
+        m_aStates.top().aTableAttributes.insert(make_pair(NS_ooxml::LN_CT_LevelText_val, pValue));
+
         aAttributes = m_aStates.top().aTableAttributes;
         bLevelTextEnd = true;
     }
@@ -1391,7 +1401,8 @@ RTFParserState::RTFParserState()
     nUc(1),
     nCharsToSkip(0),
     nListLevelNum(0),
-    aListLevelEntries()
+    aListLevelEntries(),
+    aLevelText()
 {
 }
 
