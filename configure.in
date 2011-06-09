@@ -1526,19 +1526,6 @@ AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
 if test $build_os = "cygwin"; then
-   AC_MSG_CHECKING([Cygwin build environment sanity])
-   dnl ===================================================================
-   dnl Sanity check! Native Windows programs cannot use Cygwin symlinks!
-   dnl ===================================================================
-   dnl As long as awk instead of $AWK is used somewhere in the sources,
-   dnl check for $AWK and awk. $AWK is pointing to gawk in Cygwin.
-   if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
-      AC_MSG_ERROR([$AWK, awk, tar or gunzip is a Cygwin symlink!
-Native Windows programs cannot use Cygwin symlinks. Remove the symbolic
-link, and copy the program to the name of the link.])
-   fi
-   AC_MSG_RESULT([ok])
-
    dnl ===================================================================
    dnl If $CC is set to a MinGW compiler, set WITH_MINGW
    dnl ===================================================================
