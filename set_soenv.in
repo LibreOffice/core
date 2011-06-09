@@ -1741,6 +1741,7 @@ ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
+ToFile( "SYSBASE",           "$ENV{SYSBASE}",    "e" );
 ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
 ToFile( "AR",                "@AR@",             "e" );
 ToFile( "DLLTOOL",           "@DLLTOOL@",        "e" );

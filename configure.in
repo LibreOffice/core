@@ -1669,7 +1669,7 @@ if test "$cross_compiling" = "yes"; then
 	bin/repo-list.in | (cd CONF-FOR-BUILD && tar xf -)
   (
     unset COM GUI GUIBASE OS CPU CPUNAME
-    unset CC CXX CFLAGS
+    unset CC CXX SYSBASE CFLAGS
     unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
     test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
     test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
