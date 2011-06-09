@@ -361,7 +361,7 @@ class FileAccess(object):
             xInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
             nameList = xInterface.getFolderContents(FolderName, False)
             TitleVector = []
-            NameVector = [len(nameList)]
+            NameVector = []
             if FilterName == None or FilterName == "":
                 FilterName = None
             else:
@@ -376,6 +376,7 @@ class FileAccess(object):
 
             LocLayoutFiles[1] = NameVector
             LocLayoutFiles[0] = TitleVector
+
             #COMMENTED
             #JavaTools.bubblesortList(LocLayoutFiles)
         except Exception, exception:
@@ -501,14 +502,13 @@ class FileAccess(object):
         #get the file identifier converter
         self.filenameConverter = xmsf.createInstance("com.sun.star.ucb.FileContentProvider")
 
-    def getURL(self, parentPath, childPath):
-        parent = self.filenameConverter.getSystemPathFromFileURL(parentPath)
-        f = File.File_unknown(parent, childPath)
-        r = self.filenameConverter.getFileURLFromSystemPath(parentPath, f.getAbsolutePath())
-        return r
+    def getURL(self, path, childPath=None):
+        if childPath is not None:
+            path = self.filenameConverter.getSystemPathFromFileURL(path)
+            f = open(path,childPath)
+        else:
+            f = open(path)
 
-    def getURL(self, path):
-        f = File.File_unknown(path)
         r = self.filenameConverter.getFileURLFromSystemPath(path, f.getAbsolutePath())
         return r
 

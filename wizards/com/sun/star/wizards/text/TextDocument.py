@@ -7,6 +7,11 @@ from document.OfficeDocument import OfficeDocument
 import traceback
 from text.ViewHandler import ViewHandler
 from text.TextFieldHandler import TextFieldHandler
+from com.sun.star.container import NoSuchElementException
+from com.sun.star.lang import WrappedTargetException
+from common.Configuration import Configuration
+import time
+from com.sun.star.util import DateTime
 
 class TextDocument(object):
 
@@ -17,19 +22,19 @@ class TextDocument(object):
         self.xMSF = xMSF
         self.xTextDocument = None
 
-        if listener:
-            if FrameName:
+        if listener is not None:
+            if FrameName is not None:
                 '''creates an instance of TextDocument and creates a named frame.
                 No document is actually loaded into this frame.'''
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener, FrameName);
                 return
 
-            elif _sPreviewURL:
+            elif _sPreviewURL is not None:
                 '''creates an instance of TextDocument by loading a given URL as preview'''
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
                 self.xTextDocument = self.loadAsPreview(_sPreviewURL, True)
 
-            elif xArgs:
+            elif xArgs is not None:
                 '''creates an instance of TextDocument and creates a frame and loads a document'''
                 self.xDesktop = Desktop.getDesktop(xMSF);
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener);
@@ -45,7 +50,7 @@ class TextDocument(object):
                 self.xFrame = self.xDesktop.getActiveFrame()
                 self.xTextDocument = self.xFrame.getController().getModel()
 
-        elif _moduleIdentifier:
+        elif _moduleIdentifier is not None:
             try:
                 '''create the empty document, and set its module identifier'''
                 self.xTextDocument = xMSF.createInstance("com.sun.star.text.TextDocument")
@@ -64,7 +69,7 @@ class TextDocument(object):
             except Exception, e:
                 traceback.print_exc()
 
-        elif _textDocument:
+        elif _textDocument is not None:
             '''creates an instance of TextDocument from a given XTextDocument'''
             self.xFrame = _textDocument.getCurrentController().getFrame()
             self.xTextDocument = _textDocument
@@ -180,15 +185,12 @@ class TextDocument(object):
             gn = xNA.getByName("givenname")
             sn = xNA.getByName("sn")
             fullname = str(gn) + " " + str(sn)
-            cal = GregorianCalendar.GregorianCalendar()
-            year = cal.get(Calendar.YEAR)
-            month = cal.get(Calendar.MONTH)
-            day = cal.get(Calendar.DAY_OF_MONTH)
-            currentDate = DateTime.DateTime()
-            currentDate.Day = day
-            currentDate.Month = month
-            currentDate.Year = year
-            du = DateUtils(self.xMSF, self.xTextDocument)
+            currentDate = DateTime()
+            now = time.localtime(time.time())
+            currentDate.Day = time.strftime("%d", now)
+            currentDate.Year = time.strftime("%Y", now)
+            currentDate.Month = time.strftime("%m", now)
+            du = Helper.DateUtils(self.xMSF, self.xTextDocument)
             ff = du.getFormat(NumberFormatIndex.DATE_SYS_DDMMYY)
             myDate = du.format(ff, currentDate)
             xDocProps2 = self.xTextDocument.getDocumentProperties()

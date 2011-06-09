@@ -4,7 +4,6 @@ from common.PropertyNames import PropertyNames
 from com.sun.star.awt import Rectangle
 from common.Helper import Helper
 from PeerConfig import PeerConfig
-from common.Listener import *
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS
 
@@ -52,14 +51,14 @@ class UnoDialog(object):
                 if isinstance(PropertyValue,bool):
                     xPSet.setPropertyValue(PropertyName, PropertyValue)
                 else:
-                    if isinstance(PropertyValue,list):
-                        methodname = "[]short"
-                        PropertyValue = tuple(PropertyValue)
-                    elif isinstance(PropertyValue,tuple):
-                        methodname = "[]string"
-                    else:
-                        PropertyValue = (PropertyValue,)
-                        methodname = "[]string"
+                    methodname = "[]string"
+                    if not isinstance(PropertyValue,tuple):
+                        if isinstance(PropertyValue,list):
+                            methodname = "[]short"
+                            PropertyValue = tuple(PropertyValue)
+                        else:
+                            PropertyValue = (PropertyValue,)
+
                     uno.invoke(xPSet, "setPropertyValue", (PropertyName, uno.Any( \
                         methodname, PropertyValue)))
 

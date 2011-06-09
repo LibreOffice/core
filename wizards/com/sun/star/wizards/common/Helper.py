@@ -4,9 +4,6 @@ import traceback
 from com.sun.star.uno import Exception as UnoException
 from com.sun.star.uno import RuntimeException
 
-#TEMPORAL
-import inspect
-
 class Helper(object):
 
     DAY_IN_MILLIS = (24 * 60 * 60 * 1000)
@@ -23,14 +20,13 @@ class Helper(object):
     def setUnoPropertyValue(self, xPSet, PropertyName, PropertyValue):
         try:
             if xPSet.getPropertySetInfo().hasPropertyByName(PropertyName):
-                #xPSet.setPropertyValue(PropertyName, PropertyValue)
                 uno.invoke(xPSet,"setPropertyValue", (PropertyName,PropertyValue))
             else:
                 selementnames = xPSet.getPropertySetInfo().getProperties()
                 raise ValueError("No Such Property: '" + PropertyName + "'");
 
         except UnoException, exception:
-            print type(PropertyValue)
+            print PropertyName
             traceback.print_exc()
 
     @classmethod
@@ -126,9 +122,6 @@ class Helper(object):
                     i += 1
 
         except Exception, e:
-            curframe = inspect.currentframe()
-            calframe = inspect.getouterframes(curframe, 2)
-            #print "caller name:", calframe[1][3]
             traceback.print_exc()
 
     '''
@@ -166,13 +159,7 @@ class Helper(object):
 
     class DateUtils(object):
 
-        @classmethod
-        def DateUtils_XMultiServiceFactory_Object(self, xmsf, document):
-            tmp = DateUtils()
-            tmp.DateUtils_body_XMultiServiceFactory_Object(xmsf, document)
-            return tmp
-
-        def DateUtils_body_XMultiServiceFactory_Object(self, xmsf, docMSF):
+        def __init__(self, xmsf, docMSF):
             defaults = docMSF.createInstance("com.sun.star.text.Defaults")
             l = Helper.getUnoStructValue(defaults, "CharLocale")
             jl = locale.setlocale(l.Language, l.Country, l.Variant)

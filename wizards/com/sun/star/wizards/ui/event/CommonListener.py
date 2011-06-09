@@ -1,73 +1,113 @@
-'''
-import com.sun.star.awt.*;
+#**********************************************************************
+#
+#   Danny.OOo.Listeners.ListenerProcAdapters.py
+#
+#   A module to easily work with OpenOffice.org.
+#
+#**********************************************************************
+#   Copyright (c) 2003-2004 Danny Brewer
+#   d29583@groovegarden.com
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License as published by the Free Software Foundation; either
+#   version 2.1 of the License, or (at your option) any later version.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#   See:  http://www.gnu.org/licenses/lgpl.html
+#
+#**********************************************************************
+#   If you make changes, please append to the change log below.
+#
+#   Change Log
+#   Danny Brewer         Revised 2004-06-05-01
+#
+#**********************************************************************
 
-import com.sun.star.lang.EventObject;
-'''
-from AbstractListener import AbstractListener
-from EventNames import *
+# OOo's libraries
+import uno
+import unohelper
+import inspect
 
-class CommonListener(AbstractListener):
+#--------------------------------------------------
+# An ActionListener adapter.
+# This object implements com.sun.star.awt.XActionListener.
+# When actionPerformed is called, this will call an arbitrary
+#  python procedure, passing it...
+#   1. the oActionEvent
+#   2. any other parameters you specified to this object's constructor (as a tuple).
+from com.sun.star.awt import XActionListener
+class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
 
-    def __init__(self):
-        pass
 
-    '''Implementation of com.sun.star.awt.XActionListener'''
-    def actionPerformed(self, actionEvent):
-        self.invoke(self.getEventSourceName(actionEvent), EVENT_ACTION_PERFORMED, actionEvent)
+    # oActionEvent is a com.sun.star.awt.ActionEvent struct.
+    def actionPerformed( self, oActionEvent ):
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall, (oActionEvent,) + self.tParams )
 
-    '''Implementation of com.sun.star.awt.XItemListener'''
-    def itemStateChanged(self, itemEvent):
-        self.invoke(self.getEventSourceName(itemEvent), EVENT_ITEM_CHANGED, itemEvent)
 
-    '''Implementation of com.sun.star.awt.XTextListener'''
-    def textChanged(self, textEvent):
-        self.invoke(self.getEventSourceName(textEvent), EVENT_TEXT_CHANGED, textEvent)
+#--------------------------------------------------
+# An ItemListener adapter.
+# This object implements com.sun.star.awt.XItemListener.
+# When itemStateChanged is called, this will call an arbitrary
+#  python procedure, passing it...
+#   1. the oItemEvent
+#   2. any other parameters you specified to this object's constructor (as a tuple).
+from com.sun.star.awt import XItemListener
+class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
 
-    '''@see com.sun.star.awt.XWindowListener#windowResized(com.sun.star.awt.WindowEvent)'''
-    def windowResized(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_WINDOW_RESIZED, event)
+    # oItemEvent is a com.sun.star.awt.ItemEvent struct.
+    def itemStateChanged( self, oItemEvent ):
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall, (oActionEvent,) + self.tParams )
 
-    '''@see com.sun.star.awt.XWindowListener#windowMoved(com.sun.star.awt.WindowEvent)'''
-    def windowMoved(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_WINDOW_MOVED, event)
 
-    '''@see com.sun.star.awt.XWindowListener#windowShown(com.sun.star.lang.EventObject)'''
-    def windowShown(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_WINDOW_SHOWN, event)
+#--------------------------------------------------
+# An TextListener adapter.
+# This object implements com.sun.star.awt.XTextistener.
+# When textChanged is called, this will call an arbitrary
+#  python procedure, passing it...
+#   1. the oTextEvent
+#   2. any other parameters you specified to this object's constructor (as a tuple).
+from com.sun.star.awt import XTextListener
+class TextListenerProcAdapter( unohelper.Base, XTextListener ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
 
-    '''@see com.sun.star.awt.XWindowListener#windowHidden(com.sun.star.lang.EventObject)'''
-    def windowHidden(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_WINDOW_HIDDEN, event)
+    # oTextEvent is a com.sun.star.awt.TextEvent struct.
+    def textChanged( self, oTextEvent ):
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall, (oTextEvent,) + self.tParams )
 
-    '''@see com.sun.star.awt.XMouseListener#mousePressed(com.sun.star.awt.MouseEvent)'''
-    def mousePressed(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_MOUSE_PRESSED, event)
+#--------------------------------------------------
+# An Window adapter.
+# This object implements com.sun.star.awt.XWindowListener.
+# When textChanged is called, this will call an arbitrary
+#  python procedure, passing it...
+#   1. the oTextEvent
+#   2. any other parameters you specified to this object's constructor (as a tuple).
+from com.sun.star.awt import XWindowListener
+class WindowListenerProcAdapter( unohelper.Base, XWindowListener  ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
 
-    '''@see com.sun.star.awt.XMouseListener#mouseReleased(com.sun.star.awt.MouseEvent)'''
-    def mouseReleased(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_KEY_RELEASED, event)
-
-    '''@see com.sun.star.awt.XMouseListener#mouseEntered(com.sun.star.awt.MouseEvent)'''
-    def mouseEntered(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_MOUSE_ENTERED, event)
-
-    '''@see com.sun.star.awt.XMouseListener#mouseExited(com.sun.star.awt.MouseEvent)'''
-    def mouseExited(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_MOUSE_EXITED, event)
-
-    '''@see com.sun.star.awt.XFocusListener#focusGained(com.sun.star.awt.FocusEvent)'''
-    def focusGained(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_FOCUS_GAINED, event)
-
-    '''@see com.sun.star.awt.XFocusListener#focusLost(com.sun.star.awt.FocusEvent)'''
-    def focusLost(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_FOCUS_LOST, event)
-
-    '''@see com.sun.star.awt.XKeyListener#keyPressed(com.sun.star.awt.KeyEvent)'''
-    def keyPressed(self, event):
-        self.invoke(c(event), EVENT_KEY_PRESSED, event)
-
-    '''@see com.sun.star.awt.XKeyListener#keyReleased(com.sun.star.awt.KeyEvent)'''
-    def keyReleased(self, event):
-        self.invoke(self.getEventSourceName(event), EVENT_KEY_RELEASED, event)
-
+    # oTextEvent is a com.sun.star.awt.TextEvent struct.
+    def windowResized(self, actionEvent):
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall, (actionEvent,) + self.tParams )

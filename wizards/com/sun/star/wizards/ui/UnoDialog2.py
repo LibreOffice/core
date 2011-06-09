@@ -21,13 +21,11 @@ class UnoDialog2(UnoDialog):
 
     def __init__(self, xmsf):
         super(UnoDialog2,self).__init__(xmsf,(), ())
-        self.guiEventListener = CommonListener()
 
     def insertButton(self, sName, actionPerformed, sPropNames, oPropValues, eventTarget=None):
         xButton = self.insertControlModel2("com.sun.star.awt.UnoControlButtonModel", sName, sPropNames, oPropValues)
-        if actionPerformed != None:
-            xButton.addActionListener(ActionListenerProcAdapter(self.guiEventListener))
-            self.guiEventListener.add(sName, EVENT_ACTION_PERFORMED, actionPerformed, eventTarget)
+        if actionPerformed is not None:
+            xButton.addActionListener(ActionListenerProcAdapter(actionPerformed))
 
         return xButton
 
@@ -43,8 +41,7 @@ class UnoDialog2(UnoDialog):
         if itemChanged != None:
             if eventTarget is None:
                 eventTarget = self
-            xCheckBox.addItemListener(ItemListenerProcAdapter(self.guiEventListener))
-            self.guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget)
+            xCheckBox.addItemListener(ItemListenerProcAdapter(None))
 
         return xCheckBox
 
@@ -53,16 +50,13 @@ class UnoDialog2(UnoDialog):
         if eventTarget is None:
             eventTarget = self
         if actionPerformed != None:
-            xComboBox.addActionListener(self.guiEventListener)
-            self.guiEventListener.add(sName, EVENT_ACTION_PERFORMED, actionPerformed, eventTarget)
+            xComboBox.addActionListener(None)
 
         if itemChanged != None:
-            xComboBox.addItemListener(ItemListenerProcAdapter(self.guiEventListener))
-            self.guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget)
+            xComboBox.addItemListener(ItemListenerProcAdapter(None))
 
         if textChanged != None:
-            xComboBox.addTextListener(TextListenerProcAdapter(self.guiEventListener))
-            self.guiEventListener.add(sName, EVENT_TEXT_CHANGED, textChanged, eventTarget)
+            xComboBox.addTextListener(TextListenerProcAdapter(None))
 
         return xComboBox
 
@@ -74,12 +68,10 @@ class UnoDialog2(UnoDialog):
             eventTarget = self
 
         if actionPerformed != None:
-            xListBox.addActionListener(self.guiEventListener)
-            self.guiEventListener.add(sName, EVENT_ACTION_PERFORMED, actionPerformed, eventTarget)
+            xListBox.addActionListener(None)
 
         if itemChanged != None:
-            xListBox.addItemListener(ItemListenerProcAdapter(self.guiEventListener))
-            self.guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget)
+            xListBox.addItemListener(ItemListenerProcAdapter(None))
 
         return xListBox
 
@@ -89,8 +81,8 @@ class UnoDialog2(UnoDialog):
         if itemChanged != None:
             if eventTarget is None:
                 eventTarget = self
-            xRadioButton.addItemListener(ItemListenerProcAdapter(self.guiEventListener))
-            self.guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget)
+            xRadioButton.addItemListener(ItemListenerProcAdapter(None))
+
 
         return xRadioButton
 
@@ -120,8 +112,7 @@ class UnoDialog2(UnoDialog):
         if sTextChanged != None:
             if eventTarget is None:
                 eventTarget = self
-            xField.addTextListener(TextListenerProcAdapter(self.guiEventListener))
-            self.guiEventListener.add(sName, EVENT_TEXT_CHANGED, sTextChanged, eventTarget)
+            xField.addTextListener(TextListenerProcAdapter(None))
 
         return xField
 
