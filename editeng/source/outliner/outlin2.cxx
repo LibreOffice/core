@@ -663,6 +663,16 @@ void Outliner::QuickFormatDoc( sal_Bool bFull )
 void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
 {
     DBG_CHKTHIS(Outliner,0);
+
+    // reset bullet size
+    sal_uInt16 nParagraphs = (sal_uInt16)pParaList->GetParagraphCount();
+    for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
+    {
+        Paragraph* pPara = pParaList->GetParagraph( nPara );
+        if ( pPara )
+            pPara->aBulSize.Width() = -1;
+    }
+
     pEditEngine->SetGlobalCharStretching( nX, nY );
 }
 
