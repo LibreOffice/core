@@ -82,6 +82,14 @@ if [ -x $checkdll ]; then
     fi
 else
     echo "WARNING: checkdll not found!" 1>&2
+
+    for parameter in $*; do
+        library=$parameter;
+    done
+    realname=`echo $library | sed "s/check_//"`
+    if [ $library != $realname ]; then
+        mv $library $realname
+    fi
 fi
 
 exit 0
