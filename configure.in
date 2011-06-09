@@ -6472,8 +6472,7 @@ dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
-dnl Now with librsvg we always need cairo (?), so hardcode ENABLE_CAIRO to TRUE
-dnl Eventually should bin conditionals on ENABLE_CAIRO.
+dnl ENABLE_CAIRO will be set to empty later when necessary
 ENABLE_CAIRO="TRUE"
 
 BUILD_PIXMAN=""
@@ -7922,11 +7921,14 @@ no|disable)
 
 ""|yes|auto)
    if test $build_os = cygwin -o \
-           $_os = Darwin -o $_os = iOS; then
+           $_os = Darwin; then
       dnl When building on/for these OSes always use the internal one,
       dnl if at all. Add more OSes above as needed.
       AC_MSG_RESULT([internal])
       enable_librsvg=internal
+   elif test  $_os = iOS -o $_os = Android; then
+      AC_MSG_RESULT([none])
+      enable_librsvg=no
    else
       if test "$with_system_libs" = yes; then
          AC_MSG_RESULT([system])
@@ -7980,6 +7982,7 @@ internal)
 no)
    ENABLE_LIBRSVG=NO
    SYSTEM_LIBRSVG=NO
+   ENABLE_CAIRO=
    ;;
 
 *)
@@ -8007,7 +8010,7 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_GDKPIXBUF=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8034,7 +8037,7 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_GLIB=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8058,7 +8061,7 @@ if test "$with_system_gettext" = yes -o \( "$with_system_libs" = yes -a "$with_s
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_GETTEXT=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8085,7 +8088,7 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_LIBCROCO=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8112,7 +8115,7 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_PANGO=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8139,7 +8142,7 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_LIBGSF=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8166,7 +8169,7 @@ if test "$with_system_libpng" = yes -o \( "$with_system_libs" = yes -a "$with_sy
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_LIBPNG=NO
             AC_MSG_RESULT([no])
             ;;
@@ -8192,7 +8195,7 @@ if test "$SYSTEM_JPEG" == "YES"; then
     AC_MSG_RESULT([yes])
 else
     case "$_os" in
-        WINNT|Darwin|iOS)
+        WINNT|Darwin|iOS|Android)
             SYSTEM_LIBJPEG=NO
             AC_MSG_RESULT([no])
             ;;
