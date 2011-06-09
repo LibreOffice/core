@@ -159,7 +159,7 @@ OUT2INC+=src$/raptor.h
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libraptor.$(RAPTOR_MAJOR).dylib src$/.libs$/libraptor.dylib
 OUT2BIN+=src/raptor-config
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 OUT2LIB+=src$/.libs$/libraptor.a
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="AIX"
