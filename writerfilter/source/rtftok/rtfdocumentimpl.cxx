@@ -311,7 +311,6 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_LEVELTEXT:
-            OSL_TRACE("entered leveltext destination");
             m_aStates.top().nDestinationState = DESTINATION_LEVELTEXT;
             break;
         default:
