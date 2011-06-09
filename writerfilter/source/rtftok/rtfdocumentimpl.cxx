@@ -1276,7 +1276,8 @@ int RTFDocumentImpl::popState()
                     != m_aStates.top().aLevelNumbers.end())
             {
                 aBuf.append(sal_Unicode('%'));
-                aBuf.append(nReplaces++);
+                // '1.1.1' -> '%1.%2.%3', but '1.' (with '2.' prefix omitted) is %2.
+                aBuf.append(sal_Int32(nReplaces++ + m_aStates.top().nListLevelNum + 1 - m_aStates.top().aLevelNumbers.size()));
             }
             else
                 aBuf.append(aOrig.copy(i, 1));
