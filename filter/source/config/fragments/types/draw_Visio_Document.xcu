@@ -6,7 +6,7 @@
             <prop oor:name="Preferred"><value>true</value></prop>
             <prop oor:name="PreferredFilter"><value>Visio Document</value></prop>
             <prop oor:name="UIName">
-                <value>Visio Document</value>
+                <value>Microsoft Visio 2000/XP/2003</value>
             </prop>
             <prop oor:name="ClipboardFormat"/>
         </node>
