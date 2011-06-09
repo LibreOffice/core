@@ -914,9 +914,7 @@ static JamoComp jamocomp1_to_unicode[] =
 //#define IS_OLD_HAN(x) (((x) >= 0x8020 && (x) <= 0x83ff ) || ( (x) >= 0x8420 && (x) <= 0x843f )) // beside these, there are very much characters in the hangul.
 int hcharconv(hchar ch, hchar *dest, int codeType)
 {
-    unsigned int index;
-    unsigned char lo, hi;
-     int res;
+    unsigned char lo;
      //printf("hcharconv[%04x]\n",ch);
     if (ch < 128){
          dest[0] = ch;
@@ -932,7 +930,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                     dest[0] = 0xd55c;
                     return 1 ;
                 }
-                res = kssm_hangul_to_ucs2(ch, dest);
+                int res = kssm_hangul_to_ucs2(ch, dest);
                //printf("hcharconv Hangul[%04x]\n",dest[0]);
                 return res;
           }
@@ -942,6 +940,8 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
       /* 한자는 0x4000부터 4888가지의 값을 가진다. */
     else if (IsHanja(ch))
     {
+        unsigned int index;
+        unsigned char hi;
         /*  4888이외의 수는 아래한글에서 정의한 확장한자이다. 이것에 대해서는
             유니코드나 완성형코드로의 변환을 위한 매핑테이블어 없는 실정이다.
          */

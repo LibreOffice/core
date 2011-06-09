@@ -72,8 +72,6 @@ HWPPara::HWPPara(void)
 
 HWPPara::~HWPPara(void)
 {
-    int ii;
-
     if (linfo)
         delete[]linfo;
     if (cshapep)
@@ -82,7 +80,7 @@ HWPPara::~HWPPara(void)
     {
 // virtual destructor
 /* C++은 null에 대해서도 동작한다. */
-        for (ii = 0; ii < nch; ++ii)
+        for (int ii = 0; ii < nch; ++ii)
             delete hhstr[ii];
 
         delete[]hhstr;

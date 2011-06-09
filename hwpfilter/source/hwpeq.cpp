@@ -540,7 +540,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
 
 static int read_white_space(MzString& outs, istream *strm)
 {
-  int   ch, result;
+  int   result;
 
   if( stk->state(strm) ) {
     outs << stk->white;
@@ -548,6 +548,7 @@ static int read_white_space(MzString& outs, istream *strm)
     result = stk->token[0];
   }
   else {
+    int ch;
     while( IS_WS(ch = strm->get()) )
       outs << (char )ch;
     strm->putback(sal::static_int_cast<char>(ch));
@@ -573,7 +574,7 @@ static int read_white_space(MzString& outs, istream *strm)
 static int eq_word(MzString& outs, istream *strm, int status)
 {
   MzString  token, white, state;
-  int       ch, result, nargs;
+  int       result;
   char      keyword[256];
   hwpeq     *eq;
 
@@ -610,7 +611,8 @@ static int eq_word(MzString& outs, istream *strm, int status)
     script_status = SCRIPT_NONE;
 
       if( 0 != (eq = lookup_eqn(keyword)) ) {
-    nargs = eq->nargs;
+    int nargs = eq->nargs;
+    int ch;
     while( nargs-- ) {
       ch = read_white_space(state, strm);
       if( ch != '{' ) state << '{';

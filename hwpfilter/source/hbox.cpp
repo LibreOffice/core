@@ -444,7 +444,6 @@ static hchar olHanglJaso(int num, int type)
     static unsigned char jung2[] = { 3, 7, 13, 20, 27, 29, 30 };
 
     hchar hh = 0;
-    int j;
 
     if (type == OL_HANGL_JASO)
     {
@@ -461,7 +460,7 @@ static hchar olHanglJaso(int num, int type)
             hh = (han_init[num] << 8) | 'a';
         else
         {
-            j = (num / 14) % (sizeof(jung2) / sizeof(char));
+            int j = (num / 14) % (sizeof(jung2) / sizeof(char));
 
             num = num % 14;
             hh = (han_init[num] << 8) | (jung2[j] << 5) | 1;
@@ -571,13 +570,13 @@ enum
  */
 hchar *Outline::GetUnicode(hchar * hstr, int)
 {
-    int levelnum;
     hchar *p;
      hchar buffer[255];
 
     buffer[0] = 0;
     if (kind == OUTLINE_NUM)
     {
+        int levelnum;
         switch (shape)
         {
             case OLSTY_NUMS1:

@@ -1531,7 +1531,6 @@ void HwpReader::parseParaShape(ParaShape * pshape)
  */
 void HwpReader::makePStyle(ParaShape * pshape)
 {
-    unsigned char tf = 0;
     int nscount = pshape->tabs[MAXTABS -1].type;
     padd(ascii("style:name"), sXML_CDATA,
         ascii(Int2Str(pshape->index, "P%d", buf)));
@@ -1545,6 +1544,7 @@ void HwpReader::makePStyle(ParaShape * pshape)
 
     if( nscount )
     {
+        unsigned char tf = 0;
         rstartEl(ascii("style:tab-stops"),rList);
 
           int tab_margin = pshape->left_margin + pshape->indent;
@@ -3658,11 +3658,11 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         ascii(Int2Str(hbox->style.boxnum, "Txtbox%d", buf)));
     padd(ascii("draw:name"), sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Frame%d", buf)));
-    int x = 0;
-    int y = 0;
 
     if( hbox->style.cap_len <= 0 || hbox->type != TXT_TYPE )
     {
+        int x = 0;
+        int y = 0;
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
