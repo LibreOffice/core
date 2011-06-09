@@ -43,6 +43,8 @@
 #else
 #define THIS_OS "Linux"
 #endif
+#elif defined ANDROID
+#define THIS_OS "Android"
 #elif defined MACOSX
 #define THIS_OS "MacOSX"
 #elif defined IOS

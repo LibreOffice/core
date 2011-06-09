@@ -1114,36 +1114,36 @@ osl_isFloppyMounted (oslVolumeDeviceHandleImpl* pDevice)
 
 /******************************************************************************
  *
- *                  MAC OS X AND IOS FLOPPY FUNCTIONS: NO FLOPPIES
+ * Dummy floppy functions: no stinking floppies
  *
  *****************************************************************************/
 
-#if (defined(MACOSX) || defined(IOS) || defined(NETBSD) || defined(FREEBSD) || \
+#if (defined(MACOSX) || defined(IOS) || defined(ANDROID) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY))
 static oslVolumeDeviceHandle osl_isFloppyDrive(const sal_Char* pszPath)
 {
     (void)pszPath;
     return NULL;
 }
-#endif /* MACOSX */
+#endif
 
-#if ( defined(MACOSX) || defined(IOS) || defined(NETBSD) || defined(FREEBSD) || \
+#if ( defined(MACOSX) || defined(IOS) || defined(ANDROID) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY))
 static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
 {
     (void)hFloppy;
     return osl_File_E_BUSY;
 }
-#endif /* MACOSX */
+#endif
 
-#if ( defined(MACOSX) || defined(IOS) || defined(NETBSD) || defined(FREEBSD) || \
+#if ( defined(MACOSX) || defined(IOS) || defined(ANDROID) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY))
 static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
 {
     (void)hFloppy;
     return osl_File_E_BUSY;
 }
-#endif /* MACOSX */
+#endif
 
 #if ( defined(NETBSD) || defined(IOS) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) )
 static sal_Bool osl_getFloppyMountEntry(const sal_Char* pszPath, oslVolumeDeviceHandleImpl* pItem)

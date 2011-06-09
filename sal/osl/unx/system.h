@@ -135,6 +135,23 @@
 
 #endif
 
+#ifdef ANDROID
+#   include <pthread.h>
+#   include <sys/file.h>
+#   include <sys/ioctl.h>
+#   include <sys/uio.h>
+#   include <sys/un.h>
+#   include <netinet/tcp.h>
+#   include <dlfcn.h>
+#   include <endian.h>
+#   include <sys/time.h>
+#   include <semaphore.h>
+#   define  IORESOURCE_TRANSFER_BSD
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
+#   define  pthread_testcancel()
+#   define  NO_PTHREAD_PRIORITY
+#endif
+
 #ifdef NETBSD
 #   include <sys/param.h>
 #       ifndef ETIME

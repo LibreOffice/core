@@ -66,6 +66,21 @@ extern "C" {
 #   endif
 #endif
 
+#ifdef ANDROID
+#   include <endian.h>
+#   if __BYTE_ORDER == __LITTLE_ENDIAN
+#           ifndef _LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#           endif
+#   elif __BYTE_ORDER == __BIG_ENDIAN
+#           ifndef _BIG_ENDIAN
+#       define _BIG_ENDIAN
+#           endif
+#   elif __BYTE_ORDER == __PDP_ENDIAN
+#       define _PDP_ENDIAN
+#   endif
+#endif
+
 #ifdef NETBSD
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
@@ -154,7 +169,7 @@ extern "C" {
     !defined(AIX)     && !defined(OPENBSD) && \
     !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
     !defined(DRAGONFLY) && \
-    !defined(IOS)
+    !defined(IOS)     && !defined(ANDROID)
 #   error "Target platform not specified !"
 #endif
 

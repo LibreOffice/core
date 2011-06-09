@@ -820,21 +820,23 @@ static int ReportCrash( int Signal )
 
 static void PrintStack( int sig )
 {
-#if ! defined(MACOSX) || defined(INCLUDE_BACKTRACE)
+#ifdef INCLUDE_BACKTRACE
     void *buffer[MAX_STACK_FRAMES];
     int size = backtrace( buffer, SAL_N_ELEMENTS(buffer) );
 #endif
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 
-#if defined(MACOSX) && ! defined(INCLUDE_BACKTRACE)
+#ifdef MACOSX
     fprintf( stderr, "Please turn on Enable Crash Reporting and\nAutomatic Display of Crashlogs in the Console application\n" );
 #else
+#ifdef INCLUDE_BACKTRACE
     if ( size > 0 )
     {
         fputs( "Stack:\n", stderr );
         backtrace_symbols_fd( buffer, size, fileno(stderr) );
     }
+#endif
 #endif
 }
 
