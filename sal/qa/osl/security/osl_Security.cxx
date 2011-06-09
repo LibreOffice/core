@@ -637,7 +637,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, aStringForward.getLength( ) - 1 );
             t_print("#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= aStringForward.getLength( ) - 1; i++, t_print("*") );
+            for (int i = nFirstSpacePoint+1; i <= aStringForward.getLength()-1; ++i)
+                t_print("*");
             t_print("\n" );
         }
         else
@@ -649,7 +650,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, nLastSpacePoint );
             t_print("#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= nLastSpacePoint; i++, t_print("*") );
+            for (int i = nFirstSpacePoint+1; i <= nLastSpacePoint; ++i)
+                t_print("*");
             t_print("\n" );
 
             aFileServer = aStringForward.copy( nLastSpacePoint +1, aStringForward.getLength( ) - 1 );
