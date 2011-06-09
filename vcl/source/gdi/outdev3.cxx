@@ -646,10 +646,13 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
                     ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, fExactHeight, pOutDev->mpOutDevData ? &pOutDev->mpOutDevData->maDevFontSubst : NULL );
-                    if( pEntry->maFontSelData.mpFontData )
-                        aFont.SetName( pEntry->maFontSelData.mpFontData->maName );
-                    else
-                        aFont.SetName( pEntry->maFontSelData.maTargetName );
+                    if (pEntry)
+                    {
+                        if( pEntry->maFontSelData.mpFontData )
+                            aFont.SetName( pEntry->maFontSelData.mpFontData->maName );
+                        else
+                            aFont.SetName( pEntry->maFontSelData.maTargetName );
+                    }
                 }
             }
             else
@@ -2401,7 +2404,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         if( !pEntry->mnRefCount++ )
             --mnRef0Count;
     }
-    else // no cache hit => create a new font instance
+    else if (pFontFamily)// no cache hit => create a new font instance
     {
         // find the best matching physical font face
         ImplFontData* pFontData = pFontFamily->FindBestFontFace( aFontSelData );
@@ -2952,6 +2955,9 @@ void OutputDevice::ImplInitFont() const
 {
     DBG_TESTSOLARMUTEX();
 
+    if (!mpFontEntry)
+        return;
+
     if ( mbInitFont )
     {
         if ( meOutDevType != OUTDEV_PRINTER )
@@ -3038,6 +3044,10 @@ bool OutputDevice::ImplNewFont() const
         mpFontCache->Release( pOldEntry );
 
     ImplFontEntry* pFontEntry = mpFontEntry;
+
+    if (!pFontEntry)
+        return false;
+
     // mark when lower layers need to get involved
     mbNewFont = sal_False;
     if( pFontEntry != pOldEntry )
