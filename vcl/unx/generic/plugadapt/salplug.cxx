@@ -269,9 +269,9 @@ void DeInitSalMain()
 void SalAbort( const XubString& rErrorText )
 {
     if( !rErrorText.Len() )
-        std::fprintf( stderr, "Application Error" );
+        std::fprintf( stderr, "Application Error\n" );
     else
-        std::fprintf( stderr, "%s", ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
+        std::fprintf( stderr, "%s\n", ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
     exit(-1);
 }
 
