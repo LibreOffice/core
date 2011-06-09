@@ -135,11 +135,11 @@ inline sal_Int32 LwpTools::ConvertToUnits(const double& fInch)
 }
 inline sal_Bool LwpTools::IsOddNumber(sal_uInt16& nNumber)
 {
-    return nNumber%2? sal_True : sal_False;
+    return (nNumber%2)? sal_True : sal_False;
 }
 inline sal_Bool LwpTools::IsEvenNumber(sal_uInt16& nNumber)
 {
-    return nNumber%2? sal_False : sal_True;
+    return (nNumber%2)? sal_False : sal_True;
 }
 
 class BadSeek : public std::runtime_error
