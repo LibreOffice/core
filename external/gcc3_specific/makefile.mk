@@ -48,12 +48,7 @@ $(MINGWGXXDLL) :
 
 .IF "$(SYSTEM_STDLIBS)" != "YES" && "$(COMID)"=="gcc3"
 
-.IF "$(OS)"!="MACOSX"
-.IF "$(OS)"!="IOS"
-.IF "$(OS)"!="FREEBSD"
-.IF "$(OS)"!="NETBSD"
-.IF "$(OS)"!="OPENBSD"
-.IF "$(OS)"!="DRAGONFLY"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 
 .EXPORT : CC
 
@@ -80,11 +75,6 @@ $(LB)$/libgcc_s.so.$(SHORTSTDC3) :
 
 .ENDIF
 
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF 
 .ENDIF 
 
 .ENDIF
