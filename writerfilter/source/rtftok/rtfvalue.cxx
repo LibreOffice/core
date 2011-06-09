@@ -63,6 +63,11 @@ OUString RTFValue::getString() const
         return OUString::valueOf(sal_Int32(m_nValue));
 }
 
+void RTFValue::setString(OUString sValue)
+{
+    m_sValue = sValue;
+}
+
 uno::Any RTFValue::getAny() const
 {
     uno::Any ret;

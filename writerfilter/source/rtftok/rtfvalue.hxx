@@ -20,6 +20,7 @@ namespace writerfilter {
                 RTFValue(rtl::OUString sValue);
                 RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes);
                 RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes, std::multimap<Id, RTFValue::Pointer_t> rSprms);
+                void setString(rtl::OUString sValue);
                 virtual int getInt() const;
                 virtual rtl::OUString getString() const;
                 virtual uno::Any getAny() const;
