@@ -720,6 +720,19 @@ namespace sw { namespace mark
         //position as const iterator ppMark was
         iterator_t aI = m_vMarks.begin();
         std::advance(aI, std::distance<const_iterator_t>(aI, ppMark));
+
+        //fdo#37974
+        //a) a mark destructor may callback into this method.
+        //b) vector::erase first calls the destructor of the object, then
+        //removes it from the vector.
+        //So if the only reference to the object is the one
+        //in the vector then we may reenter this method when the mark
+        //is destructed but before it is removed, i.e. findMark still
+        //finds the object whose destructor is being run. Take a temp
+        //extra reference on the shared_ptr, remove the entry from the
+        //vector, and on xHoldPastErase release findMark won't find
+        //it anymore.
+        pMark_t xHoldPastErase = *aI;
         m_vMarks.erase(aI);
     }
 
