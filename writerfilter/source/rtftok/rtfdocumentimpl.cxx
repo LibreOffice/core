@@ -322,6 +322,12 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_LEVELNUMBERS:
             m_aStates.top().nDestinationState = DESTINATION_LEVELNUMBERS;
             break;
+        case RTF_SHPPICT:
+            m_aStates.top().nDestinationState = DESTINATION_SHPPICT;
+            break;
+        case RTF_PICT:
+            m_aStates.top().nDestinationState = DESTINATION_PICT;
+            break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             // Make sure we skip destinations (even without \*) till we don't handle them
