@@ -381,7 +381,8 @@ bool SwTaggedPDFHelper::CheckReopenTag()
             {
                 FrmTagIdMap& rFrmTagIdMap = SwEnhancedPDFExportHelper::GetFrmTagIdMap();
                 const FrmTagIdMap::const_iterator aIter =  rFrmTagIdMap.find( pKey );
-                nReopenTag = (*aIter).second;
+                if ( aIterm != rFrmTagIdMap.end() )
+                    nReopenTag = (*aIter).second;
             }
         }
     }
