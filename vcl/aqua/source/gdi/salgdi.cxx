@@ -1811,15 +1811,16 @@ static OSStatus GgoMoveToProc( const Float32Point* pPoint, void* pData )
     return eStatus;
 }
 
-sal_Bool AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+sal_Bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rPolyPoly;
     rPolyPoly.clear();
 
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback when CWS pdffix02 is integrated
+    GlyphID aGlyphId = nGlyphId & GF_IDXMASK;
     OSStatus eGgoStatus = noErr;
-    OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, nGlyphId,
+    OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, aGlyphId,
         GgoMoveToProc, GgoLineToProc, GgoCurveToProc, GgoClosePathProc,
         &aGgoData, &eGgoStatus );
     if( (eStatus != noErr) ) // TODO: why is (eGgoStatus!=noErr) when curves are involved?
@@ -1853,10 +1854,10 @@ long AquaSalGraphics::GetGraphicsWidth() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
+sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect )
 {
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
-    GlyphID aGlyphId = nGlyphId;
+    GlyphID aGlyphId = nGlyphId & GF_IDXMASK;
     ATSGlyphScreenMetrics aGlyphMetrics;
     OSStatus eStatus = ATSUGlyphGetScreenMetrics( rATSUStyle,
         1, &aGlyphId, 0, FALSE, !mbNonAntialiasedText, &aGlyphMetrics );

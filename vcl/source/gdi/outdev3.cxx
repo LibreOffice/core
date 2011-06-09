@@ -6112,7 +6112,7 @@ void OutputDevice::forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &r
         if( !rFallback.GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
-        int nFontTag = nFallbackLevel << GF_FONTSHIFT;
+        sal_GlyphId nFontTag = nFallbackLevel << GF_FONTSHIFT;
         nLGlyph |= nFontTag;
 
         // get bounding rectangle of individual glyph

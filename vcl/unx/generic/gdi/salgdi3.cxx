@@ -1149,17 +1149,17 @@ X11SalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 
 // ---------------------------------------------------------------------------
 
-sal_Bool X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
-    if( nLevel < 0 || nLevel >= MAX_FALLBACK )
+    if( nLevel >= MAX_FALLBACK )
         return sal_False;
 
     ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
     return sal_True;
@@ -1167,7 +1167,7 @@ sal_Bool X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 
 // ---------------------------------------------------------------------------
 
-sal_Bool X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
+sal_Bool X11SalGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex,
     ::basegfx::B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
@@ -1178,7 +1178,7 @@ sal_Bool X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
         return sal_True;
 
