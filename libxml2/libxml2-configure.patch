@@ -1,3 +1,28 @@
+--- misc/libxml2-2.7.6/config.sub
++++ misc/build/libxml2-2.7.6/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+--- misc/libxml2-2.7.6/Makefile.in
++++ misc/build/libxml2-2.7.6/Makefile.in
+@@ -41,9 +41,9 @@
+ 	testSAX$(EXEEXT) testHTML$(EXEEXT) testXPath$(EXEEXT) \
+ 	testURI$(EXEEXT) testThreads$(EXEEXT) testC14N$(EXEEXT) \
+ 	testAutomata$(EXEEXT) testRegexp$(EXEEXT) testReader$(EXEEXT) \
+-	testapi$(EXEEXT) testModule$(EXEEXT) runtest$(EXEEXT) \
++	testapi$(EXEEXT) testModule$(EXEEXT) \
+ 	runsuite$(EXEEXT) testchar$(EXEEXT) testdict$(EXEEXT) \
+-	runxmlconf$(EXEEXT) testrecurse$(EXEEXT)
++	runxmlconf$(EXEEXT)
+ bin_PROGRAMS = xmllint$(EXEEXT) xmlcatalog$(EXEEXT)
+ subdir = .
+ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 --- misc/libxml2-2.7.6/ltmain.sh	2009-10-06 17:39:54.000000000 +0100
 +++ misc/build/libxml2-2.7.6/ltmain.sh	2009-12-17 11:43:56.000000000 +0000
 @@ -6271,8 +6271,8 @@
