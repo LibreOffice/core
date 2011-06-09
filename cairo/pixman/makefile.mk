@@ -152,7 +152,7 @@ OUT2LIB+=pixman$/.libs$/*.a
 .ELSE
 OUT2LIB+=pixman$/release$/*.lib
 .ENDIF
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 OUT2LIB+=pixman$/.libs$/libpixman-1.a
 .ELSE
 OUT2LIB+=pixman$/.libs$/libpixman-1.so*

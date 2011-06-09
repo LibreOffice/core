@@ -1,3 +1,14 @@
+--- misc/build/pixman-0.12.0/config.sub
++++ misc/build/pixman-0.12.0/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
 --- misc/build/pixman-0.12.0/configure.orig	2008-09-17 20:14:40.000000000 +0300
 +++ misc/build/pixman-0.12.0/configure	2008-11-08 21:17:00.000000000 +0200
 @@ -19740,6 +19740,13 @@
