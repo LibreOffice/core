@@ -1351,6 +1351,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
 
         case SVX_NUM_BITMAP:
         case SVX_NUM_CHAR_SPECIAL:                  nVal = 23;      break;
+        case SVX_NUM_NUMBER_NONE:                   nVal = 255;     break;
     }
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LEVELNFC;
     m_rExport.OutULong( nVal );
