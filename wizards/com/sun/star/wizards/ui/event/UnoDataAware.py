@@ -167,7 +167,7 @@ class UnoDataAware(DataAware):
     @classmethod
     def attachListBox(self, data, prop, listBox, listener, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(data, prop, 0)
+            aux = DataAwareFields.getFieldValueFor(data, prop, uno.Any("short",0))
         else:
             aux = DataAware.PropertyValue (prop, data)
         uda = UnoDataAware(data, aux, listBox, "SelectedItems")

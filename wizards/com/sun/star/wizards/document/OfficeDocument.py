@@ -1,6 +1,19 @@
 from com.sun.star.awt.WindowClass import TOP
 import traceback
 import uno
+from common.Desktop import Desktop
+from com.sun.star.awt import WindowDescriptor
+from com.sun.star.awt import Rectangle
+
+#Window Constants
+com_sun_star_awt_WindowAttribute_BORDER \
+    = uno.getConstantByName( "com.sun.star.awt.WindowAttribute.BORDER" )
+com_sun_star_awt_WindowAttribute_SIZEABLE \
+    = uno.getConstantByName( "com.sun.star.awt.WindowAttribute.SIZEABLE" )
+com_sun_star_awt_WindowAttribute_MOVEABLE \
+    = uno.getConstantByName( "com.sun.star.awt.WindowAttribute.MOVEABLE" )
+com_sun_star_awt_VclWindowPeerAttribute_CLIPCHILDREN \
+    = uno.getConstantByName( "com.sun.star.awt.VclWindowPeerAttribute.CLIPCHILDREN" )
 
 class OfficeDocument(object):
     '''Creates a new instance of OfficeDocument '''
@@ -70,13 +83,11 @@ class OfficeDocument(object):
 
         return xComponent
 
-    def createNewFrame(self, xMSF, listener):
-        return createNewFrame(xMSF, listener, "_blank")
-
-    def createNewFrame(self, xMSF, listener, FrameName):
+    @classmethod
+    def createNewFrame(self, xMSF, listener, FrameName="_blank"):
         xFrame = None
-        if FrameName.equalsIgnoreCase("WIZARD_LIVE_PREVIEW"):
-            xFrame = createNewPreviewFrame(xMSF, listener)
+        if FrameName.lower() == "WIZARD_LIVE_PREVIEW".lower():
+            xFrame = self.createNewPreviewFrame(xMSF, listener)
         else:
             xF = Desktop.getDesktop(xMSF)
             xFrame = xF.findFrame(FrameName, 0)
@@ -87,6 +98,7 @@ class OfficeDocument(object):
 
         return xFrame
 
+    @classmethod
     def createNewPreviewFrame(self, xMSF, listener):
         xToolkit = None
         try:
@@ -96,13 +108,21 @@ class OfficeDocument(object):
             traceback.print_exc()
 
         #describe the window and its properties
-        aDescriptor = WindowDescriptor.WindowDescriptor()
+        aDescriptor = WindowDescriptor()
         aDescriptor.Type = TOP
         aDescriptor.WindowServiceName = "window"
         aDescriptor.ParentIndex = -1
         aDescriptor.Parent = None
-        aDescriptor.Bounds = Rectangle.Rectangle_unknown(10, 10, 640, 480)
-        aDescriptor.WindowAttributes = WindowAttribute.BORDER | WindowAttribute.MOVEABLE | WindowAttribute.SIZEABLE | VclWindowPeerAttribute.CLIPCHILDREN
+        aDescriptor.Bounds = Rectangle(10, 10, 640, 480)
+
+        #Set Window Attributes
+        gnDefaultWindowAttributes = \
+            com_sun_star_awt_WindowAttribute_BORDER + \
+            com_sun_star_awt_WindowAttribute_MOVEABLE + \
+            com_sun_star_awt_WindowAttribute_SIZEABLE + \
+            com_sun_star_awt_VclWindowPeerAttribute_CLIPCHILDREN
+
+        aDescriptor.WindowAttributes = gnDefaultWindowAttributes
         #create a new blank container window
         xPeer = None
         try:
@@ -127,7 +147,9 @@ class OfficeDocument(object):
         #and not part of the desktop tree.
         #You are alone with him .-)
         if listener != None:
-            Desktop.getDesktop(xMSF).addTerminateListener(listener)
+            pass
+            #COMMENTED
+            #Desktop.getDesktop(xMSF).addTerminateListener(listener)
 
         return xFrame
 

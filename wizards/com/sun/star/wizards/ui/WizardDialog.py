@@ -13,11 +13,7 @@ from event.EventNames import EVENT_ITEM_CHANGED
 class WizardDialog(UnoDialog2):
 
     __metaclass__ = ABCMeta
-    __NEXT_ACTION_PERFORMED = "gotoNextAvailableStep"
-    __BACK_ACTION_PERFORMED = "gotoPreviousAvailableStep"
-    __FINISH_ACTION_PERFORMED = "finishWizard_1"
-    __CANCEL_ACTION_PERFORMED = "cancelWizard_1"
-    __HELP_ACTION_PERFORMED = "callHelp"
+
     '''
     Creates a new instance of WizardDialog
     the hid is used as following :
@@ -41,6 +37,7 @@ class WizardDialog(UnoDialog2):
         self.__bTerminateListenermustberemoved = True
         self.__oWizardResource = Resource(xMSF, "dbw")
         self.sMsgEndAutopilot = self.__oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33)
+        self.oRoadmap = None
         #self.vetos = VetoableChangeSupport.VetoableChangeSupport_unknown(this)
 
     def getResource(self):
@@ -121,13 +118,12 @@ class WizardDialog(UnoDialog2):
             # the roadmap control has got no real TabIndex ever
             # that is not correct, but changing this would need time, so it is used
             # without TabIndex as before
-            self.oRoadmap = self.insertControlModel("com.sun.star.awt.UnoControlRoadmapModel", "rdmNavi", (PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tabstop", PropertyNames.PROPERTY_WIDTH),((iDialogHeight - 26), 0, 0, 0, 0, True, uno.Any("short",85)))
+            self.oRoadmap = self.insertControlModel("com.sun.star.awt.UnoControlRoadmapModel", "rdmNavi", (PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tabstop", PropertyNames.PROPERTY_WIDTH),((iDialogHeight - 26), 0, 0, 0, uno.Any("short",0), True, uno.Any("short",85)))
             self.oRoadmap.setPropertyValue(PropertyNames.PROPERTY_NAME, "rdmNavi")
 
             mi = MethodInvocation("itemStateChanged", self)
-            self.guiEventListener.add("rdmNavi", EVENT_ITEM_CHANGED, mi)
             self.xRoadmapControl = self.xUnoDialog.getControl("rdmNavi")
-            self.xRoadmapControl.addItemListener(ItemListenerProcAdapter(self.guiEventListener))
+            self.xRoadmapControl.addItemListener(ItemListenerProcAdapter(None))
 
             Helper.setUnoPropertyValue(self.oRoadmap, "Text", self.__oWizardResource.getResText(UIConsts.RID_COMMON + 16))
         except NoSuchMethodException, ex:
@@ -176,21 +172,21 @@ class WizardDialog(UnoDialog2):
             return None
 
     def switchToStep(self,_nOldStep=None, _nNewStep=None):
-        if _nOldStep and _nNewStep:
+        if _nOldStep is not None and _nNewStep is not None:
             self.__nOldStep = _nOldStep
             self.__nNewStep = _nNewStep
 
-        leaveStep(self.__nOldStep, self.__nNewStep)
+        self.leaveStep(self.__nOldStep, self.__nNewStep)
         if self.__nNewStep != self.__nOldStep:
             if self.__nNewStep == self.__nMaxStep:
-                setControlProperty("btnWizardNext", "DefaultButton", False)
-                setControlProperty("btnWizardFinish", "DefaultButton", True)
+                self.setControlProperty("btnWizardNext", "DefaultButton", False)
+                self.setControlProperty("btnWizardFinish", "DefaultButton", True)
             else:
-                setControlProperty("btnWizardNext", "DefaultButton", True)
-                setControlProperty("btnWizardFinish", "DefaultButton", False)
+                self.setControlProperty("btnWizardNext", "DefaultButton", True)
+                self.setControlProperty("btnWizardFinish", "DefaultButton", False)
 
-            changeToStep(self.__nNewStep)
-            enterStep(self.__nOldStep, self.__nNewStep)
+            self.changeToStep(self.__nNewStep)
+            self.enterStep(self.__nOldStep, self.__nNewStep)
             return True
 
         return False
@@ -205,14 +201,12 @@ class WizardDialog(UnoDialog2):
 
     def changeToStep(self, nNewStep):
         Helper.setUnoPropertyValue(self.xDialogModel, PropertyNames.PROPERTY_STEP, nNewStep)
-        setCurrentRoadmapItemID((short)(nNewStep))
-        enableNextButton(getNextAvailableStep() > 0)
-        enableBackButton(nNewStep != 1)
-
+        self.setCurrentRoadmapItemID(nNewStep)
+        self.enableNextButton(self.getNextAvailableStep() > 0)
+        self.enableBackButton(nNewStep != 1)
 
     def iscompleted(self, _ndialogpage):
         return False
-
 
     def ismodified(self, _ndialogpage):
         return False
@@ -235,19 +229,18 @@ class WizardDialog(UnoDialog2):
             self.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnRoadSep",(PropertyNames.PROPERTY_HEIGHT, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH),(iBtnPosY - 6, 1, 85, 0, iCurStep, 1))
             propNames = (PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH)
             Helper.setUnoPropertyValue(self.xDialogModel, PropertyNames.PROPERTY_HELPURL, HelpIds.getHelpIdString(self.__hid))
-            self.insertButton("btnWizardHelp", WizardDialog.__HELP_ACTION_PERFORMED,(PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH),(True, iButtonHeight, self.__oWizardResource.getResText(UIConsts.RID_COMMON + 15), iHelpPosX, iBtnPosY, uno.Any("short",HELP), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardBack", WizardDialog.__BACK_ACTION_PERFORMED, propNames,(False, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 2), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 13), iBackPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardNext", WizardDialog.__NEXT_ACTION_PERFORMED, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 3), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 14), iNextPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardFinish", WizardDialog.__FINISH_ACTION_PERFORMED, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 4), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 12), iFinishPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardCancel", WizardDialog.__CANCEL_ACTION_PERFORMED, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 5), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 11), iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
+            self.insertButton("btnWizardHelp", "",(PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH),(True, iButtonHeight, self.__oWizardResource.getResText(UIConsts.RID_COMMON + 15), iHelpPosX, iBtnPosY, uno.Any("short",HELP), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
+            self.insertButton("btnWizardBack", self.gotoPreviousAvailableStep, propNames,(False, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 2), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 13), iBackPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
+            self.insertButton("btnWizardNext", self.gotoNextAvailableStep, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 3), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 14), iNextPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
+            self.insertButton("btnWizardFinish", self.finishWizard_1, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 4), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 12), iFinishPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
+            self.insertButton("btnWizardCancel", self.cancelWizard_1, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 5), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 11), iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
             self.setControlProperty("btnWizardNext", "DefaultButton", True)
             # add a window listener, to know
             # if the user used "escape" key to
             # close the dialog.
             windowHidden = MethodInvocation("windowHidden", self)
-            self.xUnoDialog.addWindowListener(WindowListenerProcAdapter(self.guiEventListener))
+            self.xUnoDialog.addWindowListener(WindowListenerProcAdapter(None))
             dialogName = Helper.getUnoPropertyValue(self.xDialogModel, PropertyNames.PROPERTY_NAME)
-            self.guiEventListener.add(dialogName, EVENT_ACTION_PERFORMED, windowHidden)
         except Exception, exception:
             traceback.print_exc()
 
@@ -259,22 +252,22 @@ class WizardDialog(UnoDialog2):
 
     def setStepEnabled(self, _nStep, bEnabled, enableNextButton):
         setStepEnabled(_nStep, bEnabled)
-        if getNextAvailableStep() > 0:
-            enableNextButton(bEnabled)
+        if self.getNextAvailableStep() > 0:
+            self.enableNextButton(bEnabled)
 
     def enableNavigationButtons(self, _bEnableBack, _bEnableNext, _bEnableFinish):
-        enableBackButton(_bEnableBack)
-        enableNextButton(_bEnableNext)
-        enableFinishButton(_bEnableFinish)
+        self.enableBackButton(_bEnableBack)
+        self.enableNextButton(_bEnableNext)
+        self.enableFinishButton(_bEnableFinish)
 
     def enableBackButton(self, enabled):
-        setControlProperty("btnWizardBack", PropertyNames.PROPERTY_ENABLED, enabled)
+        self.setControlProperty("btnWizardBack", PropertyNames.PROPERTY_ENABLED, enabled)
 
     def enableNextButton(self, enabled):
-        setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, enabled)
+        self.setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, enabled)
 
     def enableFinishButton(self, enabled):
-        setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, enabled)
+        self.setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, enabled)
 
     def setStepEnabled(self, _nStep, bEnabled):
         xRoadmapItem = getRoadmapItemByID(_nStep)
@@ -295,75 +288,81 @@ class WizardDialog(UnoDialog2):
 
     def isStepEnabled(self, _nStep):
         try:
-            xRoadmapItem = getRoadmapItemByID(_nStep)
+            xRoadmapItem = self.getRoadmapItemByID(_nStep)
             # Todo: In this case an exception should be thrown
             if (xRoadmapItem == None):
                 return False
-
             bIsEnabled = bool(Helper.getUnoPropertyValue(xRoadmapItem, PropertyNames.PROPERTY_ENABLED))
             return bIsEnabled
         except UnoException, exception:
             traceback.print_exc()
             return False
 
-    def gotoPreviousAvailableStep(self):
-        if self.__nNewStep > 1:
-            self.__nOldStep = self.__nNewStep
-            self.__nNewStep -= 1
-            while self.__nNewStep > 0:
-                bIsEnabled = isStepEnabled(self.__nNewStep)
-                if bIsEnabled:
-                    break;
-
+    def gotoPreviousAvailableStep(self, oActionEvent):
+        try:
+            if self.__nNewStep > 1:
+                self.__nOldStep = self.__nNewStep
                 self.__nNewStep -= 1
-            # Exception???
-            if (self.__nNewStep == 0):
-                self.__nNewStep = self.__nOldStep
-            switchToStep()
+                while self.__nNewStep > 0:
+                    bIsEnabled = self.isStepEnabled(self.__nNewStep)
+                    if bIsEnabled:
+                        break;
+
+                    self.__nNewStep -= 1
+                if (self.__nNewStep == 0):
+                    self.__nNewStep = self.__nOldStep
+                self.switchToStep()
+        except Exception, e:
+            traceback.print_exc()
 
     #TODO discuss with rp
 
     def getNextAvailableStep(self):
-        if isRoadmapComplete():
+        if self.isRoadmapComplete():
             i = self.__nNewStep + 1
             while i <= self.__nMaxStep:
-                if isStepEnabled(i):
+                if self.isStepEnabled(i):
                     return i
 
                 i += 1
 
         return -1
 
-    def gotoNextAvailableStep(self):
-        self.__nOldStep = self.__nNewStep
-        self.__nNewStep = getNextAvailableStep()
-        if self.__nNewStep > -1:
-            switchToStep()
+    def gotoNextAvailableStep(self, oActionEvent):
+        try:
+            self.__nOldStep = self.__nNewStep
+            self.__nNewStep = self.getNextAvailableStep()
+            if self.__nNewStep > -1:
+                self.switchToStep()
+        except Exception, e:
+            traceback.print_exc()
 
     @abstractmethod
     def finishWizard(self):
         pass
 
-    #This function will call if the finish button is pressed on the UI.
-
-    def finishWizard_1(self):
-        enableFinishButton(False)
-        success = False
+    def finishWizard_1(self, oActionEvent):
+        '''This function will call if the finish button is pressed on the UI'''
         try:
-            success = finishWizard()
-        finally:
-            if not success:
-                enableFinishButton(True)
+            self.enableFinishButton(False)
+            success = False
+            try:
+                success = self.finishWizard()
+            finally:
+                if not success:
+                    self.enableFinishButton(True)
 
-        if success:
-            removeTerminateListener()
+            if success:
+                removeTerminateListener()
+        except Exception, e:
+             traceback.print_exc()
 
     def getMaximalStep(self):
         return self.__nMaxStep
 
     def getCurrentStep(self):
         try:
-            return int(Helper.getUnoPropertyValue(self.MSFDialogModel, PropertyNames.PROPERTY_STEP))
+            return int(Helper.getUnoPropertyValue(self.xDialogModel, PropertyNames.PROPERTY_STEP))
         except UnoException, exception:
             traceback.print_exc()
             return -1
@@ -404,9 +403,13 @@ class WizardDialog(UnoDialog2):
     perform a cancel.
     '''
 
-    def cancelWizard_1(self):
-        cancelWizard()
-        removeTerminateListener()
+    def cancelWizard_1(self, oActionEvent):
+        try:
+            self.cancelWizard()
+            self.removeTerminateListener()
+        except Exception,e:
+            traceback.print_exc()
+
 
     def windowHidden(self):
         cancelWizard_1()

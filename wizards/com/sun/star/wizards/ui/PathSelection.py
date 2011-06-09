@@ -3,6 +3,7 @@ import uno
 from common.PropertyNames import *
 from common.FileAccess import *
 from com.sun.star.uno import Exception as UnoException
+from common.SystemDialog import SystemDialog
 
 class PathSelection(object):
 
@@ -27,11 +28,11 @@ class PathSelection(object):
         self.TXTSAVEPATH = 1
 
     def insert(self, DialogStep, XPos, YPos, Width, CurTabIndex, LabelText, Enabled, TxtHelpURL, BtnHelpURL):
-        self.CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblSaveAs",  [PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH], [Enabled, 8, LabelText, XPos, YPos, DialogStep, uno.Any("short",CurTabIndex), Width])
-        self.xSaveTextBox = self.CurUnoDialog.insertTextField("txtSavePath", "callXPathSelectionListener",  [PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH], [Enabled, 12, TxtHelpURL, XPos, YPos + 10, DialogStep, uno.Any("short",(CurTabIndex + 1)), Width - 26], self)
+        self.CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblSaveAs",  (PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH), (Enabled, 8, LabelText, XPos, YPos, DialogStep, uno.Any("short",CurTabIndex), Width))
+        self.xSaveTextBox = self.CurUnoDialog.insertTextField("txtSavePath", "callXPathSelectionListener",  (PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH), (Enabled, 12, TxtHelpURL, XPos, YPos + 10, DialogStep, uno.Any("short",(CurTabIndex + 1)), Width - 26), self)
 
         self.CurUnoDialog.setControlProperty("txtSavePath", PropertyNames.PROPERTY_ENABLED, False )
-        self.CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker", [PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH], [Enabled, 14, BtnHelpURL, "...",XPos + Width - 16, YPos + 9, DialogStep, uno.Any("short",(CurTabIndex + 2)), 16], self)
+        self.CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker", (PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH), (Enabled, 14, BtnHelpURL, "...",XPos + Width - 16, YPos + 9, DialogStep, uno.Any("short",(CurTabIndex + 2)), 16), self)
 
     def addSelectionListener(self, xAction):
         self.xAction = xAction
@@ -48,20 +49,21 @@ class PathSelection(object):
 
     def triggerPathPicker(self):
         try:
-            if iTransferMode == TransferMode.SAVE:
-                if iDialogType == DialogTypes.FOLDER:
+            if self.iTransferMode == self.TransferMode.SAVE:
+                if self.iDialogType == self.DialogTypes.FOLDER:
                     #TODO: write code for picking a folder for saving
                     return
-                elif iDialogType == DialogTypes.FILE:
-                    usedPathPicker = True
-                    myFilePickerDialog = SystemDialog.createStoreDialog(xMSF)
-                    myFilePickerDialog.callStoreDialog(sDefaultDirectory, sDefaultName, sDefaultFilter);
+                elif self.iDialogType == self.DialogTypes.FILE:
+                    self.usedPathPicker = True
+                    myFilePickerDialog = SystemDialog.createStoreDialog(self.xMSF)
+                    myFilePickerDialog.callStoreDialog(self.sDefaultDirectory, self.sDefaultName, self.sDefaultFilter);
                     sStorePath = myFilePickerDialog.sStorePath;
-                    if sStorePath:
+                    if sStorePath is not None:
+                        print "hello"
                         myFA = FileAccess(xMSF);
                         xSaveTextBox.setText(myFA.getPath(sStorePath, None));
-                        sDefaultDirectory = FileAccess.getParentDir(sStorePath);
-                        sDefaultName = myFA.getFilename(sStorePath);
+                        self.sDefaultDirectory = FileAccess.getParentDir(sStorePath);
+                        self.sDefaultName = myFA.getFilename(sStorePath);
                     return
             elif iTransferMode == TransferMode.LOAD:
                 if iDialogType == DialogTypes.FOLDER:

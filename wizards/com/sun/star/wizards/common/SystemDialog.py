@@ -3,6 +3,7 @@ import traceback
 from Configuration import Configuration
 from Resource import Resource
 from Desktop import Desktop
+from Helper import Helper
 
 from com.sun.star.ui.dialogs.TemplateDescription import FILESAVE_AUTOEXTENSION, FILEOPEN_SIMPLE
 from com.sun.star.ui.dialogs.ExtendedFilePickerElementIds import CHECKBOX_AUTOEXTENSION
@@ -26,22 +27,26 @@ class SystemDialog(object):
             self.xMSF = xMSF
             self.systemDialog = xMSF.createInstance(ServiceName)
             self.xStringSubstitution = self.createStringSubstitution(xMSF)
-            listAny = [uno.Any("short",Type)]
             if self.systemDialog != None:
-                self.systemDialog.initialize(listAny)
+                prova = uno.Any("[]short",(Type,))
+                #uno.invoke(prova, "initialize", (uno.Any("short",(Type,)),))
 
         except UnoException, exception:
             traceback.print_exc()
 
+    @classmethod
     def createStoreDialog(self, xmsf):
         return SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", FILESAVE_AUTOEXTENSION)
 
+    @classmethod
     def createOpenDialog(self, xmsf):
         return SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", FILEOPEN_SIMPLE)
 
+    @classmethod
     def createFolderDialog(self, xmsf):
         return SystemDialog(xmsf, "com.sun.star.ui.dialogs.FolderPicker", 0)
 
+    @classmethod
     def createOfficeFolderDialog(self, xmsf):
         return SystemDialog(xmsf, "com.sun.star.ui.dialogs.OfficeFolderPicker", 0)
 
@@ -54,34 +59,22 @@ class SystemDialog(object):
             return path
 
     '''
-    ATTENTION a BUG : TFILESAVE_AUTOEXTENSIONhe extension calculated
-    here gives the last 3 chars of the filename - what
-    if the extension is of 4 or more chars?
-    @param DisplayDirectory
-    @param DefaultName
-    @param sDocuType
-    @return
-    '''
-
-    def callStoreDialog(self, DisplayDirectory, DefaultName, sDocuType):
-        sExtension = DefaultName.substring(DefaultName.length() - 3, DefaultName.length())
-        addFilterToDialog(sExtension, sDocuType, True)
-        return callStoreDialog(DisplayDirectory, DefaultName)
-
-    '''
     @param displayDir
     @param defaultName
     given url to a local path.
     @return
     '''
 
-    def callStoreDialog(self, displayDir, defaultName):
+    def callStoreDialog(self, displayDir, defaultName, sDocuType=None):
+        if sDocuType is not None:
+            self.addFilterToDialog(defaultName[-3:], sDocuType, True)
+
         self.sStorePath = None
         try:
             self.systemDialog.setValue(CHECKBOX_AUTOEXTENSION, 0, True)
             self.systemDialog.setDefaultName(defaultName)
-            self.systemDialog.setDisplayDirectory(subst(displayDir))
-            if execute(self.systemDialog):
+            self.systemDialog.setDisplayDirectory(self.subst(displayDir))
+            if self.execute(self.systemDialog):
                 sPathList = self.systemDialog.getFiles()
                 self.sStorePath = sPathList[0]
 
@@ -99,7 +92,7 @@ class SystemDialog(object):
 
         self.systemDialog.setTitle(title)
         self.systemDialog.setDescription(description)
-        if execute(self.systemDialog):
+        if self.execute(self.systemDialog):
             return self.systemDialog.getDirectory()
         else:
             return None
@@ -111,7 +104,7 @@ class SystemDialog(object):
         try:
             self.systemDialog.setMultiSelectionMode(multiSelect)
             self.systemDialog.setDisplayDirectory(subst(displayDirectory))
-            if execute(self.systemDialog):
+            if self.execute(self.systemDialog):
                 return self.systemDialog.getFiles()
 
         except UnoException, exception:
@@ -122,10 +115,10 @@ class SystemDialog(object):
     def addFilterToDialog(self, sExtension, filterName, setToDefault):
         try:
             #get the localized filtername
-            uiName = getFilterUIName(filterName)
+            uiName = self.getFilterUIName(filterName)
             pattern = "*." + sExtension
             #add the filter
-            addFilter(uiName, pattern, setToDefault)
+            self.addFilter(uiName, pattern, setToDefault)
         except Exception, exception:
             traceback.print_exc()
 
@@ -147,8 +140,8 @@ class SystemDialog(object):
 
     def getFilterUIName(self, filterName):
         prodName = Configuration.getProductName(self.xMSF)
-        s = [[getFilterUIName_(filterName)]]
-        s[0][0] = JavaTools.replaceSubString(s[0][0], prodName, "%productname%")
+        s = [[self.getFilterUIName_(filterName)]]
+        s[0][0] = s[0][0].replace("%productname%", prodName)
         return s[0][0]
 
     '''
@@ -162,11 +155,10 @@ class SystemDialog(object):
             oFactory = self.xMSF.createInstance("com.sun.star.document.FilterFactory")
             oObject = Helper.getUnoObjectbyName(oFactory, filterName)
             xPropertyValue = list(oObject)
-            MaxCount = xPropertyValue.length
             i = 0
-            while i < MaxCount:
+            while i < len(xPropertyValue):
                 aValue = xPropertyValue[i]
-                if aValue != None and aValue.Name.equals("UIName"):
+                if aValue != None and aValue.Name == "UIName":
                     return str(aValue.Value)
 
                 i += 1

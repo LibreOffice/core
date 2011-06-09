@@ -2,9 +2,6 @@ from common.PropertyNames import *
 from abc import ABCMeta, abstractmethod
 import traceback
 
-#TEMPORAL
-import inspect
-
 '''
 @author rpiterman
 DataAware objects are used to live-synchronize UI and DataModel/DataObject.

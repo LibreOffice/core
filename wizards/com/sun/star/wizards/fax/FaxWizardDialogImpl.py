@@ -49,9 +49,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             ConnectStr = "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
             xLocMSF = Desktop.connect(ConnectStr)
             lw = FaxWizardDialogImpl(xLocMSF)
-            print
-            print "lw.startWizard"
-            print
             lw.startWizard(xLocMSF, None)
         except RuntimeException, e:
             # TODO Auto-generated catch block
@@ -128,18 +125,19 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             return
 
     def cancelWizard(self):
-        xDialog.endExecute()
+        self.xUnoDialog.endExecute()
         self.running = False
 
     def finishWizard(self):
-        switchToStep(getCurrentStep(), getMaxStep())
+        self.switchToStep(self.getCurrentStep(), self.getMaxStep())
         self.myFaxDoc.setWizardTemplateDocInfo(self.resources.resFaxWizardDialog_title, self.resources.resTemplateDescription)
         try:
-            fileAccess = FileAccess(xMSF)
+            fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if self.sPath.equals(""):
+            if self.sPath == "":
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
+            print self.sPath
 
             self.sPath = fileAccess.getURL(self.sPath)
             #first, if the filename was not changed, thus
@@ -189,7 +187,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         except UnoException, e:
             traceback.print_exc()
         finally:
-            xDialog.endExecute()
+            self.xUnoDialog.endExecute()
             self.running = False
 
         return True
@@ -246,9 +244,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.sWorkPath = FileAccess.getOfficePath2(xMSF, "Work", "", "")
             self.BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", self.sFaxPath)
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", self.sFaxPath)
-
-            self.setControlProperty("lstBusinessStyle", "StringItemList", self.BusinessFiles[0])
-            self.setControlProperty("lstPrivateStyle", "StringItemList", self.PrivateFiles[0])
+            self.setControlProperty("lstBusinessStyle", "StringItemList", tuple(self.BusinessFiles[0]))
+            self.setControlProperty("lstPrivateStyle", "StringItemList", tuple(self.PrivateFiles[0]))
             self.setControlProperty("lstBusinessStyle", "SelectedItems", [0])
             self.setControlProperty("lstPrivateStyle", "SelectedItems" , [0])
             return True

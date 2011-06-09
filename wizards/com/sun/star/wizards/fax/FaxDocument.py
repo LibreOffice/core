@@ -14,7 +14,7 @@ from com.sun.star.style.NumberingType import ARABIC
 class FaxDocument(TextDocument):
 
     def __init__(self, xMSF, listener):
-        super(FaxDocument,self).__init__(xMSF, listener, "WIZARD_LIVE_PREVIEW")
+        super(FaxDocument,self).__init__(xMSF, listener, None, "WIZARD_LIVE_PREVIEW")
         self.keepLogoFrame = True
         self.keepTypeFrame = True
 

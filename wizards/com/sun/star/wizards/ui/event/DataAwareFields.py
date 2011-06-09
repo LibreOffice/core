@@ -106,6 +106,8 @@ class DataAwareFields(object):
                     return int(i)
                 elif isinstance(self.convertTo,str):
                     return str(i)
+                elif self.convertTo.type == uno.Any("short",0).type:
+                    return uno.Any("[]short",(i,))
                 else:
                     raise AttributeError("Cannot convert int value to given type (" + str(type(self.convertTo)) + ").");
 
