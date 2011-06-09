@@ -259,7 +259,7 @@ SwIndexReg::SwIndexReg()
 
 SwIndexReg::~SwIndexReg()
 {
-    OSL_ENSURE( !pFirst || !pLast, "Es sind noch Indizies angemeldet" );
+    OSL_ENSURE( !pFirst || !pLast, "There are still indices registered" );
 }
 
 
