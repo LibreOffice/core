@@ -37,7 +37,8 @@ namespace writerfilter {
             DESTINATION_LISTOVERRIDETABLE,
             DESTINATION_LISTOVERRIDEENTRY,
             DESTINATION_LISTLEVEL,
-            DESTINATION_LEVELTEXT
+            DESTINATION_LEVELTEXT,
+            DESTINATION_LEVELNUMBERS
         };
 
         enum RTFErrors
@@ -106,6 +107,9 @@ namespace writerfilter {
 
                 /// Text from leveltext destination.
                 rtl::OUStringBuffer aLevelText;
+
+                /// List of character positions in leveltext to replace.
+                std::vector<sal_Int32> aLevelNumbers;
         };
 
         /// Implementation of the RTFDocument interface.

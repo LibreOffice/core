@@ -167,6 +167,12 @@ int RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
         return 0;
     OString aStr = aBuf.makeStringAndClear();
+    if (m_aStates.top().nDestinationState == DESTINATION_LEVELNUMBERS)
+    {
+        if (aStr.toChar() != ';')
+            m_aStates.top().aLevelNumbers.push_back(sal_Int32(ch));
+        return 0;
+    }
     OSL_TRACE("%s: collected '%s'", OSL_THIS_FUNC, aStr.getStr());
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
@@ -312,6 +318,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_LEVELTEXT:
             m_aStates.top().nDestinationState = DESTINATION_LEVELTEXT;
+            break;
+        case RTF_LEVELNUMBERS:
+            m_aStates.top().nDestinationState = DESTINATION_LEVELNUMBERS;
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -1243,16 +1252,36 @@ int RTFDocumentImpl::popState()
     {
         OUString aStr = m_aStates.top().aLevelText.makeStringAndClear();
 
-        //OSL_TRACE("collected leveltext: '%s'", OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
         // The first character is the length of the string (the rest should be ignored).
         sal_Int32 nLength(aStr.toChar());
         OUString aValue = aStr.copy(1, nLength);
-        //OSL_TRACE("length: %d, used part: '%s'", nLength, OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr());
         RTFValue::Pointer_t pValue(new RTFValue(aValue));
         m_aStates.top().aTableAttributes.insert(make_pair(NS_ooxml::LN_CT_LevelText_val, pValue));
 
         aAttributes = m_aStates.top().aTableAttributes;
         bLevelTextEnd = true;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_LEVELNUMBERS)
+    {
+        std::multimap<Id, RTFValue::Pointer_t>& rAttributes =
+            m_aStates.top().aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->second->getAttributes();
+        RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val)->second;
+        OUString aOrig = pValue->getString();
+
+        OUStringBuffer aBuf;
+        sal_Int32 nReplaces = 1;
+        for (int i = 0; i < aOrig.getLength(); i++)
+        {
+            if (std::find(m_aStates.top().aLevelNumbers.begin(), m_aStates.top().aLevelNumbers.end(), i+1)
+                    != m_aStates.top().aLevelNumbers.end())
+            {
+                aBuf.append(sal_Unicode('%'));
+                aBuf.append(nReplaces++);
+            }
+            else
+                aBuf.append(aOrig.copy(i, 1));
+        }
+        pValue->setString(aBuf.makeStringAndClear());
     }
 
     m_aStates.pop();
@@ -1402,7 +1431,8 @@ RTFParserState::RTFParserState()
     nCharsToSkip(0),
     nListLevelNum(0),
     aListLevelEntries(),
-    aLevelText()
+    aLevelText(),
+    aLevelNumbers()
 {
 }
 
