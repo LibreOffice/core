@@ -94,7 +94,7 @@ BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
-.IF "$(OS)"=="IOS"
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl.a
 .ELSE
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).4
