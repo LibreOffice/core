@@ -827,7 +827,7 @@ static void PrintStack( int sig )
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 
-#ifdef MACOSX
+#if defined( MACOSX ) && !defined( INCLUDE_BACKTRACE )
     fprintf( stderr, "Please turn on Enable Crash Reporting and\nAutomatic Display of Crashlogs in the Console application\n" );
 #else
 #ifdef INCLUDE_BACKTRACE
