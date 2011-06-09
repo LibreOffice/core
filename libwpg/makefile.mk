@@ -51,6 +51,10 @@ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd-stream
 
 TARFILE_NAME=libwpg-0.2.0
 TARFILE_MD5=5ba6a61a2f66dfd5fee8cdd4cd262a37
+
+PATCH_FILES=$(TARFILE_NAME).patch
+
+
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src/lib
 
