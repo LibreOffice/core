@@ -5,6 +5,8 @@
 #include <stack>
 #include <map>
 #include <rtl/strbuf.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/helper/storagebase.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfreferencetable.hxx>
@@ -170,6 +172,9 @@ namespace writerfilter {
                 bool m_bNeedPap;
                 /// The list table and list override table combined.
                 std::multimap<Id, RTFValue::Pointer_t> m_aListTableSprms;
+
+                oox::StorageRef m_xStorage;
+                oox::GraphicHelper* m_pGraphicHelper;
         };
     } // namespace rtftok
 } // namespace writerfilter

@@ -77,12 +77,15 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aColorTable(),
     m_bFirstRun(true),
     m_bNeedPap(false),
-    m_aListTableSprms()
+    m_aListTableSprms(),
+    m_xStorage()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
         throw uno::RuntimeException();
     m_pInStream = utl::UcbStreamHelper::CreateStream( xInputStream, sal_True );
+
+    m_pGraphicHelper = new oox::GraphicHelper(m_xContext, NULL, m_xStorage);
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
@@ -174,6 +177,8 @@ int RTFDocumentImpl::resolvePict(char ch)
 
     aStream.Seek(0);
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(&aStream));
+
+    OUString aGraphicObjUrl = m_pGraphicHelper->importGraphicObject(xInputStream);
 
     return 0;
 }
