@@ -247,14 +247,13 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
 //===== Service ===============================================================
 ::rtl::OUString UnoControlTabPageModel_getImplementationName (void) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.awt.tab.UnoControlTabPageModel");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tab.UnoControlTabPageModel"));
 }
 
 Sequence<rtl::OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames (void)
      throw (RuntimeException)
 {
-     static const ::rtl::OUString sServiceName(
-         ::rtl::OUString::createFromAscii("com.sun.star.awt.tab.UnoControlTabPageModel"));
+     const ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tab.UnoControlTabPageModel"));
      return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 //=============================================================================
@@ -274,7 +273,7 @@ UnoControlTabPage::~UnoControlTabPage()
 
 ::rtl::OUString UnoControlTabPage::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "TabPageModel" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabPageModel"));
 }
 
 void UnoControlTabPage::dispose() throw(RuntimeException)

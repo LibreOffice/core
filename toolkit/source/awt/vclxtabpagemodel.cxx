@@ -107,7 +107,7 @@ void SAL_CALL VCLXTabPageModel::setEnabled( ::sal_Bool _enabled ) throw (::com::
     //if ( pTabControl )
     //  return pTabControl->GetPageText(0);
     //else
-        return ::rtl::OUString::createFromAscii("");
+        return ::rtl::OUString();
 }
 void SAL_CALL VCLXTabPageModel::setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -118,7 +118,7 @@ void SAL_CALL VCLXTabPageModel::setTitle( const ::rtl::OUString& _title ) throw 
 }
 ::rtl::OUString SAL_CALL VCLXTabPageModel::getImageURL() throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("");
+    return ::rtl::OUString();
 }
 void SAL_CALL VCLXTabPageModel::setImageURL( const ::rtl::OUString& /*_imageurl*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -127,7 +127,7 @@ void SAL_CALL VCLXTabPageModel::setImageURL( const ::rtl::OUString& /*_imageurl*
 ::rtl::OUString SAL_CALL VCLXTabPageModel::getTooltip() throw (::com::sun::star::uno::RuntimeException)
 {
     //return m_sTooltip;
-    return ::rtl::OUString::createFromAscii("");
+    return ::rtl::OUString();
 }
 void SAL_CALL VCLXTabPageModel::setTooltip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
 {

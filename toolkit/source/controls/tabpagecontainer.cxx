@@ -185,7 +185,7 @@ UnoControlTabPageContainer::UnoControlTabPageContainer( const Reference< XMultiS
 
 OUString UnoControlTabPageContainer::GetComponentServiceName()
 {
-    return OUString::createFromAscii( "TabPageContainer" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("TabPageContainer"));
 }
 
 void SAL_CALL UnoControlTabPageContainer::dispose(  ) throw(RuntimeException)

@@ -408,7 +408,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::
             Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
             if ( xAgg.is() )
             {
-                if ( xSI->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.awt.UnoControlModel" ) ) )
+                if ( xSI->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel"))) )
                 {
                     // release 3 of the 4 references we have to the object
                     xAgg.clear();
@@ -996,8 +996,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Label" ) ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
+                    xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1029,8 +1029,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                     Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                     ::rtl::OUString sLabel;
-                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
-                        xModelProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Label" ) ) >>= sLabel;
+                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
+                        xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
                     aCurrentGroupLabels.push_back( sLabel );
 #endif
                     continue;
@@ -1059,8 +1059,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Label" ) ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
+                    xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1722,10 +1722,10 @@ void ControlContainerBase::addingControl( const Reference< XControl >& _rxContro
         {
             Sequence< ::rtl::OUString > aNames( 4 );
             ::rtl::OUString* pNames = aNames.getArray();
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionX" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionY" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Width" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Height" );
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX") );
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY") );
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"));
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"));
 
             xProps->addPropertiesChangeListener( aNames, this );
         }

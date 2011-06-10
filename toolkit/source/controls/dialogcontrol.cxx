@@ -266,9 +266,9 @@ UnoDialogControl::~UnoDialogControl()
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
-        return ::rtl::OUString::createFromAscii( "Dialog" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialog"));
     else
-        return ::rtl::OUString::createFromAscii( "TabPage" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabPage"));
 }
 
 void UnoDialogControl::dispose() throw(RuntimeException)

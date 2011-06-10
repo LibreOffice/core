@@ -893,8 +893,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABPAGE:
                 /*
-                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("tabpagemodel") ) )
+                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("tabpagemodel") ) )
                 {
                     pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;
@@ -1031,8 +1031,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                         // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
-                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("tabpagecontainer") ) )
+                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("tabpagecontainer") ) )
                 {
                     pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;
