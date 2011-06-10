@@ -882,7 +882,9 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         }
 
         case TypeClass_BOOLEAN:
-            aRet <<= OUString::createFromAscii( (*(sal_Bool *)rVal.getValue() ? "true" : "false") );
+            aRet <<= (*(sal_Bool *)rVal.getValue()) ?
+                OUString(RTL_CONSTASCII_USTRINGPARAM("true")) :
+                OUString(RTL_CONSTASCII_USTRINGPARAM("false"));
             break;
         case TypeClass_CHAR:
             aRet <<= OUString( (sal_Unicode *)rVal.getValue(), 1 );
