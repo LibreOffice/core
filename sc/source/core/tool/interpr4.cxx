@@ -3391,6 +3391,20 @@ sal_Bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos
     return bOk;
 }
 
+namespace {
+
+class FindByPointer : ::std::unary_function<ScInterpreterTableOpParams, bool>
+{
+    const ScInterpreterTableOpParams* mpTableOp;
+public:
+    FindByPointer(const ScInterpreterTableOpParams* p) : mpTableOp(p) {}
+    bool operator() (const ScInterpreterTableOpParams& val) const
+    {
+        return &val == mpTableOp;
+    }
+};
+
+}
 
 void ScInterpreter::ScTableOp()
 {
@@ -3450,7 +3464,11 @@ void ScInterpreter::ScTableOp()
         PushString( aCellString );
     }
 
-    pTableOp = pDok->aTableOpList.release( pDok->aTableOpList.end() ).release();
+    boost::ptr_vector< ScInterpreterTableOpParams >::iterator itr =
+        ::std::find_if(pDok->aTableOpList.begin(), pDok->aTableOpList.end(), FindByPointer(pTableOp));
+    if (itr != pDok->aTableOpList.end())
+        pTableOp = pDok->aTableOpList.release(itr).release();
+
     // set dirty again once more to be able to recalculate original
     for ( ::std::vector< ScFormulaCell* >::const_iterator iBroadcast(
                 pTableOp->aNotifiedFormulaCells.begin() );
