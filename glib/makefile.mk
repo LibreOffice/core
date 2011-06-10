@@ -49,7 +49,7 @@ TARFILE_MD5=9f6e85e1e38490c3956f4415bcd33e6e
 
 
 .IF "$(OS)"=="MACOSX" || "$(OS)"=="IOS"
-PATCH_FILES=glib-2.28.1.patch
+PATCH_FILES=glib-2.28.1.patch glib-2.28.1.noise.patch
 
 .IF "$(OS)"=="IOS"
 CONFIGURE_FLAGS= \

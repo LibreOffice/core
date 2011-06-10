@@ -1,0 +1,12 @@
+--- misc/glib-2.28.1/gio/tests/Makefile.in	2011-02-18 16:22:00.000000000 +0100
++++ misc/build/glib-2.28.1/gio/tests/Makefile.in	2011-06-10 16:37:05.000000000 +0200
+@@ -1020,7 +1020,9 @@
+ proxy_LDADD = $(progs_ldadd) \
+ 	$(top_builddir)/gthread/libgthread-2.0.la
+ 
++ifneq ($(MSGFMT),)
+ MISC_STUFF = test.mo
++endif
+ DISTCLEANFILES = \
+ 	applications/mimeinfo.cache	\
+ 	org.gtk.test.enums.xml		\
