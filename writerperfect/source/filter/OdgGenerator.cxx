@@ -600,6 +600,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
             qx = (qx < path[k]["svg:x2"]->getDouble()) ? path[k]["svg:x2"]->getDouble() : qx;
             qy = (qy < path[k]["svg:y2"]->getDouble()) ? path[k]["svg:y2"]->getDouble() : qy;
         }
+#if 0
         if(path[k]["libwpg:path-action"]->getStr() == "A")
         {
             px = (px > path[k]["svg:x"]->getDouble()-2*path[k]["svg:rx"]->getDouble()) ? path[k]["svg:x"]->getDouble()-2*path[k]["svg:rx"]->getDouble() : px;
@@ -607,6 +608,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
             qx = (qx < path[k]["svg:x"]->getDouble()+2*path[k]["svg:rx"]->getDouble()) ? path[k]["svg:x"]->getDouble()+2*path[k]["svg:rx"]->getDouble() : qx;
             qy = (qy < path[k]["svg:y"]->getDouble()+2*path[k]["svg:ry"]->getDouble()) ? path[k]["svg:y"]->getDouble()+2*path[k]["svg:ry"]->getDouble() : qy;
         }
+#endif
     }
     double vw = qx - px;
     double vh = qy - py;
@@ -641,7 +643,9 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
-        else if (path[i]["libwpg:path-action"]->getStr() == "L")
+        else if (path[i]["libwpg:path-action"]->getStr() == "L"
+        // approximate for the time being the elliptic arc by a line
+            || path[i]["libwpg:path-action"]->getStr() == "A")
         {
             sElement.sprintf("L%i %i", (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
@@ -655,6 +659,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
+#if 0
         else if (path[i]["libwpg:path-action"]->getStr() == "A")
         {
             sElement.sprintf("A%i %i %i %i %i %i %i", (unsigned)((path[i]["svg:rx"]->getDouble())*2540),
@@ -662,6 +667,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
                 0, 0, (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540), (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
+#endif
         else if (path[i]["libwpg:path-action"]->getStr() == "Z" && i >= (path.count() - 1))
             sValue.append(" Z");
     }
