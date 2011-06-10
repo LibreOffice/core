@@ -33,6 +33,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_filters_test, \
     sw/qa/core/filters-test \
 ))
 
+$(call gb_CxxObject_get_target,sw/qa/core/filters-test): $(WORKDIR)/AllLangRes/sw
+
 $(eval $(call gb_CppunitTest_add_linked_libs,sw_filters_test, \
     sw \
     sfx \
@@ -68,9 +70,6 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_filters_test,\
 $(eval $(call gb_CppunitTest_add_service_rdbs,sw_filters_test,\
     sw_filters_test \
 ))
-
-$(call gb_CppunitTest_get_target,sw_filters_test) : \
-        $(call gb_AllLangResTarget_get_target,sw)
 
 $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
     --headless \
