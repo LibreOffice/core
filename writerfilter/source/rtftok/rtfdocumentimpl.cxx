@@ -66,8 +66,10 @@ std::multimap<Id, RTFValue::Pointer_t>& lcl_getNumPr(std::stack<RTFParserState>&
     return it->second->getSprms();
 }
 
-RTFDocumentImpl::RTFDocumentImpl(uno::Reference<io::XInputStream> const& xInputStream)
-    : m_nGroup(0),
+RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
+        uno::Reference<io::XInputStream> const& xInputStream)
+    : m_xContext(xContext),
+    m_nGroup(0),
     m_aDefaultState(),
     m_bSkipUnknown(false),
     m_pCurrentKeyword(0),

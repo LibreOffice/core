@@ -2,6 +2,7 @@
 #define _RTFDOCUMENT_HXX_
 
 #include <resourcemodel/WW8ResourceModel.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
 namespace writerfilter {
@@ -29,8 +30,8 @@ namespace writerfilter {
             public:
                 static RTFDocument::Pointer_t
                     createDocument(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                            const & xInputStream );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > const & xInputStream );
         };
     } // namespace rtftok
 } // namespace writerfilter
