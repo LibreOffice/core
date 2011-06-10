@@ -82,7 +82,7 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY_THROW );
         Reference< ucb::XSimpleFileAccess > xSFI =
             Reference< ucb::XSimpleFileAccess >( xSMgr->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext ), UNO_QUERY );
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), m_xContext ), UNO_QUERY );
 
         try
         {

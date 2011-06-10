@@ -120,7 +120,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
         // TODO: Ctor
         Reference< resource::XStringResourceManager > xStringResourceManager( xSMgr_->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ),
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.resource.StringResourceWithLocation")),
                 i_xContext ), UNO_QUERY );
         if( xStringResourceManager.is() )
         {
