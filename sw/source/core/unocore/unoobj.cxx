@@ -2045,7 +2045,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 
 static void
 lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
-        SvUShortsSort const*const pWhichIds = 0 )
+                        std::set<sal_uInt16> const &rWhichIds )
 {
     // if we are reseting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
@@ -2062,7 +2062,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     {
         pTemp->MovePara(fnParaCurr, fnParaEnd);
     }
-    rDoc.ResetAttrs(*pTemp, sal_True, pWhichIds);
+    rDoc.ResetAttrs(*pTemp, sal_True, rWhichIds);
 }
 
 void SwUnoCursorHelper::SetPropertyToDefault(
@@ -2089,15 +2089,15 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 
     if (pEntry->nWID < RES_FRMATR_END)
     {
-        SvUShortsSort aWhichIds;
-        aWhichIds.Insert(pEntry->nWID);
+        std::set<sal_uInt16> aWhichIds;
+        aWhichIds.insert( pEntry->nWID );
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
-            rDoc.ResetAttrs(rPaM, sal_True, &aWhichIds);
+            rDoc.ResetAttrs(rPaM, sal_True, aWhichIds);
         }
         else
         {
-            lcl_SelectParaAndReset ( rPaM, rDoc, &aWhichIds );
+            lcl_SelectParaAndReset ( rPaM, rDoc, aWhichIds );
         }
     }
     else
@@ -2328,7 +2328,7 @@ static sal_uInt16 g_ResetableSetRange[] = {
 };
 
 static void
-lcl_EnumerateIds(sal_uInt16 const* pIdRange, SvUShortsSort & rWhichIds)
+lcl_EnumerateIds(sal_uInt16 const* pIdRange, std::set<sal_uInt16> &rWhichIds)
 {
     while (*pIdRange)
     {
@@ -2336,7 +2336,7 @@ lcl_EnumerateIds(sal_uInt16 const* pIdRange, SvUShortsSort & rWhichIds)
         const sal_uInt16 nEnd   = sal::static_int_cast<sal_uInt16>(*pIdRange++);
         for (sal_uInt16 nId = nStart + 1;  nId <= nEnd;  ++nId)
         {
-            rWhichIds.Insert( nId );
+            rWhichIds.insert( rWhichIds.end(), nId );
         }
     }
 }
@@ -2349,18 +2349,18 @@ throw (uno::RuntimeException)
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    SvUShortsSort aParaWhichIds;
-    SvUShortsSort aWhichIds;
+    std::set<sal_uInt16> aParaWhichIds;
+    std::set<sal_uInt16> aWhichIds;
     lcl_EnumerateIds(g_ParaResetableSetRange, aParaWhichIds);
     lcl_EnumerateIds(g_ResetableSetRange, aWhichIds);
-    if (aParaWhichIds.Count())
+    if (!aParaWhichIds.empty())
     {
         lcl_SelectParaAndReset(rUnoCursor, *rUnoCursor.GetDoc(),
-            &aParaWhichIds);
+            aParaWhichIds);
     }
-    if (aWhichIds.Count())
+    if (!aWhichIds.empty())
     {
-        rUnoCursor.GetDoc()->ResetAttrs(rUnoCursor, sal_True, &aWhichIds);
+        rUnoCursor.GetDoc()->ResetAttrs(rUnoCursor, sal_True, aWhichIds);
     }
 }
 
@@ -2378,8 +2378,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     {
         SwDoc & rDoc = *rUnoCursor.GetDoc();
         const OUString * pNames = rPropertyNames.getConstArray();
-        SvUShortsSort aWhichIds;
-        SvUShortsSort aParaWhichIds;
+        std::set<sal_uInt16> aWhichIds;
+        std::set<sal_uInt16> aParaWhichIds;
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             SfxItemPropertySimpleEntry const*const  pEntry =
@@ -2411,11 +2411,11 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             {
                 if (pEntry->nWID < RES_PARATR_BEGIN)
                 {
-                    aWhichIds.Insert(pEntry->nWID);
+                    aWhichIds.insert( pEntry->nWID );
                 }
                 else
                 {
-                    aParaWhichIds.Insert(pEntry->nWID);
+                    aParaWhichIds.insert( pEntry->nWID );
                 }
             }
             else if (pEntry->nWID == FN_UNO_NUM_START_VALUE)
@@ -2424,13 +2424,13 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
         }
 
-        if (aParaWhichIds.Count())
+        if (!aParaWhichIds.empty())
         {
-            lcl_SelectParaAndReset(rUnoCursor, rDoc, &aParaWhichIds);
+            lcl_SelectParaAndReset(rUnoCursor, rDoc, aParaWhichIds);
         }
-        if (aWhichIds.Count())
+        if (!aWhichIds.empty())
         {
-            rDoc.ResetAttrs(rUnoCursor, sal_True, &aWhichIds);
+            rDoc.ResetAttrs(rUnoCursor, sal_True, aWhichIds);
         }
     }
 }

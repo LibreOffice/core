@@ -44,7 +44,7 @@
  *************************************/
 
 
-void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
+void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -56,7 +56,7 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 
         FOREACHPAM_START(this)
 
-                GetDoc()->ResetAttrs(*PCURCRSR, sal_True, pAttrs);
+                GetDoc()->ResetAttrs(*PCURCRSR, sal_True, attrs);
         FOREACHPAM_END()
 
     if( bUndoGroup )

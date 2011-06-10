@@ -45,6 +45,7 @@
 #include <IMark.hxx>
 
 #include <vector>
+#include <set>
 #include <swundo.hxx>
 #include <svtools/embedhlp.hxx>
 
@@ -258,7 +259,7 @@ public:
     // Query default attribute of document.
     const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
 
-    void ResetAttr( const SvUShortsSort* pAttrs = 0 );
+    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>() );
     void GCAttr();
 
     // Returns the scripttpye of the selection.

@@ -770,9 +770,9 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
         {
-            SvUShortsSort aWhichIds;
-            aWhichIds.Insert(RES_TXTATR_CHARFMT);
-            pDoc->ResetAttrs(rPam, sal_True, &aWhichIds);
+            std::set<sal_uInt16> aWhichIds;
+            aWhichIds.insert( RES_TXTATR_CHARFMT);
+            pDoc->ResetAttrs(rPam, sal_True, aWhichIds);
         }
         break;
     }

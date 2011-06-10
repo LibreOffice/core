@@ -35,16 +35,13 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
 #include <svl/itemset.hxx>
 
 #include <swtypes.hxx>
 #include <calbck.hxx>
-
+#include <set>
 
 class SvxTabStopItem;
 class SwFmt;
@@ -82,7 +79,7 @@ public:
 class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
     const ::std::auto_ptr<SwHistory> m_pHistory;
-    SvUShortsSort m_Ids;
+    std::set<sal_uInt16> m_Ids;
     const sal_uInt16 m_nFormatId;             // Format-Id for Redo
 
 public:
@@ -95,7 +92,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void SetAttrs( const SvUShortsSort& rArr );
+    void SetAttrs( const std::set<sal_uInt16> &rAttrs );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 

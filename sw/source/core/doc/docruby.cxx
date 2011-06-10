@@ -111,8 +111,8 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             sal_uInt16 nMode )
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_SETRUBYATTR, NULL );
-    SvUShortsSort aDelArr;
-    aDelArr.Insert( RES_TXTATR_CJK_RUBY );
+    std::set<sal_uInt16> aDelArr;
+    aDelArr.insert( RES_TXTATR_CJK_RUBY );
 
     sal_uInt16 nListEntry = 0;
 
@@ -147,7 +147,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         }
                         else
                         {
-                            ResetAttrs( aPam, sal_True, &aDelArr );
+                            ResetAttrs( aPam, sal_True, aDelArr );
                         }
                     }
 

@@ -701,7 +701,6 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM & rPam = AddUndoRedoPaM(rContext);
-    SvUShortsSort* pIdArr = m_Ids.Count() ? &m_Ids : 0;
 
     switch ( m_nFormatId )
     {
@@ -709,10 +708,10 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.RstTxtAttrs(rPam);
         break;
     case RES_TXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, sal_False, pIdArr );
+        rDoc.ResetAttrs(rPam, sal_False, m_Ids );
         break;
     case RES_CONDTXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, sal_True, pIdArr );
+        rDoc.ResetAttrs(rPam, sal_True, m_Ids );
 
         break;
     case RES_TXTATR_TOXMARK:
@@ -763,29 +762,25 @@ void SwUndoResetAttr::RepeatImpl(::sw::RepeatContext & rContext)
         return;
     }
 
-    SvUShortsSort* pIdArr = m_Ids.Count() ? &m_Ids : 0;
     switch ( m_nFormatId )
     {
     case RES_CHRFMT:
         rContext.GetDoc().RstTxtAttrs(rContext.GetRepeatPaM());
         break;
     case RES_TXTFMTCOLL:
-        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), false, pIdArr);
+        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), false, m_Ids);
         break;
     case RES_CONDTXTFMTCOLL:
-        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), true, pIdArr);
+        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), true, m_Ids);
         break;
     }
 }
 
 
-void SwUndoResetAttr::SetAttrs( const SvUShortsSort& rArr )
+void SwUndoResetAttr::SetAttrs( const std::set<sal_uInt16> &rAttrs )
 {
-    if ( m_Ids.Count() )
-    {
-        m_Ids.Remove( 0, m_Ids.Count() );
-    }
-    m_Ids.Insert( &rArr );
+    m_Ids.clear();
+    m_Ids.insert( rAttrs.begin(), rAttrs.end() );
 }
 
 // -----------------------------------------------------

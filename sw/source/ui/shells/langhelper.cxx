@@ -377,16 +377,16 @@ namespace SwLangHelper
         }
         else // change language for all text
         {
-            SvUShortsSort aAttribs;
+            std::set<sal_uInt16> aAttribs;
             for (sal_uInt16 i = 0; i < 3; ++i)
             {
                 rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ) );
-                aAttribs.Insert( aLangWhichId_Writer[i] );
+                aAttribs.insert( aLangWhichId_Writer[i] );
             }
 
             // set all language attributes to default
             // (for all text in the document - which should be selected by now...)
-            rWrtSh.ResetAttr( &aAttribs );
+            rWrtSh.ResetAttr( aAttribs );
         }
     }
 
@@ -414,11 +414,11 @@ namespace SwLangHelper
         }
         else
         {
-            SvUShortsSort aAttribs;
-            aAttribs.Insert( RES_CHRATR_LANGUAGE );
-            aAttribs.Insert( RES_CHRATR_CJK_LANGUAGE );
-            aAttribs.Insert( RES_CHRATR_CTL_LANGUAGE );
-            rWrtSh.ResetAttr( &aAttribs );
+            std::set<sal_uInt16> aAttribs;
+            aAttribs.insert( RES_CHRATR_LANGUAGE );
+            aAttribs.insert( RES_CHRATR_CJK_LANGUAGE );
+            aAttribs.insert( RES_CHRATR_CTL_LANGUAGE );
+            rWrtSh.ResetAttr( aAttribs );
         }
     }
 

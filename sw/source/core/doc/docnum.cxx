@@ -66,6 +66,30 @@
 
 #include <map>
 
+namespace {
+    static void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker )
+    {
+        std::set<sal_uInt16> aResetAttrsArray;
+        aResetAttrsArray.insert( marker );
+        // #i114929#
+        // On a selection setup a corresponding Point-and-Mark in order to get
+        // the indentation attribute reset on all paragraphs touched by the selection
+        if ( rPam.HasMark() &&
+             rPam.End()->nNode.GetNode().GetTxtNode() )
+        {
+            SwPaM aPam( rPam.Start()->nNode,
+                        rPam.End()->nNode );
+            aPam.Start()->nContent = 0;
+            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
+            pDoc->ResetAttrs( aPam, sal_False, aResetAttrsArray );
+        }
+        else
+        {
+            pDoc->ResetAttrs( rPam, sal_False, aResetAttrsArray );
+        }
+    }
+}
+
 inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16 nMask )
 {
     if( 1 < nLevel )
@@ -927,24 +951,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     if ( bResetIndentAttrs &&
          pNew && pNew->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        SvUShortsSort aResetAttrsArray;
-        aResetAttrsArray.Insert( RES_LR_SPACE );
-        // #i114929#
-        // On a selection setup a corresponding Point-and-Mark in order to get
-        // the indentation attribute reset on all paragraphs touched by the selection
-        if ( rPam.HasMark() &&
-             rPam.End()->nNode.GetNode().GetTxtNode() )
-        {
-            SwPaM aPam( rPam.Start()->nNode,
-                        rPam.End()->nNode );
-            aPam.Start()->nContent = 0;
-            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
-            ResetAttrs( aPam, sal_False, &aResetAttrsArray );
-        }
-        else
-        {
-            ResetAttrs( rPam, sal_False, &aResetAttrsArray );
-        }
+        ::lcl_ResetIndentAttrs(this, rPam, RES_LR_SPACE);
     }
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -959,24 +966,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
 {
     if ( bCounted )
     {
-        SvUShortsSort aResetAttrsArray;
-        aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-        // #i114929#
-        // On a selection setup a corresponding Point-and-Mark in order to get
-        // the list-is-counted attribute reset on all paragraphs touched by the selection
-        if ( rPam.HasMark() &&
-             rPam.End()->nNode.GetNode().GetTxtNode() )
-        {
-            SwPaM aPam( rPam.Start()->nNode,
-                        rPam.End()->nNode );
-            aPam.Start()->nContent = 0;
-            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
-            ResetAttrs( aPam, sal_False, &aResetAttrsArray );
-        }
-        else
-        {
-            ResetAttrs( rPam, sal_False, &aResetAttrsArray );
-        }
+        ::lcl_ResetIndentAttrs(this, rPam, RES_PARATR_LIST_ISCOUNTED);
     }
     else
     {

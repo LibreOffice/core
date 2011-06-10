@@ -1153,7 +1153,7 @@ public:
     // control, if the side effect "send data changed events" is triggered or not.
     void ResetAttrs( const SwPaM &rRg,
                      sal_Bool bTxtAttr = sal_True,
-                     const SvUShortsSort* = 0,
+                     const std::set<sal_uInt16> &rAttrs = std::set<sal_uInt16>(),
                      const bool bSendDataChangedEvents = true );
     void RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark = sal_False );
 

@@ -1021,11 +1021,11 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 
     if (pEntry->nWID < RES_FRMATR_END)
     {
-        SvUShortsSort aWhichIds;
-        aWhichIds.Insert(pEntry->nWID);
+        std::set<sal_uInt16> aWhichIds;
+        aWhichIds.insert( pEntry->nWID );
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
-            aCursor.GetDoc()->ResetAttrs(aCursor, sal_True, &aWhichIds);
+            aCursor.GetDoc()->ResetAttrs(aCursor, sal_True, aWhichIds);
         }
         else
         {
@@ -1047,7 +1047,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             {
                 pTemp->MovePara(fnParaCurr, fnParaEnd);
             }
-            pTemp->GetDoc()->ResetAttrs(*pTemp, sal_True, &aWhichIds);
+            pTemp->GetDoc()->ResetAttrs(*pTemp, sal_True, aWhichIds);
         }
     }
     else

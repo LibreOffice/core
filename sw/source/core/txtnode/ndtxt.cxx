@@ -3272,6 +3272,20 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
 }
 
 namespace {
+    static void lcl_ResetParAttrs( SwTxtNode &rTxtNode )
+    {
+        std::set<sal_uInt16> aAttrs;
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_ID );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_LEVEL );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_ISRESTART );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_RESTARTVALUE );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_ISCOUNTED );
+        SwPaM aPam( rTxtNode );
+        // #i96644#
+        // suppress side effect "send data changed events"
+        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False, aAttrs, false );
+    }
+
     // Helper method for special handling of modified attributes at text node.
     // The following is handled:
     // (1) on changing the paragraph style - RES_FMT_CHG:
@@ -3388,18 +3402,7 @@ namespace {
                     rTxtNode.RemoveFromList();
                     if ( bParagraphStyleChanged )
                     {
-                        SvUShortsSort aResetAttrsArray;
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-                        SwPaM aPam( rTxtNode );
-                        // #i96644#
-                        // suppress side effect "send data changed events"
-                        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
-                                                       &aResetAttrsArray,
-                                                       false );
+                        ::lcl_ResetParAttrs(rTxtNode);
                     }
                 }
                 else
@@ -3428,18 +3431,7 @@ namespace {
                 rTxtNode.RemoveFromList();
                 if ( bParagraphStyleChanged )
                 {
-                    SvUShortsSort aResetAttrsArray;
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-                    SwPaM aPam( rTxtNode );
-                    // #i96644#
-                    // suppress side effect "send data changed events"
-                    rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
-                                                   &aResetAttrsArray,
-                                                   false );
+                    ::lcl_ResetParAttrs(rTxtNode);
                     // #i70748#
                     if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
                     {

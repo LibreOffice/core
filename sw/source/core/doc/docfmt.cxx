@@ -349,12 +349,11 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
 
 void SwDoc::ResetAttrs( const SwPaM &rRg,
                         sal_Bool bTxtAttr,
-                        const SvUShortsSort* pAttrs,
+                        const std::set<sal_uInt16> &rAttrs,
                         const bool bSendDataChangedEvents )
 {
     SwPaM* pPam = (SwPaM*)&rRg;
-    if( !bTxtAttr && pAttrs && pAttrs->Count() &&
-        RES_TXTATR_END > (*pAttrs)[ 0 ] )
+    if( !bTxtAttr && !rAttrs.empty() && RES_TXTATR_END > *(rAttrs.begin()) )
         bTxtAttr = sal_True;
 
     if( !rRg.HasMark() )
@@ -417,9 +416,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     {
         SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg,
             static_cast<sal_uInt16>(bTxtAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL ));
-        if( pAttrs && pAttrs->Count() )
+        if( !rAttrs.empty() )
         {
-            pUndo->SetAttrs( *pAttrs );
+            pUndo->SetAttrs( rAttrs );
         }
         pHst = &pUndo->GetHistory();
         GetIDocumentUndoRedo().AppendUndo(pUndo);
@@ -443,12 +442,13 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     };
 
     SfxItemSet aDelSet( GetAttrPool(), aResetableSetRange );
-    if( pAttrs && pAttrs->Count() )
+    if( !rAttrs.empty() )
     {
-        for( sal_uInt16 n = pAttrs->Count(); n; )
-            if( POOLATTR_END > (*pAttrs)[ --n ] )
-                aDelSet.Put( *GetDfltAttr( (*pAttrs)[ n ] ));
-
+        for( std::set<sal_uInt16>::reverse_iterator it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
+        {
+            if( POOLATTR_END > *it )
+                aDelSet.Put( *GetDfltAttr( *it ));
+        }
         if( aDelSet.Count() )
             aPara.pDelSet = &aDelSet;
     }

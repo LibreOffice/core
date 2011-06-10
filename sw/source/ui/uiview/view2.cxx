@@ -176,9 +176,9 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
         rWrtSh.ExtendedSelectAll();
 
         // set language attribute to default for all text
-        SvUShortsSort aAttribs;
-        aAttribs.Insert( nWhichId );
-        rWrtSh.ResetAttr( &aAttribs );
+        std::set<sal_uInt16> aAttribs;
+        aAttribs.insert( nWhichId );
+        rWrtSh.ResetAttr( aAttribs );
 
         rWrtSh.Pop( sal_False );
         rWrtSh.LockView( sal_False );

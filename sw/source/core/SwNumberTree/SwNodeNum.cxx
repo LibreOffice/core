@@ -372,16 +372,16 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         {
             pTxtNode->RemoveFromList();
             // --> clear all list attributes and the list style
-            SvUShortsSort aResetAttrsArray;
-            aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
-            aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
-            aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
-            aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
-            aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-            aResetAttrsArray.Insert( RES_PARATR_NUMRULE );
+            std::set<sal_uInt16> aResetAttrsArray;
+            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ID );
+            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_LEVEL );
+            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISRESTART );
+            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_RESTARTVALUE );
+            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISCOUNTED );
+            aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_NUMRULE );
             SwPaM aPam( *pTxtNode );
             pTxtNode->GetDoc()->ResetAttrs( aPam, sal_False,
-                                            &aResetAttrsArray,
+                                            aResetAttrsArray,
                                             false );
         }
     }

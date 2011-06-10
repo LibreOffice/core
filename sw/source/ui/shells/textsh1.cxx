@@ -490,7 +490,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // #i78856, reset all attributes but not the language attributes
             // (for this build an array of all relevant attributes and
             // remove the languages from that)
-            SvUShortsSort aAttribs;
+            std::set<sal_uInt16> aAttribs;
 
             sal_uInt16 aResetableSetRange[] = {
                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -510,11 +510,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 sal_uInt16 nL = pUShorts[1] - pUShorts[0] + 1;
                 sal_uInt16 nE = pUShorts[0];
                 for (sal_uInt16 i = 0; i < nL; ++i)
-                    aAttribs.Insert( nE++ );
+                    aAttribs.insert( aAttribs.end(), nE++ );
                 pUShorts += 2;
             }
 
-            rWrtSh.ResetAttr( &aAttribs );
+            rWrtSh.ResetAttr( aAttribs );
             rReq.Done();
             break;
         }
@@ -809,9 +809,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SelWrd();
             }
             //now remove the attribute
-            SvUShortsSort aAttribs;
-            aAttribs.Insert( RES_TXTATR_INETFMT );
-            rWrtSh.ResetAttr( &aAttribs );
+            std::set<sal_uInt16> aAttribs;
+            aAttribs.insert( RES_TXTATR_INETFMT );
+            rWrtSh.ResetAttr( aAttribs );
             if(!bSel)
             {
                 rWrtSh.Pop(sal_False);
