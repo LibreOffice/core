@@ -279,10 +279,14 @@ void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
 // - TakeThread -
 // --------------
 
-TakeThread::TakeThread( TakeProgress* pProgess, TPGalleryThemeProperties* pBrowser, List& rTakenList ) :
-        mpProgress  ( pProgess ),
-        mpBrowser   ( pBrowser ),
-        mrTakenList ( rTakenList )
+TakeThread::TakeThread(
+    TakeProgress* pProgess,
+    TPGalleryThemeProperties* pBrowser,
+    TokenList_impl& rTakenList
+) :
+    mpProgress  ( pProgess ),
+    mpBrowser   ( pBrowser ),
+    mrTakenList ( rTakenList )
 {
 }
 
@@ -298,9 +302,9 @@ void SAL_CALL TakeThread::run()
 {
     String              aName;
     INetURLObject       aURL;
-    sal_uInt16              nEntries;
+    sal_uInt16          nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    sal_uInt16              nPos;
+    sal_uInt16          nPos;
     GalleryProgress*    pStatusProgress;
 
     {
@@ -319,7 +323,7 @@ void SAL_CALL TakeThread::run()
             aURL = INetURLObject(*mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
 
         // Position in Taken-Liste uebernehmen
-        mrTakenList.Insert( (void*) (sal_uLong)nPos, LIST_APPEND );
+        mrTakenList.push_back( (sal_uLong)nPos );
 
         {
             SolarMutexGuard aGuard;
@@ -392,10 +396,9 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
     mpBrowser->aLbxFound.SetNoSelection();
 
     // mark all taken positions in aRemoveEntries
-    for( i = 0UL, nCount = maTakenList.Count(); i < nCount; ++i )
-        aRemoveEntries[ (sal_uLong) maTakenList.GetObject( i ) ] = true;
-
-    maTakenList.Clear();
+    for( i = 0, nCount = maTakenList.size(); i < nCount; ++i )
+        aRemoveEntries[ maTakenList[ i ] ] = true;
+    maTakenList.clear();
 
     // refill found list
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
