@@ -40,7 +40,6 @@
 #include "splitcelldlg.hxx"
 #include "gallery.hrc"
 #include "dstribut.hxx"
-#include "cuigaldlg.hxx"
 #include "cuiimapwnd.hxx"
 #include "hlmarkwn.hxx"
 #include "cuicharmap.hxx"
