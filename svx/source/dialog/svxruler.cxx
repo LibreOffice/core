@@ -72,7 +72,7 @@ namespace
         {
             ::rtl::OUString sAppName;
             uno::Sequence<beans::PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString::createFromAscii("SfxRuler"));
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxRuler")));
             ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
         }
     }
@@ -2719,7 +2719,7 @@ void SvxRuler::Click()
 */
 
 {
-    lcl_logRulerUse(::rtl::OUString::createFromAscii(".special://SfxRuler/Click"));
+    lcl_logRulerUse(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".special://SfxRuler/Click")));
     Ruler::Click();
     if( bActive )
     {
@@ -3349,7 +3349,7 @@ long SvxRuler::StartDrag()
 */
 
 {
-    lcl_logRulerUse(::rtl::OUString::createFromAscii(".special://SfxRuler/StartDrag"));
+    lcl_logRulerUse(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".special://SfxRuler/StartDrag")));
     sal_Bool bContentProtected = pRuler_Imp->aProtectItem.IsCntntProtected();
     if(!bValid)
         return sal_False;
@@ -3466,7 +3466,7 @@ void SvxRuler::EndDrag()
    data to the application.
 */
 {
-    lcl_logRulerUse(::rtl::OUString::createFromAscii(".special://SfxRuler/EndDrag"));
+    lcl_logRulerUse(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".special://SfxRuler/EndDrag")));
     const sal_Bool bUndo = IsDragCanceled();
     const long lPos = GetDragPos();
     DrawLine_Impl(lTabPos, 6, bHorz);
