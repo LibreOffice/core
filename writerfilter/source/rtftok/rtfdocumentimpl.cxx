@@ -4,7 +4,6 @@
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
-// TODO having 3 separate namespaces for the same purpose is... ugly.
 #include <doctok/sprmids.hxx> // NS_sprm
 #include <doctok/resourceids.hxx> // NS_rtf
 #include <ooxml/resourceids.hxx> // NS_ooxml
@@ -14,6 +13,7 @@
 #include <rtl/tencinfo.h>
 #include <svl/lngmisc.hxx>
 #include <editeng/borderline.hxx>
+#include <unotools/streamwrap.hxx>
 
 using std::make_pair;
 using rtl::OString;
@@ -146,7 +146,7 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
 
 int RTFDocumentImpl::resolvePict(char ch)
 {
-    uno::Sequence< sal_Int8 > aSequence;
+    SvMemoryStream aStream;
 
     int b = 0, count = 2;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
@@ -161,7 +161,7 @@ int RTFDocumentImpl::resolvePict(char ch)
             count--;
             if (!count)
             {
-                OSL_TRACE("pict char: %x", b);
+                aStream << (char)b;
                 count = 2;
                 b = 0;
             }
@@ -169,6 +169,9 @@ int RTFDocumentImpl::resolvePict(char ch)
         Strm() >> ch;
     }
     Strm().SeekRel(-1);
+
+    aStream.Seek(0);
+    uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(&aStream));
 
     return 0;
 }
