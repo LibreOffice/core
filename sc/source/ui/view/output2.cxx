@@ -2648,10 +2648,6 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
     else if ( bUseStyleColor && bForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
-    else
-    {
-        OSL_FAIL("pCell == NULL");
-    }
 
     rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
