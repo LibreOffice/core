@@ -1565,7 +1565,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aUserPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( rtl::OUString::createFromAscii("user"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bUserPackagesLoaded = true;
     }
 
@@ -1593,7 +1593,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aSharedPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( rtl::OUString::createFromAscii("shared"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shared")), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bSharedPackagesLoaded = true;
     }
 
@@ -1621,7 +1621,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aBundledPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( rtl::OUString::createFromAscii("bundled"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled")), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bBundledPackagesLoaded = true;
     }
 
