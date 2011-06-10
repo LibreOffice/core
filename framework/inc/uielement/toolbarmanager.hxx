@@ -163,7 +163,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
     protected:
         //added for 33668 by shizhoubo : 2008:04
         DECL_LINK( Command, CommandEvent * );
-        PopupMenu * GetToolBarCustomMeun(ToolBox* pToolBar);
+        PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
         //end
         DECL_LINK( Click, ToolBox * );
         DECL_LINK( DropdownClick, ToolBox * );
