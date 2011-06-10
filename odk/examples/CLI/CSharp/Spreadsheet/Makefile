@@ -1,5 +1,10 @@
 # Builds the SpreadSheet examples of the Developers Guide.
 
+# This Makefile is supposed to be run by a GNU Make built for native
+# Windows Not the Cygwin GNU Make, not dmake, not Microsoft's NMAKE.
+# But yeah, that is what the setsdkenv_windows.bat file in
+# ../../../.. presumably tries to set up.
+
 PRJ = ../../../..
 SETTINGS = $(PRJ)/settings
 
@@ -21,7 +26,14 @@ endif
 THIS_OUT_MISC = $(OUT_MISC)/csharp_SpreadsheetExamples
 
 SPREADSHEET_OUT:= $(OUT_BIN)/CSharp_SpreadsheetExamples
+
+ifneq "$(OUTDIR)" ""
+# We are running in a LO build environment, good
+CLI_LIB_LOCATION = $(OUTDIR)\bin
+else
+# Bad guess, but hey, this is how it was
 CLI_LIB_LOCATION = $(PRJ)\cli
+endif
 
 # Targets
 .PHONY : ALL
@@ -54,7 +66,7 @@ ViewSample : $(SPREADSHEET_OUT)/ViewSample.exe
 
 .PHONY : Info
 ifeq "$(OS)" "WIN"
-Info : SpreadsheetSample GenerateTableSample ViewSample
+Info : SpreadsheetSample GeneralTableSample ViewSample
 	@echo -------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
