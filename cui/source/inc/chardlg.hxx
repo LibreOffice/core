@@ -66,12 +66,8 @@ protected:
                                             sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT );
     virtual             ~SvxCharBasePage();
 
-    void                SetPrevFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
-    void                SetPrevFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
-    void                SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
-    void                SetPrevFontWidthScale( const SfxItemSet& rSet );
-
-    void                SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
+    void SetPrevFontWidthScale( const SfxItemSet& rSet );
+    void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
 
     inline SvxFont&     GetPreviewFont();
     inline SvxFont&     GetPreviewCJKFont();
