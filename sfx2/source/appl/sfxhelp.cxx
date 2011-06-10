@@ -70,7 +70,6 @@
 #include <svtools/sfxecode.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_ULONGSSORT
 #include <svl/svstdarr.hxx>
 
 #include "newhelp.hxx"
