@@ -536,7 +536,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         sal_Int32 nNum = rTxt.Copy( nSttPos, nNumEnd - nSttPos + 1 ).ToInt32( );
 
         // Check if the characters after that number correspond to the ordinal suffix
-        rtl::OUString sServiceName = rtl::OUString::createFromAscii( "com.sun.star.i18n.OrdinalSuffix" );
+        rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.OrdinalSuffix"));
         uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix(
                 comphelper::createProcessComponent( sServiceName ),
                 uno::UNO_QUERY );
