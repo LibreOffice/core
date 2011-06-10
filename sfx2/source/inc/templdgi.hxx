@@ -50,6 +50,7 @@ class SfxStyleFamilies;
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;
+class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;
 class SvTreeListBox ;
 class StyleTreeListBox_Impl;
@@ -208,7 +209,7 @@ protected:
 
     void                        UpdateStyles_Impl(sal_uInt16 nFlags);
     const SfxStyleFamilyItem*   GetFamilyItem_Impl() const;
-    sal_Bool                        IsInitialized() { return nActFamily != 0xffff; }
+    sal_Bool                    IsInitialized() const { return nActFamily != 0xffff; }
     void                        ResetFocus();
     void                        EnableDelete();
     void                        Initialize();
@@ -218,7 +219,8 @@ protected:
     void                SetWaterCanState( const SfxBoolItem* pItem );
 
     void                SelectStyle( const String& rStyle );
-    sal_Bool                HasSelectedStyle() const;
+    sal_Bool            HasSelectedStyle() const;
+    SfxStyleSheetBase  *GetSelectedStyle() const;
     void                FillTreeBox();
     void                Update_Impl();
     void                UpdateFamily_Impl();

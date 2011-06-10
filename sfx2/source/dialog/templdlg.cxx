@@ -1053,6 +1053,15 @@ const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() con
     return 0;
 }
 
+SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
+{
+    if (!IsInitialized() || !pStyleSheetPool || !HasSelectedStyle())
+        return NULL;
+    const String aTemplName( GetSelectedEntry() );
+    const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+    return pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
+}
+
 //-------------------------------------------------------------------------
 
 void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
@@ -2002,9 +2011,7 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
     {
         sal_uInt16 nFilter = nActFilter;
         String aTemplName(GetSelectedEntry());
-        const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-        const SfxStyleFamily eFam = pItem->GetFamily();
-        pStyleSheetPool->Find(aTemplName,eFam,SFXSTYLEBIT_ALL);  // -Wall required??
+        GetSelectedStyle(); // -Wall required??
         Window* pTmp;
         //DefModalDialogParent set for modality of the following dialogs
         pTmp = Application::GetDefDialogParent();
@@ -2028,9 +2035,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
     if ( IsInitialized() && HasSelectedStyle() )
     {
         const String aTemplName( GetSelectedEntry() );
-        const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
-        SfxStyleSheetBase* pStyle =
-            pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
+        SfxStyleSheetBase* pStyle = GetSelectedStyle();
         if ( pStyle )
         {
             String aMsg;
