@@ -235,7 +235,7 @@ static sal_Bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt3
 EMFP_DEBUG(void dumpWords( SvStream& s, int i )
 {
     sal_uInt32 pos = s.Tell();
-    INT16 data;
+    sal_Int16 data;
     for( ; i > 0; i -- ) {
         s >> data;
         EMFP_DEBUG(printf ("\t\t\tdata: %04hx\n", data));
