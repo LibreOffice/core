@@ -347,6 +347,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::implMoveIterators(const Reference< XDrawPage >& _rxDrawPage, sal_Bool _bClear)
     {
+        if (!_rxDrawPage.is())
+            return false;
+
         sal_Bool bKnownPage = sal_False;
 
         // the one for the ids
@@ -406,7 +409,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     ::rtl::OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
     {
-        OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLExport_Impl::getControlId: invalid current page!");
+        if (m_aCurrentPageIds == m_aControlIds.end())
+            return ::rtl::OUString();
+
         OSL_ENSURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
             "OFormLayerXMLExport_Impl::getControlId: can not find the control!");
         return m_aCurrentPageIds->second[_rxControl];
