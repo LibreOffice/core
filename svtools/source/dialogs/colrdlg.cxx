@@ -92,7 +92,7 @@ short SvColorDialog::Execute()
         Sequence< Any > args(1);
         args[0] = Any( xParent );
 
-        Reference< XExecutableDialog > xDialog( xSMGR->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.cui.ColorPicker"), args), UNO_QUERY_THROW );
+        Reference< XExecutableDialog > xDialog( xSMGR->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.cui.ColorPicker")), args), UNO_QUERY_THROW );
         Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
 
         Sequence< PropertyValue > props( 2 );
