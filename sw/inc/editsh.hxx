@@ -54,7 +54,6 @@ class SwDoc;
 class DateTime;
 class CommandExtTextInputData;
 
-class SvUShortsSort;
 class SvNumberFormatter;
 class SfxPoolItem;
 class SfxItemSet;

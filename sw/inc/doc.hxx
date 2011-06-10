@@ -111,7 +111,6 @@ class SfxPrinter;
 class SvNumberFormatter;
 class SvStringsSort;
 class SvUShorts;
-class SvUShortsSort;
 class SvxMacro;
 class SvxMacroTableDtor;
 class SwAutoCompleteWord;
