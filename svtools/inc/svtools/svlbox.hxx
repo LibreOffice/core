@@ -399,7 +399,7 @@ public:
     SvLBoxEntry*    First() const { return (SvLBoxEntry*)(pModel->First()); }
     SvLBoxEntry*    Next( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Next(pEntry,pDepth));}
     SvLBoxEntry*    Prev( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Prev(pEntry,pDepth));}
-    SvLBoxEntry*    Last( sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Last(pDepth));}
+    SvLBoxEntry*    Last() const { return (SvLBoxEntry*)(pModel->Last()); }
 
     SvLBoxEntry*    FirstChild(SvLBoxEntry* pParent ) const { return (SvLBoxEntry*)(pModel->FirstChild(pParent)); }
     SvLBoxEntry*    NextSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->NextSibling( pEntry )); }

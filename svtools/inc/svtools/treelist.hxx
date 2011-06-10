@@ -31,7 +31,6 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <vector>
 
 #include <tools/table.hxx>
@@ -65,13 +64,83 @@ class SvListEntry;
 
 //=============================================================================
 
-class SVT_DLLPUBLIC SvTreeEntryList : public List
+typedef ::std::vector< SvListEntry* > SvTreeEntryList_impl;
+
+class SVT_DLLPUBLIC SvTreeEntryList
 {
+private:
+    SvTreeEntryList_impl    maEntryList;
+    size_t                  maCurrent;
+
 public:
-                    SvTreeEntryList() {};
+                    SvTreeEntryList() { maCurrent = 0; };
                     SvTreeEntryList( SvTreeEntryList& rList );
 
     void            DestroyAll();
+    void            push_back( SvListEntry* pItem )
+                    { maEntryList.push_back( pItem ); }
+    void            insert( SvListEntry* pItem, size_t i )
+                    {
+                        if ( i < maEntryList.size() ) {
+                            maEntryList.insert( maEntryList.begin() + i, pItem );
+                        } else {
+                            maEntryList.push_back( pItem );
+                        }
+                    }
+    void            remove( SvListEntry* pItem )
+                    {
+                        for ( SvTreeEntryList_impl::iterator it = maEntryList.begin();
+                              it < maEntryList.end();
+                              ++it
+                        ) {
+                            if ( *it == pItem ) {
+                                maEntryList.erase( it );
+                                break;
+                            }
+                        }
+                    }
+    void            remove( size_t i )
+                    {
+                        if ( i < maEntryList.size() ) {
+                            maEntryList.erase( maEntryList.begin() + i );
+                        }
+                    }
+    void            replace( SvListEntry* pNew, SvListEntry* pOld )
+                    {
+                        for ( size_t i = 0, n = maEntryList.size(); i < n; ++i ) {
+                            if ( maEntryList[ i ] == pOld ) {
+                                maEntryList[ i ] = pNew;
+                                break;
+                            }
+                        }
+                    }
+    void            clear() { maEntryList.clear(); }
+
+    bool            empty() { return maEntryList.empty(); }
+
+    size_t          size() { return maEntryList.size(); }
+    size_t          GetPos( SvListEntry* pItem )
+                    {
+                        for ( size_t i = 0, n = maEntryList.size(); i < n; ++i ) {
+                            if ( maEntryList[ i ] == pItem ) {
+                                return i;
+                            }
+                        }
+                        return (size_t)~0;
+                    }
+
+    SvListEntry*    operator[]( size_t i )
+                    { return i < maEntryList.size() ? maEntryList[ i ] : NULL; }
+    SvListEntry*    First()
+                    {
+                        maCurrent = 0;
+                        return ( maCurrent < maEntryList.size() ) ? maEntryList[ 0 ] : NULL;
+                    }
+    SvListEntry*    Next()
+                    {
+                        return ( maCurrent+1 < maEntryList.size() ) ? maEntryList[ ++maCurrent ] : NULL;
+                    }
+    SvListEntry*    last() { return maEntryList.empty() ? NULL : maEntryList.back(); }
 };
 
 //=============================================================================
@@ -275,15 +344,15 @@ public:
     SvListEntry*        First() const;
     SvListEntry*        Next( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
     SvListEntry*        Prev( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvListEntry*        Last( sal_uInt16* pDepth=0 ) const;
+    SvListEntry*        Last() const;
 
     SvListEntry*        FirstChild( SvListEntry* pParent ) const;
     SvListEntry*        NextSibling( SvListEntry* pEntry ) const;
     SvListEntry*        PrevSibling( SvListEntry* pEntry ) const;
     SvListEntry*        LastSibling( SvListEntry* pEntry ) const;
 
-    sal_uLong           Insert( SvListEntry* pEntry,SvListEntry* pPar,sal_uLong nPos=LIST_APPEND);
-    sal_uLong           Insert( SvListEntry* pEntry,sal_uLong nRootPos = LIST_APPEND )
+    sal_uLong           Insert( SvListEntry* pEntry,SvListEntry* pPar,sal_uLong nPos=ULONG_MAX);
+    sal_uLong           Insert( SvListEntry* pEntry,sal_uLong nRootPos = ULONG_MAX )
     { return Insert(pEntry, pRootItem, nRootPos ); }
 
     void                InsertTree( SvListEntry* pTree, SvListEntry* pTarget );
@@ -536,17 +605,15 @@ inline SvListEntry* SvTreeList::GetEntry( SvListEntry* pParent, sal_uLong nPos )
         pParent = pRootItem;
     SvListEntry* pRet = 0;
     if ( pParent->pChilds )
-        pRet = (SvListEntry*)(pParent->pChilds->GetObject(nPos));
+        pRet = (*pParent->pChilds)[ nPos ];
     return pRet;
 }
 
 inline SvListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
 {
-    SvListEntry* pRet;
+    SvListEntry* pRet = 0;
     if ( nEntryCount )
-        pRet = (SvListEntry*)(pRootItem->pChilds->GetObject(nRootPos));
-    else
-        pRet = 0;
+        pRet = (*pRootItem->pChilds)[ nRootPos ];
     return pRet;
 }
 
@@ -575,8 +642,8 @@ public:                                                                         
                     { return (Type)SvTreeList::Next(pEntry,pDepth); }           \
     Type        Prev( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const         \
                     { return (Type)SvTreeList::Prev(pEntry,pDepth); }           \
-    Type        Last( sal_uInt16* pDepth=0 ) const                              \
-                    { return (Type)SvTreeList::Last(pDepth); }                  \
+    Type        Last() const                                                    \
+                    { return (Type)SvTreeList::Last(); }                        \
                                                                                 \
     Type        Clone( SvListEntry* pEntry, sal_uLong& nCloneCount ) const      \
                     { return (Type)SvTreeList::Clone(pEntry,nCloneCount); }     \

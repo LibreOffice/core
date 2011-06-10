@@ -1025,7 +1025,7 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     {
         // Childs werden automatisch mitkopiert
         pSource->SelectChilds( pSourceEntry, sal_False );
-        aList.Insert( pSourceEntry, LIST_APPEND );
+        aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
@@ -1033,7 +1033,7 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     while ( pSourceEntry )
     {
         SvLBoxEntry* pNewParent = 0;
-        sal_uLong nInsertionPos = LIST_APPEND;
+        sal_uLong nInsertionPos = ULONG_MAX;
         sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( bOk )
         {
@@ -1086,7 +1086,7 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
     {
         // Childs werden automatisch mitbewegt
         pSource->SelectChilds( pSourceEntry, sal_False );
-        aList.Insert( pSourceEntry, LIST_APPEND );
+        aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
@@ -1094,7 +1094,7 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
     while ( pSourceEntry )
     {
         SvLBoxEntry* pNewParent = 0;
-        sal_uLong nInsertionPos = LIST_APPEND;
+        sal_uLong nInsertionPos = ULONG_MAX;
         sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         sal_Bool bCopyOk = bOk;
         if ( !bOk && bAllowCopyFallback )
@@ -1144,7 +1144,7 @@ void SvLBox::RemoveSelection()
     SvLBoxEntry* pEntry = FirstSelected();
     while ( pEntry )
     {
-        aList.Insert( pEntry );
+        aList.push_back( pEntry );
         if ( pEntry->HasChilds() )
             // Remove loescht Childs automatisch
             SelectChilds( pEntry, sal_False );
