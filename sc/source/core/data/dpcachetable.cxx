@@ -180,12 +180,12 @@ ScDPCacheTable::~ScDPCacheTable()
 
 sal_Int32 ScDPCacheTable::getRowSize() const
 {
-    return getCache()->GetRowCount();
+    return mpCache ? getCache()->GetRowCount() : 0;
 }
 
 sal_Int32 ScDPCacheTable::getColSize() const
 {
-    return getCache()->GetColumnCount();
+    return mpCache ? getCache()->GetColumnCount() : 0;
 }
 
 void ScDPCacheTable::fillTable(
@@ -313,6 +313,9 @@ void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, c
 
 const ScDPItemData* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
 {
+    if (!mpCache)
+        return NULL;
+
    SCROW nId= getCache()->GetItemDataId(nCol, nRow, bRepeatIfEmpty);
    return getCache()->GetItemDataById( nCol, nId );
 }
@@ -331,6 +334,8 @@ void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, boo
 }
 String ScDPCacheTable::getFieldName(SCCOL  nIndex) const
 {
+    if (!mpCache)
+        return String();
     return getCache()->GetDimensionName( nIndex );
 }
 
@@ -410,7 +415,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
 
 SCROW ScDPCacheTable::getOrder(long nDim, SCROW nIndex) const
 {
-    return getCache()->GetOrder(nDim, nIndex);
+    return mpCache ? getCache()->GetOrder(nDim, nIndex) : 0;
 }
 
 void ScDPCacheTable::clear()

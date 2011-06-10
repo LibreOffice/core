@@ -136,10 +136,18 @@ void ScDatabaseDPData::SetEmptyFlags( sal_Bool /* bIgnoreEmptyRows */, sal_Bool 
 void ScDatabaseDPData::CreateCacheTable()
 {
     if (!aCacheTable.empty())
+        // cache table already created.
         return;
 
     if (!aCacheTable.hasCache())
-        aCacheTable.setCache(mrImport.CreateCache());
+    {
+        const ScDPCache* pCache = mrImport.CreateCache();
+        if (!pCache)
+            // Cache creation failed.  Perhaps invalid database connection.
+            return;
+
+        aCacheTable.setCache(pCache);
+    }
 
     aCacheTable.fillTable();
 }
