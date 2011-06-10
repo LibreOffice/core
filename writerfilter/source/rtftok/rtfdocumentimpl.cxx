@@ -562,6 +562,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aParagraphSprms.insert(make_pair(NS_sprm::LN_STextFlow, pValue));
             }
             break;
+        case RTF_ULNONE:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(0));
+                m_aStates.top().aCharacterSprms.insert(make_pair(NS_sprm::LN_CKul, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -943,7 +949,6 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_ULDB: nSprm = 3; break;
         case RTF_ULHWAVE: nSprm = 27; break;
         case RTF_ULLDASH: nSprm = 39; break;
-        case RTF_ULNONE: nSprm = 0; break;
         case RTF_ULTH: nSprm = 6; break;
         case RTF_ULTHD: nSprm = 20; break;
         case RTF_ULTHDASH: nSprm = 23; break;
