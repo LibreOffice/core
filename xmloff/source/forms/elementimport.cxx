@@ -252,7 +252,9 @@ namespace xmloff
             m_sName = implGetDefaultName();
         }
 
-        m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
+        if (m_xParentContainer.is())
+            m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
+
         LEAVE_LOG_CONTEXT( );
     }
 
