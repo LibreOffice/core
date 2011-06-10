@@ -88,7 +88,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassi
     {
         Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")), xContext);
         mxCharClass = uno::Reference< i18n::XCharacterClassification >( xInterface, uno::UNO_QUERY );
     }
     return mxCharClass;

@@ -1055,7 +1055,7 @@ rtl::OUString PDFIProcessor::mirrorString( const rtl::OUString& i_rString )
     {
         m_bMirrorMapperTried = true;
         uno::Reference< lang::XMultiComponentFactory > xMSF(  m_xContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference < uno::XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.awt.StringMirror"), m_xContext);
+        uno::Reference < uno::XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.StringMirror")), m_xContext);
         m_xMirrorMapper = uno::Reference< util::XStringMapping >( xInterface, uno::UNO_QUERY );
         #if OSL_DEBUG_LEVEL > 1
         if( m_xMirrorMapper.is() )
