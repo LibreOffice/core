@@ -794,6 +794,9 @@ void ICEConnectionObserver::ICEWatchProc(
             close( nWakeupFiles[1] );
             close( nWakeupFiles[0] );
             ICEThread = NULL;
+            // acquire the mutex again, because the caller does not expect
+            // it to be released when calling into SM
+            osl_acquireMutex( ICEMutex );
         }
     }
     SMprintf( "ICE connection on %d %s\n",
