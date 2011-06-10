@@ -2175,7 +2175,7 @@ sal_Bool ToolBox::ImplHasClippedItems()
     return sal_False;
 }
 
-void ToolBox::ImplUpdateCustomMenu()
+void ToolBox::UpdateCustomMenu()
 {
     // fill clipped items into menu
     if( !IsMenuEnabled() )
@@ -2296,7 +2296,7 @@ void ToolBox::ExecuteCustomMenu()
     {
         // handle custom menu asynchronously
         // to avoid problems if the toolbox is closed during menu execute
-        ImplUpdateCustomMenu();
+        UpdateCustomMenu();
         Application::PostUserEvent( mpData->mnEventId, LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
     }
 }

@@ -281,7 +281,6 @@ private:
     SAL_DLLPRIVATE void            ImplHideFocus();
     SAL_DLLPRIVATE void            ImplUpdateInputEnable();
     SAL_DLLPRIVATE void            ImplFillLayoutData() const;
-    SAL_DLLPRIVATE void            ImplUpdateCustomMenu();
     SAL_DLLPRIVATE sal_Bool            ImplHasClippedItems();
     SAL_DLLPRIVATE Point           ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const;
     SAL_DLLPRIVATE void            ImplExecuteCustomMenu();
@@ -599,6 +598,7 @@ public:
     sal_uInt16              GetMenuType() const;
     sal_Bool                IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
+    void                UpdateCustomMenu();
     void                SetMenuButtonHdl( const Link& rLink );
     const Link&         GetMenuButtonHdl() const;
 

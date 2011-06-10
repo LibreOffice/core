@@ -5729,7 +5729,7 @@ sal_Bool ToolBox::ImplOpenItem( KeyCode aKeyCode )
         if( ImplCloseLastPopup( GetParent() ) )
             return bRet;
 
-        ImplUpdateCustomMenu();
+        UpdateCustomMenu();
         Application::PostUserEvent( mpData->mnEventId, LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
     }
     else if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
