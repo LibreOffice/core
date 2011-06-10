@@ -68,11 +68,3 @@ DEFLIB1NAME	=$(TARGET)
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk
     @$(TYPE) $(TARGET).flt > $@
-
-$(MISC)/mtfrenderer.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        mtfrenderer.component
-	$(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-         $(SOLARENV)/bin/createcomponent.xslt mtfrenderer.component
-
-ALLTAR : $(MISC)/mtfrenderer.component
