@@ -27,30 +27,31 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include "precompiled_sw.hxx"
+#include <sal/cppunit.h>
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <sal/config.h>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
+
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
+
 #include <comphelper/processfactory.hxx>
+
+#include <tools/urlobj.hxx>
+
+#include <unotools/tempfile.hxx>
+
+#include <ucbhelper/contentbroker.hxx>
+
 #include <vcl/svapp.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-
-#include <tools/urlobj.hxx>
-#include <unotools/tempfile.hxx>
-#include <ucbhelper/contentbroker.hxx>
 
 #include "init.hxx"
 #include "swtypes.hxx"
