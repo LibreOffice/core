@@ -69,6 +69,9 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,sw_filters_test,\
     sw_filters_test \
 ))
 
+$(call gb_CppunitTest_get_target,sw_filters_test) : \
+        $(call gb_AllLangResTarget_get_target,sw)
+
 $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
     --headless \
     --invisible \
