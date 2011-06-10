@@ -54,7 +54,7 @@ class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
     # oActionEvent is a com.sun.star.awt.ActionEvent struct.
     def actionPerformed( self, oActionEvent ):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall, (oActionEvent,) + self.tParams )
+            apply( self.oProcToCall )
 
 
 #--------------------------------------------------
@@ -73,7 +73,7 @@ class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
     # oItemEvent is a com.sun.star.awt.ItemEvent struct.
     def itemStateChanged( self, oItemEvent ):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall, (oActionEvent,) + self.tParams )
+            apply( self.oProcToCall )
 
 
 #--------------------------------------------------
@@ -92,7 +92,7 @@ class TextListenerProcAdapter( unohelper.Base, XTextListener ):
     # oTextEvent is a com.sun.star.awt.TextEvent struct.
     def textChanged( self, oTextEvent ):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall, (oTextEvent,) + self.tParams )
+            apply( self.oProcToCall )
 
 #--------------------------------------------------
 # An Window adapter.
@@ -110,4 +110,4 @@ class WindowListenerProcAdapter( unohelper.Base, XWindowListener  ):
     # oTextEvent is a com.sun.star.awt.TextEvent struct.
     def windowResized(self, actionEvent):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall, (actionEvent,) + self.tParams )
+            apply( self.oProcToCall )

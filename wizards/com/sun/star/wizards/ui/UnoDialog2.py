@@ -22,66 +22,66 @@ class UnoDialog2(UnoDialog):
     def __init__(self, xmsf):
         super(UnoDialog2,self).__init__(xmsf,(), ())
 
-    def insertButton(self, sName, actionPerformed, sPropNames, oPropValues, eventTarget=None):
+    def insertButton(self, sName, actionPerformed, sPropNames, oPropValues, listener):
         xButton = self.insertControlModel2("com.sun.star.awt.UnoControlButtonModel", sName, sPropNames, oPropValues)
         if actionPerformed is not None:
+            actionPerformed = getattr(listener, actionPerformed)
             xButton.addActionListener(ActionListenerProcAdapter(actionPerformed))
 
         return xButton
 
-    def insertImageButton(self, sName, actionPerformed, sPropNames, oPropValues):
+    def insertImageButton(self, sName, actionPerformed, sPropNames, oPropValues, listener):
         xButton = self.insertControlModel2("com.sun.star.awt.UnoControlButtonModel", sName, sPropNames, oPropValues)
-        if actionPerformed != None:
+        if actionPerformed is not None:
+            actionPerformed = getattr(listener, actionPerformed)
             xButton.addActionListener(ActionListenerProcAdapter(actionPerformed))
 
         return xButton
 
-    def insertCheckBox(self, sName, itemChanged, sPropNames, oPropValues, eventTarget=None):
+    def insertCheckBox(self, sName, itemChanged, sPropNames, oPropValues, listener):
         xCheckBox = self.insertControlModel2("com.sun.star.awt.UnoControlCheckBoxModel", sName, sPropNames, oPropValues)
-        if itemChanged != None:
-            if eventTarget is None:
-                eventTarget = self
-            xCheckBox.addItemListener(ItemListenerProcAdapter(None))
+        if itemChanged is not None:
+            itemChanged = getattr(listener, itemChanged)
+            xCheckBox.addItemListener(ItemListenerProcAdapter(itemChanged))
 
         return xCheckBox
 
-    def insertComboBox(self, sName, actionPerformed, itemChanged, textChanged, sPropNames, oPropValues, eventTarget=None):
+    def insertComboBox(self, sName, actionPerformed, itemChanged, textChanged, sPropNames, oPropValues, listener):
         xComboBox = self.insertControlModel2("com.sun.star.awt.UnoControlComboBoxModel", sName, sPropNames, oPropValues)
-        if eventTarget is None:
-            eventTarget = self
-        if actionPerformed != None:
-            xComboBox.addActionListener(None)
+        if actionPerformed is not None:
+            actionPerformed = getattr(listener, actionPerformed)
+            xComboBox.addActionListener(ActionListenerProcAdapter(actionPerformed))
 
-        if itemChanged != None:
-            xComboBox.addItemListener(ItemListenerProcAdapter(None))
+        if itemChanged is not None:
+            itemChanged = getattr(listener, itemChanged)
+            xComboBox.addItemListener(ItemListenerProcAdapter(itemChanged))
 
-        if textChanged != None:
-            xComboBox.addTextListener(TextListenerProcAdapter(None))
+        if textChanged is not None:
+            textChanged = getattr(listener, textChanged)
+            xComboBox.addTextListener(TextListenerProcAdapter(textChanged))
 
         return xComboBox
 
-    def insertListBox(self, sName, actionPerformed, itemChanged, sPropNames, oPropValues, eventTarget=None):
+    def insertListBox(self, sName, actionPerformed, itemChanged, sPropNames, oPropValues, listener):
         xListBox = self.insertControlModel2("com.sun.star.awt.UnoControlListBoxModel",
             sName, sPropNames, oPropValues)
 
-        if eventTarget is None:
-            eventTarget = self
+        if actionPerformed is not None:
+            actionPerformed = getattr(listener, actionPerformed)
+            xListBox.addActionListener(actionPerformed)
 
-        if actionPerformed != None:
-            xListBox.addActionListener(None)
-
-        if itemChanged != None:
-            xListBox.addItemListener(ItemListenerProcAdapter(None))
+        if itemChanged is not None:
+            itemChanged = getattr(listener, itemChanged)
+            xListBox.addItemListener(ItemListenerProcAdapter(itemChanged))
 
         return xListBox
 
-    def insertRadioButton(self, sName, itemChanged, sPropNames, oPropValues, eventTarget=None):
+    def insertRadioButton(self, sName, itemChanged, sPropNames, oPropValues, listener):
         xRadioButton = self.insertControlModel2("com.sun.star.awt.UnoControlRadioButtonModel",
             sName, sPropNames, oPropValues)
-        if itemChanged != None:
-            if eventTarget is None:
-                eventTarget = self
-            xRadioButton.addItemListener(ItemListenerProcAdapter(None))
+        if itemChanged is not None:
+            itemChanged = getattr(listener, itemChanged)
+            xRadioButton.addItemListener(ItemListenerProcAdapter(itemChanged))
 
 
         return xRadioButton
@@ -90,9 +90,9 @@ class UnoDialog2(UnoDialog):
         oTitledBox = self.insertControlModel2("com.sun.star.awt.UnoControlGroupBoxModel", sName, sPropNames, oPropValues)
         return oTitledBox
 
-    def insertTextField(self, sName, sTextChanged, sPropNames, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget,
-            "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues)
+    def insertTextField(self, sName, sTextChanged, sPropNames, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged,
+            "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues, listener)
 
     def insertImage(self, sName, sPropNames, oPropValues):
         return self.insertControlModel2("com.sun.star.awt.UnoControlImageControlModel", sName, sPropNames, oPropValues)
@@ -107,35 +107,34 @@ class UnoDialog2(UnoDialog):
     and Time edit components.
     '''
 
-    def insertEditField(self, sName, sTextChanged, eventTarget, sModelClass, sPropNames, oPropValues):
+    def insertEditField(self, sName, sTextChanged, sModelClass, sPropNames, oPropValues, listener):
         xField = self.insertControlModel2(sModelClass, sName, sPropNames, oPropValues)
-        if sTextChanged != None:
-            if eventTarget is None:
-                eventTarget = self
-            xField.addTextListener(TextListenerProcAdapter(None))
+        if sTextChanged is not None:
+            sTextChanged = getattr(listener, sTextChanged)
+            xField.addTextListener(TextListenerProcAdapter(sTextChanged))
 
         return xField
 
-    def insertFileControl(self, sName, sTextChanged, sPropNames, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFileControlModel", sPropNames, oPropValues)
+    def insertFileControl(self, sName, sTextChanged, sPropNames, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged, "com.sun.star.awt.UnoControlFileControlModel", sPropNames, oPropValues, listener)
 
-    def insertCurrencyField(self, sName, sTextChanged, sPropNames, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlCurrencyFieldModel", sPropNames, oPropValues)
+    def insertCurrencyField(self, sName, sTextChanged, sPropNames, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged, "com.sun.star.awt.UnoControlCurrencyFieldModel", sPropNames, oPropValues, listener)
 
-    def insertDateField(self, sName, sTextChanged, sPropNames, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlDateFieldModel", sPropNames, oPropValues)
+    def insertDateField(self, sName, sTextChanged, sPropNames, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged, "com.sun.star.awt.UnoControlDateFieldModel", sPropNames, oPropValues, listener)
 
-    def insertNumericField(self, sName, sTextChanged, sPropNames, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlNumericFieldModel", sPropNames, oPropValues)
+    def insertNumericField(self, sName, sTextChanged, sPropNames, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged, "com.sun.star.awt.UnoControlNumericFieldModel", sPropNames, oPropValues, listener)
 
-    def insertTimeField(self, sName, sTextChanged, sPropNames, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlTimeFieldModel", sPropNames, oPropValues)
+    def insertTimeField(self, sName, sTextChanged, sPropNames, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged, "com.sun.star.awt.UnoControlTimeFieldModel", sPropNames, oPropValues, listener)
 
-    def insertPatternField(self, sName, sTextChanged, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlPatternFieldModel", sPropNames, oPropValues)
+    def insertPatternField(self, sName, sTextChanged, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged, "com.sun.star.awt.UnoControlPatternFieldModel", sPropNames, oPropValues, listener)
 
-    def insertFormattedField(self, sName, sTextChanged, sPropNames, oPropValues, eventTarget=None):
-        return self.insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFormattedFieldModel", sPropNames, oPropValues)
+    def insertFormattedField(self, sName, sTextChanged, sPropNames, oPropValues, listener):
+        return self.insertEditField(sName, sTextChanged, "com.sun.star.awt.UnoControlFormattedFieldModel", sPropNames, oPropValues, listener)
 
     def insertFixedLine(self, sName, sPropNames, oPropValues):
         oLine = self.insertControlModel2("com.sun.star.awt.UnoControlFixedLineModel", sName, sPropNames, oPropValues)
@@ -166,13 +165,10 @@ class UnoDialog2(UnoDialog):
 
     def setControlPropertiesDebug(self, model, names, values):
         i = 0
-        while i < names.length:
+        while i < len(names):
             print "   Settings: ", names[i]
             Helper.setUnoPropertyValue(model, names[i], values[i])
             i += 1
-
-    def translateURL(self, relativeURL):
-        return ""
 
     def getControlModel(self, unoControl):
         obj = unoControl.getModel()

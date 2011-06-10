@@ -18,6 +18,8 @@ from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
 
+import timeit
+
 class FaxWizardDialogImpl(FaxWizardDialog):
 
     def leaveStep(self, nOldStep, nNewStep):
@@ -71,6 +73,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
             #create the dialog:
             self.drawNaviBar()
+
             self.buildStep1()
             self.buildStep2()
             self.buildStep3()
@@ -220,7 +223,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def insertPathSelectionControl(self):
         self.myPathSelection = PathSelection(self.xMSF, self, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE)
-        self.myPathSelection.insert(5, 97, 70, 205, 45, self.resources.reslblTemplatePath_value, True, HelpIds.getHelpIdString(HID + 34), HelpIds.getHelpIdString(HID + 35))
+        self.myPathSelection.insert(5, 97, 70, 205, 45, self.resources.reslblTemplatePath_value, True, HelpIds.array2[HID + 34], HelpIds.array2[HID + 35])
         self.myPathSelection.sDefaultDirectory = self.UserTemplatePath
         self.myPathSelection.sDefaultName = "myFaxTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
