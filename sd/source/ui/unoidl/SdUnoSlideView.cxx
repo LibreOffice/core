@@ -168,7 +168,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
     if (xProperties.is())
     {
         sal_uInt16 nPageNumber(0);
-        if (xProperties->getPropertyValue(::rtl::OUString::createFromAscii("Number")) >>= nPageNumber)
+        if (xProperties->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))) >>= nPageNumber)
         {
             mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
                 nPageNumber-1,
