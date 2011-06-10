@@ -1360,6 +1360,30 @@ int RTFDocumentImpl::popState()
     return 0;
 }
 
+int RTFDocumentImpl::asHex(char ch)
+{
+    int ret = 0;
+    if (isdigit(ch))
+        ret = ch - '0';
+    else
+    {
+        if (islower(ch))
+        {
+            if (ch < 'a' || ch > 'f')
+                return -1;
+            ret = ch - 'a';
+        }
+        else
+        {
+            if (ch < 'A' || ch > 'F')
+                return -1;
+            ret = ch - 'A';
+        }
+        ret += 10;
+    }
+    return ret;
+}
+
 int RTFDocumentImpl::resolveParse()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -1405,24 +1429,10 @@ int RTFDocumentImpl::resolveParse()
                     {
                         OSL_TRACE("%s: hex internal state", OSL_THIS_FUNC);
                         b = b << 4;
-                        if (isdigit(ch))
-                            b += (char) ch - '0';
-                        else
-                        {
-                            if (islower(ch))
-                            {
-                                if (ch < 'a' || ch > 'f')
-                                    return ERROR_HEX_INVALID;
-                                b += (char) ch - 'a';
-                            }
-                            else
-                            {
-                                if (ch < 'A' || ch > 'F')
-                                    return ERROR_HEX_INVALID;
-                                b += (char) ch - 'A';
-                            }
-                            b += 10;
-                        }
+                        char parsed = asHex(ch);
+                        if (parsed == -1)
+                            return ERROR_HEX_INVALID;
+                        b += parsed;
                         count--;
                         if (!count)
                         {

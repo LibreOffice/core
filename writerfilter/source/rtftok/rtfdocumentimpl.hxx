@@ -132,6 +132,7 @@ namespace writerfilter {
                 void skipDestination(bool bParsed);
                 std::multimap<Id, RTFValue::Pointer_t> mergeSprms();
                 std::multimap<Id, RTFValue::Pointer_t> mergeAttributes();
+                int asHex(char ch);
             private:
                 int resolveParse();
                 int resolveKeyword();
