@@ -314,22 +314,6 @@ public:
 };
 
 //___________________________________________________________________
-// XclExpChTrTabIdBufferList
-
-class XclExpChTrTabIdBufferList : private List
-{
-private:
-    inline XclExpChTrTabIdBuffer* First()   { return (XclExpChTrTabIdBuffer*) List::First(); }
-    inline XclExpChTrTabIdBuffer* Next()    { return (XclExpChTrTabIdBuffer*) List::Next(); }
-
-public:
-    virtual                     ~XclExpChTrTabIdBufferList();
-
-    inline void                 Append( XclExpChTrTabIdBuffer* pNew )
-                                    { List::Insert( pNew, LIST_APPEND ); }
-};
-
-//___________________________________________________________________
 // XclExpChTrTabId - tab id record
 
 class XclExpChTrTabId : public ExcRecord
@@ -656,8 +640,8 @@ class XclExpChangeTrack : protected XclExpRoot
 private:
     XclExpChTrRecordList        aRecList;
     XclExpChTrActionStack       aActionStack;
-    XclExpChTrTabIdBufferList   aTabIdBufferList;
     XclExpChTrTabIdBuffer*      pTabIdBuffer;
+    std::vector<XclExpChTrTabIdBuffer*> maBuffers;
 
     ScDocument*                 pTempDoc;           // empty document
 

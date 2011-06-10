@@ -537,14 +537,6 @@ void XclExpChTrTabIdBuffer::Remove()
 
 //___________________________________________________________________
 
-XclExpChTrTabIdBufferList::~XclExpChTrTabIdBufferList()
-{
-    for( XclExpChTrTabIdBuffer* pBuffer = First(); pBuffer; pBuffer = Next() )
-        delete pBuffer;
-}
-
-//___________________________________________________________________
-
 XclExpChTrTabId::XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer, bool bInRevisionHeaders )
     : nTabCount( rBuffer.GetBufferCount() )
     , mbInRevisionHeaders( bInRevisionHeaders )
@@ -1466,7 +1458,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     aRecList(),
     aActionStack(),
-    aTabIdBufferList(),
     pTabIdBuffer( NULL ),
     pTempDoc( NULL ),
     nNewAction( 1 ),
@@ -1482,7 +1473,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         return;
 
     pTabIdBuffer = new XclExpChTrTabIdBuffer( GetTabInfo().GetXclTabCount() );
-    aTabIdBufferList.Append( pTabIdBuffer );
+    maBuffers.push_back( pTabIdBuffer );
 
     // calculate final table order (tab id list)
     const ScChangeAction* pScAction;
@@ -1557,6 +1548,10 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
 
 XclExpChangeTrack::~XclExpChangeTrack()
 {
+    std::vector<XclExpChTrTabIdBuffer*>::iterator pIter;
+    for ( pIter = maBuffers.begin(); pIter != maBuffers.end(); ++pIter )
+        delete *pIter;
+
     if( pTempDoc )
         delete pTempDoc;
 }
@@ -1612,7 +1607,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
             pXclAction = new XclExpChTrInsertTab( rAction, GetRoot(), *pTabIdBuffer );
             XclExpChTrTabIdBuffer* pNewBuffer = new XclExpChTrTabIdBuffer( *pTabIdBuffer );
             pNewBuffer->Remove();
-            aTabIdBufferList.Append( pNewBuffer );
+            maBuffers.push_back( pNewBuffer );
             pTabIdBuffer = pNewBuffer;
         }
         break;
