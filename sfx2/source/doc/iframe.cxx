@@ -384,7 +384,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString&,
 ::sal_Int16 SAL_CALL IFrameObject::execute() throw (::com::sun::star::uno::RuntimeException)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, rtl::OUString::createFromAscii(".uno:InsertObjectFloatingFrame"), mxObj );
+    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:InsertObjectFloatingFrame")), mxObj );
     if ( pDlg )
         pDlg->Execute();
     return 0;

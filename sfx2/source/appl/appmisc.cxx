@@ -319,7 +319,7 @@ Image SfxApplication::GetApplicationLogo()
     do
     {
         bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
             aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
     }
     while ( !bLoaded && ( nIndex >= 0 ) );
@@ -328,23 +328,23 @@ Image SfxApplication::GetApplicationLogo()
     if ( !bLoaded )
     {
         bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
         if ( !bLoaded )
             bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
     }
 
     if ( !bLoaded )
     {
         bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
         if ( !bLoaded )
             bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
     }
 
     return aAppLogo;
