@@ -144,10 +144,29 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
     }
 }
 
+int RTFDocumentImpl::resolvePict(char ch)
+{
+    uno::Sequence< sal_Int8 > aSequence;
+
+    while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
+    {
+        if (ch != 0x0d && ch != 0x0a)
+        {
+            // handle ch
+        }
+        Strm() >> ch;
+    }
+    Strm().SeekRel(-1);
+
+    return 0;
+}
+
 int RTFDocumentImpl::resolveChars(char ch)
 {
     OStringBuffer aBuf;
 
+    if (m_aStates.top().nDestinationState == DESTINATION_PICT)
+        return resolvePict(ch);
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)

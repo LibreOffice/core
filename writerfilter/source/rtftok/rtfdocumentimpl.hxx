@@ -144,6 +144,7 @@ namespace writerfilter {
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
 
                 int resolveChars(char ch);
+                int resolvePict(char ch);
                 int pushState();
                 int popState();
                 void text(rtl::OUString& rString);
