@@ -135,6 +135,7 @@ my_components = \
     log \
     mcnttype \
     migrationoo2 \
+    mtfrenderer \
     msfilter \
     msworksfilter \
     mysql \
