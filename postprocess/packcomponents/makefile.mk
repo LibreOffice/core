@@ -126,6 +126,7 @@ my_components = \
     lwpfilter \
     mcnttype \
     migrationoo2 \
+    mtfrenderer \
     msfilter \
     msworksfilter \
     mysql \
