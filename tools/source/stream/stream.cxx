@@ -974,14 +974,6 @@ sal_Bool SvStream::WriteUniStringLines( const String& rStr )
     return nError == SVSTREAM_OK;
 }
 
-sal_Bool SvStream::WriteUniOrByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet )
-{
-    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
-        return WriteUniStringLines( rStr );
-    else
-        return WriteByteStringLines( rStr, eDestCharSet );
-}
-
 /*************************************************************************
 |*
 |*    Stream::WriteUniOrByteChar()

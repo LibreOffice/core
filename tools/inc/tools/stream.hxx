@@ -495,12 +495,7 @@ public:
     sal_Bool        WriteUniOrByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
     sal_Bool        WriteUniOrByteStringLine( const String& rStr )
                     { return WriteUniOrByteStringLine( rStr, GetStreamCharSet() ); }
-                /// Write multiple lines of Unicode if eDestCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise write multiple lines of Bytecode converted to eDestCharSet,
-                /// CovertLineEnd is applied.
-    sal_Bool        WriteUniOrByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteUniOrByteStringLines( const String& rStr )
-                    { return WriteUniOrByteStringLines( rStr, GetStreamCharSet() ); }
+
                 /// Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise write as Bytecode converted to eDestCharSet.
                 /// This may result in more than one byte being written
