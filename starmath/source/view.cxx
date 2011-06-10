@@ -852,7 +852,7 @@ IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
         if (xSMGR.is())
         {
             xDesktop = uno::Reference< frame::XDesktop >(
-                xSMGR->createInstance( rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" )), uno::UNO_QUERY_THROW );
+                xSMGR->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), uno::UNO_QUERY_THROW );
         }
 
         aEdit.GrabFocus();
