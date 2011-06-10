@@ -59,7 +59,6 @@ class PathSelection(object):
                     myFilePickerDialog.callStoreDialog(self.sDefaultDirectory, self.sDefaultName, self.sDefaultFilter);
                     sStorePath = myFilePickerDialog.sStorePath;
                     if sStorePath is not None:
-                        print "hello"
                         myFA = FileAccess(xMSF);
                         xSaveTextBox.setText(myFA.getPath(sStorePath, None));
                         self.sDefaultDirectory = FileAccess.getParentDir(sStorePath);

@@ -26,7 +26,6 @@ class Helper(object):
                 raise ValueError("No Such Property: '" + PropertyName + "'");
 
         except UnoException, exception:
-            print PropertyName
             traceback.print_exc()
 
     @classmethod

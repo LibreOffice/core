@@ -5,7 +5,7 @@ from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.uno import Exception as UnoException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
-from common.HelpIds import *
+import common.HelpIds as HelpIds
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
 from event.MethodInvocation import *
 from event.EventNames import EVENT_ITEM_CHANGED
@@ -13,6 +13,12 @@ from event.EventNames import EVENT_ITEM_CHANGED
 class WizardDialog(UnoDialog2):
 
     __metaclass__ = ABCMeta
+
+    __NEXT_ACTION_PERFORMED = "gotoNextAvailableStep"
+    __BACK_ACTION_PERFORMED = "gotoPreviousAvailableStep"
+    __FINISH_ACTION_PERFORMED = "finishWizard_1"
+    __CANCEL_ACTION_PERFORMED = "cancelWizard_1"
+    __HELP_ACTION_PERFORMED = None
 
     '''
     Creates a new instance of WizardDialog
@@ -228,12 +234,12 @@ class WizardDialog(UnoDialog2):
             self.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnNaviSep", (PropertyNames.PROPERTY_HEIGHT, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH), (1, 0, 0, iDialogHeight - 26, iCurStep, iDialogWidth))
             self.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnRoadSep",(PropertyNames.PROPERTY_HEIGHT, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH),(iBtnPosY - 6, 1, 85, 0, iCurStep, 1))
             propNames = (PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH)
-            Helper.setUnoPropertyValue(self.xDialogModel, PropertyNames.PROPERTY_HELPURL, HelpIds.getHelpIdString(self.__hid))
-            self.insertButton("btnWizardHelp", "",(PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH),(True, iButtonHeight, self.__oWizardResource.getResText(UIConsts.RID_COMMON + 15), iHelpPosX, iBtnPosY, uno.Any("short",HELP), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardBack", self.gotoPreviousAvailableStep, propNames,(False, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 2), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 13), iBackPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardNext", self.gotoNextAvailableStep, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 3), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 14), iNextPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardFinish", self.finishWizard_1, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 4), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 12), iFinishPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
-            self.insertButton("btnWizardCancel", self.cancelWizard_1, propNames,(True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 5), self.__oWizardResource.getResText(UIConsts.RID_COMMON + 11), iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth))
+            Helper.setUnoPropertyValue(self.xDialogModel, PropertyNames.PROPERTY_HELPURL, HelpIds.array2[self.__hid])
+            self.insertButton("btnWizardHelp", WizardDialog.__HELP_ACTION_PERFORMED,(PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH),(True, iButtonHeight, self.__oWizardResource.getResText(UIConsts.RID_COMMON + 15), iHelpPosX, iBtnPosY, uno.Any("short",HELP), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
+            self.insertButton("btnWizardBack", WizardDialog.__BACK_ACTION_PERFORMED, propNames,(False, iButtonHeight, HelpIds.array2[self.__hid + 2], self.__oWizardResource.getResText(UIConsts.RID_COMMON + 13), iBackPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
+            self.insertButton("btnWizardNext", WizardDialog.__NEXT_ACTION_PERFORMED, propNames,(True, iButtonHeight, HelpIds.array2[self.__hid + 3], self.__oWizardResource.getResText(UIConsts.RID_COMMON + 14), iNextPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
+            self.insertButton("btnWizardFinish", WizardDialog.__FINISH_ACTION_PERFORMED, propNames,(True, iButtonHeight, HelpIds.array2[self.__hid + 4], self.__oWizardResource.getResText(UIConsts.RID_COMMON + 12), iFinishPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
+            self.insertButton("btnWizardCancel", WizardDialog.__CANCEL_ACTION_PERFORMED, propNames,(True, iButtonHeight, HelpIds.array2[self.__hid + 5], self.__oWizardResource.getResText(UIConsts.RID_COMMON + 11), iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep, uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.setControlProperty("btnWizardNext", "DefaultButton", True)
             # add a window listener, to know
             # if the user used "escape" key to
@@ -298,7 +304,7 @@ class WizardDialog(UnoDialog2):
             traceback.print_exc()
             return False
 
-    def gotoPreviousAvailableStep(self, oActionEvent):
+    def gotoPreviousAvailableStep(self):
         try:
             if self.__nNewStep > 1:
                 self.__nOldStep = self.__nNewStep
@@ -328,7 +334,7 @@ class WizardDialog(UnoDialog2):
 
         return -1
 
-    def gotoNextAvailableStep(self, oActionEvent):
+    def gotoNextAvailableStep(self):
         try:
             self.__nOldStep = self.__nNewStep
             self.__nNewStep = self.getNextAvailableStep()
@@ -341,7 +347,7 @@ class WizardDialog(UnoDialog2):
     def finishWizard(self):
         pass
 
-    def finishWizard_1(self, oActionEvent):
+    def finishWizard_1(self):
         '''This function will call if the finish button is pressed on the UI'''
         try:
             self.enableFinishButton(False)
@@ -403,7 +409,7 @@ class WizardDialog(UnoDialog2):
     perform a cancel.
     '''
 
-    def cancelWizard_1(self, oActionEvent):
+    def cancelWizard_1(self):
         try:
             self.cancelWizard()
             self.removeTerminateListener()
