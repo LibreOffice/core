@@ -2922,8 +2922,8 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
     if ( m_bTransient )
     {
         aURL = getParentURL();
-        if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
-            aURL += rtl::OUString::createFromAscii( "/" );
+        if ( aURL.lastIndexOf('/') != ( aURL.getLength() - 1 ) )
+            aURL += rtl::OUString(static_cast<sal_Unicode>('/'));
 
         aURL += m_aEscapedTitle;
     }
