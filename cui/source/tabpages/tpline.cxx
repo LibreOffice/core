@@ -266,12 +266,11 @@ SvxLineTabPage::~SvxLineTabPage()
     if(pSymbolList)
         delete aSymbolMB.GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
 
-    SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.First();
-    while( pInfo )
+    for ( size_t i = 0, n = aGrfBrushItems.size(); i < n; ++i )
     {
+        SvxBmpItemInfo* pInfo = aGrfBrushItems[ i ];
         delete pInfo->pBrushItem;
         delete pInfo;
-        pInfo = (SvxBmpItemInfo*)aGrfBrushItems.Next();
     }
 }
 void SvxLineTabPage::Construct()
@@ -1485,7 +1484,11 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i);
-            aGrfBrushItems.Insert(pInfo, i);
+            if ( i < aGrfBrushItems.size() ) {
+                aGrfBrushItems.insert( aGrfBrushItems.begin() + i, pInfo );
+            } else {
+                aGrfBrushItems.push_back( pInfo );
+            }
             const Graphic* pGraphic = pBrushItem->GetGraphic();
 
             if(pGraphic)
@@ -1564,7 +1567,11 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + nNumMenuGalleryItems);
-            aGrfBrushItems.Insert(pInfo, nNumMenuGalleryItems + i);
+            if ( (size_t)(nNumMenuGalleryItems + i) < aGrfBrushItems.size() ) {
+                aGrfBrushItems.insert( aGrfBrushItems.begin() + nNumMenuGalleryItems + i, pInfo );
+            } else {
+                aGrfBrushItems.push_back( pInfo );
+            }
 
             Size aSize(aBitmap.GetSizePixel());
             if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
@@ -1596,9 +1603,9 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
     PopupMenu* pPopup = pThis->aSymbolMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
     SvxBmpItemInfo* pBmpInfo = 0;
-    for ( sal_uInt16 i = 0; i < pThis->aGrfBrushItems.Count(); i++ )
+    for ( size_t i = 0; i < pThis->aGrfBrushItems.size(); i++ )
     {
-        SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)pThis->aGrfBrushItems.GetObject(i);
+        SvxBmpItemInfo* pInfo = pThis->aGrfBrushItems[ i ];
         if( pInfo->pBrushItem == pItem )
         {
             pBmpInfo = pInfo; break;
@@ -1650,7 +1657,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
             nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
             bResetSize = sal_True;
         }
-        SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.GetObject(nItemId - MN_GALLERY_ENTRY);
+        SvxBmpItemInfo* pInfo = aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
         pGraphic = pInfo->pBrushItem->GetGraphic();
     }
     else switch(nItemId)

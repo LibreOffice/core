@@ -102,6 +102,9 @@ public:
 |*
 \************************************************************************/
 
+class SvxBmpItemInfo;
+typedef ::std::vector< SvxBmpItemInfo* > SvxBmpItemInfoList;
+
 class SvxLineTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
@@ -149,7 +152,7 @@ private:
     MetricField         aSymbolHeightMF;
     CheckBox            aSymbolRatioCB;
     std::vector<String> aGrfNames;
-    List                aGrfBrushItems;
+    SvxBmpItemInfoList  aGrfBrushItems;
     String              sNumCharFmtName;
     sal_Bool            bLastWidthModified;
     Size                aSymbolLastSize;
@@ -386,7 +389,7 @@ private:
     ChangeType*         pnLineEndListState;
     sal_uInt16*         pPageType;
     sal_uInt16*         pDlgType;
-    sal_uInt16*         pPosLineEndLb;
+    sal_uInt16*             pPosLineEndLb;
 
 #ifdef _SVX_TPLNEEND_CXX
     DECL_LINK( ClickAddHdl_Impl, void * );
