@@ -197,6 +197,34 @@ int RTFDocumentImpl::resolvePict(char ch)
     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
     xShape->setSize(awt::Size( 337, 337 )); // TODO hardwired
 
+    // Send it to the dmapper.
+    // shape attribute
+    std::multimap<Id, RTFValue::Pointer_t> aPicAttributes;
+    RTFValue::Pointer_t pPicValue(new RTFValue(xShape));
+    aPicAttributes.insert(make_pair(NS_ooxml::LN_shape, pPicValue));
+    // pic sprm
+    std::multimap<Id, RTFValue::Pointer_t> aGraphicDataAttributes;
+    std::multimap<Id, RTFValue::Pointer_t> aGraphicDataSprms;
+    RTFValue::Pointer_t pGraphicDataValue(new RTFValue(aPicAttributes));
+    aGraphicDataSprms.insert(make_pair(NS_ooxml::LN_pic_pic, pGraphicDataValue));
+    // graphicData sprm
+    std::multimap<Id, RTFValue::Pointer_t> aGraphicAttributes;
+    std::multimap<Id, RTFValue::Pointer_t> aGraphicSprms;
+    RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicDataAttributes, aGraphicDataSprms));
+    aGraphicSprms.insert(make_pair(NS_ooxml::LN_CT_GraphicalObject_graphicData, pGraphicValue));
+    // graphic sprm
+    std::multimap<Id, RTFValue::Pointer_t> aInlineAttributes;
+    std::multimap<Id, RTFValue::Pointer_t> aInlineSprms;
+    RTFValue::Pointer_t pInlineValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
+    aInlineSprms.insert(make_pair(NS_ooxml::LN_graphic_graphic, pInlineValue));
+    // inline sprm
+    std::multimap<Id, RTFValue::Pointer_t> aSprms;
+    RTFValue::Pointer_t pValue(new RTFValue(aInlineAttributes, aInlineSprms));
+    aSprms.insert(make_pair(NS_ooxml::LN_inline_inline, pValue));
+    std::multimap<Id, RTFValue::Pointer_t> aAttributes;
+    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+    Mapper().props(pProperties);
+
     return 0;
 }
 
