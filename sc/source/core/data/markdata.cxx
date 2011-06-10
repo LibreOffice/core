@@ -420,7 +420,7 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
     ScRangeList aOldList(*pList);
     pList->RemoveAll();                 //! oder die vorhandenen unten weglassen
 
-    std::set<SCTAB>::iterator it = maTabMarked.begin();
+    std::set<SCTAB>::const_iterator it = maTabMarked.begin();
     for (; it != maTabMarked.end(); ++it)
         for ( size_t i=0, nCount = aOldList.size(); i<nCount; i++)
         {
