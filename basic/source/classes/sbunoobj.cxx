@@ -1738,7 +1738,7 @@ rtl::OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Ref
 {
     ::rtl::OUString aName = getDbgObjectNameImpl( pUnoObj );
     if( !aName.getLength() )
-        aName += ::rtl::OUString::createFromAscii( "Unknown" );
+        aName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
 
     ::rtl::OUStringBuffer aRet;
     if( aName.getLength() > 20 )
@@ -3496,7 +3496,7 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
         {
             // expand fully qualified name
             ::rtl::OUString aNewName = GetName();
-            aNewName += ::rtl::OUString::createFromAscii( "." );
+            aNewName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
             aNewName += rName;
 
             // get CoreReflection
@@ -3638,7 +3638,7 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
                 if( !aName.getLength() )
                 {
                     if( xCtor->isDefaultConstructor() )
-                        aName = ::rtl::OUString::createFromAscii( "create" );
+                        aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("create"));
                 }
 
                 if( aName.getLength() )
