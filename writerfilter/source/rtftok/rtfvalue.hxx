@@ -15,11 +15,12 @@ namespace writerfilter {
             public:
                 typedef ::boost::shared_ptr<RTFValue> Pointer_t;
                 RTFValue(int nValue, rtl::OUString sValue, std::multimap<Id, RTFValue::Pointer_t> rAttributes,
-                        std::multimap<Id, RTFValue::Pointer_t> rSprms);
+                        std::multimap<Id, RTFValue::Pointer_t> rSprms, uno::Reference<drawing::XShape> rShape);
                 RTFValue(int nValue);
                 RTFValue(rtl::OUString sValue);
                 RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes);
                 RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes, std::multimap<Id, RTFValue::Pointer_t> rSprms);
+                RTFValue(uno::Reference<drawing::XShape> rShape);
                 void setString(rtl::OUString sValue);
                 virtual int getInt() const;
                 virtual rtl::OUString getString() const;
@@ -36,6 +37,7 @@ namespace writerfilter {
                 rtl::OUString m_sValue;
                 std::multimap<Id, RTFValue::Pointer_t> m_rAttributes;
                 std::multimap<Id, RTFValue::Pointer_t> m_rSprms;
+                uno::Reference<drawing::XShape> m_rShape;
         };
     } // namespace rtftok
 } // namespace writerfilter

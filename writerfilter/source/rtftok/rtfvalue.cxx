@@ -10,11 +10,12 @@ using rtl::OString;
 using rtl::OUString;
 
 RTFValue::RTFValue(int nValue, rtl::OUString sValue, std::multimap<Id, RTFValue::Pointer_t> rAttributes,
-        std::multimap<Id, RTFValue::Pointer_t> rSprms)
+        std::multimap<Id, RTFValue::Pointer_t> rSprms, uno::Reference<drawing::XShape> rShape)
     : m_nValue(nValue),
     m_sValue(sValue),
     m_rAttributes(rAttributes),
-    m_rSprms(rSprms)
+    m_rSprms(rSprms),
+    m_rShape(rShape)
 {
 }
 
@@ -22,7 +23,8 @@ RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
     m_sValue(),
     m_rAttributes(),
-    m_rSprms()
+    m_rSprms(),
+    m_rShape()
 {
 }
 
@@ -30,7 +32,8 @@ RTFValue::RTFValue(OUString sValue)
     : m_nValue(),
     m_sValue(sValue),
     m_rAttributes(),
-    m_rSprms()
+    m_rSprms(),
+    m_rShape()
 {
 }
 
@@ -38,7 +41,8 @@ RTFValue::RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes)
     : m_nValue(),
     m_sValue(),
     m_rAttributes(rAttributes),
-    m_rSprms()
+    m_rSprms(),
+    m_rShape()
 {
 }
 
@@ -46,7 +50,17 @@ RTFValue::RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes, std::mult
     : m_nValue(),
     m_sValue(),
     m_rAttributes(rAttributes),
-    m_rSprms(rSprms)
+    m_rSprms(rSprms),
+    m_rShape()
+{
+}
+
+RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
+    : m_nValue(),
+    m_sValue(),
+    m_rAttributes(),
+    m_rSprms(),
+    m_rShape(rShape)
 {
 }
 
@@ -73,6 +87,8 @@ uno::Any RTFValue::getAny() const
     uno::Any ret;
     if (m_sValue.getLength() > 0)
         ret <<= m_sValue;
+    else if (m_rShape.is())
+        ret <<= m_rShape;
     else
         ret <<= static_cast<sal_Int32>(m_nValue);
     return ret;
@@ -106,7 +122,7 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms);
+    return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms, m_rShape);
 }
 
 std::multimap<Id, RTFValue::Pointer_t>& RTFValue::getAttributes()

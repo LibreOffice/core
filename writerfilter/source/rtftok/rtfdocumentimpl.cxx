@@ -192,11 +192,9 @@ int RTFDocumentImpl::resolvePict(char ch)
     OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape"));
     xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
     OSL_ASSERT(xShape.is());
-
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     OSL_ASSERT(xPropertySet.is());
     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
-
     xShape->setSize(awt::Size( 337, 337 )); // TODO hardwired
 
     return 0;
