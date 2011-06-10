@@ -200,7 +200,6 @@ sal_Bool SwWrtShell::_PrvWrdForDelete()
     return sal_True;
 }
 
-
 sal_Bool SwWrtShell::_FwdSentence()
 {
     Push();
@@ -218,8 +217,6 @@ sal_Bool SwWrtShell::_FwdSentence()
     return 1;
 }
 
-
-
 sal_Bool SwWrtShell::_BwdSentence()
 {
     Push();
@@ -229,11 +226,6 @@ sal_Bool SwWrtShell::_BwdSentence()
         Pop(sal_False);
         return 0;
     }
-    if(IsSttPara())
-    {
-        Pop();
-        return 1;
-    }
     if( !GoStartSentence()  && !IsSttPara() )
             // nicht gefunden --> an den Absatz Anfang
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
@@ -241,7 +233,6 @@ sal_Bool SwWrtShell::_BwdSentence()
     Combine();
     return 1;
 }
-
 
 sal_Bool SwWrtShell::_FwdPara()
 {
