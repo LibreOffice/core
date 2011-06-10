@@ -535,7 +535,7 @@ SvTreeEntryList* SvTreeList::CloneChilds( SvTreeEntryList* pChilds,
                                       SvListEntry* pNewParent,
                                       sal_uLong& nCloneCount ) const
 {
-    DBG_ASSERT(!pChilds->Count(),"Childs?");
+    DBG_ASSERT(!pChilds->empty(),"Childs?");
     SvTreeEntryList* pClonedChilds = new SvTreeEntryList;
     SvListEntry* pChild = (SvListEntry*)pChilds->First();
     while ( pChild )
