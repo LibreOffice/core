@@ -201,7 +201,7 @@ namespace oooimprovement
         throw(RuntimeException)
     {
         Reference<XDesktop> xDesktop(
-            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")),
+            m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
             UNO_QUERY);
         if(xDesktop.is())
             xDesktop->addTerminateListener(Reference<XTerminateListener>(new OnLogRotateThreadWatcher(m_ServiceFactory)));
