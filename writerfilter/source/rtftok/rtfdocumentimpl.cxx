@@ -14,6 +14,7 @@
 #include <svl/lngmisc.hxx>
 #include <editeng/borderline.hxx>
 #include <unotools/streamwrap.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using std::make_pair;
 using rtl::OString;
@@ -152,8 +153,9 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
 int RTFDocumentImpl::resolvePict(char ch)
 {
     SvMemoryStream aStream;
-
     int b = 0, count = 2;
+
+    // Read the group.
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
@@ -175,10 +177,25 @@ int RTFDocumentImpl::resolvePict(char ch)
     }
     Strm().SeekRel(-1);
 
+    // Store, and get its URL.
     aStream.Seek(0);
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(&aStream));
+    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream);
 
-    OUString aGraphicObjUrl = m_pGraphicHelper->importGraphicObject(xInputStream);
+    // Wrap it in an XShape.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+    OSL_ASSERT(xFactory.is());
+
+    uno::Reference<drawing::XShape> xShape;
+    OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape"));
+    xShape.set(xFactory->createInstance(aService), uno::UNO_QUERY);
+    OSL_ASSERT(xShape.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    OSL_ASSERT(xPropertySet.is());
+    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
+
+    xShape->setSize(awt::Size( 337, 337 )); // TODO hardwired
 
     return 0;
 }
