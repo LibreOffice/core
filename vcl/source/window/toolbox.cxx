@@ -2166,13 +2166,22 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
     sal_Bool            bWindow;
     sal_Bool            bBreak = sal_False;
     long            nWidthTotal = nWidth;
+    long nMenuWidth = 0;
 
     // when docked the menubutton will be in the first line
-    // ->initialize first linewidth with button
     if( IsMenuEnabled() && !ImplIsFloatingMode() )
-        nLineWidth = mpData->maMenubuttonItem.maItemSize.Width();
+        nMenuWidth = mpData->maMenubuttonItem.maItemSize.Width();
 
-    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+    // we need to know which item is the last visible one to be able to add
+    // the menu width in case we are unable to show all the items
+    std::vector< ImplToolItem >::iterator it, lastVisible;
+    for ( it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it )
+    {
+        if ( it->mbVisible )
+            lastVisible = it;
+    }
+
+    it = mpData->m_aItems.begin();
     while ( it != mpData->m_aItems.end() )
     {
         it->mbBreak = bBreak;
@@ -2208,12 +2217,18 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
                     }
                 }
 
-                // check for line break
-                if ( (nLineWidth+nCurWidth > nWidthTotal) && mbScroll )
+                // in case we are able to show all the items, we do not want
+                // to show the toolbar's menu; otherwise yes
+                if ( ( ( it == lastVisible ) && (nLineWidth+nCurWidth > nWidthTotal) && mbScroll ) ||
+                     ( ( it != lastVisible ) && (nLineWidth+nCurWidth+nMenuWidth > nWidthTotal) && mbScroll ) )
                     bBreak = sal_True;
             }
             else if ( it->meType == TOOLBOXITEM_SEPARATOR )
+            {
                 nCurWidth = it->mnSepSize;
+                if ( ( it != lastVisible ) && (nLineWidth+nCurWidth+nMenuWidth > nWidthTotal) )
+                    bBreak = sal_True;
+            }
             // treat breaks as separators, except when using old style toolbars (ie. no menu button)
             else if ( (it->meType == TOOLBOXITEM_BREAK) && !IsMenuEnabled() )
                 bBreak = sal_True;
@@ -3224,7 +3239,7 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
     if( !pThis->mpData->maMenubuttonItem.maRect.IsEmpty() )
     {
         // #i53937# paint menu button only if necessary
-        if( !(pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) && !pThis->ImplHasClippedItems() )
+        if( !pThis->ImplHasClippedItems() )
             return;
 
         // execute pending paint requests
@@ -3278,7 +3293,7 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
             else
                 pThis->DrawSelectionBackground( aInnerRect, 2, sal_False, sal_False, sal_False );
         }
-        else
+        else if( !bNativeButtons )
         {
             // improve visibility by using a dark gradient
             Gradient g;
@@ -4406,7 +4421,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
 
         // only clear highlight when focus is not in toolbar
-        sal_Bool bMenuButtonHit = mpData->maMenubuttonItem.maRect.IsInside( aMousePos );
+        sal_Bool bMenuButtonHit = mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) && ImplHasClippedItems();
         if ( bClearHigh || bMenuButtonHit )
         {
             if ( !bMenuButtonHit && mpData->mbMenubuttonSelected )
@@ -4607,7 +4622,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         Deactivate();
 
         // menu button hit ?
-        if( mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) )
+        if( mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) && ImplHasClippedItems() )
         {
             ExecuteCustomMenu();
             return;
