@@ -68,8 +68,10 @@ std::multimap<Id, RTFValue::Pointer_t>& lcl_getNumPr(std::stack<RTFParserState>&
 }
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
-        uno::Reference<io::XInputStream> const& xInputStream)
+        uno::Reference<io::XInputStream> const& xInputStream,
+        uno::Reference<lang::XComponent> const& xDstDoc)
     : m_xContext(xContext),
+    m_xModel(xDstDoc),
     m_nGroup(0),
     m_aDefaultState(),
     m_bSkipUnknown(false),
@@ -85,6 +87,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     if (!xInputStream.is())
         throw uno::RuntimeException();
     m_pInStream = utl::UcbStreamHelper::CreateStream( xInputStream, sal_True );
+
+    m_xModelFactory.set(m_xModel, uno::UNO_QUERY);
+    OSL_ASSERT(m_xModelFactory.is());
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, NULL, m_xStorage);
 }
@@ -183,12 +188,9 @@ int RTFDocumentImpl::resolvePict(char ch)
     OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream);
 
     // Wrap it in an XShape.
-    uno::Reference<lang::XMultiServiceFactory> xFactory(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-    OSL_ASSERT(xFactory.is());
-
     uno::Reference<drawing::XShape> xShape;
     OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape"));
-    xShape.set(xFactory->createInstance(aService), uno::UNO_QUERY);
+    xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
     OSL_ASSERT(xShape.is());
 
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);

@@ -11,6 +11,7 @@
 #include <rtfcontrolwords.hxx>
 #include <rtfreferencetable.hxx>
 #include <rtfvalue.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 class SvStream;
 
@@ -122,7 +123,8 @@ namespace writerfilter {
         {
             public:
                 RTFDocumentImpl(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& xContext,
-                                com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& xInputStream);
+                                com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& xInputStream,
+                                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc);
                 virtual ~RTFDocumentImpl();
                 virtual void resolve(Stream & rHandler);
                 virtual std::string getType() const;
@@ -154,6 +156,8 @@ namespace writerfilter {
                 void text(rtl::OUString& rString);
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
+                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xModel;
+                com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
