@@ -5,7 +5,7 @@ SETTINGS = $(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
-include $(SETTINGS)/dk.mk
+#include $(SETTINGS)/dk.mk
 
 CSC_FLAGS = -warnaserror+ -noconfig
 VBC_FLAGS = -warnaserror+
