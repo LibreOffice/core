@@ -755,6 +755,10 @@ String SwCrsrShell::GetBoxNms() const
         } while ( pFrm && !pFrm->IsCellFrm() );
 
         OSL_ENSURE( pFrm, "kein Frame zur Box" );
+
+        if( !pFrm )
+            return sNm;
+
         sNm = ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
         sNm += ':';
         pPos = pTblCrsr->End();
