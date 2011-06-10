@@ -318,7 +318,6 @@ public class DataAwareFields
                 {
                     if (s == null || s.equals(""))
                     {
-                    System.out.println(Any.VOID);
                         return Any.VOID;
                     }
                     else
@@ -330,7 +329,6 @@ public class DataAwareFields
                 {
                     if (s == null || s.equals(""))
                     {
-                    System.out.println(Any.VOID);
                         return Any.VOID;
                     }
                     else
