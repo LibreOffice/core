@@ -3853,26 +3853,26 @@ const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
     {
         pKeyMap.reset(new NfKeywordTable);
         NfKeywordTable & rKeywordTable = *pKeyMap;
-        rKeywordTable[NF_KEY_D] = ::rtl::OUString::createFromAscii("d");
-        rKeywordTable[NF_KEY_DD] = ::rtl::OUString::createFromAscii("dd");
-        rKeywordTable[NF_KEY_DDD] = ::rtl::OUString::createFromAscii("ddd");
-        rKeywordTable[NF_KEY_DDDD] = ::rtl::OUString::createFromAscii("dddd");
-        rKeywordTable[NF_KEY_M] = ::rtl::OUString::createFromAscii("M");
-        rKeywordTable[NF_KEY_MM] = ::rtl::OUString::createFromAscii("MM");
-        rKeywordTable[NF_KEY_MMM] = ::rtl::OUString::createFromAscii("MMM");
-        rKeywordTable[NF_KEY_MMMM] = ::rtl::OUString::createFromAscii("MMMM");
-        rKeywordTable[NF_KEY_NN] = ::rtl::OUString::createFromAscii("ddd");
-        rKeywordTable[NF_KEY_NNN] = ::rtl::OUString::createFromAscii("dddd");
-        rKeywordTable[NF_KEY_NNNN] = ::rtl::OUString::createFromAscii("dddd");
-        rKeywordTable[NF_KEY_YY] = ::rtl::OUString::createFromAscii("yy");
-        rKeywordTable[NF_KEY_YYYY] = ::rtl::OUString::createFromAscii("yyyy");
-        rKeywordTable[NF_KEY_H] = ::rtl::OUString::createFromAscii("H");
-        rKeywordTable[NF_KEY_HH] = ::rtl::OUString::createFromAscii("HH");
-        rKeywordTable[NF_KEY_MI] = ::rtl::OUString::createFromAscii("m");
-        rKeywordTable[NF_KEY_MMI] = ::rtl::OUString::createFromAscii("mm");
-        rKeywordTable[NF_KEY_S] = ::rtl::OUString::createFromAscii("s");
-        rKeywordTable[NF_KEY_SS] = ::rtl::OUString::createFromAscii("ss");
-        rKeywordTable[NF_KEY_AMPM] = ::rtl::OUString::createFromAscii("AM/PM");
+        rKeywordTable[NF_KEY_D] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("d"));
+        rKeywordTable[NF_KEY_DD] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dd"));
+        rKeywordTable[NF_KEY_DDD] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ddd"));
+        rKeywordTable[NF_KEY_DDDD] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dddd"));
+        rKeywordTable[NF_KEY_M] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("M"));
+        rKeywordTable[NF_KEY_MM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MM"));
+        rKeywordTable[NF_KEY_MMM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MMM"));
+        rKeywordTable[NF_KEY_MMMM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MMMM"));
+        rKeywordTable[NF_KEY_NN] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ddd"));
+        rKeywordTable[NF_KEY_NNN] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dddd"));
+        rKeywordTable[NF_KEY_NNNN] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dddd"));
+        rKeywordTable[NF_KEY_YY] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("yy"));
+        rKeywordTable[NF_KEY_YYYY] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("yyyy"));
+        rKeywordTable[NF_KEY_H] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("H"));
+        rKeywordTable[NF_KEY_HH] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HH"));
+        rKeywordTable[NF_KEY_MI] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("m"));
+        rKeywordTable[NF_KEY_MMI] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mm"));
+        rKeywordTable[NF_KEY_S] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("s"));
+        rKeywordTable[NF_KEY_SS] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ss"));
+        rKeywordTable[NF_KEY_AMPM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AM/PM"));
     }
 
     return *pKeyMap;
