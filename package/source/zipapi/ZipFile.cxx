@@ -168,7 +168,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
                             xEncryptionData->m_aSalt.getLength(),
                             xEncryptionData->m_nIterationCount ) )
         {
-            throw ZipIOException( ::rtl::OUString::createFromAscii( "Can not create derived key!\n" ),
+            throw ZipIOException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can not create derived key!") ),
                                   uno::Reference< XInterface >() );
         }
 
@@ -190,7 +190,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
         }
         else
         {
-            throw ZipIOException( ::rtl::OUString::createFromAscii( "Unknown cipher algorithm is requested!\n" ),
+            throw ZipIOException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown cipher algorithm is requested!") ),
                                   uno::Reference< XInterface >() );
         }
     }
