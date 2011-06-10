@@ -549,10 +549,14 @@ const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
     if (nFontIndex == 4)
         return &maFont4;
 
-    if (nFontIndex >= maFontList.size())
-        return NULL;
+    if (nFontIndex < 4)
+    {
+        // Font ID is zero-based when it's less than 4.
+        return nFontIndex >= maFontList.size() ? NULL : &maFontList[nFontIndex];
+    }
 
-    return (nFontIndex < 4) ? &(maFontList[nFontIndex]) : &(maFontList[nFontIndex - 1]);
+    // Font ID is greater than 4.  It is now 1-based.
+    return nFontIndex > maFontList.size() ? NULL : &maFontList[nFontIndex-1];
 }
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
