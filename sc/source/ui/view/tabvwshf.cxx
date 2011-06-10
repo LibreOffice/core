@@ -261,7 +261,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 pStr = pDlg->GetNextTable( &n );
                             }
                             sal_Bool bLink = pDlg->GetTablesAsLink();
-                            if (0 < nTabs.size())
+                            if (!nTabs.empty())
                             {
                                 if(pDlg->IsTableBefore())
                                 {
