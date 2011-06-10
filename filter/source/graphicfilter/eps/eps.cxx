@@ -1566,10 +1566,10 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
 
 void PSWriter::ImplAddPath( const Polygon & rPolygon )
 {
-    sal_uInt16 i = 1;
     sal_uInt16 nPointCount = rPolygon.GetSize();
     if ( nPointCount > 1 )
     {
+        sal_uInt16 i = 1;
         ImplMoveTo( rPolygon.GetPoint( 0 ) );
         while ( i < nPointCount )
         {
@@ -2482,9 +2482,9 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     for ( sal_Int32 n = 0; n < nLength; n++ )
         *mpPS << aNumber1.GetChar( (sal_uInt16)n );
 
-    int zCount = 0;
     if ( nATemp )
     {
+        int zCount = 0;
         *mpPS << (sal_uInt8)'.';
         mnCursorPos++;
         const ByteString aNumber2( ByteString::CreateFromInt32( nATemp ) );

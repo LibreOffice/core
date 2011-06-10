@@ -1463,7 +1463,6 @@ void METWriter::METSetChrCellSize(Size aSize)
 
 void METWriter::METSetChrAngle(short nAngle)
 {
-    double fa;
     long nax,nay;
 
     if (nMETChrAngle==nAngle) return;
@@ -1476,7 +1475,7 @@ void METWriter::METSetChrAngle(short nAngle)
     }
     else
     {
-        fa=((double)nAngle)/1800.0*3.14159265359;
+        double fa=((double)nAngle)/1800.0*3.14159265359;
         nax=(long)(256.0*cos(fa)+0.5);
         nay=(long)(256.0*sin(fa)+0.5);
     }

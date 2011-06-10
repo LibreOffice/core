@@ -774,10 +774,9 @@ sal_uLong OS2METReader::ReadLittleEndian3BytesLong()
 long OS2METReader::ReadCoord(sal_Bool b32)
 {
     long l;
-    short s;
 
     if (b32) *pOS2MET >> l;
-    else  { *pOS2MET >> s; l=(long)s; }
+    else  { short s;*pOS2MET >> s; l=(long)s; }
     return l;
 }
 
@@ -1927,7 +1926,6 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdSStLWd :
         {
             sal_uInt8 nFlags;
-            long nWd;
 
             *pOS2MET >> nFlags;
             if ( nFlags & 0x80 )
@@ -1935,7 +1933,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             else
             {
                 pOS2MET->SeekRel( 1 );
-                nWd = ReadCoord( bCoord32 );
+                long nWd = ReadCoord( bCoord32 );
                 if ( nWd < 0 )
                     nWd = -nWd;
                 aAttr.nStrLinWidth = (sal_uInt16)nWd;

@@ -138,8 +138,8 @@ private:
     void WritePolygon(const Polygon & rPoly);
     void WriteArcAngles(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
 
-    void ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible);
-    void ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible);
+    void ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible) const;
+    void ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible) const;
 
     void WriteOpcode_TxFace(const Font & rFont);
     void WriteOpcode_TxMode(RasterOp eMode);
@@ -443,7 +443,7 @@ void PictWriter::WriteArcAngles(const Rectangle & rRect, const Point & rStartPt,
 }
 
 
-void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible)
+void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible) const
 {
     if( bVisible )
     {
@@ -457,7 +457,7 @@ void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible)
     }
 }
 
-void PictWriter::ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible)
+void PictWriter::ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible) const
 {
     if( bVisible )
     {
