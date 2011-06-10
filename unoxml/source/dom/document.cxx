@@ -908,7 +908,7 @@ namespace DOM
                 OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInsertedIntoDocument"))),
                 UNO_QUERY_THROW);
             event->initMutationEvent(
-                OUString::createFromAscii("DOMNodeInsertedIntoDocument")
+                OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInsertedIntoDocument"))
                 , sal_True, sal_False, Reference< XNode >(),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             Reference< XEventTarget > const xDocET(xDocument, UNO_QUERY);
