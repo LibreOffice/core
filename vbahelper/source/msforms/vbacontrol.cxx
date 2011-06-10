@@ -535,7 +535,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         case form::FormComponentType::IMAGECONTROL:
             return new ScVbaImage( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
     }
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control." ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported control.")), uno::Reference< uno::XInterface >() );
 }
 
 /*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createUserformControl(
@@ -597,7 +597,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     if( xVBAControl.is() )
         return xVBAControl;
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control." ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported control.")), uno::Reference< uno::XInterface >() );
 }
 
 rtl::OUString&
