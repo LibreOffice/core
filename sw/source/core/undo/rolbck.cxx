@@ -717,7 +717,7 @@ const ::rtl::OUString& SwHistoryBookmark::GetName() const
 
 
 SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
-                        sal_uLong nNodePos, const SvUShortsSort& rSetArr )
+                        sal_uLong nNodePos, const std::set<sal_uInt16> &rSetArr )
     : SwHistoryHint( HSTRY_SETATTRSET )
     , m_OldSet( rSet )
     , m_ResetArray( 0, 4 )
@@ -727,7 +727,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
     const SfxPoolItem* pItem = aIter.FirstItem(),
                      * pOrigItem = aOrigIter.FirstItem();
     do {
-        if( !rSetArr.Seek_Entry( pOrigItem->Which() ))
+        if( !rSetArr.count( pOrigItem->Which() ))
         {
             m_ResetArray.Insert( pOrigItem->Which(), m_ResetArray.Count() );
             m_OldSet.ClearItem( pOrigItem->Which() );
@@ -1398,7 +1398,7 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             else
             {
                 const SfxPoolItem* pItem = SfxItemIter( rSet ).FirstItem();
-                if ( m_WhichIdSet.Seek_Entry( pItem->Which() ) )
+                if ( m_WhichIdSet.count( pItem->Which() ) )
                 {
                     pNewHstr = new SwHistorySetFmt( pItem, m_nNodeIndex );
                 }
@@ -1469,9 +1469,9 @@ void SwRegHistory::RegisterInModify( SwModify* pRegIn, const SwNode& rNd )
         m_nNodeIndex = rNd.GetIndex();
         _MakeSetWhichIds();
     }
-    else if ( m_WhichIdSet.Count() )
+    else
     {
-        m_WhichIdSet.Remove( 0, m_WhichIdSet.Count() );
+        m_WhichIdSet.clear();
     }
 }
 
@@ -1479,10 +1479,7 @@ void SwRegHistory::_MakeSetWhichIds()
 {
     if (!m_pHistory) return;
 
-    if ( m_WhichIdSet.Count() )
-    {
-        m_WhichIdSet.Remove( 0, m_WhichIdSet.Count() );
-    }
+    m_WhichIdSet.clear();
 
     if( GetRegisteredIn() )
     {
@@ -1503,7 +1500,7 @@ void SwRegHistory::_MakeSetWhichIds()
             sal_uInt16 nW = aIter.FirstItem()->Which();
             while( sal_True )
             {
-                m_WhichIdSet.Insert( nW );
+                m_WhichIdSet.insert( nW );
                 if( aIter.IsAtEnd() )
                     break;
                 nW = aIter.NextItem()->Which();

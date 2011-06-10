@@ -31,10 +31,11 @@
 #include <tools/solar.h>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
 #include <svl/itemset.hxx>
+
+#include <set>
 
 //Nur die History anziehen, um das docnew.cxx gegen die CLOOK's zu behaupten.
 
@@ -286,7 +287,7 @@ class SwHistorySetAttrSet : public SwHistoryHint
 
 public:
     SwHistorySetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
-                         const SvUShortsSort& rSetArr );
+                         const std::set<sal_uInt16> &rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
@@ -407,7 +408,7 @@ public:
 class SwRegHistory : public SwClient
 {
 private:
-    SvUShortsSort m_WhichIdSet;
+    std::set<sal_uInt16> m_WhichIdSet;
     SwHistory * const m_pHistory;
     sal_uLong m_nNodeIndex;
 
