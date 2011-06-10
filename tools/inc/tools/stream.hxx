@@ -490,11 +490,6 @@ public:
     sal_Bool        WriteUniStringLine( const String& rStr );
                 /// Write multiple lines of Unicode (with CovertLineEnd) and append line end (endlu())
     sal_Bool        WriteUniStringLines( const String& rStr );
-                /// Write a line of Unicode if eDestCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise write a line of Bytecode converted to eDestCharSet
-    sal_Bool        WriteUniOrByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteUniOrByteStringLine( const String& rStr )
-                    { return WriteUniOrByteStringLine( rStr, GetStreamCharSet() ); }
 
                 /// Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise write as Bytecode converted to eDestCharSet.
