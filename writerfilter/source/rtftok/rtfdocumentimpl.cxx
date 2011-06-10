@@ -148,11 +148,23 @@ int RTFDocumentImpl::resolvePict(char ch)
 {
     uno::Sequence< sal_Int8 > aSequence;
 
+    int b = 0, count = 2;
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
         {
-            // handle ch
+            b = b << 4;
+            char parsed = asHex(ch);
+            if (parsed == -1)
+                return ERROR_HEX_INVALID;
+            b += parsed;
+            count--;
+            if (!count)
+            {
+                OSL_TRACE("pict char: %x", b);
+                count = 2;
+                b = 0;
+            }
         }
         Strm() >> ch;
     }
