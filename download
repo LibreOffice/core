@@ -129,7 +129,7 @@ downloaditem()
         if [ ! -f "../$2" ]; then
             echo $2
             if [ ! -z "$wget" ]; then
-                $wget -nv -N $1/$2 2>&1 | tee -a $logfile
+                $wget --progress=dot:mega -N $1/$2 2>&1 | tee -a $logfile
             else
                 echo fetching $2
                 $curl $file_date_check -O $1/$2 2>&1 | tee -a $logfile
