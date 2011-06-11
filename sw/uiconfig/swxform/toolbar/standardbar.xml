@@ -30,7 +30,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="10244"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="5961"/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="5961" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="10366"/>
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:helpid="5960"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:helpid="6660"/>

@@ -33,7 +33,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="10593"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="5961"/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="5961" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="10366"/>
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:helpid="5960"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:helpid="6660"/>
