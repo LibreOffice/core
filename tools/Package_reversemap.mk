@@ -27,7 +27,7 @@ $(eval $(call gb_Package_Package,tools_reversemap,$(WORKDIR)/CustomTarget/tools/
 $(eval $(call gb_Package_add_customtarget,tools_reversemap,tools/source/reversemap))
 
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,tools/source/reversemap,\
-	$(call gb_Executable_get_target,bestreversemap) \
+	$(call gb_Executable_get_target_for_build,bestreversemap) \
 ))
 
 # vim: set noet sw=4:
