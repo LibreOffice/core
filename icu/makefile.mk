@@ -98,6 +98,16 @@ LDFLAGSADD += -Wl,--hash-style=both
 icu_CFLAGS+=-DUCONFIG_NO_FILE_IO
 .ENDIF
 
+.IF "$(OS)"=="ANDROID"
+# Problems with uint64_t on Android unless disabling strictness
+DISABLE_STRICT=--disable-strict
+.ENDIF
+
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+# Problems with uint64_t on Android unless disabling strictness
+DISABLE_DYLOAD=--disable-dyload
+.ENDIF
+
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
 LDFLAGSADD += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
 .ENDIF
@@ -116,7 +126,7 @@ BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-bu
 .ENDIF
 
 CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
-./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT)'
+./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT) $(DISABLE_STRICT) $(DISABLE_DYLOAD) '
 
 CONFIGURE_FLAGS=
 

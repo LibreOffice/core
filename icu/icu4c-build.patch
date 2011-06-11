@@ -1,3 +1,88 @@
+--- misc/icu/source/config.sub
++++ misc/build/icu/source/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+--- misc/icu/source/configure
++++ misc/build/icu/source/configure
+@@ -5438,7 +5438,7 @@
+ 	else
+ 		icu_cv_host_frag=mh-linux-va
+ 	fi ;;
+-*-*-linux*|*-pc-gnu) icu_cv_host_frag=mh-linux ;;
++*-*-linux*|*-pc-gnu|*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
+ *-*-cygwin|*-*-mingw32)
+ 	if test "$GCC" = yes; then
+ 		cat >conftest.$ac_ext <<_ACEOF
+@@ -7429,6 +7429,9 @@
+ # Check to see if genccode can generate simple assembly.
+ GENCCODE_ASSEMBLY=
+ case "${host}" in
++*-linux-androideabi)
++    GENCCODE_ASSEMBLY="-a gcc-android"
++    ;;
+ *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
+     if test "$GCC" = yes; then
+         # We're using gcc, and the simple -a gcc command line works for genccode
+@@ -11115,6 +1115,10 @@
+     # wchar_t can be used
+     CHECK_UTF16_STRING_RESULT="available"
+     ;;
++*-*-androideabi*)
++    # no UTF-16 strings thanks, I think, this is to avoid the -std=c++0x which causes trouble with uint64_t
++    CHECK_UTF16_STRING_RESULT="nope"
++    ;;
+ *)
+     ;;
+ esac
+--- misc/icu/source/tools/toolutil/pkg_genc.c
++++ misc/build/icu/source/tools/toolutil/pkg_genc.c
+@@ -145,6 +145,28 @@
+ 
+         ".long ","",HEX_0X
+     },
++    {"gcc-android",
++	"\t.arch armv5te\n"
++	"\t.fpu softvfp\n"
++	"\t.eabi_attribute 20, 1\n"
++	"\t.eabi_attribute 21, 1\n"
++	"\t.eabi_attribute 23, 3\n"
++	"\t.eabi_attribute 24, 1\n"
++	"\t.eabi_attribute 25, 1\n"
++	"\t.eabi_attribute 26, 2\n"
++	"\t.eabi_attribute 30, 6\n"
++	"\t.eabi_attribute 18, 4\n"
++	"\t.file \"%s.s\"\n"
++	"\t.global %s\n"
++	"\t.section .rodata\n"
++	"\t.align 2\n"
++	"\t.type %s, %%object\n"
++	"%s:\n",
++
++	"\t.word ",
++	"\t.section .note.GNU-stack,\"\",%%progbits\n",
++	HEX_0X
++    },
+     {"sun",
+         "\t.section \".rodata\"\n"
+         "\t.align   8\n"
+--- misc/icu/source/tools/pkgdata/pkgdata.cpp
++++ misc/build/icu/source/tools/pkgdata/pkgdata.cpp
+@@ -97,7 +97,7 @@
+ #endif
+ 
+ #define LARGE_BUFFER_MAX_SIZE 2048
+-#define SMALL_BUFFER_MAX_SIZE 512
++#define SMALL_BUFFER_MAX_SIZE 2048
+ 
+ static void loadLists(UPKGOptions *o, UErrorCode *status);
+ 
 --- misc/icu/source/common/putil.c	2010-09-29 20:37:22.000000000 +0200
 +++ misc/build/icu/source/common/putil.c	2011-03-15 10:58:44.054592942 +0100
 @@ -52,7 +52,7 @@
