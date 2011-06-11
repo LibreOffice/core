@@ -58,9 +58,11 @@
 /set_soenv.stamp
 /warn
 /build.log
+/post_download.log
 /install
 /downloaded
 /*.Set.sh
+/Env.Build.sh
 /ID
 /tags
 /docs
