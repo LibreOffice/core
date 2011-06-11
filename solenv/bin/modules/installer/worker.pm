@@ -39,7 +39,6 @@ use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
-use installer::mail;
 use installer::pathanalyzer;
 use installer::scpzipfiles;
 use installer::scriptitems;
@@ -412,12 +411,11 @@ sub analyze_and_save_logfile
 
     my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
 
-    # Dependent from the success, the installation directory can be renamed and mails can be send.
+    # Dependent from the success, the installation directory can be renamed.
 
     if ( $contains_error )
     {
         my $errordir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_witherror");
-        if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
         # Error output to STDERR
         for ( my $j = 0; $j <= $#installer::globals::errorlogfileinfo; $j++ )
         {
@@ -443,7 +441,6 @@ sub analyze_and_save_logfile
                 if ( $installdir =~ /_packed/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", ""); }
                 else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
             }
-            installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
         else
         {

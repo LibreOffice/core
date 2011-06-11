@@ -32,7 +32,6 @@ use installer::converter;
 use installer::files;
 use installer::globals;
 use installer::logger;
-use installer::mail;
 use installer::systemactions;
 use installer::worker;
 
