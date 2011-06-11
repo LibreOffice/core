@@ -301,7 +301,7 @@ ifeq ($(SYSTEM_LIBXSLT),YES)
 gb_XSLTPROCTARGET :=
 gb_XSLTPROC := xsltproc
 else
-gb_XSLTPROCTARGET := $(call gb_Executable_get_target,xsltproc)
+gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
 gb_XSLTPROC := $(gb_XSLTPROCPRECOMMAND) $(gb_XSLTPROCTARGET)
 endif
 
