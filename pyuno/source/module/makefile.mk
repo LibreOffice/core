@@ -90,7 +90,7 @@ SHL1STDLIBS= \
         $(PYTHONLIB) \
         $(EXTRA_FRAMEWORK_FLAG)
 
-SHL1DEPN=
+SHL1DEPN=$(eq,$(OS),MACOSX $(MISC)/framework_link $(NULL))
 SHL1LIBS= $(SLB)$/$(TARGET).lib
 SHL1IMPLIB= i$(TARGET)
 
@@ -121,7 +121,7 @@ $(LB)$/lib$(TARGET).a: $(MISC)$/$(TARGET).def
 targetdll=$(LB)$/$(TARGET)$(DLLPOST)
 .ENDIF
 
-ALLTAR : $(eq,$(OS),MACOSX $(MISC)/installname_module $(NULL)) \
+ALLTAR : \
     $(DLLDEST)$/uno.py \
     $(DLLDEST)$/unohelper.py \
     $(targetdll) \
@@ -134,11 +134,10 @@ ALLTAR : $(eq,$(OS),MACOSX $(MISC)/installname_module $(NULL)) \
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
-$(MISC)/installname_module : $(LB)/$(DLLPRE)$(TARGET)$(DLLPOST)
-	install_name_tool -change $(PYTHON_MAKEINSTALLDIR)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython @loader_path/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/OOoPython $<
-	# hack to make checkdll happy
-	ln -sf $(SOLARLIBDIR)/OOoPython.framework $(LB)/OOoPython.framework
-	touch $@
+# make checkdll happy
+$(MISC)/framework_link :
+	$(COMMAND_ECHO)ln -sf $(SOLARLIBDIR)/OOoPython.framework $(LB)/OOoPython.framework
+	@touch $@
 
 $(MISC)$/$(PYUNORC) : pyuno
     -rm -f $@
