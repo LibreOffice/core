@@ -75,7 +75,7 @@ cross-build-toolset:
 	for D in \
 	  comphelper \
 	  tools; do \
-	    (cd $$D && make -r -j@BUILD_MAX_JOBS@): \
+	    (cd $$D && make -r -j@BUILD_MAX_JOBS@); \
 	done
 endif
 
