@@ -66,8 +66,16 @@ cross-build-toolset:
 	  i18npool \
 	  unodevtools \
 	  gettext \
-	  dictionaries; do \
+	  dictionaries \
+	  o3tl \
+	  basegfx \
+	  tools; do \
 	    (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl); \
+	done; \
+	for D in \
+	  comphelper \
+	  tools; do \
+	    (cd $$D && make -r -j@BUILD_MAX_JOBS@): \
 	done
 endif
 
