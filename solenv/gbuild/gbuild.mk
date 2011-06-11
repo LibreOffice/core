@@ -167,6 +167,8 @@ else ifeq ($(OS),SOLARIS)
 include $(GBUILDDIR)/platform/solaris.mk
 else ifeq ($(OS),IOS)
 include $(GBUILDDIR)/platform/ios.mk
+else ifeq ($(OS),ANDROID)
+include $(GBUILDDIR)/platform/android.mk
 else
 $(eval $(call gb_Output_error,Unsupported OS: $(OS)))
 endif
