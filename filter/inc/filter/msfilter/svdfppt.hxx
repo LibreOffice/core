@@ -395,6 +395,7 @@ public:
     friend SvStream& operator>>( SvStream& rIn, PptExOleObjAtom& rAtom );
 };
 
+typedef ::std::vector< PPTOleEntry* > PPTOleEntryList;
 class PPTExtParaProv;
 class MSFILTER_DLLPUBLIC SdrEscherImport : public SvxMSDffManager
 {
@@ -408,8 +409,7 @@ protected:
     PptDocumentAtom     aDocAtom;
     DffRecordManager    aDocRecManager;             // contains all first level container and atoms of the document container
 
-    List                aHFMasterList;
-    List                aOleObjectList;             // contains PPTOleEntrys
+    PPTOleEntryList     aOleObjectList;             // contains PPTOleEntrys
 
     PptFontCollection*  pFonts;
 
