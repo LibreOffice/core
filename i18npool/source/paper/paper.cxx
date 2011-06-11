@@ -49,7 +49,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#if defined(LC_PAPER) && defined(_GNU_SOURCE)
 #include <langinfo.h>
+#endif
 #endif
 
 struct PageDesc
