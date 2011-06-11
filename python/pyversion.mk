@@ -10,8 +10,6 @@ PYVERSION=$(PYMAJOR).$(PYMINOR).$(PYMICRO)
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).a
 PYTHONLIB=-F$(SOLARLIBDIR) -framework OOoPython
 CFLAGS+=-I$(SOLARLIBDIR)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/include/python$(PYMAJOR).$(PYMINOR)
-# needed to fix install_name in pyuno
-PYTHON_MAKEINSTALLDIR=%%replaceme%%
 .ELSE
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).so.1.0
 PYTHONLIB=-lpython$(PYMAJOR).$(PYMINOR)

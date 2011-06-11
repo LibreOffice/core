@@ -88,7 +88,7 @@ CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
 
 .IF "$(OS)" == "MACOSX"
-PATCH_FILES+=Python-2.6.1-py8067.patch
+PATCH_FILES+=Python-2.6.1-py8067.patch Python-2.6.1-dylib_dynload.patch
 # don't build dual-arch version as OOo itself is not universal binary either
 PATCH_FILES+=Python-2.6.1-arch_$(eq,$(CPU),I i386 ppc).patch
 
@@ -235,7 +235,6 @@ $(MISC)/OOoPython.framework.zip: $(PACKAGE_DIR)/fixinstallnames $(PACKAGE_DIR)/f
 
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 	@-rm -f $@
-	@echo process $@
-	$(COMMAND_ECHO)sed 's#%%replaceme%%#$(MYCWD)/python-inst#g' < pyversion.mk > $@
+	$(COMMAND_ECHO)$(COPY) pyversion.mk $@
 
 .ENDIF # DISABLE_PYTHON != TRUE
