@@ -19,20 +19,56 @@ endif
 
 ifeq (@CROSS_COMPILING@,YES)
 cross-build-toolset:
+# Build necessary modules for the *build* platform, i.e. those needed
+# by tools run at build time. Sure, in many of these modules only a
+# part of the produced binaries are actually used then in the build.
+# Once everything is handled by gbuild, this can hopefully be streamlined.
 	. ./Env.Build.sh && \
-	(cd autodoc && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd idlc && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd icu && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@) && \
-	(cd udkapi && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd i18npool && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd unodevtools && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd offapi && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd oovbaapi && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd codemaker && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd ridljar && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd glib && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd gettext && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) && \
-	(cd dictionaries && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@)
+	for D in \
+	  solenv \
+	  soltools \
+	  boost \
+	  external \
+	  cppunit \
+	  xml2cmp \
+	  sal \
+	  cosv \
+	  udm \
+	  autodoc \
+	  store \
+	  salhelper \
+	  registry \
+	  idlc \
+	  icu \
+	  udkapi \
+	  expat \
+	  libxml2 \
+	  xml2cmp \
+	  libxslt \
+	  offapi \
+	  oovbaapi \
+	  codemaker \
+	  offuh \
+	  cppu \
+	  cppuhelper \
+	  rdbmaker \
+	  cpputools \
+	  xmlreader \
+	  i18nutil \
+	  ridljar \
+	  jurt \
+	  jvmaccess \
+	  bridges \
+	  ucbhelper \
+	  comphelper \
+	  jvmfwk \
+	  regexp \
+	  i18npool \
+	  unodevtools \
+	  gettext \
+	  dictionaries; do \
+	    (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl); \
+	done
 endif
 
 install:
