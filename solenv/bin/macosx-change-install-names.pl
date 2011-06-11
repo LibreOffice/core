@@ -112,6 +112,8 @@ foreach $file (@ARGV)
     {
         $change .= " -change $1 " . action($type, $loc, $2) . "$3"
             if m'^\s*(@_{50}([^/]+)(/.+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$';
+        $change .= ' -change '.$1.' @loader_path/'.$2
+            if m'^\s*(/python-inst/(OOoPython.framework/Versions/[^/]+/OOoPython))';
     }
     close(IN);
     if ($change ne "")
