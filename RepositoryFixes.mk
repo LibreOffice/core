@@ -30,7 +30,7 @@
 
 # Make has no support for 'or' clauses in conditionals,
 # we use a filter expression instead.
-ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD ANDROID, $(OS)))
 gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
