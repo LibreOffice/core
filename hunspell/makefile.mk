@@ -43,7 +43,8 @@ ADDITIONAL_FILES+=config.h
 PATCH_FILES=\
     hunspell-static.patch \
     hunspell-wntconfig.patch \
-    hunspell-solaris.patch
+    hunspell-solaris.patch \
+    hunspell-android.patch
 
 .IF "$(GUI)"=="UNX"
 
