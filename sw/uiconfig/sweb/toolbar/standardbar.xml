@@ -38,7 +38,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:helpid="5960"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:helpid="6660"/>
  <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="20224"/>
- <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="10000"/>
+ <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="10000" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false" toolbar:helpid="5402"/>
