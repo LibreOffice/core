@@ -30,8 +30,11 @@
 
 #include "main.hxx"
 #include <tools/table.hxx>
+#include <vector>
 
 #define nBackGroundColor    aColorTable[ 0 ]
+
+typedef ::std::vector< Bundle* > BundleList;
 
 class CGMElements
 {
@@ -84,25 +87,25 @@ class CGMElements
 
         LineBundle*         pLineBundle;        // Pointer to the current LineBundleIndex
         LineBundle          aLineBundle;
-        List                aLineList;
+        BundleList          aLineList;
         SpecMode            eLineWidthSpecMode;
         LineCapType         eLineCapType;
         LineJoinType        eLineJoinType;
 
         MarkerBundle*       pMarkerBundle;      // Pointer to the current MarkerBundleIndex
         MarkerBundle        aMarkerBundle;
-        List                aMarkerList;
+        BundleList          aMarkerList;
         SpecMode            eMarkerSizeSpecMode;
 
         EdgeBundle*         pEdgeBundle;        // Pointer to the current EdgeBundleIndex
         EdgeBundle          aEdgeBundle;
-        List                aEdgeList;
+        BundleList          aEdgeList;
         EdgeVisibility      eEdgeVisibility;
         SpecMode            eEdgeWidthSpecMode;
 
         TextBundle*         pTextBundle;        // Pointer to the current TextBundleIndex
         TextBundle          aTextBundle;
-        List                aTextList;
+        BundleList          aTextList;
         double              nCharacterHeight;
         double              nCharacterOrientation[ 4 ];
         UnderlineMode       eUnderlineMode;
@@ -119,7 +122,7 @@ class CGMElements
 
         FillBundle*         pFillBundle;        // Pointer to the current EdgeBundleIndex
         FillBundle          aFillBundle;
-        List                aFillList;
+        BundleList          aFillList;
         FloatPoint          aFillRefPoint;
         Table               aHatchTable;
 
@@ -135,11 +138,11 @@ class CGMElements
         CGMElements&        operator=( CGMElements& );
         void                Init();
         void                DeleteTable( Table& );
-        Bundle*             GetBundleIndex( sal_uInt32 nIndex, List&, Bundle& );
-        Bundle*             GetBundle( List& rList, long nIndex );
-        Bundle*             InsertBundle( List&, Bundle& );
-        void                DeleteAllBundles( List& );
-        void                CopyAllBundles( List& Source, List& Dest );
+        Bundle*             GetBundleIndex( long nIndex, BundleList&, Bundle& );
+        Bundle*             GetBundle( BundleList& rList, long nIndex );
+        Bundle*             InsertBundle( BundleList&, Bundle& );
+        void                DeleteAllBundles( BundleList& );
+        void                CopyAllBundles( BundleList& Source, BundleList& Dest );
 };
 
 #endif
