@@ -521,8 +521,10 @@ struct ProcessData
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+typedef ::std::vector< SdHyperlinkEntry* > SdHyperlinkEntryList;
 class SdrTextObj;
 class SfxObjectShell;
+
 class MSFILTER_DLLPUBLIC SdrPowerPointImport : public SdrEscherImport
 {
 protected:
@@ -535,7 +537,7 @@ protected:
     sal_Bool                bOk;
     PptUserEditAtom         aUserEditAtom;
     PptColorSchemeAtom      aPageColors;
-    List                    aHyperList;
+    SdHyperlinkEntryList    aHyperList;
     sal_uInt32*             pPersistPtr;
     sal_uLong               nPersistPtrAnz;
 

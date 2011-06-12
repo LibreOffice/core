@@ -1668,8 +1668,10 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
 
 SdrPowerPointImport::~SdrPowerPointImport()
 {
-    for ( void* pPtr = aHyperList.First(); pPtr; pPtr = aHyperList.Next() )
-        delete (SdHyperlinkEntry*)pPtr;
+    for ( size_t i = 0, n = aHyperList.size(); i < n; ++i ) {
+        delete aHyperList[ i ];
+    }
+    aHyperList.clear();
     delete pMasterPages;
     delete pSlidePages;
     delete pNotePages;
@@ -6706,9 +6708,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         {
                                             PptInteractiveInfoAtom aInteractiveInfoAtom;
                                             rIn >> aInteractiveInfoAtom;
-                                            for ( SdHyperlinkEntry* pHyperlink = (SdHyperlinkEntry*)rSdrPowerPointImport.aHyperList.First();
-                                                    pHyperlink; pHyperlink = (SdHyperlinkEntry*)rSdrPowerPointImport.aHyperList.Next() )
+                                            for ( size_t i = 0; i < rSdrPowerPointImport.aHyperList.size(); ++i )
                                             {
+                                                SdHyperlinkEntry* pHyperlink = rSdrPowerPointImport.aHyperList[ i ];
                                                 if ( pHyperlink->nIndex == aInteractiveInfoAtom.nExHyperlinkId )
                                                 {
                                                     aTextHd.SeekToEndOfRecord( rIn );
