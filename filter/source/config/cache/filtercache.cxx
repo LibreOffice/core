@@ -156,7 +156,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
 
     // c)
     // Take over only changed items!
-    // Otherwhise we risk the following scenario:
+    // Otherwise we risk the following scenario:
     // c1) clone_1 contains changed filters
     // c2) clone_2 container changed types
     // c3) clone_1 take over changed filters and unchanged types
@@ -226,7 +226,7 @@ void FilterCache::load(EFillState eRequired,
     }
 #endif
 
-    // Otherwhise load the missing items.
+    // Otherwise load the missing items.
 
     // ------------------------------------------
     // a) load some const values from configration.

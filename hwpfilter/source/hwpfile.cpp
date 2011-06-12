@@ -117,18 +117,12 @@ int HWPFile::ReadHwpFile(HStream & stream)
 {
     if (Open(stream) != HWP_NoError)
         return State();
-//  printf("HWPFile::ReadHwpFile\n");
     InfoRead();
-//  printf("HWPFile::InfoRead Done.\n");
     FontRead();
-//  printf("HWPFile::FontRead Done.\n");
     StyleRead();
-//  printf("HWPFile::StyleRead Done.\n");
     AddColumnInfo();
     ParaListRead();
-//  printf("HWPFile::ParaListRead Done.\n");
     TagsRead();
-    //printf("HWPFile::TagsRead Done. State: %d\n", State());
 
     return State();
 }
@@ -326,7 +320,6 @@ bool HWPFile::TagsRead(void)
         tag = Read4b();
         size = Read4b();
         if (size <= 0 && tag > 0){
-            //return false;
             continue;
           }
 
@@ -402,7 +395,6 @@ bool HWPFile::TagsRead(void)
                 SkipBlock(size);
         }
     }
-//    return false;
 }
 
 

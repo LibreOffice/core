@@ -2023,7 +2023,7 @@ if ( maShapePresetType.equals( sWedgeRoundedRectCallout ) ) {
             // to determine the correct adjustment handle that should be updated with the adjustment
             // position. here is the solution: the adjustment value that is used within the position
             // has to be updated, in case the position is a formula the first usage of a
-            // adjument value is decisive
+            // adjustment value is decisive
             if ( maAdjustHandleList[ i ].polar )
             {
                 aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;

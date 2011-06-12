@@ -583,7 +583,7 @@ void DffPropSet::Merge( DffPropSet& rMaster ) const
             sal_uInt32 nCurrentFlags = mpContents[ nRecType ];
             sal_uInt32 nMergeFlags = rMaster.mpContents[ nRecType ];
             nMergeFlags &=  ( nMergeFlags >> 16 ) | 0xffff0000;             // clearing low word
-            nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove allready hard set
+            nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove already hard set
                             | ( nCurrentFlags >> 16 ) ) ^ 0xffffffff;       // attributes from mergeflags
             nCurrentFlags &= ( ( nMergeFlags & 0xffff0000 )                 // apply zero master bits
                             | ( nMergeFlags >> 16 ) ) ^ 0xffffffff;

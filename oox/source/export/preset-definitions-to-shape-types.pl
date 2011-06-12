@@ -853,7 +853,7 @@ sub start_element( $% )
             $path .= "x";
         }
         elsif ( $element eq "pt" ) {
-            # rememeber the last position for the arcTo
+            # remember the last position for the arcTo
             $last_pos_x = value( $attr{'x'} );
             $last_pos_y = value( $attr{'y'} );
 

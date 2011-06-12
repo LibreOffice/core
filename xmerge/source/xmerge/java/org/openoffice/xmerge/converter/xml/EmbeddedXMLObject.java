@@ -91,7 +91,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
     /**
      * Returns the content data for this embedded object.
      *
-     * @return DOM represenation of "content.xml"
+     * @return DOM representation of "content.xml"
      *
      * @throws  SAXException    If any parser error occurs
      * @throws  IOException     If any IO error occurs
@@ -120,7 +120,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
     /**
      * Returns the settings data for this embedded object.
      *
-     * @return DOM represenation of "settings.xml"
+     * @return DOM representation of "settings.xml"
      *
      * @throws  SAXException    If any parser error occurs
      * @throws  IOException     If any IO error occurs
@@ -149,7 +149,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
     /**
      * Returns the style data for this embedded object.
      *
-     * @return DOM represenation of "styles.xml"
+     * @return DOM representation of "styles.xml"
      *
      * @throws  SAXException    If any parser error occurs
      * @throws  IOException     If any IO error occurs

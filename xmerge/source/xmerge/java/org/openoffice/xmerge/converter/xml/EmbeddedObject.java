@@ -76,7 +76,7 @@ public abstract class EmbeddedObject {
      * Retrieves the name of the embedded object represented by an instance of
      * this class.
      *
-     * <b>N.B.</b>The name referes to the name as found in the
+     * <b>N.B.</b>The name refers to the name as found in the
      * <code>META-INF/manifest.xml</code> file.
      *
      * @return  The name of the object.

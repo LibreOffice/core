@@ -54,8 +54,8 @@ LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiS
     , m_xSMGR (xSMGR)
 {
     // important to do so ...
-    // Otherwhise the temp. reference to ourselves
-    // will kill us at realeasing time!
+    // Otherwise the temp. reference to ourselves
+    // will kill us at releasing time!
     osl_incrementInterlockedCount( &m_refCount );
 
     m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(

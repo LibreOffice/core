@@ -35,10 +35,9 @@
 
 #include "hwpreader.hxx"
 #include <math.h>
-//#ifndef UDK100
 #include "formula.h"
 #include "cspline.h"
-//#endif
+
 extern int getRepFamilyName(const char* , char *, double &ratio);
 
 #include <iostream>
@@ -421,17 +420,6 @@ void HwpReader::makeMeta()
         }
         rendEl(ascii("meta:keywords"));
     }
-/*
-    padd(ascii("meta:name"), sXML_CDATA, ascii("BBSID"));
-    rstartEl(ascii("meta:user-defined"), rList);
-    pList->clear();
-    rchars((hconv(hwpinfo->summary.etc[2], gstr)));
-    rendEl(ascii("meta:user-defined"));
-
-    rstartEl(ascii("dc:language"), rList);
-    rchars(ascii("C"));
-    rendEl(ascii("dc:language"));
-*/
     rendEl(ascii("office:meta"));
 }
 
@@ -899,8 +887,6 @@ void HwpReader::makeAutoStyles()
         else
             makeFStyle(hwpfile.getFBoxStyle(i));
     }
-
-// sal_Bool bIsLeft = sal_True, bIsMiddle = sal_True, bIsRight = sal_True;
 
     sal_Bool bIsLeft = sal_False, bIsMiddle = sal_False, bIsRight = sal_False;
     for( i = 0 ; i < hwpfile.getPageNumberCount() ; i++ )
@@ -2094,16 +2080,8 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
         switch (fstyle->txtflow)
         {
             case 0:
-//padd(ascii("style:wrap"), sXML_CDATA, ascii("none"));
                 break;
             case 1:
-                     /*
-                padd(ascii("style:run-through"), sXML_CDATA, ascii("foreground"));
-                padd(ascii("style:wrap"), sXML_CDATA, ascii("parallel"));
-                padd(ascii("style:number-wrapped-paragraphs"), sXML_CDATA, ascii("no-limit"));
-                padd(ascii("style:wrap-contour"), sXML_CDATA, ascii("true"));
-                padd(ascii("style:wrap-contour-mode"), sXML_CDATA, ascii("full"));
-                     */
                 padd(ascii("style:wrap"), sXML_CDATA, ascii("run-through"));
                 break;
             case 2:
@@ -2762,7 +2740,6 @@ char *HwpReader::getPStyleName(int index, char *_buf)
 }
 
 
-//void HwpReader::makeChars(char *str, int size)
 void HwpReader::makeChars(hchar *str, int size)
 {
     if (size)
@@ -3370,7 +3347,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
     pList->clear();
 
     bool add_zero = false;
-    int zero_check = 0/*, i=0*/;
+    int zero_check = 0;
     hbox->format[DATE_SIZE -1] = 0;
 
     hchar *fmt = hbox->format[0] ? hbox->format : defaultform;
@@ -3489,16 +3466,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 pList->clear();
                 rendEl(ascii("number:am-pm"));
                 break;
-            case '~':                             // Chiness Locale
-/*
-if( fmt[1] == 0 ) break;
-fmt++;
-if( *fmt == '6' ){
-    rstartEl(ascii("number:day-of-week"), rList);
-    pList->clear();
-    rendEl(ascii("number:day-of-week"));
-}
-*/
+            case '~':                             // Chinese Locale
                 break;
             default:
                 sbuf[0] = *fmt;
@@ -4766,26 +4734,8 @@ void HwpReader::makeAutoNum(AutoNum * hbox)
             rendEl(ascii("text:page-number"));
             break;
         case FNNUM_AUTO:
-/*
-padd(ascii("text:ref-name"), sXML_CDATA,
-     ascii(Int2Str(hbox->number + 1, "ftn%d", buf)));
-rstartEl(ascii("text:footnote-ref"), rList);
-pList->clear();
-//rchars(ascii(Int2Str(hbox->number + 1, "%d", buf)));
-rchars(ascii(""));
-rendEl(ascii("text:footnote-ref"));
-*/
             break;
         case ENNUM_AUTO:
-/*
-padd(ascii("text:ref-name"), sXML_CDATA,
-     ascii(Int2Str(hbox->number + 1, "edn%d", buf)));
-rstartEl(ascii("text:endnote-ref"), rList);
-pList->clear();
-//rchars(ascii(Int2Str(hbox->number + 1, "%d", buf)));
-rchars(ascii(""));
-rendEl(ascii("text:endnote-ref"));
-*/
             break;
         case EQUNUM_AUTO:
         case PICNUM_AUTO:

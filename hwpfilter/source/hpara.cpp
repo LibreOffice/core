@@ -94,7 +94,7 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     unsigned char same_cshape;
     register int ii;
     scflag = flag;
-// Paragraph Infomation
+// Paragraph Information
     hwpf.Read1b(&reuse_shape, 1);
     hwpf.Read2b(&nch, 1);
     hwpf.Read2b(&nline, 1);
@@ -213,7 +213,7 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
 
     if (hwpf.State() != HWP_NoError)
         return 0;
-//hbox = new HBox(hh);
+
     if (hh > 31 || hh == CH_END_PARA)
         hbox = new HBox(hh);
     else if (IS_SP_SKIP_BLOCK(hh))
@@ -313,7 +313,6 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
         }
     }
     return hbox;
-//return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

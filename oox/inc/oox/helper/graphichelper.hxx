@@ -60,7 +60,7 @@ namespace oox {
     persistent graphic objects internally and store them in an internal
     container to prevent their early destruction. This makes it possible to use
     the returned URL of the graphic object in any way (e.g. insert it into a
-    property map) without needing to store it immediatly at an object that
+    property map) without needing to store it immediately at an object that
     resolves the graphic object from the passed URL and thus prevents it from
     being destroyed.
  */

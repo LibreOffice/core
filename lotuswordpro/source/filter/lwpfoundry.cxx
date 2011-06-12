@@ -332,7 +332,7 @@ LwpObjectID * LwpFoundry::FindParaStyleByName(OUString name)
 }
 
 /**
-* @descr:   Get style name registed according the original style name
+* @descr:   Get style name registered according the original style name
 *
 */
 OUString LwpFoundry::FindActuralStyleName(OUString name)
@@ -358,7 +358,7 @@ void LwpVersionManager::Read(LwpObjectStream *pStrm)
 
 void LwpVersionManager::Skip(LwpObjectStream *pStrm)
 {
-    /*sal_uInt32 cNextUserVersionID =*/ pStrm->QuickReaduInt32();
+    pStrm->QuickReaduInt32();
     sal_uInt16 Count = pStrm->QuickReaduInt16();
 
     while(Count--)
@@ -369,7 +369,6 @@ void LwpVersionManager::Skip(LwpObjectStream *pStrm)
             case TAG_USER_VERSION:
                 // TODO: skip the CUserVersionControl
                 pStrm->SeekRel(pStrm->QuickReaduInt16());
-                //pStrm->SkipExtra(); //The length has included the extra
                 break;
 
             default:

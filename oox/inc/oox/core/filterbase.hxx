@@ -213,7 +213,7 @@ public:
         the imported document. */
     ModelObjectHelper&  getModelObjectHelper() const;
 
-    /** Returns a helper for the handling of OLE obejcts. */
+    /** Returns a helper for the handling of OLE objects. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
     /** Returns the VBA project manager. */

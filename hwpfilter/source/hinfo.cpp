@@ -34,8 +34,6 @@
 
 // Info Block
 
-//int ParaShape::count = 0;
-//int CharShape::count = 0;
 
 static bool HWPReadInfoBlock(void *ptr, int len, HWPFile & hwpf)
 {
@@ -47,7 +45,7 @@ static bool HWPReadInfoBlock(void *ptr, int len, HWPFile & hwpf)
 }
 
 
-// Document Infomation
+// Document Information
 
 HWPInfo::HWPInfo(void)
 {
@@ -161,8 +159,6 @@ bool HWPSummary::Read(HWPFile & hwpf)
 }
 
 
-//
-
 bool ParaShape::Read(HWPFile & hwpf)
 {
      pagebreak = 0;
@@ -195,18 +191,8 @@ bool ParaShape::Read(HWPFile & hwpf)
 }
 
 
-/*
-CharShape::~CharShape()
-{
-}
-ParaShape::~ParaShape()
-{
-}
-
-*/
 bool CharShape::Read(HWPFile & hwpf)
 {
-//index = ++count;
     size = (short) hwpf.Read2b();
     hwpf.Read1b(font, NLanguage);
     hwpf.Read1b(ratio, NLanguage);

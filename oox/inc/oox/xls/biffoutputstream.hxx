@@ -69,7 +69,7 @@ public:
 private:
     typedef ::std::vector< sal_uInt8 > DataBuffer;
 
-    BinaryOutputStream& mrOutStrm;              /// Core ouput stream.
+    BinaryOutputStream& mrOutStrm;              /// Core output stream.
     DataBuffer          maData;                 /// Record data buffer.
     sal_uInt16          mnMaxRecSize;           /// Maximum size of record contents.
     sal_uInt16          mnRecId;                /// Current record identifier.

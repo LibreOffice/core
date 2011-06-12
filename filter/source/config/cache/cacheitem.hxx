@@ -202,12 +202,12 @@ typedef ::boost::unordered_map< ::rtl::OUString                    ,
 
     @descr  E.g. a list of internal type names can be registered
             to an extension. Organization as an hash makes it
-            faster then searching inside vectors.
+            faster than searching inside vectors.
 
-            On the other side e.g. URLPattern cant be realy adressed
+            On the other side e.g. URLPattern cant be really addressed
             by a hash value ... because the use wildcards. But
             there we need key-value pairs too, which cant be provided
-            by a pur vector!
+            by a pure vector!
  */
 typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          OUStringList                       ,
@@ -222,7 +222,7 @@ typedef ::boost::unordered_map< ::rtl::OUString                    ,
     @descr  Every type in this list is combined with an information,
             which property matched to the given URL. The user of this
             structure can decide then, if a deep detection should be
-            supressed e.g. if an URLPattern was used.
+            suppressed e.g. if an URLPattern was used.
  */
 struct  FlatDetectionInfo
 {

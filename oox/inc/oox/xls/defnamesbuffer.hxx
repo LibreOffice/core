@@ -192,7 +192,7 @@ public:
     /** Creates all defined names in the document. */
     void                finalizeImport();
 
-    /** Returns a defined name by zero-based index (order of appearence). */
+    /** Returns a defined name by zero-based index (order of appearance). */
     DefinedNameRef      getByIndex( sal_Int32 nIndex ) const;
     /** Returns a defined name by token index (index in XDefinedNames container). */
     DefinedNameRef      getByTokenIndex( sal_Int32 nIndex ) const;

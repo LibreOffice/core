@@ -120,7 +120,7 @@ public class ColourConverter {
     }
 
     /**
-     * Uses the colour table it it exists to translate default values to
+     * Uses the colour table if it exists to translate default values to
      * values in the colorTable
      */
     private short colourLookup(short colour) {
@@ -133,7 +133,7 @@ public class ColourConverter {
     }
 
     /**
-     * Uses the colour table it it exists to translate default values to
+     * Uses the colour table if it exists to translate default values to
      * values in the colorTable
      */
     private short indexLookup(short index) {

@@ -549,7 +549,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         BinaryXInputStream aInfoStrm( xEncryptionInfo, true );
         bool bValidInfo = lclReadEncryptionInfo( aEncryptInfo, aInfoStrm );
 
-        // check flags and agorithm IDs, requiered are AES128 and SHA-1
+        // check flags and algorithm IDs, required are AES128 and SHA-1
         bool bImplemented = bValidInfo &&
             getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_CRYPTOAPI ) &&
             getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_AES ) &&

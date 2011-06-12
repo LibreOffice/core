@@ -221,7 +221,7 @@ void SAL_CALL LayoutNodeContext::endFastElement( ::sal_Int32 )
 }
 
 /** convert the XML tag to a variable index in the array
- * @param aTag the tag, wihout namespace
+ * @param aTag the tag, without namespace
  * @return the variable index. -1 is an error
  */
 sal_Int32 LayoutNodeContext::tagToVarIdx( sal_Int32 aTag )

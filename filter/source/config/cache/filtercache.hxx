@@ -320,7 +320,7 @@ class FilterCache : public BaseLock
 
                     The original container will get these new data automaticly
                     because it listen for changes on the internal used configuration layer.
-                    If the new data are needed immediatly inside the original container,
+                    If the new data are needed immediately inside the original container,
                     the method takeOver() can be used to copy all changes back.
                     The may be following notifications of the configuration will be superflous then.
                     But they cant be stopped ...
@@ -346,7 +346,7 @@ class FilterCache : public BaseLock
 
             @descr      This method check if all requested items/properties already
                         exists. Only missing informations will be readed.
-                        Otherwhise this method does nothing!
+                        Otherwise this method does nothing!
 
                         This method must be called from every user of this cache
                         everytimes it need a filled cache. Normaly we load
