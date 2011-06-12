@@ -51,16 +51,13 @@ PATCH_FILES=
 CONFIGURE_DIR=
 
 .IF "$(OS)"=="MACOSX"
-CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                 ./configure \
-                 --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+CONFIGURE_ACTION=./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+                 CPPFLAGS="$(EXTRA_CDEFS)" \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
-                 LDFLAGS="-L$(SOLARLIBDIR) $(eq,$(OS),MACOSX $(EXTRA_LINKFLAGS) $(NULL))" \
+                 LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS) -Wl,-dylib_file,@loader_path/libgmodule-2.0.0.dylib:$(SOLARLIBDIR)/libgmodule-2.0.0.dylib" \
                  GLIB2_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \
                  GLIB2_LIBS="-lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lglib-2.0 -lintl" \
                  LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)"
-
-CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
