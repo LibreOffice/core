@@ -115,17 +115,25 @@ LDFLAGS+:=-L$(SOLARLIBDIR) -L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -l
 .IF "$(COMNAME)"=="sunpro5"
 CPPFLAGS+:=$(ARCH_FLAGS) -xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
+
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-shared
+# --with-libxml-prefix actually gives the prefix where bin/xml2-config is looked for,
+# and we want it to find our dummy one that prints the LIBXML_CFLAGS and LIBXML_LIBS that
+# the configure script found out.
+CONFIGURE_FLAGS=--disable-shared --with-libxml-prefix=$(SRC_ROOT)/$(PRJNAME)/dummy
 .ELSE
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
+
 CONFIGURE_FLAGS+=--enable-ipv6=no --without-crypto --without-python --with-sax1=yes
+
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
+
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Use flags found out by configure when we *don't* want
+# to use the "system" xml2-config in $PATH
+
+case $1 in
+--cflags)
+  echo $LIBXML_CFLAGS
+  ;;
+--libs)
+  echo $LIBXML_LIBS
+  ;;
+--version)
+  # Assume it's close enough to the system version...
+  xml2-config --version
+  ;;
+esac
