@@ -3223,18 +3223,17 @@ sal_Bool PPTExtParaProv::GetGraphic( sal_uInt32 nInstance, Graphic& rGraph ) con
 {
     sal_Bool bRetValue = sal_False;
     PPTBuGraEntry* pPtr = NULL;
-    if ( nInstance < aBuGraList.Count() )
+    if ( nInstance < aBuGraList.size() )
     {
-        pPtr = (PPTBuGraEntry*)aBuGraList.GetObject( nInstance );
+        pPtr = aBuGraList[ nInstance ];
         if ( pPtr->nInstance == nInstance )
             bRetValue = sal_True;
     }
     if ( !bRetValue )
     {
-        sal_uInt32 i;
-        for ( i = 0; i < aBuGraList.Count(); i++ )
+        for (size_t i = 0; i < aBuGraList.size(); i++ )
         {
-            pPtr = (PPTBuGraEntry*)aBuGraList.GetObject( i );
+            pPtr = aBuGraList[ i ];
             if ( pPtr->nInstance == nInstance )
             {
                 bRetValue = sal_True;
@@ -3284,22 +3283,26 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                             {
                                 sal_uInt32 nInstance = aBuGraAtomHd.nRecInstance;
                                 PPTBuGraEntry* pBuGra = new PPTBuGraEntry( aGraphic, nInstance );
-                                sal_uInt32 n = 0;
-                                sal_uInt32 nBuGraCount = aBuGraList.Count();
+                                size_t n = 0;
+                                size_t nBuGraCount = aBuGraList.size();
                                 if ( nBuGraCount )
                                 {
-                                    if ( ( (PPTBuGraEntry*)aBuGraList.GetObject( nBuGraCount - 1 ) )->nInstance < nInstance )
+                                    if ( aBuGraList[ nBuGraCount - 1 ]->nInstance < nInstance )
                                         n = nBuGraCount;
                                     else
                                     {   // maybe the instances are not sorted, we sort it
                                         for ( n = 0; n < nBuGraCount; n++ )
                                         {   // sorting fields ( hi >> lo )
-                                            if ( ( (PPTBuGraEntry*)aBuGraList.GetObject( n ) )->nInstance < nInstance )
+                                            if ( aBuGraList[ n ]->nInstance < nInstance )
                                                 break;
                                         }
                                     }
                                 }
-                                aBuGraList.Insert( pBuGra, (sal_uInt32)n );
+                                if ( n < nBuGraCount ) {
+                                    aBuGraList.insert( aBuGraList.begin() + n, pBuGra );
+                                } else {
+                                    aBuGraList.push_back( pBuGra );
+                                }
                             }
 #ifdef DBG_UTIL
                             else OSL_FAIL( "PPTExParaProv::PPTExParaProv - bullet graphic is not valid (SJ)" );
@@ -3310,7 +3313,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 #endif
                         aBuGraAtomHd.SeekToEndOfRecord( rSt );
                     }
-                    if ( aBuGraList.Count() )
+                    if ( !aBuGraList.empty() )
                         bGraphics = sal_True;
                 }
                 break;
@@ -3392,9 +3395,9 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 
 PPTExtParaProv::~PPTExtParaProv()
 {
-    void* pPtr;
-    for ( pPtr = aBuGraList.First(); pPtr; pPtr = aBuGraList.Next() )
-        delete (PPTBuGraEntry*)pPtr;
+    for ( size_t i = 0, n = aBuGraList.size(); i < n; ++i )
+        delete aBuGraList[ i ];
+    aBuGraList.clear();
 }
 
 PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv ) :

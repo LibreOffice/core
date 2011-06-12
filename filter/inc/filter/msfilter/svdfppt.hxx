@@ -724,9 +724,11 @@ struct PPTBuGraEntry
                 PPTBuGraEntry( Graphic& rGraphic, sal_uInt32 nInstance );
 };
 
+typedef ::std::vector< PPTBuGraEntry* > PPTBuGraEntryList;
+
 class PPTExtParaProv
 {
-    List                aBuGraList;
+    PPTBuGraEntryList   aBuGraList;
 
 public :
     sal_Bool            bStyles;
