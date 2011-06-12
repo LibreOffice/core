@@ -60,7 +60,6 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/communi/geninfo \
-    tools/source/communi/parser \
     tools/source/datetime/datetime \
     tools/source/datetime/tdate \
     tools/source/datetime/ttime \
@@ -164,5 +163,5 @@ endif
 # tools/source/string/debugprint -DDEBUG -DEXCEPTIONS_OFF -DOSL_DEBUG_LEVEL=2 -DSHAREDLIB -DTOOLS_DLLIMPLEMENTATION -D_DLL_ -O0 -fno-exceptions -fpic -fvisibility=hidden -g
 # -DOPTIMIZE
 # no -DTOOLS_DLLIMPLEMENTATION on toolsdll
-# -DEXCEPTIONS_OFF -fno-exceptions on geninfo parser datetime tdate ttime bigint color config fract gen line link poly2 svborder toolsin inetmime inetmsg inetstrm contnr mempool multisel table unqidx cachestr stream strmsys vcompat tenccvt tstring tustring testtoolloader
+# -DEXCEPTIONS_OFF -fno-exceptions on geninfo datetime tdate ttime bigint color config fract gen line link poly2 svborder toolsin inetmime inetmsg inetstrm contnr mempool multisel table unqidx cachestr stream strmsys vcompat tenccvt tstring tustring testtoolloader
 # vim: set noet sw=4 ts=4:

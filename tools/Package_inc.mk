@@ -54,7 +54,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetdef.hxx,tools/inetdef.
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetmime.hxx,tools/inetmime.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetmsg.hxx,tools/inetmsg.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetstrm.hxx,tools/inetstrm.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/iparser.hxx,tools/iparser.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/isofallback.hxx,tools/isofallback.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/line.hxx,tools/line.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/link.hxx,tools/link.hxx))
