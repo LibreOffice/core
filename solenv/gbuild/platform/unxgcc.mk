@@ -120,6 +120,10 @@ ifeq ($(HAVE_CXX0X),TRUE)
 gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
 endif
 
+ifeq ($(ENABLE_DEBUG_STL),TRUE)
+gb_CXXFLAGS += -D_GLIBCXX_DEBUG
+endif
+
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)

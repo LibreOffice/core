@@ -1859,13 +1859,16 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$enable_debug" && test "$enable_debug" != "no"; then
    ENABLE_DEBUG="TRUE"
+   ENABLE_DEBUG_STL="TRUE"
    enable_symbols="yes"
    AC_MSG_RESULT([yes])
 else
    ENABLE_DEBUG="FALSE"
+   ENABLE_DEBUG_STL="FALSE"
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+AC_SUBST(ENABLE_DEBUG_STL)
 
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================

@@ -1516,6 +1516,7 @@ ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
+ToFile( "ENABLE_DEBUG_STL",  "@ENABLE_DEBUG_STL@", "e" );
 if ("@ENABLE_WERROR@" eq "FALSE") {
 ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 }

@@ -90,6 +90,9 @@ CFLAGSCXX+=-fvisibility-inlines-hidden
 .IF "$(HAVE_CXX0X)" == "TRUE"
 CFLAGSCXX+=-std=c++0x -Wno-deprecated-declarations
 .ENDIF # "$(HAVE_CXX0X)" == "TRUE"
+.IF "$(ENABLE_DEBUG_STL)" == "TRUE"
+CFLAGSCXX += -D_GLIBCXX_DEBUG
+.ENDIF
 
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
 CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
