@@ -568,48 +568,6 @@ public:
     long            GetVersion() { return nVersion; }
     void            SetVersion( long n ) { nVersion = n; }
 
-    /** Add a mark to indicate to which position in the stream you want to be
-        able to seek back.
-
-        @descr  If you set a mark at nPos, you indicate to the stream that you
-        won't issue seek operations to any position 'before' nPos.  This can
-        be exploited by 'transient streams' that do not permanently store
-        their data; they can discard any buffered data up to nPos.
-
-        @descr  However, if the stream is already positioned past nPos, this
-        method is not guaranteed to have the desired effect.  A 'transient
-        stream' may have already discarded the buffered data at nPos, so that
-        a seek operation to nPos will fail nonetheless.
-
-        @descr  There can be more than one mark for a stream, indicating that
-        you want to be able to seek back in the stream as far as the 'lowest'
-        off all the marks.  There can even be multiple marks at the same
-        position (and they must all be individually removed with
-        RemoveMark()).
-
-        @param nPos  The position in the stream at which to add a mark.
-     */
-    virtual void    AddMark(sal_Size nPos);
-
-    /** Remove a mark introduced with AddMark().
-
-        @descr  If you no longer need to seek back to some position for which
-        you added a mark, you should remove that mark.  (And a 'transient
-        stream' that does not permanently store its data can then potentially
-        discard some of its buffered data.)
-
-        @descr  Removing one mark does not have any effects on any other
-        marks.  Especially, if you have multiple marks at the same position,
-        you must call this method multiple times to effectively 'unmark' that
-        position.
-
-        @descr  If you specify a position for which there is no mark, this
-        method simply has no effect.
-
-        @param nPos  The position in the stream at which to remove the mark.
-     */
-    virtual void    RemoveMark(sal_Size nPos);
-
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // fuer Manips
 };
 
