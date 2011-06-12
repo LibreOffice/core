@@ -109,6 +109,11 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_extra_bold, "extra-bold" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_lighter, "lighter" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_bolder, "bolder" );
 
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_text_transform, "text-transform" );
+
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_capitalize, "capitalize" );
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_uppercase, "uppercase" );
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_lowercase, "lowercase" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font_size, "font-size" );
 

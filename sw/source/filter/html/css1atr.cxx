@@ -2564,17 +2564,26 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsHTMLMode(HTMLMODE_SMALL_CAPS) )
         return rWrt;
 
-    const sal_Char *pStr = 0;
     switch( ((const SvxCaseMapItem&)rHt).GetCaseMap() )
     {
-    case SVX_CASEMAP_NOT_MAPPED:    pStr = sCSS1_PV_normal;     break;
-    case SVX_CASEMAP_KAPITAELCHEN:  pStr = sCSS1_PV_small_caps; break;
+    case SVX_CASEMAP_NOT_MAPPED:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, sCSS1_PV_normal );
+        break;
+    case SVX_CASEMAP_KAPITAELCHEN:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, sCSS1_PV_small_caps );
+        break;
+    case SVX_CASEMAP_VERSALIEN:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_uppercase );
+        break;
+    case SVX_CASEMAP_GEMEINE:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_lowercase );
+        break;
+    case SVX_CASEMAP_TITEL:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_capitalize );
+        break;
     default:
         ;
     }
-
-    if( pStr )
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, pStr );
 
     return rWrt;
 }
