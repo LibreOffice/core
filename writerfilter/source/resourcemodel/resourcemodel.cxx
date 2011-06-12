@@ -544,7 +544,7 @@ void WW8TableHandler::entry(int /*pos*/,
         output.addItem("<exception>" + e.getText() + "</exception>");
         output.addItem("</tableentry>");
 
-        throw e;
+        throw;
     }
 
     output.addItem("</tableentry>");

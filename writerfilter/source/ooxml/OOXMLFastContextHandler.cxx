@@ -1666,7 +1666,7 @@ void OOXMLFastContextHandlerTable::newPropertySet
 
 OOXMLFastContextHandlerXNote::OOXMLFastContextHandlerXNote
 (OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandler(pContext)
+: OOXMLFastContextHandler(pContext), mbForwardEventsSaved(false)
 {
 }
 

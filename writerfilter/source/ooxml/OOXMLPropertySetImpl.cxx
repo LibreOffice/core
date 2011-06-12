@@ -772,7 +772,7 @@ const ::rtl::OUString & OOXMLPropertySetEntryToString::getString() const
 }
 
 OOXMLPropertySetEntryToInteger::OOXMLPropertySetEntryToInteger(Id nId)
-: mnId(nId)
+: mnId(nId), mnValue(0)
 {
 }
 

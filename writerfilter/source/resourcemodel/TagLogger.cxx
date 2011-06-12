@@ -291,7 +291,7 @@ namespace writerfilter
             {
                 attribute( "value", rPropSet->getPropertyValue( sName ) );
             }
-            catch (uno::Exception aException)
+            catch (uno::Exception)
             {
                 startElement( "exception" );
 

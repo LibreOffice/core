@@ -172,7 +172,7 @@ void OOXMLParserState::setCharacterProperties
 void OOXMLParserState::setCellProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mCellProps.size() > 0)
+    if (!mCellProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
 
@@ -186,7 +186,7 @@ void OOXMLParserState::setCellProperties
 void OOXMLParserState::setRowProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mRowProps.size() > 0)
+    if (!mRowProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
 
@@ -199,7 +199,7 @@ void OOXMLParserState::setRowProperties
 
 void OOXMLParserState::resolveCellProperties(Stream & rStream)
 {
-    if (mCellProps.size() > 0)
+    if (!mCellProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
 
@@ -213,7 +213,7 @@ void OOXMLParserState::resolveCellProperties(Stream & rStream)
 
 void OOXMLParserState::resolveRowProperties(Stream & rStream)
 {
-    if (mRowProps.size() > 0)
+    if (!mRowProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
 
@@ -227,7 +227,7 @@ void OOXMLParserState::resolveRowProperties(Stream & rStream)
 
 void OOXMLParserState::resolveTableProperties(Stream & rStream)
 {
-    if (mTableProps.size() > 0)
+    if (!mTableProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
 
@@ -242,7 +242,7 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
 void OOXMLParserState::setTableProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mTableProps.size() > 0)
+    if (!mTableProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
         if (rTableProps.get() == NULL)
