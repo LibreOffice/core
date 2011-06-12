@@ -42,7 +42,7 @@ CFLAGS+=-DSYSTEM_EXPAT
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 
 SLOFILES=$(SLO)$/recently_used_file.obj \
          $(SLO)$/recently_used_file_handler.obj
@@ -59,9 +59,9 @@ SHL1VERSIONMAP=recfile.map
 .ELSE
 
 dummy:
-    @echo "Nothing to build for MACOSX"
+    @echo "Nothing to build for $(OS)"
 
-.ENDIF # MACOSX
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
