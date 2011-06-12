@@ -110,6 +110,12 @@ UNAME=$(shell uname)
     .ENDIF
 .ENDIF
 
+.IF "$(OS)" == "IOS"
+    PATCH_FILES=opensslios.patch
+    CONFIGURE_ACTION=Configure ios-armv7
+    CONFIGURE_FLAGS=no-shared no-idea
+.ENDIF
+
 .IF "$(OS)" == "WNT"
 
 .IF "$(COM)"=="GCC"
