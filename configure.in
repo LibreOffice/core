@@ -5799,23 +5799,12 @@ AC_MSG_CHECKING([which libssl to use])
 if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
         test "$with_system_openssl" != "no"; then
     AC_MSG_RESULT([external])
-
-    dnl Mac OS (and BSD, apparently) builds should get out without
-    dnl extra stuff is the Mac porters' wish. And pkg-config is
-    dnl although Xcode ships a .pc for OpenSSL
-
-    dnl For iOS we don't want to even try compiling bundled (outdated
-    dnl version of) OpenSSL with its ultra-weird configury. But on the
-    dnl other hand there is no system OpenSSL either. But let's just
-    dnl build a current OpenSSL separately using some of the ways
-    dnl found on the net and pretend it is a "system" OpenSSL.
-
-    dnl In either case pass OPENSSL_CFLAGS and OPENSSL_LIBS if
-    dnl necessary in the environment.
-
-    if test "$_os" = "Darwin" -o "$_os" = "iOS" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
+    # Mac OS builds should get out without extra stuff is the Mac porters'
+    # wish. And pkg-config is although Xcode ships a .pc for openssl
+    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
             "$_os" = "DragonFly"; then
-        OPENSSL_LIBS=${OPENSSL_LIBS:--lssl -lcrypto}
+        OPENSSL_CFLAGS=
+        OPENSSL_LIBS="-lssl -lcrypto"
     else
         PKG_CHECK_MODULES( OPENSSL, openssl )
     fi
