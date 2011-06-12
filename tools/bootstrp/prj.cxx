@@ -33,7 +33,6 @@
 #include <osl/mutex.hxx>
 
 #include <tools/stream.hxx>
-#include <tools/geninfo.hxx>
 #include "bootstrp/prj.hxx"
 
 #if defined(WNT)
