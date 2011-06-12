@@ -676,10 +676,11 @@ struct PPTTextSpecInfo
     ~PPTTextSpecInfo();
 };
 
+typedef ::std::vector< PPTTextSpecInfo* > PPTTextSpecInfoList;
 struct  PPTTextSpecInfoAtomInterpreter
 {
-    sal_Bool        bValid;
-    List            aList;
+    sal_Bool            bValid;
+    PPTTextSpecInfoList aList;
 
                     PPTTextSpecInfoAtomInterpreter();
                     ~PPTTextSpecInfoAtomInterpreter();

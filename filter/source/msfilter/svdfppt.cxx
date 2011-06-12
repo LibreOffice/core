@@ -1619,8 +1619,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                             if ( ( pE2->ePageKind == PPT_MASTERPAGE ) && ( pE2->aSlideAtom.nMasterId == 0 ) && ( pE2->bNotesMaster == 0 ) )
                             {
                                 PPTTextSpecInfo aTxSI( 0 );
-                                if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
-                                    aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
+                                if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
+                                    aTxSI = *( aTxSIStyle.aList[ 0 ] );
 
                                 pE2->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxCFStyle, aTxPFStyle, aTxSI );
                                 pDefaultSheet = pE2->pStyleSheet;
@@ -4758,7 +4758,7 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHea
             }
             nFlags &= ~i;
         }
-        aList.Insert( pEntry, LIST_APPEND );
+        aList.push_back( pEntry );
     }
     bValid = rIn.Tell() == rRecHd.GetRecEndFilePos();
     return bValid;
@@ -4766,9 +4766,10 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHea
 
 PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
 {
-    void *pPtr;
-    for ( pPtr = aList.First(); pPtr; pPtr = aList.Next() )
-        delete (PPTTextSpecInfo*)pPtr;
+    for ( size_t i = 0, n = aList.size(); i < n; ++i ) {
+        delete aList[ i ];
+    }
+    aList.clear();
 }
 
 void StyleTextProp9::Read( SvStream& rIn )
@@ -6526,9 +6527,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 {
                                     sal_uInt32  nI = 0;
                                     PPTTextSpecInfo* pSpecInfo;
-                                    for ( pSpecInfo = (PPTTextSpecInfo*)aTextSpecInfoAtomInterpreter.aList.First();
-                                        pSpecInfo; pSpecInfo =(PPTTextSpecInfo*)aTextSpecInfoAtomInterpreter.aList.Next() )
+                                    for ( size_t i = 0; i < aTextSpecInfoAtomInterpreter.aList.size(); ++i)
                                     {
+                                        pSpecInfo = aTextSpecInfoAtomInterpreter.aList[ i ];
                                         sal_uInt32 nCharIdx = pSpecInfo->nCharIdx;
 
                                         // portions and text have to been splitted in some cases
