@@ -676,7 +676,7 @@ public:
     void                convertFormatting(
                             ShapePropertyMap& rPropMap,
                             const ModelRef< Shape >& rxShapeProp,
-                            sal_Int32 nSeriesIdx );
+                            sal_Int32 nSeriesIdx ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -931,8 +931,8 @@ EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEn
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
 }
-
-void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ )
+//TODO :
+void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ ) const
 {
 }
 

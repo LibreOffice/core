@@ -593,6 +593,7 @@ FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     mnMaxXlsRow( rParent.getAddressConverter().getMaxXlsAddress().Row ),
     mbRelativeAsOffset( false ),
     mb2dRefsAs3dRefs( false ),
+    mbSpecialTokens( false ),
     mbAllowNulChars( false )
 {
     // reserve enough space to make resize(), push_back() etc. cheap
@@ -1669,7 +1670,7 @@ bool OoxFormulaParserImpl::importArrayToken( SequenceInputStream& rStrm )
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::readString( rStrm, false );
                 break;
                 case BIFF_TOK_ARRAY_BOOL:
-                    appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
+                    appendRawToken( OPCODE_PUSH ) <<= (static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 ));
                 break;
                 case BIFF_TOK_ARRAY_ERROR:
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( rStrm.readuInt8() );
@@ -2386,7 +2387,7 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
                         rStrm.readByteStringUC( false, getTextEncoding(), mbAllowNulChars );
                 break;
                 case BIFF_DATATYPE_BOOL:
-                    appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
+                    appendRawToken( OPCODE_PUSH ) <<= (static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 ));
                     rStrm.skip( 7 );
                 break;
                 case BIFF_DATATYPE_ERROR:

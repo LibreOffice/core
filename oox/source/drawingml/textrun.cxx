@@ -83,13 +83,13 @@ sal_Int32 TextRun::insertAt(
             else
             {
                 OUString aLatinFontName, aSymbolFontName;
-                sal_Int16 nLatinFontPitch = 0, nSymbolFontPitch = 0;
-                sal_Int16 nLatinFontFamily = 0, nSymbolFontFamily = 0;
+                sal_Int16 nSymbolFontFamily = 0, nSymbolFontPitch = 0;
 
                 if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
                     xText->insertString( xStart, getText(), sal_False );
                 else if ( getText().getLength() )
                 {   // !!#i113673<<<
+                    sal_Int16 nLatinFontPitch = 0, nLatinFontFamily = 0;
                     aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
 
                     sal_Int32 nIndex = 0;

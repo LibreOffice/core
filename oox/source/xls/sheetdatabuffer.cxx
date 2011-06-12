@@ -545,7 +545,7 @@ void SheetDataBuffer::finalizeImport()
     // write default formatting of remaining row range
     writeXfIdRowRangeProperties( maXfIdRowRange );
 
-    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; aIt++ )
+    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
         writeXfIdRangeListProperties( aIt->first.first, aIt->first.second, aIt->second );
 
     // merge all cached merged ranges and update right/bottom cell borders
@@ -824,7 +824,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
             }
             else
                 break;
-            aItM++;
+            ++aItM;
         }
 
         // update merged ranges for 'center across selection' and 'fill'

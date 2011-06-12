@@ -647,7 +647,7 @@ namespace oox { namespace ppt {
 
                     NodePropertyMap & aProps( mpNode->getNodeProperties() );
                     end = maTavList.end();
-                    for(iter = maTavList.begin(), i=0; iter != end; iter++,i++)
+                    for(iter = maTavList.begin(), i=0; iter != end; ++iter,++i)
                     {
                         // TODO what to do if it is Timing_INFINITE ?
                         Any aTime = GetTimeAnimateValueTime( iter->msTime );

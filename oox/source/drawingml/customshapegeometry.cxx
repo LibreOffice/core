@@ -483,7 +483,7 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
     while ( nIndex >= 0 );
 
     rtl::OUString aEquation;
-    if ( aTokens.size() )
+    if ( !aTokens.empty() )
     {
         sal_Int32 i, nParameters = aTokens.size() - 1;
         if ( nParameters > 3 )
