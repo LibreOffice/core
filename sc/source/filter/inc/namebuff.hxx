@@ -185,7 +185,7 @@ public:
 
 
 
-class RangeNameBufferWK3 : private List
+class RangeNameBufferWK3
 {
 private:
     struct ENTRY
@@ -208,6 +208,8 @@ private:
 
     ScTokenArray*           pScTokenArray;
     sal_uInt16                  nIntCount;
+    std::vector<ENTRY> maEntries;
+
 public:
                             RangeNameBufferWK3( void );
     virtual                 ~RangeNameBufferWK3();

@@ -524,14 +524,6 @@ RangeNameBufferWK3::RangeNameBufferWK3( void )
 
 RangeNameBufferWK3::~RangeNameBufferWK3()
 {
-    ENTRY*      pDel = ( ENTRY* ) List::First();
-
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( ENTRY* ) List::Next();
-    }
-
     delete pScTokenArray;
 }
 
@@ -541,9 +533,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
     String              aScName( rOrgName );
     ScfTools::ConvertToScDefinedName( aScName );
 
-    register ENTRY*     pInsert = new ENTRY( rOrgName, aScName, rCRD );
-
-    List::Insert( pInsert, CONTAINER_APPEND );
+    ENTRY aInsert( rOrgName, aScName, rCRD );
 
     pScTokenArray->Clear();
 
@@ -553,20 +543,21 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
     if( rRef1.nCol == rRef2.nCol && rRef1.nRow == rRef2.nRow && rRef1.nTab == rRef2.nTab )
     {
         pScTokenArray->AddSingleReference( rCRD.Ref1 );
-        pInsert->bSingleRef = sal_True;
+        aInsert.bSingleRef = sal_True;
     }
     else
     {
         pScTokenArray->AddDoubleReference( rCRD );
-        pInsert->bSingleRef = false;
+        aInsert.bSingleRef = false;
     }
 
     ScRangeData*        pData = new ScRangeData( pLotusRoot->pDoc, aScName, *pScTokenArray );
 
-    pInsert->nRelInd = nIntCount;
+    aInsert.nRelInd = nIntCount;
     pData->SetIndex( nIntCount );
     nIntCount++;
 
+    maEntries.push_back( aInsert );
     pLotusRoot->pScRangeName->insert( pData );
 }
 
@@ -575,16 +566,14 @@ sal_Bool RangeNameBufferWK3::FindRel( const String& rRef, sal_uInt16& rIndex )
 {
     StringHashEntry     aRef( rRef );
 
-    ENTRY*              pFind = ( ENTRY* ) List::First();
-
-    while( pFind )
+    std::vector<ENTRY>::const_iterator pIter;
+    for ( pIter = maEntries.begin(); pIter != maEntries.end(); ++pIter )
     {
-        if( aRef == pFind->aStrHashEntry )
+        if ( aRef == pIter->aStrHashEntry )
         {
-            rIndex = pFind->nRelInd;
-            return sal_True;
+            rIndex = pIter->nRelInd;
+            return true;
         }
-        pFind = ( ENTRY* ) List::Next();
     }
 
     return false;
@@ -596,47 +585,45 @@ sal_Bool RangeNameBufferWK3::FindAbs( const String& rRef, sal_uInt16& rIndex )
     String              aTmp( rRef );
     StringHashEntry     aRef( aTmp.Erase( 0, 1 ) ); // ohne '$' suchen!
 
-    ENTRY*              pFind = ( ENTRY* ) List::First();
-
-    while( pFind )
+    std::vector<ENTRY>::iterator pIter;
+    for ( pIter = maEntries.begin(); pIter != maEntries.end(); ++pIter )
     {
-        if( aRef == pFind->aStrHashEntry )
+        if ( aRef == pIter->aStrHashEntry )
         {
             // eventuell neuen Range Name aufbauen
-            if( pFind->nAbsInd )
-                rIndex = pFind->nAbsInd;
+            if( pIter->nAbsInd )
+                rIndex = pIter->nAbsInd;
             else
             {
-                ScSingleRefData*        pRef = &pFind->aScComplexRefDataRel.Ref1;
+                ScSingleRefData*        pRef = &pIter->aScComplexRefDataRel.Ref1;
                 pScTokenArray->Clear();
 
                 pRef->SetColRel( false );
                 pRef->SetRowRel( false );
                 pRef->SetTabRel( sal_True );
 
-                if( pFind->bSingleRef )
+                if( pIter->bSingleRef )
                     pScTokenArray->AddSingleReference( *pRef );
                 else
                 {
-                    pRef = &pFind->aScComplexRefDataRel.Ref2;
+                    pRef = &pIter->aScComplexRefDataRel.Ref2;
                     pRef->SetColRel( false );
                     pRef->SetRowRel( false );
                     pRef->SetTabRel( sal_True );
-                    pScTokenArray->AddDoubleReference( pFind->aScComplexRefDataRel );
+                    pScTokenArray->AddDoubleReference( pIter->aScComplexRefDataRel );
                 }
 
-                ScRangeData*    pData = new ScRangeData( pLotusRoot->pDoc, pFind->aScAbsName, *pScTokenArray );
+                ScRangeData*    pData = new ScRangeData( pLotusRoot->pDoc, pIter->aScAbsName, *pScTokenArray );
 
-                rIndex = pFind->nAbsInd = nIntCount;
+                rIndex = pIter->nAbsInd = nIntCount;
                 pData->SetIndex( rIndex );
                 nIntCount++;
 
                 pLotusRoot->pScRangeName->insert( pData );
             }
 
-            return sal_True;
+            return true;
         }
-        pFind = ( ENTRY* ) List::Next();
     }
 
     return false;
