@@ -34,6 +34,11 @@ TARGET=com_sun_star_comp_bridge
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 # ------------------------------------------------------------------
 
 .IF "$(SOLAR_JAVA)" != ""

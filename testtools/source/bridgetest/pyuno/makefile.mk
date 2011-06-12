@@ -38,6 +38,12 @@ my_components = pythonloader
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 # --- Files --------------------------------------------------------
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(L10N_framework)"==""

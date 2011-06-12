@@ -34,7 +34,14 @@ ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 .INCLUDE: settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 .IF "$(L10N_framework)"==""
+
 DLLPRE = # no leading "lib" on .so files
 
 .IF "$(GUI)"=="WNT"

@@ -33,6 +33,12 @@ TARGET := test_climaker
 PACKAGE = cliversion
 
 .INCLUDE: settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 .IF "$(debug)" != ""
