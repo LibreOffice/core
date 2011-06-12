@@ -502,7 +502,7 @@ sal_Bool ImplSdPPTImport::Import()
                                                 }
                                             }
                                         }
-                                        aHyperList.Insert( pHyperlink, LIST_APPEND );
+                                        aHyperList.push_back( pHyperlink );
                                     }
                                     if ( i != nPropCount )
                                         delete pHyperlink;
@@ -524,15 +524,16 @@ sal_Bool ImplSdPPTImport::Import()
         if ( SeekToRec( rStCtrl, PPT_PST_ExObjList, maDocHd.GetRecEndFilePos(), &aHyperHd ) )
         {
             sal_uInt32 nExObjHyperListLen = aHyperHd.GetRecEndFilePos();
-            for ( void* pPtr = aHyperList.First(); pPtr; pPtr = aHyperList.Next() )
+            for ( size_t i = 0, n = aHyperList.size(); i < n; ++i )
             {
+                SdHyperlinkEntry* pPtr = aHyperList[ i ];
                 DffRecordHeader aHyperE;
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlink, nExObjHyperListLen, &aHyperE ) )
                     break;
                 if ( !SeekToRec( rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen, NULL, 0 ) )
                     break;
                 rStCtrl.SeekRel( 8 );
-                rStCtrl >> ((SdHyperlinkEntry*)pPtr)->nIndex;
+                rStCtrl >> pPtr->nIndex;
                 aHyperE.SeekToEndOfRecord( rStCtrl );
             }
         }
@@ -2094,11 +2095,12 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         break;
         case 0x04 :
         {
-            SdHyperlinkEntry* pPtr;
-            for ( pPtr = (SdHyperlinkEntry*)aHyperList.First(); pPtr; pPtr = (SdHyperlinkEntry*)aHyperList.Next() )
-            {
-                if ( pPtr->nIndex == pIAtom->nExHyperlinkId )
+            SdHyperlinkEntry* pPtr = NULL;
+            for ( size_t i = 0, n = aHyperList.size(); i < n; ++i ) {
+                if ( aHyperList[ i ]->nIndex == pIAtom->nExHyperlinkId ) {
+                    pPtr = aHyperList[ i ];
                     break;
+                }
             }
             if ( pPtr )
             {
