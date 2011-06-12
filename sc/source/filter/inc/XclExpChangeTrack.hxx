@@ -615,30 +615,12 @@ private:
 };
 
 //___________________________________________________________________
-// XclExpChTrRecordList - list of "Revision Log" stream records
-
-class XclExpChTrRecordList : private List
-{
-private:
-    inline ExcRecord*           First() { return (ExcRecord*) List::First(); }
-    inline ExcRecord*           Next()  { return (ExcRecord*) List::Next(); }
-
-public:
-    virtual                     ~XclExpChTrRecordList();
-
-    using                       List::Count;
-    void                        Append( ExcRecord* pNewRec );
-    void                        Save( XclExpStream& rStrm );
-    void                        SaveXml( XclExpXmlStream& rStrm );
-};
-
-//___________________________________________________________________
 // XclExpChangeTrack - exports the "Revision Log" stream
 
 class XclExpChangeTrack : protected XclExpRoot
 {
 private:
-    XclExpChTrRecordList        aRecList;
+    std::vector<ExcRecord*>     aRecList;           // list of "Revision Log" stream records
     XclExpChTrActionStack       aActionStack;
     XclExpChTrTabIdBuffer*      pTabIdBuffer;
     std::vector<XclExpChTrTabIdBuffer*> maBuffers;
