@@ -4332,7 +4332,7 @@ AC_SUBST(XSLTPROC)
 # ===================================================================
 AC_MSG_CHECKING([which libxml to use])
 if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
-            "$_os" = "Darwin" && \
+            "$_os" = "Darwin" -o $_os = iOS && \
     test "$with_system_libxml" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXML=YES
@@ -4341,6 +4341,11 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
         LIBXML_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/libxml2"
         dnl omit -L/usr/lib
         LIBXML_LIBS="-lxml2 -lz -lpthread -liconv -lm"
+    elif test $_os = iOS; then
+        dnl make sure to use SDK path
+        usr=`echo '#include <stdlib.h>' | $CC -E -MD - | grep usr/include/stdlib.h | head -1 | sed -e 's,# 1 ",,' -e 's,/usr/include/.*,/usr,'`
+        LIBXML_CFLAGS="-I$usr/include/libxml2"
+        LIBXML_LIBS="-L$usr/lib -lxml2 -liconv"
     else
         PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
     fi
