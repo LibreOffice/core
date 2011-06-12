@@ -654,10 +654,10 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     if ( nOpenMode & STREAM_TRUNC )
         nAccess |= O_TRUNC;
 
-    nMode = S_IREAD | S_IROTH | S_IRGRP;
+    nMode = S_IRUSR | S_IROTH | S_IRGRP;
     if ( nOpenMode & STREAM_WRITE)
     {
-      nMode |= (S_IWRITE | S_IWOTH | S_IWGRP);
+      nMode |= (S_IWUSR | S_IWOTH | S_IWGRP);
 
       if ( nOpenMode & STREAM_COPY_ON_SYMLINK )
           {
@@ -695,7 +695,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
             // auf Lesen runterschalten
             nAccessRW = O_RDONLY;
             nAccess = 0;
-            nMode = S_IREAD | S_IROTH | S_IRGRP;
+            nMode = S_IRUSR | S_IROTH | S_IRGRP;
             nHandleTmp =open( aLocalFilename.GetBuffer(),
                               nAccessRW|nAccess,
                               nMode );
