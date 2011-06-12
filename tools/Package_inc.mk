@@ -47,7 +47,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fontenum.hxx,tools/fontenu
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fract.hxx,tools/fract.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fsys.hxx,tools/fsys.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/gen.hxx,tools/gen.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/geninfo.hxx,tools/geninfo.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/getprocessworkingdir.hxx,tools/getprocessworkingdir.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/globname.hxx,tools/globname.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetdef.hxx,tools/inetdef.hxx))
