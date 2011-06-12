@@ -1040,7 +1040,7 @@ struct StyleTextProp9
 
 struct PPTStyleTextPropReader
 {
-    List    aSpecMarkerList;            // hiword -> Flags, loword -> Position
+    ::std::vector< sal_uInt32 > aSpecMarkerList;    // hiword -> Flags, loword -> Position
     List    aParaPropList;
     List    aCharPropList;
 

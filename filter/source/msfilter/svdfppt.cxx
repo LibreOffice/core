@@ -5089,13 +5089,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             if ( !nChar )
                 break;
             if ( ( nChar & 0xff00 ) == 0xf000 )         // in this special case we got a symbol
-                aSpecMarkerList.Insert( (void*)(sal_uIntPtr)( i | PPT_SPEC_SYMBOL ), LIST_APPEND );
+                aSpecMarkerList.push_back( (sal_uInt32)( i | PPT_SPEC_SYMBOL ) );
             else if ( nChar == 0xd )
             {
                 if ( nInstance == TSS_TYPE_PAGETITLE )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.Insert( (void*)(sal_uIntPtr)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
+                    aSpecMarkerList.push_back( (sal_uInt32)( i | PPT_SPEC_NEWLINE ) );
             }
         }
         if ( i )
@@ -5118,7 +5118,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                 if ( nInstance == TSS_TYPE_PAGETITLE )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.Insert( (void*)( (pPtr - pBuf) | PPT_SPEC_NEWLINE ), LIST_APPEND );
+                    aSpecMarkerList.push_back( (sal_uInt32)( (pPtr - pBuf) | PPT_SPEC_NEWLINE ) );
             }
             pPtr++;
         }
@@ -5163,7 +5163,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         sal_Bool bEmptyParaPossible = sal_True;
         sal_uInt32 nCharAnzRead = 0;
         sal_uInt32 nCurrentPara = 0;
-        sal_uInt32 nCurrentSpecMarker = (sal_uInt32)(sal_uIntPtr)aSpecMarkerList.First();
+        size_t i = 1;                   // points to the next element to process
+        sal_uInt32 nCurrentSpecMarker = aSpecMarkerList.empty() ? 0 : aSpecMarkerList[0];
         sal_uInt16 nStringLen = aString.Len();
 
         while ( nCharAnzRead < nStringLen )
@@ -5231,7 +5232,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                         nCharAnzRead++;
                         bEmptyParaPossible = sal_False;
                     }
-                    nCurrentSpecMarker = (sal_uInt32)(sal_uIntPtr)aSpecMarkerList.Next();
+                    nCurrentSpecMarker = ( i < aSpecMarkerList.size() ) ? aSpecMarkerList[ i++ ] : 0;
                 }
                 else
                 {
