@@ -2181,10 +2181,11 @@ unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersi
     return nCryptMask;
 }
 
-void SvStream::SetKey( const ByteString& rKey )
+void SvStream::SetCryptMaskKey(const rtl::OString& rCryptMaskKey)
 {
-    aKey = rKey;
-    nCryptMask = implGetCryptMask( aKey.GetBuffer(), aKey.Len(), GetVersion() );
+    m_aCryptMaskKey = rCryptMaskKey;
+    nCryptMask = implGetCryptMask(m_aCryptMaskKey.getStr(),
+        m_aCryptMaskKey.getLength(), GetVersion());
 }
 
 /*************************************************************************

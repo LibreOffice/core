@@ -269,7 +269,7 @@ private:
     CharSet         eStreamCharSet;
 
     // Verschluesselung
-    ByteString      aKey;           // aKey.Len != 0  -> Verschluesselung
+    rtl::OString m_aCryptMaskKey;           // aCryptMaskKey.getLength != 0  -> Verschluesselung
     unsigned char   nCryptMask;
 
     // Formatierung von Strings
@@ -337,8 +337,8 @@ public:
                         { nCompressMode = nNewMode; }
     sal_uInt16          GetCompressMode() const { return nCompressMode; }
 
-    void            SetKey( const ByteString& rKey );
-    const ByteString&   GetKey() const { return aKey; }
+    void SetCryptMaskKey(const rtl::OString& rCryptMaskKey);
+    const rtl::OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
 
     void            SetStreamCharSet( CharSet eCharSet )
                         { eStreamCharSet = eCharSet; }
