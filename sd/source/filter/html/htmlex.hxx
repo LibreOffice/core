@@ -63,7 +63,6 @@
 
 #define HtmlButtonThemaStr = "private://gallery/hidden/HtmlExportButtons";
 
-class List;
 class SfxProgress;
 class SdrOutliner;
 class SdPage;
