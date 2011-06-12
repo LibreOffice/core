@@ -411,14 +411,6 @@ public:
                          { nJustification = nJus; CreateFormatString(); }
     sal_uInt8           GetJustification() const { return nJustification; }
 
-    SvStream&       ReadNumber( short& rShort );
-    SvStream&       ReadNumber( sal_uInt16& rUInt16 );
-    SvStream&       ReadNumber( long& rLong );
-    SvStream&       ReadNumber( sal_uInt32& rUInt32 );
-    SvStream&       ReadNumber( int& rInt );
-    SvStream&       ReadNumber( float& rFloat );
-    SvStream&       ReadNumber( double& rDouble );
-
     SvStream&       WriteNumber( short nShort );
     SvStream&       WriteNumber( sal_uInt16 nUInt16 );
     SvStream&       WriteNumber( long nLong );
@@ -575,38 +567,6 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
     return rStr;
 }
 
-inline SvStream& SvStream::ReadNumber( short& rShort )
-{
-    long nTmp;
-    ReadNumber( nTmp );
-    rShort = (short)nTmp;
-    return *this;
-}
-
-inline SvStream& SvStream::ReadNumber( sal_uInt16& rUShort )
-{
-    sal_uInt32 nTmp;
-    ReadNumber( nTmp );
-    rUShort = (sal_uInt16)nTmp;
-    return *this;
-}
-
-inline SvStream& SvStream::ReadNumber( int& rInt )
-{
-    long nTmp;
-    ReadNumber( nTmp );
-    rInt = (int)nTmp;
-    return *this;
-}
-
-inline SvStream& SvStream::ReadNumber( float& rFloat )
-{
-    double nTmp;
-    ReadNumber( nTmp );
-    rFloat = (float)nTmp;
-    return *this;
-}
-
 inline SvStream& SvStream::WriteNumber( short nShort )
 {
     WriteNumber( (long)nShort );
@@ -624,14 +584,6 @@ inline SvStream& SvStream::WriteNumber( int nInt )
     WriteNumber( (long)nInt );
     return *this;
 }
-
-/*
-inline SvStream& SvStream::WriteNumber( unsigned int nUInt )
-{
-    WriteNumber( (sal_uIntPtr)nUInt );
-    return *this;
-}
-*/
 
 inline SvStream& SvStream::WriteNumber( float nFloat )
 {
