@@ -97,7 +97,7 @@ private:
     XColorTable*            pColTab;
 
     sal_Bool                    bTreeUpdated;
-    List*                   pCurrentActions;
+    std::vector<com::sun::star::presentation::ClickAction> maCurrentActions;
     String                  aLastFile;
     ::std::vector< long >   aVerbVector;
 
