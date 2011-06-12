@@ -69,7 +69,8 @@ cross-build-toolset:
 	  dictionaries \
 	  o3tl \
 	  basegfx \
-	  tools; do \
+	  tools \
+	  rsc; do \
 	    (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl); \
 	done; \
 	for D in \
