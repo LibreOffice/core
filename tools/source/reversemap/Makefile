@@ -25,7 +25,7 @@
 
 all : reversemap.hxx
 
-reversemap.hxx : $(OUTDIR)/bin/bestreversemap
+reversemap.hxx : $(OUTDIR_FOR_BUILD)/bin/bestreversemap
 	$(gb_Helper_execute)bestreversemap > $@
 
 .PHONY : all
