@@ -117,7 +117,6 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
 
@@ -151,7 +150,7 @@ sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 class SwImplProtocol
 {
     SvFileStream *pStream;      // Ausgabestream
-    SvUShortsSort *pFrmIds;     // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
+    std::set<sal_uInt16> *pFrmIds;      // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
     std::vector<long> aVars;    // Variables
     ByteString aLayer;          // Einrueckung der Ausgabe ("  " pro Start/End)
     sal_uInt16 nTypes;              // welche Typen sollen aufgezeichnet werden
@@ -328,6 +327,7 @@ SwImplProtocol::~SwImplProtocol()
         pStream->Close();
         delete pStream;
     }
+    pFrmIds->clear();
     delete pFrmIds;
     aVars.clear();
 }
@@ -349,6 +349,7 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
         if( "[frmid" == aTmp )      // Bereich FrmIds
         {
             nInitFile = 1;
+            pFrmIds->clear();
             delete pFrmIds;
             pFrmIds = NULL;         // Default: Alle Frames aufzeichnen
         }
@@ -568,7 +569,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         {
             case 1: InsertFrm( nId ); break;
             case 2: DeleteFrm( nId ); break;
-            case 3: delete pFrmIds; pFrmIds = NULL; break;
+            case 3: pFrmIds->clear(); delete pFrmIds; pFrmIds = NULL; break;
             case 4: delete pStream; pStream = NULL; break;
         }
         return;
@@ -576,7 +577,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
     if( !pStream && !NewStream() )
         return; // Immer noch kein Stream
 
-    if( pFrmIds && !pFrmIds->Seek_Entry( sal_uInt16(lcl_GetFrameId( pFrm )) ) )
+    if( pFrmIds && !pFrmIds->count( sal_uInt16(lcl_GetFrameId( pFrm )) ) )
         return; // gehoert nicht zu den gewuenschten FrmIds
 
     if( !(pFrm->GetType() & nTypes) )
@@ -735,10 +736,10 @@ void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* , sal_uLong nAct, 
 sal_Bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
 {
     if( !pFrmIds )
-        pFrmIds = new SvUShortsSort(5,5);
-    if( pFrmIds->Seek_Entry( nId ) )
+        pFrmIds = new std::set<sal_uInt16>;
+    if( pFrmIds->count( nId ) )
         return sal_False;
-    pFrmIds->Insert( nId );
+    pFrmIds->insert( nId );
     return sal_True;
 }
 
@@ -748,11 +749,11 @@ sal_Bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
  * --------------------------------------------------*/
 sal_Bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
 {
-    sal_uInt16 nPos;
-    if( !pFrmIds || !pFrmIds->Seek_Entry( nId, &nPos ) )
+    if( !pFrmIds )
         return sal_False;
-    pFrmIds->Remove( nPos );
-    return sal_True;
+    if ( pFrmIds->erase(nId) )
+        return sal_True;
+    return sal_False;
 }
 
 /*--------------------------------------------------
