@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <utime.h>
-#if defined LINUX
+#if defined LINUX || defined ANDROID
 #include <mntent.h>
 #define mnttab mntent
 #elif defined AIX
@@ -136,7 +136,7 @@ static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
         return sal_False;
     struct mnttab mnt[1];
     while (getmntent (fp, mnt) != -1)
-#elif defined AIX
+#elif defined AIX || defined ANDROID
     FILE *fp = NULL;
     if (! fp)
         return sal_False;
