@@ -130,7 +130,7 @@ namespace testdoctok
 
                 pDocument = WW8DocumentFactory::createDocument(pStream);
             }
-            catch (doctok::Exception e)
+            catch (doctok::Exception)
             {
                 clog << "Exception!!" << endl;
             }
@@ -169,7 +169,7 @@ namespace testdoctok
                     ++nResult;
                 }
             }
-            catch (doctok::Exception e)
+            catch (doctok::Exception)
             {
                 clog << "Exception!!" << endl;
             }
@@ -190,7 +190,7 @@ namespace testdoctok
 
                 pDocument->resolve(*pStream);
             }
-            catch (doctok::Exception e)
+            catch (doctok::Exception)
             {
                 clog << "Exception!!" << endl;
             }

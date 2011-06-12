@@ -309,9 +309,8 @@ void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {
-    SectionPropertyMap* pSectionContext = 0;
     PropertyMapPtr pInsert(eId == CONTEXT_SECTION ?
-        (pSectionContext = new SectionPropertyMap( m_bIsFirstSection )) :
+        (new SectionPropertyMap( m_bIsFirstSection )) :
         eId == CONTEXT_PARAGRAPH ? new ParagraphPropertyMap :  new PropertyMap);
     if(eId == CONTEXT_SECTION)
     {
@@ -2576,7 +2575,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         {
                             if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\l")))
                             {
-                                aPartIt++;
+                                ++aPartIt;
 
                                 if (aPartIt == aItEnd)
                                     break;
@@ -2591,7 +2590,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             else if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\o")) ||
                                      aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\t")))
                             {
-                                aPartIt++;
+                                ++aPartIt;
 
                                 if (aPartIt == aItEnd)
                                     break;
@@ -2601,7 +2600,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 sURL = *aPartIt;
                             }
 
-                            aPartIt++;
+                            ++aPartIt;
                         }
 
                         if (sURL.getLength() > 0)

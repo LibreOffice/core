@@ -425,7 +425,7 @@ void DomainMapperTableManager::endOfRowAction()
             dmapper_logger->attribute("span", *aGridSpanIter);
             dmapper_logger->endElement();
 
-            aGridSpanIter++;
+            ++aGridSpanIter;
         }
     }
     dmapper_logger->endElement();
@@ -464,7 +464,7 @@ void DomainMapperTableManager::endOfRowAction()
             pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
             pSeparators[nBorder].IsVisible = sal_True;
             nLastRelPos = nLastRelPos + nRelPos;
-            aSpansIter++;
+            ++aSpansIter;
         }
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
