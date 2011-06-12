@@ -102,28 +102,23 @@ inline sal_Bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 
 
 
-class NameBuffer : private List, public ExcRoot
+class NameBuffer : public ExcRoot
 {
 private:
     sal_uInt16                  nBase;      // Index-Basis
+    std::vector<StringHashEntry*> maHashes;
+
 public:
-//    inline                  NameBuffer( void );   //prevent empty rootdata
+
     inline                  NameBuffer( RootData* );
     inline                  NameBuffer( RootData*, sal_uInt16 nNewBase );
 
     virtual                 ~NameBuffer();
-    inline const String*    Get( sal_uInt16 nIndex );
-    inline sal_uInt16           GetLastIndex( void );
+    inline const String*    Get( sal_uInt16 nIndex ) const;
+    inline sal_uInt16       GetLastIndex() const;
     inline void             SetBase( sal_uInt16 nNewBase = 0 );
     void                    operator <<( const String& rNewString );
 };
-
-//prevent empty rootdata
-//inline NameBuffer::NameBuffer( void )
-//{
-//    nBase = 0;
-//}
-
 
 inline NameBuffer::NameBuffer( RootData* p ) : ExcRoot( p )
 {
@@ -137,27 +132,27 @@ inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
 }
 
 
-inline const String* NameBuffer::Get( sal_uInt16 n )
+inline const String* NameBuffer::Get ( sal_uInt16 n ) const
 {
-    if( n < nBase )
-        return NULL;
-    else
-    {
-        StringHashEntry* pObj = ( StringHashEntry* ) List::GetObject( n );
+    const String* pObj = NULL;
 
-        if( pObj )
-            return &pObj->aString;
-        else
-            return NULL;
+    if( n > nBase )
+    {
+        if ( n < maHashes.size() )
+         pObj = &(maHashes[n]->aString);
     }
+
+    return pObj;
 }
 
 
-inline sal_uInt16 NameBuffer::GetLastIndex( void )
+inline sal_uInt16 NameBuffer::GetLastIndex () const
 {
-    OSL_ENSURE( Count() + nBase <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
+    int size = maHashes.size() + nBase;
 
-    return ( sal_uInt16 ) ( Count() + nBase );
+    OSL_ENSURE( size <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
+
+    return static_cast<sal_uInt16>( size );
 }
 
 

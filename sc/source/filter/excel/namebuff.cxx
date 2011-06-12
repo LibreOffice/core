@@ -67,22 +67,19 @@ sal_uInt32 StringHashEntry::MakeHashCode( const String& r )
 
 NameBuffer::~NameBuffer()
 {
-    register StringHashEntry*   pDel = ( StringHashEntry* ) List::First();
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( StringHashEntry* ) List::Next();
-    }
+    std::vector<StringHashEntry*>::iterator pIter;
+    for ( pIter = maHashes.begin(); pIter != maHashes.end(); ++pIter )
+        delete *pIter;
 }
 
 
 //void NameBuffer::operator <<( const SpString &rNewString )
 void NameBuffer::operator <<( const String &rNewString )
 {
-    OSL_ENSURE( Count() + nBase < 0xFFFF,
+    OSL_ENSURE( maHashes.size() + nBase < 0xFFFF,
         "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
 
-    List::Insert( new StringHashEntry( rNewString ), LIST_APPEND );
+    maHashes.push_back( new StringHashEntry( rNewString ) );
 }
 
 
