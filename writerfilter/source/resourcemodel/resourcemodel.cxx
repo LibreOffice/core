@@ -383,7 +383,7 @@ void WW8StreamHandler::table(Id name, writerfilter::Reference<Table>::Pointer_t 
     {
         ref->resolve(aHandler);
     }
-    catch (Exception e)
+    catch (Exception &e)
     {
         output.addItem("<exception>" + e.getText() + "</exception>");
     }
@@ -442,7 +442,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
         {
             pProps->resolve(*this);
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
         }
 
@@ -459,7 +459,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
 
             pStream->resolve(aHandler);
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
         }
     }
@@ -474,7 +474,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
 
             pBinObj->resolve(aHandler);
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
         }
     }
@@ -539,7 +539,7 @@ void WW8TableHandler::entry(int /*pos*/,
     {
         ref->resolve(aHandler);
     }
-    catch (Exception e)
+    catch (Exception &e)
     {
         output.addItem("<exception>" + e.getText() + "</exception>");
         output.addItem("</tableentry>");

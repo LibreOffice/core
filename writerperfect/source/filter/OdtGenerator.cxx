@@ -198,6 +198,7 @@ public:
 };
 
 OdtGeneratorPrivate::OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType) :
+    mpInput(NULL),
     mpHandler(pHandler),
     mbUsed(false),
     mWriterDocumentStates(),
@@ -208,7 +209,9 @@ OdtGeneratorPrivate::OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mpCurrentPageSpan(NULL),
     miNumPageStyles(0),
     miObjectNumber(0),
-    mxStreamType(streamType)
+    mpCurrentTableStyle(NULL),
+    mxStreamType(streamType),
+    mpPassword(NULL)
 {
     mWriterDocumentStates.push(WriterDocumentState());
     mWriterListStates.push(WriterListState());

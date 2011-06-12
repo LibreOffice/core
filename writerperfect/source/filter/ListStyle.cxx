@@ -134,6 +134,7 @@ void UnorderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) co
 
 ListStyle::ListStyle(const char *psName, const int iListID) :
     Style(psName),
+    miNumListLevels(0),
     miListID(iListID)
 {
     for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
