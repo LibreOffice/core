@@ -1360,7 +1360,7 @@ sal_Bool BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurSt
             else
             {
                 // Perhaps there are additional information in the stream...
-                xBasicStream->SetKey( szCryptingKey );
+                xBasicStream->SetCryptMaskKey(szCryptingKey);
                 xBasicStream->RefreshBuffer();
                 sal_uInt32 nPasswordMarker = 0;
                 *xBasicStream >> nPasswordMarker;
@@ -1370,7 +1370,7 @@ sal_Bool BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurSt
                     xBasicStream->ReadByteString(aPassword);
                     pLibInfo->SetPassword( aPassword );
                 }
-                xBasicStream->SetKey( ByteString() );
+                xBasicStream->SetCryptMaskKey(rtl::OString());
                 CheckModules( pLibInfo->GetLib(), pLibInfo->IsReference() );
             }
             return bLoaded;
@@ -1390,7 +1390,7 @@ sal_Bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
     {
         // Should only be the case for encrypted Streams
         bProtected = sal_True;
-        rStrm.SetKey( szCryptingKey );
+        rStrm.SetCryptMaskKey(szCryptingKey);
         rStrm.RefreshBuffer();
     }
     return bProtected;
@@ -1426,7 +1426,7 @@ sal_Bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic )
         }
     }
     if ( bProtected )
-        rStrm.SetKey( ByteString() );
+        rStrm.SetCryptMaskKey(rtl::OString());
     return bLoaded;
 }
 
