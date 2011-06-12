@@ -414,7 +414,7 @@ gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/l
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
+gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(OUTDIR_FOR_BUILD)/bin/rsc
 
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
