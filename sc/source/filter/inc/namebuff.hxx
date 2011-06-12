@@ -254,7 +254,7 @@ inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRang
 
 
 
-class ExtSheetBuffer : private List, public ExcRoot
+class ExtSheetBuffer : public ExcRoot
 {
 private:
     struct Cont
@@ -283,9 +283,11 @@ private:
                         bLink = false;
                     }
         };
+
+    std::vector<Cont> maEntries;
+
 public:
     inline          ExtSheetBuffer( RootData* );
-    virtual         ~ExtSheetBuffer();
 
     sal_Int16       Add( const String& rFilePathAndName,
                         const String& rTabName, const sal_Bool bSameWorkbook = false );

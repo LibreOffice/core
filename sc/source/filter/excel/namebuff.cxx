@@ -166,23 +166,11 @@ String ShrfmlaBuffer::CreateName( const ScRange& r )
     return aName;
 }
 
-
-ExtSheetBuffer::~ExtSheetBuffer()
-{
-    Cont    *pAkt = ( Cont * ) List::First();
-    while( pAkt )
-    {
-        delete pAkt;
-        pAkt = ( Cont * ) List::Next();
-    }
-}
-
-
 sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const sal_Bool bSWB )
 {
-    List::Insert( new Cont( rFPAN, rTN, bSWB ), LIST_APPEND );
+    maEntries.push_back( Cont( rFPAN, rTN, bSWB ) );
     // return 1-based index of EXTERNSHEET
-    return static_cast< sal_Int16 >( List::Count() );
+    return static_cast< sal_Int16 >( maEntries.size() );
 }
 
 
@@ -191,51 +179,50 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
     OSL_ENSURE( nExcIndex,
         "*ExtSheetBuffer::GetScTabIndex(): Sheet-Index == 0!" );
 
-    nExcIndex--;
-    Cont*       pCur = ( Cont * ) List::GetObject( nExcIndex );
+    if ( !nExcIndex || nExcIndex > maEntries.size() )
+        return false;
+
+    Cont*       pCur = &(maEntries[ nExcIndex ]);
     sal_uInt16&     rTabNum = pCur->nTabNum;
 
-    if( pCur )
+    if( rTabNum < 0xFFFD )
     {
-        if( rTabNum < 0xFFFD )
-        {
-            rScIndex = rTabNum;
-            return sal_True;
-        }
+        rScIndex = rTabNum;
+        return sal_True;
+    }
 
-        if( rTabNum == 0xFFFF )
-        {// neue Tabelle erzeugen
-            SCTAB   nNewTabNum;
-            if( pCur->bSWB )
-            {// Tabelle ist im selben Workbook!
-                if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
+    if( rTabNum == 0xFFFF )
+    {// neue Tabelle erzeugen
+        SCTAB   nNewTabNum;
+        if( pCur->bSWB )
+        {// Tabelle ist im selben Workbook!
+            if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
+            {
+                rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
+                return sal_True;
+            }
+            else
+                rTabNum = 0xFFFD;
+        }
+        else if( pExcRoot->pIR->GetDocShell() )
+        {// Tabelle ist 'echt' extern
+            if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
+            {
+                String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
+                                    pExcRoot->pIR->GetDocShell() ) );
+                String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
+                if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                 {
                     rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
                     return sal_True;
                 }
                 else
-                    rTabNum = 0xFFFD;
+                    rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
+                                            //  wohl auch nicht mehr gehen...
             }
-            else if( pExcRoot->pIR->GetDocShell() )
-            {// Tabelle ist 'echt' extern
-                if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
-                {
-                    String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
-                                        pExcRoot->pIR->GetDocShell() ) );
-                    String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
-                    if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
-                    {
-                        rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
-                        return sal_True;
-                    }
-                    else
-                        rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
-                                                //  wohl auch nicht mehr gehen...
-                }
-                else
-                    rTabNum = 0xFFFE;
+            else
+                rTabNum = 0xFFFE;
 
-            }
         }
     }
 
@@ -246,41 +233,33 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
 sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 {
     OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
-    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
 
-    if( pRet )
-        return pRet->bLink;
-    else
+    if (!nExcIndex || nExcIndex > maEntries.size() )
         return false;
+
+    return maEntries[ nExcIndex -1 ].bLink;
 }
 
 
 sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, String& rAppl, String& rDoc ) const
 {
     OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
-    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
 
-    if( pRet )
-    {
-        rAppl = pRet->aFile;
-        rDoc = pRet->aTab;
-        return sal_True;
-    }
-    else
+    if (!nExcIndex || nExcIndex > maEntries.size() )
         return false;
+
+    const Cont &rRet = maEntries[ nExcIndex -1 ];
+
+    rAppl = rRet.aFile;
+    rDoc = rRet.aTab;
+
+    return true;
 }
 
 
 void ExtSheetBuffer::Reset( void )
 {
-    Cont    *pAkt = ( Cont * ) List::First();
-    while( pAkt )
-    {
-        delete pAkt;
-        pAkt = ( Cont * ) List::Next();
-    }
-
-    List::Clear();
+    maEntries.clear();
 }
 
 
