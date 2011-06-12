@@ -40,7 +40,7 @@ using namespace tstutl;
 void usage();
 void test_shl( vector< sal_Char* > cmdln, sal_Bool boom );
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char* argv[] )
 #else
 int _cdecl main( int argc, char* argv[] )

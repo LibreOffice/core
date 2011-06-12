@@ -148,7 +148,7 @@ catch (sig)
     fatalerr ("got signal %d\n", sig);
 }
 
-#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32) || defined(OS2) || defined(Lynx_22)
+#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32) || defined(Lynx_22)
 #define USGISH
 #endif
 
@@ -691,12 +691,12 @@ void redirect(line, makefile)
         fatalerr("cannot open \"%s\"\n", makefile);
     sprintf(backup, "%s.bak", makefile);
     unlink(backup);
-#if defined(WIN32) || defined(OS2)
+#if defined(WIN32)
     fclose(fdin);
 #endif
     if (rename(makefile, backup) < 0)
         fatalerr("cannot rename %s to %s\n", makefile, backup);
-#if defined(WIN32) || defined(OS2)
+#if defined(WIN32)
     if ((fdin = fopen(backup, "r")) == NULL)
         fatalerr("cannot open \"%s\"\n", backup);
 #endif
@@ -765,7 +765,7 @@ void warning1(char *msg, ...)
 void convert_slashes(path)
     char* path;
 {
-#if defined (WNT) || defined(OS2)
+#if defined (WNT)
     /*
      * Convert backslashes to slashes
      */

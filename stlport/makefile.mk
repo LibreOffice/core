@@ -101,8 +101,6 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
         # FreeBSD needs a special makefile
         .IF "$(OS)"=="FREEBSD"
             BUILD_FLAGS=-f gcc-3.0-freebsd.mak
-        .ELIF "$(OS)"=="OS2"
-            BUILD_FLAGS=-f gcc-3.0-os2.mak
         .ELIF "$(GUI)"=="WNT"
             BUILD_FLAGS=-f gcc-3.0-mingw.mak
         .ELSE
@@ -163,11 +161,6 @@ OUT2BIN= \
     lib$/*.pdb
 
 .ENDIF # "$(COM)"=="GCC"
-
-.ELIF "$(GUI)"=="OS2"
-
-OUT2LIB= lib$/*.lib
-OUT2BIN= lib$/*.dll
 
 .ELSE          # "$(GUI)"=="WNT"
 
