@@ -55,7 +55,7 @@ using namespace ::com::sun::star::beans;
 \************************************************************************/
 SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                                   const SfxItemSet& rInAttrs,
-                                  List& rPageNames, List* pCSList ) :
+                                  const std::vector<String> &rPageNames, List* pCSList ) :
                 ModalDialog     ( pWindow, SdResId( DLG_START_PRESENTATION ) ),
                 aGrpRange               ( this, SdResId( GRP_RANGE ) ),
                 aRbtAll                 ( this, SdResId( RBT_ALL ) ),
@@ -119,14 +119,8 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aTmfPause.SetAccessibleName(aRbtAuto.GetText());
 
     // Listbox mit Seitennamen fuellen
-    rPageNames.First();
-    for( sal_uInt16 i = 0;
-         i < rPageNames.Count();
-         i++ )
-    {
-        aLbDias.InsertEntry( *( String* ) rPageNames.GetCurObject() );
-        rPageNames.Next();
-    }
+    for (std::vector<String>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
+        aLbDias.InsertEntry(*pIter);
 
     if( pCustomShowList )
     {
