@@ -452,8 +452,6 @@ public:
     sal_Bool        ReadByteStringLine( String& rStr ) { return ReadByteStringLine( rStr, GetStreamCharSet()); }
     sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
     sal_Bool        WriteByteStringLine( const String& rStr ) { return WriteByteStringLine( rStr, GetStreamCharSet()); }
-    sal_Bool        WriteByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteByteStringLines( const String& rStr ) { return WriteByteStringLine( rStr, GetStreamCharSet()); }
 
                 /// Switch to no endian swapping and write 0xfeff
     sal_Bool        StartWritingUnicodeText();

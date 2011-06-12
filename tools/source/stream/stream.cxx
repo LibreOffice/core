@@ -944,11 +944,6 @@ sal_Bool SvStream::WriteUniStringLine( const String& rStr )
 |*
 *************************************************************************/
 
-sal_Bool SvStream::WriteByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet )
-{
-    return WriteLines( ByteString( rStr, eDestCharSet ) );
-}
-
 sal_Bool SvStream::WriteLines( const ByteString& rStr )
 {
     ByteString aStr( rStr );
