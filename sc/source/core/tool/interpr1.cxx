@@ -5805,6 +5805,12 @@ void ScInterpreter::CalculateLookup(sal_Bool HLookup)
                 return;
             }
         }
+        else if (eType == svSingleRef)
+        {
+            PopSingleRef(nCol1, nRow1, nTab1);
+            nCol2 = nCol1;
+            nRow2 = nRow1;
+        }
         else if (eType == svMatrix || eType == svExternalDoubleRef || eType == svExternalSingleRef)
         {
             pMat = GetMatrix();
