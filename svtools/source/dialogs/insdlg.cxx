@@ -223,9 +223,9 @@ void SvObjectServerList::FillInsertObjects()
     aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
-    }catch( container::NoSuchElementException)
+    }catch(const container::NoSuchElementException&)
     {
-    }catch( uno::Exception)
+    }catch(const uno::Exception&)
     {
     }
     catch(...)

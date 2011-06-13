@@ -125,7 +125,7 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
             {
                 (*aIter)->notifyEvent( aEvtObject );
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
             }
 
@@ -154,7 +154,7 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
         return( xUnoTunnel.is() ? reinterpret_cast<ValueSetAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueSetAcc::getUnoTunnelId() ))) : NULL );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch(const ::com::sun::star::uno::Exception&)
     {
         return NULL;
     }
@@ -719,7 +719,7 @@ void SAL_CALL ValueSetAcc::disposing (void)
         {
             (*aListenerIterator)->disposing (aEvent);
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
             // Ignore exceptions.
         }
@@ -864,7 +864,7 @@ ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInter
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
         return( xUnoTunnel.is() ? reinterpret_cast<ValueItemAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueItemAcc::getUnoTunnelId() ))) : NULL );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch(const ::com::sun::star::uno::Exception&)
     {
         return NULL;
     }
@@ -932,7 +932,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             {
                 pItem = mpParent->mrParent.ImplGetVisibleItem (i);
             }
-            catch (lang::IndexOutOfBoundsException aException)
+            catch (const lang::IndexOutOfBoundsException&)
             {
                 pItem = NULL;
             }

@@ -339,11 +339,11 @@ void EmbeddedObjectRef::Clear()
                     mxObj->changeState( embed::EmbedStates::LOADED );
                     xClose->close( sal_True );
                 }
-                catch ( util::CloseVetoException& )
+                catch (const util::CloseVetoException&)
                 {
                     // there's still someone who needs the object!
                 }
-                catch ( uno::Exception& )
+                catch (const uno::Exception&)
                 {
                     OSL_FAIL( "Error on switching of the object to loaded state and closing!\n" );
                 }
@@ -484,10 +484,10 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
             {
                 aSize = mxObj->getVisualAreaSize( mpImp->nViewAspect );
             }
-            catch( embed::NoVisualAreaSizeException& )
+            catch(const embed::NoVisualAreaSizeException&)
             {
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
                 OSL_FAIL( "Something went wrong on getting of the size of the object!" );
             }
@@ -496,7 +496,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
             {
                 aSourceMapMode = VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
             }
-            catch( uno::Exception )
+            catch(const uno::Exception&)
             {
                 OSL_FAIL( "Can not get the map mode!" );
             }
@@ -733,7 +733,7 @@ sal_Bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbe
         if ( xEmbObj->getCurrentState() == embed::EmbedStates::LOADED )
             xEmbObj->changeState( embed::EmbedStates::RUNNING );
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         return sal_False;
     }

@@ -131,11 +131,11 @@ sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 
         bExists = aCnt.isDocument();
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch(const ::com::sun::star::ucb::CommandAbortedException&)
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::ucb::ContentCreationException& )
+    catch(const ::com::sun::star::ucb::ContentCreationException&)
     {
         DBG_ERRORFILE( "ContentCreationException" );
     }
@@ -158,7 +158,7 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
         aCnt.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )),
                              ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch(const ::com::sun::star::ucb::CommandAbortedException&)
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
@@ -1665,7 +1665,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             {
                 pBuf = new sal_uInt8[ nBufSize ];
             }
-                catch (std::bad_alloc)
+            catch (const std::bad_alloc&)
             {
                 nStatus = GRFILTER_TOOBIG;
             }
@@ -2020,7 +2020,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                             }
                         }
                     }
-                    catch( ::com::sun::star::uno::Exception& )
+                    catch(const ::com::sun::star::uno::Exception&)
                     {
                         nStatus = GRFILTER_IOERROR;
                     }
