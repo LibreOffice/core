@@ -1366,7 +1366,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
                 bGoOn = !aRowSpanPos.empty() && j+1 < rLines.Count();
             };
         }
-        ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, 1 );
+        ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, COLFUZZY );
     }
     else for( sal_uInt16 i = 0; i < rLines.Count(); ++i )
         ::lcl_AdjustWidthsInLine( rLines[i], aOldNew, rParm, COLFUZZY );
