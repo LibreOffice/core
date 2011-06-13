@@ -24,7 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #************************************************************************
-PRJ=..$/..$/..
+PRJ=../../..
 
 PRJNAME=i18npool
 TARGET=dict
@@ -46,13 +46,13 @@ SHL1TARGET=dict_ja
 SHL1IMPLIB=i$(SHL1TARGET)
 
 SHL1VERSIONMAP=$(TARGET).map
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1DEF=$(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1OBJS= \
-    $(SLO)$/dict_ja.obj
+    $(SLO)/dict_ja.obj
 
-LIB1TARGET=	$(SLB)$/$(SHL1TARGET).lib
+LIB1TARGET=	$(SLB)/$(SHL1TARGET).lib
 LIB1OBJFILES=$(SHL1OBJS)
 
 # Chinese dictionary
@@ -60,13 +60,13 @@ SHL2TARGET=dict_zh
 SHL2IMPLIB=i$(SHL2TARGET)
 
 SHL2VERSIONMAP=$(TARGET).map
-SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+SHL2DEF=$(MISC)/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 
 SHL2OBJS= \
-    $(SLO)$/dict_zh.obj
+    $(SLO)/dict_zh.obj
 
-LIB2TARGET=	$(SLB)$/$(SHL2TARGET).lib
+LIB2TARGET=	$(SLB)/$(SHL2TARGET).lib
 LIB2OBJFILES=$(SHL2OBJS)
 
 DEPOBJFILES= \
@@ -76,9 +76,5 @@ DEPOBJFILES= \
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
 
-$(MISC)$/dict_%.cxx : %.dic
-    $(AUGMENT_LIBRARY_PATH) $(OUT_FOR_BUILD)$/bin$/gendict $< $@
-
-# ugly - is this dependency really required here?
-$(foreach,i,$(shell @$(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gendict$(EXECPOST)
-
+$(MISC)/dict_%.cxx : %.dic
+	$(AUGMENT_LIBRARY_PATH) $(OUT_FOR_BUILD)/bin/gendict $< $@
