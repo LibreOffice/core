@@ -924,7 +924,7 @@ TabPage RID_SCPAGE_DEFAULTS
     };
     FixedText FT_NSHEETS
     {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ en-US ] = "Number of worksheets in new document";
     };
@@ -932,7 +932,7 @@ TabPage RID_SCPAGE_DEFAULTS
     {
         HelpID = "sc:NumericField:RID_SCPAGE_CALC:ED_NSHEETS";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 130 , 30 ) ;
+        Pos = MAP_APPFONT ( 130 , 14 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Minimum = 1 ;
         Maximum = 32000 ;
