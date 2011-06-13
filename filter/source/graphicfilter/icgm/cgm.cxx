@@ -67,7 +67,6 @@ void CGM::ImplCGMInit()
 
 CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
     mpGraphic               ( NULL ),
-    mpCommentOut            ( NULL ),
     mbStatus                ( sal_True ),
     mpOutAct                ( new CGMImpressOutAct( *this, rModel ) ),
     mnMode                  ( nMode )
@@ -76,75 +75,6 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
     ImplCGMInit();
 }
 #endif
-
-// ---------------------------------------------------------------
-
-void CGM::ImplComment( sal_uInt32 Level, const char* Description )
-{
-    if ( mpCommentOut )
-    {
-        if ( Level == CGM_DESCRIPTION )
-        {
-            *mpCommentOut << "                                  " << Description << "\n";
-        }
-        else
-        {
-            sal_Int8 nFirst, nSecond, i, nCount = 0;
-            if ( mnActCount < 10000 )
-                nCount++;
-            if ( mnActCount < 1000 )
-                nCount++;
-            if ( mnActCount < 100 )
-                nCount++;
-            if ( mnActCount < 10 )
-                nCount++;
-            for ( i = 0; i <= nCount; i++ )
-                *mpCommentOut << " ";
-            mpCommentOut->WriteNumber( mnActCount );
-
-            switch( Level & 0xff )
-            {
-                case CGM_UNKNOWN_LEVEL :
-                    *mpCommentOut << " L?";
-                break;
-                case CGM_UNKNOWN_COMMAND :
-                    *mpCommentOut << " UNKNOWN COMMAND";
-                break;
-                case CGM_GDSF_ONLY :
-                    *mpCommentOut << " LI";
-                break;
-                default:
-                    *mpCommentOut << " L";
-                    mpCommentOut->WriteNumber( Level & 0xff );
-                break;
-            }
-            *mpCommentOut << " C";
-            mpCommentOut->WriteNumber( mnElementClass );
-            *mpCommentOut << " ID-0x";
-            nFirst = ( mnElementID  > 0x9F ) ? (sal_Int8)( mnElementID >> 4 ) + 'A' - 10: (sal_Int8)( mnElementID >> 4 ) + '0';
-            nSecond = ( ( mnElementID & 15 ) > 9 ) ? (sal_Int8)( mnElementID & 15 ) + 'A' - 10 : (sal_Int8)( mnElementID & 15 ) + '0';
-            *mpCommentOut << nFirst << nSecond;
-             *mpCommentOut << " Size";
-            nCount = 1;
-            if ( mnElementSize < 1000000 )
-                nCount++;
-            if ( mnElementSize < 100000 )
-                nCount++;
-            if ( mnElementSize < 10000 )
-                nCount++;
-            if ( mnElementSize < 1000 )
-                nCount++;
-            if ( mnElementSize < 100 )
-                nCount++;
-            if ( mnElementSize < 10 )
-                nCount++;
-            for ( i = 0; i < nCount; i++ )
-                *mpCommentOut << " ";
-            mpCommentOut->WriteNumber( mnElementSize );
-            *mpCommentOut << " " << Description << "\n";
-        }
-    }
-}
 
 // ---------------------------------------------------------------
 
@@ -166,7 +96,6 @@ CGM::~CGM()
     maDefRepList.clear();
     maDefRepSizeList.clear();
     delete mpBitmapInUse;
-    delete mpCommentOut;
     delete mpChart;
     delete mpOutAct;
     delete pCopyOfE;
@@ -739,7 +668,7 @@ void CGM::ImplDoClass()
         case 8 : ImplDoClass8(); break;
         case 9 : ImplDoClass9(); break;
         case 15 :ImplDoClass15(); break;
-        default : ComOut( CGM_UNKNOWN_COMMAND, "" ); break;
+        default: break;
     }
     mnActCount++;
 };

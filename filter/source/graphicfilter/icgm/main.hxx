@@ -45,7 +45,6 @@
                                                 // LEVEL 1 BUT ARE NOT DEFINED IN ISO 7942(GKS)
 #define CGM_DRAWING_PLUS_CONTROL_SET    0x0200  // INDICATES THAT THIS IS AN ADDITIONAL LEVEL 1
                                                 // ELEMENT
-#define ComOut( Level, Description ) if ( mpCommentOut ) ImplComment( Level, Description );
 
 #define BMCOL( _col ) BitmapColor( (sal_Int8)(_col >> 16 ), (sal_Int8)( _col >> 8 ), (sal_Int8)_col )
 #define ALIGN2( _nElementSize ) { _nElementSize = ( _nElementSize + 1 ) & ~1; }

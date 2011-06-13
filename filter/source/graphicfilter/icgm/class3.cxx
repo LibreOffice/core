@@ -40,7 +40,7 @@ void CGM::ImplDoClass3()
     long    nI0, nI1;
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_LEVEL1, "VDC Integer Precision" )
+        case 0x01 : /*VDC Integer Precision*/
         {
             switch( ImplGetI( pElement->nIntegerPrecision ) )
             {
@@ -50,7 +50,7 @@ void CGM::ImplDoClass3()
             }
         }
         break;
-        case 0x02 : ComOut( CGM_LEVEL1, "VDC Real Precision" )
+        case 0x02 : /*VDC Real Precision*/
         {
             nUInteger = ImplGetUI16();
             nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
@@ -92,12 +92,12 @@ void CGM::ImplDoClass3()
             }
         }
         break;
-        case 0x03 : ComOut( CGM_LEVEL1, "Auxiliary Colour" )
+        case 0x03 : /*Auxiliary Colour*/
         {
             pElement->nAuxiliaryColor = ImplGetBitmapColor();
         }
         break;
-        case 0x04 : ComOut( CGM_LEVEL1, "Transparency" )
+        case 0x04 : /*Transparency*/
         {
             switch( ImplGetUI16() )
             {
@@ -107,10 +107,10 @@ void CGM::ImplDoClass3()
             }
         }
         break;
-        case 0x05 : ComOut( CGM_LEVEL1, "Clip Rectangle" )
+        case 0x05 : /*Clip Rectangle*/
             ImplGetRectangle( pElement->aClipRect );
         break;
-        case 0x06 : ComOut( CGM_LEVEL1, "Clip Indicator" )
+        case 0x06 : /*Clip Indicator*/
         {
             switch( ImplGetUI16() )
             {
@@ -120,25 +120,25 @@ void CGM::ImplDoClass3()
             }
         }
         break;
-        case 0x07 : ComOut( CGM_LEVEL2, "Line Clipping Mode" ) break;               // NS
-        case 0x08 : ComOut( CGM_LEVEL2, "Marker Clipping Mode" ) break;             // NS
-        case 0x09 : ComOut( CGM_LEVEL2, "Edge Clipping Mode" ) break;               // NS
-        case 0x0a : ComOut( CGM_LEVEL2, "New Region" )
+        case 0x07 : /*Line Clipping Mode */break;               // NS
+        case 0x08 : /*Marker Clipping Mode */break;             // NS
+        case 0x09 : /*Edge Clipping Mode */break;               // NS
+        case 0x0a : /*New Region*/
             mpOutAct->NewRegion();
         break;
-        case 0x0b : ComOut( CGM_LEVEL2, "Save Primitive Context" ) break;           // NS
-        case 0x0c : ComOut( CGM_LEVEL2, "Restore Primitive Context" ) break;        // NS
-        case 0x11 : ComOut( CGM_LEVEL3, "Protection Region Indicator" ) break;
-        case 0x12 : ComOut( CGM_LEVEL3, "Generalized Text Path Mode" ) break;       // NS
-        case 0x13 : ComOut( CGM_LEVEL3, "Mitre Limit" )
+        case 0x0b : /*Save Primitive Context */break;           // NS
+        case 0x0c : /*Restore Primitive Context */break;        // NS
+        case 0x11 : /*Protection Region Indicator */break;
+        case 0x12 : /*Generalized Text Path Mode */break;       // NS
+        case 0x13 : /*Mitre Limit*/
             pElement->nMitreLimit = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
         break;                                                                      // NS
-        case 0x14 : ComOut( CGM_LEVEL3, "Transparent Cell Color" ) break;           // NS
-        case 0xfc : ComOut( CGM_GDSF_ONLY, "Text Path Alignment Modes" ) break;
-        case 0xfd : ComOut( CGM_GDSF_ONLY, "Pop Transformation Stack" ) break;
-        case 0xfe : ComOut( CGM_GDSF_ONLY, "Push Transformation Stack" ) break;
-        case 0xff : ComOut( CGM_GDSF_ONLY, "Set Patch ID" ) break;
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
+        case 0x14 : /*Transparent Cell Color */break;           // NS
+        case 0xfc : /*Text Path Alignment Modes */break;
+        case 0xfd : /*Pop Transformation Stack */break;
+        case 0xfe : /*Push Transformation Stack */break;
+        case 0xff : /*Set Patch ID */break;
+        default: break;
     }
 };
 

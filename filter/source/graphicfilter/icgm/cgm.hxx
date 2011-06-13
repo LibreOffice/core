@@ -38,7 +38,6 @@
 
 #define CGM_EXPORT_IMPRESS  0x00000100
 #define CGM_EXPORT_META     0x00000200
-//#define CGM_EXPORT_COMMENT    0x00000400
 
 // ---------------------------------------------------------------
 
@@ -82,7 +81,6 @@ class CGM
         sal_Bool                mbAngReverse;           // AngularDirection
 
         Graphic*            mpGraphic;              // ifdef CGM_EXPORT_META
-        SvStream*           mpCommentOut;           // ifdef CGM_EXPORT_COMMENT
 
         sal_Bool                mbStatus;
         sal_Bool                mbMetaFile;
@@ -165,7 +163,6 @@ class CGM
         VirtualDevice*      mpVirDev;
         GDIMetaFile*        mpGDIMetaFile;
 #endif
-        void                ImplComment( sal_uInt32, const char* );
         sal_uInt32              GetBackGroundColor();
         sal_Bool                IsValid() const { return mbStatus; };
         sal_Bool                IsFinished() const { return mbIsFinished; };
