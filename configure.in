@@ -8711,7 +8711,7 @@ AC_SUBST(PRODUCTVERSION)
 dnl ===================================================================
 dnl Dealing with l10n options
 dnl ===================================================================
-GIT_REPO_NAMES="artwork base calc components extensions extras filters help impress libs-core libs-extern libs-extern-sys libs-gui postprocess sdk testing ure writer"
+GIT_REPO_NAMES="help"
 AC_MSG_CHECKING([which languages to be built])
 # get list of all languages
 # generate shell variable from completelangiso= from solenv/inc/langlist.mk
