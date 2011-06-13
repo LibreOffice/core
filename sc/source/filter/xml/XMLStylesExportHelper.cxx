@@ -798,7 +798,9 @@ sal_Bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange) const
 ScFormatRangeStyles::ScFormatRangeStyles()
     : aTables(),
     aStyleNames(),
-    aAutoStyleNames()
+    aAutoStyleNames(),
+    pRowDefaults(0),
+    pColDefaults(0)
 {
 }
 

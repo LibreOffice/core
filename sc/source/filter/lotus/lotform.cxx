@@ -2034,8 +2034,6 @@ DefTokenId lcl_KnownAddIn( const ByteString& sTest )
             eId=ocArcCot;
     else if(sTest== "COT")
             eId=ocCot;
-    else if(sTest== "ACOT")
-            eId=ocArcCot;
     else if(sTest== "TRUNC")
             eId=ocTrunc;
     else if(sTest== "GEOMEAN")
