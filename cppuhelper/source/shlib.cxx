@@ -244,7 +244,6 @@ static OUString makeComponentPath(
         if (rPath[ rPath.getLength() -1 ] != '/')
             buf.append( (sal_Unicode) '/' );
     }
-#ifndef IOS
     sal_Int32 nEnd = endsWith( rLibName, OUSTR(SAL_DLLEXTENSION) );
     if (nEnd < 0) // !endsWith
     {
@@ -257,7 +256,6 @@ static OUString makeComponentPath(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) );
     }
     else // name is completely pre/postfixed
-#endif
     {
         buf.append( rLibName );
     }
