@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRJ := ..$/..
+PRJ := ../..
 PRJNAME := cppu
 TARGET := test_cppumaker
 
@@ -35,17 +35,17 @@ ENABLE_EXCEPTIONS := TRUE
 
 .IF "$(CROSS_COMPILING)"=="YES"
 all:
-    @echo Nothing done when cross-compiling
+	@echo Nothing done when cross-compiling
 .ENDIF
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 DLLPRE = # no leading "lib" on .so files
 
-INCPRE += $(MISC)$/$(TARGET)$/inc
+INCPRE += $(MISC)/$(TARGET)/inc
 
 SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/test_cppumaker.obj
+SHL1OBJS = $(SLO)/test_cppumaker.obj
 SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
@@ -57,21 +57,21 @@ SLOFILES = $(SHL1OBJS)
 
 ALLTAR: test
 
-$(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+$(SHL1OBJS): $(MISC)/$(TARGET).cppumaker.flag
 
-$(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
-    - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
-    $(CPPUMAKER) \
-        -O$(MISC)$/$(TARGET)$/inc -BUCR -C $< $(SOLARBINDIR)$/udkapi.rdb
-    $(TOUCH) $@
+$(MISC)/$(TARGET).cppumaker.flag: $(MISC)/$(TARGET).rdb
+	- $(MKDIRHIER) $(MISC)/$(TARGET)/inc
+	$(CPPUMAKER) \
+	    -O$(MISC)/$(TARGET)/inc -BUCR -C $< $(SOLARBINDIR)/udkapi.rdb
+	$(TOUCH) $@
 
-$(MISC)$/$(TARGET).rdb: $(MISC)$/$(TARGET)$/types.urd
-    - rm $@
-    $(REGMERGE) $@ /UCR $<
+$(MISC)/$(TARGET).rdb: $(MISC)/$(TARGET)/types.urd
+	- rm -f $@
+	$(REGMERGE) $@ /UCR $<
 
-$(MISC)$/$(TARGET)$/types.urd: types.idl
-    - $(MKDIR) $(MISC)$/$(TARGET)
-    $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
+$(MISC)/$(TARGET)/types.urd: types.idl
+	- $(MKDIR) $(MISC)/$(TARGET)
+	$(IDLC) -O$(MISC)/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
 test .PHONY: $(SHL1TARGETN)
-    $(CPPUNITTESTER) $<
+	$(CPPUNITTESTER) $<
