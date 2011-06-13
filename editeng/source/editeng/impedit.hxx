@@ -650,7 +650,7 @@ private:
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
     sal_Bool            WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
-    long                LogicToTwips( long n );
+    sal_Int32               LogicToTwips( sal_Int32 n );
 
     inline short        GetXValue( short nXValue ) const;
     inline sal_uInt16   GetXValue( sal_uInt16 nXValue ) const;

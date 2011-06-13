@@ -869,7 +869,7 @@ SvxTabStop::SvxTabStop()
 
 // -----------------------------------------------------------------------
 
-SvxTabStop::SvxTabStop( const long nPos, const SvxTabAdjust eAdjst,
+SvxTabStop::SvxTabStop( const sal_Int32 nPos, const SvxTabAdjust eAdjst,
                         const sal_Unicode cDec, const sal_Unicode cFil )
 {
     nTabPos = nPos;
@@ -961,7 +961,7 @@ sal_uInt16 SvxTabStopItem::GetPos( const SvxTabStop& rTab ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SvxTabStopItem::GetPos( const long nPos ) const
+sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
 {
     sal_uInt16 nFound;
     return Seek_Entry( SvxTabStop( nPos ), &nFound ) ? nFound : SVX_TAB_NOTFOUND;
@@ -1158,7 +1158,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
                 if ( bComma )
                     rText += sal_Unicode(',');
                 rText += GetMetricText(
-                    (long)((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
+                    ((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
                 if ( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
                     rText += EE_RESSTR(GetMetricId(ePresUnit));
                 bComma = sal_True;
@@ -1179,7 +1179,7 @@ SfxPoolItem* SvxTabStopItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
     for ( sal_Int8 i = 0; i < nTabs; i++ )
     {
-        long nPos;
+        sal_Int32 nPos(0);
         sal_Int8 eAdjust;
         unsigned char cDecimal, cFill;
         rStrm >> nPos >> eAdjust >> cDecimal >> cFill;
@@ -1205,21 +1205,21 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
 
     const short nTabs = Count();
     sal_uInt16  nCount = 0, nDefDist = 0;
-    long nNew = 0;
+    sal_Int32 nNew = 0;
 
     if( bStoreDefTabs )
     {
         const SvxTabStopItem& rDefTab = (const SvxTabStopItem &)
             pPool->GetDefaultItem( pPool->GetWhich( SID_ATTR_TABSTOP, sal_False ) );
         nDefDist = sal_uInt16( rDefTab.GetStart()->GetTabPos() );
-        const long nPos = nTabs > 0 ? (*this)[nTabs-1].GetTabPos() : 0;
+        const sal_Int32 nPos = nTabs > 0 ? (*this)[nTabs-1].GetTabPos() : 0;
         nCount  = (sal_uInt16)(nPos / nDefDist);
         nNew    = (nCount + 1) * nDefDist;
 
         if( nNew <= nPos + 50 )
             nNew += nDefDist;
 
-        long lA3Width = SvxPaperInfo::GetPaperSize(PAPER_A3).Width();
+        sal_Int32 lA3Width = SvxPaperInfo::GetPaperSize(PAPER_A3).Width();
         nCount = (sal_uInt16)(nNew < lA3Width ? ( lA3Width - nNew ) / nDefDist + 1 : 0);
     }
 
@@ -1227,7 +1227,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     for ( short i = 0; i < nTabs; i++ )
     {
         const SvxTabStop& rTab = (*this)[ i ];
-        rStrm << (long) rTab.GetTabPos()
+        rStrm << rTab.GetTabPos()
               << (sal_Int8) rTab.GetAdjustment()
               << (unsigned char) rTab.GetDecimal()
               << (unsigned char) rTab.GetFill();
@@ -1237,7 +1237,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         for( ; nCount; --nCount )
         {
             SvxTabStop aSwTabStop(nNew, SVX_TAB_ADJUST_DEFAULT);
-            rStrm << (long) aSwTabStop.GetTabPos()
+            rStrm << aSwTabStop.GetTabPos()
                   << (sal_Int8) aSwTabStop.GetAdjustment()
                   << (unsigned char) aSwTabStop.GetDecimal()
                   << (unsigned char) aSwTabStop.GetFill();

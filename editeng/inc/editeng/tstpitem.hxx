@@ -45,7 +45,7 @@
 class EDITENG_DLLPUBLIC SvxTabStop
 {
 private:
-    long            nTabPos;
+    sal_Int32 nTabPos;
 
     SvxTabAdjust    eAdjustment;
     mutable sal_Unicode     m_cDecimal;
@@ -57,20 +57,13 @@ private:
 
 public:
     SvxTabStop();
-#if (_MSC_VER < 1300)
-    SvxTabStop( const long nPos,
+    SvxTabStop( const sal_Int32 nPos,
                 const SvxTabAdjust eAdjst = SVX_TAB_ADJUST_LEFT,
                 const sal_Unicode cDec = cDfltDecimalChar,
                 const sal_Unicode cFil = cDfltFillChar );
-#else
-    SvxTabStop::SvxTabStop( const long nPos,
-                const SvxTabAdjust eAdjst = SVX_TAB_ADJUST_LEFT,
-                const sal_Unicode cDec = cDfltDecimalChar,
-                const sal_Unicode cFil = cDfltFillChar );
-#endif
 
-    long&           GetTabPos() { return nTabPos; }
-    long            GetTabPos() const { return nTabPos; }
+    sal_Int32& GetTabPos() { return nTabPos; }
+    sal_Int32 GetTabPos() const { return nTabPos; }
 
     SvxTabAdjust&   GetAdjustment() { return eAdjustment; }
     SvxTabAdjust    GetAdjustment() const { return eAdjustment; }
@@ -135,7 +128,7 @@ public:
     sal_uInt16          GetPos( const SvxTabStop& rTab ) const;
 
     // Returns index of the tab at nPos, or TAB_NOTFOUND
-    sal_uInt16          GetPos( const long nPos ) const;
+    sal_uInt16          GetPos( const sal_Int32 nPos ) const;
 
     // unprivatized:
     sal_uInt16          Count() const { return SvxTabStopArr::Count(); }

@@ -761,7 +761,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_SBL:
         {
             rOutput << OOO_STRING_SVTOOLS_RTF_SL;
-            long nVal = ((const SvxLineSpacingItem&)rItem).GetLineHeight();
+            sal_Int32 nVal = ((const SvxLineSpacingItem&)rItem).GetLineHeight();
             char cMult = '0';
             if ( ((const SvxLineSpacingItem&)rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
@@ -822,7 +822,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_FONTHEIGHT_CTL:
         {
             rOutput << OOO_STRING_SVTOOLS_RTF_FS;
-            long nHeight = ((const SvxFontHeightItem&)rItem).GetHeight();
+            sal_Int32 nHeight = ((const SvxFontHeightItem&)rItem).GetHeight();
             nHeight = LogicToTwips( nHeight );
             // Twips => HalfPoints
             nHeight /= 10;
@@ -3082,13 +3082,12 @@ sal_Bool ImpEditEngine::ImplHasText() const
     return ( ( GetEditDoc().Count() > 1 ) || GetEditDoc().GetObject(0)->Len() );
 }
 
-long ImpEditEngine::LogicToTwips( long n )
+sal_Int32 ImpEditEngine::LogicToTwips(sal_Int32 n)
 {
-    Size aSz( n, 0 );
+    Size aSz(n, 0);
     MapMode aTwipsMode( MAP_TWIP );
     aSz = pRefDev->LogicToLogic( aSz, NULL, &aTwipsMode );
     return aSz.Width();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
