@@ -137,7 +137,7 @@ struct XclTabViewData
     XclAddress          maFirstXclPos;      /// First visible cell.
     XclAddress          maSecondXclPos;     /// First visible cell in additional panes.
     sal_uInt16          mnSplitX;           /// Split X position, or number of frozen columns.
-    sal_uInt16          mnSplitY;           /// Split Y position, or number of frozen rows.
+    sal_uInt32          mnSplitY;           /// Split Y position, or number of frozen rows.
     sal_uInt16          mnNormalZoom;       /// Zoom factor for normal view.
     sal_uInt16          mnPageZoom;         /// Zoom factor for pagebreak preview.
     sal_uInt16          mnCurrentZoom;      /// Zoom factor for current view.
