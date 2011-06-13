@@ -131,7 +131,7 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
-gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # convert parametters filesystem root to native notation
 # does some real work only on windows, make sure not to
