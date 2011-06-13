@@ -71,6 +71,7 @@ DEF1NAME=$(SHL1TARGET)
 
 
 SHL2TARGET  := $(NAMEpurpenv_helper)
+SHL2DEPN    := $(SHL1TARGETN)
 DEF2NAME    := $(SHL2TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SHL2VERSIONMAP:=uno_purpenvhelper$(COMID).map
@@ -99,7 +100,3 @@ ALLTAR:   $(SHL2TARGETN)
 
 
 .INCLUDE :	target.mk
-
-
-$(SHL2TARGETN): $(SHL1TARGETN)
-
