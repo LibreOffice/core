@@ -1,0 +1,11 @@
+--- misc/libloader-1.1.6/source/org/pentaho/reporting/libraries/resourceloader/ResourceException.java	2010-04-27 16:07:00.000000000 +0200
++++ misc/build/libloader-1.1.6/source/org/pentaho/reporting/libraries/resourceloader/ResourceException.java	2011-06-13 02:00:46.000000000 +0200
+@@ -42,7 +42,7 @@
+    */
+   public ResourceException(final String message, final Exception ex)
+   {
+-    super(message, ex);
++    super(message, (Throwable) ex);
+   }
+ 
+   /**

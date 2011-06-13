@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=../..
 
 PRJNAME=jfreereport
 TARGET=libloader
@@ -34,7 +34,7 @@ TARGET=libloader
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
-.INCLUDE : $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
@@ -42,7 +42,7 @@ TARGET=libloader
 TARFILE_NAME=$(TARGET)-$(LIBLOADER_VERSION)
 TARFILE_IS_FLAT=true
 TARFILE_MD5=97b2d4dba862397f446b217e2b623e71
-PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
+PATCH_FILES=$(PACKAGE_DIR)/$(TARGET).patch $(PRJ)/patches/$(TARGET)-$(LIBLOADER_VERSION)-deprecated.patch
 CONVERTFILES=common_build.xml
 
 .IF "$(L10N_framework)"==""
@@ -64,15 +64,15 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBLOADER_VERSION).jar 
+ALLTAR : $(CLASSDIR)/$(TARGET)-$(LIBLOADER_VERSION).jar
 
-$(PACKAGE_DIR)$/$(TARGET).patch : 
-    @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
-    ( $(TYPE:s/+//) $(PRJ)$/patches$/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBLOADER_VERSION)/g' > $(PACKAGE_DIR)$/$(TARGET).patch )
-    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)$/so_converted_$(TARGET).dummy
-    
-$(CLASSDIR)$/$(TARGET)-$(LIBLOADER_VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(LIBLOADER_VERSION).jar $(CLASSDIR)$/$(TARGET)-$(LIBLOADER_VERSION).jar
-    
+$(PACKAGE_DIR)/$(TARGET).patch :
+	@-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
+	( $(TYPE:s/+//) $(PRJ)/patches/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBLOADER_VERSION)/g' > $(PACKAGE_DIR)/$(TARGET).patch )
+	$(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/so_converted_$(TARGET).dummy
+
+$(CLASSDIR)/$(TARGET)-$(LIBLOADER_VERSION).jar : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
+	$(COPY) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/dist/$(TARGET)-$(LIBLOADER_VERSION).jar $(CLASSDIR)/$(TARGET)-$(LIBLOADER_VERSION).jar
+
 .ENDIF
 .ENDIF

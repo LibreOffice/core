@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=../..
 
 PRJNAME=jfreereport
 TARGET=libbase
@@ -33,7 +33,7 @@ TARGET=libbase
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
-.INCLUDE : $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
@@ -43,7 +43,7 @@ TARFILE_MD5=eeb2c7ddf0d302fba4bfc6e97eac9624
 #TARFILE_ROOTDIR=$(TARGET)
 TARFILE_IS_FLAT=true
 
-PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
+PATCH_FILES=$(PACKAGE_DIR)/$(TARGET).patch $(PRJ)/patches/$(TARGET)-$(LIBBASE_VERSION)-deprecated.patch
 CONVERTFILES=common_build.xml
 
 .IF "$(JAVACISGCJ)"=="yes"
@@ -65,27 +65,27 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(L10N_framework)"==""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar
+ALLTAR : $(CLASSDIR)/$(TARGET)-$(LIBBASE_VERSION).jar
 
-$(PACKAGE_DIR)$/$(TARGET).patch : 
-    @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
-    ( $(TYPE:s/+//) $(PRJ)$/patches$/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBBASE_VERSION)/g' > $(PACKAGE_DIR)$/$(TARGET).patch )
-    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)$/so_converted_$(TARGET).dummy
-    
+$(PACKAGE_DIR)/$(TARGET).patch :
+	@-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
+	( $(TYPE:s/+//) $(PRJ)/patches/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBBASE_VERSION)/g' > $(PACKAGE_DIR)/$(TARGET).patch )
+	$(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/so_converted_$(TARGET).dummy
+
 # XCLASSPATH/CLASSPATH does not work and we only can give lib once. But
 # the build.xmls fortunately take *.jar out of lib so we can copy our
 # commons-logging.jar here - yes, even in the system-apache commons case.
 # Sucks.
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(CLASSDIR)$/commons-logging.jar
+$(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE) : $(CLASSDIR)/commons-logging.jar
 
-$(CLASSDIR)$/commons-logging.jar : 
+$(CLASSDIR)/commons-logging.jar :
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
-    $(COPY) $(SOLARBINDIR)$/commons-logging-1.1.1.jar $(CLASSDIR)$/commons-logging.jar
+	$(COPY) $(SOLARBINDIR)/commons-logging-1.1.1.jar $(CLASSDIR)/commons-logging.jar
 .ELSE
-    $(COPY) $(COMMONS_LOGGING_JAR) $(CLASSDIR)$/commons-logging.jar
+	$(COPY) $(COMMONS_LOGGING_JAR) $(CLASSDIR)/commons-logging.jar
 .ENDIF
 
-$(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar : $(CLASSDIR)$/commons-logging.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(LIBBASE_VERSION).jar $(CLASSDIR)$/$(TARGET)-$(LIBBASE_VERSION).jar
+$(CLASSDIR)/$(TARGET)-$(LIBBASE_VERSION).jar : $(CLASSDIR)/commons-logging.jar $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
+	$(COPY) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/dist/$(TARGET)-$(LIBBASE_VERSION).jar $(CLASSDIR)/$(TARGET)-$(LIBBASE_VERSION).jar
 .ENDIF
 .ENDIF

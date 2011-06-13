@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=../..
 
 PRJNAME=jfreereport
 TARGET=librepository
@@ -34,7 +34,7 @@ TARGET=librepository
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
-.INCLUDE : $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
@@ -42,7 +42,7 @@ TARGET=librepository
 TARFILE_NAME=$(TARGET)-$(LIBREPOSITORY_VERSION)
 TARFILE_IS_FLAT=true
 TARFILE_MD5=8ce2fcd72becf06c41f7201d15373ed9
-PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
+PATCH_FILES=$(PACKAGE_DIR)/$(TARGET).patch $(PRJ)/patches/$(TARGET)-$(LIBREPOSITORY_VERSION)-deprecated.patch
 CONVERTFILES=common_build.xml
 
 .IF "$(L10N_framework)"==""
@@ -64,15 +64,15 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar 
+ALLTAR : $(CLASSDIR)/$(TARGET)-$(LIBREPOSITORY_VERSION).jar
 
-$(PACKAGE_DIR)$/$(TARGET).patch : 
-    @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
-    ( $(TYPE:s/+//) $(PRJ)$/patches$/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBREPOSITORY_VERSION)/g' > $(PACKAGE_DIR)$/$(TARGET).patch )
-    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)$/so_converted_$(TARGET).dummy
-    
-$(CLASSDIR)$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar $(CLASSDIR)$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar
-    
+$(PACKAGE_DIR)/$(TARGET).patch :
+	@-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
+	( $(TYPE:s/+//) $(PRJ)/patches/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBREPOSITORY_VERSION)/g' > $(PACKAGE_DIR)/$(TARGET).patch )
+	$(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)/so_converted_$(TARGET).dummy
+
+$(CLASSDIR)/$(TARGET)-$(LIBREPOSITORY_VERSION).jar : $(PACKAGE_DIR)/$(INSTALL_FLAG_FILE)
+	$(COPY) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/dist/$(TARGET)-$(LIBREPOSITORY_VERSION).jar $(CLASSDIR)/$(TARGET)-$(LIBREPOSITORY_VERSION).jar
+
 .ENDIF
 .ENDIF
