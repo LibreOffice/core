@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_swdoc_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_swdoc_test, \
     sw/qa/core/swdoc-test \
+    sw/qa/core/Test-BigPtrArray \
 ))
 
 $(call gb_CxxObject_get_target,sw/qa/core/swdoc-test): $(WORKDIR)/AllLangRes/sw
