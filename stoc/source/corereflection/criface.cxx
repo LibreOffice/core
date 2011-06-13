@@ -33,7 +33,7 @@
 #ifdef SAL_UNX
 #include <sal/alloca.h>
 #endif
-#if !(defined(MACOSX) || defined(FREEBSD))
+#if !(defined(MACOSX) || defined(IOS) || defined(FREEBSD))
 #include <malloc.h>
 #endif
 #include <rtl/alloc.h>
