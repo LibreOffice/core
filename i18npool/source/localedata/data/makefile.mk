@@ -330,7 +330,7 @@ $(MY_MISC_CXXFILES) : $(OUT_FOR_BUILD)$/bin$/saxparser$(EXECPOST) $(MISC)/saxpar
 
 $(MISC)$/localedata_%.cxx : %.xml
     $(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(OUT_FOR_BUILD)$/bin$/saxparser $* $< $@ \
-        $(my_file)$(PWD)/$(MISC)/saxparser.rdb $(SOLARBINDIR)$/types.rdb \
+        $(my_file)$(PWD)/$(MISC_FOR_BUILD)/saxparser.rdb $(SOLARBINDIR)$/types.rdb \
         -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(SOLARSHAREDBIN)
     $(RM) $(BIN)$/$(@:b).rdb
 
