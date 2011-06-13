@@ -139,21 +139,21 @@ public:
      */
     virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException);
     virtual void SAL_CALL cancel() throw(RuntimeException) {}
-    virtual void SAL_CALL setDocumentHandler(Reference< XDocumentHandler >  xHandler)
+    virtual void SAL_CALL setDocumentHandler(Reference< XDocumentHandler > xHandler)
     {
-        rDocumentHandler = xHandler;
+        m_rxDocumentHandler = xHandler;
     }
-     void setUCB( Reference< XInterface > xUCB ){
+    void setUCB( Reference< XInterface > xUCB )
+    {
          rUCB = xUCB;
-     }
+    }
 private:
-    Reference< XDocumentHandler >   rDocumentHandler;
-     Reference< XInterface > rUCB;
+    Reference< XDocumentHandler > m_rxDocumentHandler;
+    Reference< XInterface > rUCB;
     Reference< XAttributeList > rList;
     AttributeListImpl *pList;
     HWPFile hwpfile;
-     HwpReaderPrivate *d;
-
+    HwpReaderPrivate *d;
 private:
     /* -------- Document Parsing --------- */
     void makeMeta();

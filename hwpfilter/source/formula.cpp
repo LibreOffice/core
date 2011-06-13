@@ -42,11 +42,11 @@ extern LinkedList<Node> nodelist;
 
 static hchar entity[32];
 #define ascii(x)  OUString::createFromAscii(x)
-#define rstartEl(x,y)   rDocumentHandler->startElement(x,y)
-#define rendEl(x)    rDocumentHandler->endElement(x)
-#define rchars(x) rDocumentHandler->characters(ascii(x))
-#define runistr(x) rDocumentHandler->characters(OUString(x))
-#define reucstr(x,y) rDocumentHandler->characters(OUString(x,y, RTL_TEXTENCODING_EUC_KR))
+#define rstartEl(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(0)
+#define rendEl(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(0)
+#define rchars(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(ascii(x)); } while(0)
+#define runistr(x) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x)); } while(0)
+#define reucstr(x,y) do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(OUString(x,y, RTL_TEXTENCODING_EUC_KR)); } while(0)
 #define padd(x,y,z)  pList->addAttribute(x,y,z)
 #else
 static char entity[32];

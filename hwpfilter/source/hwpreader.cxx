@@ -51,9 +51,9 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 // To be shorten source code by realking
 #define hconv(x,y) OUString(hstr2ucsstr(x,y))
 #define ascii(x)        OUString::createFromAscii(x)
-#define rstartEl(x,y)   rDocumentHandler->startElement(x,y)
-#define rendEl(x)       rDocumentHandler->endElement(x)
-#define rchars(x)       rDocumentHandler->characters(x)
+#define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(0)
+#define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(0)
+#define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(0)
 #define padd(x,y,z)     pList->addAttribute(x,y,z)
 #define Double2Str(x)   OUString::valueOf((double)(x))
 #define WTI(x)          ((double)(x) / 1800.)     // unit => inch
@@ -203,7 +203,8 @@ throw(SAXException, IOException, RuntimeException)
 #endif
     }
 
-    rDocumentHandler->startDocument();
+    if (m_rxDocumentHandler.is())
+        m_rxDocumentHandler->startDocument();
 
     padd(ascii("office:class"), sXML_CDATA, ascii("text"));
     padd(ascii("office:version"), sXML_CDATA, ascii("0.9"));
@@ -236,7 +237,8 @@ throw(SAXException, IOException, RuntimeException)
 
     rendEl(ascii("office:document"));
 
-    rDocumentHandler->endDocument();
+    if (m_rxDocumentHandler.is())
+        m_rxDocumentHandler->endDocument();
 #ifndef UDK100
     return sal_True;
 #endif
@@ -3763,7 +3765,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
 //   rchars(ascii(mybuf));
 //#ifndef UDK100
     Formula *form = new Formula(mybuf);
-    form->setDocumentHandler(rDocumentHandler);
+    form->setDocumentHandler(m_rxDocumentHandler);
     form->setAttributeListImpl(pList);
     form->parse();
 

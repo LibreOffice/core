@@ -43,8 +43,8 @@ class Node;
 using namespace ::com::sun::star::xml::sax;
 // #endif
 
-
-class Formula{
+class Formula
+{
 public:
     Formula(char *_eq, int _ishwpeq = 1)
         : pList(NULL)
@@ -55,14 +55,16 @@ public:
     }
     virtual ~Formula(){ }
 
-     void setDocumentHandler(Reference < XDocumentHandler > xHandler ){
-          rDocumentHandler = xHandler;
-     }
-     void setAttributeListImpl( AttributeListImpl *p ){
-          pList = p;
-          rList = (XAttributeList *) pList;
-     }
-     int parse();
+    void setDocumentHandler(Reference < XDocumentHandler > xHandler )
+    {
+          m_rxDocumentHandler = xHandler;
+    }
+    void setAttributeListImpl( AttributeListImpl *p )
+    {
+        pList = p;
+        rList = (XAttributeList *) pList;
+    }
+    int parse();
 private:
      void trim();
      void makeMathML(Node *res);
@@ -87,7 +89,7 @@ private:
      void makeEnd(Node *res);
 
 private:
-     Reference< XDocumentHandler >   rDocumentHandler;
+     Reference< XDocumentHandler >  m_rxDocumentHandler;
      Reference< XAttributeList > rList;
      AttributeListImpl *pList;
      char *eq;
