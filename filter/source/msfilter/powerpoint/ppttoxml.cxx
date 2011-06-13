@@ -63,7 +63,7 @@ sal_Bool PptToXml::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor,
                 if( xDocStream.Is() )
                 {
                     xDocStream->SetVersion( xStg->GetVersion() );
-                    xDocStream->SetKey( xStg->GetKey() );
+                    xDocStream->SetCryptMaskKey(xStg->GetKey());
 
                     xHdl->startDocument();
 
