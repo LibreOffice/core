@@ -61,14 +61,6 @@ DBG_NAME( Stream )
 
 // -----------------------------------------------------------------------
 
-// sprintf Param-Mode
-#define SPECIAL_PARAM_NONE 0        // Format-Str, Number
-#define SPECIAL_PARAM_WIDTH 1       // Format-Str, Width, Number
-#define SPECIAL_PARAM_PRECISION 2   // Format-Str, Precision, Number
-#define SPECIAL_PARAM_BOTH 3        // Format-Str, Width, Precision, Number
-
-// -----------------------------------------------------------------------
-
 // !!! Nicht inline, wenn Operatoren <<,>> inline sind
 inline static void SwapUShort( sal_uInt16& r )
     {   r = SWAPSHORT(r);   }
@@ -466,7 +458,6 @@ void SvStream::ImpInit()
     eIOMode             = STREAM_IO_DONTKNOW;
     nBufFree            = 0;
 
-    nPrecision          = 0;  // all significant digits
     nWidth              = 0; // default width
     cFiller             = ' ';
     eStreamMode         = 0;
@@ -1960,23 +1951,14 @@ void SvStream::RefreshBuffer()
 void SvStream::CreateFormatString()
 {
     aFormatString = '%';
-    nPrintfParams = SPECIAL_PARAM_NONE;
+    ePrintfParams = SPECIAL_PARAM_NONE;
 
     if( nWidth )
     {
         if( cFiller != ' ' )
             aFormatString += '0';
         aFormatString += '*';
-        nPrintfParams = SPECIAL_PARAM_WIDTH;
-    }
-
-    if( nPrecision )
-    {
-        aFormatString += ".*";
-        if( nWidth )
-            nPrintfParams = SPECIAL_PARAM_BOTH;
-        else
-            nPrintfParams = SPECIAL_PARAM_PRECISION;
+        ePrintfParams = SPECIAL_PARAM_WIDTH;
     }
 }
 
@@ -1991,8 +1973,8 @@ SvStream& SvStream::WriteNumber( sal_Int32 nInt32 )
     char buffer[256+12];
     ByteString aFStr( aFormatString);
     aFStr += SAL_PRIdINT32;
-    sal_Size nLen;
-    switch ( nPrintfParams )
+    sal_Size nLen = 0;
+    switch ( ePrintfParams )
     {
         case SPECIAL_PARAM_NONE :
             nLen = sprintf(buffer, aFStr.GetBuffer(), nInt32);
@@ -2000,11 +1982,6 @@ SvStream& SvStream::WriteNumber( sal_Int32 nInt32 )
         case SPECIAL_PARAM_WIDTH :
             nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nInt32);
             break;
-        case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf(buffer, aFStr.GetBuffer(), nPrecision, nInt32);
-            break;
-        default:
-            nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nPrecision, nInt32);
     }
     Write( buffer, nLen );
     return *this;
@@ -2015,8 +1992,8 @@ SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
     char buffer[256+12];
     ByteString aFStr( aFormatString);
     aFStr += SAL_PRIuUINT32;
-    sal_Size nLen;
-    switch ( nPrintfParams )
+    sal_Size nLen = 0;
+    switch ( ePrintfParams )
     {
         case SPECIAL_PARAM_NONE :
             nLen = sprintf(buffer, aFStr.GetBuffer(), nUInt32);
@@ -2024,11 +2001,6 @@ SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
         case SPECIAL_PARAM_WIDTH :
             nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nUInt32);
             break;
-        case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf(buffer, aFStr.GetBuffer(), nPrecision, nUInt32);
-            break;
-        default:
-            nLen = sprintf(buffer,aFStr.GetBuffer(), nWidth, nPrecision, nUInt32);
     }
     Write( buffer, nLen );
     return *this;

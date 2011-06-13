@@ -271,10 +271,16 @@ private:
 
     // Formatierung von Strings
     char            cFiller;
-    sal_uInt8           nPrecision;
     sal_uInt8           nWidth;
-    sal_uInt8           nPrintfParams;
-    ByteString      aFormatString;
+
+    enum PrintfParams
+    {
+        SPECIAL_PARAM_NONE = 0,        // Format-Str, Number
+        SPECIAL_PARAM_WIDTH = 1       // Format-Str, Width, Number
+    };
+
+    PrintfParams ePrintfParams;
+    ByteString aFormatString;
 
     // Userdata
     long            nVersion;       // for external use
@@ -390,9 +396,6 @@ public:
     SvStream&       WriteByteString( const UniString& rStr ) { return WriteByteString( rStr, GetStreamCharSet() ); }
     SvStream&       WriteByteString( const ByteString& rStr );
 
-    void            SetPrecision( sal_uInt8 nPrec )
-                        { nPrecision = nPrec; CreateFormatString(); }
-    sal_uInt8           GetPrecision() const { return nPrecision; }
     void            SetWidth( sal_uInt8 nWid)
                         { nWidth = nWid; CreateFormatString(); }
     sal_uInt8           GetWidth() const { return nWidth; }
