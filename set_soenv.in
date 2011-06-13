@@ -1767,6 +1767,7 @@ if ( '@CROSS_COMPILING@' eq 'YES' )
    ToFile( "INPATH_FOR_BUILD",  "@INPATH_FOR_BUILD@", "e" );
    ToFile( "OUTPATH_FOR_BUILD", "@OUTPATH_FOR_BUILD@", "e" );
    ToFile( "MACOSX_DEPLOYMENT_TARGET_FOR_BUILD", "@MACOSX_DEPLOYMENT_TARGET_FOR_BUILD@", "e" );
+   ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT_FOR_BUILD@", "e" );
    ToFile( "OUTDIR_FOR_BUILD",  "@OUTDIR_FOR_BUILD@", "e");
    ToFile( "SOLARINC_FOR_BUILD", "@SOLARINC_FOR_BUILD@", "e");
    ToFile( "SOLARLIB_FOR_BUILD", "@SOLARLIB_FOR_BUILD@", "e");
@@ -1785,6 +1786,7 @@ else
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", PathFormat("@GXX_INCLUDE_PATH@"), "e" );
    ToFile( "INPATH_FOR_BUILD",  $INPATH,         "e" );
    ToFile( "OUTPATH_FOR_BUILD", $OUTPATH,        "e" );
+   ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT@", "e" );
    ToFile( "OUTDIR_FOR_BUILD",  $OUTDIR,         "e" );
    ToFile( "PATH_FOR_BUILD",    $PATH,           "e" );
    ToFile( "SOLARINC_FOR_BUILD", $SOLARINC,      "e" );

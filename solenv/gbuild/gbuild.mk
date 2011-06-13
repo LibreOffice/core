@@ -297,7 +297,7 @@ endif
 endef
 
 
-ifeq ($(SYSTEM_LIBXSLT),YES)
+ifeq ($(SYSTEM_LIBXSLT_FOR_BUILD),YES)
 gb_XSLTPROCTARGET :=
 gb_XSLTPROC := xsltproc
 else
