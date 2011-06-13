@@ -84,43 +84,10 @@ using namespace ::com::sun::star::document;
 #include "drawdef.h"
 #include "attributes.hxx"
 
-
 #define IMPLEMENTATION_NAME "com.sun.comp.hwpimport.HwpImportFilter"
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
 #define WRITER_IMPORTER_NAME "com.sun.star.comp.Writer.XMLImporter"
-
-class MyDataSink : public ::cppu::WeakImplHelper2< XActiveDataControl, XActiveDataSink >
-{
-  Reference < XInputStream >    m_xInputStream;
-public:
-
-  // XActiveDataControl.
-  virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &)
-    throw(RuntimeException) {}
-  virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &)
-    throw(RuntimeException) {}
-  virtual void SAL_CALL   start (void) throw(RuntimeException) {}
-  virtual void SAL_CALL   terminate (void) throw(RuntimeException) {}
-
-  // XActiveDataSink.
-  virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream)
-    throw(RuntimeException);
-  virtual Reference<XInputStream> SAL_CALL getInputStream (void)
-    throw(RuntimeException);
-};
-
-void SAL_CALL MyDataSink::setInputStream ( const Reference<XInputStream> &rxInputStream)
-  throw(RuntimeException )
-{
-  m_xInputStream = rxInputStream;
-}
-
-Reference < XInputStream > SAL_CALL MyDataSink::getInputStream (void)
-  throw(RuntimeException)
-{
-  return m_xInputStream;
-}
 
 struct HwpReaderPrivate;
 /**

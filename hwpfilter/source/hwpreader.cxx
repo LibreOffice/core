@@ -134,51 +134,23 @@ HwpReader::~HwpReader()
 }
 
 
-sal_Bool HwpReader::filter(const Sequence< PropertyValue >& aDescriptor) throw(RuntimeException)
+sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(RuntimeException)
 {
-    Reference< XInputStream> rInputStream;
-    for ( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
-    {
-        if ( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
-        {
-            aDescriptor[i].Value >>= rInputStream;
-            break;
-        }
-        else if ( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
-        {
-            OUString sURL;
-            aDescriptor[i].Value >>= sURL;
+    comphelper::MediaDescriptor aDescriptor(rDescriptor);
+    aDescriptor.addInputStream();
 
-            Reference< XContentIdentifierFactory > xIdFactory( rUCB, UNO_QUERY );
-            Reference< XContentProvider > xProvider( rUCB, UNO_QUERY );
-            Reference< XContentIdentifier > xId = xIdFactory->createContentIdentifier( sURL );
-            Reference< XContent > xContent = xProvider->queryContent( xId );
-            MyDataSink * pSink = new MyDataSink();
-            OpenCommandArgument2 aArgument;
-            aArgument.Sink = Reference< XInterface > ((OWeakObject *)pSink);
-            aArgument.Mode = OpenMode::DOCUMENT;
-            Command aCommand;
-            aCommand.Name = OUString( RTL_CONSTASCII_USTRINGPARAM("open"));
-            aCommand.Handle = -1;
-            aCommand.Argument <<= aArgument;
-            Reference< XCommandProcessor > xCmdProcessor( xContent, UNO_QUERY );
-            xCmdProcessor->execute( aCommand, 0, Reference< XCommandEnvironment > () );
-
-            rInputStream = pSink->getInputStream();
-
-            break;
-        }
-    }
+    Reference< XInputStream > xInputStream(
+        aDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY_THROW);
 
     HStream stream;
     Sequence < sal_Int8 > aBuffer;
     sal_Int32 nRead, nBlock = 32768, nTotal = 0;
     while( 1 )
     {
-        nRead = rInputStream.get()->readBytes(aBuffer, nBlock);
+        nRead = xInputStream->readBytes(aBuffer, nBlock);
         if( nRead == 0 )
             break;
-        stream.addData( (byte *)aBuffer.getConstArray(), nRead );
+        stream.addData( (const byte *)aBuffer.getConstArray(), nRead );
         nTotal += nRead;
     }
 
