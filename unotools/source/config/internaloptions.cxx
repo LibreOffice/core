@@ -297,32 +297,6 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL   ] >>= m_bSendCrashMail  ;
     seqValues[FIXPROPERTYHANDLE_USEMAILUI       ] >>= m_bUseMailUI  ;
     seqValues[FIXPROPERTYHANDLE_CURRENTTEMPURL  ] >>= m_aCurrentTempURL ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE ] >>= m_bRemoveMenuEntryClose  ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ] >>= m_bRemoveMenuEntryBackToWebtop  ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP ] >>= m_bRemoveMenuEntryNewWebtop  ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT ] >>= m_bRemoveMenuEntryLogout  ;
-/*
-    // Read dynamical set "RecoveryList" then.
-    // 3 subkeys for every item!
-    // Attention: Start at next element after last fixed entry! We must ignore "Slot" and "SendCrashMail" ...
-    tIMPL_RecoveryEntry aEntry;
-    sal_uInt32 nCount       = seqValues.getLength() ;
-    sal_uInt32 nPosition    = FIXPROPERTYCOUNT      ;
-
-    while( nPosition<nCount )
-    {
-        seqValues[nPosition] >>= aEntry.sURL        ;
-        ++nPosition;
-        seqValues[nPosition] >>= aEntry.sFilter     ;
-        ++nPosition;
-        seqValues[nPosition] >>= aEntry.sTempName   ;
-        ++nPosition;
-        m_aRecoveryList.push_front( aEntry );
-    }
-*/
-    // We don't need any notifications here.
-    // "Slot" and "SendCrashMail" are readonly(!) and our recovery list should not modified during runtime - it's used
-    // by our crash guard only ... otherwise we have a big problem.
 }
 
 //*****************************************************************************************************************
