@@ -155,7 +155,7 @@ throw( uno::RuntimeException )
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }

@@ -317,7 +317,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
                 ::comphelper::ConfigurationHelper::flush( xConfig );
             }
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
         }
     }
@@ -424,9 +424,12 @@ String SfxObjectFactory::GetModuleName() const
         return String(sModuleName);
     }
     catch(const css::uno::RuntimeException&)
-        { throw; }
+    {
+        throw;
+    }
     catch(const css::uno::Exception&)
-        {}
+    {
+    }
 
     return String();
 }

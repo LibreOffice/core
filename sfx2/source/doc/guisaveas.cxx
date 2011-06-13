@@ -208,10 +208,10 @@ public:
                 m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( bReadOnly ) );
                 m_bReadOnlySupported = sal_True;
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
 
         if ( ( bReadOnly && !m_bReadOnlySupported ) )
@@ -229,7 +229,7 @@ public:
                 if ( m_bReadOnlySupported )
                     m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( m_bPreserveReadOnly ) );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 OSL_FAIL( "Unexpected exception!" );
             }
@@ -458,7 +458,7 @@ void ModelData_Impl::CheckInteractionHandler()
                                             DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
                             uno::UNO_QUERY );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -600,18 +600,18 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
                 }
         }
     }
-    catch( container::NoSuchElementException& )
+    catch( const container::NoSuchElementException& )
     {
         // the filter name is unknown
         throw task::ErrorCodeIOException( ::rtl::OUString(),
                                             uno::Reference< uno::XInterface >(),
                                             ERRCODE_IO_INVALIDPARAMETER );
     }
-    catch( task::ErrorCodeIOException& )
+    catch( const task::ErrorCodeIOException& )
     {
         throw;
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -659,7 +659,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
                     nResult = STATUS_NO_ACTION;
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // impossibility to get the configuration access means normal saving flow for now
         }
@@ -1087,7 +1087,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                       ( GetMediaDescr().find( aFilterDataString ) == GetMediaDescr().end()
                       && GetMediaDescr().find( aFilterOptionsString ) == GetMediaDescr().end() );
             }
-            catch( lang::IllegalArgumentException& )
+            catch( const lang::IllegalArgumentException& )
             {}
         }
     }
@@ -1136,7 +1136,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
             }
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 
@@ -1197,7 +1197,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
             try {
                 uno::Reference< frame::XTitle > xTitle( GetModel(), uno::UNO_QUERY_THROW );
                 aReccomendedName = xTitle->getTitle();
-            } catch( uno::Exception& ) {}
+            } catch( const uno::Exception& ) {}
         }
 
         if ( aReccomendedName.getLength() && aTypeName.getLength() )
@@ -1403,7 +1403,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             {
                 aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
             }
-            catch( lang::IllegalArgumentException& )
+            catch( const lang::IllegalArgumentException& )
             {
                 OSL_FAIL( "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
                 aModelData.GetStorable()->store();
@@ -1625,7 +1625,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             else
                 aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             if ( ( nStoreMode & EXPORT_REQUESTED ) )
                 SetDocInfoState( aModelData.GetModel(), xOldDocInfo, sal_True );
@@ -1676,7 +1676,7 @@ sal_Bool SfxStoringHelper::CheckFilterOptionsAppearence(
                        bUseFilterOptions = sal_True;
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -1725,7 +1725,7 @@ void SfxStoringHelper::SetDocInfoState(
                 // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
                 xSet->setPropertyValue( pProps[i].Name, aValue );
             }
-            catch ( uno::Exception& ) {}
+            catch ( const uno::Exception& ) {}
         }
 
         sal_Int16 nCount = i_xOldDocInfo->getUserFieldCount();
@@ -1738,7 +1738,7 @@ void SfxStoringHelper::SetDocInfoState(
             xDocInfoToFill->setUserFieldValue( nInd, aPropVal );
         }
     }
-    catch ( uno::Exception& ) {}
+    catch ( const uno::Exception& ) {}
 
     // set the modified flag back if required
     if ( bNoModify && bIsModified != xModifiable->isModified() )
@@ -1794,7 +1794,7 @@ Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >&
             }
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 

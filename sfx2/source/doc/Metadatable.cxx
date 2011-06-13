@@ -1307,7 +1307,7 @@ void Metadatable::RemoveMetadataReference()
             m_pReg = 0;
         }
     }
-    catch (uno::Exception &)
+    catch (const uno::Exception &)
     {
         OSL_FAIL("Metadatable::RemoveMetadataReference: exception");
     }
@@ -1469,7 +1469,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
             }
         }
     }
-    catch (uno::Exception &)
+    catch (const uno::Exception &)
     {
         OSL_FAIL("Metadatable::RegisterAsCopyOf: exception");
     }
@@ -1492,7 +1492,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
             return pUndo;
         }
     }
-    catch (uno::Exception &)
+    catch (const uno::Exception &)
     {
         OSL_FAIL("Metadatable::CreateUndo: exception");
     }
@@ -1562,7 +1562,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
             pRegDoc->JoinMetadatables(*this, i_rOther);
         }
     }
-    catch (uno::Exception &)
+    catch (const uno::Exception &)
     {
         OSL_FAIL("Metadatable::JoinMetadatable: exception");
     }

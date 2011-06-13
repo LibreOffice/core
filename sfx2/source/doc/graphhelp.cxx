@@ -489,7 +489,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
             }
         }

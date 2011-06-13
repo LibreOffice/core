@@ -295,7 +295,7 @@ namespace sfx2
                 return disallowMacroExecution();
             }
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
             if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
                 ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
