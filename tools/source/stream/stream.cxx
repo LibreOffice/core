@@ -469,7 +469,6 @@ void SvStream::ImpInit()
     nPrecision          = 0;  // all significant digits
     nWidth              = 0; // default width
     cFiller             = ' ';
-    nJustification      = JUSTIFY_RIGHT;
     eStreamMode         = 0;
     CreateFormatString();
 
@@ -1962,11 +1961,6 @@ void SvStream::CreateFormatString()
 {
     aFormatString = '%';
     nPrintfParams = SPECIAL_PARAM_NONE;
-
-    if( nJustification )
-    {
-        aFormatString += '-';
-    }
 
     if( nWidth )
     {

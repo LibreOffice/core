@@ -94,9 +94,6 @@ typedef sal_uInt16 StreamMode;
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
 #define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
 
-#define JUSTIFY_RIGHT               0x00
-#define JUSTIFY_LEFT                0x01
-
 #define STREAM_IO_DONTKNOW          0
 #define STREAM_IO_READ              1
 #define STREAM_IO_WRITE                 2
@@ -277,7 +274,6 @@ private:
     sal_uInt8           nPrecision;
     sal_uInt8           nWidth;
     sal_uInt8           nPrintfParams;
-    sal_uInt8           nJustification;
     ByteString      aFormatString;
 
     // Userdata
@@ -403,9 +399,6 @@ public:
     void            SetFiller( char cFil )
                         { cFiller = cFil; CreateFormatString(); }
     char            GetFiller() const { return cFiller; }
-    void            SetJustification( sal_uInt8 nJus )
-                         { nJustification = nJus; CreateFormatString(); }
-    sal_uInt8           GetJustification() const { return nJustification; }
 
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
     SvStream&       WriteNumber( sal_Int32 nInt32 );
