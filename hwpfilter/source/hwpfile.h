@@ -109,15 +109,10 @@ class DLLEXPORT HWPFile
 /**
  * Default constructor
  */
-        HWPFile( void );
-
-        ~HWPFile( void );
+        HWPFile();
+        ~HWPFile();
 
     public:
-/**
- * Initialize this object
- */
-        void Init();
 
 /**
  * Opens HStream to use it.

@@ -54,16 +54,26 @@ static int ccount = 0;
 static int pcount = 0;
 static int datecodecount = 0;
 
-HWPFile::HWPFile(void)
+HWPFile::HWPFile()
+    : version(HWP_V30)
+    , compressed(false)
+    , encrypted(false)
+    , linenumber(0)
+    , info_block_len(0)
+    , error_code(HWP_NoError)
+    , oledata(0)
+    , m_nCurrentPage(1)
+    , m_nMaxSettedPage(0)
+    , hiodev(0)
+    , currenthyper(0)
 {
-    Init();
+    SetCurrentDoc(this);
 }
-
 
 /**
  * TODO : 추가된 스타일리스트에 대한 메모리 해제
  */
-HWPFile::~HWPFile(void)
+HWPFile::~HWPFile()
 {
     if (oledata)
         delete oledata;
@@ -89,24 +99,6 @@ HWPFile::~HWPFile(void)
         delete hyp.current();
     }
 }
-
-
-void HWPFile::Init(void)
-{
-    version = HWP_V30;
-    info_block_len = 0;
-    compressed = false;
-    encrypted = false;
-
-    error_code = HWP_NoError;
-    hiodev = 0;
-    oledata = 0;
-    SetCurrentDoc(this);
-    currenthyper = 0;
-     m_nCurrentPage = 1;
-     m_nMaxSettedPage = 0;
-}
-
 
 int HWPFile::ReadHwpFile(HStream & stream)
 {
