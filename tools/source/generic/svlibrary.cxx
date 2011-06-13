@@ -66,7 +66,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl()
             xPathSettings->getPropertyValue( aInternal )  >>= aInternalPaths;
             xPathSettings->getPropertyValue( aUser )      >>= aUserPaths;
         }
-        catch (uno::Exception &)
+        catch (const uno::Exception &)
         {
             bSuccess = false;
         }
