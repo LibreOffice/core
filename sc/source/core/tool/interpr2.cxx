@@ -1806,7 +1806,7 @@ void ScInterpreter::ScIntersect()
     {
         PushIllegalArgument();
         return;
-    } // if (nGlobalError || !xT2 || !xT1)
+    }
 
     StackVar sv1 = p1st->GetType();
     StackVar sv2 = p2nd->GetType();
@@ -1954,7 +1954,7 @@ void ScInterpreter::ScRangeFunc()
     {
         PushIllegalArgument();
         return;
-    } // if (nGlobalError || !xT2 || !xT1)
+    }
     FormulaTokenRef xRes = ScToken::ExtendRangeReference( *x1, *x2, aPos, false);
     if (!xRes)
         PushIllegalArgument();
@@ -1973,7 +1973,7 @@ void ScInterpreter::ScUnionFunc()
     {
         PushIllegalArgument();
         return;
-    } // if (nGlobalError || !xT2 || !xT1)
+    }
 
     StackVar sv1 = p1st->GetType();
     StackVar sv2 = p2nd->GetType();
