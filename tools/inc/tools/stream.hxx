@@ -412,8 +412,6 @@ public:
     SvStream&       WriteNumber( long nLong );
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
     SvStream&       WriteNumber( int nInt );
-    SvStream&       WriteNumber( float nFloat );
-    SvStream&       WriteNumber( const double& rDouble );
 
     sal_Size        Read( void* pData, sal_Size nSize );
     sal_Size        Write( const void* pData, sal_Size nSize );
@@ -578,13 +576,6 @@ inline SvStream& SvStream::WriteNumber( sal_uInt16 nUShort )
 inline SvStream& SvStream::WriteNumber( int nInt )
 {
     WriteNumber( (long)nInt );
-    return *this;
-}
-
-inline SvStream& SvStream::WriteNumber( float nFloat )
-{
-    double nTemp = nFloat;
-    WriteNumber( nTemp );
     return *this;
 }
 

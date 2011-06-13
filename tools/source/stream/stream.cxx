@@ -2042,31 +2042,6 @@ SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
     return *this;
 }
 
-
-SvStream& SvStream::WriteNumber( const double& rDouble )
-{
-    char buffer[256+24];
-    ByteString aFStr( aFormatString);
-    aFStr += "lf";
-    int nLen;
-    switch ( nPrintfParams )
-    {
-        case SPECIAL_PARAM_NONE :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), rDouble );
-            break;
-        case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nWidth, rDouble );
-            break;
-        case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nPrecision, rDouble);
-            break;
-        default:
-            nLen=sprintf(buffer, aFStr.GetBuffer(),nWidth,nPrecision,rDouble);
-    }
-    Write( buffer, (long)nLen );
-    return *this;
-}
-
 /*************************************************************************
 |*
 |*    Stream::CryptAndWriteBuffer()
