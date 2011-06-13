@@ -3518,7 +3518,7 @@ void WW8Export::RestoreMacroCmds()
 
         delete pStream;
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 

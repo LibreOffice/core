@@ -176,7 +176,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                     pGraphicStream =
                             ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( xPersist->getEntryName() ) );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
 
                 OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );

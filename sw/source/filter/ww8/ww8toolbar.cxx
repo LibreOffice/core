@@ -592,7 +592,7 @@ bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& 
 #endif
         bRes = true;
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         OSL_TRACE("***** For some reason we have an exception %s", rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         bRes = false;

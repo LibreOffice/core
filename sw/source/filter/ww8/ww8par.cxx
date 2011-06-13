@@ -234,7 +234,7 @@ bool BasicProjImportHelper::import( const uno::Sequence< beans::NamedValue >& aA
         uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
         bRet = xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         bRet = false;
     }
@@ -253,7 +253,7 @@ rtl::OUString BasicProjImportHelper::getProjectName()
             sProjName = xVBA->getProjectName();
 
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -4074,7 +4074,7 @@ void SwWW8ImplReader::StoreMacroCmds()
             delete[] pBuffer;
             delete pStream;
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
@@ -4110,7 +4110,7 @@ void SwWW8ImplReader::ReadDocVars()
                 xUserDefinedProps->addProperty( name,
                     beans::PropertyAttribute::REMOVEABLE,
                     aValue );
-            } catch (uno::Exception &) {
+            } catch (const uno::Exception &) {
                 // ignore
             }
         }
@@ -4198,7 +4198,7 @@ void lcl_createTemplateToProjectEntry( const uno::Reference< container::XNameCon
                 xPrjNameCache->insertByName( templateName, uno::makeAny( sVBAProjName ) );
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -4815,7 +4815,7 @@ namespace
                         aPassw = pRequest->getPassword();
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }

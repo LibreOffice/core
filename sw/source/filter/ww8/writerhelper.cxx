@@ -315,7 +315,7 @@ namespace sw
                     if ( xClose.is() )
                         xClose->close(sal_True);
                 }
-                catch ( com::sun::star::util::CloseVetoException& )
+                catch ( const com::sun::star::util::CloseVetoException& )
                 {
                 }
 
