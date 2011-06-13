@@ -262,14 +262,14 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_INTERNAL, CONFIG_MODE_IMMEDIATE_UPDATE )
     // Init member then.
-    , m_bRemoveMenuEntryClose ( sal_False )
-    , m_bRemoveMenuEntryBackToWebtop ( sal_False )
-    , m_bRemoveMenuEntryNewWebtop ( sal_False )
-    , m_bRemoveMenuEntryLogout ( sal_False )
-    ,   m_bSlotCFG          ( DEFAULT_SLOTCFG           )
-    ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL     )
-    ,   m_bUseMailUI        ( DEFAULT_USEMAILUI         )
-    ,   m_aCurrentTempURL   ( DEFAULT_CURRENTTEMPURL    )
+    , m_bRemoveMenuEntryClose(sal_False)
+    , m_bRemoveMenuEntryBackToWebtop(sal_False)
+    , m_bRemoveMenuEntryNewWebtop(sal_False)
+    , m_bRemoveMenuEntryLogout(sal_False)
+    , m_bSlotCFG(DEFAULT_SLOTCFG)
+    , m_bSendCrashMail(DEFAULT_SENDCRASHMAIL)
+    , m_bUseMailUI(DEFAULT_USEMAILUI)
+    , m_aCurrentTempURL(DEFAULT_CURRENTTEMPURL)
 {
     // Use our list of configuration keys to get his values.
     // structure of internal section: (first 2 entries are fixed - all other are member of a set!)
@@ -291,12 +291,12 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Read fixed values first!
-    DBG_ASSERT(!(seqValues[FIXPROPERTYHANDLE_SLOTCFG].getValueTypeClass()!=TypeClass_BOOLEAN)       , "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\Slot\"?"            );
-    DBG_ASSERT(!(seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].getValueTypeClass()!=TypeClass_BOOLEAN) , "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\SendCrashMail\"?"   );
-    seqValues[FIXPROPERTYHANDLE_SLOTCFG         ] >>= m_bSlotCFG        ;
-    seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL   ] >>= m_bSendCrashMail  ;
-    seqValues[FIXPROPERTYHANDLE_USEMAILUI       ] >>= m_bUseMailUI  ;
-    seqValues[FIXPROPERTYHANDLE_CURRENTTEMPURL  ] >>= m_aCurrentTempURL ;
+    DBG_ASSERT(!seqValues[FIXPROPERTYHANDLE_SLOTCFG].hasValue() || (seqValues[FIXPROPERTYHANDLE_SLOTCFG].getValueTypeClass() == TypeClass_BOOLEAN), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\Slot\"?");
+    DBG_ASSERT(!seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].hasValue() || !(seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\SendCrashMail\"?");
+    seqValues[FIXPROPERTYHANDLE_SLOTCFG] >>= m_bSlotCFG;
+    seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL] >>= m_bSendCrashMail;
+    seqValues[FIXPROPERTYHANDLE_USEMAILUI] >>= m_bUseMailUI;
+    seqValues[FIXPROPERTYHANDLE_CURRENTTEMPURL] >>= m_aCurrentTempURL;
 }
 
 //*****************************************************************************************************************
