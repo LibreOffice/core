@@ -345,9 +345,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nInvalid property value detected!\n" );
+        if (seqValues[nProperty].hasValue()==sal_False)
+            continue;
         switch( nProperty )
         {
             case PROPERTYHANDLE_PLUGINSENABLED :
@@ -496,9 +495,8 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nInvalid property value detected!\n" );
+        if (seqValues[nProperty].hasValue()==sal_False)
+            continue;
         switch( lcl_MapPropertyName(rPropertyNames[nProperty], aInternalPropertyNames) )
         {
             case PROPERTYHANDLE_PLUGINSENABLED      :   {
