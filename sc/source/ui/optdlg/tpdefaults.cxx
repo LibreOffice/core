@@ -63,18 +63,18 @@ sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
     SCTAB nTabCount = static_cast<SCTAB>(aEdNSheets.GetValue());
 
-    if ( mpLocalOptions->GetInitTabCount() != nTabCount)
-     {
-         mpLocalOptions->SetInitTabCount( nTabCount );
+    if (mpLocalOptions->GetInitTabCount() != nTabCount)
+    {
+        mpLocalOptions->SetInitTabCount( nTabCount );
 
-         rCoreAttrs.Put(ScTpCalcItem(GetWhich(SID_SCDOCOPTIONS), *mpLocalOptions));
-       return sal_True;
-     }
+        rCoreAttrs.Put(ScTpCalcItem(GetWhich(SID_SCDOCOPTIONS), *mpLocalOptions));
+        return sal_True;
+    }
     else
-     return sal_False;
+        return sal_False;
 }
 
-void ScTpDefaultsOptions::Reset(const SfxItemSet &/*rCoreAttrs*/)
+void ScTpDefaultsOptions::Reset(const SfxItemSet& /*rCoreAttrs*/)
 {
     aEdNSheets.SetValue( static_cast<sal_uInt16>(mpLocalOptions->GetInitTabCount()) );
 }
