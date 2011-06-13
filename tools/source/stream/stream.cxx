@@ -1992,53 +1992,51 @@ void SvStream::CreateFormatString()
 |*
 *************************************************************************/
 
-SvStream& SvStream::WriteNumber( long nLong )
+SvStream& SvStream::WriteNumber( sal_Int32 nInt32 )
 {
     char buffer[256+12];
-    char pType[] = "ld"; // Nicht static!
     ByteString aFStr( aFormatString);
-    aFStr += pType;
-    int nLen;
+    aFStr += SAL_PRIdINT32;
+    sal_Size nLen;
     switch ( nPrintfParams )
     {
         case SPECIAL_PARAM_NONE :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nLong );
+            nLen = sprintf(buffer, aFStr.GetBuffer(), nInt32);
             break;
         case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nWidth, nLong );
+            nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nInt32);
             break;
         case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nPrecision,nLong);
+            nLen = sprintf(buffer, aFStr.GetBuffer(), nPrecision, nInt32);
             break;
         default:
-            nLen=sprintf(buffer, aFStr.GetBuffer(),nWidth,nPrecision,nLong);
+            nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nPrecision, nInt32);
     }
-    Write( buffer, (long)nLen );
+    Write( buffer, nLen );
     return *this;
 }
 
 SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
 {
     char buffer[256+12];
-    char pType[] = "lu"; // Nicht static!
     ByteString aFStr( aFormatString);
-    aFStr += pType;
-    int nLen;
+    aFStr += SAL_PRIuUINT32;
+    sal_Size nLen;
     switch ( nPrintfParams )
     {
         case SPECIAL_PARAM_NONE :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nUInt32 );
+            nLen = sprintf(buffer, aFStr.GetBuffer(), nUInt32);
             break;
         case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nWidth, nUInt32 );
+            nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nUInt32);
             break;
         case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nPrecision, nUInt32 );
+            nLen = sprintf(buffer, aFStr.GetBuffer(), nPrecision, nUInt32);
             break;
         default:
-            nLen=sprintf(buffer,aFStr.GetBuffer(),nWidth,nPrecision,nUInt32 );
+            nLen = sprintf(buffer,aFStr.GetBuffer(), nWidth, nPrecision, nUInt32);
     }
-    Write( buffer, (long)nLen );
+    Write( buffer, nLen );
     return *this;
 }
 

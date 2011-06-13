@@ -407,11 +407,8 @@ public:
                          { nJustification = nJus; CreateFormatString(); }
     sal_uInt8           GetJustification() const { return nJustification; }
 
-    SvStream&       WriteNumber( short nShort );
-    SvStream&       WriteNumber( sal_uInt16 nUInt16 );
-    SvStream&       WriteNumber( long nLong );
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
-    SvStream&       WriteNumber( int nInt );
+    SvStream&       WriteNumber( sal_Int32 nInt32 );
 
     sal_Size        Read( void* pData, sal_Size nSize );
     sal_Size        Write( const void* pData, sal_Size nSize );
@@ -559,24 +556,6 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
 {
     (*f)(rStr);
     return rStr;
-}
-
-inline SvStream& SvStream::WriteNumber( short nShort )
-{
-    WriteNumber( (long)nShort );
-    return *this;
-}
-
-inline SvStream& SvStream::WriteNumber( sal_uInt16 nUShort )
-{
-    WriteNumber( (sal_uInt32)nUShort );
-    return *this;
-}
-
-inline SvStream& SvStream::WriteNumber( int nInt )
-{
-    WriteNumber( (long)nInt );
-    return *this;
 }
 
 inline void SvStream::SetEndianSwap( sal_Bool bVal )
