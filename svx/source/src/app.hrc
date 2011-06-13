@@ -199,6 +199,7 @@
 #define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
 #define SID_SC_TP_FORMULA               (RID_OFA_START + 257)
 #define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 258)
+#define RID_SC_TP_DEFAULTS          (RID_OFA_START + 259)
 
 // Strings ------------------------------------------
 

@@ -1570,6 +1570,24 @@
                     </constraints>
                 </prop>
             </group>
-        </group>
-	</component>
+	</group>
+	<group oor:name="Defaults">
+	  <info>
+		<desc>Contains various defaults settings.</desc>
+	  </info>
+	  <group oor:name="Other">
+		<info>
+			  <desc>Other Program defaults</desc>
+		</info>
+		<prop oor:name="TabCount" oor:type="xs:int">
+			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+			  <info>
+				<author>Albert Thuswaldner</author>
+				<desc>Option to set initial number of sheet tabs</desc>
+			  </info>
+		  <value>3</value>
+		</prop>
+	  </group>
+	</group>
+      </component>
 </oor:component-schema>

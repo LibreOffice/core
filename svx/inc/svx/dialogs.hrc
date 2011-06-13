@@ -166,6 +166,7 @@
 #define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)
 #define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252) // calc
+#define RID_SC_TP_DEFAULTS              (RID_OFA_START + 253)
 
 //---------------------------------------------------------------------
 // ResId's fuer die Zeichen-TabPages
