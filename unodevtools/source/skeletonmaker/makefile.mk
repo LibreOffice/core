@@ -35,6 +35,12 @@ LIBTARGET := NO
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
+
+.IF "$(OS)" == "IOS"
+all:
+    @echo No point in build-time executables for this platform
+.ENDIF
+
 .INCLUDE : $(PRJ)$/unodevtools.pmk
 
 APP1TARGET = $(TARGET)
