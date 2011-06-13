@@ -194,13 +194,12 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to ouer internal member.
+    // Copy values from list in right order to our internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nInvalid property value detected!\n" );
+        if (!seqValues[nProperty].hasValue())
+            continue;
         switch( nProperty )
         {
             case PROPERTYHANDLE_AUTOMNEMONIC    :   {
