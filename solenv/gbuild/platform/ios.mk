@@ -272,9 +272,9 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 define gb_LinkTarget__command
-$(call gb_Output_announce,$(2),$(true),LNK,4)
+$(call gb_Output_announce,$(2),$(true),LIB,4)
 $(if $(filter Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
-$(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
+$(if $(filter Library StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
 
