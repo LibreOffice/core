@@ -120,7 +120,6 @@ void SvtUndoOptions_Impl::Load()
     {
         for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
         {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
                 switch ( nProp )

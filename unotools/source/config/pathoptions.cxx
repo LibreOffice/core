@@ -536,7 +536,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
     else
     {
-        DBG_ERRORFILE( "wrong any type" );
+        DBG_ASSERT(!aLocale.hasValue(), "wrong any type");
         m_aLocale.Language = OStringToOUString(OString("en"), RTL_TEXTENCODING_UTF8);
         m_aLocale.Country =  OStringToOUString(OString("US"), RTL_TEXTENCODING_UTF8);
         m_aLocale.Variant =  OStringToOUString(OString(""), RTL_TEXTENCODING_UTF8);
