@@ -394,7 +394,7 @@ public:
     SvStream&       WriteByteString( const UniString& rStr ) { return WriteByteString( rStr, GetStreamCharSet() ); }
     SvStream&       WriteByteString( const ByteString& rStr );
 
-:   void            SetPrecision( sal_uInt8 nPrec )
+    void            SetPrecision( sal_uInt8 nPrec )
                         { nPrecision = nPrec; CreateFormatString(); }
     sal_uInt8           GetPrecision() const { return nPrecision; }
     void            SetWidth( sal_uInt8 nWid)
