@@ -1247,16 +1247,17 @@ IMPL_LINK(SwBaseShell, GraphicArrivedHdl, SwCrsrShell* , EMPTYARG )
     SwWrtShell &rSh = GetShell();
     if( CNT_GRF == rSh.SwEditShell::GetCntType() &&
         GRAPHIC_NONE != ( nGrfType = rSh.GetGraphicType() ) &&
-        aGrfUpdateSlots.Count() )
+        !aGrfUpdateSlots.empty() )
     {
         sal_Bool bProtect = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT);
         SfxViewFrame* pVFrame = GetView().GetViewFrame();
         sal_uInt16 nSlot;
-        for( sal_uInt16 n = 0; n < aGrfUpdateSlots.Count(); ++n )
+        std::set<sal_uInt16>::iterator it;
+        for( it = aGrfUpdateSlots.begin(); it != aGrfUpdateSlots.end(); ++it )
         {
             sal_Bool bSetState = sal_False;
             sal_Bool bState = sal_False;
-            switch( nSlot = aGrfUpdateSlots[ n ] )
+            switch( nSlot = *it )
             {
             case SID_IMAP:
             case SID_IMAP_EXEC:
@@ -1328,7 +1329,7 @@ IMPL_LINK(SwBaseShell, GraphicArrivedHdl, SwCrsrShell* , EMPTYARG )
                     pVFrame->GetBindings().SetState( aBool );
             }
         }
-        aGrfUpdateSlots.RemoveAt( 0, aGrfUpdateSlots.Count() );
+        aGrfUpdateSlots.clear();
     }
     return 0;
 }

@@ -40,6 +40,7 @@
 #include <svl/svstdarr.hxx>
 
 #include <mdiexp.hxx>
+#include <set>
 
 class SwWrtShell;
 class SwCrsrShell;
@@ -60,7 +61,7 @@ class SwBaseShell: public SfxShell
     SfxItemSet*         pGetStateSet;
 
     // Update-Timer for graphic
-    SvUShortsSort aGrfUpdateSlots;
+    std::set<sal_uInt16> aGrfUpdateSlots;
 
     DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
 
@@ -70,7 +71,7 @@ protected:
 
     inline SwView&      GetView()                       { return rView; }
     inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    inline sal_Bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.Insert( nSlot ); }
+    inline sal_Bool     AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
 
     DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 
