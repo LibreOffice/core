@@ -120,11 +120,11 @@ sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& r
             DBG_ERRORFILE( "transfer command not available" );
         }
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         bRet = sal_False;
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -149,19 +149,19 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         DBG_WARNING( "CommandAbortedException" );
     }
-    catch( ucb::IllegalIdentifierException& )
+    catch( const ucb::IllegalIdentifierException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ucb::ContentCreationException& )
+    catch( const ucb::ContentCreationException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -181,19 +181,19 @@ sal_Bool SfxContentHelper::IsFolder( const String& rContent )
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         bRet = aCnt.isFolder();
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         DBG_WARNING( "CommandAbortedException" );
     }
-    catch( ucb::IllegalIdentifierException& )
+    catch( const ucb::IllegalIdentifierException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ucb::ContentCreationException& )
+    catch( const ucb::ContentCreationException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -216,11 +216,11 @@ sal_Bool SfxContentHelper::GetTitle( const String& rContent, String& rTitle )
         rTitle = String( aTemp );
         bRet = sal_True;
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -240,12 +240,12 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
         ::ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), uno::makeAny( sal_Bool( sal_True ) ) );
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         DBG_WARNING( "CommandAbortedException" );
         bRet = sal_False;
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -303,11 +303,11 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
                 }
             }
         }
-        catch( ucb::CommandAbortedException& )
+        catch( const ucb::CommandAbortedException& )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -325,17 +325,17 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
                     pFiles->push_back( pFile );
                 }
             }
-            catch( ucb::CommandAbortedException& )
+            catch( const ucb::CommandAbortedException& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
@@ -408,11 +408,11 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
                 xResultSet = xDynamicResultSet->getStaticResultSet();
             }
         }
-        catch( ucb::CommandAbortedException& )
+        catch( const ucb::CommandAbortedException& )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -464,17 +464,17 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
                     }
                 }
             }
-            catch( ucb::CommandAbortedException& )
+            catch( const ucb::CommandAbortedException& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
@@ -520,11 +520,11 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
-        catch( ucb::CommandAbortedException& )
+        catch( const ucb::CommandAbortedException& )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -550,17 +550,17 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
                     pList->push_back( pRow );
                 }
             }
-            catch( ucb::CommandAbortedException& )
+            catch( const ucb::CommandAbortedException& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         (void) e;
         DBG_ERRORFILE(
@@ -617,10 +617,10 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
         }
-        catch( ucb::CommandAbortedException& )
+        catch( const ucb::CommandAbortedException& )
         {
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
 
@@ -645,15 +645,15 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
                     pProperties->push_back( pRow );
                 }
             }
-            catch( ucb::CommandAbortedException& )
+            catch( const ucb::CommandAbortedException& )
             {
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -703,7 +703,7 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
             nRead = xStream->readBytes( lData, 1024 );
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -724,7 +724,7 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
             DBG_ERRORFILE( "Property 'IsErrorDocument' is missing" );
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -770,15 +770,15 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
         OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
         bRet = aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         // double name?
     }
-    catch( ucb::IllegalIdentifierException& )
+    catch( const ucb::IllegalIdentifierException& )
     {
         DBG_ERRORFILE( "Illegal identifier" );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -799,12 +799,12 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FreeSpace")) ) >>= rFreeBytes;
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
         nErr = ERRCODE_IO_GENERAL;
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         nErr = ERRCODE_IO_GENERAL;
@@ -825,11 +825,11 @@ sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) ) >>= nTemp;
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -852,19 +852,19 @@ sal_Bool SfxContentHelper::Exists( const String& rContent )
         aCnt.isDocument();
         bRet = sal_True;
     }
-    catch( ucb::CommandAbortedException& )
+    catch( const ucb::CommandAbortedException& )
     {
             DBG_WARNING( "CommandAbortedException" );
     }
-    catch( ucb::IllegalIdentifierException& )
+    catch( const ucb::IllegalIdentifierException& )
     {
             DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ucb::ContentCreationException& )
+    catch( const ucb::ContentCreationException& )
     {
             DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
