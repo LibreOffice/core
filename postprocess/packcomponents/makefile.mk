@@ -67,6 +67,7 @@ my_components = \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
+    component/hwpfilter/source/hwp \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
     component/reportdesign/util/rpt \
@@ -125,7 +126,6 @@ my_components = \
     fpicker \
     fps_office \
     guesslang \
-    hwp \
     hyphen \
     i18npool \
     i18nsearch \
