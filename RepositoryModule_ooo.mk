@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     forms \
     formula \
     framework \
+    hwpfilter \
     lotuswordpro \
     oox \
     padmin \

@@ -71,6 +71,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+    hwp \
     i18npaper \
     lng \
     lwpft \
