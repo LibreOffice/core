@@ -993,7 +993,7 @@ rtl::OUString expandMacros(
                             try {
                                 buf.append(
                                     rtl::Uri::convertRelToAbs(seg[1], url));
-                            } catch (rtl::MalformedUriException &) {}
+                            } catch (const rtl::MalformedUriException &) {}
                         }
                     } else {
                         buf.append(

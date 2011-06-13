@@ -198,7 +198,7 @@ namespace test_comtools
                 sal::systools::COMReference<IUnknown> r2 = r1.QueryInterface<IUnknown>(IID_IUnknown);
                 CPPUNIT_ASSERT_MESSAGE("Wrong reference count, 2 is expected", reinterpret_cast<COMObject*>(r2.get())->GetRefCount() == 2);
             }
-            catch(sal::systools::ComError& ex)
+            catch(const sal::systools::ComError& ex)
             {
                 CPPUNIT_ASSERT_MESSAGE("Exception should not have been thrown", false);
             }
@@ -211,7 +211,7 @@ namespace test_comtools
                 sal::systools::COMReference<IUnknown> r1 = comObjectSource();
                 sal::systools::COMReference<IPersistFile> r2 = r1.QueryInterface<IPersistFile>(IID_IPersistFile);
             }
-            catch(sal::systools::ComError& ex)
+            catch(const sal::systools::ComError& ex)
             {
                 return;
             }

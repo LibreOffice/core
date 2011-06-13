@@ -170,7 +170,7 @@ extern "C" {
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME4)));
                 return sal_True;
             }
-            catch (InvalidRegistryException &)
+            catch (const InvalidRegistryException &)
             {
                 OSL_FAIL( "### InvalidRegistryException!" );
             }

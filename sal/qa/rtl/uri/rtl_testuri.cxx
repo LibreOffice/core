@@ -368,7 +368,7 @@ void Test::test_Uri() {
             aAbs = rtl::Uri::convertRelToAbs(
                 rtl::OUString::createFromAscii(aRelToAbsTest[i].pBase),
                 rtl::OUString::createFromAscii(aRelToAbsTest[i].pRel));
-        } catch (rtl::MalformedUriException &) {
+        } catch (const rtl::MalformedUriException &) {
             bMalformed = true;
         }
         if (bMalformed

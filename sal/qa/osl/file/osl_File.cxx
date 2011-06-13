@@ -6323,7 +6323,7 @@ class GlobalObject
 #endif
 
         }
-        catch (CppUnit::Exception &e)
+        catch (const CppUnit::Exception &e)
         {
             printf("Exception caught in GlobalObject dtor(). Exception message: '%s'. Source line: %d\n", e.what(), e.sourceLine().lineNumber());
         }
