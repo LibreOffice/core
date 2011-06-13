@@ -100,7 +100,7 @@ sal_Bool SdPPTFilter::Import()
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
-            pDocStream->SetKey( pStorage->GetKey() );
+            pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
             String aTraceConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Tracing/Import/PowerPoint" ) );
             Sequence< PropertyValue > aConfigData( 1 );
