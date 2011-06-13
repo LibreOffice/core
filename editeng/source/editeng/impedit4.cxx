@@ -462,11 +462,11 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         if ( !j || ( pColorItem->GetValue() != COL_AUTO ) )
         {
             rOutput << OOO_STRING_SVTOOLS_RTF_RED;
-            rOutput.WriteNumber( pColorItem->GetValue().GetRed() );
+            rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetRed()) );
             rOutput << OOO_STRING_SVTOOLS_RTF_GREEN;
-            rOutput.WriteNumber( pColorItem->GetValue().GetGreen() );
+            rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetGreen()) );
             rOutput << OOO_STRING_SVTOOLS_RTF_BLUE;
-            rOutput.WriteNumber( pColorItem->GetValue().GetBlue() );
+            rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetBlue()) );
         }
         rOutput << ';';
     }
