@@ -97,8 +97,14 @@
 
 #ifdef IOS
 #define SAL_UNX
-#define SAL_DLLEXTENSION
+/* SAL_DLLEXTENSION should not really be used on iOS, as iOS apps are
+ * not allowed to load own dynamic libraries.
+ */
+#define SAL_DLLEXTENSION ".dylib"
 #define SAL_DLLPREFIX "lib"
+/* This is fairly pointless too, an iOS app consists of a single
+ * executable (plus data files).
+ */
 #define SAL_PRGEXTENSION ".bin"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
