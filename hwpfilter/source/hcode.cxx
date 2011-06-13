@@ -1426,7 +1426,7 @@ char *urltowin(const char *src, char *dest )
           char ext[4];
           strncpy(ext,src + srclen - 3,3);
           ext[3]=0;
-          //printf("hcode.cpp : ext = %s\n",ext);
+          //printf("hcode.cxx : ext = %s\n",ext);
 
           if( !_strnicmp(ext,"HWP",3) || !_strnicmp(ext,"HWT",3)){
                 strcpy(dest,src);

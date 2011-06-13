@@ -24,24 +24,15 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..
 
-PRJNAME=hwpfilter
-TARGET=inc
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-# --- Settings -----------------------------------------------------
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:

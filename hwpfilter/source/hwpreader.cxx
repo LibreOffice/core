@@ -134,14 +134,8 @@ HwpReader::~HwpReader()
 }
 
 
-#ifndef UDK100
 sal_Bool HwpReader::filter(const Sequence< PropertyValue >& aDescriptor) throw(RuntimeException)
-#else
-void HwpReader::parseStream(const InputSource & structSource)
-throw(SAXException, IOException, RuntimeException)
-#endif
 {
-#ifndef UDK100
     Reference< XInputStream> rInputStream;
     for ( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
@@ -175,9 +169,6 @@ throw(SAXException, IOException, RuntimeException)
             break;
         }
     }
-#else
-    Reference< XInputStream> rInputStream = structSource.aInputStream;
-#endif
 
     HStream stream;
     Sequence < sal_Int8 > aBuffer;
@@ -190,18 +181,11 @@ throw(SAXException, IOException, RuntimeException)
         stream.addData( (byte *)aBuffer.getConstArray(), nRead );
         nTotal += nRead;
     }
-#ifndef UDK100
+
     if( nTotal == 0 ) return sal_False;
-#endif
 
     if (hwpfile.ReadHwpFile(stream))
-    {
-#ifdef UDK100
-        throw SAXException();
-#else
           return sal_False;
-#endif
-    }
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->startDocument();
@@ -239,10 +223,7 @@ throw(SAXException, IOException, RuntimeException)
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->endDocument();
-#ifndef UDK100
     return sal_True;
-#endif
-
 }
 
 
@@ -3762,17 +3743,13 @@ void HwpReader::makeFormula(TxtBox * hbox)
         pPar = pPar->Next();
     }
     mybuf[l] = '\0';
-//   rchars(ascii(mybuf));
-//#ifndef UDK100
+
     Formula *form = new Formula(mybuf);
     form->setDocumentHandler(m_rxDocumentHandler);
     form->setAttributeListImpl(pList);
     form->parse();
 
     delete form;
-//#endif
-
-
 }
 
 

@@ -1,5 +1,0 @@
-..\%__SRC%\bin\hwp.dll %_DEST%\bin\hwp.dll
-..\%__SRC%\lib\ihwp*.lib %_DEST%\bin\ihwp*.lib
-..\%__SRC%\lib\libhwp.so %_DEST%\lib\libhwp.so
-..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
-..\%__SRC%\misc\hwp.component %_DEST%\xml\hwp.component
