@@ -183,7 +183,6 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
         {
             for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
             {
-                DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
                 if ( pValues[nProp].hasValue() )
                 {
                     switch ( nProp )
@@ -242,7 +241,6 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                 }
             }
         }
-//        UpdateMiscSettings_Impl();
         EnableNotification( aNames );
     }
 
