@@ -264,10 +264,8 @@ HwpImportFilter::~HwpImportFilter()
 sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw( RuntimeException )
 {
-        // delegate to IchitaroImpoter
-    rFilter->filter( aDescriptor );
-
-    return sal_True;
+    // delegate to IchitaroImpoter
+    return rFilter->filter( aDescriptor );
 }
 
 void HwpImportFilter::cancel() throw(::com::sun::star::uno::RuntimeException)
