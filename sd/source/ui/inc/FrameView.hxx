@@ -43,11 +43,11 @@ namespace sd {
 |* View fuer den MDIFrame
 |*
 \************************************************************************/
-class FrameView
+class SD_DLLPUBLIC FrameView
     : public SdrView
 {
 public:
-    SD_DLLPUBLIC FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = NULL );
+    FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = NULL );
     FrameView(const FrameView& rFrameView);
     virtual ~FrameView();
 
@@ -104,7 +104,7 @@ public:
     /** can be used to get the page kind that was selected on last save of this document */
     PageKind GetPageKindOnLoad() const { return mePageKindOnLoad; }
 
-    SD_DLLPUBLIC void SetSelectedPage (sal_uInt16 nPage);
+    void SetSelectedPage (sal_uInt16 nPage);
     sal_uInt16 GetSelectedPage () const;
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
@@ -114,7 +114,7 @@ public:
     /** can be used to get the page that was selected on last save of this document */
     sal_uInt16 GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
 
-    SD_DLLPUBLIC void SetViewShEditMode(EditMode eMode, PageKind eKind);
+    void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode (PageKind eKind);
 
     /** Remember the edit mode of the main view shell at the time when the
