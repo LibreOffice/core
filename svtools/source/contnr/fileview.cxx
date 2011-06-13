@@ -732,17 +732,19 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
-    if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
-    {
-        mpHeaderBar->InsertItem( COLUMN_TITLE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 180, nBits | HIB_UPARROW );
-        mpHeaderBar->InsertItem( COLUMN_TYPE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TYPE ) ), 140, nBits );
-        mpHeaderBar->InsertItem( COLUMN_SIZE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_SIZE ) ), 80, nBits );
-        mpHeaderBar->InsertItem( COLUMN_DATE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_DATE ) ), 500, nBits );
-    }
-    if( ( nFlags & FILEVIEW_SHOW_NONE ) == FILEVIEW_SHOW_NONE )
+    if ((nFlags & FILEVIEW_SHOW_NONE) == FILEVIEW_SHOW_NONE)
         bViewHeader = false;
     else
-        mpHeaderBar->InsertItem( COLUMN_TITLE, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 600, nBits );
+    {
+        if (nFlags & FILEVIEW_SHOW_TITLE)
+            mpHeaderBar->InsertItem(COLUMN_TITLE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE)), 600, nBits | HIB_UPARROW);
+        if (nFlags & FILEVIEW_SHOW_ALL)
+            mpHeaderBar->InsertItem(COLUMN_TYPE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_TYPE)), 140, nBits);
+        if (nFlags & FILEVIEW_SHOW_SIZE)
+            mpHeaderBar->InsertItem(COLUMN_SIZE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_SIZE)), 80, nBits);
+        if (nFlags & FILEVIEW_SHOW_DATE)
+            mpHeaderBar->InsertItem(COLUMN_DATE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_DATE)), 500, nBits);
+    }
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();
     SetPosSizePixel( Point( 0, aHeadSize.Height() ),
