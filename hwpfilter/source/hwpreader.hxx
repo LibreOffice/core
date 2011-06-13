@@ -218,7 +218,7 @@ public:
     ~HwpImportFilter();
 
 public:
-    static Sequence< OUString > getSupportedServiceNames_Static( void ) throw();
+    static Sequence< OUString > getSupportedServiceNames_Static() throw();
     static OUString getImplementationName_Static() throw();
 
 public:
@@ -252,7 +252,7 @@ Reference< XInterface > HwpImportFilter_CreateInstance(
     return Reference< XInterface > ( (OWeakObject* )p );
 }
 
-Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static( void ) throw ()
+Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
 {
     Sequence< OUString > aRet(1);
     aRet.getArray()[0] = HwpImportFilter::getImplementationName_Static();
@@ -364,7 +364,7 @@ OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::s
     return sTypeName;
 }
 
-Sequence< OUString> HwpImportFilter::getSupportedServiceNames( void ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
