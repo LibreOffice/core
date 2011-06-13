@@ -72,6 +72,7 @@ SLOFILES =	\
 SHL1TARGET= $(TARGET)
 
 SHL1STDLIBS= \
+        $(COMPHELPERLIB)	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)\
         $(SALLIB)		\

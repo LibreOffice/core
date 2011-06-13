@@ -43,13 +43,8 @@
 #include "hcode.h"
 #include "hstream.h"
 
-#define HWPIDLen    30
 #define HWPHeadLen  128
 #define HWPSummaryLen   1008
-
-#define V20SIGNATURE    "HWP Document File V2.00 \032\1\2\3\4\5"
-#define V21SIGNATURE    "HWP Document File V2.10 \032\1\2\3\4\5"
-#define V30SIGNATURE    "HWP Document File V3.00 \032\1\2\3\4\5"
 
 #define FILESTG_SIGNATURE       0xF8995567
 #define FILESTG_SIGNATURE_NORMAL    0xF8995568
@@ -127,8 +122,7 @@ int HWPFile::ReadHwpFile(HStream & stream)
     return State();
 }
 
-
-static int hwp_version(char *str)
+int detect_hwp_version(const char *str)
 {
     if (memcmp(V20SIGNATURE, str, HWPIDLen) == 0)
         return HWP_V20;
@@ -138,7 +132,6 @@ static int hwp_version(char *str)
         return HWP_V30;
     return 0;
 }
-
 
 // HIODev wrapper
 
@@ -162,7 +155,7 @@ int HWPFile::Open(HStream & stream)
     char idstr[HWPIDLen];
 
     if (ReadBlock(idstr, HWPIDLen) <= 0
-        || HWP_V30 != (version = hwp_version(idstr)))
+        || HWP_V30 != (version = detect_hwp_version(idstr)))
     {
         return SetState(HWP_UNSUPPORTED_VERSION);
     }
