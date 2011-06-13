@@ -29,6 +29,7 @@
 SOLARINC += $(JDKINCS)
 
 OUTDIR := $(SOLARVERSION)/$(INPATH)
+OUTDIR_FOR_BUILD := $(SOLARVERSION)/$(INPATH_FOR_BUILD)
 WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
 
 # Override for SetupLocal
@@ -45,6 +46,7 @@ endif
 ifeq ($(OS_FOR_BUILD),WNT)
 override WORKDIR := $(shell cygpath -u $(WORKDIR))
 override OUTDIR := $(shell cygpath -u $(OUTDIR))
+override OUTDIR_FOR_BUILD := $(shell cygpath -u $(OUTDIR_FOR_BUILD))
 override gb_REPOS := $(shell cygpath -u $(gb_REPOS))
 endif
 
