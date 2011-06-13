@@ -1254,5 +1254,8 @@
 // compatibility options page
 #define RID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 9)
 
+// init option page
+#define RID_SCPAGE_DEFAULTS         (SC_OOO_BUILD_START + 10)
+
 #endif
 

@@ -91,6 +91,7 @@ ScDocOptions::ScDocOptions()
 ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
         :   fIterEps( rCpy.fIterEps ),
             nIterCount( rCpy.nIterCount ),
+            nInitTabCount( rCpy.nInitTabCount ),
             nPrecStandardFormat( rCpy.nPrecStandardFormat ),
             eKeyBindingType( rCpy.eKeyBindingType ),
             nDay( rCpy.nDay ),
@@ -126,6 +127,7 @@ void ScDocOptions::ResetDocOptions()
     bIsIgnoreCase       = false;
     bIsIter             = false;
     nIterCount          = 100;
+    nInitTabCount       = 3;
     fIterEps            = 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
     eKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
@@ -290,6 +292,11 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCCOMPATOPT_KEY_BINDING     0
 #define SCCOMPATOPT_COUNT           1
 
+#define CFGPATH_DEFAULTS    "Office.Calc/Defaults"
+#define SCDEFAULTSOPT_TAB_COUNT     0
+#define SCDEFAULTSOPT_COUNT         1
+
+
 Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
     static const char* aPropNames[] =
@@ -365,11 +372,27 @@ Sequence<OUString> ScDocCfg::GetCompatPropertyNames()
     return aNames;
 }
 
+Sequence<OUString> ScDocCfg::GetDefaultsPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Other/TabCount"             // SCDEFAULTSOPT_COUNT_TAB_COUNT
+    };
+    Sequence<OUString> aNames(SCDEFAULTSOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for (int i = 0; i < SCDEFAULTSOPT_COUNT; ++i)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
+
+
 ScDocCfg::ScDocCfg() :
     aCalcItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CALC )) ),
     aFormulaItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_FORMULA))),
     aLayoutItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DOCLAYOUT))),
-    aCompatItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_COMPAT)))
+    aCompatItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_COMPAT))),
+    aDefaultsItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DEFAULTS)))
 {
     sal_Int32 nIntVal = 0;
 
@@ -559,6 +582,27 @@ ScDocCfg::ScDocCfg() :
         }
     }
     aCompatItem.SetCommitLink( LINK(this, ScDocCfg, CompatCommitHdl) );
+
+    aNames = GetDefaultsPropertyNames();
+    aValues = aDefaultsItem.GetProperties(aNames);
+    aDefaultsItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    if (aValues.getLength() == aNames.getLength())
+    {
+        for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
+        {
+            switch (nProp)
+            {
+
+            case SCDEFAULTSOPT_TAB_COUNT:
+                nIntVal = 3; // 3 = 'Default'
+                if (pValues[nProp] >>= nIntVal)
+                    SetInitTabCount( static_cast<SCTAB>(nIntVal) );
+                break;
+            }
+        }
+    }
+    aDefaultsItem.SetCommitLink( LINK(this, ScDocCfg, DefaultsCommitHdl) );
 }
 
 IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
@@ -703,6 +747,25 @@ IMPL_LINK( ScDocCfg, CompatCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( ScDocCfg, DefaultsCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetDefaultsPropertyNames();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
+    {
+        switch(nProp)
+        {
+        case SCDEFAULTSOPT_TAB_COUNT:
+            pValues[nProp] <<= static_cast<sal_Int32>(GetInitTabCount());
+        break;
+        }
+    }
+    aDefaultsItem.PutProperties(aNames, aValues);
+    return 0;
+}
+
 void ScDocCfg::SetOptions( const ScDocOptions& rNew )
 {
     *(ScDocOptions*)this = rNew;
@@ -711,6 +774,7 @@ void ScDocCfg::SetOptions( const ScDocOptions& rNew )
     aFormulaItem.SetModified();
     aLayoutItem.SetModified();
     aCompatItem.SetModified();
+    aDefaultsItem.SetModified();
 }
 
 

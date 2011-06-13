@@ -100,12 +100,12 @@
 #include "dwfunctr.hxx"
 #include "formdata.hxx"
 #include "tpprint.hxx"
+#include "tpdefaults.hxx"
 #include "transobj.hxx"
 #include "detfunc.hxx"
 #include "preview.hxx"
 
 #include <svx/xmlsecctrl.hxx>
-
 
 #define ScModule
 #include "scslots.hxx"
@@ -2047,6 +2047,14 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
                                         pRet = (*ScTpPrintOptionsCreate)( pParent, rSet);
                                 }
             break;
+        case RID_SC_TP_DEFAULTS:
+            {
+                ::CreateTabPage ScTpDefaultsOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_DEFAULTS );
+                if ( ScTpDefaultsOptionsCreate )
+                    pRet = (*ScTpDefaultsOptionsCreate)( pParent, rSet);
+            }
+            break;
+
         case RID_OFA_TP_INTERNATIONAL:
         {
             SfxAbstractDialogFactory* pSfxFact = SfxAbstractDialogFactory::Create();

@@ -83,6 +83,7 @@
 #include "tpformula.hxx"
 #include "datafdlg.hxx"
 #include "tpcompatibility.hxx"
+#include "tpdefaults.hxx"
 
 // ause
 #include "editutil.hxx"
@@ -1608,6 +1609,8 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             return ScTpFormulaOptions::Create;
         case RID_SCPAGE_COMPATIBILITY:
             return ScTpCompatOptions::Create;
+        case RID_SCPAGE_DEFAULTS:
+            return ScTpDefaultsOptions::Create;
         case    RID_SCPAGE_PRINT :
             return ScTpPrintOptions::Create;
             //break;

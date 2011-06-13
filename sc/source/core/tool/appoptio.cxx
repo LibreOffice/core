@@ -85,7 +85,7 @@ ScAppOptions::~ScAppOptions()
 void ScAppOptions::SetDefaults()
 {
     // Set default tab count for new spreadsheet.
-    nTabCountInNewSpreadsheet = 3;
+    nTabCountInNewSpreadsheet = 0;
 
     if ( ScOptionsUtil::IsMetricSystem() )
         eMetric     = FUNIT_CM;             // default for countries with metric system

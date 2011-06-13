@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -97,6 +95,7 @@
 #include "sc.hrc"
 #include "scabstdlg.hxx"
 #include "externalrefmgr.hxx"
+#include "docoptio.hxx"
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -1596,8 +1595,13 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
             // append additional sheets (not for OLE object)
             if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
-                SCTAB nInitTabCount = 3;                            //! konfigurierbar !!!
-                // Get the customized initial tab count, we only can set the count by VBA API currently.
+                // Get the customized initial tab count...
+
+                // ... from option dialog.
+                const ScDocOptions& rDocOpt = SC_MOD()->GetDocOptions();
+                SCTAB nInitTabCount = rDocOpt.GetInitTabCount();
+
+                // ... by VBA API.
                 const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
                 SCTAB nNewTabCount = rAppOpt.GetTabCountInNewSpreadsheet();
                 if ( nNewTabCount >= 1 && nNewTabCount <= MAXTAB )

@@ -99,7 +99,7 @@
 #define HID_SCPAGE_COMPATIBILITY                                "SC_HID_SCPAGE_COMPATIBILITY"
 #define HID_SCPAGE_TABLE                                        "SC_HID_SCPAGE_TABLE"
 #define HID_SCPAGE_PRINT                                        "SC_HID_SCPAGE_PRINT"
-
+#define HID_SCPAGE_DEFAULTS                                     "SC_HID_SCPAGE_DEFAULTS"
 #define HID_SCPAGE_SUBT_GROUP1                                  "SC_HID_SCPAGE_SUBT_GROUP1"
 #define HID_SCPAGE_SUBT_GROUP2                                  "SC_HID_SCPAGE_SUBT_GROUP2"
 #define HID_SCPAGE_SUBT_GROUP3                                  "SC_HID_SCPAGE_SUBT_GROUP3"

@@ -33,6 +33,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/itemprop.hxx>
 #include "scdllapi.h"
+#include "scmod.hxx"
 #include "optutil.hxx"
 
 #include "formula/grammar.hxx"
@@ -41,6 +42,7 @@ class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                // epsilon value dazu
     sal_uInt16 nIterCount;              // number
+    SCTAB nInitTabCount;            // number of Tabs for new Spreadssheet doc
     sal_uInt16 nPrecStandardFormat; // precision for standard format
     ScOptionsUtil::KeyBindingType eKeyBindingType;
     sal_uInt16 nDay;                    // Null date:
@@ -79,6 +81,8 @@ public:
     void   SetIter( sal_Bool bVal )         { bIsIter = bVal; }
     sal_uInt16 GetIterCount() const         { return nIterCount; }
     void   SetIterCount( sal_uInt16 nCount) { nIterCount = nCount; }
+    SCTAB GetInitTabCount() const           { return nInitTabCount; }
+    void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
     double GetIterEps() const           { return fIterEps; }
     void   SetIterEps( double fEps )    { fIterEps = fEps; }
 
@@ -134,6 +138,7 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bIsIgnoreCase       = rCpy.bIsIgnoreCase;
     bIsIter             = rCpy.bIsIter;
     nIterCount          = rCpy.nIterCount;
+    nInitTabCount       = rCpy.nInitTabCount;
     fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
     eKeyBindingType     = rCpy.eKeyBindingType;
@@ -162,6 +167,7 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
                 rOpt.bIsIgnoreCase          == bIsIgnoreCase
             &&  rOpt.bIsIter                == bIsIter
             &&  rOpt.nIterCount             == nIterCount
+            &&  rOpt.nInitTabCount          == nInitTabCount
             &&  rOpt.fIterEps               == fIterEps
             &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
             &&  rOpt.eKeyBindingType        == eKeyBindingType
@@ -221,16 +227,19 @@ class ScDocCfg : public ScDocOptions
     ScLinkConfigItem    aFormulaItem;
     ScLinkConfigItem    aLayoutItem;
     ScLinkConfigItem    aCompatItem;
+    ScLinkConfigItem    aDefaultsItem;
 
     DECL_LINK( CalcCommitHdl, void* );
     DECL_LINK( FormulaCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
     DECL_LINK( CompatCommitHdl, void* );
+    DECL_LINK( DefaultsCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetDefaultsPropertyNames();
 
 public:
             ScDocCfg();

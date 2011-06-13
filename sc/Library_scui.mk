@@ -103,6 +103,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/optdlg/tpcalc \
     sc/source/ui/optdlg/tpcompatibility \
     sc/source/ui/optdlg/tpformula \
+    sc/source/ui/optdlg/tpdefaults \
     sc/source/ui/optdlg/tpprint \
     sc/source/ui/optdlg/tpusrlst \
     sc/source/ui/optdlg/tpview \
