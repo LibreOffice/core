@@ -237,6 +237,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         {
             < "%PRODUCTNAME Calc" ; 0; > ;
             < "General" ;           SID_SC_TP_LAYOUT            ;> ;
+            < "Defaults" ;          RID_SC_TP_DEFAULTS          ;> ;
             < "View" ;          SID_SC_TP_CONTENT           ;> ;
             < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
             < "Calculate" ;         SID_SC_TP_CALC              ;> ;
