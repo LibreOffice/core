@@ -111,6 +111,7 @@ application/vnd.sun.xml.writer.template; %PREFIX -view %s
 application/vnd.sun.xml.writer.global; %PREFIX -view %s
 application/vnd.stardivision.writer; %PREFIX -view %s
 application/vnd.stardivision.writer-global; %PREFIX -view %s
+application/x-hwp; %PREFIX -view %s
 application/x-starwriter; %PREFIX -view %s
 application/vnd.oasis.opendocument.formula; %PREFIX -view %s
 application/vnd.sun.xml.math; %PREFIX -view %s

@@ -287,6 +287,7 @@ application/vnd.openxmlformats-officedocument.presentationml.presentation; %unix
 application/vnd.ms-powerpoint.presentation.macroenabled.12; %unixfilename -view %s
 application/vnd.openxmlformats-officedocument.presentationml.template; %unixfilename -view %s
 application/vnd.ms-powerpoint.template.macroenabled.12; %unixfilename -view %s
+application/x-hwp; %unixfilename -view %s
 END
 
   # and replace the original file

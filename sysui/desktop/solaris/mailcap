@@ -75,6 +75,7 @@ application/wordperfect; %PREFIX -view %s
 application/vnd.lotus-wordpro; %PREFIX -view %s
 application/wpwin; %PREFIX -view %s
 application/vnd.openofficeorg.extension; %PREFIX %s
+application/x-hwp; %PREFIX -view %s
 END
 else
 # backing all entries pointing to our binary
