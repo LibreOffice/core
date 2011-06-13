@@ -274,7 +274,6 @@ private:
 
     // Formatierung von Strings
     char            cFiller;
-    sal_uInt8           nRadix;
     sal_uInt8           nPrecision;
     sal_uInt8           nWidth;
     sal_uInt8           nPrintfParams;
@@ -395,10 +394,7 @@ public:
     SvStream&       WriteByteString( const UniString& rStr ) { return WriteByteString( rStr, GetStreamCharSet() ); }
     SvStream&       WriteByteString( const ByteString& rStr );
 
-    void            SetRadix( sal_uInt8 nRad )
-                        { nRadix = nRad; CreateFormatString(); }
-    sal_uInt8           GetRadix() const { return nRadix; }
-    void            SetPrecision( sal_uInt8 nPrec )
+:   void            SetPrecision( sal_uInt8 nPrec )
                         { nPrecision = nPrec; CreateFormatString(); }
     sal_uInt8           GetPrecision() const { return nPrecision; }
     void            SetWidth( sal_uInt8 nWid)

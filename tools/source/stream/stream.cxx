@@ -466,7 +466,6 @@ void SvStream::ImpInit()
     eIOMode             = STREAM_IO_DONTKNOW;
     nBufFree            = 0;
 
-    nRadix              = 10;
     nPrecision          = 0;  // all significant digits
     nWidth              = 0; // default width
     cFiller             = ' ';
@@ -1997,10 +1996,6 @@ SvStream& SvStream::WriteNumber( long nLong )
 {
     char buffer[256+12];
     char pType[] = "ld"; // Nicht static!
-    if( nRadix == 16 )
-        pType[1] = 'x';
-    else if( nRadix == 8 )
-        pType[1] = 'o';
     ByteString aFStr( aFormatString);
     aFStr += pType;
     int nLen;
@@ -2026,10 +2021,6 @@ SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
 {
     char buffer[256+12];
     char pType[] = "lu"; // Nicht static!
-    if( nRadix == 16 )
-        pType[1] = 'x';
-    else if( nRadix == 8 )
-        pType[1] = 'o';
     ByteString aFStr( aFormatString);
     aFStr += pType;
     int nLen;
