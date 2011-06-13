@@ -548,11 +548,6 @@ sal_Bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
                     m_pWrtShell->SetAddParaSpacingToTableCells( bChecked );
                     bModified = sal_True;
                 }
-                else if ( COPT_ADD_TABLESPACING == nOption )
-                {
-                    m_pWrtShell->SetAddParaSpacingToTableCells( bChecked );
-                    bModified = sal_True;
-                }
                 else if ( COPT_USE_OBJECTPOSITIONING == nOption )
                 {
                     m_pWrtShell->SetUseFormerObjectPositioning( bChecked );
