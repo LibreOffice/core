@@ -584,10 +584,10 @@ public:
     SwDistance() { nMain = nSub = 0; }
     SwDistance& operator=( const SwDistance &rTwo )
         { nMain = rTwo.nMain; nSub = rTwo.nSub; return *this; }
-    sal_Bool operator<( const SwDistance& rTwo )
+    sal_Bool operator<( const SwDistance& rTwo ) const
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && nSub &&
           rTwo.nSub && nSub < rTwo.nSub ); }
-    sal_Bool operator<=( const SwDistance& rTwo )
+    sal_Bool operator<=( const SwDistance& rTwo ) const
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && ( !nSub ||
           !rTwo.nSub || nSub <= rTwo.nSub ) ); }
 };

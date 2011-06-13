@@ -101,9 +101,9 @@ struct _CpyTabFrm
 
     _CpyTabFrm& operator=( const _CpyTabFrm& );
 
-    sal_Bool operator==( const _CpyTabFrm& rCpyTabFrm )
+    sal_Bool operator==( const _CpyTabFrm& rCpyTabFrm ) const
         { return  (sal_uLong)Value.nSize == (sal_uLong)rCpyTabFrm.Value.nSize; }
-    sal_Bool operator<( const _CpyTabFrm& rCpyTabFrm )
+    sal_Bool operator<( const _CpyTabFrm& rCpyTabFrm ) const
         { return  (sal_uLong)Value.nSize < (sal_uLong)rCpyTabFrm.Value.nSize; }
 };
 
