@@ -634,6 +634,7 @@ MISCX=$(OUT)/umisc
 MISC=$(OUT)/umisc
 .ELSE
 MISC=$(OUT)/misc
+MISC_FOR_BUILD=$(OUT_FOR_BUILD)/misc
 # pointing to misc in common output tree if exists
 COMMONMISC={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))}
 .ENDIF
