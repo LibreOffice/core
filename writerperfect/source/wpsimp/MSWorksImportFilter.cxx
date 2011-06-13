@@ -148,7 +148,7 @@ OUString SAL_CALL MSWorksImportFilter::detect( com::sun::star::uno::Sequence< Pr
     WRITER_DEBUG_MSG(("MSWorksImportFilter::detect: Got here!\n"));
 
     WPSConfidence confidence = WPS_CONFIDENCE_NONE;
-    OUString sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "" ) );
+    OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
     OUString sURL;

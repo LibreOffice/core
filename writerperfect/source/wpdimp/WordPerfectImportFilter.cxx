@@ -193,7 +193,7 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::detect: Got here!\n"));
 
     WPDConfidence confidence = WPD_CONFIDENCE_NONE;
-    OUString sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "" ) );
+    OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
     OUString sURL;
