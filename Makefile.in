@@ -60,7 +60,7 @@ cross-build-toolset:
 	  jvmaccess \
 	  bridges \
 	  ucbhelper \
-	  comphelper \
+	  GBUILD:comphelper \
 	  jvmfwk \
 	  regexp \
 	  sax \
@@ -71,7 +71,6 @@ cross-build-toolset:
 	  dictionaries \
 	  o3tl \
 	  basegfx \
-	  GBUILD:comphelper \
 	  GBUILD:tools \
 	  rsc \
 	  setup_native; do \
