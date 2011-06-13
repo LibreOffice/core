@@ -88,6 +88,9 @@ static const ::rtl::OUString MENU_SEPERATOR(RTL_CONSTASCII_USTRINGPARAM(" | "));
 static const ::rtl::OUString MENU_SUBMENU(RTL_CONSTASCII_USTRINGPARAM("..."));
 static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/MIGRATED"));
 
+
+static const char XDG_CONFIG_PART[] = "/.config";
+
 ::rtl::OUString retrieveLabelFromCommand(const ::rtl::OUString& sCommand, const ::rtl::OUString& sModuleIdentifier)
 {
     ::rtl::OUString sLabel;
@@ -553,6 +556,22 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
         {
             ::rtl::OUString aUserInst;
             osl::Security().getConfigDir( aUserInst );
+#if defined UNX && ! defined MACOSX
+            const char* pXDGCfgHome = getenv("XDG_CONFIG_HOME");
+            // cater for XDG_CONFIG_HOME change
+            // If XDG_CONFIG_HOME is set then we;
+            // assume the user knows what they are doing ( room for improvement here, we could
+            // of course search the default config dir etc. also  - but this is more complex,
+            // we would need to weigh results from the current config dir against matches in
+            // the 'old' config dir etc. ) - currently we just use the returned config dir.
+            // If XDG_CONFIG_HOME is NOT set;
+            // assume then we should now using the default $HOME/,config config location for
+            // our user profiles, however *all* previous libreoffice and openoffice.org
+            // configurations will be in the 'old' config directory and that's where we need
+            // to search - we convert the returned config dir to the 'old' dir
+            if ( !pXDGCfgHome && aUserInst.endsWithAsciiL( XDG_CONFIG_PART, sizeof( XDG_CONFIG_PART ) - 1 )  )
+                aUserInst = aUserInst.copy( 0, aUserInst.getLength() - sizeof(  XDG_CONFIG_PART ) + 2 ); // remove trailing '.config' ( but leave the terminating '/' )
+#endif
             if ( aUserInst.getLength() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
                 aUserInst += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 #if defined UNX && ! defined MACOSX
