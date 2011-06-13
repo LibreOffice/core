@@ -87,7 +87,7 @@ SHL2OBJS    := \
     $(SLO)$/helper_purpenv_Environment.obj 	\
     $(SLO)$/helper_purpenv_Mapping.obj      \
     $(SLO)$/helper_purpenv_Proxy.obj
-
+SHL2DEPN=$(SHL1TARGETN)
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
