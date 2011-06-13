@@ -59,7 +59,7 @@ mkdir: %_DEST%\inc\cppuhelper
 ..\%__SRC%\bin\cppuh*.dll %_DEST%\bin\cppuh*.dll
 ..\%__SRC%\lib\*cppuhelper*.lib %_DEST%\lib\*
 
-..\%__SRC%\lib\libuno_cppuhelper*.*.* %_DEST%\lib\*
+..\%__SRC%\lib\libuno_cppuhelper*.* %_DEST%\lib\*
 
 ..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib\*
 ..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib\*
