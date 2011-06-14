@@ -55,6 +55,8 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
+#include <rtl/bootstrap.hxx>
+
 
 // -----------------------------------------------------------------------
 
@@ -145,7 +147,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
     // Who we are
     String sGenerator( SfxResId( STR_HTML_GENERATOR ) );
-    sGenerator.SearchAndReplaceAscii( "%1", String( DEFINE_CONST_UNICODE( TOOLS_INETDEF_OS ) ) );
+    ::rtl::OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
+    ::rtl::Bootstrap::expandMacros(os);
+    sGenerator.SearchAndReplaceAscii( "%1", os );
     OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_generator, sGenerator, sal_False, eDestEnc, pNonConvertableChars );
 
     if( i_xDocProps.is() )
