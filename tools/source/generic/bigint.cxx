@@ -686,49 +686,6 @@ BigInt::operator double() const
 
 // -----------------------------------------------------------------------
 
-ByteString BigInt::GetByteString() const
-{
-    ByteString aString;
-
-    if ( !bIsBig )
-        aString = ByteString::CreateFromInt32( nVal );
-    else
-    {
-        BigInt aTmp( *this );
-        BigInt a1000000000( 1000000000L );
-        aTmp.Abs();
-
-        do
-        {
-            BigInt a = aTmp;
-            a    %= a1000000000;
-            aTmp /= a1000000000;
-
-            ByteString aStr = aString;
-            if ( a.nVal < 100000000L )
-            { // leading 0s
-                aString = ByteString::CreateFromInt32( a.nVal + 1000000000L );
-                aString.Erase( 0, 1 );
-            }
-            else
-                aString = ByteString::CreateFromInt32( a.nVal );
-            aString += aStr;
-        }
-        while( aTmp.bIsBig );
-
-        ByteString aStr = aString;
-        if ( bIsNeg )
-            aString = ByteString::CreateFromInt32( -aTmp.nVal );
-        else
-            aString = ByteString::CreateFromInt32( aTmp.nVal );
-        aString += aStr;
-    }
-
-    return aString;
-}
-
-// -----------------------------------------------------------------------
-
 UniString BigInt::GetString() const
 {
     UniString aString;

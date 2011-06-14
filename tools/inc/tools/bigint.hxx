@@ -98,7 +98,6 @@ public:
     operator        sal_uIntPtr() const;
 
     void            Set( sal_Bool bSet ) { bIsSet = bSet; }
-    ByteString      GetByteString() const;
     UniString       GetString() const;
 
     sal_Bool            IsSet() const { return bIsSet; }
