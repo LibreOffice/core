@@ -459,7 +459,6 @@ void SvStream::ImpInit()
     nBufFree            = 0;
 
     eStreamMode         = 0;
-    CreateFormatString();
 
     nVersion           = 0;
 
@@ -1937,43 +1936,19 @@ void SvStream::RefreshBuffer()
     eIOMode = STREAM_IO_DONTKNOW;
 }
 
-
-/*************************************************************************
-|*
-|*    Stream::CreateFormatString()
-|*
-|*    Beschreibung      Baut Formatstring zusammen
-|*
-*************************************************************************/
-
-void SvStream::CreateFormatString()
-{
-    aFormatString = '%';
-}
-
-/*************************************************************************
-|*
-|*    Stream::WriteNumber()
-|*
-*************************************************************************/
-
-SvStream& SvStream::WriteNumber( sal_Int32 nInt32 )
+SvStream& SvStream::WriteNumber(sal_Int32 nInt32)
 {
     char buffer[256+12];
-    ByteString aFStr( aFormatString);
-    aFStr += SAL_PRIdINT32;
-    sal_Size nLen = sprintf(buffer, aFStr.GetBuffer(), nInt32);
-    Write( buffer, nLen );
+    sal_Size nLen = sprintf(buffer, "%"SAL_PRIdINT32, nInt32);
+    Write(buffer, nLen);
     return *this;
 }
 
-SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
+SvStream& SvStream::WriteNumber(sal_uInt32 nUInt32)
 {
     char buffer[256+12];
-    ByteString aFStr( aFormatString);
-    aFStr += SAL_PRIuUINT32;
-    sal_Size nLen = sprintf(buffer, aFStr.GetBuffer(), nUInt32);
-    Write( buffer, nLen );
+    sal_Size nLen = sprintf(buffer, "%"SAL_PRIuUINT32, nUInt32);
+    Write(buffer, nLen);
     return *this;
 }
 

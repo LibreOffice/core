@@ -269,13 +269,10 @@ private:
     rtl::OString m_aCryptMaskKey;           // aCryptMaskKey.getLength != 0  -> Verschluesselung
     unsigned char   nCryptMask;
 
-    ByteString aFormatString;
-
     // Userdata
     long            nVersion;       // for external use
 
     // Hilfsmethoden
-    void            CreateFormatString();
     TOOLS_DLLPRIVATE void           ImpInit();
 
                      SvStream ( const SvStream& rStream ); // not implemented
