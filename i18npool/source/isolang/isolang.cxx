@@ -475,6 +475,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_KITUBA,                "mkw", "CG" },
     { LANGUAGE_USER_LARI,                  "ldi", "CG" },
     { LANGUAGE_USER_MBOCHI,                "mdw", "CG" },
+    { LANGUAGE_USER_TEKE_EBOO,             "ebo", "CG" },
     { LANGUAGE_USER_TEKE_IBALI,            "tek", "CG" },
     { LANGUAGE_USER_TEKE_TYEE,             "tyx", "CG" },
     { LANGUAGE_USER_VILI,                  "vif", "CG" },

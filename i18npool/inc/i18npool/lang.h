@@ -532,6 +532,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_VILI                  0x0662
 #define LANGUAGE_USER_PORTUGUESE_ANGOLA     0x8016  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PORTUGUESE)) */
 #define LANGUAGE_USER_MANX                  0x0663
+#define LANGUAGE_USER_TEKE_EBOO             0x0664
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 
