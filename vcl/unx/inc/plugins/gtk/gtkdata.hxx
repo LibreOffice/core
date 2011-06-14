@@ -78,9 +78,8 @@ public:
 
     virtual int GetDefaultMonitorNumber() const;
 
-    static GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
-                                           GdkEvent* event,
-                                           gpointer data );
+    GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
+                                    GdkEvent* event );
     inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
     inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
     inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }

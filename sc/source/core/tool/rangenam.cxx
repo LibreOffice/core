@@ -476,6 +476,9 @@ sal_Bool ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
+    sal_Char a('.');
+    if (rName.Search(a, 0) != STRING_NOTFOUND)
+        return false;
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
     if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_CHAR_NAME ) )

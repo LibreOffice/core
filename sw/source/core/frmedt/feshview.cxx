@@ -2566,8 +2566,9 @@ sal_Bool SwFEShell::IsAlignPossible() const
         {
             SdrObject *pO = Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pO);
+            OSL_ENSURE( pC, "No SwDrawContact!");
             //only as character bound drawings can be aligned
-            bRet = (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR);
+            bRet = pC ? (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR) : sal_False;
         }
         if ( bRet )
             return Imp()->GetDrawView()->IsAlignPossible();

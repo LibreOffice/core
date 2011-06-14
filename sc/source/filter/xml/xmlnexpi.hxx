@@ -30,6 +30,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include "address.hxx"
 
 #include <boost/shared_ptr.hpp>
 
@@ -72,11 +73,11 @@ public:
     class SheetLocalInserter : public Inserter
     {
     public:
-        SheetLocalInserter(ScDocument* pDoc, ScRangeName& rRangeName);
+        SheetLocalInserter(ScXMLImport& rImport, SCTAB nTab);
         virtual void insert(ScMyNamedExpression* pExp);
     private:
-        ScDocument* mpDoc;
-        ScRangeName& mrRangeName;
+        ScXMLImport& mrImport;
+        SCTAB mnTab;
     };
 
     ScXMLNamedExpressionsContext(

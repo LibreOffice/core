@@ -207,7 +207,7 @@ void XclExpPane::SaveXml( XclExpXmlStream& rStrm )
 void XclExpPane::WriteBody( XclExpStream& rStrm )
 {
     rStrm   << mnSplitX
-            << mnSplitY
+            << static_cast<sal_uInt16>( mnSplitY )
             << maSecondXclPos
             << mnActivePane;
     if( rStrm.GetRoot().GetBiff() >= EXC_BIFF5 )
@@ -369,7 +369,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
         {
             // split window: position is in twips
             maData.mnSplitX = ulimit_cast< sal_uInt16 >( rTabSett.maSplitPos.X() );
-            maData.mnSplitY = ulimit_cast< sal_uInt16 >( rTabSett.maSplitPos.Y() );
+            maData.mnSplitY = ulimit_cast< sal_uInt32 >( rTabSett.maSplitPos.Y() );
         }
 
         // selection

@@ -35,8 +35,14 @@ PACKAGE = complex/connectivity
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar hsqldb.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       :=  $(shell @$(FIND) complex -name "*.java")
+
+.IF "$(SYSTEM_HSQLDB)" == "YES"
+XCLASSPATH:=$(XCLASSPATH)$(PATH_SEPERATOR)$(HSQLDB_JAR)
+.ELSE
+JARFILES+= hsqldb.jar
+.ENDIF
 
 #----- make a jar from compiled files ------------------------------
 

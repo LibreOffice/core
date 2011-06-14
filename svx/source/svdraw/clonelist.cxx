@@ -85,6 +85,8 @@ SdrObject* CloneList::GetClone(sal_uInt32 nIndex) const
 
 void CloneList::CopyConnections() const
 {
+    sal_uInt32 cloneCount = maCloneList.size();
+
     for(sal_uInt32 a = 0; a < maOriginalList.size(); a++)
     {
         const SdrEdgeObj* pOriginalEdge = PTR_CAST(SdrEdgeObj, GetOriginal(a));
@@ -101,10 +103,17 @@ void CloneList::CopyConnections() const
                                                                  maOriginalList.end(),
                                                                  pOriginalNode1);
 
+                sal_uInt32 nPos = it - maOriginalList.begin();
+
                 if(it != maOriginalList.end())
                 {
-                    if(pOriginalEdge->GetConnectedNode(sal_True) != *it)
-                        pCloneEdge->ConnectToNode(sal_True, const_cast<SdrObject*>(*it));
+                    SdrObject *cObj = NULL;
+
+                    if (nPos < cloneCount)
+                        cObj = GetClone(nPos);
+
+                    if(pOriginalEdge->GetConnectedNode(sal_True) != cObj)
+                        pCloneEdge->ConnectToNode(sal_True, cObj);
                 }
             }
 
@@ -114,10 +123,17 @@ void CloneList::CopyConnections() const
                                                                  maOriginalList.end(),
                                                                  pOriginalNode2);
 
+                sal_uInt32 nPos = it - maOriginalList.begin();
+
                 if(it != maOriginalList.end())
                 {
-                    if(pOriginalEdge->GetConnectedNode(sal_True) != *it)
-                        pCloneEdge->ConnectToNode(sal_True, const_cast<SdrObject*>(*it));
+                    SdrObject *cObj = NULL;
+
+                    if (nPos < cloneCount)
+                        cObj = GetClone(nPos);
+
+                    if(pOriginalEdge->GetConnectedNode(sal_False) != cObj)
+                        pCloneEdge->ConnectToNode(sal_False, cObj);
                 }
             }
         }

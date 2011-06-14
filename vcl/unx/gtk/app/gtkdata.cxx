@@ -71,6 +71,15 @@ using ::rtl::OUString;
 /***************************************************************************
  * class GtkDisplay                                                        *
  ***************************************************************************/
+extern "C" {
+GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
+                                     GdkEvent* event,
+                                     gpointer data )
+{
+    GtkSalDisplay *pDisplay = (GtkSalDisplay *)data;
+    return pDisplay->filterGdkEvent( sys_event, event );
+}
+}
 
 GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay )
             : SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ) ),
@@ -81,10 +90,14 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay )
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
     Init ();
+
+    gdk_window_add_filter( NULL, call_filterGdkEvent, this );
 }
 
 GtkSalDisplay::~GtkSalDisplay()
 {
+    gdk_window_remove_filter( NULL, call_filterGdkEvent, this );
+
     if( !m_bStartupCompleted )
         gdk_notify_startup_complete();
     doDestruct();
@@ -107,12 +120,6 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
 }
 
 extern "C" {
-GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
-                                     GdkEvent* event,
-                                     gpointer data )
-{
-    return GtkSalDisplay::filterGdkEvent( sys_event, event, data );
-}
 
 void signalKeysChanged( GdkKeymap*, gpointer data )
 {
@@ -135,13 +142,10 @@ void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 }
 
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
-                                               GdkEvent*,
-                                               gpointer data )
+                                               GdkEvent* )
 {
     GdkFilterReturn aFilterReturn = GDK_FILTER_CONTINUE;
-
     XEvent *pEvent = (XEvent *)sys_event;
-    GtkSalDisplay *pDisplay = (GtkSalDisplay *)data;
 
     // dispatch all XEvents to event callback
     if( GetSalData()->m_pInstance->
@@ -150,7 +154,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
     GTK_YIELD_GRAB();
 
-    if (pDisplay->GetDisplay() == pEvent->xany.display )
+    if (GetDisplay() == pEvent->xany.display )
     {
         // #i53471# gtk has no callback mechanism that lets us be notified
         // when settings (as in XSETTING and opposed to styles) are changed.
@@ -158,16 +162,16 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
         // these should be rare enough so that we can assume that the settings
         // actually change when a corresponding PropertyNotify occurs
         if( pEvent->type == PropertyNotify &&
-            pEvent->xproperty.atom == pDisplay->getWMAdaptor()->getAtom( WMAdaptor::XSETTINGS ) &&
-            ! pDisplay->m_aFrames.empty()
+            pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::XSETTINGS ) &&
+            ! m_aFrames.empty()
            )
         {
-            pDisplay->SendInternalEvent( pDisplay->m_aFrames.front(), NULL, SALEVENT_SETTINGSCHANGED );
+            SendInternalEvent( m_aFrames.front(), NULL, SALEVENT_SETTINGSCHANGED );
         }
         // let's see if one of our frames wants to swallow these events
         // get the frame
-        for( std::list< SalFrame* >::const_iterator it = pDisplay->m_aFrames.begin();
-                 it != pDisplay->m_aFrames.end(); ++it )
+        for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
+                 it != m_aFrames.end(); ++it )
         {
             GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(*it);
             if( (GdkNativeWindow)pFrame->GetSystemData()->aWindow == pEvent->xany.window ||
@@ -685,8 +689,6 @@ void GtkXLib::Init()
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
-
-    gdk_window_add_filter( NULL, call_filterGdkEvent, m_pGtkSalDisplay );
 
     PushXErrorLevel( true );
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );

@@ -37,6 +37,7 @@
 #include "osl/thread.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/salnativewidgets.hxx"
+#include "sallayout.hxx"
 
 #include <map>
 
@@ -298,8 +299,8 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& ) = 0;
-    virtual sal_Bool                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& ) = 0;
+    virtual sal_Bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;
+    virtual sal_Bool                    GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) = 0;
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
     virtual void                     DrawServerFontLayout( const ServerFontLayout& ) = 0;

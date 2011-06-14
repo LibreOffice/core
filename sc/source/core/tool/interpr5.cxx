@@ -572,10 +572,15 @@ ScMatrixRef ScInterpreter::GetMatrix()
                 pMat = new ScMatrix(1, 1);
                 pMat->PutDouble(pToken->GetDouble(), 0, 0);
             }
-            else
+            else if (pToken->GetType() == svString)
             {
                 pMat = new ScMatrix(1, 1);
                 pMat->PutString(pToken->GetString(), 0, 0);
+            }
+            else
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutEmpty(0, 0);
             }
         }
         break;
@@ -1978,14 +1983,10 @@ double lcl_TGetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nRa,
     return fResult;
 }
 
+// no mathematical signum, but used to switch between adding and subtracting
 double lcl_GetSign(double fValue)
 {
-    if (fValue < 0.0)
-        return -1.0;
-    else if (fValue > 0.0)
-        return 1.0;
-    else
-        return 0.0;
+    return (fValue >= 0.0 ? 1.0 : -1.0 );
 }
 
 /* Calculates a QR decomposition with Householder reflection.

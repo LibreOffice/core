@@ -126,6 +126,7 @@ my_components = \
     lwpfilter \
     mcnttype \
     migrationoo2 \
+    mtfrenderer \
     msfilter \
     msworksfilter \
     mysql \
@@ -152,6 +153,7 @@ my_components = \
     sdbc2 \
     sdbt \
     sdd \
+    sdfilt \
     simplecanvas \
     slideshow \
     $(SM_COMPONENTS)\

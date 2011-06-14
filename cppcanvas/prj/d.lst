@@ -2,6 +2,7 @@
 ..\%__SRC%\bin\mtfrenderer*.dll %_DEST%\bin%_EXT%\mtfrenderer*.dll
 ..\%__SRC%\lib\icppcanvas.lib %_DEST%\lib%_EXT%\icppcanvas.lib
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\misc\mtfrenderer.component %_DEST%\xml\mtfrenderer.component
 
 mkdir: %_DEST%\inc%_EXT%\cppcanvas
 ..\inc\cppcanvas\bitmap.hxx %_DEST%\inc%_EXT%\cppcanvas\bitmap.hxx

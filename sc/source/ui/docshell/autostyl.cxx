@@ -64,6 +64,34 @@ inline sal_uLong TimeNow()          // Sekunden
     return (sal_uLong) time(0);
 }
 
+namespace {
+
+class FindByRange : public ::std::unary_function<ScAutoStyleData, bool>
+{
+    ScRange maRange;
+public:
+    FindByRange(const ScRange& r) : maRange(r) {}
+    bool operator() (const ScAutoStyleData& rData) const { return rData.aRange == maRange; }
+};
+
+class FindByTimeout : public ::std::unary_function<ScAutoStyleData, bool>
+{
+    sal_uLong mnTimeout;
+public:
+    FindByTimeout(sal_uLong n) : mnTimeout(n) {}
+    bool operator() (const ScAutoStyleData& rData) const { return rData.nTimeout >= mnTimeout; }
+};
+
+struct FindNonZeroTimeout : public ::std::unary_function<ScAutoStyleData, bool>
+{
+    bool operator() (const ScAutoStyleData& rData) const
+    {
+        return rData.nTimeout != 0;
+    }
+};
+
+}
+
 ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell) :
     pDocSh( pShell )
 {
@@ -108,8 +136,12 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
     aTimer.Stop();
     sal_uLong nNow = TimeNow();
 
-    aEntries.erase(std::remove_if(aEntries.begin(),aEntries.end(),
-                                  boost::bind(&ScAutoStyleData::aRange,_1) == rRange));
+    // Remove the first item with the same range.
+    ::boost::ptr_vector<ScAutoStyleData>::iterator itr =
+        ::std::find_if(aEntries.begin(), aEntries.end(), FindByRange(rRange));
+
+    if (itr != aEntries.end())
+        aEntries.erase(itr);
 
     //  Timeouts von allen Eintraegen anpassen
 
@@ -120,8 +152,8 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
     }
 
     //  Einfuege-Position suchen
-    boost::ptr_vector<ScAutoStyleData>::iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                     boost::bind(&ScAutoStyleData::nTimeout,_1) >= nTimeout);
+    boost::ptr_vector<ScAutoStyleData>::iterator iter =
+        ::std::find_if(aEntries.begin(), aEntries.end(), FindByTimeout(nTimeout));
 
     aEntries.insert(iter,new ScAutoStyleData(nTimeout,rRange,rStyle));
 
@@ -145,19 +177,19 @@ void ScAutoStyleList::AdjustEntries( sal_uLong nDiff )  // Millisekunden
 
 void ScAutoStyleList::ExecuteEntries()
 {
-    boost::ptr_vector<ScAutoStyleData>::iterator iter;
-    for (iter = aEntries.begin(); iter != aEntries.end();)
+    // Execute and remove all items with timeout == 0 from the begin position
+    // until the first item with non-zero timeout value.
+    ::boost::ptr_vector<ScAutoStyleData>::iterator itr = aEntries.begin(), itrEnd = aEntries.end();
+    for (; itr != itrEnd; ++itr)
     {
-        if (!iter->nTimeout)
-        {
-            pDocSh->DoAutoStyle(iter->aRange,iter->aStyle);
-            iter = aEntries.erase(iter);
-        }
-        else
-        {
-            ++iter;
-        }
+        if (itr->nTimeout)
+            break;
+
+        pDocSh->DoAutoStyle(itr->aRange, itr->aStyle);
     }
+    // At this point itr should be on the first item with non-zero timeout, or
+    // the end position in case all items have timeout == 0.
+    aEntries.erase(aEntries.begin(), itr);
 }
 
 void ScAutoStyleList::ExecuteAllNow()
@@ -174,8 +206,8 @@ void ScAutoStyleList::ExecuteAllNow()
 void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
 {
     // ersten Eintrag mit Timeout != 0 suchen
-    boost::ptr_vector<ScAutoStyleData>::iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                     boost::bind(&ScAutoStyleData::nTimeout,_1) != static_cast<unsigned>(0));
+    boost::ptr_vector<ScAutoStyleData>::iterator iter =
+        ::std::find_if(aEntries.begin(),aEntries.end(), FindNonZeroTimeout());
 
     if (iter != aEntries.end())
     {

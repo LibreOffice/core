@@ -4333,7 +4333,7 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 }
 
 // -------------------------------------------------------------------------
-void OSQLParser::error(sal_Char *fmt)
+void OSQLParser::error(const sal_Char *fmt)
 {
 	if(!m_sErrorMessage.getLength())
 	{

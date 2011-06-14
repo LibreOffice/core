@@ -429,7 +429,7 @@ void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+sal_Bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -439,7 +439,7 @@ sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
     return sal_True;
@@ -447,7 +447,7 @@ sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPolyPoly )
+sal_Bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex, B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -457,7 +457,7 @@ sal_Bool SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPol
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
         return sal_True;
 
@@ -493,7 +493,7 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
             continue;
 
         // get the glyph's alpha mask and adjust the drawing position
-        nGlyphIndex &= ~GF_FONTMASK;
+        nGlyphIndex &= GF_IDXMASK;
         B2IPoint aDstPoint( aPos.X(), aPos.Y() );
         BitmapDeviceSharedPtr aAlphaMask
             = rGlyphPeer.GetGlyphBmp( *pSF, nGlyphIndex, m_eTextFmt, aDstPoint );

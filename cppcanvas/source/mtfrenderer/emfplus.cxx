@@ -105,7 +105,7 @@ namespace cppcanvas
         EMFP_DEBUG (void dumpWords (SvStream& s, int i)
         {
             sal_uInt32 pos = s.Tell ();
-            INT16 data;
+            sal_Int16 data;
             for (; i > 0; i --) {
                 s >> data;
                 printf ("EMF+\tdata: %04hX\n", data);

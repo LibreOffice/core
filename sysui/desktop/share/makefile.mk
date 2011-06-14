@@ -180,7 +180,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.keys : ../mimetypes/{$(MIMELIST)}.ke
     @@-$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file for $(@:d:d:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p $(PRODUCTNAME.$(@:d:d:f)) -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix "$(ICONPREFIX.$(@:d:d:f))-" $< $(MISC)/$(@:d:d:f)
+    @$(PERL) brand.pl -p $(PRODUCTNAME.$(@:d:d:f)) -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix '$(ICONPREFIX.libreoffice)-' $< $(MISC)/$(@:d:d:f)
     @$(PERL) translate.pl -p $(PRODUCTNAME.$(@:d:d:f)) -d $(MISC)/$(@:d:d:f) --ext "keys" --key "description" $(ULFDIR)$/documents.ulf
     @cat $(MISC)/$(@:d:d:f)/{$(MIMELIST)}.keys > $@.$(INPATH)
     @mv -f $@.$(INPATH) $@
@@ -208,7 +208,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/mimelnklist : ../mimetypes/{$(MIMELIST)}.deskto
     @@-$(MKDIRHIER) $(@:db).$(INPATH)
     @echo Creating KDE mimelnk entries for $(@:d:d:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix "$(ICONPREFIX.$(@:d:d:f))-" $< $(@:db).$(INPATH)
+    @$(PERL) brand.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -u $(UNIXFILENAME.$(@:d:d:f)) --iconprefix '$(ICONPREFIX.libreoffice)-' $< $(@:db).$(INPATH)
     @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME.$(@:d:d:f))" -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/documents.ulf
     @mv -f $(@:db).$(INPATH)/* $(@:d)
     @rmdir $(@:db).$(INPATH)
@@ -222,7 +222,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     @echo "#!/bin/bash" > $@.$(INPATH)
     @echo "PREFIX=$(UNIXFILENAME.$(@:d:d:f))" >> $@.$(INPATH)
-    @echo "ICON_PREFIX=$(ICONPREFIX.$(@:d:d:f))" >> $@.$(INPATH)
+    @echo "ICON_PREFIX=$(ICONPREFIX.libreoffice)" >> $@.$(INPATH)
     @echo "ICON_SOURCE_DIR=../../../desktop/icons" >> $@.$(INPATH)
     @echo "PRODUCTVERSION=$(PRODUCTVERSION.$(@:d:d:f))" >> $@.$(INPATH)
     @cat $< >> $@.$(INPATH)

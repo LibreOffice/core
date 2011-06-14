@@ -260,7 +260,9 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
     }
     bool bJoinedInput = false;
 
-    for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges && pOver; ++i )
+    // We need to query the size of the container dynamically since its size
+    // may change during the loop.
+    for ( size_t i = 0; i < maRanges.size() && pOver; ++i )
     {
         ScRange* p = maRanges[i];
         if ( p == pOver )

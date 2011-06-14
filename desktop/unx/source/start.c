@@ -999,12 +999,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 
             switch (child_get_exit_code (info)) {
             case 79: // re-start with just -env: parameters
-                fprintf (stderr, "FIXME: re-start with just -env: params !\n");
+#if OSL_DEBUG_LEVEL > 0
+                fprintf (stderr, "oosplash: re-start with just -env: params !\n");
+#endif
                 bRestart = sal_True;
                 bAllArgs = sal_False;
                 break;
             case 81: // re-start with all arguments
-                fprintf (stderr, "FIXME: re-start with all params !\n");
+#if OSL_DEBUG_LEVEL > 0
+                fprintf (stderr, "oosplash: re-start with all params !\n");
+#endif
                 bRestart = sal_True;
                 bAllArgs = sal_True;
                 break;

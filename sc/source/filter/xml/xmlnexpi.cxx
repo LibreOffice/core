@@ -36,15 +36,10 @@
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
 #include "docuno.hxx"
-#include "global.hxx"
 #include "document.hxx"
-#include "XMLConverter.hxx"
-#include "rangeutl.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -58,38 +53,12 @@ void ScXMLNamedExpressionsContext::GlobalInserter::insert(ScMyNamedExpression* p
         mrImport.AddNamedExpression(pExp);
 }
 
-ScXMLNamedExpressionsContext::SheetLocalInserter::SheetLocalInserter(
-    ScDocument* pDoc, ScRangeName& rRangeName) : mpDoc(pDoc), mrRangeName(rRangeName) {}
+ScXMLNamedExpressionsContext::SheetLocalInserter::SheetLocalInserter(ScXMLImport& rImport, SCTAB nTab) :
+    mrImport(rImport), mnTab(nTab) {}
 
 void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpression* pExp)
 {
-    using namespace formula;
-
-    ::boost::scoped_ptr<ScMyNamedExpression> p(pExp);
-
-    if (p->sRangeType.getLength() > 0)
-        // For now, we only accept normal named expressions.
-        return;
-
-    if (mpDoc && !mrRangeName.findByName(p->sName))
-    {
-        // Insert a new name.
-        ScAddress aPos;
-        sal_Int32 nOffset = 0;
-        bool bSuccess = ScRangeStringConverter::GetAddressFromString(
-            aPos, p->sBaseCellAddress, mpDoc, FormulaGrammar::CONV_OOO, nOffset);
-
-        if (bSuccess)
-        {
-            ::rtl::OUString aContent = p->sContent;
-            if (!p->bIsExpression)
-                ScXMLConverter::ParseFormula(aContent, false);
-
-            ScRangeData* pData = new ScRangeData(
-                mpDoc, p->sName, p->sContent, aPos, RT_NAME, p->eGrammar);
-            mrRangeName.insert(pData);
-        }
-    }
+    mrImport.AddNamedExpression(mnTab, pExp);
 }
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(

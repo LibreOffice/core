@@ -195,11 +195,12 @@ sub get_branch_name($)
     return $branch;
 }
 
-sub open_log_file($$$$)
+sub open_log_file($$$$$)
 {
-    my ($log_prefix, $log_suffix, $top_dir, $branch_name) = @_;
+    my ($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name) = @_;
 
     my $logfilename = "$log_prefix-$branch_name-$log_suffix.log";
+    $logfilename = "$log_dir/$logfilename" if (defined $log_dir);
 
     if (-f $logfilename) {
         print "WARNING: The log file already exists: $logfilename\n";
@@ -308,12 +309,13 @@ sub usage()
 {
     print "This script generates LO git commit summary\n\n" .
           
-          "Usage: lo-commit-stat [--help] [--no-pieces] [--piece=<piece>] --log-suffix=<string> topdir [git_arg...]\n\n" .
+          "Usage: lo-commit-stat [--help] [--no-pieces] [--piece=<piece>] --log-dir=<dir> --log-suffix=<string> topdir [git_arg...]\n\n" .
 
           "Options:\n" .
           "     --help          print this help\n" .
           "     --no-pieces     read changes just from the main repository, ignore other cloned repos\n" .
           "     --piece=<piece> summarize just changes from the given piece\n" .
+          "     --log-dir=<dir> directory where to put the generated log\n" .
           "     --log-suffix=<string> suffix of the log file name; the result will be\n" .
           "                     commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
           "                     is detected automatically\n" .
@@ -341,6 +343,7 @@ sub usage()
 my $piece;
 my $top_dir;
 my $log_prefix = "commit-log";
+my $log_dir;
 my $log_suffix;
 my $log;
 my $git_command = "git log";
@@ -360,6 +363,8 @@ foreach my $arg (@ARGV) {
 	$piece = $1;
     } elsif ($arg =~ m/--log-suffix=(.*)/) {
 	$log_suffix = "$1";
+    } elsif ($arg =~ m/--log-dir=(.*)/) {
+	$log_dir = "$1";
     } elsif ($arg eq '--bugs') {
         $print_filters{'bug'} = 1;
         $log_prefix = "bugfixes"
@@ -384,12 +389,14 @@ $git_command .= " " . join ' ', @git_args if (@git_args);
 (-d "$top_dir") || die "Error: not a directory: $top_dir\n";
 (-f "$top_dir/.git/config") || die "Error: can't find $top_dir/.git/config\n";
 
+(!defined $log_dir) || (-d $log_dir) || die "Error: directory does no exist: $log_dir\n";
+
 (defined $log_suffix) || die "Error: define log suffix using --log-suffix=<string>\n";
 
 $branch_name = get_branch_name($top_dir);
 
 load_data(\%data, $top_dir, $piece, $branch_name, $git_command);
 
-$log = open_log_file($log_prefix, $log_suffix, $top_dir, $branch_name);
+$log = open_log_file($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name);
 print_stat(\%data, \%print_filters, $print_mode, $log);
 close $log;

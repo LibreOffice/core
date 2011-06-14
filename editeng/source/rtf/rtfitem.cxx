@@ -1431,25 +1431,41 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
         case RTF_CLBRDRT:       // Cell top border
             {
                 if( bTableDef )
+                {
+                    if (nBorderTyp != 0)
+                        SetBorderLine( nBorderTyp, aAttr, aBrd );
                     nBorderTyp = RTF_BRDRT;
+                }
                 break;
             }
         case RTF_CLBRDRB:       // Cell bottom border
             {
                 if( bTableDef )
+                {
+                    if (nBorderTyp != 0)
+                        SetBorderLine( nBorderTyp, aAttr, aBrd );
                     nBorderTyp = RTF_BRDRB;
+                }
                 break;
             }
         case RTF_CLBRDRL:       // Cell left border
             {
                 if( bTableDef )
+                {
+                    if (nBorderTyp != 0)
+                        SetBorderLine( nBorderTyp, aAttr, aBrd );
                     nBorderTyp = RTF_BRDRL;
+                }
                 break;
             }
         case RTF_CLBRDRR:       // Cell right border
             {
                 if( bTableDef )
+                {
+                    if (nBorderTyp != 0)
+                        SetBorderLine( nBorderTyp, aAttr, aBrd );
                     nBorderTyp = RTF_BRDRR;
+                }
                 break;
             }
 

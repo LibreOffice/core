@@ -1814,7 +1814,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     }
 
     // make a copy of the text
-    String& rTextCopy = const_cast<String&>(m_Text);
+    String rTextCopy = m_Text.Copy( );
 
     // mask out the redlined and hidden text with ' '
     const xub_Unicode cChar(' ');

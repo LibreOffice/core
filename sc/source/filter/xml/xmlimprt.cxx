@@ -95,6 +95,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <memory>
+
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
@@ -2036,6 +2038,25 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
     return false;
 }
 
+void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
+{
+    ::std::auto_ptr<ScMyNamedExpression> p(pNamedExp);
+    SheetNamedExpMap::iterator itr = maSheetNamedExpressions.find(nTab);
+    if (itr == maSheetNamedExpressions.end())
+    {
+        // No chain exists for this sheet.  Create one.
+        ::std::auto_ptr<ScMyNamedExpressions> pNew(new ScMyNamedExpressions);
+        ::std::pair<SheetNamedExpMap::iterator, bool> r = maSheetNamedExpressions.insert(nTab, pNew);
+        if (!r.second)
+            // insertion failed.
+            return;
+
+        itr = r.first;
+    }
+    ScMyNamedExpressions& r = *itr->second;
+    r.push_back(p);
+}
+
 ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
 {
     if (!pChangeTrackingImportHelper)
@@ -2850,6 +2871,66 @@ void ScXMLImport::SetNamedRanges()
     }
 }
 
+namespace {
+
+class SheetRangeNameInserter : public ::std::unary_function<ScMyNamedExpression, void>
+{
+    ScDocument* mpDoc;
+    ScRangeName& mrRangeName;
+public:
+    SheetRangeNameInserter(ScDocument* pDoc, ScRangeName& rRangeName) :
+        mpDoc(pDoc), mrRangeName(rRangeName) {}
+
+    void operator() (const ScMyNamedExpression& r) const
+    {
+        using namespace formula;
+
+        if (r.sRangeType.getLength() > 0)
+            // For now, we only accept normal named expressions.
+            return;
+
+        if (mpDoc && !mrRangeName.findByName(r.sName))
+        {
+            // Insert a new name.
+            ScAddress aPos;
+            sal_Int32 nOffset = 0;
+            bool bSuccess = ScRangeStringConverter::GetAddressFromString(
+                aPos, r.sBaseCellAddress, mpDoc, FormulaGrammar::CONV_OOO, nOffset);
+
+            if (bSuccess)
+            {
+                ::rtl::OUString aContent = r.sContent;
+                if (!r.bIsExpression)
+                    ScXMLConverter::ParseFormula(aContent, false);
+
+                ScRangeData* pData = new ScRangeData(
+                    mpDoc, r.sName, r.sContent, aPos, RT_NAME, r.eGrammar);
+                mrRangeName.insert(pData);
+            }
+        }
+    }
+};
+
+}
+
+void ScXMLImport::SetSheetNamedRanges()
+{
+    if (!pDoc)
+        return;
+
+    SheetNamedExpMap::const_iterator itr = maSheetNamedExpressions.begin(), itrEnd = maSheetNamedExpressions.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        SCTAB nTab = itr->first;
+        ScRangeName* pRangeNames = pDoc->GetRangeName(nTab);
+        if (!pRangeNames)
+            continue;
+
+        const ScMyNamedExpressions& rNames = *itr->second;
+        ::std::for_each(rNames.begin(), rNames.end(), SheetRangeNameInserter(pDoc, *pRangeNames));
+    }
+}
+
 void SAL_CALL ScXMLImport::endDocument(void)
 throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
@@ -2891,6 +2972,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             }
             SetLabelRanges();
             SetNamedRanges();
+            SetSheetNamedRanges();
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)

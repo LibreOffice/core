@@ -999,6 +999,15 @@ void ModulWindow::ExecuteCommand( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
+        case SID_DELETE:
+        {
+            KeyEvent aFakeDelete( 0, KEY_DELETE );
+            GetEditView()->KeyInput( aFakeDelete );
+            break;
+        }
+        case SID_SELECTALL:
+            GetEditView()->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+            break;
         case SID_BASICRUN:
         {
             BasicRun();

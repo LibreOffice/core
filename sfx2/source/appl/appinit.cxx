@@ -257,12 +257,13 @@ bool SfxApplication::Initialize_Impl()
     // not processed are given to SFX as Errorcode 1.
     new SimpleErrorHandler;
 #endif
+    pAppData_Impl->pBasicResMgr = CreateResManager("sb");
     new SfxErrorHandler(RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
 
     new SfxErrorHandler(
         RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END);
     new SfxErrorHandler(
-        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END );
+        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 
     // diverse Pointer
     SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );

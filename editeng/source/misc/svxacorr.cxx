@@ -518,7 +518,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
     bool validNumber = true;
     xub_StrLen i = nEndPos;
 
-    do
+    while ( i > nSttPos )
     {
         i--;
         bool isDigit = rCC.isDigit( rTxt, i );
@@ -531,7 +531,6 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
             nNumEnd = i;
         }
     }
-    while ( i > nSttPos );
 
     if ( foundEnd && validNumber ) {
         sal_Int32 nNum = rTxt.Copy( nSttPos, nNumEnd - nSttPos + 1 ).ToInt32( );

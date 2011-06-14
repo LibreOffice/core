@@ -198,9 +198,10 @@ void XclImpTabViewSettings::ReadScl( XclImpStream& rStrm )
 
 void XclImpTabViewSettings::ReadPane( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnSplitX
-            >> maData.mnSplitY
-            >> maData.maSecondXclPos
+    rStrm   >> maData.mnSplitX;
+    maData.mnSplitY = rStrm.ReaduInt16();
+
+    rStrm   >> maData.maSecondXclPos
             >> maData.mnActivePane;
 }
 

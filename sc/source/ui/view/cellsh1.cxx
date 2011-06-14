@@ -2127,6 +2127,27 @@ void ScCellShell::ExecuteExternalSource(
         _rRequest.Ignore();
 }
 
+namespace {
+
+bool isDPSourceValid(const ScDPObject& rDPObj)
+{
+    if (rDPObj.IsImportData())
+    {
+        // If the data type is database, check if the database is still valid.
+        const ScImportSourceDesc* pDesc = rDPObj.GetImportSourceDesc();
+        if (!pDesc)
+            return false;
+
+        const ScDPCache* pCache = pDesc->CreateCache();
+        if (!pCache)
+            // cashe creation failed, probably due to invalid connection.
+            return false;
+    }
+    return true;
+}
+
+}
+
 void ScCellShell::ExecuteDataPilotDialog()
 {
     ScModule* pScMod = SC_MOD();
@@ -2142,7 +2163,8 @@ void ScCellShell::ExecuteDataPilotDialog()
                                 pData->GetTabNo() );
     if ( pDPObj )   // on an existing table?
     {
-        pNewDPObject.reset(new ScDPObject(*pDPObj));
+        if (isDPSourceValid(*pDPObj))
+            pNewDPObject.reset(new ScDPObject(*pDPObj));
     }
     else            // create new table
     {

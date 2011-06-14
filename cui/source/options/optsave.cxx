@@ -544,7 +544,6 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
         {
             aAutoSaveEdit.Enable();
             aMinuteFT.Enable();
-            aAutoSaveEdit.GrabFocus();
         }
         else
         {
@@ -558,20 +557,13 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
 OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
-    sal_Int32 nFlags;
     const PropertyValue* pProperties = rProperties.getConstArray();
     for(int nProp = 0; nProp < rProperties.getLength(); nProp++)
     {
         if(!pProperties[nProp].Name.compareToAscii("UIName"))
         {
             pProperties[nProp].Value >>= sRet;
-        }
-        else if(!pProperties[nProp].Name.compareToAscii("Flags"))
-        {
-            if ( pProperties[nProp].Value >>= nFlags )
-            {
-                nFlags &= 0x100;
-            }
+            break;
         }
         else if(!pProperties[nProp].Name.compareToAscii("Name"))
         {

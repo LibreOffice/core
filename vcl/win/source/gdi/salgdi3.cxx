@@ -2505,7 +2505,7 @@ void WinSalGraphics::GetDevFontSubstList( OutputDevice* )
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
+sal_Bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& rRect )
 {
     HDC hDC = mhDC;
 
@@ -2537,7 +2537,7 @@ sal_Bool WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::GetGlyphOutline( long nIndex,
+sal_Bool WinSalGraphics::GetGlyphOutline( sal_GlyphId nIndex,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     rB2DPolyPoly.clear();

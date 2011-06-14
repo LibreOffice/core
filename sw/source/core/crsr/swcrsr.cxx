@@ -1665,8 +1665,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
             {
                 // Set cursor to start/end of covered cell:
                 SwTableBox* pTableBox = pOldTabBoxSttNode->GetTblBox();
-                const long nRowSpan = pTableBox->getRowSpan();
-                if ( nRowSpan > 1 )
+                if ( pTableBox && pTableBox->getRowSpan() > 1 )
                 {
                     pTableBox = & pTableBox->FindEndOfRowSpan( pOldTabSttNode->GetTable(), (sal_uInt16)(pTableBox->getRowSpan() + mnRowSpanOffset ) );
                     SwNodeIndex& rPtIdx = GetPoint()->nNode;
@@ -1953,7 +1952,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
         // proceeding:
         if ( mnRowSpanOffset )
         {
-            if ( pTableBox->getRowSpan() > 1 )
+            if ( pTableBox && pTableBox->getRowSpan() > 1 )
             {
                 pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(), (sal_uInt16)(pTableBox->getRowSpan() + mnRowSpanOffset) );
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
@@ -1976,7 +1975,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
 
         pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();
         pTableBox = pTableBoxStartNode->GetTblBox();
-        if ( pTableBox->getRowSpan() < 1 )
+        if ( pTableBox && pTableBox->getRowSpan() < 1 )
         {
             mnRowSpanOffset = pTableBox->getRowSpan();
             // move cursor to non-covered cell:
