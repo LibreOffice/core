@@ -590,7 +590,6 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
-        OSL_ENSURE( pBCAlways, "ScBroadcastAreaSlotMachine::EndListeningArea: BCA_LISTEN_ALWAYS but none established");
         if ( pBCAlways )
         {
             pListener->EndListening( *pBCAlways);
