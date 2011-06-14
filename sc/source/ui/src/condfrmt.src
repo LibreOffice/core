@@ -31,7 +31,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 316 , 161 ) ;
+    Size = MAP_APPFONT ( 326 , 161 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     HelpId = HID_SCDLG_CONDFORMAT ;
@@ -136,10 +136,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         DropDown = TRUE ;
         Sort = TRUE ;
     };
+    Window WIN_CHAR_PREVIEW_COND1
+    {
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 124 , 34 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        Text [ en-US ] = "Example";
+    };
     PushButton BTN_COND1_NEW
     {
         HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND1_NEW";
-        Pos = MAP_APPFONT ( 124 , 34 ) ;
+        Pos = MAP_APPFONT ( 169 , 34 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~New Style..." ;
@@ -249,10 +256,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         DropDown = TRUE ;
         Sort = TRUE ;
     };
+    Window WIN_CHAR_PREVIEW_COND2
+    {
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 124 , 88 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        Text [ en-US ] = "Example";
+    };
     PushButton BTN_COND2_NEW
     {
         HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND2_NEW";
-        Pos = MAP_APPFONT ( 124 , 88 ) ;
+        Pos = MAP_APPFONT ( 169 , 88 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Ne~w Style..." ;
@@ -362,30 +376,51 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         DropDown = TRUE ;
         Sort = TRUE ;
     };
+    Window WIN_CHAR_PREVIEW_COND3
+    {
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 124 , 142 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        Text [ en-US ] = "Example";
+    };
     PushButton BTN_COND3_NEW
     {
         HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND3_NEW";
-        Pos = MAP_APPFONT ( 124 , 142 ) ;
+        Pos = MAP_APPFONT ( 169 , 142 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "New ~Style..." ;
     };
+    ScrollBar LB_SCROLL
+    {
+        Pos = MAP_APPFONT ( 260, 6 ) ;
+        Size = MAP_APPFONT ( 8 , 150 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 260 , 6 ) ;
+        Pos = MAP_APPFONT ( 270 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 260 , 23 ) ;
+        Pos = MAP_APPFONT ( 270 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    PushButton BTN_INSERT
+    {
+        Pos = MAP_APPFONT ( 270 , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Insert" ;
+    };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 260 , 43 ) ;
+        Pos = MAP_APPFONT ( 270 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };

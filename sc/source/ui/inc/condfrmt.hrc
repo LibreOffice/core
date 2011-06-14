@@ -63,6 +63,13 @@
 #define FL_SEP1             41
 #define FL_SEP2             42
 
+#define LB_SCROLL           43
+
+#define WIN_CHAR_PREVIEW_COND1      44
+#define WIN_CHAR_PREVIEW_COND2      45
+#define WIN_CHAR_PREVIEW_COND3      46
+#define BTN_INSERT      47
+
 //IAccessibility2 Implementation 2009-----
 #define LABEL_FORMARTTING_CONDITIONS    5043
 #define LABEL_CONDITIONS                5044
