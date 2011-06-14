@@ -117,6 +117,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vcl \
     vclplug_gen \
     vclplug_gtk \
+    vclplug_gtk3 \
     vclplug_kde \
     vclplug_kde4 \
     vclplug_svp \

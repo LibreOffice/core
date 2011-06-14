@@ -1052,6 +1052,14 @@ File gid_File_Lib_Vclplug_Gtk
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
+#ifdef ENABLE_GTK3
+File gid_File_Lib_Vclplug_Gtk3
+    Name = LIBNAME(vclplug_gtk3);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+End
+#endif
 #ifdef ENABLE_KDE
 #ifndef MACOSX
 File gid_File_Lib_Vclplug_Kde

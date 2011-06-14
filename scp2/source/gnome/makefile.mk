@@ -61,6 +61,10 @@ SCPDEFS+=-DENABLE_GNOMEVFS
 SCPDEFS+=-DENABLE_GIO
 .ENDIF
 
+.IF "$(ENABLE_GTK3)" != ""
+SCPDEFS+=-DENABLE_GTK3
+.ENDIF
+
 PARFILES =                   \
         module_gnome.par     \
         file_gnome.par

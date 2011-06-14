@@ -269,7 +269,7 @@ AC_ARG_ENABLE(gtk,
 AC_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
-,enable_gtk3=yes)
+,enable_gtk3=no)
 
 AC_ARG_ENABLE(systray,
     AS_HELP_STRING([--disable-systray],
@@ -6349,10 +6349,13 @@ GTK3_CFLAGS=""
 GTK3_LIBS=""
 ENABLE_GTK3=""
 if test "x$enable_gtk3" = "xyes"; then
-      PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.0, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
-      if test "x$ENABLE_GTK3" = "xTRUE"; then
-            R="gtk3"
-      fi
+   if test "$with_system_cairo" != yes; then
+      echo "System cairo required for gtk3 support, please use --system-cairo"
+   fi
+   PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
+   if test "x$ENABLE_GTK3" = "xTRUE"; then
+      R="gtk3"
+   fi
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
