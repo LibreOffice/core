@@ -458,8 +458,6 @@ void SvStream::ImpInit()
     eIOMode             = STREAM_IO_DONTKNOW;
     nBufFree            = 0;
 
-    nWidth              = 0; // default width
-    cFiller             = ' ';
     eStreamMode         = 0;
     CreateFormatString();
 
@@ -1951,15 +1949,6 @@ void SvStream::RefreshBuffer()
 void SvStream::CreateFormatString()
 {
     aFormatString = '%';
-    ePrintfParams = SPECIAL_PARAM_NONE;
-
-    if( nWidth )
-    {
-        if( cFiller != ' ' )
-            aFormatString += '0';
-        aFormatString += '*';
-        ePrintfParams = SPECIAL_PARAM_WIDTH;
-    }
 }
 
 /*************************************************************************
@@ -1973,16 +1962,7 @@ SvStream& SvStream::WriteNumber( sal_Int32 nInt32 )
     char buffer[256+12];
     ByteString aFStr( aFormatString);
     aFStr += SAL_PRIdINT32;
-    sal_Size nLen = 0;
-    switch ( ePrintfParams )
-    {
-        case SPECIAL_PARAM_NONE :
-            nLen = sprintf(buffer, aFStr.GetBuffer(), nInt32);
-            break;
-        case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nInt32);
-            break;
-    }
+    sal_Size nLen = sprintf(buffer, aFStr.GetBuffer(), nInt32);
     Write( buffer, nLen );
     return *this;
 }
@@ -1992,16 +1972,7 @@ SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
     char buffer[256+12];
     ByteString aFStr( aFormatString);
     aFStr += SAL_PRIuUINT32;
-    sal_Size nLen = 0;
-    switch ( ePrintfParams )
-    {
-        case SPECIAL_PARAM_NONE :
-            nLen = sprintf(buffer, aFStr.GetBuffer(), nUInt32);
-            break;
-        case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf(buffer, aFStr.GetBuffer(), nWidth, nUInt32);
-            break;
-    }
+    sal_Size nLen = sprintf(buffer, aFStr.GetBuffer(), nUInt32);
     Write( buffer, nLen );
     return *this;
 }

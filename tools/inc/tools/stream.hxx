@@ -269,17 +269,6 @@ private:
     rtl::OString m_aCryptMaskKey;           // aCryptMaskKey.getLength != 0  -> Verschluesselung
     unsigned char   nCryptMask;
 
-    // Formatierung von Strings
-    char            cFiller;
-    sal_uInt8           nWidth;
-
-    enum PrintfParams
-    {
-        SPECIAL_PARAM_NONE = 0,        // Format-Str, Number
-        SPECIAL_PARAM_WIDTH = 1       // Format-Str, Width, Number
-    };
-
-    PrintfParams ePrintfParams;
     ByteString aFormatString;
 
     // Userdata
@@ -395,13 +384,6 @@ public:
     SvStream&       WriteByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet );
     SvStream&       WriteByteString( const UniString& rStr ) { return WriteByteString( rStr, GetStreamCharSet() ); }
     SvStream&       WriteByteString( const ByteString& rStr );
-
-    void            SetWidth( sal_uInt8 nWid)
-                        { nWidth = nWid; CreateFormatString(); }
-    sal_uInt8           GetWidth() const { return nWidth; }
-    void            SetFiller( char cFil )
-                        { cFiller = cFil; CreateFormatString(); }
-    char            GetFiller() const { return cFiller; }
 
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
     SvStream&       WriteNumber( sal_Int32 nInt32 );
