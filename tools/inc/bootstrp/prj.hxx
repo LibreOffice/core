@@ -53,7 +53,6 @@ public:
                     SimpleConfig(DirEntry& rDirEntry);
                     ~SimpleConfig();
     ByteString          GetNext();
-    ByteString          GetCleanedNextLine( sal_Bool bReadComments = sal_False );
 };
 
 #endif

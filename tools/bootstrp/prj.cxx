@@ -117,48 +117,4 @@ ByteString  SimpleConfig::GetNextLine()
     return aTmpStr;
 }
 
-/*****************************************************************************/
-ByteString SimpleConfig::GetCleanedNextLine( sal_Bool bReadComments )
-/*****************************************************************************/
-{
-
-    aFileStream.ReadLine ( aTmpStr );
-    if ( aTmpStr.Search( "#" ) == 0 )
-        {
-        if (bReadComments )
-            return aTmpStr;
-        else
-            while ( aTmpStr.Search( "#" ) == 0 )
-            {
-                aFileStream.ReadLine ( aTmpStr );
-            }
-        }
-
-    aTmpStr = aTmpStr.EraseLeadingChars();
-    aTmpStr = aTmpStr.EraseTrailingChars();
-    int nLength = aTmpStr.Len();
-    ByteString aEraseString;
-    sal_Bool bFirstTab = sal_True;
-    for ( sal_uInt16 i = 0; i<= nLength; i++)
-    {
-        if ( aTmpStr.GetChar( i ) == 0x20 )
-            aTmpStr.SetChar( i, 0x09 );
-
-        if ( aTmpStr.GetChar( i ) ==  0x09 )
-        {
-            if ( bFirstTab )
-                bFirstTab = sal_False;
-            else
-            {
-                aTmpStr.SetChar( i, 0x20 );
-            }
-        }
-        else
-            bFirstTab = sal_True;
-
-    }
-    aTmpStr.EraseAllChars(' ');
-    return aTmpStr;
-
-}
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
