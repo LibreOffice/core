@@ -50,7 +50,6 @@ REALFILTERPACKAGES_TYPES_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_writer.types_flag             \
     $(DIR_FILTERCFGOUT)$/fcfg_web.types_flag                \
     $(DIR_FILTERCFGOUT)$/fcfg_global.types_flag             \
-    $(DIR_FILTERCFGOUT)$/fcfg_w4w.types_flag                \
     $(DIR_FILTERCFGOUT)$/fcfg_calc.types_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_draw.types_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_impress.types_flag            \
@@ -81,7 +80,6 @@ REALFILTERPACKAGES_FILTERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_writer.filters_flag             \
     $(DIR_FILTERCFGOUT)$/fcfg_web.filters_flag                \
     $(DIR_FILTERCFGOUT)$/fcfg_global.filters_flag             \
-    $(DIR_FILTERCFGOUT)$/fcfg_w4w.filters_flag                \
     $(DIR_FILTERCFGOUT)$/fcfg_calc.filters_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_draw.filters_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_impress.filters_flag            \
@@ -121,7 +119,6 @@ REALFILTERPACKAGES_OTHERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_writer.others_flag             \
     $(DIR_FILTERCFGOUT)$/fcfg_web.others_flag                \
     $(DIR_FILTERCFGOUT)$/fcfg_global.others_flag             \
-    $(DIR_FILTERCFGOUT)$/fcfg_w4w.others_flag                \
     $(DIR_FILTERCFGOUT)$/fcfg_calc.others_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_draw.others_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_impress.others_flag            \
