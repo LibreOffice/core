@@ -52,13 +52,13 @@ TARFILE_MD5=a7d6c5f2fe2d481149ed3ba807b5c043
 PATCH_FILES=gdk-pixbuf-2.23.0.patch
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                BASE_DEPENDENCIES_CFLAGS="-I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external/glib-2.0" \
+                BASE_DEPENDENCIES_CFLAGS="-I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                 BASE_DEPENDENCIES_LIBS=" " \
-                 .$/configure \
-                 CPPFLAGS="$(EXTRA_CDEFS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng -I$(SOLARINCDIR)$/external$/jpeg" \
+                 ./configure --disable-dependency-tracking $(eq,$(VERBOSE),$(NULL) --enable-silent-rules --disable-silent-rules) \
+                 CPPFLAGS="$(EXTRA_CDEFS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0 -I$(SOLARINCDIR)/external/libpng -I$(SOLARINCDIR)/external/jpeg" \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)" \
                  LDFLAGS="$(EXTRA_LINKFLAGS) -L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0" \
-                 --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
+                 --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
                  --disable-nls \
                  --disable-modules \
                  --with-included-loaders=ani,icns,pcx,ras,tga,png,pnm,wbmp,xbm,xpm,qtif,bmp,gif,ico,jpeg \
@@ -95,21 +95,21 @@ CONFIGURE_ACTION=
 BUILD_DIR=./gdk-pixbuf
 BUILD_ACTION=nmake -f makefile.msc
 
-OUT2LIB+=gdk-pixbuf$/gdk_pixbuf-2.0.lib
+OUT2LIB+=gdk-pixbuf/gdk_pixbuf-2.0.lib
 
-OUT2BIN+=gdk-pixbuf$/libgdk_pixbuf-2.0-0.dll
+OUT2BIN+=gdk-pixbuf/libgdk_pixbuf-2.0-0.dll
 
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-animation.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-features.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-marshal.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-core.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-io.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-simple-anim.h
-OUT2INC+=gdk-pixbuf$/gdk-pixdata.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-enum-types.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-loader.h
-OUT2INC+=gdk-pixbuf$/gdk-pixbuf-transform.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-animation.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-features.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-marshal.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-core.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-io.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-simple-anim.h
+OUT2INC+=gdk-pixbuf/gdk-pixdata.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-enum-types.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-loader.h
+OUT2INC+=gdk-pixbuf/gdk-pixbuf-transform.h
 
 .ELSE
 

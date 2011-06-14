@@ -1,5 +1,5 @@
 --- misc/gdk-pixbuf-2.23.0/configure	2010-12-23 15:18:11.000000000 +0100
-+++ misc/build/gdk-pixbuf-2.23.0/configure	2011-02-28 18:49:26.000000000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/configure	2011-06-14 15:20:05.000000000 +0200
 @@ -16839,7 +16839,7 @@
  
  
@@ -9,7 +9,7 @@
  
  if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
  	if test -n "$ac_tool_prefix"; then
-@@ -17158,7 +17158,11 @@
+@@ -17158,14 +17158,18 @@
  
  
    rm -f conf.glibtest
@@ -21,7 +21,58 @@
 +fi
  
  # See if it's safe to turn G_DISABLE_DEPRECATED on.
- GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
+-GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
+-GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo 2.25.15 | sed "s/\.[^.]*\$//"`
+-if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
++#GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
++#GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo 2.25.15 | sed "s/\.[^.]*\$//"`
++#if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
+   CFLAGS="-DG_DISABLE_DEPRECATED $CFLAGS"
+-fi
++#fi
+ 
+ CFLAGS="-DGDK_PIXBUF_DISABLE_DEPRECATED $CFLAGS"
+ 
+@@ -17801,7 +17805,7 @@
+     for l in libpng libpng14 libpng12 libpng13 libpng10 ; do
+       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $l" >&5
+ $as_echo_n "checking for $l... " >&6; }
+-      if $PKG_CONFIG --exists $l ; then
++      if false ; then
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+         PNG='png'
+@@ -18206,8 +18210,8 @@
+ $as_echo_n "checking if gio can sniff png... " >&6; }
+   gtk_save_LIBS="$LIBS"
+   gtk_save_CFLAGS="$CFLAGS"
+-  LIBS="`$PKG_CONFIG --libs gio-2.0`"
+-  CFLAGS="`$PKG_CONFIG --cflags gio-2.0`"
++  #LIBS="`$PKG_CONFIG --libs gio-2.0`"
++  #CFLAGS="`$PKG_CONFIG --cflags gio-2.0`"
+   if test "$cross_compiling" = yes; then :
+   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+@@ -18622,8 +18626,8 @@
+ GDK_PIXBUF_PACKAGES="gmodule-no-export-2.0 gobject-2.0 gio-2.0"
+ GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB $MEDIA_LIB"
+ GDK_PIXBUF_EXTRA_CFLAGS=
+-GDK_PIXBUF_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
+-GDK_PIXBUF_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $PNG_DEP_CFLAGS_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS"
++GDK_PIXBUF_DEP_LIBS="$GDK_PIXBUF_EXTRA_LIBS"
++GDK_PIXBUF_DEP_CFLAGS="$GDK_PIXBUF_EXTRA_CFLAGS"
+ 
+ 
+ 
+@@ -18640,7 +18644,7 @@
+ GDK_PIXBUF_XLIB_EXTRA_CFLAGS=
+ GDK_PIXBUF_XLIB_EXTRA_LIBS=
+ 
+-if $PKG_CONFIG --exists x11; then
++if false; then
+    if true; then
+   USE_X11_TRUE=
+   USE_X11_FALSE='#'
 --- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/gdk-pixbuf-util.c
 +++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/gdk-pixbuf-util.c
 @@ -23,7 +23,9 @@
@@ -34,7 +85,7 @@
  
  #include "gdk-pixbuf-transform.h"
  #include "gdk-pixbuf-private.h"
-@@ -336,15 +336,19 @@
+@@ -336,15 +338,19 @@
  const gchar *
  gdk_pixbuf_gettext (const gchar *msgid)
  {
