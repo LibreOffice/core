@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>

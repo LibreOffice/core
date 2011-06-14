@@ -47,7 +47,6 @@
 #include <docsh.hxx>
 
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>

@@ -31,7 +31,6 @@
 
 #include <shellid.hxx>
 
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_USHORTS
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>

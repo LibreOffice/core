@@ -32,7 +32,6 @@
 
 
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>       // OSL_ENSURE(in ~SwTxtFtn()

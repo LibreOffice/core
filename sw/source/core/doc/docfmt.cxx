@@ -31,7 +31,6 @@
 
 
 #define _ZFORLIST_DECLARE_TABLE
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_USHORTS
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>

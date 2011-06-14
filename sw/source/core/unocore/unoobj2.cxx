@@ -110,7 +110,6 @@
 #include <vcl/svapp.hxx>
 #include <fmtflcnt.hxx>
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 #include <editeng/brshitem.hxx>

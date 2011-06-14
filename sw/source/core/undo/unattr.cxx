@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <UndoAttribute.hxx>
 
 #include <svl/itemiter.hxx>

@@ -111,7 +111,6 @@
 #include <vcl/svapp.hxx>
 #include <fmtflcnt.hxx>
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/unolingu.hxx>

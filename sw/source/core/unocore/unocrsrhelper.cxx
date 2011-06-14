@@ -72,7 +72,6 @@
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
