@@ -71,6 +71,11 @@
 #include <SwNodeNum.hxx>
 #include <switerator.hxx>
 
+#include <set>
+#include <map>
+
+#include "../../../../../libs-core/sfx2/inc/sfx2/childwin.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
@@ -901,87 +906,127 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
 
 struct _RefIdsMap
 {
+private:
     String aName;
-    SvUShortsSort aIds, aDstIds, aIdsMap;
-    SvUShorts aMap;
+    std::set<sal_uInt16> aIds;
+    std::set<sal_uInt16> aDstIds;
+    std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.
     sal_Bool bInit;
 
-    _RefIdsMap( const String& rName )
-        : aName( rName ), aIds( 16, 16 ), aIdsMap( 16, 16 ), aMap( 16, 16 ),
-        bInit( sal_False )
-    {}
+    void       Init(SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField );
+    void       GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
+    void       GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
+    void       AddId( sal_uInt16 id, sal_uInt16 seqNum );
+    sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
-    void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
-                    sal_Bool bField = sal_True );
+public:
+    _RefIdsMap( const String& rName ) : aName( rName ), bInit( sal_False ) {}
 
-    sal_Bool IsInit() const { return bInit; }
+    void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld, sal_Bool bField );
+
+    String GetName() { return aName; }
 };
 
 SV_DECL_PTRARR_DEL( _RefIdsMaps, _RefIdsMap*, 5, 5 )
 SV_IMPL_PTRARR( _RefIdsMaps, _RefIdsMap* )
 
+/// Get a sorted list of the field IDs from a document.
+/// @param[in]     rDoc The document to search.
+/// @param[in,out] rIds The list of IDs found in the document.
+void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
+{
+    const SwTxtNode* pNd;
+    SwFieldType* pType;
+
+    if( 0 != ( pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
+    {
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+        for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+            if( pF->GetTxtFld() &&
+                0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
+                pNd->GetNodes().IsDocNodes() )
+                rIds.insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+    }
+}
+
+/// Get a sorted list of the footnote/endnote IDs from a document.
+/// @param[in]     rDoc The document to search.
+/// @param[in,out] rIds The list of IDs found in the document.
+void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
+{
+    for( sal_uInt16 n = rDoc.GetFtnIdxs().Count(); n; )
+        rIds.insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
+}
+
+/// Initialise the aIds and aDestIds collections from the source documents.
+/// @param[in] rDoc     The source document.
+/// @param[in] rDestDoc The destination document.
+/// @param[in] bField   True if we're interested in all fields, false for footnotes.
+void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
+{
+    if( bInit )
+        return;
+
+    if( bField )
+    {
+        GetFieldIdsFromDoc( rDestDoc, aIds );
+        GetFieldIdsFromDoc( rDoc, aDstIds );
+    }
+    else
+    {
+        GetIdsFromDoc( rDestDoc, aIds );
+        GetIdsFromDoc( rDoc, aDstIds );
+    }
+    bInit = sal_True;
+}
+
+/// Get the lowest unused ID in the passed set.
+/// @param[in] rIds The set of used ID numbers.
+/// @returns The lowest unused ID.
+sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
+{
+    sal_uInt16 num;
+    std::set<sal_uInt16>::iterator it;
+
+    for( it = rIds.begin(); it != rIds.end(); ++it )
+    {
+        if( num != *it )
+        {
+            return num;
+        }
+        ++num;
+    }
+    return num;
+}
+
+/// Add a new ID and sequence number to the "occupied" collection.
+/// @param[in] id     The ID number.
+/// @param[in] seqNum The sequence number.
+void _RefIdsMap::AddId( sal_uInt16 id, sal_uInt16 seqNum )
+{
+    aIds.insert( id );
+    sequencedIds[ seqNum ] = id;
+}
+
 void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
                         sal_Bool bField )
 {
-
-    if( !bInit )
-    {
-        if( bField )
-        {
-            const SwTxtNode* pNd;
-            SwFieldType* pType;
-            if( 0 != ( pType = rDestDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
-            {
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
-                    if( pF->GetTxtFld() &&
-                        0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
-                        pNd->GetNodes().IsDocNodes() )
-                        aIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
-            }
-            if( 0 != ( pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
-            {
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
-                    if( pF->GetTxtFld() &&
-                        0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
-                        pNd->GetNodes().IsDocNodes() )
-                        aDstIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
-            }
-        }
-        else
-        {
-            sal_uInt16 n;
-
-            for( n = rDestDoc.GetFtnIdxs().Count(); n; )
-                aIds.Insert( rDestDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
-            for( n = rDoc.GetFtnIdxs().Count(); n; )
-                aDstIds.Insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
-        }
-        bInit = sal_True;
-    }
+    Init( rDoc, rDestDoc, bField);
 
     // dann teste mal, ob die Nummer schon vergeben ist
     // oder ob eine neue bestimmt werden muss.
-    sal_uInt16 nPos, nSeqNo = rFld.GetSeqNo();
-    if( aIds.Seek_Entry( nSeqNo ) && aDstIds.Seek_Entry( nSeqNo ))
+    sal_uInt16 nSeqNo = rFld.GetSeqNo();
+    if( aIds.count( nSeqNo ) && aDstIds.count( nSeqNo ))
     {
-        // ist schon vergeben, also muss eine neue
-        // erzeugt werden.
-        if( aIdsMap.Seek_Entry( nSeqNo, &nPos ))
-            rFld.SetSeqNo( aMap[ nPos ] );
+        // Number already taken, so need a new one.
+        if( sequencedIds.count(nSeqNo) )
+            rFld.SetSeqNo( sequencedIds[nSeqNo] );
         else
         {
-            sal_uInt16 n;
-
-            for( n = 0; n < aIds.Count(); ++n )
-                if( n != aIds[ n ] )
-                    break;
+            sal_uInt16 n = GetFirstUnusedId( aIds );
 
             // die neue SeqNo eintragen, damit die "belegt" ist
-            aIds.Insert( n );
-            aIdsMap.Insert( nSeqNo, nPos );
-            aMap.Insert( n, nPos );
+            AddId( n, nSeqNo );
             rFld.SetSeqNo( n );
 
             // und noch die Felder oder Fuss-/EndNote auf die neue
@@ -1012,9 +1057,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
     }
     else
     {
-        aIds.Insert( nSeqNo );
-        aIdsMap.Insert( nSeqNo, nPos );
-        aMap.Insert( nSeqNo, nPos );
+        AddId( nSeqNo, nSeqNo );
     }
 }
 
@@ -1040,7 +1083,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                 {
                     _RefIdsMap* pMap = 0;
                     for( sal_uInt16 n = aFldMap.Count(); n; )
-                        if( aFldMap[ --n ]->aName == rRefFld.GetSetRefName() )
+                        if( aFldMap[ --n ]->GetName() == rRefFld.GetSetRefName() )
                         {
                             pMap = aFldMap[ n ];
                             break;
