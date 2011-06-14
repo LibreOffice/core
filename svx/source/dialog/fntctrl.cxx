@@ -66,26 +66,19 @@
 #include <editeng/udlnitem.hxx>     // SvxUnderlineItem
 #include <editeng/crsditem.hxx>     // SvxCrossedOutItem
 #include <editeng/cntritem.hxx>     // SvxContourItem
-//#include <editeng/langitem.hxx>   // SvxLanguageItem
 #include <editeng/wghtitem.hxx>     // SvxWeightItem
 #include <editeng/fhgtitem.hxx>     // SvxFontHeightItem
 #include <editeng/shdditem.hxx>     // SvxShadowedItem
 #include <editeng/escpitem.hxx>     // SvxEscapementItem
-//#include <editeng/prszitem.hxx>   // SvxPropSizeItem
 #include <editeng/wrlmitem.hxx>     // SvxWordLineModeItem
 #include <editeng/cmapitem.hxx>     // SvxWordLineModeItem
 #include <editeng/kernitem.hxx>     // SvxKerningItem
-//#include <editeng/blnkitem.hxx>   // SvxBlinkItem
-//#include "editeng/flstitem.hxx"   // SvxFontListItem
-//#include <editeng/akrnitem.hxx>   // SvxAutoKernItem
 #include <editeng/brshitem.hxx>     // SvxBrushItem
 #include <editeng/colritem.hxx>     // SvxColorItem
 #include <editeng/emphitem.hxx>     // SvxEmphasisMarkItem
 #include <editeng/charreliefitem.hxx>       // SvxCharReliefItem
 #include <editeng/twolinesitem.hxx>         // SvxTwoLinesItem
-// #include <editeng/charhiddenitem.hxx>    // SvxCharHiddenItem
 #include <editeng/charscaleitem.hxx>        // SvxCharScaleWidthItem
-// #include <editeng/charrotateitem.hxx>    // SvxCharRotateItem
 
 #include <svl/stritem.hxx>                  // SfxStringItem
 

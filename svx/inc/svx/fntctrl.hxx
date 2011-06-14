@@ -95,7 +95,6 @@ public:
     void                SetPreviewText( const ::rtl::OUString& rString );
     void                SetFontNameAsPreviewText();
 
-    //void              SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
     void                SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
     void                SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
     void                SetFontWidthScale( const SfxItemSet& rSet );
