@@ -52,35 +52,47 @@
 
 #include <svx/fntctrl.hxx>
 #include <svx/dialogs.hrc>
-#define TEXT_WIDTH  20
+#include <svx/sdasitm.hxx>
 
 // Item set includes
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
-#include <svx/sdasitm.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/crsditem.hxx>
-#include <editeng/cntritem.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/escpitem.hxx>
-#include <editeng/prszitem.hxx>
-#include <editeng/wrlmitem.hxx>
-#include <editeng/cmapitem.hxx>
-#include <editeng/kernitem.hxx>
-#include <editeng/blnkitem.hxx>
-#include <editeng/akrnitem.hxx>
-#include <editeng/brshitem.hxx>
+
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/emphitem.hxx>
-#include <editeng/charreliefitem.hxx>
-#include <editeng/twolinesitem.hxx>
-#include <editeng/charscaleitem.hxx>
-#include <editeng/charrotateitem.hxx>
+#include <editeng/editids.hrc>      // #define SID_ATTR_*
+#include <editeng/fontitem.hxx>     // SvxFontItem
+#include <editeng/postitem.hxx>     // SvxPostureItem
+#include <editeng/udlnitem.hxx>     // SvxUnderlineItem
+#include <editeng/crsditem.hxx>     // SvxCrossedOutItem
+#include <editeng/cntritem.hxx>     // SvxContourItem
+//#include <editeng/langitem.hxx>   // SvxLanguageItem
+#include <editeng/wghtitem.hxx>     // SvxWeightItem
+#include <editeng/fhgtitem.hxx>     // SvxFontHeightItem
+#include <editeng/shdditem.hxx>     // SvxShadowedItem
+#include <editeng/escpitem.hxx>     // SvxEscapementItem
+//#include <editeng/prszitem.hxx>   // SvxPropSizeItem
+#include <editeng/wrlmitem.hxx>     // SvxWordLineModeItem
+#include <editeng/cmapitem.hxx>     // SvxWordLineModeItem
+#include <editeng/kernitem.hxx>     // SvxKerningItem
+//#include <editeng/blnkitem.hxx>   // SvxBlinkItem
+//#include "editeng/flstitem.hxx"   // SvxFontListItem
+//#include <editeng/akrnitem.hxx>   // SvxAutoKernItem
+#include <editeng/brshitem.hxx>     // SvxBrushItem
+#include <editeng/colritem.hxx>     // SvxColorItem
+#include <editeng/emphitem.hxx>     // SvxEmphasisMarkItem
+#include <editeng/charreliefitem.hxx>       // SvxCharReliefItem
+#include <editeng/twolinesitem.hxx>         // SvxTwoLinesItem
+// #include <editeng/charhiddenitem.hxx>    // SvxCharHiddenItem
+#include <editeng/charscaleitem.hxx>        // SvxCharScaleWidthItem
+// #include <editeng/charrotateitem.hxx>    // SvxCharRotateItem
+
+#include <svl/stritem.hxx>                  // SfxStringItem
+
+// define ----------------------------------------------------------------
+
+#define TEXT_WIDTH 20
+#define ISITEMSET rSet.GetItemState(nWhich)>=SFX_ITEM_DEFAULT
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -141,7 +153,7 @@ class FontPrevWin_Impl
 
     SvxFont                         aFont;
     Printer*                        pPrinter;
-    sal_Bool                            bDelPrinter;
+    sal_Bool                        bDelPrinter;
 
     Reference < XBreakIterator >    xBreak;
     SvULongs                        aTextWidth;
@@ -160,11 +172,13 @@ class FontPrevWin_Impl
     long                            n100PercentFontWidth;       // initial -1 -> not set yet
     long                            n100PercentFontWidthCJK;
     long                            n100PercentFontWidthCTL;
-    sal_uInt16                          nFontWidthScale;
+    sal_uInt16                      nFontWidthScale;
 
-    sal_Bool                            bSelection      : 1,
+    sal_Bool                        bSelection      : 1,
                                     bGetSelection   : 1,
                                     bUseResText     : 1,
+                                    bDrawBaseLine   : 1,
+                                    bPreviewBackgroundToCharacter : 1,
                                     bTwoLines       : 1,
                                     bNoLines        : 1,
                                     bIsCJKUI        : 1,
@@ -179,7 +193,7 @@ public:
         pColor( NULL ), pBackColor( 0 ), nAscent( 0 ),
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( sal_False ), bGetSelection( sal_False ), bUseResText( sal_False ),
-        bTwoLines( sal_False ), bNoLines( sal_False ),
+        bDrawBaseLine( sal_True ), bPreviewBackgroundToCharacter( sal_False ), bTwoLines( sal_False ),
         bIsCJKUI( sal_False ), bIsCTLUI( sal_False ),
         bUseFontNameAsText( sal_False ), bTextInited( sal_False )
         {
@@ -198,9 +212,9 @@ public:
     Size                CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, SvxFont &rFont );
     void                DrawPrev( OutputDevice* pWin, Printer* pPrt, Point &rPt, SvxFont &rFont );
 
-    sal_Bool                SetFontWidthScale( sal_uInt16 nScaleInPercent );
+    sal_Bool            SetFontWidthScale( sal_uInt16 nScaleInPercent );
     inline void         Invalidate100PercentFontWidth();
-    inline sal_Bool         Is100PercentFontWidthValid() const;
+    inline sal_Bool     Is100PercentFontWidthValid() const;
     void                ScaleFontWidth( const OutputDevice& rOutDev );
                             // scales rNonCJKFont and aCJKFont depending on nFontWidthScale and
                             //  sets the 100%-Font-Widths
@@ -569,6 +583,7 @@ void SvxFontPrevWindow::StateChanged( StateChangedType nType )
         InitSettings( sal_False, sal_True );
 
     Window::StateChanged( nType );
+    Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -683,6 +698,20 @@ void SvxFontPrevWindow::UseResourceText( sal_Bool bUse )
 
 // -----------------------------------------------------------------------
 
+void SvxFontPrevWindow::SetDrawBaseLine( sal_Bool bSet )
+{
+    pImpl->bDrawBaseLine = bSet;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetPreviewBackgroundToCharacter(sal_Bool bSet)
+{
+    pImpl->bPreviewBackgroundToCharacter = bSet;
+}
+
+// -----------------------------------------------------------------------
+
 void SvxFontPrevWindow::Paint( const Rectangle& )
 {
     Printer* pPrinter = pImpl->pPrinter;
@@ -690,155 +719,175 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
     SvxFont& rCJKFont = pImpl->aCJKFont;
     // TODO: SvxFont& rCTLFont = pImpl->aCTLFont;
 
-    if ( pImpl->bUseResText )
-        pImpl->aText = GetText();
-    else if ( !pImpl->bSelection && !pImpl->bTextInited )
+    if ( !IsEnabled() )
     {
-        SfxViewShell* pSh = SfxViewShell::Current();
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const Size aLogSize( GetOutputSize() );
 
-        if ( pSh && !pImpl->bGetSelection && !pImpl->bUseFontNameAsText )
-        {
-            pImpl->aText = pSh->GetSelectionText();
-            pImpl->bGetSelection = sal_True;
-            pImpl->bSelection = pImpl->aText.Len() != 0;
-
-        }
-
-        if ( !pImpl->bSelection || pImpl->bUseFontNameAsText )
-        {
-            pImpl->aText = rFont.GetName();
-            if( pImpl->bIsCJKUI )
-                pImpl->aText += rCJKFont.GetName();
-            //TODO bIsCTLUI
-        }
-
-        if ( !pImpl->aText.Len() )
-            pImpl->aText = GetText();
-
-        // remove line feeds and carriage returns from string
-        bool bNotEmpty = false;
-        for ( xub_StrLen i = 0; i < pImpl->aText.Len(); ++i )
-        {
-            if ( 0xa == pImpl->aText.GetChar( i ) ||
-                 0xd == pImpl->aText.GetChar( i ) )
-                 pImpl->aText.SetChar( i, ' ' );
-            else
-                bNotEmpty = true;
-        }
-        if ( !bNotEmpty )
-            pImpl->aText = GetText();
-
-        if ( pImpl->aText.Len() > (TEXT_WIDTH-1) )
-            pImpl->aText.Erase( pImpl->aText.Search( sal_Unicode( ' ' ), TEXT_WIDTH ) );
-    }
-
-    // calculate text width scaling
-    pImpl->ScaleFontWidth( *this/*, rFont*/ );
-
-    pImpl->CheckScript();
-    Size aTxtSize = pImpl->CalcTextSize( this, pPrinter, rFont );
-
-    const Size aLogSize( GetOutputSize() );
-
-    long nX = aLogSize.Width()  / 2 - aTxtSize.Width() / 2;
-    long nY = aLogSize.Height() / 2 - aTxtSize.Height() / 2;
-
-    if ( nY + pImpl->nAscent > aLogSize.Height() )
-        nY = aLogSize.Height() - pImpl->nAscent;
-
-    if ( pImpl->pBackColor )
-    {
         Rectangle aRect( Point( 0, 0 ), aLogSize );
-        Color aLineCol = GetLineColor();
-        Color aFillCol = GetFillColor();
         SetLineColor();
-        SetFillColor( *pImpl->pBackColor );
+        SetFillColor( rStyleSettings.GetWindowColor() );
         DrawRect( aRect );
-        SetLineColor( aLineCol );
-        SetFillColor( aFillCol );
-    }
-    if ( pImpl->pColor )
-    {
-        Rectangle aRect( Point( nX, nY ), aTxtSize );
-        Color aLineCol = GetLineColor();
-        Color aFillCol = GetFillColor();
-        SetLineColor();
-        SetFillColor( *pImpl->pColor );
-        DrawRect( aRect );
-        SetLineColor( aLineCol );
-        SetFillColor( aFillCol );
-    }
-
-    long nStdAscent = pImpl->nAscent;
-    nY += nStdAscent;
-
-    if (!pImpl->bNoLines && pImpl->bTwoLines)
-    {
-        SvxFont aSmallFont( rFont );
-        Size aOldSize = pImpl->aCJKFont.GetSize();
-        setFontSize(aSmallFont);
-        setFontSize(pImpl->aCJKFont);
-
-        long nStartBracketWidth = 0;
-        long nEndBracketWidth = 0;
-        long nTextWidth = 0;
-        if(pImpl->cStartBracket)
-        {
-            String sBracket(pImpl->cStartBracket);
-            nStartBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
-        }
-        if(pImpl->cEndBracket)
-        {
-            String sBracket(pImpl->cEndBracket);
-            nEndBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
-        }
-        nTextWidth = pImpl->CalcTextSize( this, pPrinter, aSmallFont ).Width();
-        long nResultWidth = nStartBracketWidth;
-        nResultWidth += nEndBracketWidth;
-        nResultWidth += nTextWidth;
-
-        long _nX = (aLogSize.Width() - nResultWidth) / 2;
-        DrawLine( Point( 0,  nY ), Point( _nX, nY ) );
-        DrawLine( Point( _nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
-
-        long nSmallAscent = pImpl->nAscent;
-        long nOffset = (nStdAscent - nSmallAscent ) / 2;
-
-        if(pImpl->cStartBracket)
-        {
-            String sBracket(pImpl->cStartBracket);
-            rFont.DrawPrev( this, pPrinter, Point( _nX, nY - nOffset - 4), sBracket );
-            _nX += nStartBracketWidth;
-        }
-
-        Point aTmpPoint1( _nX, nY - nSmallAscent - 2 );
-        Point aTmpPoint2( _nX, nY );
-        pImpl->DrawPrev( this, pPrinter, aTmpPoint1, aSmallFont );
-        pImpl->DrawPrev( this, pPrinter, aTmpPoint2, aSmallFont );
-
-        _nX += nTextWidth;
-        if(pImpl->cEndBracket)
-        {
-            Point aTmpPoint( _nX + 1, nY - nOffset - 4);
-            String sBracket(pImpl->cEndBracket);
-            rFont.DrawPrev( this, pPrinter, aTmpPoint, sBracket );
-        }
-        pImpl->aCJKFont.SetSize( aOldSize );
     }
     else
     {
-        if (!pImpl->bNoLines)
+        if ( pImpl->bUseResText )
+            pImpl->aText = GetText();
+        else if ( !pImpl->bSelection && !pImpl->bTextInited )
         {
-            Color aLineCol = GetLineColor();
+            SfxViewShell* pSh = SfxViewShell::Current();
 
-            SetLineColor( rFont.GetColor() );
-            DrawLine( Point( 0,  nY ), Point( nX, nY ) );
-            DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
-            SetLineColor( aLineCol );
+            if ( pSh && !pImpl->bGetSelection && !pImpl->bUseFontNameAsText )
+            {
+                pImpl->aText = pSh->GetSelectionText();
+                pImpl->bGetSelection = sal_True;
+                pImpl->bSelection = pImpl->aText.Len() != 0;
+
+            }
+
+            if ( !pImpl->bSelection || pImpl->bUseFontNameAsText )
+            {
+                pImpl->aText = rFont.GetName();
+                if( pImpl->bIsCJKUI )
+                    pImpl->aText += rCJKFont.GetName();
+                //TODO bIsCTLUI
+            }
+
+            if ( !pImpl->aText.Len() )
+                pImpl->aText = GetText();
+
+            // remove line feeds and carriage returns from string
+            bool bNotEmpty = false;
+            for ( xub_StrLen i = 0; i < pImpl->aText.Len(); ++i )
+            {
+                if ( 0xa == pImpl->aText.GetChar( i ) ||
+                     0xd == pImpl->aText.GetChar( i ) )
+                     pImpl->aText.SetChar( i, ' ' );
+                else
+                    bNotEmpty = true;
+            }
+            if ( !bNotEmpty )
+                pImpl->aText = GetText();
+
+            if ( pImpl->aText.Len() > (TEXT_WIDTH-1) )
+                pImpl->aText.Erase( pImpl->aText.Search( sal_Unicode( ' ' ), TEXT_WIDTH ) );
         }
 
-        Point aTmpPoint( nX, nY );
-        pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
+        // calculate text width scaling
+        pImpl->ScaleFontWidth( *this/*, rFont*/ );
+
+        pImpl->CheckScript();
+        Size aTxtSize = pImpl->CalcTextSize( this, pPrinter, rFont );
+
+        const Size aLogSize( GetOutputSize() );
+
+        long nX = aLogSize.Width()  / 2 - aTxtSize.Width() / 2;
+        long nY = aLogSize.Height() / 2 - aTxtSize.Height() / 2;
+
+        if ( nY + pImpl->nAscent > aLogSize.Height() )
+            nY = aLogSize.Height() - pImpl->nAscent;
+
+        if ( pImpl->pBackColor )
+        {
+            Rectangle aRect( Point( 0, 0 ), aLogSize );
+            Color aLineCol = GetLineColor();
+            Color aFillCol = GetFillColor();
+            SetLineColor();
+            SetFillColor( *pImpl->pBackColor );
+            DrawRect( aRect );
+            SetLineColor( aLineCol );
+            SetFillColor( aFillCol );
+        }
+        if ( pImpl->pColor )
+        {
+            Rectangle aRect( Point( nX, nY ), aTxtSize );
+            Color aLineCol = GetLineColor();
+            Color aFillCol = GetFillColor();
+            SetLineColor();
+            SetFillColor( *pImpl->pColor );
+            DrawRect( aRect );
+            SetLineColor( aLineCol );
+            SetFillColor( aFillCol );
+        }
+
+        long nStdAscent = pImpl->nAscent;
+        nY += nStdAscent;
+
+        if(pImpl->bTwoLines)
+        {
+            SvxFont aSmallFont( rFont );
+            Size aOldSize = pImpl->aCJKFont.GetSize();
+            setFontSize(aSmallFont);
+            setFontSize(pImpl->aCJKFont);
+
+            long nStartBracketWidth = 0;
+            long nEndBracketWidth = 0;
+            long nTextWidth = 0;
+            if(pImpl->cStartBracket)
+            {
+                String sBracket(pImpl->cStartBracket);
+                nStartBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
+            }
+            if(pImpl->cEndBracket)
+            {
+                String sBracket(pImpl->cEndBracket);
+                nEndBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
+            }
+            nTextWidth = pImpl->CalcTextSize( this, pPrinter, aSmallFont ).Width();
+            long nResultWidth = nStartBracketWidth;
+            nResultWidth += nEndBracketWidth;
+            nResultWidth += nTextWidth;
+
+            long _nX = (aLogSize.Width() - nResultWidth) / 2;
+            if ( pImpl->bDrawBaseLine )
+            {
+                DrawLine( Point( 0,  nY ), Point( _nX, nY ) );
+                DrawLine( Point( _nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
+            }
+
+            long nSmallAscent = pImpl->nAscent;
+            long nOffset = (nStdAscent - nSmallAscent ) / 2;
+
+            if(pImpl->cStartBracket)
+            {
+                String sBracket(pImpl->cStartBracket);
+                rFont.DrawPrev( this, pPrinter, Point( _nX, nY - nOffset - 4), sBracket );
+                _nX += nStartBracketWidth;
+            }
+
+            Point aTmpPoint1( _nX, nY - nSmallAscent - 2 );
+            Point aTmpPoint2( _nX, nY );
+            pImpl->DrawPrev( this, pPrinter, aTmpPoint1, aSmallFont );
+            pImpl->DrawPrev( this, pPrinter, aTmpPoint2, aSmallFont );
+
+            _nX += nTextWidth;
+            if(pImpl->cEndBracket)
+            {
+                Point aTmpPoint( _nX + 1, nY - nOffset - 4);
+                String sBracket(pImpl->cEndBracket);
+                rFont.DrawPrev( this, pPrinter, aTmpPoint, sBracket );
+            }
+            pImpl->aCJKFont.SetSize( aOldSize );
+        }
+        else
+        {
+
+            if (!pImpl->bNoLines)
+            {
+                Color aLineCol = GetLineColor();
+
+                SetLineColor( rFont.GetColor() );
+                if ( pImpl->bDrawBaseLine )
+                {
+                    DrawLine( Point( 0,  nY ), Point( nX, nY ) );
+                    DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
+                }
+                SetLineColor( aLineCol );
+            }
+
+            Point aTmpPoint( nX, nY );
+            pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
+        }
     }
 }
 
@@ -1171,6 +1220,320 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
         SetFontWidthScale( rItem.GetValue() );
     }
 
+    Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
+{
+    SvxFont&        rFont = GetFont();
+    SvxFont&        rCJKFont = GetCJKFont();
+    SvxFont&        rCTLFont = GetCTLFont();
+
+    initFont(rFont);
+    initFont(rCJKFont);
+    initFont(rCTLFont);
+    InitSettings( sal_True, sal_True );
+
+    sal_uInt16 nWhich;
+    nWhich = rSet.GetPool()->GetWhich( SID_CHAR_DLG_PREVIEW_STRING );
+    if( ISITEMSET )
+    {
+        const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
+        ::rtl::OUString aString = rItem.GetValue();
+        if( aString.getLength() != 0 )
+            SetPreviewText( aString );
+        else
+            SetFontNameAsPreviewText();
+    }
+
+    // Underline
+    FontUnderline eUnderline;
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_UNDERLINE );
+    if( ISITEMSET )
+    {
+        const SvxUnderlineItem& rItem = ( SvxUnderlineItem& ) rSet.Get( nWhich );
+        eUnderline = ( FontUnderline ) rItem.GetValue();
+        SetTextLineColor( rItem.GetColor() );
+    }
+    else
+        eUnderline = UNDERLINE_NONE;
+
+    rFont.SetUnderline( eUnderline );
+    rCJKFont.SetUnderline( eUnderline );
+    rCTLFont.SetUnderline( eUnderline );
+
+    // Overline
+    FontUnderline eOverline;
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_OVERLINE );
+    if( ISITEMSET )
+    {
+        const SvxOverlineItem& rItem = ( SvxOverlineItem& ) rSet.Get( nWhich );
+        eOverline = ( FontUnderline ) rItem.GetValue();
+        SetOverlineColor( rItem.GetColor() );
+    }
+    else
+        eOverline = UNDERLINE_NONE;
+
+    rFont.SetOverline( eOverline );
+    rCJKFont.SetOverline( eOverline );
+    rCTLFont.SetOverline( eOverline );
+
+    //  Strikeout
+    FontStrikeout eStrikeout;
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_STRIKEOUT );
+    if( ISITEMSET )
+    {
+        const SvxCrossedOutItem& rItem = ( SvxCrossedOutItem& ) rSet.Get( nWhich );
+        eStrikeout = ( FontStrikeout ) rItem.GetValue();
+    }
+    else
+        eStrikeout = STRIKEOUT_NONE;
+
+    rFont.SetStrikeout( eStrikeout );
+    rCJKFont.SetStrikeout( eStrikeout );
+    rCTLFont.SetStrikeout( eStrikeout );
+
+    // WordLineMode
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
+    if( ISITEMSET )
+    {
+        const SvxWordLineModeItem& rItem = ( SvxWordLineModeItem& ) rSet.Get( nWhich );
+        rFont.SetWordLineMode( rItem.GetValue() );
+        rCJKFont.SetWordLineMode( rItem.GetValue() );
+        rCTLFont.SetWordLineMode( rItem.GetValue() );
+    }
+
+    // Emphasis
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
+    if( ISITEMSET )
+    {
+        const SvxEmphasisMarkItem& rItem = ( SvxEmphasisMarkItem& ) rSet.Get( nWhich );
+        FontEmphasisMark eMark = rItem.GetEmphasisMark();
+        rFont.SetEmphasisMark( eMark );
+        rCJKFont.SetEmphasisMark( eMark );
+        rCTLFont.SetEmphasisMark( eMark );
+    }
+
+    // Relief
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_RELIEF );
+    if( ISITEMSET )
+    {
+        const SvxCharReliefItem& rItem = ( SvxCharReliefItem& ) rSet.Get( nWhich );
+        FontRelief eFontRelief = ( FontRelief ) rItem.GetValue();
+        rFont.SetRelief( eFontRelief );
+        rCJKFont.SetRelief( eFontRelief );
+        rCTLFont.SetRelief( eFontRelief );
+    }
+
+    // Effects
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_CASEMAP );
+    if( ISITEMSET )
+    {
+        const SvxCaseMapItem& rItem = ( SvxCaseMapItem& ) rSet.Get( nWhich );
+        SvxCaseMap eCaseMap = ( SvxCaseMap ) rItem.GetValue();
+        rFont.SetCaseMap( eCaseMap );
+        rCJKFont.SetCaseMap( eCaseMap );
+        // #i78474# small caps do not exist in CTL fonts
+        rCTLFont.SetCaseMap( eCaseMap == SVX_CASEMAP_KAPITAELCHEN ? SVX_CASEMAP_NOT_MAPPED : eCaseMap );
+    }
+
+    // Outline
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_CONTOUR );
+    if( ISITEMSET )
+    {
+        const SvxContourItem& rItem = ( SvxContourItem& ) rSet.Get( nWhich );
+        sal_Bool bOutline = rItem.GetValue();
+        rFont.SetOutline( bOutline );
+        rCJKFont.SetOutline( bOutline );
+        rCTLFont.SetOutline( bOutline );
+    }
+
+    // Shadow
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_SHADOWED );
+    if( ISITEMSET )
+    {
+        const SvxShadowedItem& rItem = ( SvxShadowedItem& ) rSet.Get( nWhich );
+        sal_Bool bShadow = rItem.GetValue();
+        rFont.SetShadow( bShadow );
+        rCJKFont.SetShadow( bShadow );
+        rCTLFont.SetShadow( bShadow );
+    }
+
+    // Background
+    sal_Bool bTransparent;
+    nWhich = rSet.GetPool()->GetWhich( pImpl->bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR );
+    if( ISITEMSET )
+    {
+         const SvxBrushItem& rBrush = ( SvxBrushItem& ) rSet.Get( nWhich );
+         const Color& rColor = rBrush.GetColor();
+         bTransparent = rColor.GetTransparency() > 0;
+         rFont.SetFillColor( rColor );
+         rCJKFont.SetFillColor( rColor );
+         rCTLFont.SetFillColor( rColor );
+    }
+    else
+        bTransparent = sal_True;
+
+    rFont.SetTransparent( bTransparent );
+    rCJKFont.SetTransparent( bTransparent );
+    rCTLFont.SetTransparent( bTransparent );
+
+    Color aBackCol( COL_TRANSPARENT );
+    if( !pImpl->bPreviewBackgroundToCharacter )
+    {
+        nWhich = rSet.GetPool()->GetWhich( SID_ATTR_BRUSH );
+        if( ISITEMSET )
+        {
+            const SvxBrushItem& rBrush = ( SvxBrushItem& ) rSet.Get( nWhich );
+            if( GPOS_NONE == rBrush.GetGraphicPos() )
+                aBackCol = rBrush.GetColor();
+        }
+    }
+    SetBackColor( aBackCol );
+
+    // Font
+    SetFont( rSet, SID_ATTR_CHAR_FONT, rFont );
+    SetFont( rSet, SID_ATTR_CHAR_CJK_FONT, rCJKFont );
+    SetFont( rSet, SID_ATTR_CHAR_CTL_FONT, rCTLFont );
+
+    // Style
+    SetFontStyle( rSet, SID_ATTR_CHAR_POSTURE, SID_ATTR_CHAR_WEIGHT, rFont );
+    SetFontStyle( rSet, SID_ATTR_CHAR_CJK_POSTURE, SID_ATTR_CHAR_CJK_WEIGHT, rCJKFont );
+    SetFontStyle( rSet, SID_ATTR_CHAR_CTL_POSTURE, SID_ATTR_CHAR_CTL_WEIGHT, rCTLFont );
+
+    // Size
+    SetFontSize( rSet, SID_ATTR_CHAR_FONTHEIGHT, rFont );
+    SetFontSize( rSet, SID_ATTR_CHAR_CJK_FONTHEIGHT, rCJKFont );
+    SetFontSize( rSet, SID_ATTR_CHAR_CTL_FONTHEIGHT, rCTLFont );
+
+    // Color
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_COLOR );
+    if( ISITEMSET )
+    {
+        const SvxColorItem& rItem = ( SvxColorItem& ) rSet.Get( nWhich );
+        Color aCol( rItem.GetValue() );
+        rFont.SetColor( aCol );
+        rCJKFont.SetColor( aCol );
+        rCTLFont.SetColor( aCol );
+
+        AutoCorrectFontColor(); // handle color COL_AUTO
+    }
+
+    // Kerning
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_KERNING );
+    if( ISITEMSET )
+    {
+        const SvxKerningItem& rItem = ( SvxKerningItem& ) rSet.Get( nWhich );
+        short nKern = ( short )
+                        LogicToLogic( rItem.GetValue(), ( MapUnit ) rSet.GetPool()->GetMetric( nWhich ), MAP_TWIP );
+        rFont.SetFixKerning( nKern );
+        rCJKFont.SetFixKerning( nKern );
+        rCTLFont.SetFixKerning( nKern );
+    }
+
+    // Escapement
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
+    const sal_uInt8 nProp = 100;
+    short nEsc;
+    sal_uInt8 nEscProp;
+    if( ISITEMSET )
+    {
+        const SvxEscapementItem& rItem = ( SvxEscapementItem& ) rSet.Get( nWhich );
+        nEsc = rItem.GetEsc();
+        nEscProp = rItem.GetProp();
+
+        if( nEsc == DFLT_ESC_AUTO_SUPER )
+            nEsc = DFLT_ESC_SUPER;
+        else if( nEsc == DFLT_ESC_AUTO_SUB )
+            nEsc = DFLT_ESC_SUB;
+    }
+    else
+    {
+        nEsc  = 0;
+        nEscProp = 100;
+    }
+
+    SetFontEscapement( nProp, nEscProp, nEsc );
+
+    // Font width scale
+    SetFontWidthScale( rSet );
+
+    Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
+{
+    sal_uInt16 nWhich = rSet.GetPool()->GetWhich( nSlot );
+    if( ISITEMSET )
+    {
+        const SvxFontItem& rFontItem = ( SvxFontItem& ) rSet.Get( nWhich );
+        rFont.SetFamily( rFontItem.GetFamily() );
+        rFont.SetName( rFontItem.GetFamilyName() );
+        rFont.SetPitch( rFontItem.GetPitch() );
+        rFont.SetCharSet( rFontItem.GetCharSet() );
+        rFont.SetStyleName( rFontItem.GetStyleName() );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_uInt16 nWeight, SvxFont& rFont )
+{
+    sal_uInt16 nWhich = rSet.GetPool()->GetWhich( nPosture );
+    if( ISITEMSET )
+    {
+        const SvxPostureItem& rItem = ( SvxPostureItem& ) rSet.Get( nWhich );
+        rFont.SetItalic( ( FontItalic ) rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
+    }
+
+    nWhich = rSet.GetPool()->GetWhich( nWeight );
+    if( ISITEMSET )
+    {
+        SvxWeightItem& rItem = ( SvxWeightItem& ) rSet.Get( nWhich );
+        rFont.SetWeight( ( FontWeight ) rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetFontWidthScale( const SfxItemSet& rSet )
+{
+    sal_uInt16  nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    if( ISITEMSET )
+    {
+        const SvxCharScaleWidthItem&    rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
+
+        SetFontWidthScale( rItem.GetValue() );
+    }
+}
+
+// -----------------------------------------------------------------------
+namespace
+{
+    // -----------------------------------------------------------------------
+    void setFontEscapement(SvxFont& _rFont,sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
+    {
+        _rFont.SetPropr( nProp );
+        _rFont.SetProprRel( nEscProp );
+        _rFont.SetEscapement( nEsc );
+    }
+    // -----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
+}
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
+{
+    setFontEscapement(GetFont(),nProp,nEscProp,nEsc);
+    setFontEscapement(GetCJKFont(),nProp,nEscProp,nEsc);
+    setFontEscapement(GetCTLFont(),nProp,nEscProp,nEsc);
     Invalidate();
 }
 

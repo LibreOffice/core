@@ -33,6 +33,8 @@
 #include <vcl/window.hxx>
 #include <editeng/svxfont.hxx>
 #include "svx/svxdllapi.h"
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -61,6 +63,8 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
+    void                Init( const SfxItemSet& rSet );
+
     // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
@@ -74,6 +78,8 @@ public:
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
     void                UseResourceText( sal_Bool bUse = sal_True );
+    void                SetDrawBaseLine( sal_Bool bSet = sal_True );
+    void                SetPreviewBackgroundToCharacter( sal_Bool bSet = sal_True );
     void                Paint( const Rectangle& );
 
     sal_Bool            IsTwoLines() const;
@@ -88,6 +94,12 @@ public:
 
     void                SetPreviewText( const ::rtl::OUString& rString );
     void                SetFontNameAsPreviewText();
+
+    //void              SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
+    void                SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
+    void                SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
+    void                SetFontWidthScale( const SfxItemSet& rSet );
+    void                SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
 
     void                SetFromItemSet( const SfxItemSet &rSet,
                                         bool bPreviewBackgroundToCharacter = false );
