@@ -57,7 +57,7 @@ void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in
     XMLElement* pTmp2    = NULL;
 
     sCur = sLangIdx_in;
-    ByteString sFallback( sCur );
+    rtl::OString sFallback( sCur );
     GetIsoFallback( sFallback );
     if( (rElem_out.find( sFallback ) != rElem_out.end()) && rElem_out[ sFallback ] != NULL ){
         pTmp2 = rElem_out[ sFallback ];

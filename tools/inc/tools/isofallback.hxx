@@ -29,11 +29,11 @@
 #ifndef _ISOFALLBACK_HXX
 #define _ISOFALLBACK_HXX
 
-#include <tools/string.hxx>
+#include <rtl/string.hxx>
 #include "tools/toolsdllapi.h"
 
 // Return true if valid fallback found
-TOOLS_DLLPUBLIC sal_Bool GetIsoFallback( ByteString& rLanguage );
+TOOLS_DLLPUBLIC bool GetIsoFallback(rtl::OString& rLanguage);
 
 #endif //_ISOFALLBACK_HXX
 

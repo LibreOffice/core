@@ -447,7 +447,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
 ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
 /*****************************************************************************/
 {
-    ByteString sFallback=nLanguage;
+    rtl::OString sFallback=nLanguage;
     GetIsoFallback( sFallback );
     return sFallback;
 }
