@@ -48,6 +48,11 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk \
 ))
 endif
+ifneq ($(ENABLE_GTK3),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    Library_vclplug_gtk3 \
+))
+endif
 ifneq ($(ENABLE_KDE),)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_kde \
