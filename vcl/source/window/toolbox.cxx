@@ -3312,19 +3312,8 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
         else
             aRect.Left() = aRect.Right() - aRect.getWidth()/3;
 
-        if( pThis->mpData->maMenuType & TOOLBOX_MENUTYPE_CUSTOMIZE )
-            ImplDrawDropdownArrow( pThis, aRect, sal_True, !pThis->mbHorz );
-
         if( pThis->ImplHasClippedItems() )
-        {
-            aRect = aInnerRect;
-            if( pThis->mbHorz )
-                aRect.Bottom() = aRect.Top() + aRect.getHeight()/3;
-            else
-                aRect.Right() = aRect.Left() + aRect.getWidth()/3;
-
-            ImplDrawMoreIndicator( pThis, aRect, sal_True, !pThis->mbHorz );
-        }
+            ImplDrawMoreIndicator( pThis, aInnerRect, sal_True, !pThis->mbHorz );
 
         // store highlight state
         pThis->mpData->mbMenubuttonSelected = bHighlight;
