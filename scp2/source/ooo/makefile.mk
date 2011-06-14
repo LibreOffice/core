@@ -66,6 +66,9 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 SCPDEFS+=-DGTK_TWO_FOUR
 .ENDIF
 .ENDIF
+.IF "$(ENABLE_GTK3)" != ""
+SCPDEFS+=-DENABLE_GTK3
+.ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 
 .IF "$(ENABLE_KDE)" != ""
