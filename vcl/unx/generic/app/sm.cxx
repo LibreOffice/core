@@ -35,6 +35,8 @@
 
 #include <stdio.h>
 
+#include <rtl/strbuf.hxx>
+
 #include <osl/process.h>
 #include <osl/security.h>
 #include <osl/conditn.h>
@@ -177,7 +179,7 @@ public:
 
 
 SmcConn             SessionManagerClient::aSmcConnection            = NULL;
-ByteString          SessionManagerClient::aClientID;
+rtl::OString SessionManagerClient::m_aClientID;
 sal_Bool                ICEConnectionObserver::bIsWatching              = sal_False;
 struct pollfd*  ICEConnectionObserver::pFilehandles             = NULL;
 IceConn*            ICEConnectionObserver::pConnections             = NULL;
@@ -238,13 +240,14 @@ static void BuildSmPropertyList()
         pSmProps[ 2 ].vals      = new SmPropValue[3];
         pSmProps[ 2 ].vals[0].length    = aExec.getLength()+1;
         pSmProps[ 2 ].vals[0].value = strdup( aExec.getStr() );
-            ByteString aRestartOption( "-session=" );
-        aRestartOption.Append( SessionManagerClient::getSessionID() );
-        pSmProps[ 2 ].vals[1].length    = aRestartOption.Len()+1;
-        pSmProps[ 2 ].vals[1].value = strdup( aRestartOption.GetBuffer() );
-            ByteString aRestartOptionNoLogo( "-nologo" );
-        pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.Len()+1;
-        pSmProps[ 2 ].vals[2].value = strdup( aRestartOptionNoLogo.GetBuffer() );
+        rtl::OStringBuffer aRestartOption;
+        aRestartOption.append(RTL_CONSTASCII_STRINGPARAM("-session="));
+        aRestartOption.append(SessionManagerClient::getSessionID());
+        pSmProps[ 2 ].vals[1].length    = aRestartOption.getLength()+1;
+        pSmProps[ 2 ].vals[1].value = strdup(aRestartOption.getStr());
+        rtl::OString aRestartOptionNoLogo(RTL_CONSTASCII_STRINGPARAM("-nologo"));
+        pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.getLength()+1;
+        pSmProps[ 2 ].vals[2].value = strdup(aRestartOptionNoLogo.getStr());
 
         rtl::OUString aUserName;
         rtl::OString aUser;
@@ -466,7 +469,7 @@ void SessionManagerClient::open()
         ICEConnectionObserver::lock();
 
         char* pClientID = NULL;
-        const ByteString& rPrevId( getPreviousSessionID() );
+        const rtl::OString& rPrevId(getPreviousSessionID());
 
         aCallbacks.save_yourself.callback           = SaveYourselfProc;
         aCallbacks.save_yourself.client_data        = NULL;
@@ -485,7 +488,7 @@ void SessionManagerClient::open()
                                             SmcSaveCompleteProcMask         |
                                             SmcShutdownCancelledProcMask    ,
                                             &aCallbacks,
-                                            rPrevId.Len() ? const_cast<char*>(rPrevId.GetBuffer()) : NULL,
+                                            rPrevId.getLength() ? const_cast<char*>(rPrevId.getStr()) : NULL,
                                             &pClientID,
                                             sizeof( aErrBuf ),
                                             aErrBuf );
@@ -493,13 +496,13 @@ void SessionManagerClient::open()
             SMprintf( "SmcOpenConnection failed: %s\n", aErrBuf );
         else
             SMprintf( "SmcOpenConnection succeeded, client ID is \"%s\"\n", pClientID );
-        aClientID = ByteString( pClientID );
+        m_aClientID = rtl::OString(pClientID);
         free( pClientID );
         pClientID = NULL;
         ICEConnectionObserver::unlock();
 
         SalDisplay* pDisp = GetX11SalData()->GetDisplay();
-        if( pDisp->GetDrawable( pDisp->GetDefaultScreenNumber() ) && aClientID.Len() )
+        if( pDisp->GetDrawable(pDisp->GetDefaultScreenNumber()) && !m_aClientID.isEmpty() )
         {
             XChangeProperty( pDisp->GetDisplay(),
                              pDisp->GetDrawable( pDisp->GetDefaultScreenNumber() ),
@@ -507,8 +510,8 @@ void SessionManagerClient::open()
                              XA_STRING,
                              8,
                              PropModeReplace,
-                             (unsigned char*)aClientID.GetBuffer(),
-                             aClientID.Len()
+                             (unsigned char*)m_aClientID.getStr(),
+                             m_aClientID.getLength()
                              );
         }
     }
@@ -517,9 +520,9 @@ void SessionManagerClient::open()
 #endif
 }
 
-const ByteString& SessionManagerClient::getSessionID()
+const rtl::OString& SessionManagerClient::getSessionID()
 {
-    return aClientID;
+    return m_aClientID;
 }
 
 void SessionManagerClient::close()
@@ -575,22 +578,25 @@ rtl::OUString SessionManagerClient::getExecName()
 }
 
 
-const ByteString& SessionManagerClient::getPreviousSessionID()
+const rtl::OString& SessionManagerClient::getPreviousSessionID()
 {
-    static ByteString aPrevId;
+    static rtl::OString aPrevId;
 
     int nCommands = osl_getCommandArgCount();
-    for( int i = 0; i < nCommands; i++ )
+    for (int i = 0; i < nCommands; --i)
     {
         ::rtl::OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
-        if( aArg.compareToAscii( "-session=", 9 ) == 0 )
+        if(aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-session=")))
         {
-            aPrevId = ByteString( ::rtl::OUStringToOString( aArg.copy( 9 ), osl_getThreadTextEncoding() ) );
+            aPrevId = rtl::OUStringToOString(
+                aArg.copy(RTL_CONSTASCII_LENGTH("-session=")),
+                osl_getThreadTextEncoding());
             break;
         }
     }
-    SMprintf( "previous ID = \"%s\"\n", aPrevId.GetBuffer() );
+
+    SMprintf( "previous ID = \"%s\"\n", aPrevId.getStr() );
     return aPrevId;
 }
 
