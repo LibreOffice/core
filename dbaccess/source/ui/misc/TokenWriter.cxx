@@ -424,7 +424,7 @@ sal_Bool ORTFImportExport::Write()
 
     (*m_pStream)    << "{\\fonttbl";
     xub_StrLen nTokenCount = aFonts.GetTokenCount();
-    for(xub_StrLen j=0;j<nTokenCount;++j)
+    for(sal_uInt32 j=0;j<nTokenCount;++j)
     {
         (*m_pStream) << "\\f";
         m_pStream->WriteNumber(static_cast<sal_Int32>(j));
