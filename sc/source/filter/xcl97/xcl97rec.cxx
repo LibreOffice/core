@@ -77,6 +77,7 @@
 #include "docoptio.hxx"
 #include "patattr.hxx"
 #include "tabprotection.hxx"
+#include "stlalgorithm.hxx"
 
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
@@ -118,9 +119,7 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
 
 XclExpObjList::~XclExpObjList()
 {
-    std::vector<XclObj*>::iterator pIter;
-    for ( pIter = maObjs.begin(); pIter != maObjs.end(); ++pIter )
-        delete *pIter;
+    ::std::for_each(maObjs.begin(), maObjs.end(), ScDeleteObjectByPtr<XclObj>());
     delete pMsodrawingPerSheet;
     delete pSolverContainer;
 }
