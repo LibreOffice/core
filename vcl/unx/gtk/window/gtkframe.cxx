@@ -556,7 +556,11 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "style-set", G_CALLBACK(signalStyleSet), this );
     g_signal_connect( G_OBJECT(m_pWindow), "button-press-event", G_CALLBACK(signalButton), this );
     g_signal_connect( G_OBJECT(m_pWindow), "button-release-event", G_CALLBACK(signalButton), this );
+#if GTK_CHECK_VERSION(3,0,0)
+    g_signal_connect( G_OBJECT(m_pWindow), "draw", G_CALLBACK(signalDraw), this );
+#else
     g_signal_connect( G_OBJECT(m_pWindow), "expose-event", G_CALLBACK(signalExpose), this );
+#endif
     g_signal_connect( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
     g_signal_connect( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
@@ -2861,6 +2865,27 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     return sal_True;
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
+// This is unpleasant: we assume that a draw event was an expose earlier in life ...
+// We also hope & pray (for gtk 3.0.0) that the window was realised/mapped before draw
+// was called or we will badmatch
+gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
+{
+    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+
+    double x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0;
+    cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+
+    // FIXME: qutie possibly we have some co-ordinate system / translation madness here.
+    // pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
+    struct SalPaintEvent aEvent( x1, y1, x2 - x1, y2 - y1 );
+
+    GTK_YIELD_GRAB();
+    pThis->CallCallback( SALEVENT_PAINT, &aEvent );
+
+    return sal_False;
+}
+#endif
 
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {

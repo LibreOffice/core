@@ -222,6 +222,7 @@ class GtkSalFrame : public SalFrame
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static void         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
+    static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
