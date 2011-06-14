@@ -41,7 +41,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,hwpfilter_test_hwpfilter, \
     cppu \
     cppuhelper \
     sal \
-    vcl \
     $(gb_STDLIBS) \
 ))
 
