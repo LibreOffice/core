@@ -36,8 +36,8 @@ TARGET=so_pango
 
 .IF "$(SYSTEM_PANGO)" == "YES"
 all:
-    @echo "An already available installation of pango should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of pango should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -56,15 +56,15 @@ PATCH_FILES=pango-1.28.3.patch
 CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                 .$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
-                 CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 ./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) --disable-dependency-tracking --disable-doc-cross-references \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
+                 CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  LDFLAGS="$(CONFIGURE_LDFLAGS)" \
-                 CAIRO_CFLAGS="-I$(SOLARINCDIR) -I$(SOLARINCDIR)$/cairo" \
+                 CAIRO_CFLAGS="-I$(SOLARINCDIR) -I$(SOLARINCDIR)/cairo" \
                  CAIRO_LIBS="-lcairo" \
-                 GLIB_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 GLIB_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \
                  GLIB_LIBS="-lgthread-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 -lintl"
-CONFIGURE_FLAGS=--with-included-modules=yes
+CONFIGURE_FLAGS=--with-included-modules=yes $(eq,$(VERBOSE),$(NULL) --enable-silent-rules --disable-silent-rules)
 CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
 CONFIGURE_ACTION+="--without-x"
 
