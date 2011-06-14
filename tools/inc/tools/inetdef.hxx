@@ -30,45 +30,6 @@
 #define _TOOLS_INETDEF_HXX
 
 //============================================================================
-#if defined WNT
-#define TOOLS_INETDEF_OS "Win32"
-#elif defined UNX
-#if defined AIX
-#define TOOLS_INETDEF_OS "AIX"
-#elif defined SOLARIS && defined SPARC
-#define TOOLS_INETDEF_OS "Solaris Sparc"
-#elif defined SOLARIS && defined INTEL
-#define TOOLS_INETDEF_OS "Solaris x86"
-#elif defined NETBSD && defined X86
-#define TOOLS_INETDEF_OS "NetBSD/i386"
-#elif defined NETBSD && defined X86_64
-#define TOOLS_INETDEF_OS "NetBSD/amd64"
-#elif defined NETBSD && defined ARM32
-#define TOOLS_INETDEF_OS "NetBSD/arm"
-#elif defined NETBSD && defined SPARC
-#define TOOLS_INETDEF_OS "NetBSD/sparc"
-#elif defined LINUX && defined X86
-#define TOOLS_INETDEF_OS "Linux"
-#elif defined FREEBSD && defined X86
-#define TOOLS_INETDEF_OS "FreeBSD/i386"
-#elif defined FREEBSD && defined X86_64
-#define TOOLS_INETDEF_OS "FreeBSD/amd64"
-#elif defined OPENBSD && defined X86
-#define TOOLS_INETDEF_OS "OpenBSD/i386"
-#elif defined OPENBSD && defined X86_64
-#define TOOLS_INETDEF_OS "OpenBSD/amd64"
-#elif defined DRAGONFLY && defined X86
-#define TOOLS_INETDEF_OS "DragonFly/i386"
-#elif defined DRAGONFLY && defined X86_64
-#define TOOLS_INETDEF_OS "DragonFly/amd64"
-#else // AIX, SOLARIS, ...
-#define TOOLS_INETDEF_OS "Unix"
-#endif // AIX, SOLARIS, ...
-#else // WNT, ...
-#define TOOLS_INETDEF_OS "unknown OS"
-#endif // WN, ...
-
-//============================================================================
 // The following definitions seem obsolete and might get removed in future.
 
 #if defined __RSC

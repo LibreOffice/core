@@ -34,6 +34,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <rtl/bootstrap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -71,10 +72,14 @@ namespace utl
             }
         }
 
+        ::rtl::OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
+        ::rtl::OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
+        ::rtl::Bootstrap::expandMacros(os);
+        ::rtl::Bootstrap::expandMacros(arch);
         aResult.append( (sal_Unicode)'$' );
-        aResult.append( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                TOOLS_INETDEF_OS )).replace( ' ', '_' ) );
-
+        aResult.append( os );
+        aResult.append( (sal_Unicode)'_' );
+        aResult.append( arch );
         aResult.append( (sal_Unicode)' ' );
     }
 
