@@ -105,9 +105,9 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aScrollBar          ( this, ScResId( LB_SCROLL ) ),
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
-        aBtnInsert          ( this, ScResId( BTN_INSERT ) ),
-
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
+        aBtnAdd             ( this, ScResId( BTN_ADD ) ),
+
         pEdActive           ( NULL ),
         bDlgLostFocus       ( false ),
 
@@ -164,7 +164,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
 
     aBtnOk.SetClickHdl    ( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
 //? aBtnCancel.SetClickHdl( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
-    aBtnInsert.SetClickHdl( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
+    aBtnAdd.SetClickHdl( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
 
     Link aLink = LINK( this, ScConditionalFormatDlg, NewBtnHdl );
     aBtnNew1.SetClickHdl( aLink );
@@ -263,19 +263,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aLbCond3Template.InsertEntry( aName );
     }
 
-    // Vorlagen eintragen
-//! pStyle = pDoc->GetSelectionStyle( /* ??? const ScMarkData& rMark ??? */ );
-    pStyle = NULL;  //!
-    if (pStyle)
-        aName = pStyle->GetName();
-    else
-        aName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-    aLbCond1Template.SelectEntry( aName );
-    aLbCond2Template.SelectEntry( aName );
-    aLbCond3Template.SelectEntry( aName );
-
     Refresh( nCurrentOffset );
-    Cond1Cheked( true );
 
     ClickCond1Hdl( NULL );
     ClickCond2Hdl( NULL );
@@ -329,24 +317,6 @@ ScConditionalFormatDlg::~ScConditionalFormatDlg()
 }
 
 //----------------------------------------------------------------------------
-void ScConditionalFormatDlg::InsertEntry()
-{
-    UpdateValueList( nCurrentOffset );
-    ScCondFormatEntry** ppNew = new ScCondFormatEntry*[nEntryCount+1];
-    for (sal_uInt16 i=0; i<nCurrentOffset; i++)
-        ppNew[i] = ppEntries[i];
-    ppNew[nCurrentOffset] = NULL;
-    for (sal_uInt16 j=(nCurrentOffset); j<nEntryCount; j++)
-        ppNew[j+1] = ppEntries[j];
-    ++nEntryCount;
-    delete[] ppEntries;
-    ppEntries = ppNew;
-    aScrollBar.SetRange( Range( 0, nEntryCount - 3 ) );
-    Refresh( nCurrentOffset );
-    Cond1Cheked( true );
-}
-
-//----------------------------------------------------------------------------
 void ScConditionalFormatDlg::AddEntry()
 {
     ScCondFormatEntry** ppNew = new ScCondFormatEntry*[nEntryCount+1];
@@ -359,58 +329,29 @@ void ScConditionalFormatDlg::AddEntry()
     aScrollBar.SetRange( Range( 0, nEntryCount - 3 ) );
 }
 
-//----------------------------------------------------------------------------
-void ScConditionalFormatDlg::Cond1Cheked( sal_Bool bChecked )
-{
-    aCbxCond1.Check( bChecked );
-    aLbCond11.Enable( bChecked );
-    aLbCond12.Enable( bChecked );
-    aEdtCond11.Enable( bChecked );
-    aRbCond11.Enable( bChecked );
-    aFtCond1And.Enable( bChecked );
-    aEdtCond12.Enable( bChecked );
-    aRbCond12.Enable( bChecked );
-    aFtCond1Template.Enable( bChecked );
-    aLbCond1Template.Enable( bChecked );
-    aBtnNew1.Enable( bChecked );
-    aPreviewWin1.Enable( bChecked );
-}
-
-void ScConditionalFormatDlg::Cond2Cheked( sal_Bool bChecked )
-{
-    aCbxCond2.Check( bChecked );
-    aLbCond21.Enable( bChecked );
-    aLbCond22.Enable( bChecked );
-    aEdtCond21.Enable( bChecked );
-    aRbCond21.Enable( bChecked );
-    aFtCond2And.Enable( bChecked );
-    aEdtCond22.Enable( bChecked );
-    aRbCond22.Enable( bChecked );
-    aFtCond2Template.Enable( bChecked );
-    aLbCond2Template.Enable( bChecked );
-    aBtnNew2.Enable( bChecked );
-    aPreviewWin2.Enable( bChecked );
-}
-
-void ScConditionalFormatDlg::Cond3Cheked( sal_Bool bChecked )
-{
-    aCbxCond3.Check( bChecked );
-    aLbCond31.Enable( bChecked );
-    aLbCond32.Enable( bChecked );
-    aEdtCond31.Enable( bChecked );
-    aRbCond31.Enable( bChecked );
-    aFtCond3And.Enable( bChecked );
-    aEdtCond32.Enable( bChecked );
-    aRbCond32.Enable( bChecked );
-    aFtCond3Template.Enable( bChecked );
-    aLbCond3Template.Enable( bChecked );
-    aBtnNew3.Enable( bChecked );
-    aPreviewWin3.Enable( bChecked );
-}
-
 // -----------------------------------------------------------------------
 namespace
 {
+    // -----------------------------------------------------------------------
+    void CondChecked( sal_Bool bChecked, CheckBox &aCbxCond, ListBox &aLbCond1, ListBox &aLbCond2,
+                      formula::RefEdit &aEdtCond1, formula::RefButton &aRbCond1, FixedText &aFtCondAnd,
+                      formula::RefEdit &aEdtCond2, formula::RefButton &aRbCond2,
+                      FixedText &aFtCondTemplate, ListBox &aLbCondTemplate, PushButton &aBtnNew, SvxFontPrevWindow &aPreviewWin )
+    {
+        aCbxCond.Check( bChecked );
+        aLbCond1.Enable( bChecked );
+        aLbCond2.Enable( bChecked );
+        aEdtCond1.Enable( bChecked );
+        aRbCond1.Enable( bChecked );
+        aFtCondAnd.Enable( bChecked );
+        aEdtCond2.Enable( bChecked );
+        aRbCond2.Enable( bChecked );
+        aFtCondTemplate.Enable( bChecked );
+        aLbCondTemplate.Enable( bChecked );
+        aBtnNew.Enable( bChecked );
+        aPreviewWin.Enable( bChecked );
+    }
+
     // -----------------------------------------------------------------------
     String OffsetAsText( sal_uInt16 nVal )
     {
@@ -421,7 +362,90 @@ namespace
         aValNum += String::CreateFromInt32( nVal % 10 );
         return aValNum;
     }
+
+    // -----------------------------------------------------------------------
+    void RefreshEntry( sal_uInt16 nOffset, ScCondFormatEntry** ppEntries, ScAddress aCurPos, String aCbxCondInitialText,
+                       CheckBox &aCbxCond, ListBox &aLbCond1, ListBox &aLbCond2,
+                       formula::RefEdit &aEdtCond1, formula::RefButton &aRbCond1, FixedText &aFtCondAnd,
+                       formula::RefEdit &aEdtCond2, formula::RefButton &aRbCond2,
+                       FixedText &aFtCondTemplate, ListBox &aLbCondTemplate, PushButton &aBtnNew, SvxFontPrevWindow &aPreviewWin )
+    {
+        String aEmptyString = ScGlobal::GetEmptyString();
+        String aStyleNameStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
+
+        String aVal = aCbxCondInitialText;
+        String aOffsetAsText = OffsetAsText( nOffset + 1 );
+        if ( STRING_NOTFOUND != aVal.Search( String::CreateFromAscii( "~1" ) ) )
+            aVal.SearchAndReplace( String::CreateFromAscii( "~1" ), aOffsetAsText );
+        else if ( STRING_NOTFOUND != aVal.Search( String::CreateFromAscii( "~2" ) ) )
+            aVal.SearchAndReplace( String::CreateFromAscii( "~2" ), aOffsetAsText );
+        else if ( STRING_NOTFOUND != aVal.Search( String::CreateFromAscii( "~3" ) ) )
+            aVal.SearchAndReplace( String::CreateFromAscii( "~3" ), aOffsetAsText );
+        aCbxCond.SetText(aVal);
+
+        const ScCondFormatEntry* pEntry;
+        if ( ppEntries[ nOffset + 0 ] )
+        {
+            CondChecked( true, aCbxCond, aLbCond1, aLbCond2, aEdtCond1, aRbCond1, aFtCondAnd, aEdtCond2, aRbCond2,
+                         aFtCondTemplate, aLbCondTemplate, aBtnNew, aPreviewWin );
+            pEntry= ppEntries[ nOffset + 0 ];
+            aEdtCond1.SetText( pEntry->GetExpression( aCurPos, 0 ) );
+            aLbCondTemplate.SelectEntry( pEntry->GetStyle() );
+
+            ScConditionMode eMode = pEntry->GetOperation();
+            if ( eMode == SC_COND_DIRECT )          // via Formel
+                aLbCond1.SelectEntryPos( 1 );
+            else if ( eMode == SC_COND_NONE )       // ???
+                ;
+            else                                    // via Werte
+            {
+                aLbCond1.SelectEntryPos( 0 );
+                aLbCond2.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eMode ) );
+                if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
+                    aEdtCond2.SetText( pEntry->GetExpression( aCurPos, 1 ) );
+            }
+        }
+        else
+        {
+            CondChecked( false, aCbxCond, aLbCond1, aLbCond2, aEdtCond1, aRbCond1, aFtCondAnd, aEdtCond2, aRbCond2,
+                         aFtCondTemplate, aLbCondTemplate, aBtnNew, aPreviewWin );
+            aLbCond1.SelectEntryPos( 0 );
+            aLbCond2.SelectEntryPos( 0 );
+            aLbCondTemplate.SelectEntry( aStyleNameStandard );
+            aEdtCond1.SetText( aEmptyString );
+            aEdtCond2.SetText( aEmptyString );
+        }
+    }
+
+//----------------------------------------------------------------------------
+
+    void UpdateValue( sal_uInt16 nOffset, ScDocument* pDoc, ScCondFormatEntry** ppEntries, ScAddress aCurPos,
+                      CheckBox &aCbxCond, ListBox &aLbCond1, ListBox &aLbCond2,
+                      formula::RefEdit &aEdtCond1, formula::RefEdit &aEdtCond2, ListBox &aLbCondTemplate )
+    {
+        ScConditionMode eOper;
+        String sExpr1;
+        String sExpr2;
+        String sStyle;
+
+        delete ppEntries[ nOffset ];
+        if ( aCbxCond.IsChecked() )
+        {
+            if ( aLbCond1.GetSelectEntryPos() == 1 )    // via Formel
+                eOper = SC_COND_DIRECT;
+            else
+                eOper = (ScConditionMode)aLbCond2.GetSelectEntryPos();
+            sExpr1 = aEdtCond1.GetText();
+            sExpr2 = aEdtCond2.GetText();
+            sStyle = aLbCondTemplate.GetSelectEntry();
+            ppEntries[ nOffset ] = new ScCondFormatEntry( eOper, sExpr1, sExpr2, pDoc, aCurPos, sStyle );
+        }
+        else
+            ppEntries[ nOffset ] = NULL;
+    }
 }
+
+// -----------------------------------------------------------------------
 
 void ScConditionalFormatDlg::Refresh( sal_uInt16 nOffset )
 {
@@ -433,126 +457,33 @@ void ScConditionalFormatDlg::Refresh( sal_uInt16 nOffset )
         aCurPos = ScAddress( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
     }
 
-    String aEmptyString = ScGlobal::GetEmptyString();
-
-    // update checkBox text with nOffset
-    String aVal1 = aCbxCond1InitialText;
-    aVal1.SearchAndReplace( String::CreateFromAscii( "~1" ), OffsetAsText( nOffset + 1 ) );
-    aCbxCond1.SetText(aVal1);
-
-    String aVal2 = aCbxCond2InitialText;
-    aVal2.SearchAndReplace( String::CreateFromAscii( "~2" ), OffsetAsText( nOffset + 2 ) );
-    aCbxCond2.SetText(aVal2);
-
-    String aVal3 = aCbxCond3InitialText;
-    aVal3.SearchAndReplace( String::CreateFromAscii( "~3" ), OffsetAsText( nOffset + 3 ) );
-    aCbxCond3.SetText(aVal3);
-
-    const ScCondFormatEntry* pEntry;
-    if ( ppEntries[ nOffset + 0 ] )
-    {
-        Cond1Cheked( true );
-        pEntry= ppEntries[ nOffset + 0 ];
-        aEdtCond11.SetText( pEntry->GetExpression( aCurPos, 0 ) );
-        aLbCond1Template.SelectEntry( pEntry->GetStyle() );
-
-        ScConditionMode eMode = pEntry->GetOperation();
-        if ( eMode == SC_COND_DIRECT )          // via Formel
-            aLbCond11.SelectEntryPos( 1 );
-        else if ( eMode == SC_COND_NONE )       // ???
-            ;
-        else                                    // via Werte
-        {
-            aLbCond11.SelectEntryPos( 0 );
-            aLbCond12.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eMode ) );
-            if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
-                aEdtCond12.SetText( pEntry->GetExpression( aCurPos, 1 ) );
-        }
-    }
-    else
-    {
-        Cond1Cheked( false );
-        aLbCond11.SelectEntryPos( 0 );
-        aLbCond12.SelectEntryPos( 0 );
-        aLbCond1Template.SelectEntryPos( 0 );
-        aEdtCond11.SetText( aEmptyString );
-        aEdtCond12.SetText( aEmptyString );
-    }
+    RefreshEntry( nOffset + 0, ppEntries, aCurPos, aCbxCond1InitialText,
+                  aCbxCond1, aLbCond11, aLbCond12, aEdtCond11, aRbCond11, aFtCond1And, aEdtCond12, aRbCond12,
+                  aFtCond1Template, aLbCond1Template, aBtnNew1, aPreviewWin1 );
     ChangeCond11Hdl( NULL );
     ChangeCond1TemplateHdl( NULL );
 
-    if ( ppEntries[ nOffset + 1 ] )
-    {
-        Cond2Cheked( true );
-        pEntry= ppEntries[ nOffset + 1 ];
-        aEdtCond21.SetText( pEntry->GetExpression( aCurPos, 0 ) );
-        aLbCond2Template.SelectEntry( pEntry->GetStyle() );
-
-        ScConditionMode eMode = pEntry->GetOperation();
-        if ( eMode == SC_COND_DIRECT )          // via Formel
-            aLbCond21.SelectEntryPos( 1 );
-        else if ( eMode == SC_COND_NONE )       // ???
-            ;
-        else                                    // via Werte
-        {
-            aLbCond21.SelectEntryPos( 0 );
-            aLbCond22.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eMode ) );
-            if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
-                aEdtCond22.SetText( pEntry->GetExpression( aCurPos, 1 ) );
-        }
-    }
-    else
-    {
-        Cond2Cheked( false );
-        aLbCond21.SelectEntryPos( 0 );
-        aLbCond22.SelectEntryPos( 0 );
-        aLbCond2Template.SelectEntryPos( 0 );
-        aEdtCond21.SetText( aEmptyString );
-        aEdtCond22.SetText( aEmptyString );
-    }
+    RefreshEntry( nOffset + 1, ppEntries, aCurPos, aCbxCond2InitialText,
+                  aCbxCond2, aLbCond21, aLbCond22, aEdtCond21, aRbCond21, aFtCond2And, aEdtCond22, aRbCond22,
+                  aFtCond2Template, aLbCond2Template, aBtnNew2, aPreviewWin2 );
     ChangeCond21Hdl( NULL );
     ChangeCond2TemplateHdl( NULL );
 
-    if ( ppEntries[ nOffset + 2 ] )
-    {
-        Cond3Cheked( true );
-        pEntry= ppEntries[ nOffset + 2 ];
-        aEdtCond31.SetText( pEntry->GetExpression( aCurPos, 0 ) );
-        aLbCond3Template.SelectEntry( pEntry->GetStyle() );
-
-        ScConditionMode eMode = pEntry->GetOperation();
-        if ( eMode == SC_COND_DIRECT )          // via Formel
-            aLbCond31.SelectEntryPos( 1 );
-        else if ( eMode == SC_COND_NONE )       // ???
-            ;
-        else                                    // via Werte
-        {
-            aLbCond31.SelectEntryPos( 0 );
-            aLbCond32.SelectEntryPos( sal::static_int_cast<sal_uInt16>( eMode ) );
-            if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
-                aEdtCond32.SetText( pEntry->GetExpression( aCurPos, 1 ) );
-        }
-    }
-    else
-    {
-        Cond3Cheked( false );
-        aLbCond31.SelectEntryPos( 0 );
-        aLbCond32.SelectEntryPos( 0 );
-        aLbCond3Template.SelectEntryPos( 0 );
-        aEdtCond31.SetText( aEmptyString );
-        aEdtCond32.SetText( aEmptyString );
-    }
+    RefreshEntry( nOffset + 2, ppEntries, aCurPos, aCbxCond3InitialText,
+                  aCbxCond3, aLbCond31, aLbCond32, aEdtCond31, aRbCond31, aFtCond3And, aEdtCond32, aRbCond32,
+                  aFtCond3Template, aLbCond3Template, aBtnNew3, aPreviewWin3 );
     ChangeCond31Hdl( NULL );
     ChangeCond3TemplateHdl( NULL );
+
+    if ( nOffset == 0 )
+        CondChecked( true, aCbxCond1, aLbCond11, aLbCond12, aEdtCond11, aRbCond11, aFtCond1And, aEdtCond12, aRbCond12,
+                     aFtCond1Template, aLbCond1Template, aBtnNew1, aPreviewWin1 );
 }
 
 //----------------------------------------------------------------------------
+
 void ScConditionalFormatDlg::UpdateValueList( sal_uInt16 nOffset )
 {
-    ScConditionMode eOper;
-    String sExpr1;
-    String sExpr2;
-    String sStyle;
     ScAddress aCurPos;
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -562,53 +493,18 @@ void ScConditionalFormatDlg::UpdateValueList( sal_uInt16 nOffset )
         aCurPos = ScAddress( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
     }
 
-    delete ppEntries[ nOffset + 0 ];
-    if ( aCbxCond1.IsChecked() )
-    {
-        if ( aLbCond11.GetSelectEntryPos() == 1 )   // via Formel
-            eOper = SC_COND_DIRECT;
-        else
-            eOper = (ScConditionMode)aLbCond12.GetSelectEntryPos();
-        sExpr1 = aEdtCond11.GetText();
-        sExpr2 = aEdtCond12.GetText();
-        sStyle = aLbCond1Template.GetSelectEntry();
-        ppEntries[ nOffset + 0 ] = new ScCondFormatEntry( eOper, sExpr1, sExpr2, pDoc, aCurPos, sStyle );
-    }
-    else
-        ppEntries[ nOffset + 0 ] = NULL;
+    UpdateValue( nOffset + 0, pDoc, ppEntries, aCurPos,
+                 aCbxCond1, aLbCond11, aLbCond12, aEdtCond11, aEdtCond12, aLbCond1Template );
 
-    delete ppEntries[ nOffset + 1 ];
-    if ( aCbxCond2.IsChecked() )
-    {
-        if ( aLbCond21.GetSelectEntryPos() == 1 )   // via Formel???
-            eOper = SC_COND_DIRECT;
-        else
-            eOper = (ScConditionMode)aLbCond22.GetSelectEntryPos();
-        sExpr1 = aEdtCond21.GetText();
-        sExpr2 = aEdtCond22.GetText();
-        sStyle = aLbCond2Template.GetSelectEntry();
-        ppEntries[ nOffset + 1 ] = new ScCondFormatEntry( eOper, sExpr1, sExpr2, pDoc, aCurPos, sStyle );
-    }
-    else
-        ppEntries[ nOffset + 1 ] = NULL;
+    UpdateValue( nOffset + 1, pDoc, ppEntries, aCurPos,
+                 aCbxCond2, aLbCond21, aLbCond22, aEdtCond21, aEdtCond22, aLbCond2Template );
 
-    delete ppEntries[ nOffset + 2 ];
-    if ( aCbxCond3.IsChecked() )
-    {
-        if ( aLbCond31.GetSelectEntryPos() == 1 )   // via Formel???
-            eOper = SC_COND_DIRECT;
-        else
-            eOper = (ScConditionMode)aLbCond32.GetSelectEntryPos();
-        sExpr1 = aEdtCond31.GetText();
-        sExpr2 = aEdtCond32.GetText();
-        sStyle = aLbCond3Template.GetSelectEntry();
-        ppEntries[ nOffset + 2 ] = new ScCondFormatEntry( eOper, sExpr1, sExpr2, pDoc, aCurPos, sStyle );
-    }
-    else
-        ppEntries[ nOffset + 2 ] = NULL;
+    UpdateValue( nOffset + 2, pDoc, ppEntries, aCurPos,
+                 aCbxCond3, aLbCond31, aLbCond32, aEdtCond31, aEdtCond32, aLbCond3Template );
 }
 
 //----------------------------------------------------------------------------
+
 void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( pEdActive )
@@ -728,8 +624,8 @@ sal_uInt16 ScConditionalFormatDlg::GetSliderPos()
 IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
 {
     sal_Bool bChecked = aCbxCond1.IsChecked();
-
-    Cond1Cheked( bChecked );
+    CondChecked( bChecked, aCbxCond1, aLbCond11, aLbCond12, aEdtCond11, aRbCond11, aFtCond1And, aEdtCond12, aRbCond12,
+                 aFtCond1Template, aLbCond1Template, aBtnNew1, aPreviewWin1 );
     return( 0L );
 }
 
@@ -823,8 +719,8 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond1TemplateHdl, void *, EMPTYARG )
 IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
 {
     sal_Bool bChecked = aCbxCond2.IsChecked();
-
-    Cond2Cheked( bChecked );
+    CondChecked( bChecked, aCbxCond2, aLbCond21, aLbCond22, aEdtCond21, aRbCond21, aFtCond2And, aEdtCond22, aRbCond22,
+                 aFtCond2Template, aLbCond2Template, aBtnNew2, aPreviewWin2 );
     return( 0L );
 }
 
@@ -918,8 +814,8 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond2TemplateHdl, void *, EMPTYARG )
 IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
 {
     sal_Bool bChecked = aCbxCond3.IsChecked();
-
-    Cond3Cheked( bChecked );
+    CondChecked( bChecked, aCbxCond3, aLbCond31, aLbCond32, aEdtCond31, aRbCond31, aFtCond3And, aEdtCond32, aRbCond32,
+                 aFtCond3Template, aLbCond3Template, aBtnNew3, aPreviewWin3 );
     if ( bChecked && ( ( nCurrentOffset + 3 ) == nEntryCount ) )
         AddEntry();
     return( 0L );
@@ -1061,8 +957,15 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
         Close();
     }
 
-    else if ( pBtn == &aBtnInsert )
-        InsertEntry();
+    else if ( pBtn == &aBtnAdd )
+    {
+        if ( ppEntries[ nEntryCount - 1 ] )
+            AddEntry();
+        aScrollBar.SetThumbPos( nEntryCount - 3 );
+        SliderMoved();
+        aEdtCond31.GrabFocus();
+        pEdActive = &aEdtCond31;
+    }
 
     else if ( pBtn == &aBtnCancel )
         Close();

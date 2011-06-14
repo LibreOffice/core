@@ -68,7 +68,7 @@
 #define WIN_CHAR_PREVIEW_COND1      44
 #define WIN_CHAR_PREVIEW_COND2      45
 #define WIN_CHAR_PREVIEW_COND3      46
-#define BTN_INSERT      47
+#define BTN_ADD     47
 
 //IAccessibility2 Implementation 2009-----
 #define LABEL_FORMARTTING_CONDITIONS    5043

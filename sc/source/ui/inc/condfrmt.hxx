@@ -106,8 +106,8 @@ private:
     ScrollBar           aScrollBar;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
-    PushButton          aBtnInsert;
     HelpButton          aBtnHelp;
+    PushButton          aBtnAdd;
 
     Point               aCond1Pos1;
     Point               aCond1Pos2;
@@ -144,14 +144,10 @@ private:
     String              aCbxCond3InitialText;
 
 #ifdef _CONDFRMT_CXX
-    void    InsertEntry();
     void    AddEntry();
     void    GetConditionalFormat( ScConditionalFormat& rCndFmt );
     void    Refresh( sal_uInt16 nOffset );
     void    UpdateValueList ( sal_uInt16 nOffset );
-    void    Cond1Cheked( sal_Bool bChecked );
-    void    Cond2Cheked( sal_Bool bChecked );
-    void    Cond3Cheked( sal_Bool bChecked );
 
     DECL_LINK( ClickCond1Hdl, void * );
     DECL_LINK( ChangeCond11Hdl, void * );

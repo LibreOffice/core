@@ -411,18 +411,18 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    PushButton BTN_INSERT
+    HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 270 , 57 ) ;
+        Pos = MAP_APPFONT ( 270 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Insert" ;
     };
-    HelpButton BTN_HELP
+    PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 270 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+        Text [ en-US ] = "~Add" ;
     };
     Text [ en-US ] = "Conditional Formatting" ;
 };
