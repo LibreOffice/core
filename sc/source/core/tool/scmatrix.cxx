@@ -462,12 +462,15 @@ const String& ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
-        if (maMat.get_type(nR, nC) == ::mdds::element_string)
-            return *maMat.get_string(nR, nC);
-        else
+        switch (maMat.get_type(nR, nC))
         {
-            SetErrorAtInterpreter( GetError(nC, nR));
-            OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
+            case ::mdds::element_string:
+                return *maMat.get_string(nR, nC);
+            case ::mdds::element_empty:
+                return ScGlobal::GetEmptyString();
+            default:
+                SetErrorAtInterpreter( GetError(nC, nR));
+                OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
         }
     }
     else
