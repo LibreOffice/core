@@ -40,4 +40,21 @@
  LIBCROCOPKG=""
  
  test_croco=true
-
+@@ -13376,13 +13380,13 @@
+ 
+ 
+ 
+-GLIB_PREFIX=$($PKG_CONFIG --variable=prefix glib-2.0)
++#GLIB_PREFIX=$($PKG_CONFIG --variable=prefix glib-2.0)
+ 
+-GDK_PIXBUF_PREFIX=$($PKG_CONFIG --variable=prefix gdk-pixbuf-2.0)
++#GDK_PIXBUF_PREFIX=$($PKG_CONFIG --variable=prefix gdk-pixbuf-2.0)
+ 
+-GTK_PREFIX=$($PKG_CONFIG --variable=prefix gdk-pixbuf-2.0)
++#GTK_PREFIX=$($PKG_CONFIG --variable=prefix gdk-pixbuf-2.0)
+ 
+-CAIRO_PREFIX=$($PKG_CONFIG --variable=prefix cairo)
++#CAIRO_PREFIX=$($PKG_CONFIG --variable=prefix cairo)
+ 
+ 
+ 
