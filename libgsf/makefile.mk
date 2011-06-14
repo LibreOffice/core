@@ -57,17 +57,17 @@ BUILD_DIR=gsf
 BUILD_ACTION=dmake
 
 ADDITIONAL_FILES=\
-    gsf$/makefile.mk \
-    gsf$/gsf-config.h
+    gsf/makefile.mk \
+    gsf/gsf-config.h
 
 .ELSE
 PATCH_FILES=libgsf-1.14.19.patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                 .$/configure \
-                 --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(LIBXML_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 ./configure \
+                 --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(LIBXML_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  LDFLAGS="-L$(SOLARLIBDIR) $(eq,$(OS),MACOSX $(EXTRA_LINKFLAGS) $(NULL))" \
                  --without-python \
                  --without-bonobo \
@@ -76,11 +76,11 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  --with-gdk_pixbuf \
                  --without-gnome-vfs \
                  --disable-nls \
-                 LIBGSF_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 LIBGSF_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \
                  LIBGSF_LIBS="-lxml2 -lgio-2.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl" \
-                 LIBGSF_GIO_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 LIBGSF_GIO_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \
                  LIBGSF_GIO_LIBS="-lgio-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl" \
-                 GDK_PIXBUF_CFLAGS="-I$(SOLARINCDIR)$/external$/gdk-pixbuf-2.0" \
+                 GDK_PIXBUF_CFLAGS="-I$(SOLARINCDIR)/external/gdk-pixbuf-2.0" \
                  GDK_PIXBUF_LIBS="-lgdk_pixbuf-2.0"
                  
                  
