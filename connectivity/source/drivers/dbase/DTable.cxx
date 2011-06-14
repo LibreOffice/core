@@ -1412,9 +1412,6 @@ sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     if (!m_pMemoStream)
         return sal_False;
 
-    char aBuffer[512];              // write buffer
-    memset(aBuffer,0,sizeof(aBuffer));
-
     m_pMemoStream->SetStreamSize(512);
 
     m_pMemoStream->Seek(0L);
