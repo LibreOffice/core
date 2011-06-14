@@ -1261,12 +1261,12 @@ void GtkSalFrame::SetDefaultSize()
 static void initClientId()
 {
     static bool bOnce = false;
-    if( ! bOnce )
+    if (!bOnce)
     {
         bOnce = true;
-        const ByteString& rID = SessionManagerClient::getSessionID();
-        if( rID.Len() > 0 )
-            gdk_set_sm_client_id(rID.GetBuffer());
+        const rtl::OString& rID = SessionManagerClient::getSessionID();
+        if (!rID.isEmpty())
+            gdk_set_sm_client_id(rID.getStr());
     }
 }
 
