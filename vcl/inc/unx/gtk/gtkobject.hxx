@@ -38,12 +38,16 @@ class GtkSalObject : public SalObject
 {
     SystemChildData     m_aSystemData;
     GtkWidget*          m_pSocket;
+#if GTK_CHECK_VERSION(3,0,0)
+    cairo_region_t*     m_pRegion;
+#else
     GdkRegion*          m_pRegion;
+#endif
 
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
-    static void         signalDestroy( GtkObject*, gpointer );
+    static void         signalDestroy( GtkWidget*, gpointer );
 public:
     GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow = sal_True );
     virtual ~GtkSalObject();

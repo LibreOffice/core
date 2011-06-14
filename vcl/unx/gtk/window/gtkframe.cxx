@@ -80,6 +80,14 @@
 #define GDK_META_MASK       (1 << 28)
 #endif
 
+#if GTK_CHECK_VERSION(3,0,0)
+#define IS_WIDGET_REALIZED gtk_widget_get_realized
+#define IS_WIDGET_MAPPED   gtk_widget_get_mapped
+#else
+#define IS_WIDGET_REALIZED GTK_WIDGET_REALIZED
+#define IS_WIDGET_MAPPED   GTK_WIDGET_MAPPED
+#endif
+
 using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
@@ -432,12 +440,18 @@ GtkSalFrame::~GtkSalFrame()
     getDisplay()->deregisterFrame( this );
 
     if( m_pRegion )
+    {
+#if GTK_CHECK_VERSION(3,0,0)
+        cairo_region_destroy( m_pRegion );
+#else
         gdk_region_destroy( m_pRegion );
+#endif
+    }
 
     if( m_hBackgroundPixmap )
     {
         XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
-                                    GDK_WINDOW_XWINDOW(m_pWindow->window),
+                                    GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
                                     None );
         XFreePixmap( getDisplay()->GetDisplay(), m_hBackgroundPixmap );
     }
@@ -595,7 +609,7 @@ void GtkSalFrame::InitCommon()
     SalDisplay* pDisp = GetX11SalData()->GetDisplay();
     m_aSystemData.nSize         = sizeof( SystemChildData );
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
-    m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pWindow->window);
+    m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow));
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.pVisual       = pDisp->GetVisual( m_nScreen ).GetVisual();
@@ -647,7 +661,7 @@ void GtkSalFrame::InitCommon()
     *  some paint issues
     */
     XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
-                                GDK_WINDOW_XWINDOW(m_pWindow->window),
+                                GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
                                 m_hBackgroundPixmap );
 }
 
@@ -681,7 +695,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     else if( ! bBeforeRealize )
     {
         Display* pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
-        XLIB_Window aWindow = GDK_WINDOW_XWINDOW( GTK_WIDGET(pWindow)->window );
+        XLIB_Window aWindow = GDK_WINDOW_XWINDOW( widget_get_window(GTK_WIDGET(pWindow)) );
         XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
         if( ! pHints )
         {
@@ -867,7 +881,7 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
             /* #i99360# ugly workaround an X11 library bug */
             nUserTime= getDisplay()->GetLastUserEventTime( true );
         }
-        lcl_set_user_time(GTK_WIDGET(m_pWindow)->window, nUserTime);
+        lcl_set_user_time(widget_get_window(GTK_WIDGET(m_pWindow)), nUserTime);
     }
 
     if( bDecoHandling )
@@ -921,7 +935,8 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     {
         m_pWindow = gtk_plug_new( pSysData->aWindow );
         m_bWindowIsGtkPlug  = true;
-        GTK_WIDGET_SET_FLAGS( m_pWindow, GTK_CAN_FOCUS | GTK_SENSITIVE | GTK_CAN_DEFAULT );
+        widget_set_can_default( m_pWindow, true );
+        widget_set_can_focus( m_pWindow, true );
         gtk_widget_set_sensitive( m_pWindow, true );
     }
     else
@@ -946,7 +961,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     if( ! m_bWindowIsGtkPlug )
     {
         XReparentWindow( getDisplay()->GetDisplay(),
-                         GDK_WINDOW_XWINDOW(m_pWindow->window),
+                         GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
                          (XLIB_Window)pSysData->aWindow,
                          0, 0 );
     }
@@ -996,7 +1011,7 @@ SalGraphics* GtkSalFrame::GetGraphics()
                 if( ! m_aGraphics[i].pGraphics )
                 {
                     m_aGraphics[i].pGraphics = new GtkSalGraphics( m_pWindow );
-                    m_aGraphics[i].pGraphics->Init( this, GDK_WINDOW_XWINDOW(m_pWindow->window), m_nScreen );
+                    m_aGraphics[i].pGraphics->Init( this, GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)), m_nScreen );
                 }
                 return m_aGraphics[i].pGraphics;
             }
@@ -1289,7 +1304,7 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
             setMinMaxSize();
 
             // #i45160# switch to desktop where a dialog with parent will appear
-            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea && GTK_WIDGET_MAPPED(m_pParent->m_pWindow) )
+            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea && IS_WIDGET_MAPPED(m_pParent->m_pWindow) )
                 getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
 
             if( isFloatGrabWindow() &&
@@ -1340,7 +1355,7 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
                 nUserTime= getDisplay()->GetLastUserEventTime( true );
                 //nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
             }
-            lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
+            lcl_set_user_time( widget_get_window(GTK_WIDGET(m_pWindow)), nUserTime );
 
             if( ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
@@ -1449,7 +1464,7 @@ void GtkSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     {
         m_aMaxSize = Size( nWidth, nHeight );
         // Show does a setMinMaxSize
-        if( GTK_WIDGET_MAPPED( m_pWindow ) )
+        if( IS_WIDGET_MAPPED( m_pWindow ) )
             setMinMaxSize();
     }
 }
@@ -1462,7 +1477,7 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
         {
             gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
             // Show does a setMinMaxSize
-            if( GTK_WIDGET_MAPPED( m_pWindow ) )
+            if( IS_WIDGET_MAPPED( m_pWindow ) )
                 setMinMaxSize();
         }
     }
@@ -1708,7 +1723,7 @@ void GtkSalFrame::moveToScreen( int nScreen )
         gtk_widget_realize( m_pWindow );
         // update system data
         GtkSalDisplay* pDisp = getDisplay();
-        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pWindow->window);
+        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow));
         m_aSystemData.pVisual       = pDisp->GetVisual( m_nScreen ).GetVisual();
         m_aSystemData.nScreen       = nScreen;
         m_aSystemData.nDepth        = pDisp->GetVisual( m_nScreen ).GetDepth();
@@ -1719,7 +1734,7 @@ void GtkSalFrame::moveToScreen( int nScreen )
         for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
         {
             if( m_aGraphics[i].bInUse )
-                m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(m_pWindow->window), m_nScreen );
+                m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)), m_nScreen );
         }
         updateScreenNumber();
     }
@@ -1748,7 +1763,7 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 
             Rectangle aOldScreenRect( pDisp->GetXineramaScreens()[maGeometry.nScreenNumber] );
             Rectangle aNewScreenRect( pDisp->GetXineramaScreens()[nNewScreen] );
-            bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
+            bool bVisible = IS_WIDGET_MAPPED(m_pWindow);
             if( bVisible )
                 Show( sal_False );
             maGeometry.nX = aNewScreenRect.Left() + (maGeometry.nX - aOldScreenRect.Left());
@@ -1773,14 +1788,14 @@ void GtkSalFrame::updateWMClass()
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
     const char *pResClass = aResClass.getLength() ? aResClass.getStr() : X11SalData::getFrameClassName();
 
-    if( GTK_WIDGET_REALIZED( m_pWindow ) )
+    if( IS_WIDGET_REALIZED( m_pWindow ) )
     {
         XClassHint* pClass = XAllocClassHint();
         rtl::OString aResName = X11SalData::getFrameResName( m_nExtStyle );
         pClass->res_name  = const_cast<char*>(aResName.getStr());
         pClass->res_class = const_cast<char*>(pResClass);
         XSetClassHint( getDisplay()->GetDisplay(),
-                       GDK_WINDOW_XWINDOW(m_pWindow->window),
+                       GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
                        pClass );
         XFree( pClass );
     }
@@ -1814,7 +1829,7 @@ void GtkSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
             {
                 m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                                                Size( maGeometry.nWidth, maGeometry.nHeight ) );
-                bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
+                bool bVisible = IS_WIDGET_MAPPED(m_pWindow);
                 if( bVisible )
                     Show( sal_False );
                 m_nStyle |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
@@ -1847,7 +1862,7 @@ void GtkSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
             }
             else
             {
-                bool bVisible = GTK_WIDGET_MAPPED(m_pWindow);
+                bool bVisible = IS_WIDGET_MAPPED(m_pWindow);
                 if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
                     gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
                 if( bVisible )
@@ -2055,7 +2070,7 @@ void GtkSalFrame::StartPresentation( sal_Bool bStart )
         }
 #ifdef ENABLE_DBUS
         m_nGSMCookie = dbus_inhibit_gsm(g_get_application_name(), "presentation",
-                    GDK_WINDOW_XID(m_pWindow->window));
+                    GDK_WINDOW_XID(widget_get_window(m_pWindow)));
 #endif
     }
     else
@@ -2081,7 +2096,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
     {
         if( isChild( false, true ) )
             gtk_widget_grab_focus( m_pWindow );
-        else if( GTK_WIDGET_MAPPED( m_pWindow ) )
+        else if( IS_WIDGET_MAPPED( m_pWindow ) )
         {
             if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
@@ -2089,7 +2104,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
             {
                 /* #i99360# ugly workaround an X11 library bug */
                 guint32 nUserTime= getDisplay()->GetLastUserEventTime( true );
-                gdk_window_focus( m_pWindow->window, nUserTime );
+                gdk_window_focus( widget_get_window(m_pWindow), nUserTime );
             }
             /*  need to do an XSetInputFocus here because
              *  gdk_window_focus will ask a EWMH compliant WM to put the focus
@@ -2101,7 +2116,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
                 // sad but true: this can cause an XError, we need to catch that
                 // to do this we need to synchronize with the XServer
                 getDisplay()->GetXLib()->PushXErrorLevel( true );
-                XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( m_pWindow->window ), RevertToParent, CurrentTime );
+                XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( widget_get_window(m_pWindow) ), RevertToParent, CurrentTime );
                 XSync( getDisplay()->GetDisplay(), False );
                 getDisplay()->GetXLib()->PopXErrorLevel();
             }
@@ -2120,7 +2135,7 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
     {
         m_ePointerStyle = ePointerStyle;
         GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
-        gdk_window_set_cursor( m_pWindow->window, pCursor );
+        gdk_window_set_cursor( widget_get_window(m_pWindow), pCursor );
         m_pCurrentCursor = pCursor;
 
         // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
@@ -2158,7 +2173,7 @@ void GtkSalFrame::grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents )
                 const int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
 
                 if( !pEnv || !*pEnv )
-                    gdk_pointer_grab( m_pWindow->window, bOwnerEvents,
+                    gdk_pointer_grab( widget_get_window( m_pWindow ), bOwnerEvents,
                                       (GdkEventMask) nMask, NULL, m_pCurrentCursor,
                                       GDK_CURRENT_TIME );
             }
@@ -2172,7 +2187,7 @@ void GtkSalFrame::grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents )
                 // set the right cursor this way
                 if( !pEnv || !*pEnv )
                     XGrabPointer( getDisplay()->GetDisplay(),
-                                  GDK_WINDOW_XWINDOW( m_pWindow->window),
+                                  GDK_WINDOW_XWINDOW( widget_get_window( m_pWindow ) ),
                                   bOwnerEvents,
                                   PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
                                   GrabModeAsync,
@@ -2221,7 +2236,7 @@ void GtkSalFrame::SetPointerPos( long nX, long nY )
     // #i38648# ask for the next motion hint
     gint x, y;
     GdkModifierType mask;
-    gdk_window_get_pointer( pFrame->m_pWindow->window, &x, &y, &mask );
+    gdk_window_get_pointer( widget_get_window(pFrame->m_pWindow) , &x, &y, &mask );
 }
 
 void GtkSalFrame::Flush()
@@ -2319,7 +2334,7 @@ SalBitmap* GtkSalFrame::SnapShot()
         return NULL;
 
     X11SalBitmap *pBmp = new X11SalBitmap;
-    GdkWindow *pWin = m_pWindow->window;
+    GdkWindow *pWin = widget_get_window(m_pWindow);
     if( pBmp->SnapShot( GDK_DISPLAY_XDISPLAY( getGdkDisplay() ),
                         GDK_WINDOW_XID( pWin ) ) )
         return pBmp;
@@ -2381,7 +2396,7 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
 
 void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nScreen )
 {
-    bool bWasVisible = GTK_WIDGET_MAPPED(m_pWindow);
+    bool bWasVisible = IS_WIDGET_MAPPED(m_pWindow);
     if( bWasVisible )
         Show( sal_False );
 
@@ -2426,7 +2441,13 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
         m_pIMHandler = NULL;
     }
     if( m_pRegion )
+{
+#if GTK_CHECK_VERSION(3,0,0)
+        cairo_region_destroy( m_pRegion );
+#else
         gdk_region_destroy( m_pRegion );
+#endif
+}
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET(m_pFixedContainer) );
     if( m_pWindow )
@@ -2454,7 +2475,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
     {
         if( m_aGraphics[i].bInUse )
         {
-            m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(m_pWindow->window), m_nScreen );
+            m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)), m_nScreen );
             m_aGraphics[i].pGraphics->SetWindow( m_pWindow );
         }
     }
@@ -2484,14 +2505,20 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 void GtkSalFrame::ResetClipRegion()
 {
     if( m_pWindow )
-        gdk_window_shape_combine_region( m_pWindow->window, NULL, 0, 0 );
+        gdk_window_shape_combine_region( widget_get_window( m_pWindow ), NULL, 0, 0 );
 }
 
 void GtkSalFrame::BeginSetClipRegion( sal_uLong )
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    if( m_pRegion )
+        cairo_region_destroy( m_pRegion );
+    m_pRegion = cairo_region_create();
+#else
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );
     m_pRegion = gdk_region_new();
+#endif
 }
 
 void GtkSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
@@ -2503,15 +2530,18 @@ void GtkSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
         aRect.y         = nY;
         aRect.width     = nWidth;
         aRect.height    = nHeight;
-
+#if GTK_CHECK_VERSION(3,0,0)
+        cairo_region_union_rectangle( m_pRegion, &aRect );
+#else
         gdk_region_union_with_rect( m_pRegion, &aRect );
+#endif
     }
 }
 
 void GtkSalFrame::EndSetClipRegion()
 {
     if( m_pWindow && m_pRegion )
-        gdk_window_shape_combine_region( m_pWindow->window, m_pRegion, 0, 0 );
+        gdk_window_shape_combine_region( widget_get_window(m_pWindow), m_pRegion, 0, 0 );
 }
 
 bool GtkSalFrame::Dispatch( const XEvent* pEvent )
@@ -2525,7 +2555,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
         if( pEvent->xproperty.atom == nDesktopAtom &&
             pEvent->xproperty.state == PropertyNewValue )
         {
-            m_nWorkArea = pAdaptor->getWindowWorkArea( GDK_WINDOW_XWINDOW( m_pWindow->window) );
+            m_nWorkArea = pAdaptor->getWindowWorkArea( GDK_WINDOW_XWINDOW( widget_get_window(m_pWindow)) );
         }
     }
     else if( pEvent->type == ConfigureNotify )
@@ -2552,7 +2582,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             int x = 0, y = 0;
             XLIB_Window aChild;
             XTranslateCoordinates( getDisplay()->GetDisplay(),
-                                   GDK_WINDOW_XWINDOW( m_pWindow->window),
+                                   GDK_WINDOW_XWINDOW( widget_get_window(m_pWindow) ),
                                    getDisplay()->GetRootWindow( getDisplay()->GetDefaultScreenNumber() ),
                                    0, 0,
                                    &x, &y,
@@ -2567,7 +2597,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
     }
     else if( pEvent->type == ClientMessage &&
              pEvent->xclient.message_type == getDisplay()->getWMAdaptor()->getAtom( vcl_sal::WMAdaptor::XEMBED ) &&
-             pEvent->xclient.window == GDK_WINDOW_XWINDOW(m_pWindow->window) &&
+             pEvent->xclient.window == GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)) &&
              m_bWindowIsGtkPlug
              )
     {
@@ -2579,7 +2609,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
         {
             GdkEventFocus aEvent;
             aEvent.type = GDK_FOCUS_CHANGE;
-            aEvent.window = m_pWindow->window;
+            aEvent.window = widget_get_window( m_pWindow );
             aEvent.send_event = sal_True;
             aEvent.in = (pEvent->xclient.data.l[1] == 1);
             signalFocus( m_pWindow, &aEvent, this );
@@ -2594,7 +2624,7 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
     if( m_hBackgroundPixmap )
     {
         XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
-                                    GDK_WINDOW_XWINDOW(m_pWindow->window),
+                                    GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
                                     None );
         XFreePixmap( getDisplay()->GetDisplay(), m_hBackgroundPixmap );
         m_hBackgroundPixmap = None;
@@ -2607,7 +2637,7 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
         {
             m_hBackgroundPixmap =
                 XCreatePixmap( getDisplay()->GetDisplay(),
-                               GDK_WINDOW_XWINDOW(m_pWindow->window),
+                               GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
                                aSize.Width(),
                                aSize.Height(),
                                getDisplay()->GetVisual(m_nScreen).GetDepth() );
@@ -2623,7 +2653,7 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
                                aTwoRect,
                                getDisplay()->GetCopyGC(m_nScreen) );
                 XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
-                                            GDK_WINDOW_XWINDOW(m_pWindow->window),
+                                            GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)),
                                             m_hBackgroundPixmap );
             }
         }
@@ -2796,7 +2826,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
             // ask for the next hint
             gint x, y;
             GdkModifierType mask;
-            gdk_window_get_pointer( GTK_WIDGET(pThis->m_pWindow)->window, &x, &y, &mask );
+            gdk_window_get_pointer( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &x, &y, &mask );
         }
     }
 
@@ -2882,7 +2912,7 @@ IMPL_LINK( GtkSalFrame, ImplDelayedFullScreenHdl, void*, EMPTYARG )
         XEvent aEvent;
         aEvent.type                 = ClientMessage;
         aEvent.xclient.display      = getDisplay()->GetDisplay();
-        aEvent.xclient.window       = GDK_WINDOW_XWINDOW(m_pWindow->window);
+        aEvent.xclient.window       = GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow));
         aEvent.xclient.message_type = nStateAtom;
         aEvent.xclient.format       = 32;
         aEvent.xclient.data.l[0]    = 1;
@@ -2932,7 +2962,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
     if( bSetFocus )
     {
         XSetInputFocus( pThis->getDisplay()->GetDisplay(),
-                        GDK_WINDOW_XWINDOW( GTK_WIDGET(pThis->m_pWindow)->window),
+                        GDK_WINDOW_XWINDOW( widget_get_window(GTK_WIDGET(pThis->m_pWindow))),
                         RevertToParent, CurrentTime );
     }
 
@@ -2980,7 +3010,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      */
     XLIB_Window aChild;
     XTranslateCoordinates( pThis->getDisplay()->GetDisplay(),
-                           GDK_WINDOW_XWINDOW(GTK_WIDGET(pThis->m_pWindow)->window),
+                           GDK_WINDOW_XWINDOW(widget_get_window(GTK_WIDGET(pThis->m_pWindow))),
                            pThis->getDisplay()->GetRootWindow( pThis->getDisplay()->GetDefaultScreenNumber() ),
                            0, 0,
                            &x, &y,
@@ -3014,7 +3044,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
     if( ! (pThis->m_nStyle & SAL_FRAME_STYLE_PLUG) )
     {
         GdkRectangle aRect;
-        gdk_window_get_frame_extents( GTK_WIDGET(pThis->m_pWindow)->window, &aRect );
+        gdk_window_get_frame_extents( widget_get_window(GTK_WIDGET(pThis->m_pWindow)), &aRect );
         pThis->maGeometry.nTopDecoration    = y - aRect.y;
         pThis->maGeometry.nBottomDecoration = aRect.y + aRect.height - y - pEvent->height;
         pThis->maGeometry.nLeftDecoration   = x - aRect.x;
@@ -3189,7 +3219,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     *  some time on the Xserver as well as prevent
     *  some paint issues
     */
-    GdkWindow* pWin = GTK_WIDGET(pThis->getWindow())->window;
+    GdkWindow* pWin = widget_get_window(GTK_WIDGET(pThis->getWindow()));
     if( pWin )
     {
         XLIB_Window aWin = GDK_WINDOW_XWINDOW(pWin);
@@ -3242,10 +3272,10 @@ gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, 
     return sal_False;
 }
 
-void GtkSalFrame::signalDestroy( GtkObject* pObj, gpointer frame )
+void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
-    if( GTK_WIDGET( pObj ) == pThis->m_pWindow )
+    if( pObj == pThis->m_pWindow )
     {
         pThis->m_pFixedContainer = NULL;
         pThis->m_pWindow = NULL;
@@ -3293,7 +3323,7 @@ void GtkSalFrame::IMHandler::createIMContext()
                           G_CALLBACK (signalIMPreeditEnd), this );
 
         m_pFrame->getDisplay()->GetXLib()->PushXErrorLevel( true );
-        gtk_im_context_set_client_window( m_pIMContext, GTK_WIDGET(m_pFrame->m_pWindow)->window );
+        gtk_im_context_set_client_window( m_pIMContext, widget_get_window(GTK_WIDGET(m_pFrame->m_pWindow)) );
         gtk_im_context_focus_in( m_pIMContext );
         m_pFrame->getDisplay()->GetXLib()->PopXErrorLevel();
         m_bFocused = true;

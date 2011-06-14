@@ -41,6 +41,39 @@
 
 #include <list>
 
+inline GdkWindow * widget_get_window(GtkWidget *widget)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return gtk_widget_get_window(widget);
+#else
+    return widget->window;
+#endif
+}
+
+inline void widget_set_can_focus(GtkWidget *widget, gboolean can_focus)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return gtk_widget_set_can_focus(widget, can_focus);
+#else
+    if (can_focus)
+        GTK_WIDGET_SET_FLAGS( widget, GTK_CAN_FOCUS );
+    else
+        GTK_WIDGET_UNSET_FLAGS( widget, GTK_CAN_FOCUS );
+#endif
+}
+
+inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return gtk_widget_set_can_default(widget, can_default);
+#else
+    if (can_default)
+        GTK_WIDGET_SET_FLAGS( widget, GTK_CAN_DEFAULT );
+    else
+        GTK_WIDGET_UNSET_FLAGS( widget, GTK_CAN_DEFAULT );
+#endif
+}
+
 class GtkData : public X11SalData
 {
 public:

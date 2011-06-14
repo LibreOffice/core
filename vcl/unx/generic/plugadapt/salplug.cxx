@@ -84,7 +84,8 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
                  */
-                if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk")) )
+                if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk")) ||
+                    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")) )
                 {
                     pCloseModule = NULL;
                 }
@@ -147,12 +148,12 @@ static SalInstance* autodetect_plugin()
 {
     static const char* pKDEFallbackList[] =
     {
-        "kde4", "kde", "gtk", "gen", 0
+        "kde4", "kde", "gtk3", "gtk", "gen", 0
     };
 
     static const char* pStandardFallbackList[] =
     {
-        "gtk", "gen", 0
+        "gtk3", "gtk", "gen", 0
     };
 
     static const char* pHeadlessFallbackList[] =
@@ -223,7 +224,7 @@ SalInstance *CreateSalInstance()
         pInst = autodetect_plugin();
 
     // fallback, try everything
-    const char* pPlugin[] = { "gtk", "kde4", "kde", "gen", 0 };
+    const char* pPlugin[] = { "gtk3", "gtk", "kde4", "kde", "gen", 0 };
 
     for ( int i = 0; !pInst && pPlugin[ i ]; ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );

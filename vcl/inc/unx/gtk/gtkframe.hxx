@@ -199,7 +199,11 @@ class GtkSalFrame : public SalFrame
     Size                            m_aMinSize;
     Rectangle                       m_aRestorePosSize;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    cairo_region_t*                 m_pRegion;
+#else
     GdkRegion*                      m_pRegion;
+#endif
 
     void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
@@ -220,7 +224,7 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
     static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
-    static void         signalDestroy( GtkObject*, gpointer );
+    static void         signalDestroy( GtkWidget*, gpointer );
 
     void            Center();
     void            SetDefaultSize();
