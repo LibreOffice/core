@@ -1208,42 +1208,6 @@ inline ByteString INetMIMEStringOutputSink::takeBuffer()
 }
 
 //============================================================================
-class INetMIMEUnicodeOutputSink: public INetMIMEOutputSink
-{
-    UniString m_aBuffer;
-    bool m_bOverflow;
-
-    using INetMIMEOutputSink::writeSequence;
-
-    virtual void writeSequence(const sal_Char * pBegin,
-                               const sal_Char * pEnd);
-
-    virtual void writeSequence(const sal_uInt32 * pBegin,
-                               const sal_uInt32 * pEnd);
-
-    virtual void writeSequence(const sal_Unicode * pBegin,
-                               const sal_Unicode * pEnd);
-
-public:
-    inline INetMIMEUnicodeOutputSink(sal_uInt32 nColumn = 0,
-                                     sal_uInt32 nLineLengthLimit
-                                         = INetMIME::SOFT_LINE_LENGTH_LIMIT):
-        INetMIMEOutputSink(nColumn, nLineLengthLimit), m_bOverflow(false) {}
-
-    virtual ErrCode getError() const;
-
-    inline UniString takeBuffer();
-};
-
-inline UniString INetMIMEUnicodeOutputSink::takeBuffer()
-{
-    UniString aTheBuffer = m_aBuffer;
-    m_aBuffer.Erase();
-    m_bOverflow = false;
-    return aTheBuffer;
-}
-
-//============================================================================
 class INetMIMEEncodedWordOutputSink
 {
 public:

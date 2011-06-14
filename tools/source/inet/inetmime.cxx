@@ -3598,68 +3598,6 @@ ErrCode INetMIMEStringOutputSink::getError() const
 
 //============================================================================
 //
-//  INetMIMEUnicodeOutputSink
-//
-//============================================================================
-
-// virtual
-void INetMIMEUnicodeOutputSink::writeSequence(const sal_Char * pBegin,
-                                              const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEUnicodeOutputSink::writeSequence(): Bad sequence");
-
-    sal_Unicode * pBufferBegin = new sal_Unicode[pEnd - pBegin];
-    sal_Unicode * pBufferEnd = pBufferBegin;
-    while (pBegin != pEnd)
-        *pBufferEnd++ = sal_uChar(*pBegin++);
-    writeSequence(pBufferBegin, pBufferEnd);
-    delete[] pBufferBegin;
-}
-
-//============================================================================
-// virtual
-void INetMIMEUnicodeOutputSink::writeSequence(const sal_uInt32 * pBegin,
-                                              const sal_uInt32 * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEUnicodeOutputSink::writeSequence(): Bad sequence");
-
-    sal_Unicode * pBufferBegin = new sal_Unicode[pEnd - pBegin];
-    sal_Unicode * pBufferEnd = pBufferBegin;
-    while (pBegin != pEnd)
-    {
-        DBG_ASSERT(*pBegin < 256,
-                   "INetMIMEOutputSink::writeSequence(): Bad octet");
-        *pBufferEnd++ = sal_Unicode(*pBegin++);
-    }
-    writeSequence(pBufferBegin, pBufferEnd);
-    delete[] pBufferBegin;
-}
-
-//============================================================================
-// virtual
-void INetMIMEUnicodeOutputSink::writeSequence(const sal_Unicode * pBegin,
-                                              const sal_Unicode * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEUnicodeOutputSink::writeSequence(): Bad sequence");
-
-    m_bOverflow = m_bOverflow
-                  || pEnd - pBegin > STRING_MAXLEN - m_aBuffer.Len();
-    if (!m_bOverflow)
-        m_aBuffer.Append(pBegin, static_cast< xub_StrLen >(pEnd - pBegin));
-}
-
-//============================================================================
-// virtual
-ErrCode INetMIMEUnicodeOutputSink::getError() const
-{
-    return m_bOverflow ? ERRCODE_IO_OUTOFMEMORY : ERRCODE_NONE;
-}
-
-//============================================================================
-//
 //  INetMIMEEncodedWordOutputSink
 //
 //============================================================================
