@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SFX_VIEW_HRC
+#define _SFX_VIEW_HRC
+
+#include <sfx2/sfx.hrc>
+
+// #defines *****************************************************************
+
+#define STR_NODEFPRINTER                    (RID_SFX_VIEW_START+ 0)
+#define STR_PRINTER_NOTAVAIL                (RID_SFX_VIEW_START+ 1)
+
+
+#define STR_PRINT_OPTIONS                   (RID_SFX_VIEW_START+ 6)
+#define STR_PRINT_OPTIONS_TITLE             (RID_SFX_VIEW_START+ 7)
+#define STR_ERROR_PRINTER_BUSY              (RID_SFX_VIEW_START+ 8)
+#define STR_NOSTARTPRINTER                  (RID_SFX_VIEW_START+ 9)
+#define STR_PRINTING                        (RID_SFX_VIEW_START+10)
+
+#define DLG_PRINTMONITOR                    (RID_SFX_VIEW_START)
+#define FT_DOCNAME                      1
+#define FT_PRINTING                     2
+#define FT_PRINTER                      3
+#define FT_PRINTINFO                    4
+#define PB_CANCELPRNMON                 5
+#define STR_FT_PREPARATION              6
+#define STR_PAGE                            (RID_SFX_VIEW_START+20)
+#define STR_ERROR_PRINT                     (RID_SFX_VIEW_START+21)
+#define STR_PRINT_NEWORI                    (RID_SFX_VIEW_START+22)
+#define STR_PRINT_NEWSIZE                   (RID_SFX_VIEW_START+23)
+#define STR_PRINT_NEWORISIZE                (RID_SFX_VIEW_START+24)
+
+#define STR_PREVIEW_DOCINFO                 (RID_SFX_VIEW_START+25)
+#define STR_PREVIEW_NODOCINFO               (RID_SFX_VIEW_START+26)
+
+#define MSG_ERROR_SEND_MAIL                 (RID_SFX_VIEW_START+31)
+
+#define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_VIEW_START+33)
+
+#define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
+#define MSG_CANT_CLOSE                      (RID_SFX_VIEW_START+42)
+#define MSG_ERROR_NO_WEBBROWSER_FOUND       (RID_SFX_VIEW_START+43)
+#define TP_FRAMEPROPERTIES                  (RID_SFX_VIEW_START+44)
+
+#define FT_FRAMENAME                    3
+#define ED_FRAMENAME                    4
+#define FT_URL                          5
+#define ED_URL                          6
+#define BT_FILEOPEN                     7
+#define NM_MARGINHEIGHT                 8
+#define FT_MARGINHEIGHT                 9
+#define NM_MARGINWIDTH                  10
+#define FT_MARGINWIDTH                  11
+#define GB_MARGIN                       12
+#define RB_SCROLLINGON                  13
+#define RB_SCROLLINGOFF                 14
+#define RB_SCROLLINGAUTO                15
+#define GB_SCROLLING                    16
+#define GB_BORDER                       17
+#define RB_FRMBORDER_ON                 18
+#define RB_FRMBORDER_INHERIT            19
+#define RB_FRMBORDER_OFF                20
+#define CB_MARGINWIDTHDEFAULT           21
+#define CB_MARGINHEIGHTDEFAULT          22
+
+#define GB_WIDTH                        23
+#define GB_HEIGHT                       24
+#define RB_PIXELWIDTH                   25
+#define RB_PERCENTWIDTH                 26
+#define RB_RELATIVEWIDTH                27
+#define RB_PIXELHEIGHT                  28
+#define RB_PERCENTHEIGHT                29
+#define RB_RELATIVEHEIGHT               30
+#define FT_WIDTHCOMMENT                 31
+#define FT_HEIGHTCOMMENT                32
+#define FT_WIDTH                        33
+#define NM_WIDTH                        34
+#define CB_WIDTHFIXED                   35
+#define CB_HEIGHTFIXED                  36
+#define FT_HEIGHT                       37
+#define NM_HEIGHT                       38
+
+#define FT_FRAMESPACING                 39
+#define NM_FRAMESPACING                 40
+#define CB_FRAMESPACING_INHERIT         41
+#define FT_FRAMESPACINGCOLOR            42
+#define ED_FRAMESPACINGCOLOR            43
+#define CB_FRAMESPACINGCOLOR_INHERIT    44
+#define GB_FRAMESET                     45
+#define FL_SEP_LEFT                     46
+#define FL_SEP_RIGHT                    47
+
+#define STR_FRAME_FILEDLG                   (RID_SFX_VIEW_START+46)
+
+#endif
+

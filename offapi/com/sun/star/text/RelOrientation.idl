@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_RelOrientation_idl__
+#define __com_sun_star_text_RelOrientation_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::text::RelOrientation
+/** These values define the reference position of relative orientations.
+ */
+published constants RelOrientation
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::FRAME
+    /** paragraph, including margins
+     */
+    const short FRAME = 0;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::PRINT_AREA
+    /** paragraph, without margins
+     */
+    const short PRINT_AREA = 1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::CHAR
+    /** at a character
+     */
+    const short CHAR = 2;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_LEFT
+    /** inside the left page margin
+     */
+    const short PAGE_LEFT = 3;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_RIGHT
+    /** inside the right page margin
+     */
+    const short PAGE_RIGHT = 4;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::FRAME_LEFT
+    /** inside the left paragraph margin
+     */
+    const short FRAME_LEFT = 5;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::FRAME_RIGHT
+    /** inside the right paragraph margin
+     */
+    const short FRAME_RIGHT = 6;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_FRAME
+    /** page includes margins for page-anchored frames identical with
+                <const>RelOrientation::FRAME</const>
+     */
+    const short PAGE_FRAME = 7;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::RelOrientation::PAGE_PRINT_AREA
+    /** page without borders (for page anchored frames identical with
+                <const>RelOrientation::PRINT_AREA</const>).
+
+<!-- JRH: does not make sense -->
+     */
+    const short PAGE_PRINT_AREA = 8;
+
+        /** at the top of the text line, only sensible for vertical orientation.
+
+            @since OOo 2.0
+         */
+        const short TEXT_LINE = 9;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

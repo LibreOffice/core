@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "RptResId.hrc"
+#include "helpids.hrc"
+#include "rptui_slotid.hrc"
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _SBASLTID_HRC
+#include <svx/svxids.hrc>
+#endif
+#include <svl/solar.hrc>
+
+#define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
+#define RID_SVXIMG_EXPANDEDNODE                     (RID_FORMS_START + 3)
+#define RID_SVXIMG_FORMS                            (RID_FORMS_START +13)
+
+FloatingWindow RID_NAVIGATOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 250 ) ;
+    Text [ en-US ] = "Report navigator" ;
+    HelpId = HID_RPT_NAVIGATOR_DLG;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = TRUE;
+
+    Control 1
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 200, 250 );
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+};
+#define NAVIGATOR_IMAGEIDS \
+    IdList = \
+    { \
+        SID_SELECT_REPORT;\
+        SID_FM_FIXEDTEXT ; \
+        SID_INSERT_HFIXEDLINE ; \
+        SID_INSERT_VFIXEDLINE;\
+        SID_FM_IMAGECONTROL ; \
+        SID_FM_EDIT ; \
+        SID_RPT_NEW_FUNCTION;\
+        SID_REPORTHEADERFOOTER;\
+        SID_PAGEHEADERFOOTER;\
+        SID_GROUPHEADER;\
+        SID_GROUPFOOTER;\
+        RID_SVXIMG_COLLAPSEDNODE ; \
+        RID_SVXIMG_EXPANDEDNODE ; \
+        SID_SORTINGANDGROUPING;\
+        SID_DRAWTBX_CS_BASIC;\
+        SID_GROUP;\
+        SID_ICON_DETAIL;\
+    }; \
+    IdCount = 17
+
+ImageList RID_SVXIMGLIST_RPTEXPL
+{
+    Prefix = "sx";
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    NAVIGATOR_IMAGEIDS;
+};
+
+String RID_STR_FUNCTIONS
+{
+    Text [ en-US ] = "Functions" ;
+};
+String RID_STR_GROUPS
+{
+    Text [ en-US ] = "Groups" ;
+};
+Menu RID_MENU_NAVIGATOR
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_SORTINGANDGROUPING;
+            Command = ".uno:DbSortingAndGrouping";
+            Text [ en-US ] = "Sorting and Grouping...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_PAGEHEADERFOOTER;
+            Command = ".uno:PageHeaderFooter";
+            Checkable = TRUE;
+            Text [ en-US ] = "Page Header/Footer...";
+        };
+        MenuItem
+        {
+            Identifier = SID_REPORTHEADERFOOTER;
+            Command = ".uno:ReportHeaderFooter";
+            Checkable = TRUE;
+            Text [ en-US ] = "Report Header/Footer...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_RPT_NEW_FUNCTION;
+            Command = ".uno:NewFunction";
+            Text [ en-US ] = "New Function";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_SHOW_PROPERTYBROWSER;
+            Command = ".uno:FormProperties";
+            Text [ en-US ] = "Properties...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+/*
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            ITEM_EDIT_CUT
+        };
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+        MenuItem
+        {
+            ITEM_EDIT_PASTE
+        };
+*/
+    };
+};
+

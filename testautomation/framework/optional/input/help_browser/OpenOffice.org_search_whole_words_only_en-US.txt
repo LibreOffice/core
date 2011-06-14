@@ -1,0 +1,16 @@
+Glossary of Internet Terms
+General Glossary
+JDBC Connection
+MySQL Connection
+Report Builder
+Accessibility in OpenOffice.org
+Assistive Tools in OpenOffice.org
+Mobile Device Filters for Pocket Device Appliances 
+Scripting OpenOffice.org
+Java Platform Support
+OpenOffice.org
+Accessibility
+Java
+Class Path
+Start Parameters
+Mail Merge Wizard - Document Type

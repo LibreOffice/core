@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "sc.hrc" // ->RID_SCDLG_PIVOT_LAYOUT
+
+#define BTN_OK                  1
+#define BTN_CANCEL              2
+#define BTN_HELP                3
+#define BTN_MORE                4
+#define BTN_REMOVE              5
+#define BTN_OPTIONS             6
+
+#define FL_LAYOUT               10
+#define FL_SELECT               90
+#define SCROLL_COL              91
+#define WND_COL                 11
+#define SCROLL_ROW              92
+#define WND_ROW                 12
+#define SCROLL_DATA             93
+#define WND_DATA                13
+#define WND_SELECT              14
+#define WND_PAGE                18
+#define FT_COL                  31
+#define FT_ROW                  32
+#define FT_DATA                 33
+#define STR_SELECT              34
+#define FT_PAGE                 35
+
+#define PTR_FIELD               18
+#define FT_INFO                 19
+
+#define FL_OUTPUT               20
+#define FT_OUTAREA              21
+#define LB_OUTAREA              22
+#define ED_OUTAREA              23
+#define RB_OUTAREA              24
+#define BTN_IGNEMPTYROWS        25
+#define BTN_DETECTCAT           26
+#define BTN_TOTALCOL            27
+#define BTN_TOTALROW            28
+#define BTN_FILTER              29
+#define BTN_DRILLDOWN           30
+
+#define FT_INAREA               40
+#define RB_INAREA               41
+#define ED_INAREA               42
+
+#define PIVOTSTR_SUM            1
+#define PIVOTSTR_COUNT          2
+#define PIVOTSTR_AVG            3
+#define PIVOTSTR_MAX            4
+#define PIVOTSTR_MIN            5
+#define PIVOTSTR_PROD           6
+#define PIVOTSTR_COUNT2         7
+#define PIVOTSTR_DEV            8
+#define PIVOTSTR_DEV2           9
+#define PIVOTSTR_VAR            10
+#define PIVOTSTR_VAR2           11

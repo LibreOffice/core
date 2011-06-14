@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+
+#define ED_OBJECTIVECELL        1
+#define ED_TARGET               2
+#define ED_VARIABLECELLS        3
+#define ED_LEFT1                4
+#define ED_LEFT2                5
+#define ED_LEFT3                6
+#define ED_LEFT4                7
+#define ED_RIGHT1               8
+#define ED_RIGHT2               9
+#define ED_RIGHT3               10
+#define ED_RIGHT4               11
+
+#define FT_OBJECTIVECELL        1
+#define FT_DIRECTION            2
+#define FT_VARIABLECELLS        3
+#define FT_CELLREF              4
+#define FT_OPERATOR             5
+#define FT_CONSTRAINT           6
+
+#define FT_PROGRESS             7
+#define FT_TIMELIMIT            8
+#define FT_NOSOLUTION           9
+#define FT_ERRORTEXT            10
+#define FT_SUCCESS              11
+#define FT_RESULT               12
+#define FT_QUESTION             13
+
+#define FL_CONDITIONS           1
+#define FL_BUTTONS              2
+
+#define IB_OBJECTIVECELL        1
+#define IB_TARGET               2
+#define IB_VARIABLECELLS        3
+#define IB_LEFT1                4
+#define IB_LEFT2                5
+#define IB_LEFT3                6
+#define IB_LEFT4                7
+#define IB_RIGHT1               8
+#define IB_RIGHT2               9
+#define IB_RIGHT3               10
+#define IB_RIGHT4               11
+#define IB_DELETE1              12
+#define IB_DELETE2              13
+#define IB_DELETE3              14
+#define IB_DELETE4              15
+
+#define LB_OP1                  1
+#define LB_OP2                  2
+#define LB_OP3                  3
+#define LB_OP4                  4
+
+#define RB_MAX                  1
+#define RB_MIN                  2
+#define RB_VALUE                3
+
+#define SB_SCROLL               1
+
+#define BTN_OPTIONS             1
+#define BTN_HELP                2
+#define BTN_CLOSE               3
+#define BTN_SOLVE               4
+#define BTN_OK                  5
+#define BTN_CANCEL              6
+
+#define STR_INVALIDINPUT        1
+#define STR_INVALIDCONDITION    2

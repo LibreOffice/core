@@ -1,0 +1,308 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/script/XInvocation.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/lang/XEventListener.idl>
+
+
+module oletest
+{
+
+interface XTestSequence: com::sun::star::uno::XInterface
+{
+    sequence<byte> methodByte( [in] sequence<byte> aSeq );
+    sequence<float> methodFloat( [in] sequence<float> aSeq);
+    sequence<double> methodDouble( [in] sequence<double> aSeq);
+    sequence<boolean> methodBool( [in] sequence<boolean> aSeq);
+    sequence<short> methodShort( [in] sequence<short> aSeq);
+    sequence<unsigned short> methodUShort( [in] sequence<unsigned short> aSeq);
+    sequence<long> methodLong( [in] sequence<long> aSeq);
+    sequence<unsigned long> methodULong( [in] sequence<unsigned long> aSeq);
+    sequence<string> methodString( [in] sequence<string> aSeq);
+    sequence<char> methodChar( [in] sequence<char> aSeq);
+    sequence<any> methodAny ( [in] sequence<any> aSeq);
+    sequence<type> methodType   ( [in] sequence<type> aSeq);
+    sequence<com::sun::star::uno::XInterface> methodXInterface ( [in] sequence<com::sun::star::uno::XInterface> aSeq);
+    sequence< sequence <long> > methodSequence( [in] sequence< sequence< long > > aSeq);
+    sequence< sequence <sequence <long> > > methodSequence2( [in] sequence< sequence< sequence<long> > > aSeq);
+    sequence< com::sun::star::lang::XEventListener > methodXEventListeners( [in] sequence<com::sun::star::lang::XEventListener> aSeq);
+    sequence< sequence< com::sun::star::lang::XEventListener > > methodXEventListenersMul( [in] sequence< sequence< com::sun::star::lang::XEventListener> > aSeq);
+
+    [attribute] sequence<byte> AttrByte;
+    [attribute] sequence<float> AttrFloat;
+    [attribute] sequence<double> AttrDouble;
+    [attribute] sequence<boolean> AttrBool;
+    [attribute] sequence<short> AttrShort;
+    [attribute] sequence<unsigned short> AttrUShort;
+    [attribute] sequence<long> AttrLong;
+    [attribute] sequence<unsigned long> AttrULong;
+    [attribute] sequence<string> AttrString;
+    [attribute] sequence<char> AttrChar;
+    [attribute] sequence<any> AttrAny;
+    [attribute] sequence<type> AttrType;
+    [attribute] sequence< sequence<long> > AttrSequence;
+    [attribute] sequence< sequence< sequence <long> > > AttrSequence2;
+    [attribute] sequence< com::sun::star::uno::XInterface > AttrXInterface;
+
+    [attribute] byte AByte;
+    [attribute] float AFloat;
+    [attribute] double ADouble;
+    [attribute] boolean ABool;
+    [attribute] short AShort;
+    [attribute] unsigned short AUShort;
+    [attribute] long ALong;
+    [attribute] unsigned long AULong;
+    [attribute] string AString;
+    [attribute] char AChar;
+    [attribute] any AAny;
+    [attribute] type AType;
+    [attribute] com::sun::star::uno::XInterface  AXInterface;
+    [attribute] com::sun::star::script::XInvocation  AXInvocation;
+
+    void testout_methodByte( [out] byte rOut );
+    void testout_methodFloat( [out] float rOut);
+    void testout_methodDouble( [out] double rOut);
+    void testout_methodBool( [out] boolean rOut);
+    void testout_methodShort( [out] short rOut);
+    void testout_methodUShort( [out] unsigned short rOut);
+    void testout_methodLong( [out]  long rOut);
+    void testout_methodULong( [out] unsigned long rOut);
+     void testout_methodHyper( [out]  hyper rOut);
+     void testout_methodUHyper( [out] unsigned hyper rOut);
+    void testout_methodString( [out] string rOut);
+    void testout_methodChar( [out] char rOut);
+    void testout_methodAny  ( [out] any rOut);
+    void testout_methodType ( [out] type rOut);
+    void testout_methodSequence( [out] sequence< long > rOut);
+    void testout_methodSequence2( [out] sequence < sequence< long > > rOut);
+    void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut);
+
+    void testout_methodMulParams1( [out] long rout1, [out] long rout2);
+    void testout_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3);
+    void testout_methodMulParams3( [in] string sin, [out] string sout);
+    void testout_methodMulParams4( [in] float in1, [out] float out1, [in] long in2, [out] long out2, [in] long in3);
+
+    void testinout_methodByte( [inout] byte rOut );
+    void testinout_methodFloat( [inout] float rOut);
+    void testinout_methodDouble( [inout] double rOut);
+    void testinout_methodBool( [inout] boolean rOut);
+    void testinout_methodShort( [inout] short rOut);
+    void testinout_methodUShort( [inout] unsigned short rOut);
+    void testinout_methodLong( [inout]  long rOut);
+    void testinout_methodULong( [inout] unsigned long rOut);
+    void testinout_methodHyper( [inout]  hyper rOut);
+    void testinout_methodUHyper( [inout] unsigned hyper rOut);
+    void testinout_methodString( [inout] string rOut);
+    void testinout_methodChar( [inout] char rOut);
+    void testinout_methodAny    ( [inout] any rOut);
+    void testinout_methodType   ( [inout] type rOut);
+    void testinout_methodSequence( [inout] sequence< long > rOut);
+    void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut);
+    void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut);
+    void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut);
+
+    any methodAnyTest1( [in] any rIn);
+    [attribute]  any AttrAny2;
+
+};
+interface XTestStruct: com::sun::star::uno::XInterface
+{
+// Method taking structs as arguments
+    void methodStruct( [in] com::sun::star::beans::Property aProp);
+//  Methods returning structs
+    com::sun::star::beans::Property retMethodStruct();
+// Attributes as structs
+    [attribute] com::sun::star::beans::Property AttrStruct;
+
+    com::sun::star::beans::Property methodStruct2( [in] com::sun::star::beans::Property aProp);
+};
+
+
+struct SimpleStruct
+{
+    string message;
+};
+
+interface XTestInParameters: com::sun::star::uno::XInterface
+{
+    byte in_methodByte( [in] byte rIn );
+    float in_methodFloat( [in] float rIn);
+    double in_methodDouble( [in] double rIn);
+    boolean in_methodBool( [in] boolean rIn);
+    short in_methodShort( [in] short rIn);
+    unsigned short in_methodUShort( [in] unsigned short rIn);
+    long in_methodLong( [in]  long rIn);
+    unsigned long in_methodULong( [in] unsigned long rIn);
+    hyper in_methodHyper( [in]  hyper rIn);
+    unsigned hyper in_methodUHyper( [in] unsigned hyper rIn);
+    string in_methodString( [in] string rIn);
+    char in_methodChar( [in] char rIn);
+    any in_methodAny    ( [in] any rIn);
+    type in_methodType  ( [in] type rIn);
+    com::sun::star::uno::XInterface in_methodXInterface([in] com::sun::star::uno::XInterface rIn);
+    com::sun::star::script::XInvocation in_methodInvocation( [in] com::sun::star::script::XInvocation inv);
+    SimpleStruct in_methodStruct( [in] SimpleStruct aStruct);
+    void in_methodAll( [in] byte b, [in] float f, [in] double d, [in] boolean abool, [in]short sh,
+                       [in] unsigned short us, [in] long l, [in] unsigned long ul,
+                       [in] string s, [in] char c, [in] any a, [in] type t, [in] com::sun::star::script::XInvocation inv);
+};
+
+
+enum SimpleEnum
+{
+    A,
+    B,
+    C
+};
+
+interface XTestOther: com::sun::star::uno::XInterface
+{
+    // Any test
+    void other_methodAnyIn( [in] any rAny);
+    void other_methodAnyOut( [out] any rAny);
+    any other_methodAnyRet();
+    void in_float( [in] float val);
+    //typeInAny determines what type must be in rAny. If rAny contains
+    //a different type then an exception is being thrown
+    any other_methodAny([in] any rAny, [in] string typeInAny);
+};
+
+
+interface XSimple: com::sun::star::uno::XInterface
+{
+    void func( [in] string message);
+    string getName();
+};
+
+interface XSimple2: com::sun::star::uno::XInterface
+{
+    void func2( [in] string message);
+    string getName2();
+};
+
+interface XSimple3: com::sun::star::uno::XInterface
+{
+    void func3( [in] string message);
+    string getName3();
+};
+
+
+interface XCallback: com::sun::star::uno::XInterface
+{
+    void func1();
+    oletest::XSimple returnInterface();
+    void outInterface( [out] oletest::XSimple outInterface);
+    void outStruct( [out] oletest::SimpleStruct outStruct);
+    void outEnum( [out] oletest::SimpleEnum outEnum);
+    void outSeqAny( [out] sequence<any> outSeqAny);
+    void outSeqByte( [out] sequence<byte> outVal);
+    void outAny( [out] any outAny);
+    void outBool( [out] boolean outBool);
+    void outChar( [out] char outChar);
+    void outString( [out] string outString);
+    void outFloat( [out] float outFloat);
+    void outDouble( [out] double outDouble);
+    void outByte( [out] byte outByte);
+    void outShort( [out] short outShort);
+    void outLong( [out] long outLong);
+    void outValuesMixed( [in] long lval, [out] long outval, [in] string sval);
+    void outValuesAll( [out] oletest::XSimple outInterface,
+                       [out] SimpleStruct outStruct ,
+                       [out] SimpleEnum outEnum,
+                       [out] sequence<any> outSeqAny,
+                       [out] any outAny,
+                       [out] boolean outBool,
+                       [out] char outChar,
+                       [out] string outString,
+                       [out] float outFloat,
+                       [out] double outDouble,
+                       [out] byte   outByte,
+                       [out] short outShort,
+                       [out] long outLong);
+// IN OUT parameters
+    void inoutInterface( [inout] oletest::XSimple inoutVal);
+    void inoutStruct( [inout] oletest::SimpleStruct inoutVal);
+    void inoutEnum( [inout] oletest::SimpleEnum inoutVal);
+    void inoutSeqAny( [inout] sequence<any> inoutVal);
+    void inoutAny( [inout] any inoutVal);
+    void inoutBool( [inout] boolean inoutVal);
+    void inoutChar( [inout] char inoutVal);
+    void inoutString( [inout] string inoutVal);
+    void inoutFloat( [inout] float inoutVal);
+    void inoutDouble( [inout] double inoutVal);
+    void inoutByte( [inout] byte inoutVal);
+    void inoutShort( [inout] short inoutVal);
+    void inoutLong( [inout] long inoutVal);
+
+    void inoutValuesAll( [inout] oletest::XSimple aXSimple,
+                         [inout] oletest::SimpleStruct aStruct,
+                         [inout] oletest::SimpleEnum aEnum,
+                         [inout] sequence<any> aSeq,
+                         [inout] any aAny,
+                         [inout] boolean aBool,
+                         [inout] char aChar,
+                         [inout] string aString,
+                         [inout] float aFloat,
+                         [inout] double aDouble,
+                         [inout] byte aByte,
+                         [inout] short aShort,
+                         [inout] long aLong);
+
+    // IN parameter
+
+    void inValues( [in] char aChar, [in] long aLong, [in] string aString);
+    void inSeqByte( [in] sequence<byte> val);
+    void inSeqXEventListener( [in] sequence<com::sun::star::lang::XEventListener> listener, [in]
+                              sequence<com::sun::star::lang::EventObject> events);
+
+    // Attributes
+    [attribute] oletest::XSimple simple;
+
+
+
+
+};
+
+interface XTestInterfaces: com::sun::star::uno::XInterface
+{
+    // Any test
+    void testInterface( [in] oletest::XCallback xCallback, [in] long mode);
+    void testInterface2( [in] oletest::XSimple xSimple, [in] long mode);
+};
+
+interface XIdentity: com::sun::star::uno::XInterface
+{
+    void setObject([in] com::sun::star::uno::XInterface val);
+    boolean isSame( [in] com::sun::star::uno::XInterface val);
+
+    com::sun::star::uno::XInterface getThis();
+};
+
+}; // oletest
+

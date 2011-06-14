@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sd_SdUnoPresView" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for frame.XController
+Global oFrameToAttach As Object
+Global oModelToAttach As Object
+Global bHasNoViewData As Boolean
+Global oObjToSuspend As Object
+Global bHasNoModel As Boolean
+
+' Required for lang.XComponent
+Global oComponentInstance As Object
+
+' Required for frame.XDispatchProvider
+Global dispatchUrl As String
+
+' Required for drawing.XDrawView
+Global oPages As Variant
+
+' Required for awt.XWindow
+Global oXWindow As Object
+Global oCtrlShape as Object
+
+Global oSecDoc As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sd.SdUnoPresView
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oDP As Object, oDP1 As Object
+    Dim oDPs As Object
+    bOK = true
+
+    oDoc = utils.createImpressDocument(cObjectName)
+    oSecDoc = utils.createImpressDocument(cObjectName+"1")
+    wait(500)
+
+    oDPs = oDoc.getDrawPages()
+    oDP = oDPs.getByIndex(0)
+    oDPs.insertNewByIndex(0)
+    oDP1 = oDPs.getByIndex(1)
+
+    addShape(oDP, 1000, 1000, "Rectangle")
+    addShape(oDP, 5000, 5000, "Ellipse")
+
+    oObj = oDoc.getCurrentController()
+
+    ' For XDrawPages
+    oPages = oDoc.getDrawPages()
+
+    ' For XComponent
+    oComponentInstance = oObj
+
+    ' For XDispatchProvider
+    dispatchUrl = "slot:27009"
+
+    ' For frame.XController
+    oFrameToAttach = StarDesktop.getCurrentFrame()
+    oModelToAttach = oSecDoc
+    bHasNoViewData = false
+    bHasNoModel = false
+    oObjToSuspend = oObj
+
+    ' For awt.XWindow
+    oXWindow = utils.at_getCurrentWindow(oSecDoc)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub DisposeObj()
+    oDoc.dispose()
+    oSecDoc.dispose()
+End Sub
+
+Sub addShape(oPage as Object, nPosX as Integer, nPosY as Integer, oType As String)
+    Dim aPoint As New com.sun.star.awt.Point
+    Dim aSize As New com.sun.star.awt.Size
+    Dim oRectangleShape As Object
+
+    aPoint.x = nPosX
+    aPoint.y = nPosY
+    aSize.Width = 2000
+    aSize.Height = 1000
+    oRectangleShape = oDoc.createInstance("com.sun.star.drawing."+oType+"Shape")
+    oRectangleShape.Size = aSize
+    oRectangleShape.Position = aPoint
+    oRectangleShape.FillColor = RGB(128, 255, 0)
+    oPage.add(oRectangleShape)
+End Sub
+
+</script:module>

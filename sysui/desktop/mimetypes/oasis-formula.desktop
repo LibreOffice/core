@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=oasis-formula
+Type=MimeType
+Patterns=*.odf
+MimeType=application/vnd.oasis.opendocument.formula
+Comment=OpenDocument Formula

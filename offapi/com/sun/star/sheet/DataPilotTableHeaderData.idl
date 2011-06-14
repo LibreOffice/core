@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotTableHeaderData_idl__
+#define __com_sun_star_sheet_DataPilotTableHeaderData_idl__
+
+#include <com/sun/star/sheet/DataPilotFieldFilter.idl>
+#include <com/sun/star/sheet/DataResult.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** information about a cell within the column or row header area of a DataPilot table.
+
+    This struct contains information about a particular cell located within the
+    column or row header area of a DataPilot table.  This is the type that is
+    contained in <member>DataPilotTablePositionData::PositionData</member> when
+    the value of <member>DataPilotTablePositionData::PositionType</member> is
+    either <const>DataPilotTablePositionType::ROW_HEADER</const> or
+    <const>DataPilotTablePositionType::COLUMN_HEADER</const>.
+
+    @see com::sun::star::sheet::DataPilotTablePositionData
+    @see com::sun::star::sheet::DataPilotTablePositionType
+    @see com::sun::star::sheet::DataPilotFieldFilter
+    @see com::sun::star::sheet::DataResult
+
+    @since OOo 3.0
+ */
+struct DataPilotTableHeaderData
+{
+    /** number of dimensions */
+    long    Dimension;
+
+    /** hierarchy */
+    long    Hierarchy;
+
+    /** level */
+    long    Level;
+
+    /** flag */
+    long    Flags;
+
+    /** member name */
+    string  MemberName;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

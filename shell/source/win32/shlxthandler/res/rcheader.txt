@@ -1,0 +1,15 @@
+#if defined(_MSC_VER) && (_MSC_VER < 1500)
+#include <winres.h>
+#else
+#define WINVER 0x0500
+#include <winresrc.h>
+#define LB_ADDSTRING	(WM_USER+1)
+#define CB_ADDSTRING	(WM_USER+3)
+#define IDC_STATIC	(-1)
+#endif
+
+#include "internal/resource.h"
+
+MANIFEST_RESOURCE_ID RT_MANIFEST "shlxthdl.manifest"
+
+IDB_PROPERTY_IMAGES BITMAP "prop_img.bmp"

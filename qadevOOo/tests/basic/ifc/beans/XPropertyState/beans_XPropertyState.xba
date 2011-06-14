@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="beans_XPropertyState" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+Const BOUND = 2
+Const CONSTRAINED = 4
+Const MAYBENULL = 8
+Const READONLY = 16
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.beans.XPropertyState
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    Dim oProperties As Variant
+    Dim nAllProps As Integer
+    Dim aValue As Variant
+    Dim n As Integer
+    Dim oCoreRefl As Object
+    Dim bTypesEq As Boolean
+
+    bOK = true
+
+    oCoreRefl = createUnoService("com.sun.star.reflection.CoreReflection")
+
+    oProperties = oObj.GetPropertySetInfo().Properties
+    nAllProps = uBound(oProperties)
+    Dim AllPropsNames(nAllProps) As String
+    Out.Log("Found " &amp; nAllProps &amp; " properties.")
+
+    for n = 0 to (nAllProps)
+        AllPropsNames(n) = oProperties(n).Name
+    next n
+
+    Test.StartMethod("getPropertyStates()")
+    Out.Log("getting states for all properties.")
+    bOK = true
+
+    Dim aStates As Variant
+
+    aStates() = oObj.getPropertyStates(AllPropsNames())
+    bOK = bOK AND isArray(aStates())
+    if (bOK) then Out.Log("Length of returned array is " &amp; ubound(aStates()))
+    bOK = bOK AND ubound(aStates()) = nAllProps
+
+    Dim nState As Integer
+    nState = aStates(nAllProps / 2)
+    bOK = bOK AND (nState = com.sun.star.beans.PropertyState.DIRECT_VALUE OR _
+                   nState = com.sun.star.beans.PropertyState.DEFAULT_VALUE OR _
+                   nState = com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE)
+    Test.MethodTested("getPropertyStates()", bOK)
+
+    Test.StartMethod("getPropertyState()")
+    bOK = false
+    n = 0
+
+    ' Here testing getPropertyState method. Method is OK when at least one
+    ' property works correctly.
+
+    while (bOK = false AND n &lt; nAllProps)
+        bOK = true
+        nState = oObj.getPropertyState(AllPropsNames(n))
+        bOK = bOK AND (nState = com.sun.star.beans.PropertyState.DIRECT_VALUE OR _
+                       nState = com.sun.star.beans.PropertyState.DEFAULT_VALUE OR _
+                       nState = com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE)
+        n = n + 1
+    wend
+    Test.MethodTested("getPropertyState()", bOK)
+
+    Test.StartMethod("getPropertyDefault()")
+    bOK = false
+    n = 0
+
+    ' Here testing getPropertyDefault method. Method is OK when at least one
+    ' property works correctly.
+
+    while (bOK = false AND n &lt; nAllProps)
+        bOK = true
+        aValue = oObj.getPropertyDefault(AllPropsNames(n))
+        bOK = bOK AND (oProperties(n).Type.Name = oCoreRefl.getType(aValue).Name)
+        n = n + 1
+    wend
+    Test.MethodTested("getPropertyDefault()", bOK)
+
+    Test.StartMethod("setPropertyToDefault()")
+    bOK = false
+    n = 0
+
+    ' Here testing setPropertyToDefault method. Method is OK when at least one
+    ' property works correctly.
+
+    while (bOK = false AND n &lt; nAllProps)
+        bOK = true
+        oObj.setPropertyToDefault(AllPropsNames(n))
+        n = n + 1
+    wend
+    Test.MethodTested("setPropertyToDefault()", bOK)
+
+
+    ' Here testing getPropertyState for ALL properties. This will
+    ' put all exceptions to .log file (if this method doesn't work with some properties)
+    ' but without any affect to test status.
+
+    n = 0
+    while (n &lt; nAllProps)
+        bOK = true
+        nState = oObj.getPropertyState(AllPropsNames(n))
+        bOK = bOK AND (nState = com.sun.star.beans.PropertyState.DIRECT_VALUE OR _
+                       nState = com.sun.star.beans.PropertyState.DEFAULT_VALUE OR _
+                       nState = com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE)
+
+        if (NOT bOK) then
+            Out.Log("Error while testing getPropertyState() for '" &amp; AllPropsNames(n) &amp; "' FAILED.")
+        else
+            Out.Log("getPropertyState() for property '" &amp; AllPropsNames(n) &amp; "' is OK")
+        end if
+
+        bOK = true
+        aValue = oObj.getPropertyDefault(AllPropsNames(n))
+        bTypesEq = false
+        if (bOK AND (TypeName(aValue) &lt;&gt; "Empty")) then
+            bTypesEq = (oProperties(n).Type.Name = oCoreRefl.getType(aValue).Name)
+        end if
+
+        if (NOT bOK) then ' exception was occurred
+            Out.Log("Error while testing getPropertyDefault() for '" &amp; AllPropsNames(n) &amp; "' FAILED.")
+        elseif ((TypeName(aValue) &lt;&gt; "Empty") AND (NOT bTypesEq)) then
+            Out.Log("Types: '" &amp; oProperties(n).Type.Name &amp; "' and '" &amp; oCoreRefl.getType(aValue).Name &amp; "' are different.")
+        else
+            Out.Log("getPropertyDefault() for property '" &amp; AllPropsNames(n) &amp; "' is OK")
+        end if
+        n = n + 1
+    wend
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

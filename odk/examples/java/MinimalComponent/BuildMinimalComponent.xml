@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    author:   Bertram Nolte
+    created:  2001-10-11
+    revision: 1.0
+ -->
+<project name="MinimalComponent" basedir="." default="all">
+
+  <target name="init">
+        <!--
+         In this target you have to change all parts, so that the properties
+         fit to your odk installation and to your service
+         -->
+         <property name="ODKPATH" value="D:/cvs/api/odk"/>
+         <property name="OUTPUTPATH" value="D:/cvs/api/odk/WINexample.out"/>
+         <property name="PACKAGE_NAME" value="org.OpenOffice."/>
+         <property name="JAR_FILE_NAME" value="MinimalComponent"/>
+         <property name="INTERFACE_NAME" value="MinimalComponent"/>
+         <property name="RDB_NAME" value="MinimalComponent.rdb"/>
+   </target>
+   <target depends="init" name="unoidl">
+
+       <exec dir="${ODKPATH}/WINexample.out/misc/" executable="${ODKPATH}/windows/bin/idlc.exe" timeout="600">
+             <arg line="-I. -I${ODKPATH}/idl ${ODKPATH}/examples/java/MinimalComponent/${INTERFACE_NAME}.idl"/>
+       </exec>
+
+       <exec dir="." executable="${ODKPATH}/windows/bin/regmerge.exe" timeout="600">
+             <arg line="./${RDB_NAME} /UCR ./${INTERFACE_NAME}.urd"/>
+       </exec>
+
+       <exec dir="." executable="${ODKPATH}/windows/bin/regmerge.exe" timeout="600">
+             <arg line="./${RDB_NAME} / ${ODKPATH}/windows/bin/applicat.rdb"/>
+       </exec>
+
+       <exec dir="." executable="${ODKPATH}/windows/bin/javamaker.exe" timeout="600">
+             <arg line="-BUCR -O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${RDB_NAME}"/>
+<!--
+             <arg line="-BUCR -T${PACKAGE_NAME}${INTERFACE_NAME} -O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${INTERFACE_NAME}.urd"/>
+ -->
+       </exec>
+
+   </target>
+
+   <target depends="init,unoidl" name="compile">
+       <mkdir dir="classes"/>
+       <javac debug="on" destdir="./classes" srcdir="." >
+               <classpath>
+                   <fileset dir="${ODKPATH}/classes/">
+                           <include name="**/*.jar"/>
+                   </fileset>
+                   <pathelement location="./classes"/>
+               </classpath>
+         </javac>
+    </target>
+
+     <target depends="compile,init" name="jar">
+        <jar basedir="./classes" compress="true" jarfile="${JAR_FILE_NAME}.jar" manifest="Manifest">
+        </jar>
+     </target>
+
+    <target depends="compile,init,jar" name="all">
+        <!-- WRITEME -->
+    </target>
+</project>

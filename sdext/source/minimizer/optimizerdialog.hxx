@@ -1,0 +1,248 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef OPTIMIZERDIALOG_HXX
+#define OPTIMIZERDIALOG_HXX
+#include "optimizerdialog.hrc"
+#include <vector>
+#include "unodialog.hxx"
+#include "pppoptimizertoken.hxx"
+#include "optimizationstats.hxx"
+#include "configurationaccess.hxx"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XItemListener.hpp>
+#include <com/sun/star/awt/XSpinField.hpp>
+#include <com/sun/star/awt/XSpinListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/awt/XItemEventBroadcaster.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/awt/PushButtonType.hpp>
+
+#define MAX_STEP        4
+#define OD_DIALOG_WIDTH 330
+#define DIALOG_HEIGHT   210
+#define BUTTON_WIDTH    50
+#define BUTTON_HEIGHT   14
+#define BUTTON_POS_Y    DIALOG_HEIGHT - BUTTON_HEIGHT - 6
+
+#define PAGE_POS_X      91
+#define PAGE_POS_Y      8
+#define PAGE_WIDTH      OD_DIALOG_WIDTH - PAGE_POS_X
+
+// -------------------
+// - OPTIMIZERDIALOG -
+// -------------------
+class OptimizerDialog : public UnoDialog, public ConfigurationAccess
+{
+public :
+
+    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher );
+    ~OptimizerDialog();
+
+    sal_Bool                execute();
+
+    sal_Int16               mnCurrentStep;
+    sal_Int16               mnTabIndex;
+    sal_Bool                mbIsReadonly;
+
+private :
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControl;
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControlModel;
+
+    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener >    mxItemListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListenerListBox0Pg0;
+    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerFormattedField0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerComboBox0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::awt::XSpinListener >    mxSpinListenerFormattedField0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >      mxStatusDispatcher;
+
+    std::vector< std::vector< rtl::OUString > > maControlPages;
+
+    void InitDialog();
+    void InitRoadmap();
+    void InitNavigationBar();
+    void InitPage0();
+    void InitPage1();
+    void InitPage2();
+    void InitPage3();
+    void InitPage4();
+    void UpdateControlStatesPage0();
+    void UpdateControlStatesPage1();
+    void UpdateControlStatesPage2();
+    void UpdateControlStatesPage3();
+    void UpdateControlStatesPage4();
+
+    void ActivatePage( sal_Int16 nStep );
+    void DeactivatePage( sal_Int16 nStep );
+    void InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const rtl::OUString& rLabel, const sal_Int32 nItemID );
+
+public :
+
+    OptimizationStats maStats;
+
+    void UpdateStatus( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rStatus );
+
+    // the ConfigurationAccess is updated to actual control settings
+    void UpdateConfiguration();
+
+    void EnablePage( sal_Int16 nStep );
+    void DisablePage( sal_Int16 nStep );
+
+    void SwitchPage( sal_Int16 nNewStep );
+    void UpdateControlStates( sal_Int16 nStep = -1 );
+
+    rtl::OUString GetSelectedString( PPPOptimizerTokenEnum eListBox );
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxMSF; };
+};
+
+// -----------------------------------------------------------------------------
+
+class ItemListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XItemListener >
+{
+public:
+    ItemListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class ActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+{
+public:
+    ActionListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+{
+public:
+    ActionListenerListBox0Pg0( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
+{
+public:
+    TextListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
+{
+public:
+    TextListenerComboBox0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XSpinListener >
+{
+public:
+    SpinListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL up( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL down( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL first( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL last( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class HelpCloseListener : public ::cppu::WeakImplHelper1< com::sun::star::util::XCloseListener >
+{
+public:
+    HelpCloseListener( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rXFrame ) : mrXFrame( rXFrame ){};
+
+    virtual void SAL_CALL addCloseListener(const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
+    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException) ;
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
+
+private:
+
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& mrXFrame;
+};
+
+
+#endif // OPTIMIZERDIALOG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

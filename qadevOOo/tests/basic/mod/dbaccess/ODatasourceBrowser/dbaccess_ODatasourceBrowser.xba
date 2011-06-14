@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="dbaccess_ODatasourceBrowser" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' variable for XComponent
+Global oComponentInstance As Object
+
+' variable for XFormController
+Global otherWin As Object
+
+' variable for XDispatchProvider
+Global dispatchUrl As String
+
+' variable for frame.XController
+Global oFrameToAttach As Object 
+Global oModelToAttach As Object 
+Global bHasNoViewData As Boolean
+Global oObjToSuspend As Object  
+Global bHasNoModel As Boolean
+
+' variables for awt.XTabController
+Global oXTabControllerModel as Object    
+Global oXTabControllerContainer as Object
+
+' variable for lang.XInitialization
+Global aInitArgs As Variant 
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' dbaccess.ODatasourceBrowser
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim cntrlr As Object
+    Dim frame1 As Object, frame2 As Object
+    Dim url As new com.sun.star.util.URL
+    Dim dispatcher As Object
+    Dim oShape As Object, oDrawPage As Object, oModel As Object
+    Dim oController As Object, oCtrll As Object
+    Dim params(2) as new com.sun.star.beans.PropertyValue
+    Dim list1 as object, ctrl as object
+
+'    oDoc = utils.createDocument("swriter", cObjectName)
+    oDoc = StarDesktop.loadComponentFromUrl("private:factory/swriter", "_blank",0 , args())
+
+    wait(500)
+
+    cntrlr = oDoc.getCurrentController()
+    frame1 = StarDesktop.getCurrentFrame()
+    url.Complete = ".component:DB/DataSourceBrowser"
+    dispatcher = frame1.queryDispatch(url, "_beamer", 12)
+    dispatcher.dispatch(url, DimArray())
+    
+    frame2 = frame1.findFrame("_beamer", 4)
+    frame2.setName("ODatasourceBrowser")
+    
+    oObj = frame2.getController()
+
+    ' now initialize the browser to make him displaying a table in its gtrid.
+    ' This is required for activating of this control
+    params(0).Name = "DataSourceName"
+    params(0).Value = "Bibliography"
+    params(1).Name = "CommandType"
+    params(1).Value = com.sun.star.sdb.CommandType.TABLE
+    params(2).Name = "Command"
+    params(2).Value = "biblio"
+    
+    oObj.initialize(params())
+    ' waiting while data loading ...
+    wait(2000)
+
+'setting variable for XComponent
+    oComponentInstance = oObj
+
+'setting variable for XDispatchProvider
+    dispatchUrl = ".uno:DataSourceBrowser/FormLetter"
+
+'setting variable for XController
+    oFrameToAttach = frame1
+    oModelToAttach = oDoc
+    bHasNoViewData = true
+    oObjToSuspend = oObj
+    bHasNoModel = true
+
+'setting variables for awt.XTabController and for XFormController
+    oShape = toolkittools.createUNOControlShape("CommandButton", "UnoControlButton")
+    toolkittools.addShape(oShape)
+    oDrawPage = oDoc.getDrawPage()
+
+    oModel = oShape.getControl()
+    oController = oDoc.getCurrentController()
+    otherWin = oController.getControl(oModel)
+    oXTabControllerContainer = otherWin.getContext()
+    oXTabControllerModel = oDrawPage.getForms().getByIndex(0)
+
+' setting variable for lang.XInitialization
+    aInitArgs = params()
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

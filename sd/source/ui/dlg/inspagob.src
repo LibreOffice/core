@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "helpids.h"
+#include "inspagob.hrc"
+
+ModalDialog DLG_INSERT_PAGES_OBJS
+{
+    HelpID = HID_DLG_INSERT_PAGES_OBJS ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 128 ) ;
+    Moveable = TRUE ;
+    Text [ en-US ] = "Insert Slides/Objects" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 144 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Control LB_TREE
+    {
+        HelpId = HID_SD_PAGEOBJSTLB;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 132 , 88 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CBX_LINK
+    {
+        HelpID = "sd:CheckBox:DLG_INSERT_PAGES_OBJS:CBX_LINK";
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Size = MAP_APPFONT ( 140 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Link" ;
+    };
+    CheckBox CBX_CHECK_MASTERS
+    {
+        HelpID = "sd:CheckBox:DLG_INSERT_PAGES_OBJS:CBX_CHECK_MASTERS";
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 140 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Delete unused backg~rounds";
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

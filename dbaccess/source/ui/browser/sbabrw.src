@@ -1,0 +1,200 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_BRW_HRC_
+#include "dbu_brw.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#include "toolbox.hrc"
+
+QueryBox QUERY_BRW_SAVEMODIFIED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "The current record has been changed.\nDo you want to save the changes?" ;
+};
+
+QueryBox QUERY_BRW_DELETE_ROWS
+{
+    Buttons = WB_YES_NO ;
+    Message [ en-US ] = "Do you want to delete the selected data?" ;
+};
+
+String RID_STR_DATABROWSER_FILTERED
+{
+    Text [ en-US ] = "(filtered)" ;
+};
+
+String SBA_BROWSER_SETTING_ORDER
+{
+    Text [ en-US ] = "Error setting the sort criteria";
+};
+
+String SBA_BROWSER_SETTING_FILTER
+{
+    Text [ en-US ] = "Error setting the filter criteria";
+};
+
+String RID_STR_CONNECTION_LOST
+{
+    Text [ en-US ] = "Connection lost";
+};
+
+String RID_STR_QUERIES_CONTAINER
+{
+    Text [ en-US ] = "Queries";
+};
+
+String RID_STR_TABLES_CONTAINER
+{
+    Text [ en-US ] = "Tables";
+};
+
+#define MID_EDIT_DATABASE   \
+    Identifier = ID_TREE_EDIT_DATABASE ;    \
+    HelpId = HID_BROWSER_EDIT_DATABASE; \
+    Text [ en-US ] = "Edit ~Database File..." ;\
+
+#define MID_ADMINISTRATE    \
+    Identifier = ID_TREE_ADMINISTRATE ; \
+    HelpId = HID_BROWSER_ADMINISTRATE;  \
+    Text [ en-US ] = "Registered databases ..." ;\
+
+#define MID_CLOSECONN   \
+    Identifier = ID_TREE_CLOSE_CONN ;   \
+    HelpId = HID_BROWSER_CLOSECONN ;    \
+    Text [ en-US ] = "Disco~nnect" ;    \
+
+Menu MENU_BROWSER_DEFAULTCONTEXT
+{
+    ItemList =
+    {
+        MenuItem    \
+        {   \
+            MID_EDIT_DATABASE   \
+        };  \
+        MenuItem    \
+        {   \
+            MID_CLOSECONN   \
+        };  \
+        MenuItem    \
+        {   \
+            Separator = TRUE;   \
+        };  \
+        MenuItem { ITEM_EDIT_COPY       };
+        MenuItem    \
+        {   \
+            Separator = TRUE;   \
+        };  \
+        MenuItem    \
+        {   \
+            MID_ADMINISTRATE    \
+        };
+    };
+};
+
+String STR_TITLE_CONFIRM_DELETION
+{
+    Text [ en-US ] = "Confirm Deletion" ;
+};
+
+String STR_QUERY_DELETE_TABLE
+{
+    Text [ en-US ] = "Do you want to delete the table '%1'?" ;
+};
+
+QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
+{
+    Buttons = WB_YES_NO ;
+    Message [ en-US ] = "The query already exists. Do you want to delete it?" ;
+};
+
+QueryBox QUERY_CONNECTION_LOST
+{
+    Buttons = WB_YES_NO ;
+    Message [ en-US ] = "The connection to the database has been lost. Do you want to reconnect?" ;
+};
+
+String STR_OPENTABLES_WARNINGS
+{
+    Text [ en-US ] = "Warnings encountered";
+};
+
+String STR_OPENTABLES_WARNINGS_DETAILS
+{
+    Text [ en-US ] = "While retrieving the tables, warnings were reported by the database connection.";
+};
+
+String STR_CONNECTING_DATASOURCE
+{
+    Text [ en-US ] = "Connecting to \"$name$\" ...";
+};
+
+String STR_LOADING_QUERY
+{
+    Text [ en-US ] = "Loading query $name$ ...";
+};
+
+String STR_LOADING_TABLE
+{
+    Text [ en-US ] = "Loading table $name$ ...";
+};
+
+String STR_NO_TABLE_FORMAT_INSIDE
+{
+    Text [ en-US ] = "No table format could be found." ;
+};
+
+String STR_COULDNOTCONNECT_DATASOURCE
+{
+    Text [ en-US ] = "The connection to the data source \"$name$\" could not be established.";
+};
+
+Menu RID_MENU_REFRESH_DATA
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            MID_SBA_QRY_REFRESH
+            Command = ".uno:Refresh";
+        };
+        MenuItem
+        {
+            Identifier = ID_BROWSER_REFRESH_REBUILD;
+            Command = ".uno:DBRebuildData";
+            Text [ en-US ] = "Rebuild";
+        };
+    };
+};

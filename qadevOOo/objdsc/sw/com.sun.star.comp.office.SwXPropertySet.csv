@@ -1,0 +1,7 @@
+"SwXPropertySet";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
+"SwXPropertySet";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
+"SwXPropertySet";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
+"SwXPropertySet";"com::sun::star::beans::XPropertySet";"addPropertyChangeListener()"
+"SwXPropertySet";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
+"SwXPropertySet";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
+"SwXPropertySet";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"

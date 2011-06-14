@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "glosbib.hrc"
+#include "misc.hrc"
+#include "helpid.h"
+ModalDialog DLG_BIB_BASE
+{
+    HelpID = HID_BIB_BASE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 349 , 121 ) ;
+    Moveable = TRUE ;
+    Text [ en-US ] = "Edit Categories" ;
+    PushButton PB_NEW
+    {
+        HelpID = "sw:PushButton:DLG_BIB_BASE:PB_NEW";
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 293 , 66 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~New" ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_DELETE
+    {
+        HelpID = "sw:PushButton:DLG_BIB_BASE:PB_DELETE";
+        Pos = MAP_APPFONT ( 293 , 83 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+    };
+    PushButton PB_RENAME
+    {
+        HelpID = "sw:PushButton:DLG_BIB_BASE:PB_RENAME";
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 293 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Rename" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_BIB
+    {
+        Pos = MAP_APPFONT ( 12 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "Category" ;
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 293 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 293 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 293 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Edit ED_NAME
+    {
+        HelpID = "sw:Edit:DLG_BIB_BASE:ED_NAME";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 159 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        MaxTextLength = 256 ;
+    };
+    FixedText FT_PATH
+    {
+        Pos = MAP_APPFONT ( 174 , 3 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Path";
+    };
+    ListBox LB_PATH
+    {
+        HelpID = "sw:ListBox:DLG_BIB_BASE:LB_PATH";
+        Pos = MAP_APPFONT ( 174 , 14 ) ;
+        Size = MAP_APPFONT ( 107 , 50 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    FixedText FT_SELECT
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "Selection list";
+    };
+    Control TLB_GROUPS
+    {
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 269 , 73 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    /*    ComboBox CO_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 89 , 76 ) ;
+        TabStop = TRUE ;
+#ifdef WIN
+        MaxTextLength = 8 ;
+#else
+        MaxTextLength = 32 ;
+#endif
+        Sort = TRUE ;
+    };*/
+};
+/*
+String STR_GLOSSARY_BIB_DLG
+{
+    Text [ en-US ] = "Edit Categories" ;
+};*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

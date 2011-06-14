@@ -1,0 +1,868 @@
+Formulas
+General Information and User Interface Usage
+Welcome to the Oracle Open Office Math Help
+Oracle Open Office Math Features
+Instructions for Using Oracle Open Office Math
+Shortcuts (Oracle Open Office Math Accessibility)
+Command and Menu Reference
+Menus
+Toolbars
+Working with Formulas
+Manually Aligning Formula Parts
+Changing Default Attributes
+Merging Formula Parts in Brackets
+Entering Comments
+Entering Line Breaks
+Inserting Brackets
+Spreadsheets
+General Information and User Interface Usage
+Welcome to the Oracle Open Office Calc Help
+Oracle Open Office Calc Features
+Shortcut Keys (Oracle Open Office Calc Accessibility)
+Shortcut Keys for Spreadsheets
+Error Codes in Oracle Open Office Calc
+Add-in for Programming in Oracle Open Office Calc
+Instructions for Using Oracle Open Office Calc
+Command and Menu Reference
+Menus
+Menus
+File
+Edit
+View
+Insert
+Format
+Tools
+Window
+Data
+Toolbars
+Toolbars
+Formatting Bar
+Drawing Object Properties Bar
+Text Formatting Bar
+Formula Bar
+Status Bar
+Page Preview Bar
+Picture Bar
+Tools Bar
+Standard Bar
+Hyperlink Bar
+Table Data Bar
+Form Navigation Bar
+Query Design Bar
+Form Design Toolbar
+Functions Types and Operators
+Function Wizard
+Functions by Category
+Database Functions
+Date + Time Functions
+Financial Functions Part One
+Financial Functions Part Two
+Financial Functions Part Three
+Information Functions
+Logical Functions
+Mathematical Functions
+Array Functions
+Statistics Functions
+Statistical Functions Part One
+Statistical Functions Part Two
+Statistical Functions Part Three
+Statistical Functions Part Four
+Statistical Functions Part Five
+Spreadsheet Functions
+Text Functions
+Add-in Functions
+Add-in Functions, List of Analysis Functions Part One
+Add-in Functions, List of Analysis Functions Part Two
+Operators in Oracle Open Office Calc
+User-Defined Functions
+Loading, Saving, Importing, and Exporting
+Inserting External Data in Table (WebQuery)
+Saving and Opening Sheets in HTML
+Importing and Exporting Text Files
+Formatting
+Rotating Text
+Writing Multi-line Text
+Formatting Numbers as Text
+Text Superscript / Subscript
+Changing Row Height or Column Width
+Applying Conditional Formatting
+Highlighting Negative Numbers
+Assigning Formats by Formula
+Entering a Number with Leading Zeros
+Formatting Spreadsheets
+Formatting Numbers With Decimals
+Naming Cells
+Rotating Tables (Transposing)
+Renaming Sheets
+19xx/20xx Years
+Using Rounded Off Numbers
+Cells in Currency Format
+Using AutoFormat for Tables
+Inserting and Editing Comments
+Selecting Themes for Sheets
+Entering Fractions 
+Filtering and Sorting
+Applying Filters
+Filter: Applying Advanced Filters
+Applying AutoFilter
+Applying Sort Lists
+Printing
+Printing Rows or Columns on Every Page
+Printing Sheets in Landscape Format
+Printing Sheet Details
+Defining Number of Pages for Printing
+Data Ranges
+Defining Database Ranges
+Filtering Cell Ranges 
+Sorting Data 
+Data Pilot
+DataPilot
+Creating DataPilot Tables
+Deleting DataPilot Tables
+Editing DataPilot Tables
+Filtering DataPilot Tables
+Selecting DataPilot Output Ranges
+Updating DataPilot Tables
+Scenarios
+Using Scenarios
+References
+Addresses and References, Absolute and Relative
+Referencing a Cell in Another Document
+References to Other Sheets and Referencing URLs
+Referencing Cells by Drag-and-Drop
+Recognizing Names as Addressing
+Viewing, Selecting, Copying
+Changing Table Views
+Displaying Formulas or Values
+Freezing Rows or Columns as Headers
+Navigating Through Sheets Tabs
+Copying to Multiple Sheets
+Only Copy Visible Cells
+Selecting Multiple Cells
+Formulas and Calculations
+Calculating With Formulas
+Copying Formulas
+Entering Formulas 
+Displaying Formulas or Values
+Calculating in Spreadsheets
+Calculating With Dates and Times
+Automatically Calculating Series
+Calculating Time Differences
+Entering Matrix Formulas
+Protection
+Protecting Cells from Changes
+Unprotecting Cells
+Miscellaneous
+Deactivating Automatic Changes
+Consolidating Data
+Applying Goal Seek
+Applying Multiple Operations
+Applying Multiple Sheets
+Validity of Cell Contents
+Installation
+Changing the Association of Microsoft Office Document Types
+Common Help Topics
+General Information
+Shortcut Keys
+General Glossary
+Glossary of Internet Terms
+Accessibility in Oracle Open Office
+Shortcuts (Oracle Open Office Accessibility)
+General Shortcut Keys in Oracle Open Office
+Versions and Build Numbers
+Oracle Open Office and Microsoft Office
+Using Microsoft Office and Oracle Open Office
+Comparing Microsoft Office and Oracle Open Office Terms
+About Converting Microsoft Office Documents
+Changing the Association of Microsoft Office Document Types
+Oracle Open Office Options
+Options
+User Data
+General
+Paths
+Writing Aids
+Colors
+General
+Fonts
+View
+Print Options
+Memory
+Appearance
+Accessibility
+Load/Save options
+Internet options
+Text Document Options
+HTML Document Options
+Spreadsheet Options
+Presentation Options
+Drawing Options
+Formula
+Chart options
+VBA Properties
+Microsoft Office
+Languages
+Language Setting Options
+Data sources options
+Wizards
+Wizard
+Letter Wizard
+Letter Wizard
+Fax Wizard
+Fax Wizard
+Agenda Wizard
+Agenda Wizard
+Presentation Wizard
+Presentation Wizard
+HTML Export Wizard
+HTML Export
+Document Converter Wizard
+Document Converter
+Euro Converter Wizard
+Configuring Oracle Open Office
+Configuring Oracle Open Office
+Extension Manager
+Changing Icon Views
+Adding Buttons to Toolbars 
+Changing Your Working Directory 
+Changing Default Templates
+Registering an Address Book
+Inserting and Editing Buttons
+Working with the User Interface
+Navigation to Quickly Reach Objects
+Navigator for Document Overview
+Showing, Docking and Hiding Windows
+Showing Navigation Pane of the Help
+Switching Between Insert Mode and Overwrite Mode
+Using Toolbars
+Printing, Faxing, Sending
+Printing Address Labels
+Printing in Black and White
+Sending Documents as E-mail
+Sending Faxes and Configuring Oracle Open Office for Faxing
+Drag & Drop
+Dragging and Dropping Within a Oracle Open Office Document
+Moving and Copying Text in Documents
+Copying Spreadsheet Areas to Text Documents
+Copying Graphics Between Documents
+Copying Graphics From the Gallery
+Drag-and-Drop With the Data Source View
+Copy and Paste
+Copying Drawing Objects Into Other Documents
+Copying Graphics Between Documents
+Copying Graphics From the Gallery
+Copying Spreadsheet Areas to Text Documents
+Charts and Diagrams
+Inserting Charts
+Charts in Oracle Open Office
+Load, Save, Import, Export
+Opening Documents
+Opening documents saved in other formats
+Saving Documents
+Saving Documents Automatically
+Saving Documents in Other Formats
+Importing and Exporting Data in Text Format
+Links and References
+Inserting Hyperlinks
+Relative and Absolute Links
+Editing Hyperlinks
+Document Version Tracking
+Comparing Versions of a Document
+Merging Versions
+Recording Changes
+Recording and Displaying Changes
+Accepting or Rejecting Changes
+Version Management
+Labels and Business Cards
+Creating and Printing Labels and Business Cards
+Inserting External Data
+Inserting Data From Spreadsheets
+Inserting Data From Text Documents
+Inserting, Editing, Saving Bitmaps
+Adding Graphics to the Gallery
+Automatic Functions
+Turning off Automatic URL Recognition
+Searching and Replacing
+Searching With a Form Filter
+Searching With the Hyperlink Bar
+Searching Tables and Form Documents
+List of Regular Expressions
+Guides
+Applying Line Styles
+Changing the Color of Text
+Changing the Title of a Document
+Creating Round Corners
+Defining Background Colors or Background Graphics
+Defining Line Ends
+Defining Line Styles
+Editing Graphic Objects 
+Drawing Lines in Text
+First Steps
+Inserting Objects From the Gallery
+Inserting Protected Spaces, Hyphens and Conditional Separators
+Inserting Special Characters
+Inserting and Editing Tab Stops
+Protecting Content in Oracle Open Office
+Protecting Records
+Selecting the Maximum Printable Area on a Page
+Selecting Measurement Units
+Selecting the Document Language
+Table Design
+Turning off Bullets and Numbering for Individual Paragraphs
+Database Functionality
+General Information
+Oracle Open Office Database
+Database Overview
+Creating a New Database
+Working with Tables
+Working with Queries
+Working with Forms
+Creating Reports 
+Registering and Deleting a Database 
+Importing and Exporting Data in Base 
+Executing SQL Commands
+Text Documents
+General Information and User Interface Usage
+Welcome to the Oracle Open Office Writer Help
+Oracle Open Office Writer Features
+Instructions for Using Oracle Open Office Writer
+Docking and Resizing Windows
+Shortcut Keys for Oracle Open Office Writer
+Counting Words
+Using Shortcut Keys (Oracle Open Office Writer Accessibility)
+Command and Menu Reference
+Menus
+Menus
+File
+Edit
+View
+Insert
+Format
+Tools
+Window
+Toolbars
+Toolbars
+Formatting Bar
+Picture Bar
+Table Bar
+Drawing Object Properties Bar
+Bullets and Numbering Bar
+Status Bar
+Page Preview
+Rulers
+Formula Bar
+Frame Bar
+OLE-Object Bar
+Text Object Bar
+Standard Bar
+Hyperlink Bar
+Table Data Bar
+Form Navigation Bar
+Query Design Bar
+Form Design Toolbar
+Creating Text Documents
+Navigating and Selecting With the Keyboard
+Using the Direct Cursor
+Graphics in Text Documents
+Inserting Graphics
+Inserting a Graphic From a File
+Inserting Graphics From the Gallery With Drag-and-Drop
+Inserting a Scanned Image
+Inserting a Calc Chart into a Text Document
+Inserting Graphics From Oracle Open Office Draw or Impress
+Inserting a Horizontal Line
+Tables in Text Documents
+Turning Number Recognition On or Off in Tables
+Modifying Rows and Columns by Keyboard
+Deleting Tables or the Contents of a Table
+Inserting Tables
+Repeating a Table Header on a New Page
+Resizing Rows and Columns in a Text Table 
+Adding or Deleting a Row or Column to a Table Using the Keyboard
+Objects in Text Documents
+Positioning Objects
+Wrapping Text Around Objects
+Sections and Frames in Text Documents
+Using Sections
+Inserting, Editing, and Linking Text Frames
+Editing Sections
+Inserting Sections
+Tables of Contents and Indexes
+Outline Numbering
+User-Defined Indexes
+Creating a Table of Contents
+Creating Alphabetical Indexes
+Indexes Covering Several Documents
+Creating a Bibliography
+Editing or Deleting Index and Table Entries
+Updating, Editing and Deleting Indexes and Tables of Contents
+Defining Index or Table of Contents Entries
+Formatting an Index or a Table of Contents
+Fields in Text Documents
+About Fields
+Inserting a Fixed or Variable Date Field
+Converting a Field into Text
+Navigating Text Documents
+Moving and Copying Text in Documents
+Rearranging a Document by Using the Navigator
+Inserting Hyperlinks With the Navigator
+Navigator for Text Documents
+Calculating in Text Documents
+Calculating Across Tables
+Calculating in Text Documents
+Calculating and Pasting the Result of a Formula in a Text Document
+Calculating Cell Totals in Tables
+Calculating Complex Formulas in Text Documents
+Displaying the Result of a Table Calculation in a Different Table
+Formatting Text Documents
+Templates and Styles
+Templates and Styles
+Alternating Page Styles on Odd and Even Pages
+Creating a Page Style Based on the Current Page
+Using Styles From Another Document or Template
+Creating New Styles From Selections
+Updating Styles From Selections
+Creating a Document Template
+Changing the Default Template
+Changing the Case of Text
+Hiding Text
+Defining Different Headers and Footers
+Inserting a Chapter Name and Number in a Header or a Footer
+Applying Text Formatting While You Type
+Resetting Font Attributes
+Applying Styles in Fill Format Mode
+Wrapping Text Around Objects
+Using a Frame to Center Text on a Page
+Emphasizing Text
+Rotating Text
+Inserting and Deleting Page Breaks
+Creating and Applying Page Styles
+Making Text Superscript or Subscript
+Special Text Elements
+Using Captions 
+Conditional Text
+Conditional Text for Page Counts
+Inserting a Fixed or Variable Date Field
+Adding Input Fields
+Inserting Page Numbers of Continuation Pages
+Inserting Page Numbers in Footers
+Hiding Text
+Defining Different Headers and Footers
+Inserting a Chapter Name and Number in a Header or a Footer
+Querying User Data in Fields or Conditions
+Inserting and Editing Footnotes or Endnotes
+Spacing Between Footnotes
+About Headers and Footers
+Formatting Headers or Footers
+Animating Text
+Creating a Form Letter
+Automatic Functions
+Adding Exceptions to the AutoCorrect List
+Using AutoText
+Creating Numbered or Bulleted Lists as You Type
+Turning Off AutoCorrect 
+Automatically Check Spelling
+Turning Number Recognition On or Off in Tables
+Checking Spelling in Other Languages
+Hyphenation
+Numbering and Lists
+Adding Chapter Numbers to Captions
+Creating Numbered or Bulleted Lists as You Type
+Outline Numbering
+Changing the Outline Level of Numbered and Bulleted Lists
+Combining Numbered Lists
+Adding Line Numbers
+Modifying Numbering in a Numbered List
+Defining Number Ranges
+Adding Numbering
+Numbering and Numbering Styles
+Adding Bullets
+Spellchecking, Thesaurus, and Languages
+Automatically Check Spelling
+Removing Words From a User-Defined Dictionary
+Thesaurus
+Checking Spelling in Other Languages
+Checking Spelling and Grammar
+Troubleshooting Tips
+Inserting Text Before a Table at the Top of Page
+Going to Specific Bookmark
+Loading, Saving, Importing, and Exporting
+Saving Text Documents in HTML Format
+Inserting an Entire Text Document
+Master Documents
+Master Documents and Subdocuments
+Links and References
+Inserting Cross-References
+Inserting Hyperlinks With the Navigator
+Printing
+Selecting printer paper trays
+Previewing a Page Before Printing
+Printing Multiple Pages on One Sheet
+Creating and Applying Page Styles
+Searching and Replacing
+Using Wildcards in Text Searches
+List of Regular Expressions
+HTML Documents
+Web Pages
+HTML Filters and Forms
+Saving Text Documents in HTML Format
+Macros and Programming
+General Information and User Interface Usage
+Oracle Open Office Basic Help
+Programming with Oracle Open Office Basic 
+Oracle Open Office Basic Glossary
+Basics
+Syntax
+Oracle Open Office Basic IDE
+IDE Overview
+The Basic Editor
+Watch Window
+Macro Toolbar
+Macro
+Command Reference
+Using Procedures and Functions
+Libraries, Modules and Dialogs
+Run-Time Functions, Statements, and Operators
+Screen I/O Functions
+File I/O Functions
+Date and Time Functions
+Error-Handling Functions
+Logical Operators
+Mathematical Operators
+Numeric Functions
+Controlling Program Execution
+Variables
+Comparison Operators
+Strings
+Other Commands
+Alphabetic List of Functions, Statements, and Operators
+Abs Function [Runtime]
+AND Operator [Runtime]
+Array Function [Runtime]
+Asc Function [Runtime]
+Atn Function [Runtime]
+Beep Statement [Runtime]
+Blue Function [Runtime]
+CBool Function [Runtime]
+CByte Function [Runtime]
+CDateFromIso Function [Runtime]
+CDateToIso Function [Runtime]
+CDate Function [Runtime]
+CDbl Function [Runtime]
+CInt Function [Runtime]
+CLng Function [Runtime]
+CSng Function[Runtime]
+CStr Function [Runtime]
+Call Statement [Runtime]
+ChDir Statement [Runtime]
+ChDrive Statement [Runtime]
+Choose Function [Runtime]
+Chr Function [Runtime]
+Close Statement [Runtime]
+Comparison Operators [Runtime]
+Const Statement [Runtime]
+ConvertFromURL Function [Runtime]
+ConvertToURL Function [Runtime]
+Cos Function [Runtime]
+CreateUnoDialog Function [Runtime]
+CreateUnoListener Function [Runtime]
+CreateUnoService Function [Runtime]
+CreateUnoStruct Function [Runtime]
+CurDir Function [Runtime]
+DateSerial Function [Runtime]
+DateValue Function [Runtime]
+Date Statement [Runtime]
+Day Function [Runtime]
+Declare Statement [Runtime]
+DefBool Statement [Runtime]
+DefDate Statement [Runtime]
+DefDbl Statement [Runtime]
+DefInt Statement [Runtime]
+DefLng Statement [Runtime]
+DefObj Statement [Runtime]
+DefVar Statement [Runtime]
+DimArray Function [Runtime]
+Dim Statement [Runtime]
+Dir Function [Runtime]
+Do...Loop Statement [Runtime]
+Comparison Operators [Runtime]
+End Statement [Runtime]
+Environ Function [Runtime]
+Eof Function [Runtime]
+EqualUnoObjects Function [Runtime]
+Eqv Operator [Runtime]
+Erl Function [Runtime]
+Err Function [Runtime]
+Error Function [Runtime]
+Error-Handling Functions
+Exit Statement [Runtime]
+Exp Function [Runtime]
+FileAttr-Function [Runtime]
+FileCopy Statement [Runtime]
+FileDateTime Function [Runtime]
+FileExists Function [Runtime]
+FileLen-Function [Runtime]
+FindObject Function [Runtime]
+FindPropertyObject Function [Runtime]
+Fix Function [Runtime]
+For...Next Statement [Runtime]
+Format Function [Runtime]
+FreeFile Function[Runtime]
+FreeLibrary Function [Runtime]
+Function Statement [Runtime]
+Further Statements
+Generating Random Numbers
+GetAttr Function [Runtime]
+GetProcessServiceManager Function [Runtime]
+GetSolarVersion Function [Runtime]
+GetSystemTicks Function [Runtime]
+Get Statement [Runtime]
+GlobalScope [Runtime]
+GoSub...Return Statement [Runtime]
+GoTo Statement [Runtime]
+Green Function [Runtime]
+HasUnoInterfaces Function [Runtime]
+Hex Function [Runtime]
+Hour Function [Runtime]
+IIf Statement [Runtime]
+If...Then...Else Statement [Runtime]
+Imp-Operator [Runtime]
+InStr Function [Runtime]
+InputBox Function [Runtime]
+Input# Statement [Runtime]
+Int Function [Runtime]
+IsArray Function [Runtime]
+IsDate Function [Runtime]
+IsEmpty Function [Runtime]
+IsMissing function [Runtime]
+IsNull Function [Runtime]
+IsNumeric Function [Runtime]
+IsObject Function [Runtime]
+IsUnoStruct Function [Runtime]
+Join Function [Runtime]
+Kill Statement [Runtime]
+LBound Function [Runtime]
+LCase Function [Runtime]
+LSet Statement [Runtime]
+LTrim Function [Runtime]
+Left Function [Runtime]
+Len Function [Runtime]
+Let Statement [Runtime]
+Line Input # Statement [Runtime]
+Loc Function [Runtime]
+Lof Function [Runtime]
+Log Function [Runtime]
+Mid Function, Mid Statement [Runtime]
+Minute Function [Runtime]
+MkDir Statement [Runtime]
+Mod-Operator [Runtime]
+Month Function [Runtime]
+MsgBox Function [Runtime]
+MsgBox Statement [Runtime]
+Name Statement [Runtime]
+Not-Operator [Runtime]
+Now Function [Runtime]
+Numeric Functions
+Oct Function [Runtime]
+On Error GoTo ... Resume Statement [Runtime]
+On...GoSub Statement; On...GoTo Statement [Runtime]
+Open Statement[Runtime]
+Option Base Statement [Runtime]
+Option Explicit Statement [Runtime]
+Optional (in Function Statement) [Runtime]
+Or-Operator [Runtime]
+Print Statement [Runtime]
+Public Statement [Runtime]
+Put Statement [Runtime]
+QBColor Function [Runtime]
+RGB Function [Runtime]
+RSet Statement [Runtime]
+RTrim Function [Runtime]
+Randomize Statement [Runtime]
+ReDim Statement [Runtime]
+Red Function [Runtime]
+Rem Statement [Runtime]
+Reset Statement [Runtime]
+Right Function [Runtime]
+RmDir Statement [Runtime]
+Rnd Function [Runtime]
+Second Function [Runtime]
+Seek Function [Runtime]
+Seek Statement [Runtime]
+Select...Case Statement [Runtime]
+SetAttr Statement [Runtime]
+Set Statement[Runtime]
+Sgn Function [Runtime]
+Shell Function [Runtime]
+Sin Function [Runtime]
+Space Function [Runtime]
+Split Function [Runtime]
+Sqr Function [Runtime]
+Square Root Calculation
+Static Statement [Runtime]
+Stop Statement [Runtime]
+StrComp Function [Runtime]
+Str Function [Runtime]
+String Function [Runtime]
+Sub Statement [Runtime]
+Switch Function [Runtime]
+Tan Function [Runtime]
+TimeSerial Function [Runtime]
+TimeValue Function [Runtime]
+Time Statement [Runtime]
+Timer Function [Runtime]
+Trigonometric Functions
+Trim Function [Runtime]
+TwipsPerPixelX Function [Runtime]
+TwipsPerPixelY Function [Runtime]
+TypeName Function; VarType Function[Runtime]
+UBound Function [Runtime]
+UCase Function [Runtime]
+Val Function [Runtime]
+Wait Statement [Runtime]
+WeekDay Function [Runtime]
+While...Wend Statement[Runtime]
+With Statement [Runtime]
+Write Statement [Runtime]
+Xor-Operator [Runtime]
+Year Function [Runtime]
+"-" Operator [Runtime]
+"*" Operator [Runtime]
+"+" Operator [Runtime]
+"/" Operator [Runtime]
+"^" Operator [Runtime]
+Guides
+Changing the Properties of Controls in the Dialog Editor
+Creating Controls in the Dialog Editor
+Programming Examples for Controls in the Dialog Editor
+Opening a Dialog With Program Code
+Creating a Basic Dialog
+Organizing Libraries and Modules
+Using Variables
+Using Objects
+Debugging a Basic Program
+Event-Driven Macros
+Presentations and Drawings
+General Information and User Interface Usage
+Welcome to the Oracle Open Office Impress Help
+Welcome to the Oracle Open Office Draw Help
+Oracle Open Office Impress Features
+Oracle Open Office Draw Features
+Using Shortcut Keys in Oracle Open Office Impress 
+Shortcut Keys for Drawing Objects
+Shortcut Keys for Oracle Open Office Impress
+Shortcut Keys for Drawings
+Instructions for Using Oracle Open Office Impress
+Instructions for Using Oracle Open Office Draw
+Command and Menu Reference
+Presentations (Oracle Open Office Impress)
+Menus
+Menus
+File
+Edit
+View
+Insert
+Format
+Tools
+Window
+Slide Show
+Toolbars
+Toolbars
+Line and Filling Bar
+Text Formatting Bar
+Slide View Bar
+Status Bar
+Rulers
+Drawing Bar
+Outline Bar
+Slide Sorter Bar
+Options Bar
+Picture Bar
+Standard Bar
+Hyperlink Bar
+Form Navigation Bar
+Form Design Toolbar
+Edit Points Bar
+Drawings (Oracle Open Office Draw)
+Menus
+Menus
+File
+Edit
+View
+Insert
+Format
+Tools
+Modify
+Toolbars
+Toolbars
+Drawing Bar
+Options Bar
+Standard Bar
+Hyperlink Bar
+Form Navigation Bar
+Form Design Toolbar
+Edit Points Bar
+Loading, Saving, Importing, and Exporting
+Saving a Presentation in HTML Format
+Importing HTML Pages Into Presentations 
+Loading Color, Gradient, and Hatching Lists
+Exporting Animations in GIF Format
+Including Spreadsheets in Slides
+Inserting Graphics
+Copying Slides From Other Presentations
+Formatting
+Loading Color, Gradient, and Hatching Lists
+Loading Line and Arrow Styles
+Defining Custom Colors
+Creating Gradient Fills
+Replacing Colors
+Arranging, Aligning and Distributing Objects
+Changing the Slide Background Fill
+Adding a Header or a Footer to All Slides
+Applying a Slide Design to a Slide Master 
+Moving Objects
+Printing
+Printing Presentations
+Printing a Slide to Fit a Paper Size
+Effects
+Exporting Animations in GIF Format
+Animating Objects in Presentation Slides
+Animating Slide Transitions
+Cross-Fading Two Objects
+Creating Animated GIF Images
+Objects, Graphics, and Bitmaps
+Combining Objects and Constructing Shapes
+Drawing Sectors and Segments
+Duplicating Objects
+Rotating Objects
+Assembling 3D Objects
+Connecting Lines
+Converting Text Characters into Drawing Objects
+Converting Bitmap Images into Vector Graphics
+Converting 2D Objects to Curves, Polygons, and 3D Objects
+Loading Line and Arrow Styles
+Drawing Curves
+Editing Curves
+Inserting Graphics
+Including Spreadsheets in Slides
+Moving Objects
+Selecting Underlying Objects
+Creating a Flowchart
+Groups and Layers
+Grouping Objects
+About Layers
+Inserting Layers
+Working With Layers
+Moving Objects to a Different Layer
+Text in Presentations and Drawings
+Adding Text
+Converting Text Characters into Drawing Objects
+Viewing
+Creating a Custom Slide Show
+Changing the Slide Order
+Zooming With the Keypad
+Rehearse Timings of Slide Changes
+Charts and Diagrams
+General Information
+Charts in Oracle Open Office
+Oracle Open Office Chart Features
+Shortcuts for Charts

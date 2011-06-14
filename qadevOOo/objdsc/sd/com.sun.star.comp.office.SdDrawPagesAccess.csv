@@ -1,0 +1,8 @@
+"SdDrawPagesAccess";"com::sun::star::container::XIndexAccess";"getCount()"
+"SdDrawPagesAccess";"com::sun::star::container::XIndexAccess";"getByIndex()"
+"SdDrawPagesAccess";"com::sun::star::drawing::XDrawPages";"insertNewByIndex()"
+"SdDrawPagesAccess";"com::sun::star::drawing::XDrawPages";"remove()"
+"SdDrawPagesAccess";"com::sun::star::container::XElementAccess";"getElementType()"
+"SdDrawPagesAccess";"com::sun::star::container::XElementAccess";"hasElements()"
+"SdDrawPagesAccess";"com::sun::star::drawing::XDrawPageExpander#optional";"expand()"
+"SdDrawPagesAccess";"com::sun::star::drawing::XDrawPageSummarizer#optional";"summarize()"

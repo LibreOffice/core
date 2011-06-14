@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "index.hrc"
+#include "multmrk.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_MULTMRK
+{
+    HelpID = CMD_FN_EDIT_IDX_ENTRY_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 95 ) ;
+    Text [ en-US ] = "Index Markings" ;
+    Moveable = TRUE ;
+    FixedLine FL_TOX
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 153 , 8 ) ;
+        Text [ en-US ] = "Selection" ;
+    };
+    FixedText FT_ENTRY
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "Index" ;
+        Left = TRUE ;
+    };
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 53 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_TOX
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "Entry" ;
+        Left = TRUE ;
+    };
+    ListBox LB_TOX
+    {
+        HelpID = "sw:ListBox:DLG_MULTMRK:LB_TOX";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Size = MAP_APPFONT ( 100 , 49 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    OKButton OK_BT
+    {
+        Pos = MAP_APPFONT ( 165 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton CANCEL_BT
+    {
+        Pos = MAP_APPFONT ( 165 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

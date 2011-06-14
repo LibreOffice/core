@@ -1,0 +1,505 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
+#include "fontwork.hrc"
+#include "helpid.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_FONTWORK ---------------------------------------------------
+DockingWindow RID_SVXDLG_FONTWORK
+{
+    HelpId = CMD_SID_FONTWORK ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 89 , 193 ) ;
+    Text [ en-US ] = "Fontwork" ;
+    Moveable = TRUE ;
+    Zoomable = TRUE ;
+    Closeable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Control VS_FORMS
+    {
+        HelpId = HID_FONTWORK_CTL_FORMS ;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 71 , 30 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    ToolBox TBX_STYLE
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        ItemList  =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Identifier = TBI_STYLE_OFF ;
+                HelpId = HID_FONTWORK_TBI_STYLE_OFF ;
+                Text [ en-US ] = "Off" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_ROTATE ;
+                HelpId = HID_FONTWORK_TBI_STYLE_ROTATE ;
+                Text [ en-US ] = "Rotate" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_UPRIGHT ;
+                HelpId = HID_FONTWORK_TBI_STYLE_UPRIGHT ;
+                Text [ en-US ] = "Upright" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_SLANTX ;
+                HelpId = HID_FONTWORK_TBI_STYLE_SLANTX ;
+                Text [ en-US ] = "Slant Horizontal" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_SLANTY ;
+                HelpId = HID_FONTWORK_TBI_STYLE_SLANTY ;
+                Text [ en-US ] = "Slant Vertical" ;
+            };
+        };
+    };
+    ToolBox TBX_ADJUST
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        ItemList  =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = TBI_ADJUST_MIRROR ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_MIRROR ;
+                Text [ en-US ] = "Orientation" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_LEFT ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_LEFT ;
+                Text [ en-US ] = "Align Left" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_CENTER ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_CENTER ;
+                Text [ en-US ] = "Center" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_RIGHT ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_RIGHT ;
+                Text [ en-US ] = "Align Right" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_AUTOSIZE ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_AUTOSIZE ;
+                Text [ en-US ] = "AutoSize Text" ;
+            };
+        };
+    };
+    FixedImage FB_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 10 , 84 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+    };
+    MetricField MTR_FLD_DISTANCE
+    {
+        HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_DISTANCE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 85 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -5000000 ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = -5000000 ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        QuickHelpText [ en-US ] = "Distance" ;
+
+    };
+    FixedImage FB_TEXTSTART
+    {
+        Pos = MAP_APPFONT ( 10 , 99 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+    };
+    MetricField MTR_FLD_TEXTSTART
+    {
+        HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_TEXTSTART";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 100 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        QuickHelpText [ en-US ] = "Indent" ;
+    };
+    ToolBox TBX_SHADOW
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
+        ItemList  =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = TBI_SHOWFORM ;
+                HelpId = HID_FONTWORK_TBI_SHOWFORM ;
+                Text [ en-US ] = "Contour" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = TBI_OUTLINE ;
+                HelpId = HID_FONTWORK_TBI_OUTLINE ;
+                Text [ en-US ] = "Text Contour" ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_SHADOW_OFF ;
+                HelpId = HID_FONTWORK_TBI_SHADOW_OFF ;
+                Text [ en-US ] = "No Shadow" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_SHADOW_NORMAL ;
+                HelpId = HID_FONTWORK_TBI_SHADOW_NORMAL ;
+                Text [ en-US ] = "Vertical" ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_SHADOW_SLANT ;
+                HelpId = HID_FONTWORK_TBI_SHADOW_SLANT ;
+                Text [ en-US ] = "Slant" ;
+            };
+        };
+    };
+    FixedImage FB_SHADOW_X
+    {
+        Pos = MAP_APPFONT ( 10 , 143 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+    };
+    MetricField MTR_FLD_SHADOW_X
+    {
+        HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_SHADOW_X";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 144 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -5000000 ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        CustomUnitText [ en-US ] = " degrees" ;
+        First = -5000000 ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        QuickHelpText [ en-US ] = "Distance X" ;
+    };
+    FixedImage FB_SHADOW_Y
+    {
+        Pos = MAP_APPFONT ( 10 , 158 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+    };
+    MetricField MTR_FLD_SHADOW_Y
+    {
+        HelpID = "svx:MetricField:RID_SVXDLG_FONTWORK:MTR_FLD_SHADOW_Y";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 159 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        QuickHelpText [ en-US ] = "Distance Y" ;
+        CustomUnitText [ en-US ] = "%" ;
+    };
+    ListBox CLB_SHADOW_COLOR
+    {
+        HelpID = "svx:ListBox:RID_SVXDLG_FONTWORK:CLB_SHADOW_COLOR";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 174 ) ;
+        Size = MAP_APPFONT ( 71 , 60 ) ;
+        DropDown = TRUE ;
+        QuickHelpText [ en-US ] = "Shadow Color" ;
+        Text = "-";
+    };
+
+#define FONTWORK_IDLIST \
+        IdList =            \
+        {                   \
+            TBI_STYLE_OFF ; \
+            TBI_STYLE_ROTATE ;  \
+            TBI_STYLE_UPRIGHT ; \
+            TBI_STYLE_SLANTX ;  \
+            TBI_STYLE_SLANTY ;  \
+            TBI_ADJUST_MIRROR ; \
+            TBI_ADJUST_LEFT ;   \
+            TBI_ADJUST_CENTER ; \
+            TBI_ADJUST_RIGHT ;  \
+            TBI_ADJUST_AUTOSIZE ; \
+            TBI_SHOWFORM ;  \
+            TBI_OUTLINE ;   \
+            TBI_SHADOW_OFF ;    \
+            TBI_SHADOW_NORMAL ; \
+            TBI_SHADOW_SLANT ; \
+            TBI_SHADOW_XDIST ; \
+            TBI_SHADOW_YDIST ; \
+            TBI_SHADOW_ANGLE ; \
+            TBI_SHADOW_SIZE ; \
+            TBI_DISTANCE ; \
+            TBI_TEXTSTART ; \
+        };                 \
+        IdCount = { 21 ; };
+
+    #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+
+    ImageList IL_FONTWORK
+    {
+        Prefix = "fw";
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        FONTWORK_IDLIST
+    };
+};
+ // Bitmaps ---------------------------------------------------------------
+Bitmap RID_SVXBMP_FONTWORK_FORM1
+{
+    File = "fwthcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM2
+{
+    File = "fwbhcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM3
+{
+    File = "fwlhcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM4
+{
+    File = "fwrhcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM5
+{
+    File = "fwtoparc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM6
+{
+    File = "fwbotarc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM7
+{
+    File = "fwlftarc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM8
+{
+    File = "fwrgtarc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM9
+{
+    File = "fwbuttn1.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM10
+{
+    File = "fwbuttn2.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM11
+{
+    File = "fwbuttn3.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM12
+{
+    File = "fwbuttn4.bmp" ;
+};
+
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_FONTWORK_FORM1
+{
+    Text [ en-US ] = "Upper Semicircle" ;
+};
+String RID_SVXSTR_FONTWORK_FORM2
+{
+    Text [ en-US ] = "Lower Semicircle" ;
+};
+String RID_SVXSTR_FONTWORK_FORM3
+{
+    Text [ en-US ] = "Left Semicircle" ;
+};
+String RID_SVXSTR_FONTWORK_FORM4
+{
+    Text [ en-US ] = "Right Semicircle" ;
+};
+String RID_SVXSTR_FONTWORK_FORM5
+{
+    Text [ en-US ] = "Upper Arc" ;
+};
+String RID_SVXSTR_FONTWORK_FORM6
+{
+    Text [ en-US ] = "Lower Arc" ;
+};
+String RID_SVXSTR_FONTWORK_FORM7
+{
+    Text [ en-US ] = "Left Arc" ;
+};
+String RID_SVXSTR_FONTWORK_FORM8
+{
+    Text [ en-US ] = "Right Arc" ;
+};
+String RID_SVXSTR_FONTWORK_FORM9
+{
+    Text [ en-US ] = "Open Circle" ;
+};
+String RID_SVXSTR_FONTWORK_FORM10
+{
+    Text [ en-US ] = "Closed Circle" ;
+};
+String RID_SVXSTR_FONTWORK_FORM11
+{
+    Text [ en-US ] = "Closed Circle II" ;
+};
+String RID_SVXSTR_FONTWORK_FORM12
+{
+    Text [ en-US ] = "Open Circle Vertical" ;
+};
+String RID_SVXSTR_FONTWORK_UNDOCREATE
+{
+    Text [ en-US ] = "Create Fontwork object" ;
+};
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

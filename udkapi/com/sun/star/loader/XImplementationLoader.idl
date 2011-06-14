@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_loader_XImplementationLoader_idl__
+#define __com_sun_star_loader_XImplementationLoader_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/registry/XRegistryKey.idl>
+
+#include <com/sun/star/registry/CannotRegisterImplementationException.idl>
+
+#include <com/sun/star/loader/CannotActivateFactoryException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module loader {
+
+//=============================================================================
+
+/** handles activation (loading) of a UNO component.
+    @see        com::sun::star::registry::XImplementationRegistration
+ */
+published interface XImplementationLoader: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** activates a concrete implementation within a component.
+        @param implementationName The name of the implementation,
+               which shall be instantiated. The method
+               <member>XImplementationLoader::writeRegistryInfo</member>
+               writes a list of implementation names hosted by this component.
+        @param implementationLoaderUrl specification bug, ignore this parameter, please
+               pass an empty string.
+        @param locationUrl Points to the location of the file containing
+               the component (for instance a .jar-file or a shared library).
+               This parameter
+               should be in an URL format (= protocol:protocol-dependent-part).
+               In case the string contains no
+               leading "protocol:", the implementation in general assumes,
+               that it is a relative file url. <p>Special loaders may define
+               their own protocol (for instance an executable loader may need
+               more than only one file url).
+
+        @param xKey A registry which may be used to read static data previously
+               written via <method>XImplementationLoader::writeRegistryInfo()</method>.
+               The use of this parameter is deprecated.
+
+        @return returns a factory interface, which allows to create an instance of
+                the concrete implementation. In general, the object supports a
+                <type scope="com::sun::star::lang">XSingleComponentFactory</type>
+                and the <type scope="com::sun::star::lang">XServiceInfo</type> interface. The
+                XServiceInfo interface informs about the capabilities of the
+                service implementation, not the factory itself.
+     */
+    com::sun::star::uno::XInterface activate( [in] string implementationName,
+             [in] string implementationLoaderUrl,
+             [in] string locationUrl,
+             [in] com::sun::star::registry::XRegistryKey xKey )
+            raises( com::sun::star::loader::CannotActivateFactoryException );
+
+    //-------------------------------------------------------------------------
+    /** writes a list of all implementations hosted by this component into a registry key.
+        <p>This method is called during registering a component.
+        @param xKey The registry key, which shall be used to write for each
+                    implementation the implementation name plus a list of supported
+                    services.
+        @param implementationLoaderUrl specification bug, ignore this parameter, please
+               pass an empty string.
+        @param locationUrl Points to the location of the file containing
+               the component (for instance a .jar-file or a shared library).
+               This parameter
+               should be in an URL format (= protocol:protocol-dependent-part).
+               In case the string contains no
+               leading &quot;protocol:&quot;, the implementation in general assumes,
+               that it is a relative file url. <p>Special loaders may define
+               their own protocol (for instance an executable loader may need
+               more than only one file url).
+        @see com::sun::star::registry::XImplementationRegistration
+     */
+    boolean writeRegistryInfo( [in] com::sun::star::registry::XRegistryKey xKey,
+             [in] string implementationLoaderUrl,
+             [in] string locationUrl )
+            raises( com::sun::star::registry::CannotRegisterImplementationException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,6 @@
+#! /bin/sh
+
+SRC=${1-../../svx/source/dialog/zoom.src}
+SRC=${1-../../sw/source/ui/dialog/wordcountdialog.src}
+
+../src2xml/source/src2xml.py --ignore-includes --post-process --output-dir=. $SRC

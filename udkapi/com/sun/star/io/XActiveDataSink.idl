@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_io_XActiveDataSink_idl__
+#define __com_sun_star_io_XActiveDataSink_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/io/XInputStream.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module io {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::io::XActiveDataSink
+/** makes it possible to read the corresponding object from an input stream.
+
+    <p>If you want to allow control from outside, also implement the
+    <type>XActiveDataControl</type> interface. </p>
+ */
+published interface XActiveDataSink: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::XActiveDataSink::setInputStream
+    /** plugs the input stream.
+
+        <p>If <type>XConnectable</type> is also implemented, this
+        method should query <var>aStream</var> for an
+        <type>XConnectable</type> and connect both.</p>
+     */
+    void setInputStream( [in] com::sun::star::io::XInputStream aStream );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::io::XActiveDataSink::getInputStream
+    /** @returns
+                the plugged stream.
+     */
+    com::sun::star::io::XInputStream getInputStream();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

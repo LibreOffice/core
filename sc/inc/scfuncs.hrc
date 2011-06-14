@@ -1,0 +1,42 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "sc.hrc"
+
+#define ID_FUNCTION_GRP_DATABASE    1
+#define ID_FUNCTION_GRP_DATETIME    2
+#define ID_FUNCTION_GRP_FINANZ      3
+#define ID_FUNCTION_GRP_INFO        4
+#define ID_FUNCTION_GRP_LOGIC       5
+#define ID_FUNCTION_GRP_MATH        6
+#define ID_FUNCTION_GRP_MATRIX      7
+#define ID_FUNCTION_GRP_STATISTIC   8
+#define ID_FUNCTION_GRP_TABLE       9
+#define ID_FUNCTION_GRP_TEXT        10
+#define ID_FUNCTION_GRP_ADDINS      11
+
+#define ID_FUNCTION_OFFSET          90
+

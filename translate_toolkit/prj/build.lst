@@ -1,0 +1,3 @@
+trt     translate_toolkit       :       PYTHON:python NULL
+trt     translate_toolkit       usr1    -       all     trt_mkout NULL
+trt     translate_toolkit       nmake   -       all     translate_toolkit NULL

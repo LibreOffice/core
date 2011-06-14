@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="JavaScript" xmlns:parcel="scripting.dtd">
+
+    <script language="JavaScript">
+        <locale lang="en">
+            <displayname value="ExportSheetsToHTML"/>
+            <description>
+                Saves each sheet in the current Calc document as a separate HTML file in the same directory as the original Calc document.
+            </description>
+        </locale>
+        <functionname value="exportsheetstohtml.js"/>
+        <logicalname value="ExportSheetsToHTML.JavaScript"/>
+    </script>
+
+</parcel>

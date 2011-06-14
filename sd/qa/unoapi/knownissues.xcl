@@ -1,0 +1,63 @@
+### i84994 ###
+sd.SdXImpressDocument::com::sun::star::view::XPrintable
+# -> disabled in sd.sce
+
+### i34994 ###
+sd.SdXPresentation::com::sun::star::presentation::Presentation
+
+### i53605 ###
+sd.DrawController_OutlineView::com::sun::star::awt::XUserInputInterception
+sd.DrawController_PresentationView::com::sun::star::awt::XUserInputInterception
+sd.DrawController_DrawView::com::sun::star::awt::XUserInputInterception
+sd.DrawController_HandoutView::com::sun::star::awt::XUserInputInterception
+sd.DrawController_NotesView::com::sun::star::awt::XUserInputInterception
+
+### i63664 ###
+sd.DrawController_OutlineView::com::sun::star::view::XSelectionSupplier
+sd.DrawController_PresentationView::com::sun::star::view::XSelectionSupplier
+
+### i65255 ###
+sd.DrawController_OutlineView::com::sun::star::drawing::DrawingDocumentDrawView
+sd.DrawController_PresentationView::com::sun::star::drawing::DrawingDocumentDrawView
+sd.DrawController_DrawView::com::sun::star::drawing::DrawingDocumentDrawView
+sd.DrawController_HandoutView::com::sun::star::drawing::DrawingDocumentDrawView
+sd.DrawController_NotesView::com::sun::star::drawing::DrawingDocumentDrawView
+
+### i65256 ###
+sd.DrawController_PresentationView::com::sun::star::drawing::XDrawView
+sd.DrawController_HandoutView::com::sun::star::drawing::XDrawView
+sd.DrawController_NotesView::com::sun::star::drawing::XDrawView
+
+### i84992 ###
+sd.DrawController_NotesView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_OutlineView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_HandoutView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_PresentationView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_DrawView::com::sun::star::ui::XContextMenuInterception
+
+### i87746 ###
+sd.SdXShape::com::sun::star::drawing::Shape::Style
+# -> disabled in sd.sce
+
+### i88256 ### 
+sd.SdXCustomPresentationAccess::com::sun::star::container::XNameReplace
+
+### i88309 ###
+sd.DrawController_OutlineView::com::sun::star::frame::XController
+
+### i88537 ###
+sd.DrawController_OutlineView::com::sun::star::beans::XPropertySet
+
+### i88537 ###
+sd.DrawController_PresentationView::com::sun::star::beans::XPropertySet
+
+### i109518 ###
+sd.SdXPresentation::com::sun::star::presentation::XPresentation
+sd.SdXPresentation::com::sun::star::beans::XPropertySet
+
+### i113161 ###
+sd.SdLayer::com::sun::star::beans::XPropertySet
+sd.SdLayer::com::sun::star::drawing::Layer
+
+### i113386 ###
+sd.AccessibleDrawDocumentView::com::sun::star::accessibility::XAccessibleComponent

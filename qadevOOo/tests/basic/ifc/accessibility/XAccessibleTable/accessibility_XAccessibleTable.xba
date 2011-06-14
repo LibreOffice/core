@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleTable" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleTable
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim implSel As Boolean
+
+    implSel = hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessibleSelection")
+    if (NOT implSel) then
+        Out.Log("!!! The component doesn't implement the interface XAccessibleSelection.")
+        Out.Log("!!! This interface is required for more detailed tests.")
+    End If
+
+    Test.StartMethod("getAccessibleRowCount()")
+    Dim rowCount As Long
+    bOK = true
+    rowCount = oObj.getAccessibleRowCount()
+    Out.Log("Accessible row count: "+rowCount)
+    Test.MethodTested("getAccessibleRowCount()",bOK)
+
+    Test.StartMethod("getAccessibleColumnCount()")
+    Dim colCount As Long
+    bOK = true
+    colCount = oObj.getAccessibleColumnCount()
+    Out.Log("Accessible column count: "+colCount)
+    Test.MethodTested("getAccessibleColumnCount()",bOK)
+
+    Test.StartMethod("getAccessibleRowDescription()")
+    Dim rowDescr As String
+    bOK = true
+    if (rowCount &gt; 0) then
+        rowDescr = oObj.getAccessibleRowDescription(rowCount - 1)
+        Out.Log("Row "+(rowCount-1)+" description: "+rowDescr)
+        bOK = bOK AND NOT isNull(rowDescr)
+    else
+        Out.Log("!!! RowCount is 0. Could not test this method.")
+    End If
+    Test.MethodTested("getAccessibleRowDescription()",bOK)
+
+    Test.StartMethod("getAccessibleColumnDescription()")
+    Dim colDescr As String
+    bOK = true
+    if (colCount &gt; 0) then
+        colDescr = oObj.getAccessibleRowDescription(colCount - 1)
+        Out.Log("Column "+(colCount-1)+" description: "+colDescr)
+        bOK = bOK AND NOT isNull(colDescr)
+    else
+        Out.Log("!!! ColumnCount is 0. Could not test this method.")
+    End If
+    Test.MethodTested("getAccessibleColumnDescription()",bOK)
+
+    Test.StartMethod("getAccessibleRowExtentAt()")
+    Dim ext As Long
+    bOK = true
+    ext = oObj.getAccessibleRowExtentAt(rowCount - 1, colCount - 1)
+    Out.Log(ext)
+    bOK = bOK AND (ext &gt;= 1)
+    Test.MethodTested("getAccessibleRowExtentAt()",bOK)
+
+    Test.StartMethod("getAccessibleColumnExtentAt()")
+    bOK = true
+    ext = oObj.getAccessibleColumnExtentAt(rowCount - 1, colCount - 1)
+    Out.Log(ext)
+    bOK = bOK AND (ext &gt;= 1)
+    Test.MethodTested("getAccessibleColumnExtentAt()",bOK)
+
+    Test.StartMethod("getAccessibleRowHeaders()")
+    Dim rowHeaders As Object
+    bOK = true
+    rowHeaders = oObj.getAccessibleRowHeaders()
+    bOK = bOK AND NOT isNull(rowHeaders)
+    Test.MethodTested("getAccessibleRowHeaders()",bOK)
+
+    Test.StartMethod("getAccessibleColumnHeaders()")
+    Dim colHeaders As Object
+    bOK = true
+    colHeaders = oObj.getAccessibleColumnHeaders()
+    bOK = bOK AND NOT isNull(colHeaders)
+    Test.MethodTested("getAccessibleColumnHeaders()",bOK)
+
+    Test.StartMethod("getSelectedAccessibleRows()")
+    Dim selRows As Variant
+    Dim elCount As Long, i As Integer
+    Dim locRes As Boolean
+    bOK = true
+    if implSel then
+        oObj.selectAllAccessible()
+    End If
+    selRows = oObj.getSelectedAccessibleRows()
+    elCount = ubound(selRows) - 1
+    Out.Log("Returned sequence has "+elCount+" elements")
+    if implSel then
+        bOK = bOK AND (elCount = rowCount)
+    else
+        bOK = bOK AND (elCount = 0)
+    End If
+    if (elCount &gt; 0) then
+        Out.Log("Checking that returned sequence is in ascending order")
+    End If
+    i = 1
+    while (i &lt; elCount)
+        locRes = (selRows(i) &gt;= selRows(i-1))
+        bOK = bOK AND locRes
+        if NOT locRes then
+            Out.Log("Element "+i+" : Returned sequence is not in accending order.")
+            break
+        End If
+    wend
+    Test.MethodTested("getSelectedAccessibleRows()",bOK)
+
+    Test.StartMethod("getSelectedAccessibleColumns()")
+    Dim selCols As Variant
+    bOK = true
+    selCols = oObj.getSelectedAccessibleRows()
+    elCount = ubound(selCols) - 1
+    Out.Log("Returned sequence has "+elCount+" elements")
+    if implSel then
+        bOK = bOK AND (elCount = colCount)
+    else
+        bOK = bOK AND (elCount = 0)
+    End If
+    if (elCount &gt; 0) then
+        Out.Log("Checking that returned sequence is in ascending order")
+    End If
+    i = 1
+    while (i &lt; elCount)
+        locRes = (selCols(i) &gt;= selCols(i-1))
+        bOK = bOK AND locRes
+        if NOT locRes then
+            Out.Log("Element "+i+" : Returned sequence is not in accending order.")
+            break
+        End If
+    wend
+    Test.MethodTested("getSelectedAccessibleColumns()",bOK)
+
+    Test.StartMethod("isAccessibleRowSelected()")
+    Dim mCount As Integer
+    bOK = true
+    locRes = true
+    if (rowCount &gt; 299) then
+        mCount = 299
+    else
+        mCount = rowCount - 1
+    End If
+    for i=0 to mCount
+        locRes = oObj.isAccessibleRowSelected(i)
+        if implSel then
+            bOK = bOK AND locRes
+        else
+            bOK = bOK AND NOT locRes
+        End If
+    next i
+    Out.Log("Checked "+i+" of "+rowCount+" rows.")
+    Test.MethodTested("isAccessibleRowSelected()",bOK)
+
+    Test.StartMethod("isAccessibleColumnSelected()")
+    bOK = true
+    locRes = true
+    if (colCount &gt; 299) then
+        mCount = 299
+    else
+        mCount = colCount - 1
+    End If
+    for i=0 to mCount
+        locRes = oObj.isAccessibleColumnSelected(i)
+        if implSel then
+            bOK = bOK AND locRes
+        else
+            bOK = bOK AND NOT locRes
+        End If
+    next i
+    Out.Log("Checked "+i+" of "+colCount+" columns.")
+    Test.MethodTested("isAccessibleColumnSelected()",bOK)
+
+    Test.StartMethod("getAccessibleCellAt()")
+    Dim xAccCell As Object
+    bOK = true
+    xAccCell = oObj.getAccessibleCellAt(rowCount - 1, colCount - 1)
+    bOK = bOK AND NOT isNull(xAccCell)
+    Test.MethodTested("getAccessibleCellAt()",bOK)
+
+    Test.StartMethod("getAccessibleCaption()")
+    Dim caption As Object
+    bOK = true
+    caption = oObj.getAccessibleCaption()
+    Test.MethodTested("getAccessibleCaption()",bOK)
+
+    Test.StartMethod("getAccessibleSummary()")
+    Dim summary As Object
+    bOK = true
+    summary = oObj.getAccessibleSummary()
+    Test.MethodTested("getAccessibleSummary()",bOK)
+
+    Test.StartMethod("isAccessibleSelected()")
+    bOK = true
+    locRes = oObj.isAccessibleSelected(rowCount - 1, colCount - 1)
+    if implSel then
+        bOK = bOK AND locRes
+    else
+        bOK = bOK AND NOT locRes
+    End If
+    Test.MethodTested("isAccessibleSelected()",bOK)
+
+    Test.StartMethod("getAccessibleIndex()")
+    Dim ind As Long, expIndex As Long
+    bOK = true
+    ind = oObj.getAccessibleIndex(rowCount - 1, colCount - 1)
+    Out.Log("AccessibleIndex is: "+ind)
+    if NOT isNull(xAccCell) then
+        expIndex = xAccCell.getAccessibleContext().getAccessibleIndexInParent()
+        Out.Log("Expected index is: "+expIndex)
+        bOK = bOK AND (ind = expIndex)
+    End If
+    Test.MethodTested("getAccessibleIndex()",bOK)
+
+    Test.StartMethod("getAccessibleRow()")
+    Dim rowIndex As Long
+    Dim chCount As Long
+    bOK = true
+    if hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessibleContext") then
+        chCount = oObj.getAccessibleChildCount()
+        rowIndex = oObj.getAccessibleRow(chCount - 1)
+        bOK = bOK AND (rowIndex &gt;= 0) AND (rowIndex &lt;= rowCount)
+    End If
+    rowIndex = oObj.getAccessibleRow(0)
+    bOK = bOK AND (rowIndex &gt;= 0) AND (rowIndex &lt;= rowCount)
+    Test.MethodTested("getAccessibleRow()",bOK)
+
+    Test.StartMethod("getAccessibleColumn()")
+    Dim colIndex As Long
+    bOK = true
+    if hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessibleContext") then
+        chCount = oObj.getAccessibleChildCount()
+        colIndex = oObj.getAccessibleColumn(chCount - 1)
+        bOK = bOK AND (colIndex &gt;= 0) AND (colIndex &lt;= colCount)
+    End If
+    colIndex = oObj.getAccessibleColumn(0)
+    bOK = bOK AND (colIndex &gt;= 0) AND (colIndex &lt;= colCount)
+    Test.MethodTested("getAccessibleColumn()",bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

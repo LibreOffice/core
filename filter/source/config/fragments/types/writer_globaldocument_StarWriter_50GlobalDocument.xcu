@@ -1,0 +1,12 @@
+    <node oor:name="writer_globaldocument_StarWriter_50GlobalDocument" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.sfx2.BinaryFormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sgl</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.stardivision.writer-global</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarWriter 5.0/GlobalDocument</value></prop>
+        <prop oor:name="UIName">
+            <value>StarWriter 5.0 Master Document</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>StarWriter/Global 5.0</value></prop>
+    </node>

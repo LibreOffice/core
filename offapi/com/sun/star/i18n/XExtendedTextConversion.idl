@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_XExtendedTextConversion_idl__
+#define __com_sun_star_i18n_XExtendedTextConversion_idl__
+
+#include <com/sun/star/i18n/XTextConversion.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+
+/**
+    This interface provides Text Conversion service.
+
+    <p> It is derived from
+    <type scope="::com::sun::star::i18n">XTextConversion</type> and provides
+    a new conversion function containing position map (offset) between original
+    and converted string. </p>
+
+     @since OOo 2.0
+ */
+published interface XExtendedTextConversion : ::com::sun::star::i18n::XTextConversion
+{
+    //-------------------------------------------------------------------------
+    /**
+        The functionality of this method is same as
+        <member scope="::com::sun::star::i18n">XTextConversion::getConversion()</member>,
+        except an additional output parameter rOffset.
+
+        @param rOffset
+            To find the grapheme of input string corresponding to the
+            grapheme of output string, rOffset provides the offset array
+            whose index is the offset of output string, the element
+            containing the position within the input string.
+            When the graphemes of input and output strings are simple
+            one to one mapping, to improve the performance, returned
+            rOffset will be a zero length array.
+     */
+    string getConversionWithOffset(
+            [in] string aText,
+            [in] long nStartPos,
+            [in] long nLength,
+            [in] ::com::sun::star::lang::Locale aLocale,
+            [in] short nTextConversionType,
+            [in] long nTextConversionOptions,
+            [out] sequence <long> rOffset )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NoSupportException );
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

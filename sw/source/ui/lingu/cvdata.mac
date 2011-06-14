@@ -1,0 +1,19 @@
+#############
+## Deutsch ##
+#############
+rename "GR_HYP.DAT" "German Hyph"
+setfile -c 'SW/g' -t 'Lexi' "German Hyph"
+rename "GR_SPL.DAT" "German Spell"
+setfile -c 'SW/g' -t 'Lexi' "German Spell"
+rename "GR_THE.DAT" "German Thes"
+setfile -c 'SW/g' -t 'Lexi' "German Thes"
+
+#############
+## English ##
+#############
+rename "EN_HYP.DAT" "English Hyph"
+setfile -c 'SW/g' -t 'Lexi' "English Hyph"
+rename "EN_SPL.DAT" "English Spell"
+setfile -c 'SW/g' -t 'Lexi' "English Spell"
+rename "EN_THE.DAT" "English Thes"
+setfile -c 'SW/g' -t 'Lexi' "English Thes"

@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBACCESS_SLOTID_HRC_
+#define _DBACCESS_SLOTID_HRC_
+
+#ifndef _SFXSIDS_HRC
+#include <sfx2/sfxsids.hrc>
+#endif
+
+#define SID_INDEXDESIGN                 ( SID_DBACCESS_START +   0 )
+#define SID_DOCUMENT_DATA_SOURCE        ( SID_DBACCESS_START +   1 )
+#define SID_DB_NEW                      ( SID_DBACCESS_START +   2 )
+#define SID_DB_APP_DISABLE_PREVIEW      ( SID_DBACCESS_START +   3 )
+#define SID_DB_APP_DSCONNECTION_TYPE    ( SID_DBACCESS_START +   4 )
+#define SID_DB_APP_DSADVANCED_SETTINGS  ( SID_DBACCESS_START +   5 )
+// free
+#define SID_DB_APP_VIEW_DOCINFO_PREVIEW ( SID_DBACCESS_START +   7 )
+#define SID_DB_APP_VIEW_DOC_PREVIEW     ( SID_DBACCESS_START +   8 )
+#define SID_DB_APP_VIEW_TABLES          ( SID_DBACCESS_START +   9 )
+#define SID_DB_APP_VIEW_QUERIES         ( SID_DBACCESS_START +  10 )
+#define SID_DB_APP_DSIMPORT             ( SID_DBACCESS_START +  11 )
+#define SID_DB_APP_VIEW_FORMS           ( SID_DBACCESS_START +  12 )
+#define SID_DB_APP_DSRELDESIGN          ( SID_DBACCESS_START +  13 )
+#define SID_DB_APP_DSUSERADMIN          ( SID_DBACCESS_START +  14 )
+#define SID_DB_APP_TABLEFILTER          ( SID_DBACCESS_START +  15 )
+#define SID_DB_APP_CLOSECONNECTION      ( SID_DBACCESS_START +  16 )
+#define SID_DB_APP_DSPROPS              ( SID_DBACCESS_START +  17 )
+#define SID_DB_APP_DBADMIN              ( SID_DBACCESS_START +  18 )
+#define SID_APP_NEW_REPORT_PRE_SEL      ( SID_DBACCESS_START +  19 )
+#define SID_DB_APP_CONVERTTOVIEW        ( SID_DBACCESS_START +  20 )
+#define SID_DB_APP_REFRESH_TABLES       ( SID_DBACCESS_START +  21 )
+#define SID_DB_APP_VIEW_REPORTS         ( SID_DBACCESS_START +  22 )
+#define SID_DB_APP_DSEXPORT             ( SID_DBACCESS_START +  23 )
+
+#define SID_DB_APP_TABLE_DELETE         ( SID_DBACCESS_START +  24 )
+#define SID_DB_APP_TABLE_RENAME         ( SID_DBACCESS_START +  25 )
+#define SID_DB_APP_TABLE_EDIT           ( SID_DBACCESS_START +  26 )
+#define SID_DB_APP_TABLE_OPEN           ( SID_DBACCESS_START +  27 )
+
+#define SID_DB_APP_QUERY_DELETE         ( SID_DBACCESS_START +  28 )
+#define SID_DB_APP_QUERY_RENAME         ( SID_DBACCESS_START +  29 )
+#define SID_DB_APP_QUERY_EDIT           ( SID_DBACCESS_START +  30 )
+#define SID_DB_APP_QUERY_OPEN           ( SID_DBACCESS_START +  31 )
+
+#define SID_DB_APP_FORM_DELETE          ( SID_DBACCESS_START +  32 )
+#define SID_DB_APP_FORM_RENAME          ( SID_DBACCESS_START +  33 )
+#define SID_DB_APP_FORM_EDIT            ( SID_DBACCESS_START +  34 )
+#define SID_DB_APP_FORM_OPEN            ( SID_DBACCESS_START +  35 )
+
+#define SID_DB_APP_REPORT_DELETE        ( SID_DBACCESS_START +  36 )
+#define SID_DB_APP_REPORT_RENAME        ( SID_DBACCESS_START +  37 )
+#define SID_DB_APP_REPORT_EDIT          ( SID_DBACCESS_START +  38 )
+#define SID_DB_APP_REPORT_OPEN          ( SID_DBACCESS_START +  39 )
+
+#define SID_DB_APP_DELETE               ( SID_DBACCESS_START +  40 )
+#define SID_DB_APP_RENAME               ( SID_DBACCESS_START +  41 )
+#define SID_DB_APP_EDIT                 ( SID_DBACCESS_START +  42 )
+#define SID_DB_APP_OPEN                 ( SID_DBACCESS_START +  43 )
+
+#define SID_BROWSER_CLEAR_QUERY         ( SID_DBACCESS_START +  44 )
+#define SID_RELATION_ADD_RELATION       ( SID_DBACCESS_START +  45 )
+#define SID_QUERY_VIEW_FUNCTIONS        ( SID_DBACCESS_START +  46 )
+#define SID_QUERY_VIEW_TABLES           ( SID_DBACCESS_START +  47 )
+#define SID_QUERY_VIEW_ALIASES          ( SID_DBACCESS_START +  48 )
+#define SID_QUERY_DISTINCT_VALUES       ( SID_DBACCESS_START +  49 )
+#define SID_FORM_CREATE_REPWIZ_PRE_SEL  ( SID_DBACCESS_START +  50 )
+#define SID_REPORT_CREATE_REPWIZ_PRE_SEL ( SID_DBACCESS_START + 51 )
+#define SID_DB_QUERY_PREVIEW            ( SID_DBACCESS_START +  52 )
+#define SID_APP_NEW_FOLDER              ( SID_DBACCESS_START +  53 )
+#define SID_APP_NEW_FORM                ( SID_DBACCESS_START +  54 )
+#define SID_DB_APP_PASTE_SPECIAL        ( SID_DBACCESS_START +  55 )
+
+// status information
+#define SID_DB_APP_STATUS_TYPE          ( SID_DBACCESS_START +  57 )
+#define SID_DB_APP_STATUS_DBNAME        ( SID_DBACCESS_START +  58 )
+#define SID_DB_APP_STATUS_USERNAME      ( SID_DBACCESS_START +  59 )
+#define SID_DB_APP_STATUS_HOSTNAME      ( SID_DBACCESS_START +  60 )
+
+#define SID_DB_APP_SENDREPORTASMAIL     ( SID_DBACCESS_START +  61 )
+#define SID_DB_APP_SENDREPORTTOWRITER   ( SID_DBACCESS_START +  62 )
+#define SID_DB_FORM_NEW_PILOT           ( SID_DBACCESS_START +  63 )
+#define SID_DB_NEW_VIEW_SQL             ( SID_DBACCESS_START +  64 )
+#define SID_APP_NEW_REPORT              ( SID_DBACCESS_START +  65 )
+
+#define SID_DB_APP_EDIT_SQL_VIEW        ( SID_DBACCESS_START +  66 )
+
+#define SID_TABLEDESIGN_TABED_PRIMARYKEY ( SID_DBACCESS_START + 67 )
+#define SID_TABLEDESIGN_INSERTROWS      ( SID_DBACCESS_START +  68 )
+
+
+#endif // _DBACCESS_SLOTID_HRC_
+

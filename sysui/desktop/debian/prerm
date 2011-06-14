@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$1" = "remove" ]
+then
+  # backing all entries pointing to our binary
+  sed '/%PREFIX/d' /etc/mailcap 2>/dev/null >> /etc/mailcap.tmp$$
+
+  # and replace the original file
+  mv -f /etc/mailcap.tmp$$ /etc/mailcap
+fi

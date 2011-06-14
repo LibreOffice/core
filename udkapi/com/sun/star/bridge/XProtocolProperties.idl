@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _COM_SUN_STAR_BRIDGE_XPROTOCOLPROPERTIES_IDL_
+#define _COM_SUN_STAR_BRIDGE_XPROTOCOLPROPERTIES_IDL_
+#include <com/sun/star/bridge/ProtocolProperty.idl>
+#include <com/sun/star/bridge/InvalidProtocolChangeException.idl>
+
+module com { module sun { module star { module bridge {
+
+
+/** Bridge internal interface, that allows to change protocol settings of the remote
+    counter part.
+
+    <p>In general, this interface is implemented by the bridge itself. It must not
+    be called from outside the bridge.</p>
+
+    <p>INTERNAL INTERFACE, DO NOT USE IT ELSEWHERE!</p>
+*/
+published interface XProtocolProperties : com::sun::star::uno::XInterface
+{
+    /** called to get a list of bridge internal properties. Which properties can be retrieved,
+        is protocol dependent.
+
+        <p> The properties MUST NOT change between a requestChange and a commit change call.</p>
+     */
+    sequence< ProtocolProperty > getProperties( );
+
+    /** called to initiate a protocol change.
+
+        <p>This method should always be called in the scope of the local bridge setting object,
+        because the remote counter part may do such a call at the same time
+        (typically at startup time). </p>
+
+        @param nRandomNumber
+            In case both processes call requestChange at the same time,
+             the caller with the higher nRandomNumber is allowed to call
+             commitChange.
+
+        @returns
+            1, if the caller may ( and MUST !!!) call commitChange.
+            0, if the caller is not allowed to call commitChange. This can only happen,
+               if the other bridge has called requestChange at the same time and
+               nRandomNumber is smaller than the other bridge's nRandomNumber.
+               The remote counterpart is supposed to call commitChange within a small
+               time span. Please call requestChange() after the remote counterpart has
+               called commitChange().
+            -1 if the nRandomNumber is of the same value as the previously
+               sent requestChange (sent by the remote counterpart). This is a draw :o).
+               Generate a new random number and try again.
+     */
+    long requestChange( [in] long nRandomNumber );
+
+    /** called to commit a protocol change.
+
+        <p>It is only allowed to call commitChange, if requestChange
+        has been called previously and the return value was true.  The new properties are
+        valid after the reply of commitChange has been received.
+        Note, that this is difficult for the callee, because it must marshal the reply
+        with the old settings. </p>
+
+        <p>All properties not mentioned in the list are unchanged.
+        Note that the bridge must be blocked for other threads,
+        before commitChange is sent and unblocked
+        after the reply has been received. This blocks the bridge.</p>
+
+        @throws InvalidProtocolChangeException
+                when the remote counterpart could not change at least one of the properties.
+                No property has been changed. requestChange must be called
+                again to initiate a new change of the protocol.
+     */
+    void commitChange( [in] sequence< ProtocolProperty > newValues )
+        raises ( com::sun::star::bridge::InvalidProtocolChangeException );
+};
+
+};};};};
+#endif

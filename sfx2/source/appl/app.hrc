@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SFX_APP_HRC
+#define _SFX_APP_HRC
+
+#include <sfx2/sfx.hrc>
+
+// #defines *****************************************************************
+
+#define ACC_IBM                                 (RID_SFX_APP_START+2)
+#define MSG_ERR_NO_WEBBROWSER_FOUND                 (RID_SFX_APP_START+7)
+
+#define MSG_ISPRINTING_QUERYABORT               (RID_SFX_APP_START+9)
+#define MSG_CANT_QUIT                           (RID_SFX_APP_START+10)
+#define STR_ISMODIFIED                          (RID_SFX_APP_START+11)
+
+#define RID_FULLSCREENTOOLBOX                   (RID_SFX_APP_START+42)
+#define RID_RECORDINGTOOLBOX                    (RID_SFX_APP_START+43)
+#define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
+
+#define STR_QUITAPP                             (RID_SFX_APP_START+59)
+
+#define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)
+
+#define RID_STR_HELP                            (RID_SFX_APP_START+79)
+#define RID_STR_NOAUTOSTARTHELPAGENT            (RID_SFX_APP_START+80)
+#define RID_HELPBAR                             (RID_SFX_APP_START+81)
+#define RID_SPECIALCONFIG_ERROR                 (RID_SFX_APP_START+82)
+
+#define CONFIG_PATH_START               (RID_SFX_APP_START+98)
+
+#define WIN_HELPINDEX                           (RID_SFX_APP_START+99)
+#define TP_HELP_CONTENT                         (RID_SFX_APP_START+100)
+#define TP_HELP_INDEX                           (RID_SFX_APP_START+101)
+#define TP_HELP_SEARCH                          (RID_SFX_APP_START+102)
+#define TP_HELP_BOOKMARKS                       (RID_SFX_APP_START+103)
+#define DLG_HELP_ADDBOOKMARK                    (RID_SFX_APP_START+104)
+#define MENU_HELP_BOOKMARKS                     (RID_SFX_APP_START+105)
+#define RID_INFO_NOSEARCHRESULTS                (RID_SFX_APP_START+106)
+#define RID_INFO_NOSEARCHTEXTFOUND              (RID_SFX_APP_START+107)
+
+#define IMG_HELP_TOOLBOX_INDEX_ON               (RID_SFX_APP_START+110)
+#define IMG_HELP_TOOLBOX_INDEX_OFF              (RID_SFX_APP_START+111)
+#define IMG_HELP_TOOLBOX_START                  (RID_SFX_APP_START+112)
+#define IMG_HELP_TOOLBOX_PREV                   (RID_SFX_APP_START+113)
+#define IMG_HELP_TOOLBOX_NEXT                   (RID_SFX_APP_START+114)
+#define IMG_HELP_TOOLBOX_PRINT                  (RID_SFX_APP_START+115)
+#define IMG_HELP_TOOLBOX_BOOKMARKS              (RID_SFX_APP_START+116)
+#define IMG_HELP_TOOLBOX_SEARCHDIALOG           (RID_SFX_APP_START+117)
+#define IMG_HELP_TOOLBOX_COPY                   (RID_SFX_APP_START+118)
+
+#define IMG_HELP_CONTENT_BOOK_OPEN              (RID_SFX_APP_START+120)
+#define IMG_HELP_CONTENT_BOOK_CLOSED            (RID_SFX_APP_START+122)
+#define IMG_HELP_CONTENT_DOC                    (RID_SFX_APP_START+124)
+
+#define STR_HELP_WINDOW_TITLE                   (RID_SFX_APP_START+125) // string
+
+#define STR_HELP_BUTTON_INDEX_ON                (RID_SFX_APP_START+126)
+#define STR_HELP_BUTTON_START                   (RID_SFX_APP_START+127)
+#define STR_HELP_BUTTON_PREV                    (RID_SFX_APP_START+128)
+#define STR_HELP_BUTTON_NEXT                    (RID_SFX_APP_START+129)
+#define STR_HELP_BUTTON_PRINT                   (RID_SFX_APP_START+130)
+#define STR_HELP_BUTTON_SOURCEVIEW              (RID_SFX_APP_START+131)
+#define STR_HELP_FIRST_MESSAGE                  (RID_SFX_APP_START+132)
+#define STR_HELP_FIRST_HTML                     (RID_SFX_APP_START+133)
+
+#define STR_QUICKSTART_EXIT                     (RID_SFX_APP_START+134)
+#define STR_QUICKSTART_TIP                      (RID_SFX_APP_START+135)
+#define STR_QUICKSTART_FILEOPEN                 (RID_SFX_APP_START+136)
+#define STR_QUICKSTART_FROMTEMPLATE             (RID_SFX_APP_START+137)
+#define STR_QUICKSTART_PRELAUNCH                (RID_SFX_APP_START+138)
+#define STR_QUICKSTART_LNKNAME                  (RID_SFX_APP_START+139)
+#define STR_HELP_BUTTON_ADDBOOKMARK             (RID_SFX_APP_START+140)
+#define STR_HELP_BUTTON_INDEX_OFF               (RID_SFX_APP_START+141)
+#define STR_HELP_BUTTON_SEARCHDIALOG            (RID_SFX_APP_START+142)
+#define STR_HELP_MENU_TEXT_SELECTION_MODE       (RID_SFX_APP_START+143)
+#define STR_HELP_MENU_TEXT_COPY                 (RID_SFX_APP_START+144)
+#define STR_QUICKSTART_PRELAUNCH_UNX            (RID_SFX_APP_START+146)
+#define STR_QUICKSTART_FILE                     (RID_SFX_APP_START+147)
+#define STR_QUICKSTART_STARTCENTER              (RID_SFX_APP_START+148)
+#define STR_QUICKSTART_RECENTDOC                (RID_SFX_APP_START+149)
+
+#define RID_HELP_ONSTARTUP_BOX                  (RID_SFX_APP_START+144)
+#define RID_HELP_ONSTARTUP_TEXT                 (RID_SFX_APP_START+145)
+
+#define IMG_HELP_TOOLBOX_L_INDEX_ON             (RID_SFX_APP_START+160)
+#define IMG_HELP_TOOLBOX_L_INDEX_OFF            (RID_SFX_APP_START+161)
+#define IMG_HELP_TOOLBOX_L_START                (RID_SFX_APP_START+162)
+#define IMG_HELP_TOOLBOX_L_PREV                 (RID_SFX_APP_START+163)
+#define IMG_HELP_TOOLBOX_L_NEXT                 (RID_SFX_APP_START+164)
+#define IMG_HELP_TOOLBOX_L_PRINT                (RID_SFX_APP_START+165)
+#define IMG_HELP_TOOLBOX_L_BOOKMARKS            (RID_SFX_APP_START+166)
+#define IMG_HELP_TOOLBOX_L_SEARCHDIALOG         (RID_SFX_APP_START+167)
+#define IMG_HELP_TOOLBOX_L_COPY                 (RID_SFX_APP_START+168)
+
+#define RID_SECURITY_WARNING_HYPERLINK          (RID_SFX_APP_START + 180)
+#define RID_SECURITY_WARNING_TITLE              (RID_SFX_APP_START + 181)
+
+#define RID_DESKTOP                             (RID_SFX_APP_START + 184)
+
+#define RID_XMLSEC_QUERY_LOSINGSIGNATURE        (RID_SFX_APP_START + 186)
+#define RID_XMLSEC_QUERY_SAVEBEFORESIGN         (RID_SFX_APP_START + 187)
+
+#define RID_XMLSEC_INFO_WRONGDOCFORMAT          (RID_SFX_APP_START + 190)
+
+#define STR_QUERY_UPDATE_LINKS                  (RID_SFX_APP_START + 192)
+#define STR_DDE_ERROR                           (RID_SFX_APP_START + 193)
+#define RID_SECURITY_WARNING_NO_HYPERLINKS      (RID_SFX_APP_START + 194)
+
+#define RID_SVXSTR_FILELINK                     (RID_SFX_APP_START + 195)
+#define RID_SVXSTR_GRAFIKLINK                   (RID_SFX_APP_START + 196)
+#define RID_SVXSTR_EDITGRFLINK                  (RID_SFX_APP_START + 197)
+
+// strings for error messsages of OpenGraphics dialog
+#define RID_SVXSTR_GRFILTER_OPENERROR           (RID_SFX_APP_START + 198)
+#define RID_SVXSTR_GRFILTER_IOERROR             (RID_SFX_APP_START + 199)
+#define RID_SVXSTR_GRFILTER_FORMATERROR         (RID_SFX_APP_START + 200)
+#define RID_SVXSTR_GRFILTER_VERSIONERROR        (RID_SFX_APP_START + 201)
+#define RID_SVXSTR_GRFILTER_FILTERERROR         (RID_SFX_APP_START + 202)
+#define RID_SVXSTR_GRFILTER_TOOBIG              (RID_SFX_APP_START + 203)
+
+// For the License Information dialog box
+#define DLG_HELP_LICENSING                      (RID_SFX_APP_START + 204)
+#define STR_LICENSING_INFORMATION_1             (RID_SFX_APP_START + 205)
+#define STR_LICENSING_INFORMATION_2             (RID_SFX_APP_START + 206)
+#define STR_LICENSING_INFORMATION_3             (RID_SFX_APP_START + 207)
+#define STR_LICENSING_INFORMATION_4             (RID_SFX_APP_START + 208)
+#define STR_LICENSING_INFORMATION_5             (RID_SFX_APP_START + 209)
+#define PB_LICENSING_SHOW                       (RID_SFX_APP_START + 210)
+#define PB_LICENSING_CLOSE                      (RID_SFX_APP_START + 211)
+
+#define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
+
+#endif // #ifndef _SFX_APP_HRC
+
+// ******************************************************************* EOF

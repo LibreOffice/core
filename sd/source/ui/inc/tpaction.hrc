@@ -1,0 +1,54 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define LB_EFFECT 1
+#define LB_ACTION 3
+#define LB_OLE_ACTION 4
+#define LB_TREE 5
+#define LB_TREE_DOCUMENT 6
+#define BTN_SEARCH 1
+#define BTN_SEEK 2
+#define TSB_SOUND 1
+#define TSB_PLAY_FULL 2
+#define FL_EFFECT 1
+#define FL_SEPARATOR 2
+#define RBT_SLOW 1
+#define RBT_MEDIUM 2
+#define RBT_FAST 3
+#define EDT_SOUND 1
+#define EDT_BOOKMARK 2
+#define EDT_DOCUMENT 3
+#define EDT_PROGRAM 4
+#define EDT_MACRO 5
+#define FT_ACTION 2
+#define FT_ANIMATION 3
+#define FT_SPEED 4
+#define FT_TREE 5
+#define TP_ANIMATION 787
+#define TP_ANIMATION_ACTION 789
+//IAccessibility2 Implementation 2009-----
+#define STR_PATHNAME 1
+ //-----IAccessibility2 Implementation 2009

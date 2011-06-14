@@ -1,0 +1,42 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define FT_SECTION 1
+#define LB_SECTION 2
+#define FT_STYLESHEETS 3
+#define LB_STYLESHEETS 4
+#define BT_ORGANIZE 20
+#define BT_HELP 21
+#define FL_EDIT 5
+#define FT_NAME 6
+#define ED_NAME 7
+#define BT_OK 10
+#define BT_SECTION 11
+#define BT_EDIT 12
+#define BT_NEW 13
+#define BT_DELETE 15
+#define BT_CANCEL 16
+#define FL_STYLESHEETS 17

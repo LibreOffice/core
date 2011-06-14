@@ -1,0 +1,149 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "tabopdlg.hrc"
+
+ModelessDialog RID_SCDLG_TABOP
+{
+    OutputSize = TRUE ;
+    HelpId = CMD_SID_OPENDLG_TABOP ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 240 , 64 ) ;
+    Text [ en-US ] = "Multiple operations" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    FixedText FT_FORMULARANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
+        Text [ en-US ] = "~Formulas" ;
+    };
+    Edit ED_FORMULARANGE
+    {
+        HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_FORMULARANGE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 14 ) ;
+        Size = MAP_APPFONT ( 79 , 12 ) ;
+    };
+    ImageButton RB_FORMULARANGE
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_FORMULARANGE";
+        Pos = MAP_APPFONT ( 163 , 13 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_ROWCELL
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "~Row input cell" ;
+    };
+    Edit ED_ROWCELL
+    {
+        HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_ROWCELL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 30 ) ;
+        Size = MAP_APPFONT ( 79 , 12 ) ;
+    };
+    ImageButton RB_ROWCELL
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_ROWCELL";
+        Pos = MAP_APPFONT ( 163 , 29 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_COLCELL
+    {
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "~Column input cell" ;
+    };
+    Edit ED_COLCELL
+    {
+        HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_COLCELL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 46 ) ;
+        Size = MAP_APPFONT ( 79 , 12 ) ;
+    };
+    ImageButton RB_COLCELL
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_COLCELL";
+        Pos = MAP_APPFONT ( 163 , 45 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedLine FL_VARIABLES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text [ en-US ] = "Default settings" ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 184 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 184 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 184 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_NOFORMULA
+    {
+        Text [ en-US ] = "No formula specified." ;
+    };
+    String STR_NOCOLROW
+    {
+        Text [ en-US ] = "Neither row or column specified." ;
+    };
+    String STR_WRONGFORMULA
+    {
+        Text [ en-US ] = "Undefined name or range." ;
+    };
+    String STR_WRONGROWCOL
+    {
+        Text [ en-US ] = "Undefined name or wrong cell reference." ;
+    };
+    String STR_NOCOLFORMULA
+    {
+        Text [ en-US ] = "Formulas don't form a column." ;
+    };
+    String STR_NOROWFORMULA
+    {
+        Text [ en-US ] = "Formulas don't form a row." ;
+    };
+};

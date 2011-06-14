@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+	
+<helpdocument version="1.0">
+<meta>
+<topic id="comsunstarwikiMediaWikiwikiformatsxml" indexer="include" status="PUBLISH">
+<title id="tit" xml-lang="en-US">MediaWiki Formats</title>
+<filename>/@WIKIEXTENSIONID@/wikiformats.xhp</filename>
+</topic>
+<history>
+<created date="2008-02-08T12:13:25"/>
+<lastedited date="2008-02-08T14:16:47"/>
+</history>
+</meta>
+<body>
+<bookmark branch="hid/vnd.com.sun.star.wiki:formats" id="bm_id7021088" localize="false"/> 
+<paragraph role="heading" id="hd_id3743095" xml-lang="en-US" level="1" l10n="NEW">MediaWiki Formats</paragraph>
+<paragraph role="paragraph" id="par_id8654133" xml-lang="en-US" l10n="NEW">The following list gives an overview of the text formats that the @WIKIEXTENSIONPRODUCTNAME@ can upload to the Wiki server.</paragraph>
+<paragraph role="paragraph" id="par_id5630664" xml-lang="en-US" l10n="NEW">The OpenDocument format used by Writer and the WikiMedia format are quite different. Only a subset of all features can be transformed from one format to the other.</paragraph>
+<paragraph role="heading" id="hd_id7178868" xml-lang="en-US" level="2" l10n="NEW">Headings</paragraph>
+<paragraph role="paragraph" id="par_id508133" xml-lang="en-US" l10n="NEW">Apply a heading paragraph style to the headings in your Writer document. The Wiki will show the heading styles of the same outline level, formatted as defined by the Wiki engine.</paragraph>
+<paragraph role="heading" id="hd_id7217627" xml-lang="en-US" level="2" l10n="NEW">Hyperlinks</paragraph>
+<paragraph role="paragraph" id="par_id3735465" xml-lang="en-US" l10n="NEW">Native OpenDocument hyperlinks are transformed into "external" Wiki links. Therefore, the built-in linking facility of OpenDocument should only be used to create links that point to other sites outside the Wiki web. For creating Wiki links that point to other subjects of the same Wiki domain, use Wiki links.</paragraph>
+<paragraph role="heading" id="hd_id941190" xml-lang="en-US" level="2" l10n="NEW">Lists</paragraph>
+<paragraph role="paragraph" id="par_id8942838" xml-lang="en-US" l10n="NEW">Lists can reliably be exported when the whole list uses a consistent list style. Use the Numbering or Bullets icon to generate a list in Writer. If you need a list without numbering or bullets, use Format - Bullets and Numbering to define and apply the respective list style.</paragraph>
+<paragraph role="heading" id="hd_id7026886" xml-lang="en-US" level="2" l10n="NEW">Paragraphs</paragraph>
+<paragraph role="heading" id="hd_id4436475" xml-lang="en-US" level="3" l10n="NEW">Alignment</paragraph>
+<paragraph role="paragraph" id="par_id376598" xml-lang="en-US" l10n="NEW">Explicit text alignment should not be used in Wiki articles. Nevertheless, text alignment is supported for left, centered, and right alignment of text.</paragraph>
+<paragraph role="heading" id="hd_id7486190" xml-lang="en-US" level="3" l10n="NEW">Pre-formatted text</paragraph>
+<paragraph role="paragraph" id="par_id1459395" xml-lang="en-US" l10n="NEW">A paragraph style with a fixed-width font is transformed as pre-formatted text. Pre-formatted text is shown on the Wiki with a border around the text.</paragraph>
+<paragraph role="heading" id="hd_id4834131" xml-lang="en-US" level="2" l10n="NEW">Character styles</paragraph>
+<paragraph role="paragraph" id="par_id6397595" xml-lang="en-US" l10n="NEW">Character styles modify the appearance of parts of a paragraph. The transformation supports bold, italics, bold/italics, subscript and superscript. All fixed width fonts are transformed into the Wiki typewriter style.</paragraph>
+<paragraph role="heading" id="hd_id5152745" xml-lang="en-US" level="2" l10n="NEW">Footnotes</paragraph>
+<paragraph role="paragraph" id="par_id5238196" xml-lang="en-US" l10n="NEW">Note: The transformation uses the new style of footnotes with &lt;ref&gt; and &lt;references&gt; tags that requires the Cite.php extension to be installed into MediaWiki. If those tags occur as plain text in the transformation result, ask the Wiki administrator to install this extension.</paragraph>
+<paragraph role="heading" id="hd_id9405499" xml-lang="en-US" level="2" l10n="NEW">Images</paragraph>
+<paragraph role="paragraph" id="par_id3541673" xml-lang="en-US" l10n="NEW">Images cannot be exported by a transformation producing a single file of Wiki text. However, if the image is already uploaded to the target Wiki domain (e. g. WikiMedia Commons), then the transformation produces a valid image tag that includes the image. Image captions are also supported.</paragraph>
+<paragraph role="heading" id="hd_id2162236" xml-lang="en-US" level="2" l10n="NEW">Tables</paragraph>
+<paragraph role="paragraph" id="par_id3037202" xml-lang="en-US" l10n="NEW">Simple tables are supported well. Table headers are translated into corresponding Wiki style table headers. However, custom formatting of table borders, column sizes and background colors is ignored.</paragraph>
+<paragraph role="heading" id="hd_id2954496" xml-lang="en-US" level="3" l10n="NEW">Joined Cells</paragraph>
+<paragraph role="paragraph" id="par_id8253730" xml-lang="en-US" l10n="NEW">OpenDocument and especially OpenOffice.org represent tables that have joined cells that span rows as tables with nested tables. In contrast, the wiki model of table is to declare column and row spans for such joined cells. </paragraph>
+<paragraph role="paragraph" id="par_id8163090" xml-lang="en-US" l10n="NEW">If only columns of the same row are joined, the result of the transformation resembles the source document very well.</paragraph>
+<paragraph role="heading" id="hd_id425122" xml-lang="en-US" level="3" l10n="NEW">Borders</paragraph>
+<paragraph role="paragraph" id="par_id1831110" xml-lang="en-US" l10n="NEW">Irrespective of custom table styles for border and background, a table is always exported as "<emph>prettytable"</emph>, which renders in the Wiki engine with simple borders and bold header.</paragraph>
+<paragraph role="heading" id="hd_id6255073" xml-lang="en-US" level="2" l10n="NEW">Charset and special characters</paragraph>
+<paragraph role="paragraph" id="par_id8216193" xml-lang="en-US" l10n="NEW">The charset of the transformation result is fixed to UTF-8. Depending on your system, this might not be the default charset. This might cause "special characters" to look broken when viewed with default settings. However, you can switch your editor to UTF-8 encoding to fix this. If your editor does not support switching the encoding, you can display the result of the transformation in the Firefox browser and switch the encoding to UTF-8 there. Now, you can cut and paste the transformation result to your program of choice.</paragraph>
+</body>
+</helpdocument>

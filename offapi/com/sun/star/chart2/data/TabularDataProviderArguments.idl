@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_TabularDataProviderArguments_idl
+#define com_sun_star_chart2_data_TabularDataProviderArguments_idl
+
+#include <com/sun/star/chart/ChartDataRowSource.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/**
+  */
+service TabularDataProviderArguments
+{
+    /** the range address string spanning all data.
+
+        <p>The range address string must be interpretable by the
+        component that implements <type>XDataProvider</type> and gets
+        this property as argument to
+        <member>XDataProvider::detectArguments</member>.</p>
+
+        <p>The representation string is of a form that may be used in the
+        user interface.  Example for OOo Calc: "$Sheet1.$A$1:$D$7",
+        example for OOo Writer: "&lt;Table1.A1:D7&gt;".</p>
+
+        <p>When used as input, this range will be split in columns or
+        rows depending on the property
+        <member>DataRowSource</member>.</p>
+
+        <p>When used as output of
+        <member>XDataProvider::detectArguments</member> this is the
+        range that spans the ranges of all given
+        <type>XDataSequence</type>s.  If the result is ambiguous,
+        i.e., a splitting of this range would not yield the same
+        result, this property should be empty.  The latter is the
+        case, when ranges are overlapping, the lengths of sequences
+        are not equal or even if the order of two sequences is swapped
+        (e.g. data comes from column A, C, B).</p>
+     */
+    [property]   string                                        CellRangeRepresentation;
+
+    /** determines, whether data sequences are created out of columns
+        or rows in a table.
+
+        <p>If this property is not given as argument it is assumed to
+        <member scope="com::sun::star::chart">ChartDataRowSource::COLUMNS</member>,
+        i.e., the default is "take data from columns".</p>
+     */
+    [property]   ::com::sun::star::chart::ChartDataRowSource   DataRowSource;
+
+    /** If data comes from columns, the first row will provide the
+        labels for all sequences, if data comes from rows, the first
+        column will provide the labels for all sequences.
+
+        <p>Even if this property is false, the
+        <type>XLabeledDataSequence</type> may contain a label, but
+        this will not be the first cell of the selection.  It may be a
+        generic string like "Column C".</p>
+
+        <p>If this property is not given as argument it is assumed to
+        be <FALSE/>, i.e., the default is "no labels".</p>
+     */
+    [property]   boolean                                       FirstCellAsLabel;
+
+    /** determines the order of the created labeled sequences
+
+        <p>For example a SequenceMapping of [3,0,2,1] indicates that
+        the sequence from old position "3" should now be the first one.
+        Then comes the sequence from old position "0". Then that one
+        from old position "2" and then the sequence from old position "1".</p>
+
+        <p>If the SequenceMapping contains invalid indexes just
+        ignore those single indexes. For example if you only have three
+        labeled sequences and a SequenceMapping [2,5,1,0], you should
+        ignore the "5" and continue to place the sequence from
+        old index "1" to the next new position and so on.</p>
+
+        <p>If the given SequenceMapping does not cover all existing
+        labeled sequences just put the remaining sequences in old order
+        behind the others. For example you have 4 sequences and a
+        SequenceMapping [3,1]. The result should be a as if [3,1,0,2]
+        was given.</p>
+     */
+    [property]   sequence< long >                              SequenceMapping;
+
+    /** If <FALSE/> the data provider may create a data sequence
+        containing generated categories that fit the rest of the data,
+        like e.g. "Row 12", "Row 13", etc.
+
+        <p>This property is not relevant for the splitting up of the
+        data.  It just indicates, if the chart wants to use part of
+        the data as categories, so that generic categories can be
+        returned if it doesn't.</p>
+
+        <p>The generic category labeled sequence returned should be
+        the first one in the returned <type>XDataSource</type>. It
+        needs no label. The values should have their role set to
+        "categories".  The generic strings returned should also be
+        localized.</p>
+     */
+    [optional, property] boolean                               HasCategories;
+
+    /** This property is for providing proprietary table indexes for
+        each table appearing in a range given in
+        CellRangeRepresentation.
+
+        @deprecated
+
+        <p>This argument is supported by Spreadsheets in order to be
+        able to export a document into the StarOffice 5.0 binary
+        format.</p>
+
+        <p>Example: If you have the sheets (Sheet1, Sheet2, Sheet3) in
+        your document and a chart uses the range
+        "Sheet2.A1:.A5 Sheet3.A1:.A5 Sheet2.B1:.B5 Sheet1:B1:.B5", your
+        TableNumberList would be "1 2 1 0".  A simple range like
+        "Sheet1.A1:.E4" would have the TableNumberList in "0"</p>.
+     */
+    [optional, property] string                               TableNumberList;
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

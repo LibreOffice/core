@@ -1,0 +1,85 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_LocaleDataItem_idl__
+#define __com_sun_star_i18n_LocaleDataItem_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+/**
+    Locale specific data, for example, separators, quotation marks.
+
+    @see XLocaleData
+        for links to DTD of XML locale data files.
+ */
+
+published struct LocaleDataItem
+{
+        /// internal ID string, not unique, not meaningful to the outer world
+    string unoID;
+    /// date separator, for example, <b>"/"</b> or <b>"."</b> or <b>"-"</b>
+    string dateSeparator;
+    /// group and thousand separator, for example, <b>","</b> or <b>"."</b>
+    string thousandSeparator;
+    /// decimal separator, for example, <b>"."</b> or <b>","</b>
+    string decimalSeparator;
+    /// time separator, for example, <b>":"</b>
+    string timeSeparator;
+    /// time 100th seconds separator, for example, <b>","</b>
+    string time100SecSeparator;
+    /// list separator, for example, <b>";"</b>
+    string listSeparator;
+    /// single quotation mark start
+    string quotationStart;
+    /// single quotation mark end
+    string quotationEnd;
+    /// double quotation mark start
+    string doubleQuotationStart;
+    /// double quotation mark end
+    string doubleQuotationEnd;
+        /// time AM symbol, for example, <b>"AM"</b> or <b>"am"</b>
+    string timeAM;
+        /// time PM symbol, for example, <b>"PM"</b> or <b>"pm"</b>
+    string timePM;
+    /// measurement system, <b>"metric"</b> or <b>"us"</b>
+    string measurementSystem;
+    /// long date day of week separator, for example, <b>", "</b>
+    string LongDateDayOfWeekSeparator;
+    /// long date day separator, for example, <b>", "</b>
+    string LongDateDaySeparator;
+    /// long date month separator, for example, <b>" "</b>
+    string LongDateMonthSeparator;
+    /// long date year separator, for example, <b>" "</b>
+    string LongDateYearSeparator;
+};
+
+}; }; }; };
+
+#endif

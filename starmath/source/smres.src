@@ -1,0 +1,1670 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#include <sfx2/sfx.hrc>
+#include <svx/globlmn.hrc>
+#include "starmath.hrc"
+#include "dialog.hrc"
+#include "toolbox.hrc"
+#include "smcommands.h"
+
+#define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+#define MN_SUB_TOOLBAR 32
+#define WORKARROUND_1 1
+#define WORKARROUND_3 3
+#define WORKARROUND_10 10
+
+ModalDialog RID_FONTDIALOG
+{
+    HelpID = "starmath:ModalDialog:RID_FONTDIALOG";
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 183 , 150 ) ;
+    Text [ en-US ] = "Fonts" ;
+    FixedText 1
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Font";
+    };
+    ComboBox 1
+    {
+        HelpID = "starmath:ComboBox:RID_FONTDIALOG:1";
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 111 , 60 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+        VScroll = TRUE ;
+    };
+    CheckBox 1
+    {
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 84 ) ;
+        Size = MAP_APPFONT ( 33 , 10 ) ;
+        Text [ en-US ] = "~Bold" ;
+    };
+    CheckBox 2
+    {
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:2";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 97 ) ;
+        Size = MAP_APPFONT ( 33 , 10 ) ;
+        Text [ en-US ] = "~Italic" ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 126 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 126 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Control 1
+    {
+        Disable = TRUE ;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 113 ) ;
+        Size = MAP_APPFONT ( 111 , 31 ) ;
+    };
+    FixedText 2
+    {
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Text [ en-US ] = "Attributes" ;
+    };
+};
+
+ModalDialog RID_FONTSIZEDIALOG
+{
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = CMD_SID_FONTSIZE ;
+    Size = MAP_APPFONT ( 171 , 120 ) ;
+    Text [ en-US ] = "Font Sizes" ;
+    FixedText 1
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 7 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Base ~size";
+    };
+    MetricField 1
+    {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 6 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 4 ;
+        Maximum = 127 ;
+        Unit = FUNIT_POINT ;
+    };
+    FixedText 4
+    {
+        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Text";
+    };
+    MetricField 4
+    {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:4";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 36 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 5 ;
+        Maximum = 200 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    FixedText 5
+    {
+        Pos = MAP_APPFONT ( 12 , 52 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Indexes";
+    };
+    MetricField 5
+    {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:5";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 51 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 5 ;
+        Maximum = 200 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    FixedText 6
+    {
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Functions";
+    };
+    MetricField 6
+    {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:6";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 66 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 5 ;
+        Maximum = 200 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    FixedText 7
+    {
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Operators";
+    };
+    MetricField 7
+    {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:7";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 81 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 5 ;
+        Maximum = 200 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    FixedText 8
+    {
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Limits";
+    };
+    MetricField 8
+    {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:8";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 96 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 5 ;
+        Maximum = 200 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    FixedLine 1
+    {
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Text [ en-US ] = "Relative sizes" ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 21 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        HelpID = "starmath:PushButton:RID_FONTSIZEDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 114 , 45 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Default" ;
+    };
+};
+
+ModalDialog RID_FONTTYPEDIALOG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = CMD_SID_FONT ;
+    Size = MAP_APPFONT ( 282 , 153 ) ;
+    Text [ en-US ] = "Fonts" ;
+    Moveable = TRUE ;
+    FixedLine 1
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 207 , 8 ) ;
+        Text [ en-US ] = "Formula fonts" ;
+    };
+    FixedLine 2
+    {
+        Pos = MAP_APPFONT ( 6 , 84 ) ;
+        Size = MAP_APPFONT ( 207 , 8 ) ;
+        Text [ en-US ] = "Custom fonts" ;
+    };
+    FixedText 1
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 18 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Variables";
+    };
+    ListBox 1
+    {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 18 ) ;
+        Size = MAP_APPFONT ( 150 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText 2
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Functions";
+    };
+    ListBox 2
+    {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 33 ) ;
+        Size = MAP_APPFONT ( 150 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText 3
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Numbers";
+    };
+    ListBox 3
+    {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:3";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 48 ) ;
+        Size = MAP_APPFONT ( 150 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText 4
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Text";
+    };
+    ListBox 4
+    {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:4";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 63 ) ;
+        Size = MAP_APPFONT ( 150 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText 5
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Serif";
+    };
+    ListBox 5
+    {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:5";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 96 ) ;
+        Size = MAP_APPFONT ( 150 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText 6
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "S~ans";
+    };
+    ListBox 6
+    {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:6";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 111 ) ;
+        Size = MAP_APPFONT ( 150 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText 7
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 127 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "F~ixed";
+    };
+    ListBox 7
+    {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:7";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 126 ) ;
+        Size = MAP_APPFONT ( 150 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 225 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 225 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MenuButton 1
+    {
+        HelpID = "starmath:MenuButton:RID_FONTTYPEDIALOG:1";
+        TabStop = TRUE ;
+        ButtonMenu = Menu , RID_FONTMENU ;
+        Pos = MAP_APPFONT ( 225 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Modify" ;
+    };
+    PushButton 2
+    {
+        HelpID = "starmath:PushButton:RID_FONTTYPEDIALOG:2";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 225 , 66 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Default" ;
+    };
+};
+
+ModalDialog RID_DISTANCEDIALOG
+{
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = CMD_SID_DISTANCE ;
+    Size = MAP_APPFONT ( 240 , 90 ) ;
+    Text [ en-US ] = "Spacing" ;
+    FixedText 1
+    {
+        Pos = MAP_APPFONT ( 12 , 19 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Left = TRUE ;
+    };
+    MetricField 1
+    {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:1";
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE;
+        Pos = MAP_APPFONT ( 78 , 18 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        CustomUnitText [ en-US ] = "%" ;
+    };
+    FixedText 2
+    {
+        Disable = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Left = TRUE ;
+    };
+    MetricField 2
+    {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:2";
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE;
+        Pos = MAP_APPFONT ( 78 , 34 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        CustomUnitText [ en-US ] = "%" ;
+    };
+    CheckBox 1
+    {
+        HelpID = "starmath:CheckBox:RID_DISTANCEDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
+        Size = MAP_APPFONT ( 110 , 12 ) ;
+        Text [ en-US ] = "Scale all brackets";
+    };
+    FixedText 3
+    {
+        Disable = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Left = TRUE ;
+    };
+    MetricField 3
+    {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:3";
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE;
+        Pos = MAP_APPFONT ( 78 , 50 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        CustomUnitText [ en-US ] = "%" ;
+    };
+    FixedText 4
+    {
+        Disable = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Left = TRUE ;
+    };
+    MetricField 4
+    {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:4";
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE;
+        Pos = MAP_APPFONT ( 78 , 66 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 184 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 184 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        HelpID = "starmath:PushButton:RID_DISTANCEDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 184 , 69 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Default" ;
+    };
+    MenuButton 1
+    {
+        HelpID = "starmath:MenuButton:RID_DISTANCEDIALOG:1";
+        TabStop = TRUE ;
+        ButtonMenu = Menu , RID_DISTANCEMENU ;
+        Pos = MAP_APPFONT ( 184 , 51 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Category" ;
+    };
+    FixedBitmap 1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 122 , 18 ) ;
+        Size = MAP_APPFONT ( 49 , 53 ) ;
+    };
+    FixedLine 1
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 171 , 8 ) ;
+        Text [ en-US ] = "Category" ;
+    };
+    Resource 1
+    {
+        String 1
+        {
+            Text [ en-US ] = "Spacing" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Spacing";
+        };
+        Bitmap 20
+        {
+            File = "dist11.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Line spacing";
+        };
+        Bitmap 30
+        {
+            File = "dist12.bmp" ;
+        };
+        String 4
+        {
+            Text [ en-US ] = "~Root spacing";
+        };
+        Bitmap 40
+        {
+            File = "dist13.bmp" ;
+        };
+    };
+    Resource 2
+    {
+        String 1
+        {
+            Text [ en-US ] = "Indexes";
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Superscript";
+        };
+        Bitmap 20
+        {
+            File = "dist21.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "S~ubscript";
+        };
+        Bitmap 30
+        {
+            File = "dist22.bmp" ;
+        };
+    };
+    Resource 3
+    {
+        String 1
+        {
+            Text [ en-US ] = "Fractions" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Numerator";
+        };
+        Bitmap 20
+        {
+            File = "dist31.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Denominator";
+        };
+        Bitmap 30
+        {
+            File = "dist32.bmp" ;
+        };
+    };
+    Resource 4
+    {
+        String 1
+        {
+            Text [ en-US ] = "Fraction bar" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Excess length";
+        };
+        Bitmap 20
+        {
+            File = "dist41.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Weight";
+        };
+        Bitmap 30
+        {
+            File = "dist42.bmp" ;
+        };
+    };
+    Resource 5
+    {
+        String 1
+        {
+            Text [ en-US ] = "Limits" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Upper limit";
+        };
+        Bitmap 20
+        {
+            File = "dist51.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Lower limit";
+        };
+        Bitmap 30
+        {
+            File = "dist52.bmp" ;
+        };
+    };
+    Resource 6
+    {
+        String 1
+        {
+            Text [ en-US ] = "Brackets" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Excess size (left/right)";
+        };
+        Bitmap 20
+        {
+            File = "dist61.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Spacing";
+        };
+        Bitmap 30
+        {
+            File = "dist62.bmp" ;
+        };
+        String 5
+        {
+            Text [ en-US ] = "~Excess size";
+        };
+        Bitmap 50
+        {
+            File = "dist61.bmp" ;
+        };
+    };
+    Resource 7
+    {
+        String 1
+        {
+            Text [ en-US ] = "Matrix" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Line spacing";
+        };
+        Bitmap 20
+        {
+            File = "dist71.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Column spacing";
+        };
+        Bitmap 30
+        {
+            File = "dist72.bmp" ;
+        };
+    };
+    Resource 8
+    {
+        String 1
+        {
+            Text [ en-US ] = "Symbols" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Primary height";
+        };
+        Bitmap 20
+        {
+            File = "dist81.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Minimum spacing";
+        };
+        Bitmap 30
+        {
+            File = "dist82.bmp" ;
+        };
+    };
+    Resource 9
+    {
+        String 1
+        {
+            Text [ en-US ] = "Operators" ;
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Excess size";
+        };
+        Bitmap 20
+        {
+            File = "dist91.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Spacing";
+        };
+        Bitmap 30
+        {
+            File = "dist92.bmp" ;
+        };
+    };
+    Resource 10
+    {
+        String 1
+        {
+            Text [ en-US ] = "Borders";
+        };
+        String 2
+        {
+            Text [ en-US ] = "~Left";
+        };
+        Bitmap 20
+        {
+            File = "dist101.bmp" ;
+        };
+        String 3
+        {
+            Text [ en-US ] = "~Right";
+        };
+        Bitmap 30
+        {
+            File = "dist102.bmp" ;
+        };
+        String 4
+        {
+            Text [ en-US ] = "~Top";
+        };
+        Bitmap 40
+        {
+            File = "dist103.bmp" ;
+        };
+        String 5
+        {
+            Text [ en-US ] = "~Bottom";
+        };
+        Bitmap 50
+        {
+            File = "dist104.bmp" ;
+        };
+    };
+};
+
+
+ModalDialog RID_ALIGNDIALOG
+{
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = CMD_SID_ALIGN ;
+    Size = MAP_APPFONT ( 139 , 66 ) ;
+    Text [ en-US ] = "Alignment" ;
+    RadioButton 1
+    {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text [ en-US ] = "~Left" ;
+    };
+    RadioButton 2
+    {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:2";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text [ en-US ] = "~Centered" ;
+    };
+    RadioButton 3
+    {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:3";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text [ en-US ] = "~Right" ;
+    };
+    FixedLine 1
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Text [ en-US ] = "Horizontal" ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 83 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 83 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        HelpID = "starmath:PushButton:RID_ALIGNDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 83 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Default" ;
+    };
+};
+
+TabPage RID_PRINTOPTIONPAGE
+{
+    HelpID = "starmath:TabPage:RID_PRINTOPTIONPAGE";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text [ en-US ] = "Formula Options:Settings";
+    FixedLine FL_PRINTOPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Print options";
+    };
+    CheckBox CB_TITLEROW
+    {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_TITLEROW";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text [ en-US ] = "~Title row" ;
+    };
+    CheckBox CB_EQUATION_TEXT
+    {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_EQUATION_TEXT";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text [ en-US ] = "~Formula text" ;
+    };
+    CheckBox CB_FRAME
+    {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_FRAME";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text [ en-US ] = "B~order" ;
+    };
+    FixedLine FL_PRINT_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Print format" ;
+    };
+    RadioButton RB_ORIGINAL_SIZE
+    {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ORIGINAL_SIZE";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 69 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text [ en-US ] = "O~riginal size" ;
+    };
+    RadioButton RB_FIT_TO_PAGE
+    {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_FIT_TO_PAGE";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text [ en-US ] = "Fit to ~page" ;
+    };
+    RadioButton RB_ZOOM
+    {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ZOOM";
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text [ en-US ] = "~Scaling" ;
+        TabStop = TRUE ;
+    };
+    MetricField MF_ZOOM
+    {
+        HelpID = "starmath:MetricField:RID_PRINTOPTIONPAGE:MF_ZOOM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 18 , 111 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        Maximum = 400 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    FixedLine FL_MISC_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Miscellaneous options";
+    };
+    CheckBox CB_IGNORE_SPACING
+    {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_IGNORE_SPACING";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 140 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Ig~nore ~~ and ` at the end of the line";
+    };
+    CheckBox CB_SAVE_ONLY_USED_SYMBOLS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Embed only used symbols (smaller file size)";
+    };
+};
+
+ModalDialog RID_SYMBOLDIALOG
+{
+    HelpID = "starmath:ModalDialog:RID_SYMBOLDIALOG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Closeable = TRUE;   // Close Button in Window Leiste explizit einbauen
+    Size = MAP_APPFONT ( 239 , 123 ) ;
+    Text [ en-US ] = "Symbols" ;
+    Moveable = TRUE ;
+    FixedText 1
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Symbol set";
+    };
+    ListBox 1
+    {
+        HelpID = "starmath:ListBox:RID_SYMBOLDIALOG:1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 92, 57 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+        DropDown = TRUE ;
+        VScroll = TRUE ;
+    };
+    Control 1
+    {
+        HelpID = HID_SMA_CONTROL_SYMBOLSET_VIEW ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 96 , 72 ) ;
+        TabStop = TRUE ;
+    };
+    Control 2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 108 , 35 ) ;
+        Size = MAP_APPFONT ( 63 , 72 ) ;
+    };
+    FixedText 2
+    {
+        Center = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text [ en-US ] = "Unknown" ;
+    };
+    PushButton 2
+    {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:2";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 6 ) ;
+        Size = MAP_APPFONT ( 56 , 14 ) ;
+        DefButton = TRUE ;
+        Text [ en-US ] = "~Insert" ;
+    };
+    PushButton 3
+    {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:3";
+        Pos = MAP_APPFONT ( 177 , 24 ) ;
+        Size = MAP_APPFONT ( 56 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Close";
+    };
+    PushButton 1
+    {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 42 ) ;
+        Size = MAP_APPFONT ( 56 , 14 ) ;
+        Text [ en-US ] = "~Edit..." ;
+    };
+};
+
+ModalDialog RID_SYMDEFINEDIALOG
+{
+    HelpID = "starmath:ModalDialog:RID_SYMDEFINEDIALOG";
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 365 , 215 ) ;
+    Text [ en-US ] = "Edit Symbols" ;
+    FixedText 1
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Old symbol";
+    };
+    ComboBox 1
+    {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:1";
+        Pos = MAP_APPFONT ( 59 , 6 ) ;
+        Size = MAP_APPFONT ( 80 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText 2
+    {
+        Pos = MAP_APPFONT ( 145 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "O~ld symbol set";
+    };
+    ComboBox 2
+    {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:2";
+        Pos = MAP_APPFONT ( 210 , 6 ) ;
+        Size = MAP_APPFONT ( 80 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    Control 1
+    {
+        HelpID = HID_SMA_CONTROL_FONTCHAR_VIEW ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 295 , 87 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    FixedText 9
+    {
+        Pos = MAP_APPFONT ( 6 , 118 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Symbol";
+    };
+    ComboBox 4
+    {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:4";
+        Pos = MAP_APPFONT ( 80 , 115 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText 10
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Text [ en-US ] = "Symbol s~et";
+    };
+    ComboBox 5
+    {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:5";
+        Pos = MAP_APPFONT ( 80 , 130 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText 3
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 148 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Text [ en-US ] = "~Font";
+    };
+    ListBox 1
+    {
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 145 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_FONTS_SUBSET
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 163 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Text [ en-US ] = "~Subset";
+    };
+    ListBox LB_FONTS_SUBSET
+    {
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:LB_FONTS_SUBSET";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 160 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+        Sort = FALSE ;
+        DropDown = TRUE ;
+    };
+    FixedText 4
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 178 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
+        Text [ en-US ] = "~Typeface";
+    };
+    ComboBox 3
+    {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:3";
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 80 , 175 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = FALSE ;
+    };
+    FixedText 5
+    {
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 303 , 130 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
+    };
+    Control 2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 310 , 140 ) ;
+        Size = MAP_APPFONT ( 40 , 40 ) ;
+    };
+    FixedText 6
+    {
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 303 , 182 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
+    };
+    Image 1
+    {
+        ImageBitmap = Bitmap { File = "ar_right.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+    };
+    FixedImage BMP_ARROW_RIGHT
+    {
+        Pos  = MAP_APPFONT ( 252 , 142 ) ;
+        Size = MAP_APPFONT ( 36 , 36 ) ;
+
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "ar_right.bmp" ; };
+            MaskColor = IMAGE_STDBTN_COLOR ;
+        };
+    };
+    FixedText 7
+    {
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 183 , 130 ) ;
+        Size = MAP_APPFONT ( 54 , 9 ) ;
+    };
+    Control 3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 190 , 140 ) ;
+        Size = MAP_APPFONT ( 40 , 40 ) ;
+    };
+    FixedText 8
+    {
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 183 , 182 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
+    };
+    PushButton 1
+    {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:1";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 305 , 195 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add" ;
+    };
+    PushButton 2
+    {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:2";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 245 , 195 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Modify" ;
+    };
+    PushButton 3
+    {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:3";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 195 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 310 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 310 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+WarningBox RID_NOMATHTYPEFACEWARNING
+{
+    Message [ en-US ] = "The 'StarMath' font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
+};
+
+QueryBox RID_DEFAULTSAVEQUERY
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
+};
+
+String RID_FONTREGULAR
+{
+    Text [ en-US ] = "Standard" ;
+};
+String RID_FONTITALIC
+{
+    Text [ en-US ] = "Italic" ;
+};
+String RID_FONTBOLD
+{
+    Text [ en-US ] = "Bold" ;
+};
+String RID_APPLICATION
+{
+    Text = "StarMath" ;
+};
+String RID_OBJECTNAME
+{
+    Text = "SMath3" ;
+};
+String RID_UNDOEDITNAME
+{
+    Text = "Edit" ;
+};
+String RID_UNDOFORMATNAME
+{
+    Text = "Format" ;
+};
+String GID_FORMEL
+{
+    Text = "StarMath" ;
+};
+Menu RID_VIEWMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_VIEW050 ;
+            HelpId = CMD_SID_VIEW050 ;
+            Text [ en-US ] = "~View 50%" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_VIEW100 ;
+            HelpId = CMD_SID_VIEW100 ;
+            Text [ en-US ] = "View ~100%" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_VIEW200 ;
+            HelpId = CMD_SID_VIEW200 ;
+            Text [ en-US ] = "View ~200%" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_ZOOMIN ;
+            HelpId = CMD_SID_ZOOMIN ;
+            Text [ en-US ] = "~Zoom In" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_ZOOMOUT ;
+            HelpId = CMD_SID_ZOOMOUT ;
+            Text [ en-US ] = "Zoom ~Out" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_ADJUST ;
+            HelpId = CMD_SID_ADJUST ;
+            Text [ en-US ] = "~Display All" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DRAW ;
+            HelpId = CMD_SID_DRAW ;
+            Text [ en-US ] = "U~pdate" ;
+        };
+    };
+};
+Menu RID_DISTANCEMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = WORKARROUND_1 ;
+            Text [ en-US ] = "Spacing" ;
+        };
+        MenuItem
+        {
+            Identifier = 2 ;
+            Text [ en-US ] = "Indexes" ;
+        };
+        MenuItem
+        {
+            Identifier = WORKARROUND_3 ;
+            Text [ en-US ] = "Fractions" ;
+        };
+        MenuItem
+        {
+            Identifier = 4 ;
+            Text [ en-US ] = "Fraction Bars" ;
+        };
+        MenuItem
+        {
+            Identifier = 5 ;
+            Text [ en-US ] = "Limits" ;
+        };
+        MenuItem
+        {
+            Identifier = 6 ;
+            Text [ en-US ] = "Brackets" ;
+        };
+        MenuItem
+        {
+            Identifier = 7 ;
+            Text [ en-US ] = "Matrices" ;
+        };
+        MenuItem
+        {
+            Identifier = 8 ;
+            Text [ en-US ] = "Symbols" ;
+        };
+        MenuItem
+        {
+            Identifier = 9 ;
+            Text [ en-US ] = "Operators" ;
+        };
+        MenuItem
+        {
+            Identifier = WORKARROUND_10 ;
+            Text [ en-US ] = "Borders";
+        };
+    };
+};
+
+Menu RID_FONTMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = 1 ;
+            Text [ en-US ] = "Variables" ;
+        };
+        MenuItem
+        {
+            Identifier = 2 ;
+            Text [ en-US ] = "Functions" ;
+        };
+        MenuItem
+        {
+            Identifier = 3 ;
+            Text [ en-US ] = "Numbers" ;
+        };
+        MenuItem
+        {
+            Identifier = 4 ;
+            Text [ en-US ] = "Text" ;
+        };
+        MenuItem
+        {
+            Identifier = 5 ;
+            Text [ en-US ] = "Serif" ;
+        };
+        MenuItem
+        {
+            Identifier = 6 ;
+            Text [ en-US ] = "Sans" ;
+        };
+        MenuItem
+        {
+            Identifier = 7 ;
+            Text [ en-US ] = "Fixed" ;
+        };
+    };
+};
+
+#define CMDBOXWINDOW_TEXT           \
+    Text [ en-US ] = "Commands" ;              \
+
+DockingWindow RID_CMDBOXWINDOW\
+{
+    HelpId = HID_SMA_COMMAND_WIN ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = TRUE ;
+    OutputSize = TRUE ;
+    HideWhenDeactivate = FALSE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 292 , 94 ) ;
+    Dockable = TRUE ;
+    CMDBOXWINDOW_TEXT
+};
+
+
+String STR_CMDBOXWINDOW
+{
+    CMDBOXWINDOW_TEXT
+};
+
+String RID_DOCUMENTSTR
+{
+    Text [ en-US ] = "Formula" ;
+};
+
+String STR_STATSTR_READING
+{
+    Text [ en-US ] = "Loading document..." ;
+};
+
+String STR_STATSTR_WRITING
+{
+    Text [ en-US ] = "Saving document..." ;
+};
+
+
+String STR_MATH_DOCUMENT_FULLTYPE_CURRENT
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Formula";
+};
+
+String RID_SYMBOLFILESSTR
+{
+    Text [ en-US ] = "Symbol files (*.sms)" ;
+};
+
+String RID_ALLFILESSTR
+{
+    Text [ en-US ] = "All Files (*.*)" ;
+};
+
+String RID_ERR_IDENT
+{
+    Text [ en-US ] = "ERROR : " ;
+};
+
+String RID_ERR_UNKOWN
+{
+    Text [ en-US ] = "Unknown error occurred" ;
+};
+
+String RID_ERR_UNEXPECTEDCHARACTER
+{
+    Text [ en-US ] = "Unexpected character" ;
+};
+
+String RID_ERR_OVERFLOW
+{
+    Text [ en-US ] = "Formula entry too complex" ;
+};
+
+String RID_ERR_LGROUPEXPECTED
+{
+    Text [ en-US ] = "'{' expected" ;
+};
+
+String RID_ERR_RGROUPEXPECTED
+{
+    Text [ en-US ] = "'}' expected" ;
+};
+
+String RID_ERR_LBRACEEXPECTED
+{
+    Text [ en-US ] = "'(' expected" ;
+};
+
+String RID_ERR_RBRACEEXPECTED
+{
+    Text [ en-US ] = "')' expected" ;
+};
+
+String RID_ERR_FUNCEXPECTED
+{
+    Text [ en-US ] = "Function expected" ;
+};
+
+String RID_ERR_UNOPEREXPECTED
+{
+    Text [ en-US ] = "Unary operator expected" ;
+};
+
+String RID_ERR_BINOPEREXPECTED
+{
+    Text [ en-US ] = "Binary operator expected" ;
+};
+
+String RID_ERR_SYMBOLEXPECTED
+{
+    Text [ en-US ] = "Symbol expected" ;
+};
+
+String RID_ERR_IDENTEXPECTED
+{
+    Text [ en-US ] = "Identifier expected" ;
+};
+
+String RID_ERR_POUNDEXPECTED
+{
+    Text [ en-US ] = "'#' expected" ;
+};
+
+String RID_ERR_COLOREXPECTED
+{
+    Text [ en-US ] = "Color required" ;
+};
+
+String RID_ERR_LPARENTEXPECTED
+{
+    Text [ en-US ] = "Left limit expected" ;
+};
+
+String RID_ERR_RPARENTEXPECTED
+{
+    Text [ en-US ] = "Right limit expected" ;
+};
+
+String RID_ERR_RIGHTEXPECTED
+{
+    Text [ en-US ] = "'RIGHT' expected" ;
+};
+
+String RID_MATH_TOOLBOX
+{
+    Text [ en-US ] = "Main Toolbar" ;
+};
+
+StringArray RID_PRINTUIOPTIONS
+{
+    ItemList [en-US] =
+    {
+        < "%PRODUCTNAME %s"; >;
+        < "Contents"; >;
+        < "~Title"; >;
+        < "~Formula text"; >;
+        < "B~orders"; >;
+        < "Size"; >;
+        < "O~riginal size"; >;
+        < "Fit to ~page"; >;
+        < "~Scaling"; >;
+    };
+};
+

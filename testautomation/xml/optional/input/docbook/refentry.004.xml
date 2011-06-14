@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: refentry.004</title>
+<releaseinfo role="CVS">$Id: refentry.004.xml,v 1.2 2008-07-11 07:56:01 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>Test an <sgmltag>xref</sgmltag> to <sgmltag>refnamediv</sgmltag>:
+<xref linkend="lm"/>.</para>
+
+<refentry id="evenlessminimal">
+<refmeta>
+<refentrytitle>Fred</refentrytitle>
+<manvolnum>3</manvolnum>
+</refmeta>
+<refnamediv id="lm">
+<refname>Less Minimal</refname>
+<refname>Even Less Minimal</refname>
+<refpurpose>Test of a minimal RefEntry</refpurpose>
+</refnamediv>
+<refsynopsisdiv><title>Synopsis</title>
+<cmdsynopsis>
+<command>command</command>
+<group><arg choice="plain">-a</arg><arg choice="plain">-alpha</arg>
+</group>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>command</command>
+<group><arg choice="plain">-b</arg><arg choice="plain">-beta</arg>
+</group>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>command</command>
+<group choice="plain"><arg choice="plain">-c</arg><arg choice="plain">
+-charlie</arg>
+</group>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>command</command>
+<group choice="plain"><arg choice="plain">-d</arg><arg choice="plain">
+-delta</arg>
+</group>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>command</command>
+<arg choice="plain">--help</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+<title>Description</title>
+<para>This is a less minimal RefEntry.</para>
+
+<figure><title>Some Program</title>
+<programlisting>Testing
+Some
+Text</programlisting>
+</figure>
+
+</refsect1>
+</refentry>
+
+</article>

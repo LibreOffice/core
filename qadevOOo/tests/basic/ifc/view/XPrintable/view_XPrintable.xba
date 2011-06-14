@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="view_XPrintable" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.view.XPrintable
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim sFileName, sFileUrl As String
+    Dim aPrintingOptions(1) As New com.sun.star.beans.PropertyValue
+    Dim aPrinterProps As Variant
+    Dim i As Integer
+
+    Test.StartMethod("getPrinter()")
+    bOK = true
+    aPrinterProps = oObj.getPrinter()
+    bOK = bOK AND (ubound(aPrinterProps) &gt; 0)
+    Test.MethodTested("getPrinter()", bOK)
+
+
+    Test.StartMethod("print()")
+    bOK = true
+
+    sFileUrl = utils.getTempFileURL("/XPrintable.prt", true)
+    sFileName = utils.URL2Path(sFileUrl)
+
+    aPrintingOptions(0).Name = "FileName"
+    aPrintingOptions(0).Value = sFileName
+    aPrintingOptions(0).State = com.sun.star.beans.PropertyState.DEFAULT_VALUE
+
+    aPrintingOptions(1).Name = "Wait"
+    aPrintingOptions(1).Value = true
+    oObj.Print(aPrintingOptions())
+    
+    ' without waiting Office can hang on setPrinter() call.
+    wait(500)
+
+    bOK = bOK AND FileExists(sFileName)
+    Test.MethodTested("print()", bOK)
+
+    Test.StartMethod("setPrinter()")
+    bOK = true
+    Dim iPaperFormat As Integer
+    Dim iNewPaperFormat As Integer
+
+    for i = 0 to ubound(aPrinterProps())
+        if (aPrinterProps(i).Name = "PaperFormat") then
+            iPaperFormat = aPrinterProps(i).Value
+            exit for
+        endif
+    next i
+
+    if (iPaperFormat = com.sun.star.view.PaperFormat.A4) then
+        iNewPaperFormat = com.sun.star.view.PaperFormat.LETTER
+    else
+        iNewPaperFormat = com.sun.star.view.PaperFormat.A4
+    endif
+
+    aPrinterProps(i).Value = iNewPaperFormat
+
+    oObj.setPrinter(aPrinterProps())
+
+    aPrinterProps() = oObj.getPrinter()
+
+    for i = 0 to ubound(aPrinterProps())
+        if (aPrinterProps(i).Name = "PaperFormat") then
+            bOK = bOK AND (aPrinterProps(i).Value = iNewPaperFormat)
+            exit for
+        endif
+    next i
+    Test.MethodTested("setPrinter()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

@@ -1,0 +1,1654 @@
+--- include/atl/atlbase.h.orig	2005-04-14 17:54:32.000000000 +0900
++++ include/atl/atlbase.h	2007-12-23 14:38:02.467500000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLBASE_H__
+ #define __ATLBASE_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -73,19 +76,47 @@
+ #define _ATL_TYPELIB_INDEX_LENGTH 10
+ #define _ATL_QUOTES_SPACE 2
+ 
+-#pragma pack(push, _ATL_PACKING)
++#pragma pack(push, 8)
+ 
+ #if defined(_ATL_DLL)
+         #pragma comment(lib, "atl.lib")
+ #endif
+ 
+-extern "C" const __declspec(selectany) GUID LIBID_ATLLib = {0x44EC0535,0x400F,0x11D0,{0x9D,0xCD,0x00,0xA0,0xC9,0x03,0x91,0xD3}};
+-extern "C" const __declspec(selectany) CLSID CLSID_Registrar = {0x44EC053A,0x400F,0x11D0,{0x9D,0xCD,0x00,0xA0,0xC9,0x03,0x91,0xD3}};
+-extern "C" const __declspec(selectany) IID IID_IRegistrar = {0x44EC053B,0x400F,0x11D0,{0x9D,0xCD,0x00,0xA0,0xC9,0x03,0x91,0xD3}};
+-extern "C" const __declspec(selectany) IID IID_IAxWinHostWindow = {0xb6ea2050,0x48a,0x11d1,{0x82,0xb9,0x0,0xc0,0x4f,0xb9,0x94,0x2e}};
+-extern "C" const __declspec(selectany) IID IID_IAxWinAmbientDispatch = {0xb6ea2051,0x48a,0x11d1,{0x82,0xb9,0x0,0xc0,0x4f,0xb9,0x94,0x2e}};
+-extern "C" const __declspec(selectany) IID IID_IInternalConnection = {0x72AD0770,0x6A9F,0x11d1,{0xBC,0xEC,0x00,0x60,0x08,0x8F,0x44,0x4E}};
+-extern "C" const __declspec(selectany) IID IID_IDocHostUIHandlerDispatch = {0x425B5AF0,0x65F1,0x11d1,{0x96,0x11,0x00,0x00,0xF8,0x1E,0x0D,0x0D}};
++#define __uuidof(I) IID_##I
++
++#include <excpt.h>
++
++namespace ATL
++{
++inline int InlineIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
++{
++   return (
++      ((unsigned long *) &rguid1)[0] == ((unsigned long *) &rguid2)[0] &&
++      ((unsigned long *) &rguid1)[1] == ((unsigned long *) &rguid2)[1] &&
++      ((unsigned long *) &rguid1)[2] == ((unsigned long *) &rguid2)[2] &&
++      ((unsigned long *) &rguid1)[3] == ((unsigned long *) &rguid2)[3]);
++}
++}
++
++#ifdef _INIT_ATL_COMMON_VARS
++extern "C" const GUID LIBID_ATLLib = {0x44EC0535,0x400F,0x11D0,{0x9D,0xCD,0x00,0xA0,0xC9,0x03,0x91,0xD3}};
++extern "C" const CLSID CLSID_Registrar = {0x44EC053A,0x400F,0x11D0,{0x9D,0xCD,0x00,0xA0,0xC9,0x03,0x91,0xD3}};
++extern "C" const IID IID_IRegistrar = {0x44EC053B,0x400F,0x11D0,{0x9D,0xCD,0x00,0xA0,0xC9,0x03,0x91,0xD3}};
++extern "C" const IID IID_IAxWinHostWindow = {0xb6ea2050,0x48a,0x11d1,{0x82,0xb9,0x0,0xc0,0x4f,0xb9,0x94,0x2e}};
++extern "C" const IID IID_IAxWinAmbientDispatch = {0xb6ea2051,0x48a,0x11d1,{0x82,0xb9,0x0,0xc0,0x4f,0xb9,0x94,0x2e}};
++extern "C" const IID IID_IInternalConnection = {0x72AD0770,0x6A9F,0x11d1,{0xBC,0xEC,0x00,0x60,0x08,0x8F,0x44,0x4E}};
++extern "C" const IID IID_IDocHostUIHandlerDispatch = {0x425B5AF0,0x65F1,0x11d1,{0x96,0x11,0x00,0x00,0xF8,0x1E,0x0D,0x0D}};
++#else
++extern "C" {
++extern const GUID LIBID_ATLLib;
++extern const CLSID CLSID_Registrar;
++extern const IID IID_IRegistrar;
++extern const IID IID_IAxWinHostWindow;
++extern const IID IID_IAxWinAmbientDispatch;
++extern const IID IID_IInternalConnection;
++extern const IID IID_IDocHostUIHandlerDispatch;
++}
++#endif
+ 
+ #ifndef _ATL_DLL_IMPL
+ namespace ATL
+@@ -135,7 +166,7 @@
+                 IUnknown* p = NULL;
+                 if (pfnGetClassObject == NULL)
+                         return S_OK;
+-                HRESULT hRes = pfnGetClassObject(pfnCreateInstance, IID_IUnknown, (LPVOID*) &p);
++                HRESULT hRes = pfnGetClassObject((LPVOID)pfnCreateInstance, IID_IUnknown, (LPVOID*) &p);
+                 if (SUCCEEDED(hRes))
+                         hRes = CoRegisterClassObject(*pclsid, p, dwClsContext, dwFlags, &dwRegister);
+                 if (p != NULL)
+@@ -284,13 +315,15 @@
+ };
+ #pragma pack(pop)
+ 
+-PVOID __stdcall __AllocStdCallThunk(VOID);
+-VOID  __stdcall __FreeStdCallThunk(PVOID);
++//PVOID __stdcall __AllocStdCallThunk(VOID);
++//VOID  __stdcall __FreeStdCallThunk(PVOID);
+ 
+-#define AllocStdCallThunk() __AllocStdCallThunk()
+-#define FreeStdCallThunk(p) __FreeStdCallThunk(p)
++//#define AllocStdCallThunk() __AllocStdCallThunk()
++//#define FreeStdCallThunk(p) __FreeStdCallThunk(p)
+ 
+-#pragma comment(lib, "atlthunk.lib")
++//#pragma comment(lib, "atlthunk.lib")
++#define AllocStdCallThunk() HeapAlloc(GetProcessHeap(),0,sizeof(_stdcallthunk))
++#define FreeStdCallThunk(p) HeapFree(GetProcessHeap(), 0, p)
+ 
+ #elif defined (_M_AMD64)
+ #pragma pack(push,2)
+@@ -465,7 +498,7 @@
+         return( HRESULT_FROM_WIN32( nError ) );
+ }
+ 
+-inline void __declspec(noreturn) _AtlRaiseException( DWORD dwExceptionCode, DWORD dwExceptionFlags = EXCEPTION_NONCONTINUABLE )
++inline void _AtlRaiseException( DWORD dwExceptionCode, DWORD dwExceptionFlags = EXCEPTION_NONCONTINUABLE )
+ {
+         RaiseException( dwExceptionCode, dwExceptionFlags, 0, NULL );
+ }
+@@ -658,6 +691,7 @@
+ class _NoAddRefReleaseOnCComPtr : public T
+ {
+         private:
++                _NoAddRefReleaseOnCComPtr();
+                 STDMETHOD_(ULONG, AddRef)()=0;
+                 STDMETHOD_(ULONG, Release)()=0;
+ };
+@@ -781,6 +815,7 @@
+         {
+                 return AtlAdvise(p, pUnk, iid, pdw);
+         }
++#if 0
+         HRESULT CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter = NULL, DWORD dwClsContext = CLSCTX_ALL)
+         {
+                 ATLASSERT(p == NULL);
+@@ -801,11 +836,12 @@
+                 ATLASSERT(pp != NULL && *pp == NULL);
+                 return p->QueryInterface(__uuidof(Q), (void**)pp);
+         }
++#endif
+         T* p;
+ };
+ 
+ 
+-template <class T, const IID* piid = &__uuidof(T)>
++template <class T, const IID* piid>
+ class CComQIPtr
+ {
+ public:
+@@ -933,6 +969,7 @@
+         {
+                 return AtlAdvise(p, pUnk, iid, pdw);
+         }
++#if 0
+         HRESULT CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter = NULL, DWORD dwClsContext = CLSCTX_ALL)
+         {
+                 ATLASSERT(p == NULL);
+@@ -953,6 +990,7 @@
+                 ATLASSERT(pp != NULL && *pp == NULL);
+                 return p->QueryInterface(__uuidof(Q), (void**)pp);
+         }
++#endif
+         T* p;
+ };
+ 
+@@ -1087,12 +1125,14 @@
+                         hr = ::CoCreateInstance(clsid, pUnkOuter, dwClsContext, __uuidof(IUnknown), (void**)&p);
+                 return hr;
+         }
++#if 0
+         template <class Q>
+         HRESULT QueryInterface(Q** pp)
+         {
+                 ATLASSERT(pp != NULL && *pp == NULL);
+                 return p->QueryInterface(__uuidof(Q), (void**)pp);
+         }
++#endif
+         IUnknown* p;
+ };
+ 
+@@ -1257,21 +1297,26 @@
+ 		LeaveCriticalSection(&m_sec);
+ 		return S_OK;
+ 	}
++	static void _InitHandler(void *pData, LPEXCEPTION_POINTERS ep)
++	  {
++	    HRESULT &hRes=*reinterpret_cast<HRESULT*>(pData);
++			if (STATUS_NO_MEMORY == ep->ExceptionRecord->ExceptionCode)
++				hRes = E_OUTOFMEMORY;
++			else
++				hRes = E_FAIL;
++	  }
+ 	HRESULT Init() throw()
+ 	{
+ 		HRESULT hRes = S_OK;
+-		__try
+-		{
++                jmp_buf _sejmpbuf;
++                __SEHandler _sehandler;
++                if (__builtin_setjmp(_sejmpbuf) == 0)
++                {
++                        _sehandler.Set(_sejmpbuf, &hRes, reinterpret_cast<__SEHandler::PF>(EXCEPTION_EXECUTE_HANDLER), _InitHandler);
+ 			InitializeCriticalSection(&m_sec);
+-		}
++                }
+ 		// structured exception may be raised in low memory situations
+-		__except(EXCEPTION_EXECUTE_HANDLER)
+-		{
+-			if (STATUS_NO_MEMORY == GetExceptionCode())
+-				hRes = E_OUTOFMEMORY;
+-			else
+-				hRes = E_FAIL;
+-		}
++                _sehandler.Reset();
+ 		return hRes;
+ 	}
+ 
+@@ -2799,10 +2844,19 @@
+ 
+ 
+ class CComModule;
+-__declspec(selectany) CComModule* _pModule=NULL;
++#ifdef _INIT_ATL_COMMON_VARS
++CComModule* _pModule=NULL;
++#else
++extern CComModule* _pModule;
++#endif
++
+ 
+ // {B62F5910-6528-11d1-9611-0000F81E0D0D}
+-_declspec(selectany) GUID GUID_ATLVer30 = { 0xb62f5910, 0x6528, 0x11d1, { 0x96, 0x11, 0x0, 0x0, 0xf8, 0x1e, 0xd, 0xd } };
++#ifdef _INIT_ATL_COMMON_VARS
++GUID GUID_ATLVer30 = { 0xb62f5910, 0x6528, 0x11d1, { 0x96, 0x11, 0x0, 0x0, 0xf8, 0x1e, 0xd, 0xd } };
++#else
++extern GUID GUID_ATLVer30;
++#endif
+ 
+ class CComModule : public _ATL_MODULE
+ {
+@@ -4286,7 +4340,9 @@
+ 
+ #endif
+ 
+-__declspec(selectany) GUID CComModule::m_libid = {0x0,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0}};
++#ifdef _INIT_ATL_COMMON_VARS
++GUID CComModule::m_libid = {0x0,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0}};
++#endif
+ 
+ #ifdef _ATL_STATIC_REGISTRY
+ #define UpdateRegistryFromResource UpdateRegistryFromResourceS
+@@ -4355,7 +4411,9 @@
+         LONG m_nLockCnt;
+ };
+ 
+-__declspec(selectany) UINT CComApartment::ATL_CREATE_OBJECT = 0;
++#ifdef _INIT_ATL_COMMON_VARS
++UINT CComApartment::ATL_CREATE_OBJECT = 0;
++#endif
+ 
+ class CComSimpleThreadAllocator
+ {
+@@ -5855,6 +5913,10 @@
+                 }
+ 
+         }
++        static int _Except(void *pThis, LPEXCEPTION_POINTERS lpEP)
++        {
++	  return reinterpret_cast<CVirtualBuffer *>(pThis)->Except(lpEP);
++	}
+         void Seek(int nElement)
+         {
+                 if(nElement < 0 || nElement >= m_nMaxElements)
+@@ -5866,41 +5928,53 @@
+         {
+                 if(nElement < 0 || nElement >= m_nMaxElements)
+                         _AtlRaiseException((DWORD)EXCEPTION_ARRAY_BOUNDS_EXCEEDED);                
+-                __try
++                jmp_buf _sejmpbuf;
++                __SEHandler _sehandler;
++                if (__builtin_setjmp(_sejmpbuf) == 0)
+                 {
++                        _sehandler.Set(_sejmpbuf, this, _Except);
+                         T* p = &m_pBase[nElement];
+                         *p = Element;
+                         m_pTop = p > m_pTop ? p : m_pTop;
+                 }
+-                __except(Except(GetExceptionInformation()))
++                else
+                 {
+                 }
++                _sehandler.Reset();
+ 
+         }
+         template <class Q>
+         void WriteBulk(Q& helper)
+         {
+-                __try
++                jmp_buf _sejmpbuf;
++                __SEHandler _sehandler;
++                if (__builtin_setjmp(_sejmpbuf) == 0)
+                 {
++                        _sehandler.Set(_sejmpbuf, this, _Except);
+                         m_pCurrent = helper(m_pBase);
+                         m_pTop = m_pCurrent > m_pTop ? m_pCurrent : m_pTop;
+                 }
+-                __except(Except(GetExceptionInformation()))
++                else
+                 {
+                 }
++                _sehandler.Reset();
+         }
+         void Write(const T& Element)
+         {
+             if (m_pCurrent < &m_pBase[m_nMaxElements]) {
+-                __try
++                jmp_buf _sejmpbuf;
++                __SEHandler _sehandler;
++                if (__builtin_setjmp(_sejmpbuf) == 0)
+                 {
++                    _sehandler.Set(_sejmpbuf, this, _Except);
+                     *m_pCurrent = Element;
+                     m_pCurrent++;
+                     m_pTop = m_pCurrent > m_pTop ? m_pCurrent : m_pTop; 
+                 }
+-                __except(Except(GetExceptionInformation()))
++                else
+                 {
+                 }
++                _sehandler.Reset();
+             }
+         }
+         T& Read()
+@@ -5910,14 +5984,18 @@
+         operator BSTR()
+         {
+                 BSTR bstrTemp = NULL ;
+-                __try
++                jmp_buf _sejmpbuf;
++                __SEHandler _sehandler;
++                if (__builtin_setjmp(_sejmpbuf) == 0)
+                 {
++                        _sehandler.Set(_sejmpbuf, this, _Except);
+                         bstrTemp = SysAllocStringByteLen((char*) m_pBase,
+                                 (UINT) ((BYTE*)m_pTop - (BYTE*)m_pBase));
+                 }
+-                __except(Except(GetExceptionInformation()))
++                else
+                 {
+                 }
++                _sehandler.Reset();
+                 return bstrTemp;
+         }
+         const T& operator[](int nElement) const
+@@ -6336,6 +6414,11 @@
+ //Although these functions are big, they are only used once in a module
+ //so we should make them inline.
+ 
++ATLINLINE int atlmoduleinitfilter(void *, LPEXCEPTION_POINTERS ep)
++{
++  return ep->ExceptionRecord->ExceptionCode == STATUS_NO_MEMORY ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH;
++}
++
+ ATLINLINE ATLAPI AtlModuleInit(_ATL_MODULE* pM, _ATL_OBJMAP_ENTRY* p, HINSTANCE h)
+ {
+         ATLASSERT(pM != NULL);
+@@ -6352,32 +6435,43 @@
+         pM->m_hInst = pM->m_hInstTypeLib = pM->m_hInstResource = h;
+         pM->m_nLockCnt=0L;
+         pM->m_hHeap = NULL;
+-        __try {
++        jmp_buf _sejmpbuf;
++        __SEHandler _sehandler;
++        if (__builtin_setjmp(_sejmpbuf) == 0) {
++            _sehandler.Set(_sejmpbuf, NULL, atlmoduleinitfilter);
+             InitializeCriticalSection(&pM->m_csTypeInfoHolder);
+-        } __except (GetExceptionCode() == STATUS_NO_MEMORY ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
++        } else {
+             ZeroMemory(&pM->m_csTypeInfoHolder, sizeof(pM->m_csTypeInfoHolder));
+-            return STATUS_NO_MEMORY;
++            _sehandler.Reset();
++	    return STATUS_NO_MEMORY;
+         }
++        _sehandler.Reset();
+ 
+-        __try {
++        if (__builtin_setjmp(_sejmpbuf) == 0) {
++            _sehandler.Set(_sejmpbuf, NULL, atlmoduleinitfilter);
+             InitializeCriticalSection(&pM->m_csWindowCreate);
+-        } __except (GetExceptionCode() == STATUS_NO_MEMORY ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
++        } else {
+             DeleteCriticalSection(&pM->m_csTypeInfoHolder);
+             ZeroMemory(&pM->m_csWindowCreate, sizeof(pM->m_csWindowCreate));
+             ZeroMemory(&pM->m_csTypeInfoHolder, sizeof(pM->m_csTypeInfoHolder));
++            _sehandler.Reset();
+             return STATUS_NO_MEMORY;
+         }
++        _sehandler.Reset();
+ 
+-        __try {
++        if (__builtin_setjmp(_sejmpbuf) == 0) {
++            _sehandler.Set(_sejmpbuf, NULL, atlmoduleinitfilter);
+             InitializeCriticalSection(&pM->m_csObjMap);
+-        } __except (GetExceptionCode() == STATUS_NO_MEMORY ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
++        } else {
+             DeleteCriticalSection(&pM->m_csWindowCreate);
+             DeleteCriticalSection(&pM->m_csTypeInfoHolder);
+             ZeroMemory(&pM->m_csObjMap, sizeof(pM->m_csObjMap));
+             ZeroMemory(&pM->m_csWindowCreate, sizeof(pM->m_csWindowCreate));
+             ZeroMemory(&pM->m_csTypeInfoHolder, sizeof(pM->m_csTypeInfoHolder));
++            _sehandler.Reset();
+             return STATUS_NO_MEMORY;
+         }
++        _sehandler.Reset();
+ #ifdef _ATL_DLL_IMPL
+         if (pM->cbSize > _nAtlModuleVer21Size)
+ #endif
+@@ -6450,6 +6544,11 @@
+         return hRes;
+ }
+ 
++ATLINLINE void atlfinalleavecriticalsection(void *pData)
++{
++  LeaveCriticalSection(reinterpret_cast<LPCRITICAL_SECTION>(pData));
++}
++
+ ATLINLINE ATLAPI AtlModuleGetClassObject(_ATL_MODULE* pM, REFCLSID rclsid, REFIID riid, LPVOID* ppv)
+ {
+         ATLASSERT(pM != NULL);
+@@ -6473,15 +6572,15 @@
+                         if (pEntry->pCF == NULL)
+                         {
+                                 EnterCriticalSection(&pM->m_csObjMap);
+-                                __try
++                                jmp_buf _sejmpbuf;
++                                __SEHandler _sehandler;
++                                if (__builtin_setjmp(_sejmpbuf) == 0)
+                                 {
++                                        _sehandler.Set(_sejmpbuf, &pM->m_csObjMap, EXCEPTION_CONTINUE_SEARCH, NULL, atlfinalleavecriticalsection);
+                                         if (pEntry->pCF == NULL)
+-                                                hRes = pEntry->pfnGetClassObject(pEntry->pfnCreateInstance, IID_IUnknown, (LPVOID*)&pEntry->pCF);
+-                                }
+-                                __finally
+-                                {
+-                                        LeaveCriticalSection(&pM->m_csObjMap);
++						hRes = pEntry->pfnGetClassObject((void *)(pEntry->pfnCreateInstance), IID_IUnknown, (LPVOID*)&pEntry->pCF);
+                                 }
++                                _sehandler.Reset();
+                         }
+                         if (pEntry->pCF != NULL)
+                                 hRes = pEntry->pCF->QueryInterface(riid, ppv);
+--- include/atl/atlcom.h.orig	2005-04-14 17:54:32.000000000 +0900
++++ include/atl/atlcom.h	2007-12-03 22:43:54.833375000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLCOM_H__
+ #define __ATLCOM_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -19,7 +22,10 @@
+         #error atlcom.h requires atlbase.h to be included first
+ #endif
+ 
+-#pragma pack(push, _ATL_PACKING)
++#include <algorithm>
++using ::std::min;
++
++#pragma pack(push, 8)
+ 
+ EXTERN_C const IID IID_ITargetFrame;
+ 
+@@ -2191,19 +2197,23 @@
+ // override it in your class and call each base class' version of this
+ #define BEGIN_COM_MAP(x) public: \
+         typedef x _ComMapClass; \
++        static void _CacheFinal(void *pData)\
++        {\
++                reinterpret_cast<_ComMapClass*>(pData)->Unlock();\
++        }\
+         static HRESULT WINAPI _Cache(void* pv, REFIID iid, void** ppvObject, DWORD_PTR dw)\
+         {\
+                 _ComMapClass* p = (_ComMapClass*)pv;\
+                 p->Lock();\
+                 HRESULT hRes = E_FAIL; \
+-                __try \
++                jmp_buf _sejmpbuf; \
++                __SEHandler _sehandler; \
++                if (__builtin_setjmp(_sejmpbuf) == 0) \
+                 { \
++                        _sehandler.Set(_sejmpbuf, p, EXCEPTION_CONTINUE_SEARCH, NULL, _CacheFinal);\
+                         hRes = CComObjectRootBase::_Cache(pv, iid, ppvObject, dw);\
+                 } \
+-                __finally \
+-                { \
+-                        p->Unlock();\
+-                } \
++                _sehandler.Reset();\
+                 return hRes;\
+         }\
+         IUnknown* _GetRawUnknown() \
+@@ -2339,7 +2349,7 @@
+    return( pMap ); }
+ 
+ #define BEGIN_OBJECT_MAP(x) static _ATL_OBJMAP_ENTRY x[] = {
+-#define END_OBJECT_MAP()   {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}};
++#define END_OBJECT_MAP()   {NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL}};
+ #define OBJECT_ENTRY(clsid, class) {&clsid, class::UpdateRegistry, class::_ClassFactoryCreatorClass::CreateInstance, class::_CreatorClass::CreateInstance, NULL, 0, class::GetObjectDescription, class::GetCategoryMap, class::ObjectMain },
+ #define OBJECT_ENTRY_NON_CREATEABLE(class) {&CLSID_NULL, class::UpdateRegistry, NULL, NULL, NULL, 0, NULL, class::GetCategoryMap, class::ObjectMain },
+ 
+@@ -2492,9 +2502,9 @@
+ public:
+         typedef ThreadModel _ThreadModel;
+ #ifdef OLD_ATL_CRITSEC_CODE
+-        typename typedef _ThreadModel::AutoCriticalSection _CritSec;
++        typedef typename _ThreadModel::AutoCriticalSection _CritSec;
+ #else
+-    	typename typedef _ThreadModel::AutoDeleteCriticalSection _AutoDelCritSec;
++    	typedef typename _ThreadModel::AutoDeleteCriticalSection _AutoDelCritSec;
+ #endif  /* OLD_ATL_CRITSEC_CODE */
+         typedef CComObjectLockT<_ThreadModel> ObjectLock;
+ 
+@@ -2638,8 +2648,8 @@
+         // Set refcount to 1 to protect destruction
+         ~CComObject()
+         {
+-                m_dwRef = 1L;
+-                FinalRelease();
++                this->m_dwRef = 1L;
++                this->FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(_GetRawUnknown());
+ #endif
+@@ -2647,22 +2657,24 @@
+         }
+         //If InternalAddRef or InternalRelease is undefined then your class
+         //doesn't derive from CComObjectRoot
+-        STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
++        STDMETHOD_(ULONG, AddRef)() {return this->InternalAddRef();}
+         STDMETHOD_(ULONG, Release)()
+         {
+-                ULONG l = InternalRelease();
++                ULONG l = this->InternalRelease();
+                 if (l == 0)
+                         delete this;
+                 return l;
+         }
+         //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
+-        {return _InternalQueryInterface(iid, ppvObject);}
++        {return this->_InternalQueryInterface(iid, ppvObject);}
++#if 0
+         template <class Q>
+         HRESULT STDMETHODCALLTYPE QueryInterface(Q** pp)
+         {
+                 return QueryInterface(__uuidof(Q), (void**)pp);
+         }
++#endif
+ 
+         static HRESULT WINAPI CreateInstance(CComObject<Base>** pp);
+ };
+@@ -2719,8 +2731,8 @@
+ #endif  /* OLD_ATL_CRITSEC_CODE */
+         ~CComObjectCached()
+         {
+-                m_dwRef = 1L;
+-                FinalRelease();
++                this->m_dwRef = 1L;
++                this->FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(_GetRawUnknown());
+ #endif
+@@ -2729,14 +2741,14 @@
+         //doesn't derive from CComObjectRoot
+         STDMETHOD_(ULONG, AddRef)()
+         {
+-                ULONG l = InternalAddRef();
++                ULONG l = this->InternalAddRef();
+                 if (l == 2)
+                         _Module.Lock();
+                 return l;
+         }
+         STDMETHOD_(ULONG, Release)()
+         {
+-                ULONG l = InternalRelease();
++                ULONG l = this->InternalRelease();
+                 if (l == 0)
+                         delete this;
+                 else if (l == 1)
+@@ -2745,7 +2757,7 @@
+         }
+         //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
+-        {return _InternalQueryInterface(iid, ppvObject);}
++        {return this->_InternalQueryInterface(iid, ppvObject);}
+ #ifndef OLD_ATL_CRITSEC_CODE
+     	CComGlobalsThreadModel::AutoDeleteCriticalSection m_csCached;
+ #endif  /* OLD_ATL_CRITSEC_CODE */
+@@ -2762,8 +2774,8 @@
+         // Set refcount to 1 to protect destruction
+         ~CComObjectNoLock()
+         {
+-                m_dwRef = 1L;
+-                FinalRelease();
++                this->m_dwRef = 1L;
++                this->FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(_GetRawUnknown());
+ #endif
+@@ -2771,17 +2783,17 @@
+ 
+         //If InternalAddRef or InternalRelease is undefined then your class
+         //doesn't derive from CComObjectRoot
+-        STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
++        STDMETHOD_(ULONG, AddRef)() {return this->InternalAddRef();}
+         STDMETHOD_(ULONG, Release)()
+         {
+-                ULONG l = InternalRelease();
++                ULONG l = this->InternalRelease();
+                 if (l == 0)
+                         delete this;
+                 return l;
+         }
+         //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
+-        {return _InternalQueryInterface(iid, ppvObject);}
++        {return this->_InternalQueryInterface(iid, ppvObject);}
+ };
+ 
+ // It is possible for Base not to derive from CComObjectRoot
+@@ -2794,14 +2806,14 @@
+         CComObjectGlobal(void* = NULL)
+         {
+ #ifndef OLD_ATL_CRITSEC_CODE
+-			m_hResFinalConstruct = _AtlInitialConstruct();
++			m_hResFinalConstruct = this->_AtlInitialConstruct();
+ 			if (SUCCEEDED(m_hResFinalConstruct))
+ #endif  /* OLD_ATL_CRITSEC_CODE */
+-                m_hResFinalConstruct = FinalConstruct();
++                m_hResFinalConstruct = this->FinalConstruct();
+         }
+         ~CComObjectGlobal()
+         {
+-                FinalRelease();
++                this->FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(_GetRawUnknown());
+ #endif
+@@ -2810,7 +2822,7 @@
+         STDMETHOD_(ULONG, AddRef)() {return _Module.Lock();}
+         STDMETHOD_(ULONG, Release)(){return _Module.Unlock();}
+         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
+-        {return _InternalQueryInterface(iid, ppvObject);}
++        {return this->_InternalQueryInterface(iid, ppvObject);}
+         HRESULT m_hResFinalConstruct;
+ };
+ 
+@@ -2824,14 +2836,14 @@
+         CComObjectStack(void* = NULL)
+         {
+ #ifndef OLD_ATL_CRITSEC_CODE
+-			m_hResFinalConstruct = _AtlInitialConstruct();
++			m_hResFinalConstruct = this->_AtlInitialConstruct();
+ 			if (SUCCEEDED(m_hResFinalConstruct))
+ #endif  /* OLD_ATL_CRITSEC_CODE */
+-                m_hResFinalConstruct = FinalConstruct();
++                m_hResFinalConstruct = this->FinalConstruct();
+         }
+         ~CComObjectStack()
+         {
+-                FinalRelease();
++                this->FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(_GetRawUnknown());
+ #endif
+@@ -2850,6 +2862,8 @@
+ {
+ public:
+         typedef Base _BaseClass;
++        using Base::_GetRawUnknown;
++        using Base::m_pOuterUnknown;
+         CComContainedObject(void* pv) {m_pOuterUnknown = (IUnknown*)pv;}
+ #ifdef _ATL_DEBUG_INTERFACES
+         ~CComContainedObject()
+@@ -2859,20 +2873,22 @@
+         }
+ #endif
+ 
+-        STDMETHOD_(ULONG, AddRef)() {return OuterAddRef();}
+-        STDMETHOD_(ULONG, Release)() {return OuterRelease();}
++        STDMETHOD_(ULONG, AddRef)() {return this->OuterAddRef();}
++        STDMETHOD_(ULONG, Release)() {return this->OuterRelease();}
+         STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
+         {
+-                HRESULT hr = OuterQueryInterface(iid, ppvObject);
++                HRESULT hr = this->OuterQueryInterface(iid, ppvObject);
+                 if (FAILED(hr) && _GetRawUnknown() != m_pOuterUnknown)
+-                        hr = _InternalQueryInterface(iid, ppvObject);
++                        hr = this->_InternalQueryInterface(iid, ppvObject);
+                 return hr;
+         }
++#if 0
+         template <class Q>
+         HRESULT STDMETHODCALLTYPE QueryInterface(Q** pp)
+         {
+                 return QueryInterface(__uuidof(Q), (void**)pp);
+         }
++#endif
+         //GetControllingUnknown may be virtual if the Base class has declared
+         //DECLARE_GET_CONTROLLING_UNKNOWN()
+         IUnknown* GetControllingUnknown()
+@@ -2915,18 +2931,18 @@
+         // override it in your class and call each base class' version of this
+         HRESULT FinalConstruct()
+         {
+-                CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
++                CComObjectRootEx<typename contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
+                 return m_contained.FinalConstruct();
+         }
+         void FinalRelease()
+         {
+-                CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
++                CComObjectRootEx<typename contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
+                 m_contained.FinalRelease();
+         }
+         // Set refcount to 1 to protect destruction
+         ~CComAggObject()
+         {
+-                m_dwRef = 1L;
++                this->m_dwRef = 1L;
+                 FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(this);
+@@ -2934,10 +2950,10 @@
+                 _Module.Unlock();
+         }
+ 
+-        STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
++        STDMETHOD_(ULONG, AddRef)() {return this->InternalAddRef();}
+         STDMETHOD_(ULONG, Release)()
+         {
+-                ULONG l = InternalRelease();
++                ULONG l = this->InternalRelease();
+                 if (l == 0)
+                         delete this;
+                 return l;
+@@ -2959,11 +2975,13 @@
+                         hRes = m_contained._InternalQueryInterface(iid, ppvObject);
+                 return hRes;
+         }
++#if 0
+         template <class Q>
+         HRESULT STDMETHODCALLTYPE QueryInterface(Q** pp)
+         {
+                 return QueryInterface(__uuidof(Q), (void**)pp);
+         }
++#endif
+         static HRESULT WINAPI CreateInstance(LPUNKNOWN pUnkOuter, CComAggObject<contained>** pp)
+         {
+                 _ATL_VALIDATE_OUT_POINTER(pp);
+@@ -3023,21 +3041,21 @@
+         // override it in your class and call each base class' version of this
+         HRESULT FinalConstruct()
+         {
+-                InternalAddRef();
+-                CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
++                this->InternalAddRef();
++                CComObjectRootEx<typename contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
+                 HRESULT hr = m_contained.FinalConstruct();
+-                InternalRelease();
++                this->InternalRelease();
+                 return hr;
+         }
+         void FinalRelease()
+         {
+-                CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
++                CComObjectRootEx<typename contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
+                 m_contained.FinalRelease();
+         }
+         // Set refcount to 1 to protect destruction
+         ~CComPolyObject()
+         {
+-                m_dwRef = 1L;
++                this->m_dwRef = 1L;
+                 FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(this);
+@@ -3045,10 +3063,10 @@
+                 _Module.Unlock();
+         }
+ 
+-        STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
++        STDMETHOD_(ULONG, AddRef)() {return this->InternalAddRef();}
+         STDMETHOD_(ULONG, Release)()
+         {
+-                ULONG l = InternalRelease();
++                ULONG l = this->InternalRelease();
+                 if (l == 0)
+                         delete this;
+                 return l;
+@@ -3072,11 +3090,13 @@
+                         hRes = m_contained._InternalQueryInterface(iid, ppvObject);
+                 return hRes;
+         }
++#if 0
+         template <class Q>
+         HRESULT STDMETHODCALLTYPE QueryInterface(Q** pp)
+         {
+                 return QueryInterface(__uuidof(Q), (void**)pp);
+         }
++#endif
+         static HRESULT WINAPI CreateInstance(LPUNKNOWN pUnkOuter, CComPolyObject<contained>** pp)
+         {
+                 _ATL_VALIDATE_OUT_POINTER(pp);
+@@ -3111,27 +3131,28 @@
+ class CComTearOffObject : public Base
+ {
+ public:
++        using Base::m_pOwner;
+         CComTearOffObject(void* pv)
+         {
+                 ATLASSERT(m_pOwner == NULL);
+-                m_pOwner = reinterpret_cast<CComObject<Base::_OwnerClass>*>(pv);
++                m_pOwner = reinterpret_cast<CComObject<typename Base::_OwnerClass>*>(pv);
+                 m_pOwner->AddRef();
+         }
+         // Set refcount to 1 to protect destruction
+         ~CComTearOffObject()
+         {
+-                m_dwRef = 1L;
+-                FinalRelease();
++                this->m_dwRef = 1L;
++                this->FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(_GetRawUnknown());
+ #endif
+                 m_pOwner->Release();
+         }
+ 
+-        STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
++        STDMETHOD_(ULONG, AddRef)() {return this->InternalAddRef();}
+         STDMETHOD_(ULONG, Release)()
+         {
+-                ULONG l = InternalRelease();
++                ULONG l = this->InternalRelease();
+                 if (l == 0)
+                         delete this;
+                 return l;
+@@ -3150,27 +3171,27 @@
+ public:
+         typedef contained _BaseClass;
+         CComCachedTearOffObject(void* pv) :
+-                m_contained(((contained::_OwnerClass*)pv)->GetControllingUnknown())
++                m_contained(((typename contained::_OwnerClass*)pv)->GetControllingUnknown())
+         {
+                 ATLASSERT(m_contained.m_pOwner == NULL);
+-                m_contained.m_pOwner = reinterpret_cast<CComObject<contained::_OwnerClass>*>(pv);
++                m_contained.m_pOwner = reinterpret_cast<CComObject<typename contained::_OwnerClass>*>(pv);
+         }
+         //If you get a message that this call is ambiguous then you need to
+         // override it in your class and call each base class' version of this
+         HRESULT FinalConstruct()
+         {
+-                CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
++                CComObjectRootEx<typename contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
+                 return m_contained.FinalConstruct();
+         }
+         void FinalRelease()
+         {
+-                CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
++                CComObjectRootEx<typename contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
+                 m_contained.FinalRelease();
+         }
+         // Set refcount to 1 to protect destruction
+         ~CComCachedTearOffObject()
+         {
+-                m_dwRef = 1L;
++                this->m_dwRef = 1L;
+                 FinalRelease();
+ #ifdef _ATL_DEBUG_INTERFACES
+                 _Module.DeleteNonAddRefThunk(this);
+@@ -3178,10 +3199,10 @@
+         }
+ 
+ 
+-        STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
++        STDMETHOD_(ULONG, AddRef)() {return this->InternalAddRef();}
+         STDMETHOD_(ULONG, Release)()
+         {
+-                ULONG l = InternalRelease();
++                ULONG l = this->InternalRelease();
+                 if (l == 0)
+                         delete this;
+                 return l;
+@@ -3260,7 +3281,9 @@
+ {
+ public:
+         typedef license _LicenseClass;
+-        typedef CComClassFactory2<license> _ComMapClass;
++        using license::IsLicenseValid;
++        using license::GetLicenseKey;
++//        typedef CComClassFactory2<license> _ComMapClass;
+ BEGIN_COM_MAP(CComClassFactory2<license>)
+         COM_INTERFACE_ENTRY(IClassFactory)
+         COM_INTERFACE_ENTRY(IClassFactory2)
+@@ -3297,7 +3320,7 @@
+                 if (ppvObject == NULL)
+                         return E_POINTER;
+                 *ppvObject = NULL;
+-                if ( ((bstrKey != NULL) && !VerifyLicenseKey(bstrKey)) ||
++                if ( ((bstrKey != NULL) && !this->VerifyLicenseKey(bstrKey)) ||
+                          ((bstrKey == NULL) && !IsLicenseValid()) )
+                         return CLASS_E_NOTLICENSED;
+                 if ((pUnkOuter != NULL) && !InlineIsEqualUnknown(riid))
+@@ -3363,7 +3386,7 @@
+                         if (pUnkOuter != NULL)
+                                 hRes = CLASS_E_NOAGGREGATION;
+                         else
+-                                hRes = _Module.CreateInstance(m_pfnCreateInstance, riid, ppvObj);
++                                hRes = _Module.CreateInstance((LPVOID)m_pfnCreateInstance, riid, ppvObj);
+                 }
+                 return hRes;
+         }
+@@ -3454,6 +3477,7 @@
+                         lpszHelpFile, iid, hRes);
+         }
+ #endif
++#if 0
+         template <class Q>
+         static HRESULT CreateInstance(IUnknown* punkOuter, Q** pp)
+         {
+@@ -3464,6 +3488,7 @@
+         {
+                 return T::_CreatorClass::CreateInstance(NULL, __uuidof(Q), (void**) pp);
+         }
++#endif
+ };
+ 
+ // ATL doesn't support multiple LCID's at the same time
+@@ -3651,7 +3676,7 @@
+                         {
+                                 CComPtr<ITypeInfo> spInfo(spTypeInfo);
+                                 CComPtr<ITypeInfo2> spTypeInfo2;
+-                                if (SUCCEEDED(spTypeInfo->QueryInterface(&spTypeInfo2)))
++                                if (SUCCEEDED(spTypeInfo->QueryInterface(IID_ITypeInfo2, (void**)&spTypeInfo2)))
+                                         spInfo = spTypeInfo2;
+ 
+                                 m_pInfo = spInfo.Detach();
+@@ -3760,6 +3785,9 @@
+ /////////////////////////////////////////////////////////////////////////////
+ // IDispEventImpl
+ 
++template <class T>
++struct _ATL_EVENT_ENTRY;
++
+ #ifdef _ATL_DLL
+ ATLAPI AtlGetObjectSourceInterface(IUnknown* punkObj, GUID* plibid, IID* piid, unsigned short* pdwMajor, unsigned short* pdwMinor);
+ #else
+@@ -3909,16 +3937,17 @@
+ #else
+ 
+ #pragma warning(disable:4740)       // flow in/out of inline disables global opts
+-inline void __declspec(naked) __stdcall CComStdCallThunkHelper()
++inline void __stdcall CComStdCallThunkHelper()
+ {
+-        __asm
+-        {
+-                mov eax, [esp+4];       // get pThunk
+-                mov edx, [eax+4];       // get the pThunk->pThis
+-                mov [esp+4], edx;       // replace pThunk with pThis
+-                mov eax, [eax+8];       // get pThunk->pfn
+-                jmp eax;                // jump pfn
+-        };
++  asm(
++      " movl $8(%ebp), %eax\n"       // get pThunk
++      " movl $4(%eax), edx\n"       // get the pThunk->pThis
++      " movl %edx, $8(%ebp)\n"       // replace pThunk with pThis
++      " movl $8(%eax), %eax\n"       // get pThunk->pfn
++      "	movl %ebp, %esp\n"
++      "	popl %ebp\n"
++      "	jmp %eax"                // jump pfn
++      );
+ }
+ #pragma warning(default:4740)
+ #endif
+@@ -3985,6 +4014,7 @@
+ class ATL_NO_VTABLE IDispEventSimpleImpl : public _IDispEventLocator<nID, pdiid>
+ {
+ public:
++        using _IDispEventLocator<nID, pdiid>::m_dwEventCookie;
+         STDMETHOD(_LocDEQueryInterface)(REFIID riid, void ** ppvObject)
+         {
+                 _ATL_VALIDATE_OUT_POINTER(ppvObject);
+@@ -3992,7 +4022,7 @@
+                 if (InlineIsEqualGUID(riid, *pdiid) || 
+                         InlineIsEqualUnknown(riid) ||
+                         InlineIsEqualGUID(riid, IID_IDispatch) ||
+-                        InlineIsEqualGUID(riid, m_iid))
++                        InlineIsEqualGUID(riid, this->m_iid))
+                 {
+                         *ppvObject = this;
+                         AddRef();
+@@ -4186,6 +4216,10 @@
+ {
+ public:
+         typedef tihclass _tihclass;
++        using IDispEventSimpleImpl<nID, T, pdiid>::m_libid;
++        using IDispEventSimpleImpl<nID, T, pdiid>::m_iid;
++        using IDispEventSimpleImpl<nID, T, pdiid>::m_wMajorVerNum;
++        using IDispEventSimpleImpl<nID, T, pdiid>::m_wMinorVerNum;
+ 
+         IDispEventImpl()
+         {
+@@ -4475,6 +4509,11 @@
+         }
+ };
+ 
++template <class Base, const IID* piid, class T, class Copy, class ThreadModel = CComObjectThreadModel>
++class ATL_NO_VTABLE CComEnum;
++template <class Base, const IID* piid, class T, class Copy, class CollType, class ThreadModel = CComObjectThreadModel>
++class ATL_NO_VTABLE CComEnumOnSTL;
++
+ 
+ /////////////////////////////////////////////////////////////////////////////
+ // CComEnumImpl
+@@ -4746,7 +4785,7 @@
+         return S_OK;
+ }
+ 
+-template <class Base, const IID* piid, class T, class Copy, class ThreadModel = CComObjectThreadModel>
++template <class Base, const IID* piid, class T, class Copy, class ThreadModel>
+ class ATL_NO_VTABLE CComEnum :
+         public CComEnumImpl<Base, piid, T, Copy>,
+         public CComObjectRootEx< ThreadModel >
+@@ -4868,7 +4907,7 @@
+         return hRes;
+ }
+ 
+-template <class Base, const IID* piid, class T, class Copy, class CollType, class ThreadModel = CComObjectThreadModel>
++template <class Base, const IID* piid, class T, class Copy, class CollType, class ThreadModel>
+ class ATL_NO_VTABLE CComEnumOnSTL :
+         public IEnumOnSTLImpl<Base, piid, T, Copy, CollType>,
+         public CComObjectRootEx< ThreadModel >
+@@ -4901,7 +4940,7 @@
+                         return E_INVALIDARG;                        
+                 HRESULT hr = E_FAIL;
+                 Index--;
+-                CollType::iterator iter = m_coll.begin();
++                typename CollType::iterator iter = m_coll.begin();
+                 while (iter != m_coll.end() && Index > 0)
+                 {
+                         iter++;
+@@ -5314,7 +5353,7 @@
+                 if (InlineIsEqualGUID(riid, IID_IConnectionPoint) || InlineIsEqualUnknown(riid))
+                 {
+                         *ppvObject = this;
+-                        AddRef();
++                        this->AddRef();
+ #ifdef _ATL_DEBUG_INTERFACES
+                         _Module.AddThunk((IUnknown**)ppvObject, _T("IConnectionPointImpl"), riid);
+ #endif // _ATL_DEBUG_INTERFACES
+--- include/atl/atlconv.h.orig	2005-04-14 17:54:32.000000000 +0900
++++ include/atl/atlconv.h	2007-12-31 07:29:34.759750000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLCONV_H__
+ #define __ATLCONV_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -30,7 +33,11 @@
+ // Following code is to avoid alloca causing a stack overflow.
+ // It is intended for use from the _ATL_SAFE_ALLOCA macros 
+ // or Conversion macros.
+-__declspec(selectany) DWORD _Atlosplatform = 0;
++#ifdef _INIT_ATL_COMMON_VARS
++DWORD _Atlosplatform = 0;
++#else
++extern DWORD _Atlosplatform;
++#endif
+ inline BOOL _AtlGetVersionEx()
+ {
+         OSVERSIONINFO osi;
+@@ -156,8 +163,11 @@
+ #pragma prefast(suppress:515, "Atlresetstkoflw is the same as resetstkoflw")
+ 
+ // Verifies if sufficient space is available on the stack.
+-inline bool _AtlVerifyStackAvailable(SIZE_T Size)
++inline bool _AtlVerifyStackAvailable(SIZE_T /*Size*/)
+ {
++#if 1
++    return false;
++#else
+     bool bStackAvailable = true;
+ 
+     __try
+@@ -173,6 +183,7 @@
+         _Atlresetstkoflw();
+     }
+     return bStackAvailable;
++#endif
+ }
+ 
+ #pragma prefast(pop)
+@@ -281,15 +292,15 @@
+ 
+ #ifdef _CONVERSION_USES_THREAD_LOCALE
+         #ifndef _DEBUG
+-                #define USES_CONVERSION int _convert; _convert; UINT _acp = GetACP(); _acp; LPCWSTR _lpw; _lpw; LPCSTR _lpa; _lpa
++                #define USES_CONVERSION int _convert; (void)_convert; UINT _acp = GetACP(); (void)_acp; LPCWSTR _lpw; (void)_lpw; LPCSTR _lpa; (void)_lpa
+         #else
+-                #define USES_CONVERSION int _convert = 0; _convert; UINT _acp = GetACP(); _acp; LPCWSTR _lpw = NULL; _lpw; LPCSTR _lpa = NULL; _lpa
++                #define USES_CONVERSION int _convert = 0; (void)_convert; UINT _acp = GetACP(); (void)_acp; LPCWSTR _lpw = NULL; (void)_lpw; LPCSTR _lpa = NULL; (void)_lpa
+         #endif
+ #else
+         #ifndef _DEBUG
+-                #define USES_CONVERSION int _convert; _convert; UINT _acp = CP_ACP; _acp; LPCWSTR _lpw; _lpw; LPCSTR _lpa; _lpa
++                #define USES_CONVERSION int _convert; (void)_convert; UINT _acp = CP_ACP; (void)_acp; LPCWSTR _lpw; (void)_lpw; LPCSTR _lpa; (void)_lpa
+         #else
+-                #define USES_CONVERSION int _convert = 0; _convert; UINT _acp = CP_ACP; _acp; LPCWSTR _lpw = NULL; _lpw; LPCSTR _lpa = NULL; _lpa
++                #define USES_CONVERSION int _convert = 0; (void)_convert; UINT _acp = CP_ACP; (void)_acp; LPCWSTR _lpw = NULL; (void)_lpw; LPCSTR _lpa = NULL; (void)_lpa
+         #endif
+ #endif
+ 
+--- include/atl/atlctl.h.orig	2005-04-14 17:54:32.000000000 +0900
++++ include/atl/atlctl.h	2009-04-19 13:31:15.146000000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLCTL_H__
+ #define __ATLCTL_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -57,7 +60,7 @@
+ namespace ATL
+ {
+ 
+-#pragma pack(push, _ATL_PACKING)
++#pragma pack(push, 8)
+ 
+ // Forward declarations
+ //
+@@ -142,7 +145,9 @@
+         CComControlBase(HWND& h) : m_hWndCD(h)
+         {
+                 memset(this, 0, sizeof(CComControlBase));
+-                m_phWndCD = &h;
++		// previous element of m_hWndCD in this class is m_rcPos
++		*reinterpret_cast<HWND **>(reinterpret_cast<DWORD>(reinterpret_cast<char *>(&m_rcPos)+sizeof(m_rcPos)+(__alignof__(m_hWndCD)-1))&(-(__alignof__(m_hWndCD))))=&h;
++//                m_phWndCD = &h;
+                 m_sizeExtent.cx = 2*2540;
+                 m_sizeExtent.cy = 2*2540;
+                 m_sizeNatural = m_sizeExtent;
+@@ -530,13 +535,13 @@
+         SIZE m_sizeNatural; //unscaled size in himetric
+         SIZE m_sizeExtent;  //current extents in himetric
+         RECT m_rcPos; // position in pixels
+-#pragma warning(disable: 4510 4610) // unnamed union
+-        union
+-        {
++//#pragma warning(disable: 4510 4610) // unnamed union
++//        union
++//        {
+                 HWND& m_hWndCD;
+-                HWND* m_phWndCD;
+-        };
+-#pragma warning(default: 4510 4610)
++//                HWND* m_phWndCD;
++//        };
++//#pragma warning(default: 4510 4610)
+         union
+         {
+                 // m_nFreezeEvents is the only one actually used
+@@ -1362,7 +1367,7 @@
+ class ATL_NO_VTABLE CComControl :  public CComControlBase, public WinBase
+ {
+ public:
+-        CComControl() : CComControlBase(m_hWnd) {}
++        CComControl() : CComControlBase(this->m_hWnd) {}
+         HRESULT FireOnRequestEdit(DISPID dispID)
+         {
+                 T* pT = static_cast<T*>(this);
+@@ -1401,6 +1406,8 @@
+ class CComCompositeControl : public CComControl< T, CAxDialogImpl< T > >
+ {
+ public:
++        using CComControl< T, CAxDialogImpl< T > >::m_hWnd;
++        using CComControl< T, CAxDialogImpl< T > >::GetNextDlgTabItem;
+         CComCompositeControl()
+         {
+                 m_hbrBackground = NULL;
+@@ -1429,7 +1436,7 @@
+                         m_hbrBackground = NULL;
+                 }
+                 OLE_COLOR clr;
+-                HRESULT hr = GetAmbientBackColor(clr);
++                HRESULT hr = this->GetAmbientBackColor(clr);
+                 if (SUCCEEDED(hr))
+                 {
+                         COLORREF rgb;
+@@ -1443,7 +1450,7 @@
+         {
+                 CAxWindow wnd(hwnd);
+                 CComPtr<IAxWinAmbientDispatch> spDispatch;
+-                wnd.QueryHost(&spDispatch);
++                wnd.QueryHost(IID_IAxWinAmbientDispatch, (void**)&spDispatch);
+                 if (spDispatch != NULL)
+                         spDispatch->put_BackColor((OLE_COLOR)l);
+                 return TRUE;
+@@ -1458,10 +1465,10 @@
+         }
+         HWND Create(HWND hWndParent, RECT& /*rcPos*/, LPARAM dwInitParam = NULL)
+         {
+-                CComControl< T, CAxDialogImpl< T > >::Create(hWndParent, dwInitParam);
++                this->Create(hWndParent, dwInitParam);
+                 SetBackgroundColorFromAmbient();
+                 if (m_hWnd != NULL)
+-                        ShowWindow(SW_SHOWNOACTIVATE);
++                        this->ShowWindow(SW_SHOWNOACTIVATE);
+                 return m_hWnd;
+         }
+         BOOL CalcExtent(SIZE& size)
+@@ -1488,7 +1495,7 @@
+                         return FALSE;
+                 // find a direct child of the dialog from the window that has focus
+                 HWND hWndCtl = ::GetFocus();
+-                if (IsChild(hWndCtl) && ::GetParent(hWndCtl) != m_hWnd)
++                if (this->IsChild(hWndCtl) && ::GetParent(hWndCtl) != m_hWnd)
+                 {
+                         do
+                         {
+@@ -1546,7 +1553,7 @@
+                         break;
+                 }
+ 
+-                return IsDialogMessage(pMsg);
++                return this->IsDialogMessage(pMsg);
+         }
+         HRESULT IOleInPlaceObject_InPlaceDeactivate(void)
+         {
+@@ -1563,7 +1570,7 @@
+         }
+         virtual HRESULT OnDraw(ATL_DRAWINFO& di)
+         {
+-                if(!m_bInPlaceActive)
++                if(!this->m_bInPlaceActive)
+                 {
+                         HPEN hPen = (HPEN)::GetStockObject(BLACK_PEN);
+                         HBRUSH hBrush = (HBRUSH)::GetStockObject(GRAY_BRUSH);
+@@ -1626,7 +1633,7 @@
+         }
+         STDMETHOD(OnAmbientPropertyChange)(DISPID dispid)
+         {
+-                dispid;
++                (void)dispid;
+                 ATLTRACE2(atlTraceControls,2,_T("IOleControlImpl::OnAmbientPropertyChange\n"));
+                 ATLTRACE2(atlTraceControls,2,_T(" -- DISPID = %d (%d)\n"), dispid);
+                 return S_OK;
+@@ -2905,7 +2912,7 @@
+                 ATLTRACE2(atlTraceControls,2,_T("~CBindStatusCallback\n"));
+         }
+ 
+-        STDMETHOD(OnStartBinding)(DWORD dwReserved, IBinding *pBinding)
++        STDMETHOD(OnStartBinding)(DWORD /*dwReserved*/, IBinding *pBinding)
+         {
+                 ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnStartBinding\n"));
+                 m_spBinding = pBinding;
+@@ -2923,19 +2930,19 @@
+                 return S_OK;
+         }
+ 
+-        STDMETHOD(OnLowResource)(DWORD reserved)
++        STDMETHOD(OnLowResource)(DWORD /*reserved*/)
+         {
+                 ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnLowResource"));
+                 return S_OK;
+         }
+ 
+-        STDMETHOD(OnProgress)(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR szStatusText)
++        STDMETHOD(OnProgress)(ULONG /*ulProgress*/, ULONG /*ulProgressMax*/, ULONG /*ulStatusCode*/, LPCWSTR /*szStatusText*/)
+         {
+                 ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnProgress"));
+                 return S_OK;
+         }
+ 
+-        STDMETHOD(OnStopBinding)(HRESULT hresult, LPCWSTR szError)
++        STDMETHOD(OnStopBinding)(HRESULT /*hresult*/, LPCWSTR /*szError*/)
+         {
+                 ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnStopBinding\n"));
+                 (m_pT->*m_pFunc)(this, NULL, 0);
+@@ -2962,7 +2969,7 @@
+                 return S_OK;
+         }
+ 
+-        STDMETHOD(OnDataAvailable)(DWORD grfBSCF, DWORD dwSize, FORMATETC *pformatetc, STGMEDIUM *pstgmed)
++        STDMETHOD(OnDataAvailable)(DWORD grfBSCF, DWORD dwSize, FORMATETC */*pformatetc*/, STGMEDIUM *pstgmed)
+         {
+                 ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnDataAvailable\n"));
+                 HRESULT hr = S_OK;
+@@ -3005,7 +3012,7 @@
+                 return hr;
+         }
+ 
+-        STDMETHOD(OnObjectAvailable)(REFIID riid, IUnknown *punk)
++        STDMETHOD(OnObjectAvailable)(REFIID /*riid*/, IUnknown */*punk*/)
+         {
+                 ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnObjectAvailable"));
+                 return S_OK;
+--- include/atl/atlwin.h.orig	2005-04-14 17:54:32.000000000 +0900
++++ include/atl/atlwin.h	2007-12-31 07:29:28.525375000 +0900
+@@ -10,6 +10,9 @@
+ 
+ #ifndef __ATLWIN_H__
+ #define __ATLWIN_H__
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ 
+ #ifndef __cplusplus
+         #error ATL requires C++ compilation (use a .cpp suffix)
+@@ -99,6 +102,8 @@
+ #else
+ #define CWndClassInfo CWndClassInfoA
+ #endif
++template <DWORD t_dwStyle = 0, DWORD t_dwExStyle = 0> class CWinTraits;
++typedef CWinTraits<WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0>                                        CControlWinTraits;
+ template <class T, class TBase = CWindow, class TWinTraits = CControlWinTraits> class CWindowImpl;
+ template <class T, class TBase = CWindow> class CDialogImpl;
+ #ifndef _ATL_NO_HOSTING
+@@ -658,6 +663,13 @@
+                 ATLASSERT(::IsWindow(m_hWnd));
+                 return ::GetDlgItemText(m_hWnd, nID, lpStr, nMaxCount);
+         }
++
++        HWND GetDlgItem(int nID) const
++        {
++                ATLASSERT(::IsWindow(m_hWnd));
++                return ::GetDlgItem(m_hWnd, nID);
++        }
++
+         BOOL GetDlgItemText(int nID, BSTR& bstrText) const
+         {
+                 ATLASSERT(::IsWindow(m_hWnd));
+@@ -847,12 +859,6 @@
+                 return (int)::SetWindowLong(m_hWnd, GWL_ID, nID);
+         }
+ 
+-        HWND GetDlgItem(int nID) const
+-        {
+-                ATLASSERT(::IsWindow(m_hWnd));
+-                return ::GetDlgItem(m_hWnd, nID);
+-        }
+-
+ // Alert Functions
+ 
+         BOOL FlashWindow(BOOL bInvert)
+@@ -1319,7 +1325,9 @@
+         }
+ };
+ 
+-_declspec(selectany) RECT CWindow::rcDefault = { CW_USEDEFAULT, CW_USEDEFAULT, 0, 0 };
++#ifdef _INIT_ATL_COMMON_VARS
++RECT CWindow::rcDefault = { CW_USEDEFAULT, CW_USEDEFAULT, 0, 0 };
++#endif
+ 
+ /////////////////////////////////////////////////////////////////////////////
+ // CAxWindow - client side for an ActiveX host window
+@@ -1330,6 +1338,7 @@
+ class CAxWindowT : public TBase
+ {
+ public:
++        using TBase::m_hWnd;
+ // Constructors
+         CAxWindowT(HWND hWnd = NULL) : TBase(hWnd)
+         { }
+@@ -1439,11 +1448,13 @@
+                         hr = spUnk->QueryInterface(iid, ppUnk);
+                 return hr;
+         }
++#if 0
+         template <class Q>
+         HRESULT QueryHost(Q** ppUnk)
+         {
+                 return QueryHost(__uuidof(Q), (void**)ppUnk);
+         }
++#endif
+         HRESULT QueryControl(REFIID iid, void** ppUnk)
+         {
+                 ATLASSERT(ppUnk != NULL);
+@@ -1459,11 +1470,13 @@
+                         hr = spUnk->QueryInterface(iid, ppUnk);
+                 return hr;
+         }
++#if 0
+         template <class Q>
+         HRESULT QueryControl(Q** ppUnk)
+         {
+                 return QueryControl(__uuidof(Q), (void**)ppUnk);
+         }
++#endif
+         HRESULT SetExternalDispatch(IDispatch* pDisp)
+         {
+                 HRESULT hr;
+@@ -1521,12 +1534,12 @@
+         BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID = 0) \
+         { \
+                 BOOL bHandled = TRUE; \
+-                hWnd; \
+-                uMsg; \
+-                wParam; \
+-                lParam; \
+-                lResult; \
+-                bHandled; \
++                (void)hWnd; \
++                (void)uMsg; \
++                (void)wParam; \
++                (void)lParam; \
++                (void)lResult; \
++                (void)bHandled; \
+                 switch(dwMsgMapID) \
+                 { \
+                 case 0:
+@@ -1750,7 +1763,7 @@
+ 
+         // search for an empty one
+ 
+-                for(i = 0; i < m_aChainEntry.GetSize(); i++)
++                for(int i = 0; i < m_aChainEntry.GetSize(); i++)
+                 {
+                         if(m_aChainEntry[i] == NULL)
+                         {
+@@ -1841,7 +1854,7 @@
+ /////////////////////////////////////////////////////////////////////////////
+ // CWinTraits - Defines various default values for a window
+ 
+-template <DWORD t_dwStyle = 0, DWORD t_dwExStyle = 0>
++template <DWORD t_dwStyle, DWORD t_dwExStyle>
+ class CWinTraits
+ {
+ public:
+@@ -1855,7 +1868,7 @@
+         }
+ };
+ 
+-typedef CWinTraits<WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0>                                        CControlWinTraits;
++//typedef CWinTraits<WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0>                                        CControlWinTraits;
+ typedef CWinTraits<WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_APPWINDOW | WS_EX_WINDOWEDGE>                CFrameWinTraits;
+ typedef CWinTraits<WS_OVERLAPPEDWINDOW | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_MDICHILD>        CMDIChildWinTraits;
+ 
+@@ -1882,6 +1895,7 @@
+ class ATL_NO_VTABLE CWindowImplRoot : public TBase, public CMessageMap
+ {
+ public:
++        using TBase::GetDlgItem;
+         CWndProcThunk m_thunk;
+         const MSG* m_pCurrentMsg;
+ 
+@@ -1892,7 +1906,7 @@
+         ~CWindowImplRoot()
+         {
+ #ifdef _DEBUG
+-                if(m_hWnd != NULL)        // should be cleared in WindowProc
++                if(this->m_hWnd != NULL)        // should be cleared in WindowProc
+                 {
+                         ATLTRACE2(atlTraceWindowing, 0, _T("ERROR - Object deleted before window was destroyed\n"));
+                         ATLASSERT(FALSE);
+@@ -2017,6 +2031,8 @@
+ class ATL_NO_VTABLE CWindowImplBaseT : public CWindowImplRoot< TBase >
+ {
+ public:
++        using CWindowImplRoot< TBase >::m_hWnd;
++        using CWindowImplRoot< TBase >::m_thunk;
+         WNDPROC m_pfnSuperWindowProc;
+ 
+         CWindowImplBaseT() : m_pfnSuperWindowProc(::DefWindowProc)
+@@ -2049,7 +2065,7 @@
+ 
+         LRESULT DefWindowProc()
+         {
+-                const MSG* pMsg = m_pCurrentMsg;
++                const MSG* pMsg = this->m_pCurrentMsg;
+                 LRESULT lRes = 0;
+                 if (pMsg != NULL)
+                         lRes = DefWindowProc(pMsg->message, pMsg->wParam, pMsg->lParam);
+@@ -2091,7 +2107,7 @@
+         if(pOldProc != StartWindowProc)
+                 ATLTRACE2(atlTraceWindowing, 0, _T("Subclassing through a hook discarded.\n"));
+ #else
+-        pOldProc;        // avoid unused warning
++        (void)pOldProc;        // avoid unused warning
+ #endif
+         return pProc(hWnd, uMsg, wParam, lParam);
+ }
+@@ -2219,6 +2235,7 @@
+ class ATL_NO_VTABLE CWindowImpl : public CWindowImplBaseT< TBase, TWinTraits >
+ {
+ public:
++        using CWindowImplBaseT< TBase, TWinTraits >::StartWindowProc;
+         DECLARE_WND_CLASS(NULL)
+ 
+         HWND Create(HWND hWndParent, RECT& rcPos, LPCTSTR szWindowName = NULL,
+@@ -2226,8 +2243,8 @@
+                         UINT nID = 0, LPVOID lpCreateParam = NULL)
+         {
+                 if (T::GetWndClassInfo().m_lpszOrigName == NULL)
+-                        T::GetWndClassInfo().m_lpszOrigName = GetWndClassName();
+-                ATOM atom = T::GetWndClassInfo().Register(&m_pfnSuperWindowProc);
++                        T::GetWndClassInfo().m_lpszOrigName = this->GetWndClassName();
++                ATOM atom = T::GetWndClassInfo().Register(&(this->m_pfnSuperWindowProc));
+ 
+                 dwStyle = T::GetWndStyle(dwStyle);
+                 dwExStyle = T::GetWndExStyle(dwExStyle);
+@@ -2244,6 +2261,7 @@
+ class ATL_NO_VTABLE CDialogImplBaseT : public CWindowImplRoot< TBase >
+ {
+ public:
++        using CWindowImplRoot< TBase >::m_hWnd;
+ 	virtual DLGPROC GetDialogProc()
+ 	{
+ 		return DialogProc;
+@@ -2344,6 +2362,9 @@
+ class ATL_NO_VTABLE CDialogImpl : public CDialogImplBaseT< TBase >
+ {
+ public:
++        using CDialogImplBaseT< TBase >::m_hWnd;
++        using CDialogImplBaseT< TBase >::m_thunk;
++        typedef CDialogImplBaseT< TBase > CDialogImplBase_Class;
+ #ifdef _DEBUG
+         bool m_bModal;
+         CDialogImpl() : m_bModal(false) { }
+@@ -2422,6 +2443,8 @@
+ class ATL_NO_VTABLE CAxDialogImpl : public CDialogImplBaseT< TBase >
+ {
+ public:
++        using CDialogImplBaseT< TBase >::m_hWnd;
++        using CDialogImplBaseT< TBase >::m_thunk;
+ #ifdef _DEBUG
+         bool m_bModal;
+         CAxDialogImpl() : m_bModal(false) { }
+@@ -2515,6 +2538,8 @@
+ class CContainedWindowT : public TBase
+ {
+ public:
++        using TBase::m_hWnd;
++        using TBase::GetWndClassName;
+         CWndProcThunk m_thunk;
+         LPCTSTR m_lpszClassName;
+         WNDPROC m_pfnSuperWindowProc;
+@@ -2536,7 +2561,7 @@
+         { }
+ 
+         CContainedWindowT(CMessageMap* pObject, DWORD dwMsgMapID = 0)
+-                : m_lpszClassName(TBase::GetWndClassName()),
++                : m_lpszClassName(GetWndClassName()),
+                 m_pfnSuperWindowProc(::DefWindowProc),
+                 m_pObject(pObject), m_dwMsgMapID(dwMsgMapID),
+                 m_pCurrentMsg(NULL)
+@@ -2666,7 +2691,7 @@
+                 LPCTSTR szWindowName = NULL, DWORD dwStyle = 0, DWORD dwExStyle = 0,
+                 UINT nID = 0, LPVOID lpCreateParam = NULL)
+         {
+-                m_lpszClassName = TBase::GetWndClassName();
++                m_lpszClassName = GetWndClassName();
+                 m_pfnSuperWindowProc = ::DefWindowProc;
+                 m_pObject = pObject;
+                 m_dwMsgMapID = dwMsgMapID;
+@@ -2959,8 +2984,11 @@
+         {
+ 
+                 ::EnterCriticalSection(&pM->m_csWindowCreate);
+-                __try 
++                jmp_buf _sejmpbuf;
++                __SEHandler _sehandler;
++                if (__builtin_setjmp(_sejmpbuf) == 0)
+                 {
++                        _sehandler.Set(_sejmpbuf, &pM->m_csWindowCreate, EXCEPTION_CONTINUE_SEARCH, NULL, atlfinalleavecriticalsection);
+                         if(p->m_atom == 0)
+                         {
+                                 HINSTANCE hInst = pM->m_hInst;
+@@ -2979,7 +3007,7 @@
+                                                 if(!::GetClassInfoExA(_Module.GetModuleInstance(), p->m_lpszOrigName, &wc))
+                                                 {
+                                                         fFail = TRUE;
+-                                                        __leave;
++                                                        __builtin_longjmp(_sejmpbuf, 1);
+                                                 }
+                                         }
+                                         memcpy(&p->m_wc, &wc, sizeof(WNDCLASSEX));
+@@ -3011,10 +3039,7 @@
+                                         p->m_atom = ::RegisterClassExA(&p->m_wc);
+                         }
+                 }
+-                __finally 
+-                {
+-                        ::LeaveCriticalSection(&pM->m_csWindowCreate);
+-                }
++                _sehandler.Reset();
+         }
+ 
+         if (fFail)
+@@ -3038,8 +3063,11 @@
+         if (p->m_atom == 0)
+         {
+                 ::EnterCriticalSection(&pM->m_csWindowCreate);        
+-                __try
++                jmp_buf _sejmpbuf;
++                __SEHandler _sehandler;
++                if (__builtin_setjmp(_sejmpbuf) == 0)
+                 {
++                        _sehandler.Set(_sejmpbuf, &pM->m_csWindowCreate, EXCEPTION_CONTINUE_SEARCH, NULL, atlfinalleavecriticalsection);
+                         if(p->m_atom == 0)
+                         {
+                                 HINSTANCE hInst = pM->m_hInst;
+@@ -3058,7 +3086,7 @@
+                                                 if(!::GetClassInfoExW(_Module.GetModuleInstance(), p->m_lpszOrigName, &wc))
+                                                 {
+                                                         fFail = TRUE;
+-                                                        __leave;
++                                                        __builtin_longjmp(_sejmpbuf, -1);
+                                                 }
+                                         }
+                                         memcpy(&p->m_wc, &wc, sizeof(WNDCLASSEX));
+@@ -3090,10 +3118,7 @@
+                                         p->m_atom = ::RegisterClassExW(&p->m_wc);
+                         }
+                 }
+-                __finally
+-                {
+-                        ::LeaveCriticalSection(&pM->m_csWindowCreate);
+-                }
++                _sehandler.Reset();
+         }
+ 
+         if (fFail)
+--- include/atl/statreg.h.orig	2005-04-14 17:54:34.000000000 +0900
++++ include/atl/statreg.h	2006-09-18 20:05:01.468750000 +0900
+@@ -573,15 +573,16 @@
+         return hRes;
+ }
+ 
+-__declspec(selectany) LPCTSTR CRegParser::rgszNeverDelete[] = //Component Catagories
++#ifdef _INIT_ATL_COMMON_VARS
++LPCTSTR CRegParser::rgszNeverDelete[] = //Component Catagories
+ {
+         _T("CLSID"), _T("TYPELIB")
+ };
+ 
+-__declspec(selectany) const int CRegParser::cbNeverDelete = sizeof(rgszNeverDelete) / sizeof(LPCTSTR*);
+-__declspec(selectany) const int CRegParser::MAX_VALUE=4096;
+-__declspec(selectany) const int CRegParser::MAX_TYPE=MAX_VALUE;
+-
++const int CRegParser::cbNeverDelete = sizeof(rgszNeverDelete) / sizeof(LPCTSTR*);
++const int CRegParser::MAX_VALUE=4096;
++const int CRegParser::MAX_TYPE=MAX_VALUE;
++#endif
+ 
+ inline BOOL CRegParser::VTFromRegType(LPCTSTR szValueType, VARTYPE& vt)
+ {

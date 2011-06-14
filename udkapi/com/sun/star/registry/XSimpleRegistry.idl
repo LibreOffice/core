@@ -1,0 +1,148 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_registry_XSimpleRegistry_idl__
+#define __com_sun_star_registry_XSimpleRegistry_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/registry/InvalidRegistryException.idl>
+#include <com/sun/star/registry/XRegistryKey.idl>
+#include <com/sun/star/registry/MergeConflictException.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module registry {
+
+//=============================================================================
+/** allows access to a registry (a persistent data source).
+    The data is stored in a hierarchical key structure beginning with a root key.
+    Each key can store a value and can have multiple subkeys.
+
+    @see XRegistryKey
+*/
+published interface XSimpleRegistry: com::sun::star::uno::XInterface
+{
+    //---------------------------------------------------------------------
+    /** returns the URL of the current data source of the registry.
+     */
+    string  getURL();
+
+    //-------------------------------------------------------------------------
+    /** connects the registry to a persistent data source represented by
+        an URL.
+
+        <p>If a local registry is already open, this function
+        will close the currently open registry.
+
+        @param aURL
+        specifies the complete URL to access the data source.
+
+        @param bReadOnly
+        specifies if the data source should be opened for
+        read only.
+
+        @param bCreate
+        specifies if the data source should be created if it
+        does not already exist.
+
+        @throws InvalidRegistryException
+        if the registry does not exist.
+    */
+    void open( [in] string rURL,
+             [in] boolean bReadOnly,
+             [in] boolean bCreate )
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** checks if the registry points to a valid data-source.
+    */
+    boolean isValid();
+
+    //-------------------------------------------------------------------------
+    /** disconnects the registry from the data-source.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+    */
+    void close()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** destroys the registry and the data source.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+    */
+    void destroy()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** @returns
+        the root key of the registry.
+
+        @throws InvalidRegistryException
+        if no registry is open
+    */
+    com::sun::star::registry::XRegistryKey getRootKey()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** checks if the registry is readonly.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+    */
+    boolean isReadOnly()
+            raises( com::sun::star::registry::InvalidRegistryException );
+
+    //-------------------------------------------------------------------------
+    /** DEPRECATED: this method lacks a registry key (better than a URL).
+
+        merges a registry under the specified key.
+
+        <p>If the key does not exist it will be created. Existing
+        keys will be overridden from keys of registry specified by
+        <var>aUrl</var>.
+
+        @throws InvalidRegistryException
+        if the registry is not open.
+
+        @throws MergeConflictException
+        if any differences occur during merging
+    */
+    void mergeKey( [in] string aKeyName,
+             [in] string aUrl )
+            raises( com::sun::star::registry::InvalidRegistryException,
+                    com::sun::star::registry::MergeConflictException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

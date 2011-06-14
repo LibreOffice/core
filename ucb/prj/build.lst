@@ -1,0 +1,21 @@
+uc ucb : cppuhelper CURL:curl OPENSSL:openssl NEON:neon LIBXML2:libxml2 LIBXSLT:libxslt offapi sal salhelper ucbhelper udkapi comphelper tools NULL
+uc	ucb							usr1	-	all	uc_mkout NULL
+uc	ucb\inc					    nmake	-	all	uc_inc NULL
+uc	ucb\source\regexp		    nmake	-	all	uc_regexp uc_inc NULL
+uc	ucb\source\core			    nmake	-	all	uc_core uc_regexp uc_inc NULL
+uc	ucb\source\cacher		    nmake	-	all	uc_cacher uc_inc NULL
+uc	ucb\source\sorter		    nmake	-	all	uc_sorter uc_inc NULL
+uc	ucb\source\ucp\ftp		    nmake	-	all	uc_ftp uc_inc NULL
+uc	ucb\source\ucp\file		    nmake	-	all	uc_file uc_inc NULL
+uc	ucb\source\ucp\gvfs			nmake	- 	u 	uc_gvfs uc_inc NULL
+uc	ucb\source\ucp\gio			nmake	- 	u 	uc_gio uc_inc NULL
+uc	ucb\source\ucp\hierarchy	nmake	-	all	uc_hierarchy uc_inc NULL
+uc	ucb\source\ucp\webdav		nmake	-	all	uc_webdav uc_inc NULL
+uc	ucb\source\ucp\package		nmake	-	all	uc_package uc_inc NULL
+uc	ucb\source\ucp\tdoc			nmake	-	all	uc_tdoc uc_inc NULL
+uc	ucb\source\ucp\expand		nmake	-	all	uc_expand uc_inc NULL
+uc	ucb\source\ucp\ext		    nmake	-	all	uc_ext uc_inc NULL
+uc	ucb\source\ucp\odma			nmake	-	w	uc_odma uc_inc NULL
+#uc      ucb\qa\complex\ucb              nmake   -       all     uc_complex_ucb uc_inc NULL
+# fails, please fix
+# uc      ucb\qa\complex\tdoc             nmake   -       all     uc_complex_tdoc uc_complex_tdoc_interfaces uc_inc NULL

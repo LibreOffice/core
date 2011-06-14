@@ -1,0 +1,73 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef CHART2_DLG_INSERT_DATALABELS_GRID_HXX
+#define CHART2_DLG_INSERT_DATALABELS_GRID_HXX
+
+// header for class ModalDialog
+#include <vcl/dialog.hxx>
+// header for class CheckBox
+#include <vcl/button.hxx>
+// header for class SfxItemSet
+#include <svl/itemset.hxx>
+//for auto_ptr
+#include <memory>
+
+class SvNumberFormatter;
+
+//.............................................................................
+namespace chart
+{
+//.............................................................................
+
+class DataLabelResources;
+class DataLabelsDialog : public ModalDialog
+{
+private:
+    OKButton            m_aBtnOK;
+    CancelButton        m_aBtnCancel;
+    HelpButton          m_aBtnHelp;
+    ::std::auto_ptr< DataLabelResources >    m_apDataLabelResources;
+
+    const SfxItemSet&   m_rInAttrs;
+
+    void Reset();
+
+public:
+    DataLabelsDialog(Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
+    virtual ~DataLabelsDialog();
+
+    void FillItemSet(SfxItemSet& rOutAttrs);
+};
+
+//.............................................................................
+} //namespace chart
+//.............................................................................
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

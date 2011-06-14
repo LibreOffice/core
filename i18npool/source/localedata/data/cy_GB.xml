@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="yes" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>cy</LangID>
+      <DefaultName>Welsh</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>GB</CountryID>
+      <DefaultName>United Kingdom</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="en_GB" />
+  <LC_FORMAT ref="en_GB" replaceFrom="[CURRENCY]" replaceTo="[$£-452]" />
+  <LC_COLLATION ref="en_GB" />
+  <LC_SEARCH ref="en_GB"/>
+  <LC_INDEX ref="en_US"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Sul</DefaultAbbrvName>
+          <DefaultFullName>Dydd Sul</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Llun</DefaultAbbrvName>
+          <DefaultFullName>Dydd Llun</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Maw</DefaultAbbrvName>
+          <DefaultFullName>Dydd Mawrth</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Mer</DefaultAbbrvName>
+          <DefaultFullName>Dydd Mercher</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Iau</DefaultAbbrvName>
+          <DefaultFullName>Dydd Iau</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Gwen</DefaultAbbrvName>
+          <DefaultFullName>Dydd Gwener</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sad</DefaultAbbrvName>
+          <DefaultFullName>Dydd Sadwrn</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Ion</DefaultAbbrvName>
+          <DefaultFullName>Ionawr</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Chwef</DefaultAbbrvName>
+          <DefaultFullName>Chwefror</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mawrth</DefaultAbbrvName>
+          <DefaultFullName>Mawrth</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Ebrill</DefaultAbbrvName>
+          <DefaultFullName>Ebrill</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Mai</DefaultAbbrvName>
+          <DefaultFullName>Mai</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Meh</DefaultAbbrvName>
+          <DefaultFullName>Mehefin</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Gorff</DefaultAbbrvName>
+          <DefaultFullName>Gorffenaf</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Awst</DefaultAbbrvName>
+          <DefaultFullName>Awst</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Medi</DefaultAbbrvName>
+          <DefaultFullName>Medi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Hyd</DefaultAbbrvName>
+          <DefaultFullName>Hydref</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Tach</DefaultAbbrvName>
+          <DefaultFullName>Tachwedd</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Rhag</DefaultAbbrvName>
+          <DefaultFullName>Rhagfyr</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>BCE</DefaultAbbrvName>
+          <DefaultFullName>BC</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>CE</DefaultAbbrvName>
+          <DefaultFullName>AD</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="en_GB" />
+  <LC_TRANSLITERATION ref="en_GB"/>
+  <LC_MISC ref="en_GB"/>
+  <LC_NumberingLevel ref="en_GB"/>
+  <LC_OutLineNumberingLevel ref="en_GB"/>
+</Locale>

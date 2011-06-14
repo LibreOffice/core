@@ -1,0 +1,65 @@
+#ifndef com_sun_star_chart2_IncrementData_idl
+#define com_sun_star_chart2_IncrementData_idl
+
+#include <com/sun/star/chart2/SubIncrement.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module chart2 {
+
+//=============================================================================
+
+/** An IncrementData describes how tickmarks are positioned on the scale of an axis.
+
+@see <type>Axis</type>
+@see <type>Grid</type>
+@see <type>Scale</type>
+@see <type>XScaling</type>
+*/
+struct IncrementData
+{
+    /** if the any contains a double value this is used as a fixed
+        Distance value.  Otherwise, if the any is empty or contains an
+        incompatible type, the Distance is meant to be calculated
+        automatically by the view component representing the model
+        containing this increment.
+     */
+    any         Distance;
+
+    /**
+    <member>PostEquidistant</member> rules whether the member <member>Distance</member>
+    describes a distance before or after the scaling is applied.
+
+    <p>If <member>PostEquidistant</member> equals <TRUE/> <member>Distance</member>
+    is given in values after <type>XScaling</type> is applied, thus resulting
+    main tickmarks will always look equidistant on the screen.
+    If <member>PostEquidistant</member> equals <FALSE/> <member>Distance</member>
+    is given in values before <type>XScaling</type> is applied.</p>
+    */
+    any         PostEquidistant;
+
+    /** if the any contains a double value this is used as a fixed
+        BaseValue.  Otherwise, if the any is empty or contains an
+        incompatible type, the BaseValue is meant to be calculated
+        automatically by the view component representing the model
+        containing this increment.
+     */
+    any         BaseValue;
+
+    /** <member>SubIncrements</member> describes the positioning of further
+    sub tickmarks on the scale of an axis.
+
+    <p>The first SubIncrement in this sequence determines how the
+    distance between two neighboring main tickmarks is divided for positioning
+    of further sub tickmarks. Every following SubIncrement determines the
+    positions of subsequent tickmarks in relation to their parent tickmarks
+    given by the preceding SubIncrement.</p>
+    */
+    sequence< SubIncrement > SubIncrements;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,13 @@
+UDK_3_0_0 {
+    global:
+    jfw_plugin_getAllJavaInfos;
+    jfw_plugin_getJavaInfoByPath;
+    jfw_plugin_startJavaVirtualMachine;
+    local:
+    *;
+};
+
+UDK_3.1 { # OOo 3.3
+    global:
+    jfw_plugin_existJRE;
+} UDK_3_0_0;

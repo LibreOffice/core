@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="OptionsDialog" oor:package="org.openoffice.Office" xml:lang="en-US"> 
+  <info>
+    <author>PB</author>
+    <desc >Contains general structures used to hide a single option or an option 
+      tabpage or a whole option group.</desc>
+  </info>
+  <templates>
+    <group oor:name="SingleOption">
+      <info>
+	<desc>Describes one single option.</desc>
+      </info>
+      <prop oor:name="Hide" oor:type="xs:boolean">
+	<info>
+	  <desc>Should this option be hidden?.</desc>
+	</info>
+      </prop>
+    </group>
+    <group oor:name="OptionsPage">
+      <info>
+	<desc>Describes one options tabpage.</desc>
+      </info>
+      <prop oor:name="Hide" oor:type="xs:boolean">
+	<info>
+	  <desc>Should this page be hidden?</desc>
+	</info>
+      </prop>
+      <set oor:name="Options" oor:node-type="SingleOption">
+	<info>
+	  <desc>An optional set to allow to hide single options of this page.</desc>
+	</info>
+      </set>
+    </group>
+    <group oor:name="OptionsGroup">
+      <info>
+	<desc>Describes a group of options tabpages.</desc>
+      </info>
+      <prop oor:name="Hide" oor:type="xs:boolean">
+	<info>
+	  <desc>Should this whole group of options tabpages be hidden?</desc>
+	</info>
+      </prop>
+      <set oor:name="Pages" oor:node-type="OptionsPage">
+	<info>
+	  <desc>An optional set to allow to hide single options tabpages of this 
+	    group.</desc>
+	</info>
+      </set>
+    </group>
+
+    <group oor:name="Module">
+      <info>
+	<desc>Defines a Module. The options dialog displays entries in its tree
+	  view only if they are defined to belong to the Module for which the 
+	  options dialog is being displayed. The exception is the options dialog 
+	  which is invoked from the Extension Manager, where the Module is 
+	  irrelevant.</desc>
+      </info>
+      <set oor:name="Nodes" oor:node-type="OrderedNode">
+	<info>
+	  <desc>A set member countains a Node (see type Node) which has been 
+	    assigned to this Module. Also entities which do not own the Module 
+	    may add members to the set. Please look at the specification for 
+	    applying restrictions
+	    (http://specs.openoffice.org/appwide/packagemanager/options_dialog_for_extensions.odt)
+	    The actual Node|s are kept in a separate set (OptionsDialog/Nodes),
+	    to prevent redundancy, because a Node can be assigned to several 
+	    Module|s. The position of a node (the tree view element) within the 
+	    tree view of the options dialog is determined by the property Index 
+	    of each set member. The position can be different dependent on the 
+	    Module. Therefore the order is determined per Module. Only the owner 
+	    of the Module should set the position (property Index).
+	    The order is undefined if two or more members have the same value for 
+	    the Index property.
+	    See also the description for OrderedNode.
+	  </desc>
+	</info>
+      </set>
+    </group>
+    
+    <group oor:name="Node">
+      <info>
+	<desc>Defines a node (the tree view element) which can be displayed in 
+	  the tree view of the options dialog.</desc>
+      </info>
+      <prop oor:name="Label" oor:type="xs:string" oor:localized="true" 
+	    oor:nillable="false">
+	<info>
+	  <desc>The localized name which is displayed next to the node in the 
+	    options dialog. If two different nodes (the tree view element) happen 
+	    to have the same localized name then both are displayed.</desc>
+	</info>
+      </prop>
+      <prop oor:name="OptionsPage" oor:type="xs:string">
+	<info>
+	  <desc>URL which references the dialog editor resource. This options 
+	  page should only contain information for the user and should not 
+	  accept input.</desc>
+	</info>
+      </prop>
+      <prop oor:name="AllModules" oor:type="xs:boolean">
+	<info>
+	  <desc>If true then this Node shall be displayed independent of the 
+	    Module for which the options dialog is displayed -  that is, always. 
+	    In this case it must not be assigned directly to one ore more 
+	    Module|s. That is, it must not exist as member in Module/Nodes of no
+	    existing Module. 
+	    This is an optimization so that an extension need not provide 
+	    entries for all Module|s. 
+	    The default value is false.
+	  </desc>
+	</info>
+	<value>false</value>
+      </prop>
+      <prop oor:name="GroupId" oor:type="xs:string">
+	<info>
+	  <desc>Identifies a group of Node|s. All nodes (the tree view elements) 
+	    which refer to the same group are displayed next to each other. If 
+	    this property is set then GroupIndex must also have a value. The 
+	    group will be used by Node|s which have been added to existing 
+	    Module|s. If one defines a Module AND Node|s which are used in this 
+	    Module, then GroupId must not be set. In this case one uses 
+	    Module/Nodes/Index to determine the position of the nodes (the tree 
+	    view element).
+	    The empty string is no valid identifier and represents nil.
+	    See also GroupIndex.
+	  </desc>
+	</info>
+	<value></value>
+      </prop>
+      <prop oor:name="GroupIndex" oor:type="xs:int">
+	<info>
+	  <desc>The index of the Node within the group. The index starts with 
+	    null. If this property is set then property GroupId must also have 
+	    a value. If a Node of this group is displayed depends on the 
+	    respective Module to which it is assigned. For example, if there are 
+	    the Nodes A(index 0), B (index 1), and C (index 2) in a group, 
+	    and B is assigned to a different Module, then only A and 
+	    B are displayed together although there indices are 0 and 2 (B has 1).
+	    The value -1 is regarded as nil.
+	    Actually one could have allowed to define a group per Module, so that 
+	    the order could be different depending on the Module. But this would 
+	    have added more complexity to the data structures.
+	  </desc>
+	</info>
+	<value>-1</value>
+      </prop>
+      <set oor:name="Leaves" oor:node-type="Leaf">
+	<info>
+	  <desc>Leaves which are assigned to this node. Extensions can add to this 
+	    set new Leaf|s.</desc>
+	</info>
+      </set>
+    </group>
+    
+    <group oor:name="Leaf">
+      <info>
+	<desc>Defines a leaf (the tree view element). A Leaf must be assigned to 
+	  exactly one Node. </desc>
+      </info>
+      <prop oor:name="Id" oor:type="xs:string">
+	<info>
+	  <desc>The unique identifier of the Leaf. This must be the extension 
+	    identifier if this Leaf was defined by an extension.</desc>
+	</info>
+      </prop>
+      <prop oor:name="Label" oor:type="xs:string" oor:localized="true" 
+	    oor:nillable="false">
+	<info>
+	  <desc>The localized name that is displayed for the leaf in the options 
+	    dialog.</desc>
+	</info>
+      </prop>
+      <prop oor:name="OptionsPage" oor:type="xs:string" oor:nillable="false">
+	<info>
+	  <desc>A URL which references the window resource.</desc>
+	</info>
+      </prop>
+      <prop oor:name="EventHandlerService" oor:type="xs:string" oor:nillable="false">
+	<info>
+	  <desc>Name of the event handler service which is used as argument in 
+	    com.sun.star.awt.XContainerWindowProvider.createContainerWindow. This 
+	    handler does not even process events from the options page but also 
+	    provides for saving and reading the respective values.</desc>
+	</info>
+      </prop>
+      <prop oor:name="GroupId" oor:type="xs:string">
+	<info>
+	  <desc>Identifies a group of Leaf|s. All Leaf|s which have the same 
+	    GroupId form a group and the corresponding entries in the tree view
+	    are displayed next to each other.
+	    If this property is set then the property GroupIndex must
+	    also be set.
+	    The GroupIndex represents the position within the group. If one 
+	    owns the Node (e.g. defined it oneself) then one can set the GroupId 
+	    to the name of the Node to which this Leaf is assigned. The Leaf|s of 
+	    this particular group are displayed first under the node (the tree 
+	    view element) before any other groups.
+	    If one does not own the Node then one should not use the Node name as 
+	    group id.
+	    The empty string is regarded as nil.
+	  </desc>
+	</info>
+	<value></value>
+      </prop>
+      <prop oor:name="GroupIndex" oor:type="xs:int">
+	<info>
+	  <desc>The index of the Leaf within the group. The index starts with 
+	    null. If this property is set then GroupId must also have 
+	    a value. If there are two Leaf|s with the same index in the same 
+	    group then then their order is undefined.
+	    The value -1 is regarded as nil.</desc>
+	</info>
+	<value>-1</value>
+      </prop>
+    </group>
+    
+    <group oor:name="OrderedNode">
+      <info>
+	<desc>Represents a reference to a Node and an optional index. 
+	  Instances of this type are used in a set (see Module). The name of the 
+	  set member must be the same as the one of the respective Node. The 
+	  index determines the position of the node (the tree view element) in 
+	  the options dialog for a particular Module.</desc>
+      </info>
+      <prop oor:name="Index" oor:type="xs:int">
+	<info>
+	  <desc>Determines the position of the node in the options dialog. 
+	    The index starts with null. That is, the corresponding node 
+	    appears at the first position in the tree view of the options dialog.
+	    If the value is -1 then the index is undefined. If one adds
+	    Node|s to a Module which one does not define oneself (e.g. the Module
+	    is owned by someone else), then one must not set the Index. This 
+	    applies, for example, to extensions which add their Node|s to existing 
+	    Module|s.
+	    The value -1 is regarded as nil.
+	  </desc>
+	</info>
+	<value>-1</value>
+      </prop>
+    </group>
+  </templates>
+  
+  <component>
+    <set oor:name="OptionsDialogGroups" oor:node-type="OptionsGroup">
+      <info>
+	<desc>Contains the set of single options, options tabpages and options 
+	  groups which should be hidden.</desc>
+	<label>Hidden options</label>
+      </info>
+    </set>
+    
+    <set oor:name="Modules" oor:node-type="Module">
+      <info>
+	<desc>List of availabe application contexts</desc>
+      </info>
+    </set>
+    <set oor:name="Nodes" oor:node-type="Node">
+      <info>
+	<desc>List of available nodes.</desc>
+      </info>
+    </set>
+    
+  </component>
+</oor:component-schema>
+

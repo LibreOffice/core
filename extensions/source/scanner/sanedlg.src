@@ -1,0 +1,318 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <sanedlg.hrc>
+ModalDialog RID_SANE_DIALOG
+{
+    HelpID = "extensions:ModalDialog:RID_SANE_DIALOG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 10 , 10 ) ;
+    Size = MAP_APPFONT ( THIRD_COLUMN + 60 , 268 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton RID_SCAN_OK
+    {
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 6 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+        DefButton = TRUE;
+    };
+    CancelButton RID_SCAN_CANCEL
+    {
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 25 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+    };
+    PushButton RID_DEVICEINFO_BTN
+    {
+        HelpID = "extensions:PushButton:RID_SANE_DIALOG:RID_DEVICEINFO_BTN";
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 44 ) ;
+        Size = MAP_APPFONT ( 55 , 22 ) ;
+        Text [ en-US ] = "About\n Dev~ice" ;
+    };
+    PushButton RID_PREVIEW_BTN
+    {
+        HelpID = "extensions:PushButton:RID_SANE_DIALOG:RID_PREVIEW_BTN";
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 71 ) ;
+        Size = MAP_APPFONT ( 55 , 22 ) ;
+        Text [ en-US ] = "Create\nPreview" ;
+    };
+    FixedLine RID_PREVIEW_BOX
+    {
+        Pos = MAP_APPFONT ( PREVIEW_UPPER_LEFT - 5 , PREVIEW_UPPER_TOP - 8 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 8 ) ;
+        Text [ en-US ] = "Preview" ;
+    };
+    FixedLine RID_SCANAREA_BOX
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT - 5 , SCAN_AREA_TOP - 12 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 8 ) ;
+        Text [ en-US ] = "Scan area" ;
+    };
+    FixedText RID_SCAN_LEFT_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Left:" ;
+    };
+    MetricField RID_SCAN_LEFT_BOX
+    {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_LEFT_BOX";
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP - 2 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_SCAN_TOP_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 17 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Top:" ;
+    };
+    MetricField RID_SCAN_TOP_BOX
+    {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_TOP_BOX";
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP + 15 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_SCAN_RIGHT_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 34 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Right:" ;
+    };
+    MetricField RID_SCAN_RIGHT_BOX
+    {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_RIGHT_BOX";
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP + 32 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_SCAN_BOTTOM_TXT
+    {
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 51 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Bottom:" ;
+    };
+    MetricField RID_SCAN_BOTTOM_BOX
+    {
+        HelpID = "extensions:MetricField:RID_SANE_DIALOG:RID_SCAN_BOTTOM_BOX";
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SCAN_AREA_LEFT + 50 , SCAN_AREA_TOP + 49 ) ;
+        Size = MAP_APPFONT ( PREVIEW_WIDTH - 50 , 12 ) ;
+    };
+    FixedText RID_DEVICE_BOX_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 8 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "Device used:" ;
+    };
+    ListBox RID_DEVICE_BOX
+    {
+        HelpID = "extensions:ListBox:RID_SANE_DIALOG:RID_DEVICE_BOX";
+        Border = TRUE ;
+        Dropdown = TRUE ;
+        Sort = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 70 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
+    };
+    FixedText RID_SCAN_RESOLUTION_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 25 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "Resolution [~DPI]" ;
+    };
+    NumericBox RID_SCAN_RESOLUTION_BOX
+    {
+        HelpID = "extensions:NumericBox:RID_SANE_DIALOG:RID_SCAN_RESOLUTION_BOX";
+        Dropdown = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 70 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 80 ) ;
+    };
+    FixedText RID_SCAN_ADVANCED_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 40 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ en-US ] = "Show advanced options" ;
+    };
+    CheckBox RID_SCAN_ADVANCED_BOX
+    {
+        HelpID = "extensions:CheckBox:RID_SANE_DIALOG:RID_SCAN_ADVANCED_BOX";
+        Check = FALSE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 120 , 40 ) ;
+        Size = MAP_APPFONT ( 8 , 8 ) ;
+    };
+    FixedText RID_SCAN_OPTION_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 54 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text [ en-US ] = "Options:" ;
+    };
+    Control RID_SCAN_OPTION_BOX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 63 ) ;
+        Size = MAP_APPFONT ( 130 , 102 ) ;
+    };
+    FixedText RID_SCAN_OPTIONTITLE_TXT
+    {
+        WordBreak = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 170 ) ;
+        Size = MAP_APPFONT ( 130 , 50 ) ;
+    };
+    FixedText RID_SCAN_OPTION_DESC_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 225 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+    };
+    CheckBox RID_SCAN_BOOL_OPTION_BOX
+    {
+        HelpID = "extensions:CheckBox:RID_SANE_DIALOG:RID_SCAN_BOOL_OPTION_BOX";
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 120 , 225 ) ;
+        Size = MAP_APPFONT ( 8 , 8 ) ;
+    };
+    Edit RID_SCAN_STRING_OPTION_EDT
+    {
+        HelpID = "extensions:Edit:RID_SANE_DIALOG:RID_SCAN_STRING_OPTION_EDT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+    };
+    ListBox RID_SCAN_QUANTUM_RANGE_BOX
+    {
+        HelpID = "extensions:ListBox:RID_SANE_DIALOG:RID_SCAN_QUANTUM_RANGE_BOX";
+        Border = TRUE ;
+        Dropdown = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+    };
+    ListBox RID_SCAN_STRING_RANGE_BOX
+    {
+        HelpID = "extensions:ListBox:RID_SANE_DIALOG:RID_SCAN_STRING_RANGE_BOX";
+        Border = TRUE ;
+        Dropdown = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+    };
+    Edit RID_SCAN_NUMERIC_OPTION_EDT
+    {
+        HelpID = "extensions:Edit:RID_SANE_DIALOG:RID_SCAN_NUMERIC_OPTION_EDT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+    };
+    FixedText RID_SCAN_NUMERIC_VECTOR_TXT
+    {
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 253 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Vector element" ;
+    };
+    NumericField RID_SCAN_NUMERIC_VECTOR_BOX
+    {
+        HelpID = "extensions:NumericField:RID_SANE_DIALOG:RID_SCAN_NUMERIC_VECTOR_BOX";
+        Border = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Pos = MAP_APPFONT ( SECOND_COLUMN + 90 , 251 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+    };
+    PushButton RID_SCAN_BUTTON_OPTION_BTN
+    {
+        HelpID = "extensions:PushButton:RID_SANE_DIALOG:RID_SCAN_BUTTON_OPTION_BTN";
+        Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
+        Size = MAP_APPFONT ( 130 , 14 ) ;
+        Text [ en-US ] = "Set" ;
+    };
+    Bitmap RID_SCAN_BITMAP_PLUS
+    {
+        File = "plus.bmp" ;
+    };
+    Bitmap RID_SCAN_BITMAP_MINUS
+    {
+        File = "minus.bmp" ;
+    };
+    Text [ en-US ] = "Scanner" ;
+};
+String RID_SANE_DEVICEINFO_TXT
+{
+    Text [ en-US ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s" ;
+};
+String RID_SANE_SCANERROR_TXT
+{
+    Text [ en-US ] = "An error occurred while scanning." ;
+};
+String RID_SANE_NORESOLUTIONOPTION_TXT
+{
+    Text [ en-US ] = "The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." ;
+};
+String RID_SANE_NOSANELIB_TXT
+{
+    Text [ en-US ] = "The SANE interface could not be initialized. Scanning is not possible." ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,198 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SFX_DOC_HRC
+#define _SFX_DOC_HRC
+
+#include <sfx2/sfx.hrc>
+
+// #defines *****************************************************************
+
+#define RID_SFX_DOC_END                     (RID_SFX_DIALOG_START-1)
+
+#define STR_NODEFPRINTER                    (RID_SFX_DOC_START+ 0)
+#define STR_PRINTER_NOTAVAIL_1              (RID_SFX_DOC_START+ 1)
+#define STR_PRINTER_NOTAVAIL_2              (RID_SFX_DOC_START+ 2)
+#define STR_PRINTER_NOTAVAIL_3              (RID_SFX_DOC_START+ 3)
+#define STR_PRINTER_NOTAVAIL_4              (RID_SFX_DOC_START+ 4)
+#define STR_PRINTER_NOTAVAIL_5              (RID_SFX_DOC_START+ 5)
+#define STR_PRINT_OPTIONS                   (RID_SFX_DOC_START+ 6)
+#define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 7)
+#define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 8)
+#define MSG_CONFIRM_FILTER                  (RID_SFX_DOC_START+11)
+#define MSG_CONFIRM_OVERWRITE_TEMPLATE      (RID_SFX_DOC_START+12)
+
+#define STR_DELETE_REGION                   (RID_SFX_DOC_START+14)
+#define STR_DELETE_TEMPLATE                 (RID_SFX_DOC_START+15)
+#define MSG_REGION_NOTEMPTY                 (RID_SFX_DOC_START+17)
+
+#define DLG_NEW_FILE                        (RID_SFX_DOC_START+1)
+#define DLG_DOC_TEMPLATE                    (RID_SFX_DOC_START+2)
+#define DLG_ORGANIZE                        (RID_SFX_DOC_START+3)
+
+#define BMP_STYLES_CLOSED                   (RID_SFX_DOC_START+ 0)
+#define BMP_STYLES_OPENED                   (RID_SFX_DOC_START+ 1)
+
+#define BMP_STYLES_FAMILY1                  (RID_SFX_DOC_START+ 2)
+#define BMP_STYLES_FAMILY2                  (RID_SFX_DOC_START+ 3)
+#define BMP_STYLES_FAMILY3                  (RID_SFX_DOC_START+ 4)
+#define BMP_STYLES_FAMILY4                  (RID_SFX_DOC_START+ 5)
+
+#define STR_STYLES                          (RID_SFX_DOC_START+ 18)
+#define STR_MACROS                          (RID_SFX_DOC_START+ 19)
+
+#define STR_PRINT_STYLES                    (RID_SFX_DOC_START+ 20)
+#define STR_PRINT_STYLES_HEADER             (RID_SFX_DOC_START+ 21)
+#define MSG_PRINT_ERROR                     (RID_SFX_DOC_START+ 22)
+#define STR_BACKUP_COPY                     (RID_SFX_DOC_START+ 23)
+#define MSG_CANT_OPEN_TEMPLATE              (RID_SFX_DOC_START+ 25)
+#define MSG_VIEW_OPEN_CANT_SAVE             (RID_SFX_DOC_START+ 26)
+#define STR_ERROR_SAVE                      (RID_SFX_DOC_START+ 27)
+#define STR_TEMPLATE_FILTER                 (RID_SFX_DOC_START+ 28)
+#define STR_ERROR_COPY_TEMPLATE             (RID_SFX_DOC_START+ 29)
+
+#define STR_ERROR_DELETE_TEMPLATE           (RID_SFX_DOC_START+ 30)
+#define STR_ERROR_MOVE_TEMPLATE             (RID_SFX_DOC_START+ 32)
+#define MSG_ERROR_RESCAN                    (RID_SFX_DOC_START+ 33)
+#define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_DOC_START+ 34)
+#define MSG_ERROR_RENAME_TEMPLATE           (RID_SFX_DOC_START+ 34)
+#define MSG_ERROR_RENAME_TEMPLATE_REGION    (RID_SFX_DOC_START+ 35)
+#define STR_CONFIG                          (RID_SFX_DOC_START+ 37)
+#define MSG_ERROR_EMPTY_NAME                (RID_SFX_DOC_START+ 37)
+#define MSG_ERROR_UNIQ_NAME                 (RID_SFX_DOC_START+ 38)
+#define STR_QUERY_DEFAULT_TEMPLATE          (RID_SFX_DOC_START+ 39)
+#define MSG_QUERY_RESET_DEFAULT_TEMPLATE    (RID_SFX_DOC_START+ 39)
+#define MSG_TEMPLATE_DIR_NOT_EXIST          (RID_SFX_DOC_START+ 40)
+#define MSG_DOCINFO_CANTREAD                (RID_SFX_DOC_START+ 41)
+#define STR_ERROR_NOSTORAGE                 (RID_SFX_DOC_START+ 42)
+#define STR_QUERY_MUSTOWNFORMAT             (RID_SFX_DOC_START+ 44)
+#define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
+#define STR_UPDATEDOC                       (RID_SFX_DOC_START+ 46)
+#define STR_SAVEASDOC                       (RID_SFX_DOC_START+ 47)
+#define STR_SAVECOPYDOC                     (RID_SFX_DOC_START+ 48)
+#define STR_CLOSEDOC                        (RID_SFX_DOC_START+ 49)
+#define STR_CLOSEDOC_ANDRETURN              (RID_SFX_DOC_START+ 50)
+#define STR_WIZARD                          (RID_SFX_DOC_START+ 51)
+#define RID_STR_FILTCONFIG                  (RID_SFX_DOC_START+ 52)
+#define RID_STR_FILTBASIC                   (RID_SFX_DOC_START+ 53)
+#define RID_STR_WARNSTYLEOVERWRITE          (RID_SFX_DOC_START+ 54)
+#define RID_DLSTATUS                        (RID_SFX_DOC_START+ 55)
+
+#define STR_DOC_LOADING                     (RID_SFX_DOC_START+ 57)
+#define MSG_OPEN_READONLY                   (RID_SFX_DOC_START+ 58)
+
+#define RID_OFFICEFILTER                    (RID_SFX_DOC_START+ 59)
+#define RID_OFFICEFILTER_WILDCARD           (RID_SFX_DOC_START+ 60)
+#define RID_OFFICEFILTER_MACTYPE            (RID_SFX_DOC_START+ 61)
+#define RID_OFFICEFILTER_OS2TYPE            (RID_SFX_DOC_START+ 62)
+#define STR_FRAMEOBJECT_PROPERTIES          (RID_SFX_DOC_START+ 63)
+
+#define STR_FSET_FILTERNAME0                (RID_SFX_DOC_START+ 64)
+#define STR_FSET_FILTERNAME1                (RID_SFX_DOC_START+ 65)
+
+#define STR_TEMPL_MOVED                     (RID_SFX_DOC_START+ 66)
+#define STR_TEMPL_RESET                     (RID_SFX_DOC_START+ 67)
+#define STR_AUTOMATICVERSION                (RID_SFX_DOC_START+ 68)
+
+#define STR_DOCTYPENAME_SW                  (RID_SFX_DOC_START+ 69)
+#define STR_DOCTYPENAME_SWWEB               (RID_SFX_DOC_START+ 70)
+#define STR_DOCTYPENAME_SWGLOB              (RID_SFX_DOC_START+ 71)
+#define STR_DOCTYPENAME_SC                  (RID_SFX_DOC_START+ 72)
+#define STR_DOCTYPENAME_SI                  (RID_SFX_DOC_START+ 73)
+#define STR_DOCTYPENAME_SD                  (RID_SFX_DOC_START+ 74)
+#define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
+#define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
+
+#define STR_SAVEANDCLOSE                    (RID_SFX_DOC_START+ 77)
+#define STR_NOSAVEANDCLOSE                  (RID_SFX_DOC_START+ 78)
+#define STR_PACKNGO_NOACCESS                (RID_SFX_DOC_START+ 79)
+#define STR_PACKNGO_NEWMEDIUM               (RID_SFX_DOC_START+ 80)
+
+#define TEMPLATE_LONG_NAMES_ARY             (RID_SFX_DOC_START+ 81)
+#define TEMPLATE_SHORT_NAMES_ARY            (RID_SFX_DOC_START+ 82)
+#define RID_CNT_STR_WAITING                 (RID_SFX_DOC_START+ 83)
+
+#define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
+
+#define DLOAD_URL 1
+#define DLOAD_STATUS 2
+#define DLOAD_NAME 3
+#define DLOAD_TEXT 4
+#define DLOAD_CANCEL 1
+
+#define DLG_MACROQUERY                      (RID_SFX_DOC_START+87)
+#define BTN_OK                              (RID_SFX_DOC_START+88)
+#define BTN_CANCEL                          (RID_SFX_DOC_START+89)
+#define FT_OK                               (RID_SFX_DOC_START+90)
+#define FT_CANCEL                           (RID_SFX_DOC_START+91)
+
+#define STR_EXPORTASPDF_TITLE               (RID_SFX_DOC_START+92)
+#define STR_EXPORTBUTTON                    (RID_SFX_DOC_START+93)
+#define STR_EXPORTWITHCFGBUTTON             (RID_SFX_DOC_START+94)
+
+#define RID_SVXSTR_SECURITY_ADDPATH         (RID_SFX_DOC_START+95)
+
+#define STR_LABEL_FILEFORMAT                (RID_SFX_DOC_START+96)
+
+// some icons are commented out since they are removed
+#define BMP_SIGNATURE                       (RID_SFX_DOC_START+97)
+#define BMP_128X128_CALC_DOC                (RID_SFX_DOC_START+99)
+#define BMP_128X128_CHART_DOC               (RID_SFX_DOC_START+101)
+#define BMP_128X128_DRAW_DOC                (RID_SFX_DOC_START+102)
+#define BMP_128X128_IMPRESS_DOC             (RID_SFX_DOC_START+104)
+#define BMP_128X128_MATH_DOC                (RID_SFX_DOC_START+107)
+#define BMP_128X128_WRITER_DOC              (RID_SFX_DOC_START+108)
+
+#define STR_HIDDENINFO_CONTAINS             (RID_SFX_DOC_START+110)
+#define STR_HIDDENINFO_RECORDCHANGES        (RID_SFX_DOC_START+111)
+#define STR_HIDDENINFO_NOTES                (RID_SFX_DOC_START+112)
+#define STR_HIDDENINFO_DOCVERSIONS          (RID_SFX_DOC_START+113)
+#define STR_HIDDENINFO_FIELDS               (RID_SFX_DOC_START+114)
+#define STR_HIDDENINFO_LINKDATA             (RID_SFX_DOC_START+115)
+#define STR_HIDDENINFO_CONTINUE_SAVING      (RID_SFX_DOC_START+116)
+#define STR_HIDDENINFO_CONTINUE_PRINTING    (RID_SFX_DOC_START+117)
+#define STR_HIDDENINFO_CONTINUE_SIGNING     (RID_SFX_DOC_START+118)
+#define STR_HIDDENINFO_CONTINUE_CREATEPDF   (RID_SFX_DOC_START+119)
+
+#define STR_NEW_FILENAME_SAVE               (RID_SFX_DOC_START+121)
+#define STR_ERROR_DELETE_TEMPLATE_DIR       (RID_SFX_DOC_START+123)
+#define STR_DOCINFO_INFOFIELD               (RID_SFX_DOC_START+124)
+
+#define MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN (RID_SFX_DOC_START+125)
+#define STR_XMLSEC_ODF12_EXPECTED           (RID_SFX_DOC_START+126)
+
+#define STR_QRYTEMPL_MESSAGE                (RID_SFX_DOC_START+127)
+#define STR_QRYTEMPL_UPDATE_BTN             (RID_SFX_DOC_START+128)
+#define STR_QRYTEMPL_KEEP_BTN               (RID_SFX_DOC_START+129)
+
+// please update to the last id
+#define ACT_SFX_DOC_END STR_QRYTEMPL_KEEP_BTN
+#if ACT_SFX_DOC_END > RID_SFX_DOC_END
+#error resource overflow in #line, #file
+#endif
+
+#endif
+

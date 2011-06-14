@@ -1,0 +1,278 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+#include "fontworkgallery.hrc"
+#include "svtools/controldims.hrc"
+
+#define WIDTH                       256
+#define HEIGHT                      256
+
+#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
+
+ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
+{
+    HelpID = "svx:ModalDialog:RID_SVX_MDLG_FONTWORK_GALLERY";
+    OutputSize = TRUE;
+    SVLook = TRUE ;
+    Moveable = TRUE;
+    Closeable = TRUE;
+
+    Size = MAP_APPFONT( WIDTH, HEIGHT );
+
+    Text [ en-US ] = "Fontwork Gallery" ;
+
+    FixedLine FL_FAVORITES
+    {
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( WIDTH - 6 , 8 ) ;
+        Text [ en-US ] = "Select a Fontwork style:" ;
+    };
+    Control CTL_FAVORITES
+    {
+        HelpId = HID_CTL_FONTWORK_FAVORITES ;
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 3 , 14 ) ;
+        Size = MAP_APPFONT ( WIDTH - 6,
+                             HEIGHT - RSC_CD_PUSHBUTTON_HEIGHT -
+                             6 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    OkButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( WIDTH - 3 * RSC_CD_PUSHBUTTON_WIDTH - 9 ,
+                            HEIGHT - 3 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH,
+                             RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( WIDTH - 2 * RSC_CD_PUSHBUTTON_WIDTH - 6 ,
+                            HEIGHT - 3 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH,
+                             RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( WIDTH - 1 * RSC_CD_PUSHBUTTON_WIDTH - 3 ,
+                            HEIGHT - 3 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH,
+                             RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    String STR_CLICK_TO_ADD_TEXT
+    {
+        Text [ en-US ] = "Click to edit text" ;
+    };
+};
+
+DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
+{
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_FONTWORK_ALIGNMENT";
+    Border = FALSE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = FALSE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+
+    Text [ en-US ] = "Fontwork Alignment" ;
+
+    String STR_ALIGN_LEFT
+    {
+        Text [ en-US ] = "~Left Align";
+    };
+    String STR_ALIGN_CENTER
+    {
+        Text [ en-US ] = "~Center";
+    };
+    String STR_ALIGN_RIGHT
+    {
+        Text [ en-US ] = "~Right Align";
+    };
+    String STR_ALIGN_WORD
+    {
+        Text [ en-US ] = "~Word Justify";
+    };
+    String STR_ALIGN_STRETCH
+    {
+        Text [ en-US ] = "S~tretch Justify";
+    };
+
+    Image IMG_FONTWORK_ALIGN_LEFT_16
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignleft_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_LEFT_26
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignleft_26.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_CENTER_16
+    {
+        ImageBitmap = Bitmap { File = "fontworkaligncentered_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_CENTER_26
+    {
+        ImageBitmap = Bitmap { File = "fontworkaligncentered_26.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_RIGHT_16
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignright_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_RIGHT_26
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignright_26.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_WORD_16
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignjustified_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_WORD_26
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignjustified_26.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_STRETCH_16
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignstretch_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_FONTWORK_ALIGN_STRETCH_26
+    {
+        ImageBitmap = Bitmap { File = "fontworkalignstretch_26.png"; };
+        MASKCOLOR
+    };
+};
+
+DockingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
+{
+    HelpID = "svx:DockingWindow:RID_SVXFLOAT_FONTWORK_CHARSPACING";
+    Border = FALSE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = FALSE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+
+    Text [ en-US ] = "Fontwork Character Spacing" ;
+
+    String STR_CHARS_SPACING_VERY_TIGHT
+    {
+        Text [ en-US ] = "~Very Tight";
+    };
+    String STR_CHARS_SPACING_TIGHT
+    {
+        Text [ en-US ] = "~Tight";
+    };
+    String STR_CHARS_SPACING_NORMAL
+    {
+        Text [ en-US ] = "~Normal";
+    };
+    String STR_CHARS_SPACING_LOOSE
+    {
+        Text [ en-US ] = "~Loose";
+    };
+    String STR_CHARS_SPACING_VERY_LOOSE
+    {
+        Text [ en-US ] = "Very ~Loose";
+    };
+    String STR_CHARS_SPACING_CUSTOM
+    {
+        Text [ en-US ] = "~Custom...";
+    };
+    String STR_CHARS_SPACING_KERN_PAIRS
+    {
+        Text [ en-US ] = "~Kern Character Pairs";
+    };
+};
+
+ModalDialog RID_SVX_MDLG_FONTWORK_CHARSPACING
+{
+    HelpID = "svx:ModalDialog:RID_SVX_MDLG_FONTWORK_CHARSPACING";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 139 , 64 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    Text [ en-US ] = "Fontwork Character Spacing" ;
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 83 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 83 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 83 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_VALUE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text[ en-US ] = "~Value";
+    };
+    MetricField MF_VALUE
+    {
+        HelpID = "svx:MetricField:RID_SVX_MDLG_FONTWORK_CHARSPACING:MF_VALUE";
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 32 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 500 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+};
+

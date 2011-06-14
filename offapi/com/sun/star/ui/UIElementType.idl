@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: UIElementType.idl,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ui_UIElementType_idl__
+#define __com_sun_star_ui_UIElementType_idl__
+
+module com {  module sun {  module star {  module ui {
+
+/** determine the type of a user interface element which is controlled
+    by a layout manager.
+
+    @since OOo 2.0
+ */
+constants UIElementType
+{
+    //-------------------------------------------------------------------------
+    /** unknown user interface element type, which can be used as a wildcard
+       to specify all types.
+    */
+    const short UNKNOWN         = 0;
+
+    //-------------------------------------------------------------------------
+    /** specifies a menu bar.
+    */
+    const short MENUBAR         = 1;
+
+    //-------------------------------------------------------------------------
+    /** specifies a pop-up menu.
+    */
+    const short POPUPMENU       = 2;
+
+    //-------------------------------------------------------------------------
+    /** specifies a toolbar.
+    */
+    const short TOOLBAR         = 3;
+
+    //-------------------------------------------------------------------------
+    /** specifies a statusbar.
+    */
+    const short STATUSBAR       = 4;
+
+    //-------------------------------------------------------------------------
+    /** specifies a floating window, which can also be docked.
+    */
+    const short FLOATINGWINDOW  = 5;
+
+    //-------------------------------------------------------------------------
+    /** specifies a floating window, which can also be docked.
+    */
+    const short PROGRESSBAR     = 6;
+
+    //-------------------------------------------------------------------------
+    /** specifies a tool panel
+    */
+    const short TOOLPANEL       = 7;
+
+    //-------------------------------------------------------------------------
+    /** specifies a window that can be docked.
+    */
+    const short DOCKINGWINDOW   = 7;
+
+    //-------------------------------------------------------------------------
+    /** specifies the number of constants.
+    */
+    const short COUNT           = 8;
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,20 @@
+#ifndef __com_sun_star_text_XFormField_idl__
+#define __com_sun_star_text_XFormField_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+
+module com {  module sun {  module star {  module text {
+
+    /** @deprecated
+     */
+    interface XFormField : com::sun::star::uno::XInterface
+    {
+        string getFieldType();
+        void setFieldType([in] string fieldType);
+        com::sun::star::container::XNameContainer getParameters();
+    };
+
+}; }; }; };
+
+#endif

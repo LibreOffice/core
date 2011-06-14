@@ -1,0 +1,343 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "navipi.hrc"
+
+#define SC_NAVI_CMD_IDLIST \
+    IdList =               \
+    {                      \
+        IID_DATA ;         \
+        IID_UP ;           \
+        IID_DOWN ;         \
+        IID_SCENARIOS ;    \
+        IID_DROPMODE ;     \
+        IID_CHANGEROOT ;   \
+        IID_ZOOMOUT ;      \
+    };                     \
+    IdCount = { 8 ; };
+
+// SC_CONTENT_...
+#define SC_NAVI_CONT_IDLIST \
+    IdList =                \
+    {                       \
+        1 ;                 \
+        2 ;                 \
+        3 ;                 \
+        4 ;                 \
+        5 ;                 \
+        6 ;                 \
+        7 ;                 \
+        8 ;                 \
+    };                      \
+    IdCount = { 8 ; };
+
+Window RID_SCDLG_NAVIGATOR
+{
+    SVLook = TRUE ;
+    HelpId = HID_SC_NAVIGATOR ;
+    Size = MAP_APPFONT ( 115 , 116 ) ;
+    OutputSize = TRUE ;
+    DialogControl = TRUE ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Navigator" ;
+    FixedText FT_ROW
+    {
+        Pos = MAP_APPFONT ( 2 , 19 ) ;
+         // an kleinere Toolbox-Bitmaps angepasst
+        Size = MAP_APPFONT ( 19 , 10 ) ;
+        Text [ en-US ] = "Row" ;
+    };
+    NumericField ED_ROW
+    {
+        HelpId = HID_SC_NAVIPI_ROW ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 31 , 18 ) ;
+         // an kleinere Toolbox-Bitmaps angepasst
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1 ;
+        Minimum = 1 ;
+        First = 1 ;
+        QuickHelpText [ en-US ] = "Row" ;
+    };
+    FixedText FT_COL
+    {
+        Pos = MAP_APPFONT ( 2 , 5 ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text [ en-US ] = "Column" ;
+    };
+    SpinField ED_COL
+    {
+        HelpId = HID_SC_NAVIPI_COL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 31 , 4 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        QuickHelpText [ en-US ] = "Column" ;
+    };
+    Control LB_ENTRIES
+    {
+         // "Control" braucht immer eigene HelpId
+        HelpId = HID_SC_NAVIPI_ENTRIES ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 2 , 35 ) ;
+        Size = MAP_APPFONT ( 110 , 100 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_DOCUMENTS
+    {
+        HelpId = HID_SC_NAVIPI_DOC ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 2 , 89 ) ;
+        Size = MAP_APPFONT ( 82 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        QuickHelpText [ en-US ] = "Document" ;
+    };
+    ImageList IL_CMD
+    {
+        Prefix = "na";
+        MaskColor = STD_MASKCOLOR ;
+        SC_NAVI_CMD_IDLIST
+    };
+    ToolBox TBX_CMD
+    {
+        Pos = MAP_APPFONT ( 66 , 3 ) ;
+        HelpId = HID_SC_NAVIPI_TOOLBOX ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = IID_DATA ;
+                HelpId = HID_SC_NAVIPI_DATA ;
+                Text [ en-US ] = "Data Range" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_UP ;
+                HelpId = HID_SC_NAVIPI_UP ;
+                Text [ en-US ] = "Start" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_DOWN ;
+                HelpId = HID_SC_NAVIPI_DOWN ;
+                Text [ en-US ] = "End" ;
+            };
+             //--------------------------------------------
+             //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
+             //--------------------------------------------
+             //----------------------------------------
+            ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
+             //----------------------------------------
+            ToolBoxItem
+            {
+                Identifier = IID_ZOOMOUT ;
+                HelpId = HID_SC_NAVIPI_ZOOM ;
+                Text [ en-US ] = "Contents" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_CHANGEROOT ;
+                HelpId = HID_SC_NAVIPI_ROOT ;
+                Text [ en-US ] = "Toggle" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_SCENARIOS ;
+                HelpId = HID_SC_NAVIPI_SCEN ;
+                Text [ en-US ] = "Scenarios" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_DROPMODE ;
+                HelpId = HID_SC_NAVIPI_DROP ;
+                DropDown = TRUE ;
+                Text [ en-US ] = "Drag Mode" ;
+            };
+        };
+    };
+    String STR_DRAGMODE
+    {
+        Text [ en-US ] = "Drag Mode" ;
+    };
+    String STR_DISPLAY
+    {
+        Text [ en-US ] = "Display" ;
+    };
+    String STR_ACTIVE
+    {
+        Text [ en-US ] = "active" ;
+    };
+    String STR_NOTACTIVE
+    {
+        Text [ en-US ] = "inactive" ;
+    };
+    String STR_HIDDEN
+    {
+        Text [ en-US ] = "hidden" ;
+    };
+    String STR_ACTIVEWIN
+    {
+        Text [ en-US ] = "Active Window" ;
+    };
+
+    String STR_QHLP_SCEN_LISTBOX
+    {
+        Text [ en-US ] = "Scenario Name";
+    };
+
+    String STR_QHLP_SCEN_COMMENT
+    {
+        Text [ en-US ] = "Comment";
+    };
+
+};
+
+ImageList RID_IMAGELIST_NAVCONT
+{
+    Prefix = "nc";
+    MaskColor = STD_MASKCOLOR ;
+    SC_NAVI_CONT_IDLIST
+};
+
+Image RID_IMG_DROP_URL
+{
+    ImageBitmap = Bitmap { File = "dropurl.png" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+
+Image RID_IMG_DROP_LINK
+{
+    ImageBitmap = Bitmap { File = "droplink.png" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+
+Image RID_IMG_DROP_COPY
+{
+    ImageBitmap = Bitmap { File = "dropcopy.png" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+
+//  content description strings are also used in ScLinkTargetsObj
+
+String SCSTR_CONTENT_ROOT
+{
+    Text [ en-US ] = "Contents" ;
+};
+
+String SCSTR_CONTENT_TABLE
+{
+    Text [ en-US ] = "Sheets" ;
+};
+
+String SCSTR_CONTENT_RANGENAME
+{
+    Text [ en-US ] = "Range names" ;
+};
+
+String SCSTR_CONTENT_DBAREA
+{
+    Text [ en-US ] = "Database Ranges" ;
+};
+
+String SCSTR_CONTENT_GRAPHIC
+{
+    Text [ en-US ] = "Graphics" ;
+};
+
+String SCSTR_CONTENT_OLEOBJECT
+{
+    Text [ en-US ] = "OLE objects" ;
+};
+
+String SCSTR_CONTENT_NOTE
+{
+    Text [ en-US ] = "Comments" ;
+};
+
+String SCSTR_CONTENT_AREALINK
+{
+    Text [ en-US ] = "Linked areas" ;
+};
+
+String SCSTR_CONTENT_DRAWING
+{
+    Text [ en-US ] = "Drawing objects";
+};
+
+ // PopupMenu -------------------------------------------------------------
+Menu RID_POPUP_DROPMODE
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = RID_DROPMODE_URL ;
+            HelpId = HID_SC_DROPMODE_URL ;
+            Text [ en-US ] = "Insert as Hyperlink" ;
+        };
+        MenuItem
+        {
+            Identifier = RID_DROPMODE_LINK ;
+            HelpId = HID_SC_DROPMODE_LINK ;
+            Text [ en-US ] = "Insert as Link" ;
+        };
+        MenuItem
+        {
+            Identifier = RID_DROPMODE_COPY ;
+            HelpId = HID_SC_DROPMODE_COPY ;
+            Text [ en-US ] = "Insert as Copy" ;
+        };
+    };
+};
+
+Menu RID_POPUP_NAVIPI_SCENARIO
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = RID_NAVIPI_SCENARIO_DELETE ;
+            HelpId = HID_SC_SCENARIO_DELETE ;
+            Text [ en-US ] = "Delete" ;
+        };
+        MenuItem
+        {
+            Identifier = RID_NAVIPI_SCENARIO_EDIT ;
+            HelpId = HID_SC_SCENARIO_EDIT ;
+            Text [ en-US ] = "Properties..." ;
+        };
+    };
+};

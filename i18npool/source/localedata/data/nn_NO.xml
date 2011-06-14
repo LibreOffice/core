@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+<LC_INFO>
+<Language>
+<LangID>nn</LangID>
+<DefaultName>Norwegian Nynorsk</DefaultName>
+</Language>
+<Country>
+<CountryID>NO</CountryID>
+<DefaultName>Norway</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE ref="no_NO"/>
+<LC_FORMAT ref="no_NO" replaceTo="[$kr-814]"/>
+<LC_COLLATION ref="no_NO"/>
+<LC_SEARCH ref="no_NO"/>
+<LC_INDEX ref="no_NO"/>
+<LC_CALENDAR>
+<Calendar unoid="gregorian" default="true">
+<DaysOfWeek>
+<Day>
+<DayID>sun</DayID>
+<DefaultAbbrvName>su.</DefaultAbbrvName>
+<DefaultFullName>sundag</DefaultFullName>
+</Day>
+<Day>
+<DayID>mon</DayID>
+<DefaultAbbrvName>må.</DefaultAbbrvName>
+<DefaultFullName>måndag</DefaultFullName>
+</Day>
+<Day>
+<DayID>tue</DayID>
+<DefaultAbbrvName>ty.</DefaultAbbrvName>
+<DefaultFullName>tysdag</DefaultFullName>
+</Day>
+<Day>
+<DayID>wed</DayID>
+<DefaultAbbrvName>on.</DefaultAbbrvName>
+<DefaultFullName>onsdag</DefaultFullName>
+</Day>
+<Day>
+<DayID>thu</DayID>
+<DefaultAbbrvName>to.</DefaultAbbrvName>
+<DefaultFullName>torsdag</DefaultFullName>
+</Day>
+<Day>
+<DayID>fri</DayID>
+<DefaultAbbrvName>fr.</DefaultAbbrvName>
+<DefaultFullName>fredag</DefaultFullName>
+</Day>
+<Day>
+<DayID>sat</DayID>
+<DefaultAbbrvName>la.</DefaultAbbrvName>
+<DefaultFullName>laurdag</DefaultFullName>
+</Day>
+</DaysOfWeek>
+<MonthsOfYear ref="no_NO_gregorian"/>
+<Eras ref="no_NO_gregorian"/>
+<StartDayOfWeek>
+<DayID>mon</DayID>
+</StartDayOfWeek>
+<MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
+</Calendar>
+</LC_CALENDAR>
+<LC_CURRENCY ref="no_NO"/>
+<LC_TRANSLITERATION ref="no_NO"/>
+<LC_MISC ref="no_NO"/>
+<LC_NumberingLevel ref="no_NO"/>
+<LC_OutLineNumberingLevel ref="no_NO"/>
+</Locale>

@@ -1,0 +1,254 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_corba_giop_giop_idl__
+#define __com_sun_star_corba_giop_giop_idl__
+
+#include <com/sun/star/corba/iop/iop.idl>
+module com { module sun { module star { module corba { module giop
+{
+    /**
+      @deprecated
+     */
+published   struct Version
+    {
+        byte major;
+        byte minor;
+    };
+
+    /**
+      @deprecated
+     */
+published enum MsgType_1_1
+    {
+        Request, Reply, CancelRequest,
+        LocateRequest, LocateReply,
+        CloseConnection, MessageError,
+        Fragment // GIOP 1.1 addition
+    };
+
+
+    /**
+      @deprecated
+     */
+published   struct MessageHeader_1_0
+    {// Renamed from MessageHeader
+        byte magic_1;
+        byte magic_2;
+        byte magic_3;
+        byte magic_4;
+        Version GIOP_version;
+        boolean byte_order;
+        byte message_type;
+        unsigned long message_size;
+    };
+
+    /**
+      @deprecated
+     */
+published   struct MessageHeader_1_1
+    {
+        byte magic_1;
+        byte magic_2;
+        byte magic_3;
+        byte magic_4;
+        Version GIOP_version;
+        byte flags; // GIOP 1.1 change
+        byte message_type;
+        unsigned long message_size;
+    };
+
+    /**
+      @deprecated
+     */
+published typedef MessageHeader_1_1 MessageHeader_1_2;
+
+    /**
+      @deprecated
+     */
+published   struct RequestHeader_1_0
+    {
+        com::sun::star::corba::iop::ServiceContextList service_context;
+        unsigned long request_id;
+        boolean response_expected;
+        sequence < byte > object_key;
+        CorbaString8 operation;
+        sequence < byte > requesting_principal;
+    };
+
+    /**
+      @deprecated
+     */
+published   struct RequestHeader_1_1
+    {
+        com::sun::star::corba::iop::ServiceContextList service_context;
+        unsigned long request_id;
+        boolean response_expected;
+        byte reserved_1;
+        byte reserved_2;
+        byte reserved_3; // Added in GIOP 1.1
+        sequence <byte> object_key;
+        CorbaString8 operation;
+        sequence <byte> requesting_principal; // binary compatible
+    };
+
+    /**
+      @deprecated
+     */
+published   struct IORAddressingInfo
+    {
+        unsigned long selected_profile_index;
+        com::sun::star::corba::iop::IOR ior;
+    };
+
+    /**
+      @deprecated
+     */
+published constants TargetAddressGroup
+        {
+            const short KeyAddr = 0;
+            const short ProfileAddr = 1;
+            const short ReferenceAddr = 2;
+        };
+
+    /**
+      @deprecated
+     */
+published struct TargetAddress : CorbaUnion
+    {
+        short nDiscriminator;
+        sequence < byte > object_key;  // KeyAddr
+        com::sun::star::corba::iop::TaggedProfile profile;    // ProfileAddr
+        IORAddressingInfo ior;         // ReferenceAddr
+    };
+
+
+    /**
+      @deprecated
+     */
+published   struct RequestHeader_1_2
+    {
+        unsigned long request_id;
+        byte response_flags;
+        byte reserved_1;
+        byte reserved_2;
+        byte reserved_3;
+        TargetAddress target;
+        CorbaString8 operation;
+// Principal not in GIOP 1.2
+        com::sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
+    };
+
+
+    /**
+      @deprecated
+     */
+published enum ReplyStatusType_1_2
+    {
+        NO_EXCEPTION,
+        USER_EXCEPTION,
+        SYSTEM_EXCEPTION,
+        LOCATION_FORWARD,
+        LOCATION_FORWARD_PERM, // new value for 1.2
+        NEEDS_ADDRESSING_MODE // new value for 1.2
+    };
+
+
+    /**
+      @deprecated
+     */
+published   struct ReplyHeader_1_2
+    {
+        unsigned long request_id;
+        ReplyStatusType_1_2 reply_status;
+        com::sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
+    };
+
+    /**
+      @deprecated
+     */
+published   struct SystemExceptionReplyBody
+    {
+        CorbaString8 exception_id;
+        unsigned long minor_code_value;
+        unsigned long completion_status;
+    };
+
+    /**
+      @deprecated
+     */
+published   struct CancelRequestHeader
+    {
+        unsigned long request_id;
+    };
+
+    /**
+      @deprecated
+     */
+published   struct LocateRequestHeader_1_0
+    {
+// Renamed LocationRequestHeader
+        unsigned long request_id;
+        sequence <byte> object_key;
+    };
+
+    /**
+      @deprecated
+     */
+published typedef LocateRequestHeader_1_0 LocateRequestHeader_1_1;
+
+    /**
+      @deprecated
+     */
+published enum LocateStatusType_1_2 {
+        UNKNOWN_OBJECT,
+        OBJECT_HERE,
+        OBJECT_FORWARD,
+        OBJECT_FORWARD_PERM, // new value for GIOP 1.2
+        LOC_SYSTEM_EXCEPTION, // new value for GIOP 1.2
+        LOC_NEEDS_ADDRESSING_MODE // new value for GIOP 1.2
+    };
+
+    /**
+      @deprecated
+     */
+published   struct LocateReplyHeader_1_2
+    {
+        unsigned long request_id;
+        LocateStatusType_1_2 locate_status;
+    };
+
+    /**
+      @deprecated
+     */
+published   struct FragmentHeader_1_2
+    {
+        unsigned long request_id;
+    };
+
+
+}; }; }; }; };
+#endif

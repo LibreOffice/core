@@ -1,0 +1,200 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_OfficeDocument_idl__
+#define __com_sun_star_document_OfficeDocument_idl__
+
+#include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/util/XModifiable.idl>
+#include <com/sun/star/frame/XStorable.idl>
+#include <com/sun/star/view/XPrintable.idl>
+#include <com/sun/star/view/XPrintJobBroadcaster.idl>
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#include <com/sun/star/document/XEventsSupplier.idl>
+#include <com/sun/star/document/XDocumentInfoSupplier.idl>
+#include <com/sun/star/document/XViewDataSupplier.idl>
+#include <com/sun/star/document/XDocumentEventBroadcaster.idl>
+#include <com/sun/star/document/XEmbeddedScripts.idl>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.idl>
+#include <com/sun/star/document/XUndoManagerSupplier.idl>
+
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
+/** abstract service which specifies a storable and printable document
+
+    <p>
+    All major document-like components should support this service
+    instead of simple components which supports a <type scope="com::sun::star::frame">Controller</type>
+    or pure <type scope="com::sun::star::awt">XWindow</type> only.
+    </p>
+
+    @see com::sun::star::frame::Controller
+ */
+published service OfficeDocument
+{
+    //-------------------------------------------------------------------------
+    /** represents a component which is created from an URL and arguments
+
+        <p>
+        It is a representation of a resource in the sense that it was
+        created/loaded from the resource. The arguments are passed to the loader
+        to modify its behavior.
+        </p>
+     */
+    interface com::sun::star::frame::XModel;
+
+    //-------------------------------------------------------------------------
+    /** a storable document should provide information about his modify state
+
+        <p>
+        With this interface it's possible too, to reset the modify state.
+        That can be necessary to prevent code against problem during closing
+        of the document without saving any changes.
+        </p>
+     */
+    interface com::sun::star::util::XModifiable;
+
+    //-------------------------------------------------------------------------
+    /** offers a simple way to store a component to an URL
+
+        <p>
+        This interface supports functionality
+        <ul>
+            <li>to make a copy of current component by saving it to another location</li>
+            <li>to commit made changes</li>
+            <li>to convert it by saving it by using suitable filter name.</li>
+        </ul>
+        </p>
+     */
+    interface com::sun::star::frame::XStorable;
+
+    //-------------------------------------------------------------------------
+    /** offers a way to print a component
+
+        <p>
+        It's possible to specify which printer should be used and of course
+        print the document on it.
+        </p>
+     */
+    interface com::sun::star::view::XPrintable;
+
+    //-------------------------------------------------------------------------
+    /** is an old and deprecated version of the <type>XDocumentEventBroadcaster</type> interface
+        @deprecated
+     */
+    [optional] interface XEventBroadcaster;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to register listeners which are called whenever
+        a document event occurs
+     */
+    [optional] interface XDocumentEventBroadcaster;
+
+    //-------------------------------------------------------------------------
+    /** access to bound event handlers
+     */
+    [optional] interface XEventsSupplier;
+
+    //-------------------------------------------------------------------------
+    /** document can provide a <type>DocumentInfo</type>
+
+        <p>
+        Instead of the <type>StandaloneDocumentInfo</type> service the <type>DocumentInfo</type>
+        will be available on an already opened document only.
+        </p>
+
+        @deprecated     Use <type>XDocumentPropertiesSupplier</type> instead.
+     */
+    [optional] interface XDocumentInfoSupplier;
+
+    //-------------------------------------------------------------------------
+    /** access to some properties describing all open views to a document
+     */
+    [optional] interface XViewDataSupplier;
+
+    //-------------------------------------------------------------------------
+    /** allows for getting information about a print job
+
+        @since OOo 1.1.2
+     */
+    [optional] interface com::sun::star::view::XPrintJobBroadcaster;
+
+    /** is supported when the document can contain scripts and dialogs
+
+        @since OOo 2.4
+    */
+    [optional] interface XEmbeddedScripts;
+
+    //-------------------------------------------------------------------------
+    /** access to the <type>DocumentProperties</type>.
+
+        @since OOo 3.0
+     */
+    [optional] interface XDocumentPropertiesSupplier;
+
+    /** provides access to the document's undo manager.
+    */
+    [optional] interface XUndoManagerSupplier;
+
+    //-------------------------------------------------------------------------
+    /** controls the focus behavior of the form controls in the document
+
+        <p>
+        If this flag is set to <TRUE/>, any view belonging to the document
+        should focus the first control in the document. With this, you may
+        control if your document works primarily as a form document.
+        </p>
+    */
+    [property, optional] boolean AutomaticControlFocus;
+
+    //-------------------------------------------------------------------------
+    /** controls the initial (on-load) behavior of the form controls in the document
+
+        <p>If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br/>
+        If set to <FALSE/>, they will be alive, i.e. operational.<br/>
+        With this, you may control if your document works primarily as a form document.
+        </p>
+    */
+    [property, optional] boolean ApplyFormDesignMode;
+
+    //-------------------------------------------------------------------------
+    /** contains a unique id for the document
+
+        <p>Once calculated, the id must not change until the document has been
+        closed. Upon closing it will not be made persistent. Thus, the document
+        may get a different id every time it gets loaded.</p>
+    */
+    [property, optional, readonly] string RuntimeUID;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_FormComponentType_idl__
+#define __com_sun_star_form_FormComponentType_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** These constants specify the class types used to identify a component.
+ */
+published constants FormComponentType
+{
+    //-------------------------------------------------------------------------
+
+    /** This generic identifier is for controls which cannot be identified by
+                an other specific identifier.
+     */
+    const short CONTROL = 1;
+
+    /** specifies a control that is used to begin, interrupt, or end a process.
+    */
+    const short COMMANDBUTTON = 2;
+
+    /** specifies a control that acts like a radio button. Grouped together, such radio buttons
+        present a set of two or more mutually exclusive choices to the user.
+    */
+    const short RADIOBUTTON = 3;
+
+    /** specifies a control that displays an image that responds to mouse clicks.
+    */
+    const short IMAGEBUTTON = 4;
+
+    /** specifies a control that is used to check or uncheck to turn an option on or off.
+    */
+    const short CHECKBOX = 5;
+
+    /** specifies a control that displays a list from which the user can select one or more items.
+    */
+    const short LISTBOX = 6;
+
+    /** specifies a control that is used when a list box combined with a static text control or an edit
+        control is needed.
+    */
+    const short COMBOBOX = 7;
+
+    /** specifies a control that displays a frame around a group of controls with or without a caption.
+    */
+    const short GROUPBOX = 8;
+
+    /** specifies a control that is a text component that allows for the editing of a single line of text.
+    */
+    const short TEXTFIELD = 9;
+
+    /** specifies a control to display a fixed text, usually used to label other controls.
+    */
+    const short FIXEDTEXT = 10;
+
+    /** is a table like control to display database data.
+    */
+    const short GRIDCONTROL = 11;
+
+    /** specifies an control which can be used to enter text, extended by an (user-startable) file dialog
+        to browse for files.
+    */
+    const short FILECONTROL = 12;
+
+    /** specifies a control that should not be visible.
+    */
+    const short HIDDENCONTROL = 13;
+
+    /** specifies a control to display an image.
+    */
+    const short IMAGECONTROL = 14;
+
+    /** specifies a control to display and edit a date value.
+    */
+    const short DATEFIELD = 15;
+
+    /** specifies a control to display and edit a time value.
+    */
+    const short TIMEFIELD = 16;
+
+    /** specifies a field to display and edit a numeric value.
+    */
+    const short NUMERICFIELD = 17;
+
+    /** specifies a field to display and edit a currency value.
+    */
+    const short CURRENCYFIELD = 18;
+
+    /** specifies a control to display and edit a string according to a pattern.
+    */
+    const short PATTERNFIELD = 19;
+
+    /** specifies a control to display and edit, in the form of a scrollbar, a value from a continuous value range
+    */
+    const short SCROLLBAR = 20;
+
+    /** specifies a control to edit, in the form of a spin field, a value from a continuous range of values
+    */
+    const short SPINBUTTON = 21;
+
+    /** specifies a control which provides controller functionality for the <type scope="com::sun::star::form::component">DataForm</type>
+        it belongs to, such as functionality to navigate or filter this form.
+    */
+    const short NAVIGATIONBAR = 22;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

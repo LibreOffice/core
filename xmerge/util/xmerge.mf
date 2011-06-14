@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Main-Class: org.openoffice.xmerge.test.Driver
+Class-Path: xml-apis.jar xercesImpl.jar serializer.jar
+Specification-Title: OpenOffice XMerge Framework
+Specification-Vendor: OpenOffice.org
+Specification-Version: 0.6.0
+Implementation-Version: #IMPL-VERSION#
+

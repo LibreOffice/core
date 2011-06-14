@@ -1,0 +1,235 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef _DBAUI_INDEXDIALOG_HRC_
+#include "indexdialog.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+
+#define DIALOG_SIZE_X       220
+#define DIALOG_SIZE_Y       140
+#define BUTTON_SIZE_X       50
+#define BUTTON_SIZE_Y       14
+
+#define LIST_WIDTH          70
+
+ModalDialog DLG_INDEXDESIGN
+{
+    HelpID = "dbaccess:ModalDialog:DLG_INDEXDESIGN";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( DIALOG_SIZE_X , DIALOG_SIZE_Y ) ;
+    Text [ en-US ] = "Indexes" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    ToolBox TLB_ACTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        ButtonType = BUTTON_SYMBOL;
+        Align = BOXALIGN_TOP;
+        HelpId = HID_INDEX_DIALOG_ACTION_TB;
+        Customize = FALSE;
+        ItemImageList = IMG_INDEX_DLG_SC ;
+
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_NEW;
+                HelpId = HID_DLGIDX_NEWINDEX;
+                Command = ".index:createNew";
+                Text [ en-US ] = "New Index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_DROP;
+                HelpId = HID_DLGIDX_DROPINDEX;
+                Command = ".index:dropCurrent";
+                Text [ en-US ] = "Delete Current Index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_RENAME;
+                HelpId = HID_DLGIDX_RENAMEINDEX;
+                Command = ".index:renameCurrent";
+                Text [ en-US ] = "Rename Current Index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_SAVE;
+                HelpId = HID_DLGIDX_SAVEINDEX;
+                Command = ".index:saveCurrent";
+                Text [ en-US ] = "Save Current Index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_RESET;
+                HelpId = HID_DLGIDX_RESETINDEX;
+                Command = ".index:resetCurrent";
+                Text [ en-US ] = "Reset Current Index" ;
+            };
+        };
+    };
+    Control CTR_INDEXLIST
+    {
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( LIST_WIDTH , DIALOG_SIZE_Y - (BUTTON_SIZE_Y + 4) - 29 ) ;
+        SVLook = TRUE;
+        Border  = TRUE;
+
+        HelpId = HID_DLGIDX_INDEXLIST;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_INDEXDETAILS
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16 - 3, 9 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
+        Text [ en-US ] = "Index details";
+    };
+    FixedText FT_DESC_LABEL
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 23 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
+        Text [ en-US ] = "Index identifier:";
+    };
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 69, 23 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 75, 8 ) ;
+    };
+    CheckBox CB_UNIQUE
+    {
+        HelpID = "dbaccess:CheckBox:DLG_INDEXDESIGN:CB_UNIQUE";
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 34 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
+        SVLook = TRUE;
+        Text [ en-US ] = "~Unique";
+    };
+    FixedText FT_FIELDS
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 48 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
+        SVLook = TRUE;
+        Text [ en-US ] = "Fields";
+    };
+    Control CTR_FIELDS
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 59 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, DIALOG_SIZE_Y - (BUTTON_SIZE_Y + 4) - 65 ) ;
+        SVLook = TRUE;
+        Border  = TRUE;
+        TabStop = TRUE ;
+    };
+    PushButton PB_CLOSE
+    {
+        HelpID = "dbaccess:PushButton:DLG_INDEXDESIGN:PB_CLOSE";
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6 - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+        SVLook = TRUE;
+        DefButton = TRUE;
+        Text [ en-US ] = "~Close";
+    };
+    HelpButton HB_HELP
+    {
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+    };
+};
+
+String STR_TAB_INDEX_SORTORDER
+{
+    Text [ en-US ] = "Sort order" ;
+};
+
+String STR_TAB_INDEX_FIELD
+{
+    Text [ en-US ] = "Index field" ;
+};
+
+String STR_ORDER_ASCENDING
+{
+    Text [ en-US ] = "Ascending" ;
+};
+
+String STR_ORDER_DESCENDING
+{
+    Text [ en-US ] = "Descending" ;
+};
+
+String STR_CONFIRM_DROP_INDEX
+{
+    Text [ en-US ] = "Do you really want to delete the index '$name$'?";
+};
+
+String STR_LOGICAL_INDEX_NAME
+{
+    Text [ en-US ] = "index";
+};
+
+Image IMG_PKEYICON
+{
+    ImageBitmap = Bitmap { File = "pkey.png"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+ErrorBox ERR_NEED_INDEX_FIELDS
+{
+    Title [ en-US ] = "Save Index";
+
+    Message [ en-US ] = "The index must contain at least one field.";
+
+    Buttons = WB_OK;
+};
+
+QueryBox QUERY_SAVE_CURRENT_INDEX
+{
+    Title [ en-US ] = "Exit Index Design";
+
+    Message [ en-US ] = "Do you want to save the changes made to the current index?";
+
+    Buttons = WB_YES_NO_CANCEL;
+    DefButton = WB_DEF_YES;
+};
+
+String STR_INDEX_NAME_ALREADY_USED
+{
+    Text [ en-US ] = "There is already another index named \"$name$\".";
+};
+
+String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
+{
+    Text [ en-US ] = "In an index definition, no table column may occur more than once. However, you have entered column \"$name$\" twice.";
+};

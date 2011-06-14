@@ -1,0 +1,200 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_comphelper.hxx"
+
+#include "comphelper/documentinfo.hxx"
+#include "comphelper/namedvaluecollection.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
+/** === end UNO includes === **/
+
+#include <cppuhelper/exc_hlp.hxx>
+
+#include <osl/diagnose.h>
+#include <osl/thread.h>
+
+#include <boost/current_function.hpp>
+
+//........................................................................
+namespace comphelper {
+//........................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::frame::XTitle;
+    using ::com::sun::star::frame::XController;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::document::XDocumentPropertiesSupplier;
+    using ::com::sun::star::document::XDocumentProperties;
+    using ::com::sun::star::frame::XStorable;
+    using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::frame::XTitle;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::frame::XFrame;
+    /** === end UNO using === **/
+
+    //====================================================================
+    //= helper
+    //====================================================================
+    namespace
+    {
+        ::rtl::OUString lcl_getTitle( const Reference< XInterface >& _rxComponent )
+        {
+            Reference< XTitle > xTitle( _rxComponent, UNO_QUERY );
+            if ( xTitle.is() )
+                return xTitle->getTitle();
+            return ::rtl::OUString();
+        }
+    }
+
+    //====================================================================
+    //= DocumentInfo
+    //====================================================================
+    //--------------------------------------------------------------------
+    ::rtl::OUString DocumentInfo::getDocumentTitle( const Reference< XModel >& _rxDocument )
+    {
+        ::rtl::OUString sTitle;
+
+        if ( !_rxDocument.is() )
+            return sTitle;
+
+        ::rtl::OUString sDocURL;
+        try
+        {
+            // 1. ask the model and the controller for their XTitle::getTitle
+            sTitle = lcl_getTitle( _rxDocument );
+            if ( sTitle.getLength() )
+                return sTitle;
+
+            Reference< XController > xController( _rxDocument->getCurrentController() );
+            sTitle = lcl_getTitle( xController );
+            if ( sTitle.getLength() )
+                return sTitle;
+
+            // work around a problem with embedded objects, which sometimes return
+            // private:object as URL
+            sDocURL = _rxDocument->getURL();
+            if ( sDocURL.matchAsciiL( "private:", 8 ) )
+                sDocURL = ::rtl::OUString();
+
+            // 2. if the document is not saved, yet, check the frame title
+            if ( sDocURL.getLength() == 0 )
+            {
+                Reference< XFrame > xFrame;
+                if ( xController.is() )
+                    xFrame.set( xController->getFrame() );
+                sTitle = lcl_getTitle( xFrame );
+                if ( sTitle.getLength() )
+                    return sTitle;
+            }
+
+            // 3. try the UNO DocumentInfo
+            Reference< XDocumentPropertiesSupplier > xDPS( _rxDocument, UNO_QUERY );
+            if ( xDPS.is() )
+            {
+                Reference< XDocumentProperties > xDocProps (
+                    xDPS->getDocumentProperties(), UNO_QUERY_THROW );
+                OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
+                sTitle = xDocProps->getTitle();
+                if ( sTitle.getLength() )
+                    return sTitle;
+            }
+
+            // 4. try model arguments
+            NamedValueCollection aModelArgs( _rxDocument->getArgs() );
+            sTitle = aModelArgs.getOrDefault( "Title", sTitle );
+            if ( sTitle.getLength() )
+                return sTitle;
+
+            // 5. try the last segment of the document URL
+            // this formerly was an INetURLObject::getName( LAST_SEGMENT, true, DECODE_WITH_CHARSET ),
+            // but since we moved this code to comphelper, we do not have access to an INetURLObject anymore
+            // This heuristics here should be sufficient - finally, we will get an UNO title API in a not
+            // too distant future (hopefully), then  this complete class is superfluous)
+            if ( sDocURL.getLength() == 0 )
+            {
+                Reference< XStorable > xDocStorable( _rxDocument, UNO_QUERY_THROW );
+                sDocURL = xDocStorable->getLocation();
+            }
+            sal_Int32 nLastSepPos = sDocURL.lastIndexOf( '/' );
+            if ( ( nLastSepPos != -1 ) && ( nLastSepPos == sDocURL.getLength() - 1 ) )
+            {
+                sDocURL = sDocURL.copy( 0, nLastSepPos );
+                nLastSepPos = sDocURL.lastIndexOf( '/' );
+            }
+            sTitle = sDocURL.copy( nLastSepPos + 1 );
+
+            if ( sTitle.getLength() != 0 )
+                return sTitle;
+
+            // 5.
+            // <-- #i88104# (05-16-08) TKR: use the new XTitle Interface to get the Title -->
+
+            Reference< XTitle > xTitle( _rxDocument, UNO_QUERY );
+            if ( xTitle.is() )
+            {
+                if ( xTitle->getTitle().getLength() != 0 )
+                    return xTitle->getTitle();
+            }
+        }
+        catch ( const Exception& )
+        {
+            ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() );
+            ::rtl::OString sMessage( "caught an exception!" );
+            sMessage += "\ntype   : ";
+            sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
+            sMessage += "\nmessage: ";
+            ::com::sun::star::uno::Exception exception;
+            caught >>= exception;
+            sMessage += ::rtl::OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() );
+            sMessage += "\nin function:\n";
+            sMessage += BOOST_CURRENT_FUNCTION;
+            sMessage += "\n";
+            OSL_FAIL( sMessage );
+        }
+
+        return sTitle;
+    }
+
+//........................................................................
+} // namespace comphelper
+//........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: procedure.001</title>
+<releaseinfo role="CVS">$Id: procedure.001.xml,v 1.2 2008-07-11 07:52:51 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<procedure id="proc"><title>Procedure Title</title>
+<step><para>Press MENUS.</para>
+</step>
+<step id="step-x"><para>Press MENUS.</para>
+</step>
+<step><para>Press MENUS.</para>
+</step>
+<step><para>Press MENUS.</para>
+</step>
+<step><para>Select SETUP.</para>
+<substeps>
+<step><para>Should be an <quote>a</quote></para>
+</step>
+<step id="step-y"><para>Should be a <quote>b</quote></para>
+</step>
+<step><para>Should be a <quote>c</quote></para>
+</step>
+<step><para>Should be a <quote>d</quote></para>
+</step>
+<step><para>should be an <quote>e</quote></para>
+<substeps>
+<step><para>should be an <quote>i</quote></para>
+</step>
+<step id="step-z"><para>should be an <quote>ii</quote></para>
+</step>
+</substeps>
+</step>
+</substeps>
+</step>
+</procedure>
+
+</article>

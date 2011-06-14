@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_DSSELECT_HRC_
+#include "dsselect.hrc"
+#endif
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+
+
+ModalDialog DLG_DATASOURCE_SELECTION
+{
+    HelpID = "dbaccess:ModalDialog:DLG_DATASOURCE_SELECTION";
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 218 , 118 ) ;
+    Text [ en-US ] = "Data Source" ;
+
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 154 , 10 ) ;
+        Text [ en-US ] = "Choose a data source:";
+    };
+    ListBox LB_DATASOURCE
+    {
+        HelpID = "dbaccess:ListBox:DLG_DATASOURCE_SELECTION:LB_DATASOURCE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 154 , 94 ) ;
+        TabStop = TRUE ;
+        HScroll = TRUE ;
+        Sort = TRUE ;
+    };
+
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 166 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 166 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 166 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_MANAGE
+    {
+        HelpID = "dbaccess:PushButton:DLG_DATASOURCE_SELECTION:PB_MANAGE";
+        Pos = MAP_APPFONT ( 166 , 99 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Organize..." ;
+    };
+    PushButton PB_CREATE
+    {
+        HelpID = "dbaccess:PushButton:DLG_DATASOURCE_SELECTION:PB_CREATE";
+        Pos = MAP_APPFONT ( 166 , 99 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Create..." ;
+    };
+    String STR_LOCAL_DATASOURCES
+    {
+        Text [ en-US ] = "Local Databases" ;
+    };
+    String STR_DESCRIPTION2
+    {
+        Text [ en-US ] = "Choose a database";
+    };
+};

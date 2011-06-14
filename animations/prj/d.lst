@@ -1,0 +1,10 @@
+..\%__SRC%\bin\animcore.dll %_DEST%\bin%_EXT%\animcore.dll
+..\%__SRC%\lib\libanimcore.so %_DEST%\lib%_EXT%\libanimcore.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
+..\source\animcore\animcore.xml %_DEST%\xml%_EXT%\animcore.xml
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+
+mkdir: %_DEST%\inc%_EXT%\animations
+..\inc\animations\animationnodehelper.hxx %_DEST%\inc%_EXT%\animations\animationnodehelper.hxx
+..\%__SRC%\misc\animcore.component %_DEST%\xml%_EXT%\animcore.component

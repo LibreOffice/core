@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=oasis-text
+Type=MimeType
+Patterns=*.fodt
+MimeType=application/vnd.oasis.opendocument.text-flat-xml
+Comment=OpenDocument Text (Flat XML)

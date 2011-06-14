@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_AnimationFill_idl__
+#define __com_sun_star_animations_AnimationFill_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** This constants are used for the members <member>fill</member> and <member>fillDefault</member>
+    of the an <type>XTimeContainer</type>.
+
+    @see <type>XTimeContainer</type>
+    @see http://www.w3.org/TR/smil20/smil-timing.html#adef-fill
+*/
+constants AnimationFill
+{
+    /**  The fill behavior for the element is determined by the value of the <member>XTiming::FillDefault</member> attribute.
+         This is the default value for the <member>XTiming::Fill</member>..
+         If the application of fillDefault to an element would result in the element having a value
+         of fill that is not allowed on that element, the element will instead have a fill value of
+         <const>AnimationFill::AUTO</const>.
+     */
+    const short DEFAULT = 0;
+
+    /** Specifies that the value of this attribute (and of the fill behavior) are
+        inherited from the <member>XTiming::FillDefault</member> value
+        of the parent element. If there is no parent element, the value is <const>AnimationFill::AUTO</const>.
+        This is the default value for the <member>XTiming::FillDefault</member>.
+    */
+    const short INHERIT = 0;
+
+    /** Specifies that the element will not extend past the end of the last instance of the simple duration.  */
+    const short REMOVE = 1;
+
+    /** Specifies that the element will extend past the end of the last instance of the simple duration by
+        "freezing" the element state at that point. The parent time container of the element determines how
+        long the element is frozen (as described immediately below).
+    */
+    const short FREEZE = 2;
+
+    /** Setting this to "hold" has the same effect as setting to "freeze", except that the element is always
+        frozen to extend to the end of the simple duration of the parent time container of the element
+        (independent of the type of time container). For profiles that support a layered layout model
+        (e.g., SMIL 2.0 Language Profile), held elements (elements with fill="hold") will refresh their display
+        area when a layer is added on top then later removed.
+    */
+    const short HOLD = 3;
+
+    /** Setting this to "transition" has the same effect as setting to "freeze", except that the element is
+        removed at the end of the transition. This value is only allowed on elements with media directly
+        associated with them. If specified on any other element (e.g. a time container element in the SMIL
+        language profile), the attribute is ignored. See the SMIL Transitions module.
+    */
+    const short TRANSITION = 4;
+
+    /** The fill behavior for this element depends on whether the element specifies any of the attributes
+        that define the simple or active duration:
+        <ul>
+        <li>If none of the attributes duration, end, repeatCount or repeatDuration are specified on
+        the element, then the element will have a fill behavior identical to that if it were specified
+        as <const>AnimationFill::FREEZE</const>.</li>
+        <li>Otherwise, the element will have a fill behavior identical to that if it were specified as
+        <const>AnimationFill::REMOVE</const.</li>
+        </ul>
+    */
+    const short AUTO = 5;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

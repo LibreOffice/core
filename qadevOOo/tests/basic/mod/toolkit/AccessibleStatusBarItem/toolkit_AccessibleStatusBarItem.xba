@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="toolkit_AccessibleStatusBarItem" script:language="StarBasic">
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' "com::sun::star::accessibility::XAccessibleText"
+ ' needs the following Global variables:
+   Global accText as String
+   Global readOnly as Boolean
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' com.sun.star.toolkit.AccessibleStatusBarItem
+'*************************************************************************
+On Error Goto ErrHndl
+
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    Dim xController As Object
+    xController = oDoc.getCurrentController()
+
+    Dim xRoot As Object
+    Dim oWin as Object
+    oWin = utils.at_getCurrentWindow(oDoc)
+    xRoot = utils.at_getAccessibleObject(oWin)
+    Dim oStatusBar as Object
+    oStatusBar = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.STATUS_BAR)
+    oObj = oStatusBar.getAccessibleChild(0)
+    
+    readOnly = true
+    accText = oObj.getText()
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub fireEvent()
+    Dim oText as Object
+    oText = oDoc.getText()
+    
+    Dim oEnum as Object
+    Dim oParagraph as Object
+    oEnum = oText.createEnumeration() ' get all paragraphs
+    while oEnum.hasMoreElements()
+        oParagraph = oEnum.nextElement() ' get the last paragraph
+    wend
+    oParagraph.BreakType = com.sun.star.style.BreakType.PAGE_AFTER 
+    
+    Dim oCursor as Object
+    oCursor = oText.createTextCursor()
+    oCursor.gotoEnd(false) 'Goto to the end of document
+    oText.insertControlCharacter(oCursor, 0, false) ' insert a new paragraph
+    oCursor.setString("AccessibleStatusBarItem") ' insert text 
+end Sub
+</script:module>

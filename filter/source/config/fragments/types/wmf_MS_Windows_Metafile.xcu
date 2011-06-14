@@ -1,0 +1,12 @@
+    <node oor:name="wmf_MS_Windows_Metafile" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>wmf</value></prop>
+        <prop oor:name="MediaType"><value>image/x-wmf</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>WMF - MS Windows Metafile</value></prop>
+        <prop oor:name="UIName">
+            <value>WMF - Windows Metafile</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

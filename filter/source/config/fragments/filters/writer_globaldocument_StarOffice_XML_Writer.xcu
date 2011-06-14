@@ -1,0 +1,10 @@
+    <node oor:name="writer_globaldocument_StarOffice_XML_Writer" oor:op="replace">
+        <prop oor:name="Flags"><value>EXPORT TEMPLATE ALIEN ENCRYPTION</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CXML</value></prop>
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>writer_StarOffice_XML_Writer</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+    </node>

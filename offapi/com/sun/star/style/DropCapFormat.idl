@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_DropCapFormat_idl__
+#define __com_sun_star_style_DropCapFormat_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+// DocMerge from xml: struct com::sun::star::style::DropCapFormat
+/** This struct describes drop caps at a paragraph object.
+ */
+published struct DropCapFormat
+{
+    // DocMerge from xml: field com::sun::star::style::DropCapFormat::Lines
+    /** This is the number of lines used for a drop cap.
+     */
+    byte Lines;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::style::DropCapFormat::Count
+    /** This is the number of characters in the drop cap.
+     */
+    byte Count;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::style::DropCapFormat::Distance
+    /** This is the distance between the drop cap in the following text.
+     */
+    short Distance;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

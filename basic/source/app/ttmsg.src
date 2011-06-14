@@ -1,0 +1,141 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "basic/ttmsg.hrc"
+
+
+// Here are included the messages of the folder /basic/source/testtool
+
+
+// Error messages which go to the result file.
+// *********************
+// ***  !!ATTENTION!!  ***
+// *********************
+// The numbers must NEVER(!) change,
+// because they are saved in the result files and a renewed display
+// would display new strings or no strings.
+
+String S_NAME_NOT_THERE
+{
+    Text[ en-US ] = "Name doesn't exist: #($Arg1)";
+};
+String S_DOUBLE_NAME
+{
+    Text[ en-US ] = "Name double: ($Arg1)";
+};
+String S_READING_FILE
+{
+    Text[ en-US ] = "Reading the files";
+};
+String S_CANNOT_OPEN_FILE
+{
+    Text[ en-US ] = "File cannot be opened: ($Arg1)";
+};
+String S_INVALID_LINE
+{
+    Text[ en-US ] = "Line \"($Arg1)\" is invalid.";
+};
+String S_SHORTNAME_UNKNOWN
+{
+    Text[ en-US ] = "Short-name unknown during copying: ($Arg1)";
+};
+String S_LONGNAME_UNKNOWN
+{
+    Text[ en-US ] = "Long-name unknown: ($Arg1)";
+};
+String S_FIRST_SHORTNAME_REQ_ASTRX
+{
+    Text[ en-US ] = "First short-name must start with * . Ignoring.";
+};
+String S_TIMOUT_WAITING
+{
+    Text[ en-US ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
+};
+String S_APPLICATION_RESTARTED
+{
+    Text[ en-US ] = "Application has been restarted.";
+};
+String S_APPLICATION_START_FAILED
+{
+    Text[ en-US ] = "Application \"($Arg1)\" cannot be started. ";
+};
+String S_TIMOUT_SENDING
+{
+    Text[ en-US ] = "Server Timeout while sending. Sequence No: ($Arg1)";
+};
+String S_NO_CONNECTION
+{
+    Text[ en-US ] = "No connection. Sequence No: ($Arg1)";
+};
+String S_NO_FILES_FOUND // Not used anymore. needed only for old *.res files
+{
+    Text[ en-US ] = "No ($Arg1) files found";
+};
+String S_ERRORS_DETECTED
+{
+    Text[ en-US ] = "** ($Arg1) errors occurred";
+};
+String S_NO_ERRORS_DETECTED
+{
+    Text[ en-US ] = "** No errors have occurred";
+};
+String S_WARNINGS_DETECTED
+{
+    Text[ en-US ] = "** ($Arg1) warnings occurred";
+};
+String S_NO_WARNINGS_DETECTED
+{
+    Text[ en-US ] = "** No warnings have occurred";
+};
+String S_INCLUDE_FILE_WARNINGS_DETECTED
+{
+    Text[ en-US ] = "** ($Arg1) warnings occurred during initialization";
+};
+String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
+{
+    Text[ en-US ] = "** No warnings occurred during initialization";
+};
+String S_UNKNOWN_SLOT_CONTROL
+{
+    Text[ en-US ] = "Slot/Control unknown :\"($Arg1)\"";
+};
+String S_RETURN_SEQUENCE_MISSMATCH
+{
+    Text[ en-US ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
+};
+String S_RETURNED_VALUE_ID_MISSMATCH
+{
+    Text[ en-US ] = "Return value received but different Id expected";
+};
+String S_RETURNED_VALUE_NO_RECEIVER
+{
+    Text[ en-US ] = "Return value received but no receiver defined";
+};
+String S_UNKNOWN_METHOD
+{
+    Text[ en-US ] = "Unknown method on object :($Arg1).($Arg2)";
+};
+

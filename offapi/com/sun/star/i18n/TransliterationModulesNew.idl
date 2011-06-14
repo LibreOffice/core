@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_TransliterationModulesNew_idl__
+#define __com_sun_star_i18n_TransliterationModulesNew_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+/** New transliteration module enumeration to use with
+    <member>XTransliteration::loadModuleNew()</member>
+ */
+
+published enum TransliterationModulesNew
+{
+    /// Transliterate a string from upper case to lower case
+    UPPERCASE_LOWERCASE            = 1,
+    /// Transliterate a string from lower case to upper case
+    LOWERCASE_UPPERCASE            = 2,
+    /// Transliterate a string from half width character to full width character
+    HALFWIDTH_FULLWIDTH            = 3,
+    /// Transliterate a string from full width character to half width character
+    FULLWIDTH_HALFWIDTH            = 4,
+    /// Transliterate a Japanese string from Katakana to Hiragana
+    KATAKANA_HIRAGANA              = 5,
+    /// Transliterate a Japanese string from Hiragana to Katakana
+    HIRAGANA_KATAKANA              = 6,
+    /// Ignore case when comparing strings by transliteration service
+    IGNORE_CASE                    = 7,
+    /// Ignore Hiragana and Katakana when comparing strings by transliteration service
+    IGNORE_KANA                    = 8,  // ja_JP
+    /// Ignore full width and half width characters when comparing strings by transliteration service
+    IGNORE_WIDTH                   = 9,  // ja_JP
+    /// Ignore Japanese traditional Kanji characters in Japanese fuzzy search
+    ignoreTraditionalKanji_ja_JP   = 10,
+    /// Ignore Japanese traditional Katakana and Hiragana characters in Japanese fuzzy search
+    ignoreTraditionalKana_ja_JP    = 11,
+    /// Ignore dash or minus sign in Japanese fuzzy search
+    ignoreMinusSign_ja_JP          = 12,
+    /// Ignore Hiragana and Katakana iteration mark in Japanese fuzzy search
+    ignoreIterationMark_ja_JP      = 13,
+    /// Ignore separator punctuations in Japanese fuzzy search
+    ignoreSeparator_ja_JP          = 14,
+    /// Ignore Katakana and Hiragana Zi/Zi and Zu/Zu  in Japanese fuzzy search
+    ignoreZiZu_ja_JP               = 15,
+    /// Ignore Katakana and Hiragana Ba/Gua and Ha/Fa in Japanese fuzzy search
+    ignoreBaFa_ja_JP               = 16,
+    /// Ignore Katakana and Hiragana Tsui/Tea/Ti and Dyi/Ji in Japanese fuzzy search
+    ignoreTiJi_ja_JP               = 17,
+    /// Ignore Katakana and Hiragana Hyu/Fyu and Byu/Gyu in Japanese fuzzy search
+    ignoreHyuByu_ja_JP             = 18,
+    /// Ignore Katakana and Hiragana Se/Sye and Ze/Je in Japanese fuzzy search
+    ignoreSeZe_ja_JP               = 19,
+    /// Ignore Katakana YA/A following the character in either I or E row in Japanese fuzzy search
+    ignoreIandEfollowedByYa_ja_JP  = 20,
+    /// Ignore Katakana KI/KU following the character in SA column in Japanese fuzzy search
+    ignoreKiKuFollowedBySa_ja_JP   = 21,
+    /// Ignore Japanese normal and small sized character in Japanese fuzzy search
+    ignoreSize_ja_JP               = 22,
+    /// Ignore Japanese prolonged sound mark in Japanese fuzzy search
+    ignoreProlongedSoundMark_ja_JP = 23,
+    /// Ignore middle dot in Japanese fuzzy search
+    ignoreMiddleDot_ja_JP          = 24,
+    /// Ignore white space characters, include space, TAB, return, etc. in Japanese fuzzy search
+    ignoreSpace_ja_JP              = 25,
+    /// transliterate Japanese small sized character to normal sized character
+    smallToLarge_ja_JP             = 26,
+    /// transliterate Japanese normal sized character to small sized character
+    largeToSmall_ja_JP             = 27,
+    /// Transliterate an ASCII number string to Simplified Chinese lower case number string in spellout format
+    NumToTextLower_zh_CN           = 28,
+    /// Transliterate an ASCII number string to Simplified Chinese upper case number string in spellout format
+    NumToTextUpper_zh_CN           = 29,
+    /// Transliterate an ASCII number string to Traditional Chinese lower case number string in spellout format
+    NumToTextLower_zh_TW           = 30,
+    /// Transliterate an ASCII number string to Traditional Chinese upper case number string in spellout format
+    NumToTextUpper_zh_TW           = 31,
+    /// Transliterate an ASCII number string to formal Korean Hangul number string in spellout format
+    NumToTextFormalHangul_ko       = 32,
+    /// Transliterate an ASCII number string to formal Korean Hanja lower case number string in spellout format
+    NumToTextFormalLower_ko        = 33,
+    /// Transliterate an ASCII number string to formal Korean Hanja upper case number string in spellout format
+    NumToTextFormalUpper_ko        = 34,
+    /// Transliterate an ASCII number string to informal Korean Hangul number string in spellout format
+    NumToTextInformalHangul_ko     = 35,
+    /// Transliterate an ASCII number string to informal Korean Hanja lower case number string in spellout format
+    NumToTextInformalLower_ko      = 36,
+    /// Transliterate an ASCII number string to informal Korean Hanja upper case number string in spellout format
+    NumToTextInformalUpper_ko      = 37,
+    /// Transliterate an ASCII number string to Simplified Chinese lower case number string
+    NumToCharLower_zh_CN           = 38,
+    /// Transliterate an ASCII number string to Simplified Chinese upper case number string
+    NumToCharUpper_zh_CN           = 39,
+    /// Transliterate an ASCII number string to Traditional Chinese lower case number string
+    NumToCharLower_zh_TW           = 40,
+    /// Transliterate an ASCII number string to Traditional Chinese upper case number string
+    NumToCharUpper_zh_TW           = 41,
+    /// Transliterate an ASCII number string to Korean Hangul number string
+    NumToCharHangul_ko             = 42,
+    /// Transliterate an ASCII number string to Korean Hanja lower case number string
+    NumToCharLower_ko              = 43,
+    /// Transliterate an ASCII number string to Korean Hanja upper case number string
+    NumToCharUpper_ko              = 44,
+    /// Transliterate a half width number string to full width number string
+    NumToCharFullwidth             = 45,
+    /// Transliterate an ASCII number string to Japanese Kanji number string
+    NumToCharKanjiShort_ja_JP      = 46,
+    /// Transliterate a Simplified Chinese lower case number string (spellout) to ASCII number string
+    TextToNumLower_zh_CN           = 47,
+    /// Transliterate a Simplified Chinese upper case number string (spellout) to ASCII number string
+    TextToNumUpper_zh_CN           = 48,
+    /// Transliterate a Traditional Chinese lower case number string (spellout) to ASCII number string
+    TextToNumLower_zh_TW           = 49,
+    /// Transliterate a Traditional Chinese upper case number string (spellout) to ASCII number string
+    TextToNumUpper_zh_TW           = 50,
+    /// Transliterate a Korean formal Hangul number string (spellout) to ASCII number string
+    TextToNumFormalHangul_ko       = 51,
+    /// Transliterate a Korean formal Hanja lower case number string (spellout) to ASCII number string
+    TextToNumFormalLower_ko        = 52,
+    /// Transliterate a Korean formal Hanja upper case number string (spellout) to ASCII number string
+    TextToNumFormalUpper_ko        = 53,
+    /// Transliterate a Korean informal Hangul number string (spellout) to ASCII number string
+    TextToNumInformalHangul_ko     = 54,
+    /// Transliterate a Korean informal Hanja lower case number string (spellout) to ASCII number string
+    TextToNumInformalLower_ko      = 55,
+    /// Transliterate a Korean informal Hanja upper case number string (spellout) to ASCII number string
+    TextToNumInformalUpper_ko      = 56,
+    // 2 Spaces for Japanese TextToNum
+    /// Transliterate a Simplified Chinese lower case number string to ASCII number string
+    CharToNumLower_zh_CN           = 59,
+    /// Transliterate a Simplified Chinese upper case number string to ASCII number string
+    CharToNumUpper_zh_CN           = 60,
+    /// Transliterate a Traditional Chinese lower case number string to ASCII number string
+    CharToNumLower_zh_TW           = 61,
+    /// Transliterate a Traditional Chinese upper case number string to ASCII number string
+    CharToNumUpper_zh_TW           = 62,
+    /// Transliterate a Korean Hangul number string to ASCII number string
+    CharToNumHangul_ko             = 63,
+    /// Transliterate a Korean Hanja lower case number string to ASCII number string
+    CharToNumLower_ko              = 64,
+    /// Transliterate a Korean Hanja upper case number string to ASCII number string
+    CharToNumUpper_ko              = 65,
+    END_OF_MODULE                  = 0
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

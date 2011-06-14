@@ -1,0 +1,6 @@
+fileAlias;serviceName;expectedType
+text1;com.sun.star.text.FormatDetector
+csv1;com.sun.star.text.FormatDetector;writer_Text_encoded
+csv1;com.sun.star.comp.calc.FormatDetector;calc_Text_txt_csv_StarCalc
+csv2;com.sun.star.text.FormatDetector;writer_Text_encoded
+csv2;com.sun.star.comp.calc.FormatDetector;calc_Text_txt_csv_StarCalc

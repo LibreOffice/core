@@ -1,0 +1,379 @@
+--- misc/mysql-connector-cpp/cppconn/build_config.h	2009-08-13 17:13:46.000000000 +0200
++++ misc/build/mysql-connector-cpp/cppconn/build_config.h	2009-09-11 09:41:41.150391316 +0200
+@@ -1,36 +1,34 @@
+-/*
+-   Copyright 2007 - 2008 MySQL AB, 2008 - 2009 Sun Microsystems, Inc.  All rights reserved.
+-
+-   The MySQL Connector/C++ is licensed under the terms of the GPL
+-   <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>, like most
+-   MySQL Connectors. There are special exceptions to the terms and
+-   conditions of the GPL as it is applied to this software, see the
+-   FLOSS License Exception
+-   <http://www.mysql.com/about/legal/licensing/foss-exception.html>.
+-*/
+-
+-#ifndef _SQL_BUILD_CONFIG_H_
+-#define _SQL_BUILD_CONFIG_H_
+-
+-#ifndef CPPCONN_PUBLIC_FUNC
+-
+-#if defined(_WIN32)
+- // mysqlcppconn_EXPORTS is added by cmake and defined for dynamic lib build only
+-  #ifdef mysqlcppconn_EXPORTS
+-    #define CPPCONN_PUBLIC_FUNC __declspec(dllexport)
+-  #else
+-    // this is for static build
+-    #ifdef CPPCONN_LIB_BUILD
+-      #define CPPCONN_PUBLIC_FUNC
+-    #else
+-      // this is for clients using dynamic lib
+-      #define CPPCONN_PUBLIC_FUNC __declspec(dllimport)
+-    #endif
+-  #endif
+-#else
+-  #define CPPCONN_PUBLIC_FUNC
+-#endif
+-
+-#endif    //#ifndef CPPCONN_PUBLIC_FUNC
+-
+-#endif    //#ifndef _SQL_BUILD_CONFIG_H_
++/*
++   Copyright 2007 - 2008 MySQL AB, 2008 - 2009 Sun Microsystems, Inc.  All rights reserved.
++
++   The MySQL Connector/C++ is licensed under the terms of the GPL
++   <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>, like most
++   MySQL Connectors. There are special exceptions to the terms and
++   conditions of the GPL as it is applied to this software, see the
++   FLOSS License Exception
++   <http://www.mysql.com/about/legal/licensing/foss-exception.html>.
++*/
++
++#ifndef _SQL_BUILD_CONFIG_H_
++#define _SQL_BUILD_CONFIG_H_
++
++#ifndef _SAL_TYPES_H_
++#include <sal/types.h>
++#endif
++  
++ // mysqlcppconn_EXPORTS is added by cmake and defined for dynamic lib build only
++  #ifdef mysqlcppconn_EXPORTS
++    #define CPPCONN_PUBLIC_FUNC SAL_DLLPUBLIC_EXPORT
++  #else
++    // this is for static build
++    #ifdef CPPCONN_LIB_BUILD
++      #define CPPCONN_PUBLIC_FUNC
++    #else
++      // this is for clients using dynamic lib
++      #define CPPCONN_PUBLIC_FUNC SAL_DLLPUBLIC_IMPORT
++    #endif
++  #endif
++
++  #define CPPCONN_PUBLIC_EXCEPTION SAL_EXCEPTION_DLLPUBLIC_EXPORT
++
++#endif    //#ifndef _SQL_BUILD_CONFIG_H_
+--- misc/mysql-connector-cpp/cppconn/config.h	2009-08-14 10:17:38.234375000 +0200
++++ misc/build/mysql-connector-cpp/cppconn/config.h	2009-08-14 09:56:37.000000000 +0200
+@@ -1 +1,34 @@
+-dummy
++#include <sal/types.h>
++
++#define HAVE_FUNCTION_STRTOL 1
++#define HAVE_FUNCTION_STRTOUL 1
++#define HAVE_FUNCTION_STRTOL 1
++#define HAVE_FUNCTION_STRTOULL 1
++
++#if defined(MACOSX) || defined(SOLARIS) || defined(LINUX)
++    #define HAVE_STDINT_H
++    #define HAVE_INTTYPES_H
++#endif
++
++#ifdef HAVE_STDINT_H
++#include <stdint.h>
++#endif
++
++#ifdef HAVE_INTTYPES_H
++#include <inttypes.h>
++#endif
++
++#if !defined(HAVE_STDINT_H) && !defined(HAVE_INTTYPES_H) 
++
++// if we do not have the standard C99 integer types, then define them based on the respective SAL types
++#if !defined(_SYS_TYPES_H)
++typedef sal_Int8    int8_t;
++typedef sal_Int16   int16_t;
++typedef sal_Int32   int32_t;
++#endif // !defined(_SYS_TYPES_H)
++typedef sal_uInt8   uint8_t;
++typedef sal_uInt16  uint16_t;
++typedef sal_uInt32  uint32_t;
++typedef sal_Int64   int64_t;
++typedef sal_uInt64  uint64_t;
++#endif // !defined(HAVE_STDINT_H) && !defined(HAVE_INTTYPES_H)
+--- misc/mysql-connector-cpp/cppconn/connection.h	2009-08-13 17:13:46.000000000 +0200
++++ misc/build/mysql-connector-cpp/cppconn/connection.h	2009-08-14 09:56:37.000000000 +0200
+@@ -13,7 +13,6 @@
+ #define _SQL_CONNECTION_H_
+ 
+ #include <map>
+-#include <boost/variant.hpp>
+ 
+ #include "build_config.h"
+ #include "warning.h"
+@@ -22,8 +21,54 @@
+ namespace sql
+ {
+ 
+-
+-typedef boost::variant<int, double, bool, sql::SQLString > ConnectPropertyVal;
++// hack around the non-existent ::boost::variant in OOo 3.1 build env
++struct ConnectPropertyVal
++{
++    sql::SQLString valString;
++    int            valInt;
++    bool           valBool;
++
++    ConnectPropertyVal()
++    {
++        reset();
++    }
++    ConnectPropertyVal( const sql::SQLString& _val )
++    {
++        *this = _val;
++    }
++    ConnectPropertyVal( const int _val )
++    {
++        *this = _val;
++    }
++    ConnectPropertyVal( const bool _val )
++    {
++        *this = _val;
++    }
++    ConnectPropertyVal& operator=( const sql::SQLString& _val )
++    {
++        reset();
++        valString = _val;
++        return *this;
++    }
++    ConnectPropertyVal& operator=( const int _val )
++    {
++        reset();
++        valInt = _val;
++        return *this;
++    }
++    ConnectPropertyVal& operator=( const bool _val )
++    {
++        reset();
++        valBool = _val;
++        return *this;
++    }
++    void reset()
++    {
++        valString = std::string();
++        valInt = 0;
++        valBool = false;
++    }
++};
+ 
+ typedef std::map< sql::SQLString, ConnectPropertyVal > ConnectOptionsMap;
+ 
+--- misc/mysql-connector-cpp/cppconn/exception.h	2009-08-20 17:51:23.000000000 +0200
++++ misc/build/mysql-connector-cpp/cppconn/exception.h	2009-09-11 09:41:41.076379817 +0200
+@@ -37,7 +37,7 @@
+ #pragma warning(push)
+ #pragma warning(disable: 4275)
+ #endif
+-class CPPCONN_PUBLIC_FUNC SQLException : public std::runtime_error
++class CPPCONN_PUBLIC_EXCEPTION SQLException : public std::runtime_error
+ {
+ #ifdef _WIN32
+ #pragma warning(pop)
+@@ -83,26 +83,26 @@
+ 	MEMORY_ALLOC_OPERATORS(SQLException)
+ };
+ 
+-struct CPPCONN_PUBLIC_FUNC MethodNotImplementedException : public SQLException
++struct CPPCONN_PUBLIC_EXCEPTION MethodNotImplementedException : public SQLException
+ {
+ 	MethodNotImplementedException(const MethodNotImplementedException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
+ 	MethodNotImplementedException(const std::string& reason) : SQLException(reason, "", 0) {}
+ };
+ 
+-struct CPPCONN_PUBLIC_FUNC InvalidArgumentException : public SQLException
++struct CPPCONN_PUBLIC_EXCEPTION InvalidArgumentException : public SQLException
+ {
+ 	InvalidArgumentException(const InvalidArgumentException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
+ 	InvalidArgumentException(const std::string& reason) : SQLException(reason, "", 0) {}
+ };
+ 
+-struct CPPCONN_PUBLIC_FUNC InvalidInstanceException : public SQLException
++struct CPPCONN_PUBLIC_EXCEPTION InvalidInstanceException : public SQLException
+ {
+ 	InvalidInstanceException(const InvalidInstanceException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
+ 	InvalidInstanceException(const std::string& reason) : SQLException(reason, "", 0) {}
+ };
+ 
+ 
+-struct CPPCONN_PUBLIC_FUNC NonScrollableException : public SQLException
++struct CPPCONN_PUBLIC_EXCEPTION NonScrollableException : public SQLException
+ {
+ 	NonScrollableException(const NonScrollableException& e) : SQLException(e.what(), e.sql_state, e.errNo) { }
+ 	NonScrollableException(const std::string& reason) : SQLException(reason, "", 0) {}
+--- misc/mysql-connector-cpp/driver/makefile.mk	2009-09-11 09:42:34.087202551 +0200
++++ misc/build/mysql-connector-cpp/driver/makefile.mk	2009-09-11 09:42:25.902286382 +0200
+@@ -1 +1,64 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++.INCLUDE : $(PRJ)$/cppconn_config.pmk
++
++PRJINC=..
++TARGET=$(PRJNAME)
++
++# --- Settings -----------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++.INCLUDE : $(PRJ)$/mysql_config.pmk
++
++# --- Files --------------------------------------------------------
++
++.IF "$(GUI)-$(OS)-$(RTL_ARCH)" == "UNX-LINUX-x86"
++    SHL1NOCHECK=TRUE
++.ENDIF
++SHL1TARGET=$(TARGET)
++
++LIB1TARGET=$(SLB)$/$(PRJNAME).lib
++LIB1OBJFILES+= \
++        $(SLO)$/mysql_art_resultset.obj \
++        $(SLO)$/mysql_art_rset_metadata.obj \
++        $(SLO)$/mysql_connection.obj \
++        $(SLO)$/mysql_debug.obj \
++        $(SLO)$/mysql_driver.obj \
++        $(SLO)$/mysql_metadata.obj \
++        $(SLO)$/mysql_parameter_metadata.obj \
++        $(SLO)$/mysql_prepared_statement.obj \
++        $(SLO)$/mysql_ps_resultset.obj \
++        $(SLO)$/mysql_ps_resultset_metadata.obj \
++        $(SLO)$/mysql_resultbind.obj \
++        $(SLO)$/mysql_resultset.obj \
++        $(SLO)$/mysql_resultset_metadata.obj \
++        $(SLO)$/mysql_statement.obj \
++        $(SLO)$/mysql_util.obj \
++        $(SLO)$/mysql_warning.obj \
++
++SHL1STDLIBS=\
++       $(MYSQL_LIB)
++
++SHL1RPATH=OXT
++SHL1IMPLIB=  i$(TARGET)
++SHL1LIBS=    $(LIB1TARGET) $(SLB)$/$(CPPCONN_NATIVEAPI).lib
++SHL1DEF=     $(MISC)$/$(SHL1TARGET).def
++DEF1NAME=    $(SHL1TARGET)
++DEF1DEPN=    $(MISC)$/$(SHL1TARGET).flt \
++              $(LIB1TARGET)
++DEFLIB1NAME=$(TARGET)
++
++# --- Targets ------------------------------------------------------
++
++.INCLUDE :  target.mk
++
++# --- filter file ------------------------------
++
++.IF "$(depend)"==""
++$(MISC)$/$(SHL1TARGET).flt: makefile.mk
++    @echo CLEAR_THE_FILE	> $@
++	@echo _TI				>>$@
++	@echo _real				>>$@
++	@echo __CT				>>$@
++.ENDIF # "$(depend)"==""
+--- misc/mysql-connector-cpp/driver/mysql_connection.cpp	2009-08-13 17:13:46.000000000 +0200
++++ misc/build/mysql-connector-cpp/driver/mysql_connection.cpp	2009-08-14 09:56:37.015625000 +0200
+@@ -50,6 +50,34 @@
+ #include "mysql_debug.h"
+ 
+ 
++// part II of the hack to make C/C++ compile in an OOo env which doesn't have boost::variant installed
++namespace boost
++{
++    template < class TYPE >
++    const TYPE* get( const sql::ConnectPropertyVal* val )
++    {
++        return val;
++    }
++
++    template < >
++    const sql::SQLString* get< sql::SQLString >( const sql::ConnectPropertyVal* val )
++    {
++        return &val->valString;
++    }
++
++    template < >
++    const int* get< int >( const sql::ConnectPropertyVal* val )
++    {
++        return &val->valInt;
++    }
++
++    template < >
++    const bool* get< bool >( const sql::ConnectPropertyVal* val )
++    {
++        return &val->valBool;
++    }
++}
++
+ namespace sql
+ {
+ namespace mysql
+--- misc/mysql-connector-cpp/driver/mysql_debug.h	2009-08-13 17:13:46.000000000 +0200
++++ misc/build/mysql-connector-cpp/driver/mysql_debug.h	2009-08-14 09:56:37.015625000 +0200
+@@ -25,16 +25,6 @@
+ 
+ 
+ 
+-#if defined(WE_HAVE_VARARGS_MACRO_SUPPORT) && (CPPCONN_TRACE_ENABLED || defined(SAL_DLLPRIVATE))
+-	#define CPP_ENTER(msg)			const boost::shared_ptr< MySQL_DebugLogger > __l = this->logger;(void)__l;\
+-									MySQL_DebugEnterEvent __this_func(__LINE__, __FILE__, msg, this->logger)
+-	#define CPP_ENTER_WL(l, msg)	const boost::shared_ptr< MySQL_DebugLogger > __l = (l);(void)__l;\
+-									MySQL_DebugEnterEvent __this_func(__LINE__, __FILE__, msg, (l))
+-	#define CPP_INFO(msg)		{if (__l) __l->log("INF", msg); }
+-	#define CPP_INFO_FMT(...)	{if (__l) __l->log_va("INF", __VA_ARGS__); }
+-	#define CPP_ERR(msg)		{if (__l) __l->log("ERR", msg); }
+-	#define CPP_ERR_FMT(...)	{if (__l) __l->log_va("ERR", __VA_ARGS__); }
+-#else
+ 	#define CPP_ENTER(msg)
+ 	#define CPP_ENTER_WL(l, msg)
+ 	#define CPP_INFO(msg)
+@@ -42,7 +32,6 @@
+ 	#define CPP_ENTER_WL(l, msg)
+ 	static inline void CPP_INFO_FMT(...) {}
+ 	static inline void CPP_ERR_FMT(...) {}
+-#endif
+ 
+ #include <stack>
+ #include "mysql_util.h"
+--- misc/mysql-connector-cpp/driver/nativeapi/makefile.mk	2009-08-17 21:32:53.694119382 +0200
++++ misc/build/mysql-connector-cpp/driver/nativeapi/makefile.mk	2009-08-17 21:32:50.534346360 +0200
+@@ -1 +1,23 @@
+-dummy
++PRJ=..$/..$/..$/..$/..$/..
++PRJINC=..$/..
++
++.INCLUDE : $(PRJ)$/cppconn_config.pmk
++
++TARGET=$(CPPCONN_NATIVEAPI)
++
++# --- Settings -----------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++.INCLUDE : $(PRJ)$/mysql_config.pmk
++
++LIB1TARGET=$(SLB)$/$(TARGET).lib
++LIB1OBJFILES+= \
++        $(SLO)$/mysql_client_api.obj \
++        $(SLO)$/library_loader.obj \
++        $(SLO)$/mysql_native_connection_wrapper.obj \
++        $(SLO)$/mysql_native_resultset_wrapper.obj \
++        $(SLO)$/mysql_native_statement_wrapper.obj \
++
++# --- Targets ------------------------------------------------------
++.INCLUDE :  target.mk

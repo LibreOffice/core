@@ -1,0 +1,428 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "optload.hrc"
+#include "helpid.h"
+#include "config.hrc"
+
+/**************************************************************************/
+/*                                                                        */
+/**************************************************************************/
+
+TabPage TP_OPTLOAD_PAGE
+{
+    HelpID = HID_OPTLOAD_PAGE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_UPDATE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Update";
+    };
+    FixedText FT_LINK
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 115 , 8 ) ;
+        Text [ en-US ] = "Update links when loading";
+    };
+    RadioButton RB_ALWAYS
+    {
+        HelpID = "sw:RadioButton:TP_OPTLOAD_PAGE:RB_ALWAYS";
+        Pos = MAP_APPFONT ( 18 , 26 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Always";
+    };
+    RadioButton RB_REQUEST
+    {
+        HelpID = "sw:RadioButton:TP_OPTLOAD_PAGE:RB_REQUEST";
+        Pos = MAP_APPFONT ( 18 , 39 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~On request";
+    };
+    RadioButton RB_NEVER
+    {
+        HelpID = "sw:RadioButton:TP_OPTLOAD_PAGE:RB_NEVER";
+        Pos = MAP_APPFONT ( 18 , 52 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Never";
+    };
+    FixedText FT_FIELD
+    {
+        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Text [ en-US ] = "Automatically";
+    };
+    CheckBox CB_AUTO_UPDATE_FIELDS
+    {
+        HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_AUTO_UPDATE_FIELDS";
+        Pos = MAP_APPFONT ( 136 , 26) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~Fields";
+    };
+    CheckBox CB_AUTO_UPDATE_CHARTS
+    {
+        HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_AUTO_UPDATE_CHARTS";
+        Pos = MAP_APPFONT ( 136 , 39) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text [ en-US ] = "~Charts";
+    };
+    FixedLine FL_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Settings";
+    };
+    FixedText FT_METRIC
+    {
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Measurement unit";
+    };
+    ListBox LB_METRIC
+    {
+        HelpID = "sw:ListBox:TP_OPTLOAD_PAGE:LB_METRIC";
+        Pos = MAP_APPFONT ( 130, 77 ) ;
+        Size = MAP_APPFONT ( 50 , 50 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_TAB
+    {
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
+        Text [ en-US ] = "Tab stops";
+        Group = TRUE ;
+    };
+    MetricField MF_TAB
+    {
+        HelpID = "sw:MetricField:TP_OPTLOAD_PAGE:MF_TAB";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 93 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        SpinSize = 10 ;
+        Minimum = 50 ;
+        Maximum = 9999 ;
+        First = 50 ;
+        Last = 9999 ;
+    };
+    CheckBox CB_USE_SQUARE_PAGE_MODE
+    {
+        HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_USE_SQUARE_PAGE_MODE";
+        Pos = MAP_APPFONT ( 12 , 111) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Text [ en-US ] = "Use square page mode for text grid";
+        Text [ zh-CN ] = "使用稿纸模式";
+    };
+
+    CheckBox CB_USE_CHAR_UNIT
+    {
+        Pos = MAP_APPFONT ( 12 , 130) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text [ en-US ] = "Enable char unit";
+        Text [ x-comment ] = " ";
+    };
+
+};
+/**************************************************************************/
+/*                                                                        */
+/**************************************************************************/
+
+TabPage TP_OPTCAPTION_PAGE
+{
+    HelpID = HID_OPTCAPTION_PAGE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Caption" ;
+
+    FixedText FT_OBJECTS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 106 , 20 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Add captions automatically\nwhen inserting:" ;
+    };
+    Control CLB_OBJECTS
+    {
+        Pos = MAP_APPFONT ( 6 , 29 ) ;
+        Size = MAP_APPFONT ( 106 , 97 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ORDER
+    {
+        Pos = MAP_APPFONT ( 6 , 130 ) ;
+        Size = MAP_APPFONT ( 106 , 8 ) ;
+        Text [ en-US ] = "Caption order" ;
+    };
+    ListBox LB_ORDER
+    {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:LB_ORDER";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 141 ) ;
+        Size = MAP_APPFONT ( 106 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Category first" ; > ;
+            < "Numbering first" ; > ;
+        };
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 159 ) ;
+        Size = MAP_APPFONT ( 106 , 20 ) ;
+        Border = TRUE;
+    };
+    String STR_TABLE
+    {
+        Text [ en-US ] = "%PRODUCTNAME Writer Table";
+    };
+    String STR_FRAME
+    {
+        Text [ en-US ] = "%PRODUCTNAME Writer Frame";
+    };
+    String STR_GRAPHIC
+    {
+        Text [ en-US ] = "%PRODUCTNAME Writer Picture";
+    };
+    String STR_OLE
+    {
+        Text [ en-US ] = "Other OLE Objects";
+    };
+
+    FixedLine FL_SETTINGS_2
+    {
+        Pos = MAP_APPFONT ( 118 , 3 ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
+        Text [ en-US ] = "Caption" ;
+    };
+    FixedText TXT_CATEGORY
+    {
+        Pos = MAP_APPFONT ( 125 , 16 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "Category" ;
+        Left = TRUE ;
+    };
+    ComboBox BOX_CATEGORY
+    {
+        HelpID = "sw:ComboBox:TP_OPTCAPTION_PAGE:BOX_CATEGORY";
+        Pos = MAP_APPFONT ( 189 , 14 ) ;
+        Size = MAP_APPFONT ( 59 , 61 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText TXT_FORMAT
+    {
+        Pos = MAP_APPFONT ( 125 , 31 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "~Numbering" ;
+        Left = TRUE ;
+    };
+    ListBox BOX_FORMAT
+    {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:BOX_FORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 189 , 29 ) ;
+        Size = MAP_APPFONT ( 59 , 61 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NUM_SEP
+    {
+        Pos = MAP_APPFONT ( 125 , 46 ) ;
+        Size = MAP_APPFONT ( 61 , 8 ) ;
+        Text [ en-US ] = "Numbering separator" ;
+        Left = TRUE ;
+    };
+    Edit ED_NUM_SEP
+    {
+        HelpID = "sw:Edit:TP_OPTCAPTION_PAGE:ED_NUM_SEP";
+        Pos = MAP_APPFONT ( 189 , 44 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Text  = ". " ;
+    };
+    FixedText TXT_TEXT
+    {
+        Pos = MAP_APPFONT ( 125 , 60 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "Separator" ;
+        Left = TRUE ;
+    };
+    Edit EDT_TEXT
+    {
+        HelpID = "sw:Edit:TP_OPTCAPTION_PAGE:EDT_TEXT";
+        Pos = MAP_APPFONT ( 189 , 59 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText TXT_POS
+    {
+        Pos = MAP_APPFONT ( 125 , 75 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Position" ;
+    };
+    ListBox BOX_POS
+    {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:BOX_POS";
+        Pos = MAP_APPFONT ( 189 , 74 ) ;
+        Size = MAP_APPFONT ( 59 , 61 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+    FixedLine FL_NUMCAPT
+    {
+        Pos = MAP_APPFONT ( 118 , 89 ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
+        Text [ en-US ] = "Numbering captions by chapter" ;
+    };
+    FixedText FT_LEVEL
+    {
+        Pos = MAP_APPFONT ( 125 , 102 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "Level" ;
+    };
+    ListBox LB_LEVEL
+    {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:LB_LEVEL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 189 , 100 ) ;
+        Size = MAP_APPFONT ( 59 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "None" ; > ;
+        };
+    };
+    FixedText FT_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 125 , 117 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "Separator" ;
+    };
+    Edit ED_SEPARATOR
+    {
+        HelpID = "sw:Edit:TP_OPTCAPTION_PAGE:ED_SEPARATOR";
+        Pos = MAP_APPFONT ( 189 , 115 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
+        Border = TRUE ;
+        MaxTextLength = 1 ;
+        TEXT = "." ;
+    };
+    FixedLine FL_CATEGORY
+    {
+        Pos = MAP_APPFONT ( 118 , 130 ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
+        Text [ en-US ] = "Category and frame format" ;
+    };
+    FixedText FT_CHARSTYLE
+    {
+        Pos = MAP_APPFONT ( 125 , 143 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "Character style" ;
+    };
+    ListBox LB_CHARSTYLE
+    {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:LB_CHARSTYLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 189 , 141 ) ;
+        Size = MAP_APPFONT ( 59 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "None" ; > ;
+        };
+    };
+    CheckBox CB_APPLYBORDER
+    {
+        HelpID = "sw:CheckBox:TP_OPTCAPTION_PAGE:CB_APPLYBORDER";
+        Pos = MAP_APPFONT ( 125 , 158 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        Text [ en-US ] = "Apply border and shadow" ;
+    };
+
+    String STR_BEGINNING
+    {
+        Text [ en-US ] = "At the beginning" ;
+    };
+    String STR_END
+    {
+        Text [ en-US ] = "At the end" ;
+    };
+    String STR_ABOVE
+    {
+        Text [ en-US ] = "Above" ;
+    };
+    String STR_CP_BELOW
+    {
+        Text [ en-US ] = "Below" ;
+    };
+    String STR_CATEGORY_NONE
+    {
+        Text [ en-US ] = "<None>" ;
+    };
+};
+
+StringArray STR_ARR_METRIC
+{
+    ItemList [ en-US ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Inch" ; FUNIT_INCH ; > ;
+        < "Foot" ; FUNIT_FOOT ; > ;
+        < "Miles" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+        < "Char" ; FUNIT_CHAR ; >;
+        < "Line" ; FUNIT_LINE ; >;
+    };
+};
+

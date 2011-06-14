@@ -1,0 +1,2371 @@
+[RID_STR_COMMON_PRODUCTNAME]
+en-US = "OpenOffice.org"
+
+[RID_STR_COMMON_PRODUCTVERSION]
+en-US = "3.0"
+
+[RID_STR_COMMON_NEXTPRODUCTVERSION]
+en-US = "3.1"
+
+[RID_STR_COMMON_OLE_CONTROL]
+en-US = "OLE Control"
+
+[RID_STR_COMMON_OLE_FIELD_LINK]
+en-US = "OLE Field Link"
+
+[RID_STR_COMMON_OLE_UNKNOWN]
+en-US = "Unknown Type"
+
+[RID_STR_COMMON_VB_COMPONENT_MODULE]
+en-US = "Module"
+
+[RID_STR_COMMON_VB_COMPONENT_STANDARD]
+en-US = "Standard Module"
+
+[RID_STR_COMMON_VB_COMPONENT_CLASS]
+en-US = "Class Module"
+
+[RID_STR_COMMON_VB_COMPONENT_USER_FORM]
+en-US = "User Form"
+
+[RID_STR_COMMON_VB_COMPONENT_DOCUMENT]
+en-US = "Document"
+
+[RID_STR_COMMON_VB_COMPONENT_ACTIVEX_DESIGNER]
+en-US = "ActiveX Designer"
+
+[RID_STR_COMMON_VB_COMPONENT_UNKNOWN]
+en-US = "Unknown"
+
+[RID_STR_COMMON_YES_OR_NO]
+en-US = "Yes or No"
+
+[RID_STR_COMMON_DATE]
+en-US = "Date"
+
+[RID_STR_COMMON_NUMBER]
+en-US = "Number"
+
+[RID_STR_COMMON_TEXT]
+en-US = "Text"
+
+[RID_STR_COMMON_UNKNOWN]
+en-US = "Unknown"
+
+[RID_STR_COMMON_DEC_TO_EXTERNAL_LIBRARY]
+en-US = "Declaration to external library"
+
+[RID_STR_COMMON_RESULTS_LOCATION_TYPE_DOCUMENT]
+en-US = "Document"
+
+[RID_STR_COMMON_RESULTS_LOCATION_TYPE_PAGE]
+en-US = "Page"
+
+[RID_STR_COMMON_RESULTS_LOCATION_TYPE_WORKBOOK]
+en-US = "WorkBook"
+
+[RID_STR_COMMON_RESULTS_LOCATION_TYPE_SHEET]
+en-US = "Sheet"
+
+[RID_STR_COMMON_RESULTS_LOCATION_TYPE_PRESENTATION]
+en-US = "Presentation"
+
+[RID_STR_COMMON_RESULTS_LOCATION_TYPE_SLIDE]
+en-US = "Slide"
+
+[RID_STR_COMMON_INVALID_PASSWORD]
+en-US = "Invalid Password"
+
+[RID_STR_COMMON_PASSWORD_SKIPDOC]
+en-US = "Skip Password Protected"
+
+[RID_STR_COMMON_NA]
+en-US = "na"
+
+[RID_STR_COMMON_ATTRIBUTE_BROKEN]
+en-US = "Broken!"
+
+[RID_STR_COMMON_ATTRIBUTE_BUILTIN]
+en-US = "BuiltIn"
+
+[RID_STR_COMMON_ATTRIBUTE_CHECK_DOCUMENT_REFERENCES]
+en-US = "Check document VB-IDE/Tools/References"
+
+[RID_STR_COMMON_ATTRIBUTE_CLASS_ME_COUNT]
+en-US = "Class refs to Me"
+
+[RID_STR_COMMON_ATTRIBUTE_COMPONENT]
+en-US = "Component"
+
+[RID_STR_COMMON_ATTRIBUTE_CONTROLS]
+en-US = "Controls"
+
+[RID_STR_COMMON_ATTRIBUTE_CUSTOM]
+en-US = "Custom"
+
+[RID_STR_COMMON_ATTRIBUTE_DESCRIPTION]
+en-US = "Description"
+
+[RID_STR_COMMON_ATTRIBUTE_GUID]
+en-US = "GUID"
+
+[RID_STR_COMMON_ATTRIBUTE_FILE]
+en-US = "File"
+
+[RID_STR_COMMON_ATTRIBUTE_PROPERTIES]
+en-US = "Properties"
+
+[RID_STR_COMMON_ATTRIBUTE_FURTHER_MACRO_ANALYSIS_NOT_POSSIBLE]
+en-US = "Further macro analysis not possible"
+
+[RID_STR_COMMON_ATTRIBUTE_INCLUDING]
+en-US = "including:"
+
+[RID_STR_COMMON_ATTRIBUTE_INTACT]
+en-US = "Intact"
+
+[RID_STR_COMMON_ATTRIBUTE_ISBROKEN]
+en-US = "IsBroken"
+
+[RID_STR_COMMON_ATTRIBUTE_MAJOR]
+en-US = "Major"
+
+[RID_STR_COMMON_ATTRIBUTE_MINOR]
+en-US = "Minor"
+
+[RID_STR_COMMON_ATTRIBUTE_MISSING]
+en-US = "MISSING"
+
+[RID_STR_COMMON_ATTRIBUTE_NAME]
+en-US = "Name"
+
+[RID_STR_COMMON_ATTRIBUTE_NON_PORTABLE_EXTERNAL_REFERENCES]
+en-US = "Non Portable External References"
+
+[RID_STR_COMMON_ATTRIBUTE_NON_PORTABLE_EXTERNAL_REFERENCES_COUNT]
+en-US = "External Reference Count"
+
+[RID_STR_COMMON_ATTRIBUTE_NUMBER_OF_LINES]
+en-US = "Number of Lines"
+
+[RID_STR_COMMON_ATTRIBUTE_SIGNATURE]
+en-US = "MD5 Hash"
+
+[RID_STR_COMMON_ATTRIBUTE_PASSWORD]
+en-US = "Password"
+
+[RID_STR_COMMON_ATTRIBUTE_PATH]
+en-US = "Path"
+
+[RID_STR_COMMON_ATTRIBUTE_PROCEDURES]
+en-US = "Procedures"
+
+[RID_STR_COMMON_ATTRIBUTE_PROJECT]
+en-US = "Project"
+
+[RID_STR_COMMON_ATTRIBUTE_TYPE]
+en-US = "Type"
+
+[RID_STR_COMMON_ATTRIBUTE_TYPELIB]
+en-US = "Type Library"
+
+[RID_STR_COMMON_ATTRIBUTE_UNABLE_TO_ACCESS_VBPROJECT]
+en-US = "Unable to access VBProject"
+
+[RID_STR_COMMON_ATTRIBUTE_UNKNOWN]
+en-US = "Unknown"
+
+[RID_STR_COMMON_ATTRIBUTE_USERFORM_TYPE]
+en-US = "Control Types"
+
+[RID_STR_COMMON_ATTRIBUTE_USERFORM_TYPES_COUNT]
+en-US = "Control Types Count"
+
+[RID_STR_COMMON_ATTRIBUTE_VALUE]
+en-US = "Value"
+
+[RID_STR_COMMON_ATTRIBUTE_VBPROJECT_PASSWORD]
+en-US = "VBProject Password set"
+
+[RID_STR_COMMON_ISSUE_INFORMATION]
+en-US = "Information"
+
+[RID_STR_COMMON_ISSUE_FORMAT]
+en-US = "Format"
+
+[RID_STR_COMMON_ISSUE_PORTABILITY]
+en-US = "Portability"
+
+[RID_STR_COMMON_ISSUE_VBA_MACROS]
+en-US = "VBA Macros"
+
+[RID_STR_COMMON_ISSUE_CONTENT_AND_DOCUMENT_PROPERTIES]
+en-US = "Content and Document Properties"
+
+[RID_STR_COMMON_NOTE_DOCUMENT_PROPERTIES_LOST]
+en-US = "this summary property is lost"
+
+[RID_STR_COMMON_SUBISSUE_PROPERTIES]
+en-US = "Properties"
+
+[RID_STR_COMMON_SUBISSUE_REFERENCES]
+en-US = "References"
+
+[RID_STR_COMMON_SUBISSUE_EXTERNAL_REFERENCES_IN_MACROS]
+en-US = "External References in Macro"
+
+[RID_STR_COMMON_SUBISSUE_INVALID_PASSWORD_ENTERED]
+en-US = "Invalid Password Entered"
+
+[RID_STR_COMMON_SUBISSUE_DOCUMENT_PARTS_PROTECTION]
+en-US = "Document Parts Protection"
+
+[RID_STR_COMMON_SUBISSUE_MACRO_PASSWORD_PROTECTION]
+en-US = "Password Protected"
+
+[RID_STR_COMMON_SUBISSUE_PASSWORDS_PROTECTION]
+en-US = "Password Protection"
+
+[RID_STR_COMMON_ATTRIBUTE_OBJECT_NAME]
+en-US = "Object Name"
+
+[RID_STR_COMMON_ATTRIBUTE_OBJECT_TYPE]
+en-US = "Object Type"
+
+[RID_STR_COMMON_ATTRIBUTE_SOURCE]
+en-US = "Source"
+
+[RID_STR_COMMON_NOTE_HF_PREPARABLE]
+en-US = "will add additional returns to the header/footer"
+
+[RID_STR_COMMON_PREPARATION_FOLDER]
+en-US = "prepared"
+
+[RID_STR_COMMON_SUBISSUE_DOCUMENT_CUSTOM_PROPERTY]
+en-US = "Document Custom Property"
+
+[RID_STR_COMMON_MACRO_CLASS_COMPLEX]
+en-US = "Complex"
+
+[RID_STR_COMMON_MACRO_CLASS_MEDIUM]
+en-US = "Medium"
+
+[RID_STR_COMMON_MACRO_CLASS_SIMPLE]
+en-US = "Simple"
+
+[RID_STR_COMMON_MACRO_CLASS_NONE]
+en-US = "No Macros"
+
+[RID_STR_COMMON_ISSUE_CLASS_COMPLEX]
+en-US = "Complex"
+
+[RID_STR_COMMON_ISSUE_CLASS_MINOR]
+en-US = "Minor"
+
+[RID_STR_COMMON_ISSUE_CLASS_NONE]
+en-US = "No Issues"
+
+[RID_STR_COMMON_OV_VERSION_STR]
+en-US = "Created by"
+
+[RID_STR_COMMON_OV_DOC_MOD_DATES_COMMENT_TITLE]
+en-US = "Which documents do you need to migrate?"
+
+[RID_STR_COMMON_OV_DOC_MOD_DATES_COMMENT_BODY]
+en-US = "<CR>The last modified date is an indicator of the importance of a document. It helps you decide which documents should just be archived to a read only format such as Adobe PDF and which actually need to be migrated to <PRODUCTNAME> where they can continue to be updated and modified."
+
+[RID_STR_COMMON_OV_LEGEND_TITLE]
+en-US = "Legend"
+
+[RID_STR_COMMON_OV_DOC_MOD_DATES_LEGEND_BODY]
+en-US = "< 3 months: Migrate to <PRODUCTNAME>.<CR>3 - 6 Months: Careful review to see if they should be archived or migrated to <PRODUCTNAME>.<CR>6 - 12 Months: Quick review, either archive or migrate to the read/write <PRODUCTNAME> XML file format.<CR>> 1 Year: Older than 1 year, archive to read-only format such as PDF"
+
+[RID_STR_COMMON_OV_DOC_MACRO_COMMENT_TITLE]
+en-US = "How many documents contain macros?"
+
+[RID_STR_COMMON_OV_DOC_MACRO_COMMENT_BODY]
+en-US = "<CR><PRODUCTNAME> includes <PRODUCTNAME> BASIC, a Basic dialect that is similar to Microsoft's Visual Basic for Application (VBA), but <PRODUCTNAME> uses a different sets of objects to access the underlying Office.<CR>This makes it necessary to migrate the VBA macros into the platform independent <PRODUCTNAME> BASIC. Your local <PRODUCTNAME> Migration partner can help you with these VBA macro migrations."
+
+[RID_STR_COMMON_OV_DOC_MACRO_LEGEND_BODY]
+en-US = "Complex: Macros using Forms, Controls and external references<CR>Medium: Macros with more than 50 lines of code<CR>Simple: Macros with less than 50 lines of code<CR>None: No macros in the document"
+
+[RID_STR_COMMON_OV_HIGH_LEVEL_ANALYSIS_DAW]
+en-US = "Analysis of document migration issues for documents modified within the last <TOPIC> months"
+
+[RID_STR_COMMON_OV_HIGH_LEVEL_ANALYSIS_PAW_NO_LIMIT]
+en-US = "High level analysis of document migration issues"
+
+[RID_STR_COMMON_OV_DOC_ANALYSIS_COMMENT_TITLE]
+en-US = "Which documents may have migration issues?"
+
+[RID_STR_COMMON_OV_DOC_ANALYSIS_COMMENT_BODY]
+en-US = "<CR>Some Microsoft Office documents may not migrate perfectly into <PRODUCTNAME>. These issues are outlined in the <PRODUCTNAME> Migration Guide. <PRODUCTNAME> engineering is working continously to resolve these issues by improving the Microsoft Office filters.<CR>The Document Analysis Wizard has been provided by <PRODUCTNAME> engineering to detect the most important of these migration issues in any Microsoft Office document you wish to specify. These findings are summarised below [refer to the 'List of documents' sheet to see the list of all analyzed documents]."
+
+[RID_STR_COMMON_OV_DOC_ANALYSIS_DAW_LEGEND_BODY]
+en-US = "Complex: More complex migration issues.<CR>Minor:  Minor migration issues easily fixed by any user.<CR>None: No issues Migrate to <PRODUCTNAME> without any issues.<CR><CR>Your <PRODUCTNAME> Migration Partners can help you with these more complex migration issues [refer to link above]. For instance they can migrate these documents to custom templates that achieve the same functionality but work well in both Office environments allowing the documents to be freely exchanged."
+
+[RID_STR_COMMON_OV_DOC_ANALYSIS_PAW_LEGEND_BODY]
+en-US = "Complex: More complex migration issues.<CR>Minor:  Minor migration issues easily fixed by any user.<CR>None: No issues Migrate to <PRODUCTNAME> without any issues."
+
+[RID_STR_COMMON_OV_DOC_MOD_DATES_CHART_TITLE]
+en-US = "Document modification dates"
+
+[RID_STR_COMMON_OV_DOC_MACRO_CHART_TITLE]
+en-US = "Document with Macro Migration Issues"
+
+[RID_STR_COMMON_OV_DOC_ANALYSIS_CHART_TITLE]
+en-US = "Documents with Document Migration Issues"
+
+[RID_STR_COMMON_PREPARATION_NOTE]
+en-US = "Preparation"
+
+[RID_STR_COMMON_CANNOT_OPEN]
+en-US = "Cannot open - no analysis possible"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_OVERVIEW]
+en-US = "Overview"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_COSTS]
+en-US = "Issues Analyzed"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_DOCISSUES_WORD]
+en-US = "Word Issues"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_DOCISSUES_EXCEL]
+en-US = "Excel Issues"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_DOCISSUES_POWERPOINT]
+en-US = "PowerPoint Issues"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_DOCISSUE_DETAILS]
+en-US = "Issue Details"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_DOCREF_DETAILS]
+en-US = "Reference Details"
+
+[RID_STR_COMMON_RESULTS_SHEET_NAME_DOCPROP]
+en-US = "List of documents"
+
+[RID_STR_COMMON_ANALYSIS_STR]
+en-US = "Analysis"
+
+[RID_STR_COMMON_NOTE_PRE]
+en-US = "Note"
+
+[RID_STR_COMMON_NOTE_POST]
+en-US = " on migration"
+
+[RID_STR_COMMON_OLE_EMBEDDED]
+en-US = "Embedded OLE Object"
+
+[RID_STR_COMMON_OLE_LINKED]
+en-US = "Linked OLE Object"
+
+[RID_STR_EXCEL_ISSUE_CHARTS_AND_TABLES]
+en-US = "Charts and Tables"
+
+[RID_STR_EXCEL_ISSUE_FORMAT]
+en-US = "Format"
+
+[RID_STR_EXCEL_ISSUE_FUNCTIONS]
+en-US = "Functions"
+
+[RID_STR_EXCEL_ISSUE_PORTABILITY]
+en-US = "Portability"
+
+[RID_STR_EXCEL_ISSUE_VBA_MACROS]
+en-US = "VBA Macros"
+
+[RID_STR_EXCEL_ISSUE_INFORMATION]
+en-US = "Information"
+
+[RID_STR_EXCEL_SUBISSUE_PIVOT]
+en-US = "Pivot"
+
+[RID_STR_EXCEL_SUBISSUE_ZOOM]
+en-US = "Zoom"
+
+[RID_STR_EXCEL_TRUE]
+en-US = "True"
+
+[RID_STR_EXCEL_FALSE]
+en-US = "False"
+
+[RID_STR_EXCEL_SUBISSUE_MAX_SHEETS_EXCEEDED]
+en-US = "Maximum Sheets Exceeded"
+
+[RID_STR_EXCEL_SUBISSUE_ATTRIBUTES]
+en-US = "Cell Attributes"
+
+[RID_STR_EXCEL_SUBISSUE_EXTERNAL]
+en-US = "External"
+
+[RID_STR_EXCEL_SUBISSUE_SHEET_CHART]
+en-US = "Sheet Chart"
+
+[RID_STR_EXCEL_SUBISSUE_EMBEDDED_CHART]
+en-US = "Embedded Chart"
+
+[RID_STR_EXCEL_SUBISSUE_INVALID_WORKSHEET_NAME]
+en-US = "Invalid Worksheet Name"
+
+[RID_STR_EXCEL_ATTRIBUTE_BADCHARACTER]
+en-US = "'<TOKEN1>' at pos <TOKEN2>"
+
+[RID_STR_EXCEL_ATTRIBUTE_DB_QUERY]
+en-US = "Connection string"
+
+[RID_STR_EXCEL_ATTRIBUTE_NAME]
+en-US = "Name"
+
+[RID_STR_EXCEL_ATTRIBUTE_NUMBER_OF_PIVOTFIELDS]
+en-US = "Number of PivotFields"
+
+[RID_STR_EXCEL_ATTRIBUTE_TITLE]
+en-US = "Title"
+
+[RID_STR_EXCEL_ATTRIBUTE_TYPE]
+en-US = "Type"
+
+[RID_STR_EXCEL_ATTRIBUTE_PIE]
+en-US = "Pie"
+
+[RID_STR_EXCEL_ATTRIBUTE_SLICES_IN_DIFFERENT_DIRECTION]
+en-US = "Slices in diff. direction"
+
+[RID_STR_EXCEL_ATTRIBUTE_LEGEND_NAME]
+en-US = "Legend Name"
+
+[RID_STR_EXCEL_ATTRIBUTE_NUMBER_OF_LEGEND_ENTRIES]
+en-US = "Number of Legend Entries"
+
+[RID_STR_EXCEL_ATTRIBUTE_PIVOT_TABLE_NAME]
+en-US = "PivotTable Name"
+
+[RID_STR_EXCEL_ATTRIBUTE_PIVOT_FIELDS_VISIBLE]
+en-US = "PivotFields Visible"
+
+[RID_STR_EXCEL_ATTRIBUTE_PIVOT_FIELDS_NUM]
+en-US = "Number of PivotFields"
+
+[RID_STR_EXCEL_ATTRIBUTE_PRINT_RANGE]
+en-US = "Print Range"
+
+[RID_STR_EXCEL_ATTRIBUTE_DISPLAY_ZOOM]
+en-US = "Display Zoom"
+
+[RID_STR_EXCEL_ATTRIBUTE_NUMBER_OF_SHEETS]
+en-US = "Number of Sheets"
+
+[RID_STR_EXCEL_ATTRIBUTE_LIST_SOURCE]
+en-US = "ListSource"
+
+[RID_STR_EXCEL_ATTRIBUTE_CUSTOM_FORMULA]
+en-US = "Custom Formula"
+
+[RID_STR_EXCEL_ATTRIBUTE_SET]
+en-US = "Set"
+
+[RID_STR_EXCEL_ATTRIBUTE_LINE_STYLE]
+en-US = "Line Style"
+
+[RID_STR_EXCEL_ATTRIBUTE_DASHED_DOT]
+en-US = "Dashed/Dot"
+
+[RID_STR_EXCEL_ATTRIBUTE_FILL_PATTERN]
+en-US = "Fill Pattern"
+
+[RID_STR_EXCEL_ATTRIBUTE_PATTERNED]
+en-US = "Patterned"
+
+[RID_STR_EXCEL_ATTRIBUTE_FUNCTION_STRING]
+en-US = "Function String"
+
+[RID_STR_EXCEL_ATTRIBUTE_PASSWORD_TO_OPEN]
+en-US = "Password to Open"
+
+[RID_STR_EXCEL_ATTRIBUTE_PASSWORD_TO_MODIFY]
+en-US = "Password to Modify"
+
+[RID_STR_EXCEL_ATTRIBUTE_OBJECT_TYPE]
+en-US = "Object Type"
+
+[RID_STR_EXCEL_ATTRIBUTE_OBJECT_NAME]
+en-US = "Object Name"
+
+[RID_STR_EXCEL_ATTRIBUTE_SOURCE]
+en-US = "Source"
+
+[RID_STR_EXCEL_ATTRIBUTE_VALUE]
+en-US = "Value"
+
+[RID_STR_EXCEL_ATTRIBUTE_UNABLE_TO_ACCESS_VBPROJECT]
+en-US = "Unable to access VBProject"
+
+[RID_STR_EXCEL_ATTRIBUTE_FURTHER_MACRO_ANALYSIS_NOT_POSSIBLE]
+en-US = "Further macro analysis not possible"
+
+[RID_STR_EXCEL_ATTRIBUTE_VBPROJECT_PASSWORD_SET]
+en-US = "VBProject Password Set"
+
+[RID_STR_EXCEL_ATTRIBUTE_PROJECT]
+en-US = "Project"
+
+[RID_STR_EXCEL_ATTRIBUTE_COMPONENT]
+en-US = "Component"
+
+[RID_STR_EXCEL_ATTRIBUTE_PROCEDURES]
+en-US = "Procedures"
+
+[RID_STR_EXCEL_ATTRIBUTE_NUMBER_OF_LINES]
+en-US = "Number of Lines"
+
+[RID_STR_EXCEL_ATTRIBUTE_CONTROLS]
+en-US = "Controls"
+
+[RID_STR_EXCEL_ATTRIBUTE_TYPES]
+en-US = "Types"
+
+[RID_STR_EXCEL_ATTRIBUTE_DESCRIPTION]
+en-US = "Description"
+
+[RID_STR_EXCEL_ATTRIBUTE_FILE]
+en-US = "File"
+
+[RID_STR_EXCEL_ATTRIBUTE_PATH]
+en-US = "Path"
+
+[RID_STR_EXCEL_ATTRIBUTE_MISSING]
+en-US = "MISSING"
+
+[RID_STR_EXCEL_ATTRIBUTE_CHECK_DOCUMENT_REFERENCES]
+en-US = "Check document VB-IDE/Tools/References"
+
+[RID_STR_EXCEL_ATTRIBUTE_MAJOR]
+en-US = "Major"
+
+[RID_STR_EXCEL_ATTRIBUTE_MINOR]
+en-US = "Minor"
+
+[RID_STR_EXCEL_ATTRIBUTE_BUILT_IN]
+en-US = "Built In"
+
+[RID_STR_EXCEL_ATTRIBUTE_INTACT]
+en-US = "Intact"
+
+[RID_STR_EXCEL_ATTRIBUTE_TYPELIB]
+en-US = "TypeLib"
+
+[RID_STR_EXCEL_ATTRIBUTE_GUID]
+en-US = "GUID"
+
+[RID_STR_EXCEL_ATTRIBUTE_CUSTOM]
+en-US = "Custom"
+
+[RID_STR_EXCEL_ATTRIBUTE_IS_BROKEN]
+en-US = "Is Broken"
+
+[RID_STR_EXCEL_ATTRIBUTE_BROKEN]
+en-US = "Broken!"
+
+[RID_STR_EXCEL_ATTRIBUTE_NON_PORTABLE_EXTERNAL_REFERENCES]
+en-US = "Non Portable External References"
+
+[RID_STR_EXCEL_ATTRIBUTE_INCLUDING]
+en-US = "including:"
+
+[RID_STR_EXCEL_ATTRIBUTE_PASSWORD]
+en-US = "Password"
+
+[RID_STR_EXCEL_ENUMERATION_CUSTOM]
+en-US = "Custom"
+
+[RID_STR_EXCEL_ENUMERATION_LIST]
+en-US = "List"
+
+[RID_STR_EXCEL_ENUMERATION_UNKNOWN]
+en-US = "Unknown"
+
+[RID_STR_EXCEL_ENUMERATION_LINE_STYLE_CONTINUOUS]
+en-US = "Continuous"
+
+[RID_STR_EXCEL_ENUMERATION_LINE_STYLE_DASH]
+en-US = "Dash"
+
+[RID_STR_EXCEL_ENUMERATION_LINE_STYLE_DASHDOT]
+en-US = "DashDot"
+
+[RID_STR_EXCEL_ENUMERATION_LINE_STYLE_DOT]
+en-US = "Dot"
+
+[RID_STR_EXCEL_ENUMERATION_LINE_STYLE_DOUBLE]
+en-US = "Double"
+
+[RID_STR_EXCEL_ENUMERATION_LINE_STYLE_SLANTDASHDOT]
+en-US = "SlantDashDot"
+
+[RID_STR_EXCEL_ENUMERATION_LINE_STYLE_LINESTYLENONE]
+en-US = "LineStyleNone"
+
+[RID_STR_EXCEL_NOTE_DB_QUERY]
+en-US = "The connection to the database in <PRODUCTNAME> will be lost . The data will appear correctly but can not be updated."
+
+[RID_STR_EXCEL_NOTE_INVALIDWORKSHEETNAME]
+en-US = "The worksheet name contains characters that are not supported by <PRODUCTNAME>. Please rename your sheet and exclude these characters."
+
+[RID_STR_EXCEL_NOTE_ZOOM]
+en-US = "all sheets will have the same zoom irrespective of their Excel View/Zoom setting after migration to <PRODUCTNAME>"
+
+[RID_STR_EXCEL_NOTE_CELL_ATTRIBUTES_3]
+en-US = "this line style is imported as a solid line. Only solid line syles are supported in <PRODUCTNAME>"
+
+[RID_STR_EXCEL_NOTE_CELL_ATTRIBUTES_4]
+en-US = "this fill pattern is imported as a solid gray. Only solid fill patterns are supported in <PRODUCTNAME>"
+
+[RID_STR_EXCEL_NOTE_CELL_FUNCTIONS_1]
+en-US = "this function returns platform dependent information specific to Windows and is not imported to <PRODUCTNAME>"
+
+[RID_STR_EXCEL_NOTE_CELL_FUNCTIONS_2]
+en-US = "this function returns error codes specific to Excel and is imported in <PRODUCTNAME> as the stub function ErrorType() always returning Err.520"
+
+[RID_STR_EXCEL_NOTE_CELL_FUNCTIONS_3]
+en-US = "this is an external function referenced from an Excel spreadsheet. It does not import correctly to <PRODUCTNAME>. The external reference is stripped and the resulting formula always returns #ADDIN?"
+
+[RID_STR_EXCEL_NOTE_DOCUMENT_PROPERTIES_1]
+en-US = "this summary property is lost"
+
+[RID_STR_EXCEL_NOTE_DOCUMENT_PROPERTIES_2]
+en-US = "this custom property is lost"
+
+[RID_STR_EXCEL_NOTE_SHEET_LIMITS_1]
+en-US = "all sheets will be lost in <PRODUCTNAME> that are greater than "
+
+[RID_STR_EXCEL_NOTE_SHEET_LIMITS_2]
+en-US = "all sheets must be moved to a new workbook before migration that are greater than "
+
+[RID_STR_EXCEL_SUBLOCATION_NA]
+en-US = "na"
+
+[RID_STR_EXCEL_SUBISSUE_WORKBOOK_PROTECTION]
+en-US = "Workbook Protection"
+
+[RID_STR_EXCEL_ATTRIBUTE_PROTECT_TYPE_SHARING]
+en-US = "Protection Sharing"
+
+[RID_STR_EXCEL_ATTRIBUTE_PROTECT_TYPE_STRUCTURE]
+en-US = "Protection Structure"
+
+[RID_STR_EXCEL_ATTRIBUTE_PROTECT_TYPE_WINDOWS]
+en-US = "Protection Windows"
+
+[RID_STR_EXCEL_NOTE_PASSWORD_TO_OPEN]
+en-US = "workbook is protected"
+
+[RID_STR_EXCEL_NOTE_DATATABLE]
+en-US = "no simple workaround, could copy the data table and paste below the chart"
+
+[RID_STR_EXCEL_NOTE_XAXISCATEGORY]
+en-US = "only category option supported. Setup your category labels you need on the sheet"
+
+[RID_STR_EXCEL_NOTE_UNSUPPORTEDTYPE1]
+en-US = "following chart types not supported"
+
+[RID_STR_EXCEL_NOTE_UNSUPPORTEDTYPE2]
+en-US = "pie of pie,exploded 3D pie,bar of pie,bubble,filled radar,exploded doughnut"
+
+[RID_STR_EXCEL_NOTE_TRENDLINE]
+en-US = "replace the trend line by drawing a line on the chart. You must click outside the chart when adding the line and drag it onto the chart. Objects created by clicking on the chart will not import"
+
+[RID_STR_EXCEL_NOTE_DATALABELWITHLEGEND]
+en-US = "after import into <PRODUCTNAME>, select Insert->Data Labels->show legend icon with label and the legend key will appear"
+
+[RID_STR_EXCEL_NOTE_LEGENDPOSITION]
+en-US = "only legend to the right is supported on import. Change legend position in <PRODUCTNAME> after import"
+
+[RID_STR_EXCEL_NOTE_TITLEFONT]
+en-US = "title font with different font size is not supported on import, set a sub-title in <PRODUCTNAME>, then change the font size"
+
+[RID_STR_EXCEL_NOTE_SERIESCHARTTYPE]
+en-US = "multiple series with different chart types. SO only supports one chart type for all series. Adjust the chart type to best display the series"
+
+[RID_STR_EXCEL_NOTE_DATASOURCENOTLINKEDTOCELL]
+en-US = "data sources to catalogue or other external sources not supported. Data source must be set to cell or range on the sheet"
+
+[RID_STR_EXCEL_NOTE_CATEGORYANDDATA]
+en-US = "category names must be located above or to the left of the value ranges"
+
+[RID_STR_EXCEL_NOTE_DATASOURCEONDIFFERENTSHEET]
+en-US = "data sources must be located on the same sheet. Paste the data sources onto the same sheet"
+
+[RID_STR_EXCEL_NOTE_CATEGORYLABELMORETHANONECELL]
+en-US = "category labels spanning multiple cells are not supported. Copy all the text  to one cell"
+
+[RID_STR_EXCEL_NOTE_COLUMNBAR]
+en-US = "chart 'series in' must match the data source. For data source in single row, set  'series in' =  row. For data source in single column, set 'series in' = column"
+
+[RID_STR_EXCEL_NOTE_BORDER]
+en-US = "chart border will not appear in <PRODUCTNAME>,  before import,set border to none, draw a rectangle around the border of the chart"
+
+[RID_STR_EXCEL_NOTE_AXISINTERVAL]
+en-US = " y axis interval setting will be changed in <PRODUCTNAME>. Modify axes interval setting in <PRODUCTNAME>, re-set major interval scale"
+
+[RID_STR_EXCEL_ATTRIBUTE_DATATABLE]
+en-US = "Data Table"
+
+[RID_STR_EXCEL_ATTRIBUTE_INVALIDCHARACTER]
+en-US = "Invalid Characters"
+
+[RID_STR_EXCEL_ATTRIBUTE_XAXISCATEGORY]
+en-US = "Chart Axes"
+
+[RID_STR_EXCEL_ATTRIBUTE_TIMESCALE]
+en-US = "time scale/auto"
+
+[RID_STR_EXCEL_ATTRIBUTE_UNSUPPORTEDTYPE]
+en-US = "Unsupported Chart Type"
+
+[RID_STR_EXCEL_ATTRIBUTE_TRENDLINE]
+en-US = "Trendline"
+
+[RID_STR_EXCEL_ATTRIBUTE_DATALABELWITHLEGEND]
+en-US = "Data Label With Legend"
+
+[RID_STR_EXCEL_ATTRIBUTE_LEGENDPOSITION]
+en-US = "Legend Position"
+
+[RID_STR_EXCEL_ATTRIBUTE_TITLEFONT]
+en-US = "Title Font"
+
+[RID_STR_EXCEL_ATTRIBUTE_DIFFERENT]
+en-US = "Different"
+
+[RID_STR_EXCEL_ATTRIBUTE_SERIESCHARTTYPE]
+en-US = "Multiple series chart type"
+
+[RID_STR_EXCEL_ATTRIBUTE_CHANGED]
+en-US = "changed"
+
+[RID_STR_EXCEL_ATTRIBUTE_DATASOURCE]
+en-US = "Data Source"
+
+[RID_STR_EXCEL_ATTRIBUTE_DATASOURCENOTLINKEDTOCELL]
+en-US = "Not Linked To A Cell"
+
+[RID_STR_EXCEL_ATTRIBUTE_CATEGORYANDDATA]
+en-US = "Category And Data"
+
+[RID_STR_EXCEL_ATTRIBUTE_SEPARATE]
+en-US = "Separate"
+
+[RID_STR_EXCEL_ATTRIBUTE_DATASOURCEONDIFFERENTSHEET]
+en-US = "On Different Sheet"
+
+[RID_STR_EXCEL_ATTRIBUTE_CATEGORYLABEL]
+en-US = "Category Label"
+
+[RID_STR_EXCEL_ATTRIBUTE_CATEGORYLABELMORETHANONECELL]
+en-US = "More Than One Cell"
+
+[RID_STR_EXCEL_ATTRIBUTE_COLUMNBAR]
+en-US = "Column/Bar Chart"
+
+[RID_STR_EXCEL_ATTRIBUTE_ONECOLUMNROW]
+en-US = "Data Source With Single Column/ Chart Series In Row"
+
+[RID_STR_EXCEL_ATTRIBUTE_BORDER]
+en-US = "Border"
+
+[RID_STR_EXCEL_ATTRIBUTE_AXISINTERVAL]
+en-US = "Y Axis Interval"
+
+[RID_STR_EXCEL_ATTRIBUTE_AUTO]
+en-US = "Auto"
+
+[RID_STR_EXCEL_ATTRIBUTE_CHARTNAME]
+en-US = "Chart Name"
+
+[RID_STR_EXCEL_SUBISSUE_CHART_COMPLEX]
+en-US = "Chart Issues Complex"
+
+[RID_STR_EXCEL_SUBISSUE_CHART_MINOR]
+en-US = "Chart Issues Minor"
+
+[RID_STR_EXCEL_ATTRIBUTE_NOTRIGHT]
+en-US = "not at right hand side"
+
+[RID_STR_EXCEL_ATTRIBUTE_NUMBER_OF_CELLS]
+en-US = "number cells effected"
+
+[RID_STR_PP_TRUE]
+en-US = "True"
+
+[RID_STR_PP_FALSE]
+en-US = "False"
+
+[RID_STR_PP_ISSUE_OBJECTS_GRAPHICS_AND_TEXTBOXES]
+en-US = "Objects, Graphics and Textboxes"
+
+[RID_STR_PP_SUBISSUE_COMMENT]
+en-US = "Comment"
+
+[RID_STR_PP_SUBISSUE_MOVIE]
+en-US = "Movie"
+
+[RID_STR_PP_ATTRIBUTE_CONTENT]
+en-US = "Content"
+
+[RID_STR_PP_ATTRIBUTE_LOOP]
+en-US = "Loop"
+
+[RID_STR_PP_ATTRIBUTE_PLAYONENTRY]
+en-US = "PlayOnEntry"
+
+[RID_STR_PP_ATTRIBUTE_REWIND]
+en-US = "Rewind"
+
+[RID_STR_PP_ATTRIBUTE_TYPES]
+en-US = "Types"
+
+[RID_STR_PP_ENUMERATION_VIEW_HANDOUT_MASTER]
+en-US = "View Handout Master"
+
+[RID_STR_PP_ENUMERATION_VIEW_NORMAL]
+en-US = "View Normal"
+
+[RID_STR_PP_ENUMERATION_VIEW_NOTES_MASTER]
+en-US = "View Notes Master"
+
+[RID_STR_PP_ENUMERATION_VIEW_NOTES_PAGE]
+en-US = "View Notes Page"
+
+[RID_STR_PP_ENUMERATION_VIEW_OUTLINE]
+en-US = "View Outline"
+
+[RID_STR_PP_ENUMERATION_VIEW_SLIDE]
+en-US = "View Slide"
+
+[RID_STR_PP_ENUMERATION_VIEW_SLIDE_MASTER]
+en-US = "View Slide Master"
+
+[RID_STR_PP_ENUMERATION_VIEW_SLIDE_SORTER]
+en-US = "View Slide Sorter"
+
+[RID_STR_PP_ENUMERATION_VIEW_TITLE_MASTER]
+en-US = "View Title Master"
+
+[RID_STR_PP_ENUMERATION_UNKNOWN]
+en-US = "Unknown"
+
+[RID_RESXLS_COST_Action_Settings]
+en-US = "Action Settings"
+
+[RID_RESXLS_COST_Add_custom_properties_to_document_Properties_Summary_Comments_field]
+en-US = "Add custom properties to document Properties Summary Comments field."
+
+[RID_RESXLS_COST_Additional_Weighting_Factors]
+en-US = "Additional Weighting Factors"
+
+[RID_RESXLS_COST_All_sheets__256_will_need_to_be_moved_to_a_new_workbook]
+en-US = "All sheets >256 will need to be moved to a new workbook"
+
+[RID_RESXLS_COST_Appearance]
+en-US = "Appearance"
+
+[RID_RESXLS_COST_Application]
+en-US = "Application"
+
+[RID_RESXLS_COST_AutoFilter]
+en-US = "AutoFilter"
+
+[RID_RESXLS_COST_Border_Styles]
+en-US = "Border Styles"
+
+[RID_RESXLS_COST_Cell_Attributes]
+en-US = "Cell Attributes"
+
+[RID_RESXLS_COST_CELL_SPAN_WORKAROUND]
+en-US = "Add extra row below cell. Cut and paste contents running onto 2nd page into new cell."
+
+[RID_RESXLS_COST_Cell_Spanning_Page]
+en-US = "Cell Spanning Page"
+
+[RID_RESXLS_COST_ChangesAndReviewing]
+en-US = "Changes And Reviewing"
+
+[RID_RESXLS_COST_Charts_And_Tables]
+en-US = "Charts And Tables"
+
+[RID_RESXLS_COST_Comment]
+en-US = "Comment"
+
+[RID_RESXLS_COST_Content_And_Document_Properties]
+en-US = "Content And Document Properties"
+
+[RID_RESXLS_COST_ContentAndDocumentProperties]
+en-US = "Content And Document Properties"
+
+[RID_RESXLS_COST_Controls]
+en-US = "Controls"
+
+[RID_RESXLS_COST_Cost]
+en-US = "Cost Comment"
+
+[RID_RESXLS_COST_Cost__In_simple_cases_cut_and_paste_to_new_sheet_3___5_min]
+en-US = "Cost: In simple cases cut and paste to new sheet. 3 - 5 min. May exist functions that refer to these cells. 10+"
+
+[RID_RESXLS_COST_COST_0]
+en-US = "Cost = 0. No work around."
+
+[RID_RESXLS_COST_COST_EMBED_CHART]
+en-US = "Variations in cost can range from 0 - 30 mins. Cost caused by uneven data souce, external data source, unsupported chart types, floating legend position."
+
+[RID_RESXLS_COST_COST_ERROR_TYPE]
+en-US = "Fix up cost can vary depending on the context in which this is used. Cost 3 - 5"
+
+[RID_RESXLS_COST_COST_INFO]
+en-US = "Fix up cost can vary depending on the context in which this is used. Cost 2 - 4"
+
+[RID_RESXLS_COST_COST_INVAL_PASS]
+en-US = "Cost = 0. Rerun analysis with correct password."
+
+[RID_RESXLS_COST_COST_INVALID_WORKSHEET_NAME]
+en-US = "Aufewand: Vergewissern Sie sich nach der Umbenennung, dass alle Makros mit Verweisen auf dieses Arbeitsblatt ebenfalls angepaßt werden. Der Aufwand hängt von der Zahl der Codezeilen ab, die auf den Arbeitsblattnamen verweisen."
+en-US = "Cost: When the worksheet has been renamed, ensure that all macros with a reference to the worksheet are also renamed accordingly. Cost depends on how many lines of code there are that refer to the worksheet name."
+
+[RID_RESXLS_COST_Cost_of_4_min_per_line__takes_no_account_of_complexity_of_code__number_of_comment_lines_and_so_on]
+en-US = "Cost of 4 min per line, takes no account of complexity of code, number of comment lines and so on"
+
+[RID_RESXLS_COST_Cost_per_Issue_or_Factor__min]
+en-US = "Cost per Issue or Factor (min)"
+
+[RID_RESXLS_COST_COST_PIVOT]
+en-US = "Cost = 0. Calc does not support dynamically created charts. No workaround."
+
+[RID_RESXLS_COST_COST_SHEET_CHART]
+en-US = "Variations in cost can range from 0 - 30 mins. Cost caused by uneven data souce, external data source, unsupported chart types, floating legend position."
+
+[RID_RESXLS_COST_Cost_variations_occur_because_of_the_use_of_macros_with_controls]
+en-US = "Cost variations occur because of the use of macros with controls."
+
+[RID_RESXLS_COST_COST_VBA_CONT_TYPE]
+en-US = "Cost = 0. Total number of controls better estimate - this information is useful as an indication of complexity of the Forms."
+
+[RID_RESXLS_COST_COST_VBA_CONTROLS]
+en-US = "Cost = 3 minute per control, this does not take account of issues with Frame controls or the number of these controls that have event handlers that need manually linked to migrated code."
+
+[RID_RESXLS_COST_COST_VBA_FORMS]
+en-US = "Cost = 0. Using total number of controls on forms as better estimate"
+
+[RID_RESXLS_COST_COST_VBA_LOC]
+en-US = "Cost of 4 min per line, takes no account of complexity of code, number of comment lines and so on"
+
+[RID_RESXLS_COST_COST_VBA_PROPS]
+en-US = "Cost = 0 using lines of code as better cost estimate."
+
+[RID_RESXLS_COST_Costs__min]
+en-US = "Costs (min)"
+
+[RID_RESXLS_COST_Custom_Bullet_List]
+en-US = "Custom Bullet List"
+
+[RID_RESXLS_COST_Document_Custom_Properties]
+en-US = "Document Custom Properties"
+
+[RID_RESXLS_COST_Document_Parts_Protection]
+en-US = "Document Parts Protection"
+
+[RID_RESXLS_COST_Embedded_Chart]
+en-US = "Chart Issues Minor"
+
+[RID_RESXLS_COST_embedded_objects]
+en-US = "Cost = 0. Most embedded objects come across. If one does not then this may require some reenginering and is not in the scope of an automated cost calculation."
+
+[RID_RESXLS_COST_Embedded_OLE_Object]
+en-US = "Embedded OLE Object"
+
+[RID_RESXLS_COST_Excel]
+en-US = "Excel"
+
+[RID_RESXLS_COST_Excel_Totals]
+en-US = "Excel Totals"
+
+[RID_RESXLS_COST_External]
+en-US = "External"
+
+[RID_RESXLS_COST_External_References_In_Macro___Module__Class_or_UserForm]
+en-US = "External References In Macro - Module, Class or UserForm"
+
+[RID_RESXLS_COST_Factor_Count]
+en-US = "Factor Count"
+
+[RID_RESXLS_COST_Fields]
+en-US = "Fields"
+
+[RID_RESXLS_COST_Filters]
+en-US = "Filters"
+
+[RID_RESXLS_COST_Fixed_SO7]
+en-US = "Fixed <PRODUCTNAME> <PRODUCTVERSION>"
+
+[RID_RESXLS_COST_Form_Field]
+en-US = "Form Field"
+
+[RID_RESXLS_COST_Format]
+en-US = "Format"
+
+[RID_RESXLS_COST_Functions]
+en-US = "Functions"
+
+[RID_RESXLS_COST_Zoom]
+en-US = "Zoom"
+
+[RID_RESXLS_COST_HEADERFOOTER_WORKAROUND]
+en-US = "Insert carriage returns to resize header/ footer to the size of the graphic."
+
+[RID_RESXLS_COST_Hours_Per_MD]
+en-US = "Hours Per MD ="
+
+[RID_RESXLS_COST_Indexes_And_References]
+en-US = "Indexes And References"
+
+[RID_RESXLS_COST_Invalid_Password_Entered]
+en-US = "Invalid Password Entered"
+
+[RID_RESXLS_COST_Invalid_Worksheet_Name]
+en-US = "Invalid Worksheet Name"
+
+[RID_RESXLS_COST_Issue__18_of_the_24_table_border_styles_do_not_display_correctly]
+en-US = "Issue: 18 of the 24 table border styles do not display correctly."
+
+[RID_RESXLS_COST_Issue__256_sheet_limit_exceeded]
+en-US = "Issue: 256 sheet limit exceeded."
+
+[RID_RESXLS_COST_Issue__32000_row_limit_exceeded]
+en-US = "Issue: 32000 row limit exceeded."
+
+[RID_RESXLS_COST_Issue__A_worksheet_in_the_workbook_has_a_name_with_invalid_characters]
+en-US = "Issue: A worksheet in the workbook has a name with invalid characters."
+
+[RID_RESXLS_COST_Issue__AutoFilter_does_not_function_properly]
+en-US = "Issue: AutoFilter does not function properly."
+
+[RID_RESXLS_COST_Issue__Calls_to_windows_API_functions_are_windows_specific]
+en-US = "Issue: Calls to windows API functions are windows specific."
+
+[RID_RESXLS_COST_Issue__Chart_support_is_limited_in_SO7]
+en-US = "Issue: Chart support is limited in <PRODUCTNAME>."
+
+[RID_RESXLS_COST_Issue__Comments_are_lost_on_migration_to_SO7]
+en-US = "Issue: Comments are lost on migration to <PRODUCTNAME>."
+
+[RID_RESXLS_COST_Issue__Custom_Properties_are_lost_on_migration]
+en-US = "Issue: Custom Properties are lost on migration"
+
+[RID_RESXLS_COST_Issue__Document_is_password_protected_and_cannot_be_opened_by_SO]
+en-US = "Issue: Document is password protected and cannot be opened by SO."
+
+[RID_RESXLS_COST_Issue__External_functions_not_supported_by_SO7]
+en-US = "Issue: External functions not supported by <PRODUCTNAME>"
+
+[RID_RESXLS_COST_Issue__External_references_are_windows_specific]
+en-US = "Issue: External references are windows specific."
+
+[RID_RESXLS_COST_Issue__Fields_are_imported_but_need_to_have_the_link_to_datasource_reset]
+en-US = "Issue: Fields are imported but need to have the link to data source reset."
+
+[RID_RESXLS_COST_Issue__Graphics___frames_in_header_footer_tend_to_be_misplaced]
+en-US = "Issue: Graphics & frames in header footer tend to be misplaced."
+
+[RID_RESXLS_COST_Issue__Incorrect_password_entered]
+en-US = "Issue: Incorrect password entered. "
+
+[RID_RESXLS_COST_Issue__Information_relating_to_the_data_source_is_lost_in_migration]
+en-US = "Issue: Information relating to the data source is lost in migration."
+
+[RID_RESXLS_COST_Issue__Invalid_password_entered_Rerun_analysis]
+en-US = "Issue: Invalid password entered. Rerun analysis."
+
+[RID_RESXLS_COST_Issue__Lost_during_migration_No_StarOffice_equivalent]
+en-US = "Issue: Lost during migration. No <PRODUCTNAME> equivalent."
+
+[RID_RESXLS_COST_Issue__Macros_from_old_workbook_versions_do_not_import_into_SO7]
+en-US = "Issue: Macros from old workbook versions do not import into SO9."
+
+[RID_RESXLS_COST_Issue__Modules_will_need_porting_to_StarOffice_Basic]
+en-US = "Issue: Modules will need porting to <PRODUCTNAME> Basic."
+
+[RID_RESXLS_COST_Issue__Most_migrate_ok_but_do_not_roundtrip]
+en-US = "Issue: Most migrate ok but do not roundtrip."
+
+[RID_RESXLS_COST_Issue__Movies_are_not_supported_by_SO7]
+en-US = "Issue: Movies are not supported by <PRODUCTNAME>."
+
+[RID_RESXLS_COST_Issue__Need_to_set_these_to_be_included_in_TOC_in_SO7]
+en-US = "Issue: Need to set these to be included in TOC in <PRODUCTNAME>"
+
+[RID_RESXLS_COST_Issue__Password_protection_of_comments__tracked_changes_and_forms_is_lost]
+en-US = "Issue: Password protection of comments, tracked changes and forms is lost."
+
+[RID_RESXLS_COST_Issue__Pivot_charts_are_not_supported_by_SO7]
+en-US = "Issue: Pivot charts are not supported by <PRODUCTNAME>."
+
+[RID_RESXLS_COST_Issue__Presents_a_cross_platform_interoperability_issue]
+en-US = "Issue: Presents a cross platform interoperability issue."
+
+[RID_RESXLS_COST_Issue__Print_wide_pages_not_supported]
+en-US = "Issue: Print wide pages not supported."
+
+[RID_RESXLS_COST_Issue__Shading_can_be_applied_to_fields_and_to_controls_separately_in_Word]
+en-US = "Issue: Shading can be applied to fields and to controls separately in Word. <PRODUCTNAME> does not differentiate between controls and fields so shading can look different in Writer."
+
+[RID_RESXLS_COST_Issue__Table_imported_as_text_as_no_StarOffice_equivalent]
+en-US = "Issue: Table imported as text as no <PRODUCTNAME> equivalent."
+
+[RID_RESXLS_COST_Issue__Tables_nested_in_tables_are_not_supported_by_SO7]
+en-US = "Issue: Tables nested in tables are not supported by <PRODUCTNAME>."
+
+[RID_RESXLS_COST_Issue__Tabs_are_incorrect_after_migration]
+en-US = "Issue: Tabs are incorrect after migration. Certain format types do not migrate to <PRODUCTNAME>."
+
+[RID_RESXLS_COST_Issue__Text_form_fields_roundtrip_as_Fill_In_field]
+en-US = "Issue: Text form fields roundtrip as Fill In field. Field attributes are lost."
+
+[RID_RESXLS_COST_Issue__Unsupported_formatting_set]
+en-US = "Issue: Unsupported formatting set."
+
+[RID_RESXLS_COST_Issue__Unsupported_function_type]
+en-US = "Issue: Unsupported function type. "
+
+[RID_RESXLS_COST_Issue__Userform_controls_will_need_porting_to_StarOffice_Basic]
+en-US = "Issue: Userform controls will need porting to <PRODUCTNAME> Basic."
+
+[RID_RESXLS_COST_Issue__Userforms_controls_will_need_porting_to_StarOffice_Basic]
+en-US = "Issue: Userform controls will need porting to <PRODUCTNAME> Basic."
+
+[RID_RESXLS_COST_Issue__Userforms_will_need_porting_to_StarOffice_Basic]
+en-US = "Issue: Userforms will need porting to <PRODUCTNAME> Basic."
+
+[RID_RESXLS_COST_Issue__VBProject_is_password_protected_Remove_password__rerun_analysis]
+en-US = "Issue: VBProject is password protected. Remove password, rerun analysis."
+
+[RID_RESXLS_COST_Issue__Will_need_refreshing_in_SO7_External_datasources_and_functions_are_not_supported]
+en-US = "Issue: Will need refreshing in <PRODUCTNAME>. External data sources and functions are not supported"
+
+[RID_RESXLS_COST_Issue__Workbook_protection_is_not_supported]
+en-US = "Issue: Workbook protection is not supported"
+
+[RID_RESXLS_COST_Issue__Writer_cannot_correctly_display_cells_spanning_more_than_1_page]
+en-US = "Issue: Writer cannot correctly display cells spanning more than 1 page."
+
+[RID_RESXLS_COST_Issue_Category]
+en-US = "Issue Category"
+
+[RID_RESXLS_COST_Issue_Count]
+en-US = " Issue Count"
+
+[RID_RESXLS_COST_Issue_Type]
+en-US = "Issue Type"
+
+[RID_RESXLS_COST_Linked_OLE_Object]
+en-US = "Linked OLE Object"
+
+[RID_RESXLS_COST_Mail_Merge_Datasource]
+en-US = "Mail Merge Data Source"
+
+[RID_RESXLS_COST_Mail_Merge_Field]
+en-US = "Mail Merge Field"
+
+[RID_RESXLS_COST_Major_Issue]
+en-US = "Complex Issue"
+
+[RID_RESXLS_COST_MAX_SHEETS_WORKAROUND]
+en-US = "Need to move sheets to new workbook. "
+
+[RID_RESXLS_COST_Maximum_Rows_Exceeded]
+en-US = "Maximum Rows Exceeded"
+
+[RID_RESXLS_COST_Maximum_Sheets_Exceeded]
+en-US = "Maximum Sheets Exceeded"
+
+[RID_RESXLS_COST_Migration_Issues_Costs]
+en-US = "Migration Issues Analyzed"
+
+[RID_RESXLS_COST_Movie]
+en-US = "Movie"
+
+[RID_RESXLS_COST_NESTED_TABLE_WORKAROUND]
+en-US = "In word use split cell to create similar layout."
+
+[RID_RESXLS_COST_Nested_Tables]
+en-US = "Nested Tables"
+
+[RID_RESXLS_COST_Not_Planned]
+en-US = "Not Planned"
+
+[RID_RESXLS_COST_Notes_And_Handouts]
+en-US = "Notes And Handouts"
+
+[RID_RESXLS_COST_Number_Of_External_References]
+en-US = "Number Of External References"
+
+[RID_RESXLS_COST_Number_Of_Lines]
+en-US = "Number Of Lines"
+
+[RID_RESXLS_COST_Number_of_Lines_in_Unique_Modules]
+en-US = "Number of Lines in Unique Code Modules"
+
+[RID_RESXLS_COST_Number_of_Modules]
+en-US = "Number of Modules"
+
+[RID_RESXLS_COST_Number_of_Unique_Modules]
+en-US = "Number of Unique Code Modules"
+
+[RID_RESXLS_COST_Numbering_Reference]
+en-US = "Numbering Reference"
+
+[RID_RESXLS_COST_Numbering_Reference_Comment]
+en-US = "Issue: <PRODUCTNAME> can not import references that refer in a numbered list."
+
+[RID_RESXLS_COST_Object_In_Header_Footer]
+en-US = "Object In Header Footer"
+
+[RID_RESXLS_COST_Objects_And_Graphics]
+en-US = "Objects And Graphics"
+
+[RID_RESXLS_COST_Objects_Graphics_And_Frames]
+en-US = "Objects Graphics And Frames"
+
+[RID_RESXLS_COST_Objects_Graphics_And_Textboxes]
+en-US = "Objects Graphics And Textboxes"
+
+[RID_RESXLS_COST_Old_Workbook_Version]
+en-US = "Old Workbook Version"
+
+[RID_RESXLS_COST_OLE_Control]
+en-US = "OLE Control"
+
+[RID_RESXLS_COST_OLECONTR_COST]
+en-US = "Cost variations occur because of the use of macros with controls."
+
+[RID_RESXLS_COST_Page_Setup]
+en-US = "Page Setup"
+
+[RID_RESXLS_COST_Password_Protected]
+en-US = "Password Protected"
+
+[RID_RESXLS_COST_Password_Protection]
+en-US = "Password Protection"
+
+[RID_RESXLS_COST_Pivot]
+en-US = "Pivot Chart"
+
+[RID_RESXLS_COST_Planned_SO8]
+en-US = "Planned"
+
+[RID_RESXLS_COST_Portability]
+en-US = "Portability"
+
+[RID_RESXLS_COST_PowerPoint]
+en-US = "PowerPoint"
+
+[RID_RESXLS_COST_PowerPoint_Totals]
+en-US = "PowerPoint Totals"
+
+[RID_RESXLS_COST_Prepared_Issue_Count]
+en-US = "Prepared Issue Count"
+
+[RID_RESXLS_COST_Prepared_Savings__min]
+en-US = "Prepared Savings (min)"
+
+[RID_RESXLS_COST_Properties___Module__Class_or_UserForm]
+en-US = "Properties - Module, Class or UserForm"
+
+[RID_RESXLS_COST_Remove_password_to_open]
+en-US = "Remove password to open."
+
+[RID_RESXLS_COST_Remove_the_invalid_characters_from_the_worksheet_name]
+en-US  = "Remove the invalid characters from the worksheet name."
+
+[RID_RESXLS_COST_Rerun_analysis_with_correct_password]
+en-US = "Rerun analysis with correct password."
+
+[RID_RESXLS_COST_Reset_link_to_Data_Base_having_setup_a_Datasource_in_SO7]
+en-US = "Reset link to database having setup a data source in <PRODUCTNAME>."
+
+[RID_RESXLS_COST_set_cost_factor_if_the_macro_has_to_be_ported_off_Windows]
+en-US = "Cost = 0. Set a cost factor if the macro has to be ported off Windows. "
+
+[RID_RESXLS_COST_Save_workbook_as_a_new_workbook_version]
+en-US = "Save workbook as a new workbook version."
+
+[RID_RESXLS_COST_Setup_Datasource_in_SO7_using_Tools__Datasource]
+en-US = "Setup data source in <PRODUCTNAME> using Tools/Data source"
+
+[RID_RESXLS_COST_Sheet_Chart]
+en-US = "Chart Issues Complex"
+
+[RID_RESXLS_COST_Status]
+en-US = "Status"
+
+[RID_RESXLS_COST_Table_Of_Authorities]
+en-US = "Table Of Authorities"
+
+[RID_RESXLS_COST_Table_Of_Authorities_Field]
+en-US = "Table Of Authorities Field"
+
+[RID_RESXLS_COST_Table_Of_Contents]
+en-US = "Table Of Contents"
+
+[RID_RESXLS_COST_Tables]
+en-US = "Tables"
+
+[RID_RESXLS_COST_TOC_ISSUE_WORKAROUND]
+en-US = "Tab Issues: use fancy format. Numbering incorrect: remove blank lines with heading style used by TOC. Numbering abuts Header: replace leading tabs in Header style used in TOC with spaces."
+
+[RID_RESXLS_COST_Total_Cost___MD]
+en-US = "Total Cost  (MD) = "
+
+[RID_RESXLS_COST_User_Error]
+en-US = "User Error"
+
+[RID_RESXLS_COST_User_Forms_Control_Count]
+en-US = "User Forms Control Count"
+
+[RID_RESXLS_COST_User_Forms_Control_Type_Count]
+en-US = "User Forms Control Type Count"
+
+[RID_RESXLS_COST_User_Forms_Count]
+en-US = "User Forms Count"
+
+[RID_RESXLS_COST_VBA_Macros]
+en-US = "VBA Macros"
+
+[RID_RESXLS_COST_Word]
+en-US = "Word"
+
+[RID_RESXLS_COST_Word_Totals]
+en-US = "Word Totals"
+
+[RID_RESXLS_COST_Work_Around]
+en-US = "Work Around"
+
+[RID_RESXLS_COST_Workaround_Remove_protection_before_importing]
+en-US = "Remove protection before importing"
+
+[RID_RESXLS_COST_WorkbookProtection]
+en-US = "WorkbookProtection "
+
+[RID_RESXLS_DP_Accessed]
+en-US = "Accessed"
+
+[RID_RESXLS_DP_All_Analysed_Documents___Properties]
+en-US = "All Analysed Documents - properties"
+
+[RID_RESXLS_DP_Application]
+en-US = "Application"
+
+[RID_RESXLS_DP_Based_on_Template]
+en-US = "Based on Template"
+
+[RID_RESXLS_DP_Costs]
+en-US = "Costs"
+
+[RID_RESXLS_DP_Created]
+en-US = "Created"
+
+[RID_RESXLS_DP_Document_Details]
+en-US = "Document Details"
+
+[RID_RESXLS_DP_Document_Issue_Costs]
+en-US = "Document Migration Costs (min)"
+
+[RID_RESXLS_DP_Document_Migration_Issues]
+en-US = "Document Migration Issues"
+
+[RID_RESXLS_DP_Document_Name]
+en-US = "Document Name"
+
+[RID_RESXLS_DP_Document_Name_and_Path]
+en-US = "Document Name and Path"
+
+[RID_RESXLS_DP_Issues_Complex_count]
+en-US = "Issues Complex Count"
+
+[RID_RESXLS_DP_Last_Saved_By]
+en-US = "Last Saved By"
+
+[RID_RESXLS_DP_Lines_of_Macro_Code]
+en-US = "Lines of Macro Code"
+
+[RID_RESXLS_DP_Macro_Issues]
+en-US = "Macro Migration Issues"
+
+[RID_RESXLS_DP_Macro_Migration_Costs]
+en-US = "Macro Migration Costs (min)"
+
+[RID_RESXLS_DP_Macro_Migration_Issues]
+en-US = "Macro Migration Issues"
+
+[RID_RESXLS_DP_Migration_Issues]
+en-US = "Document Migration Issues"
+
+[RID_RESXLS_DP_Minor_Issues]
+en-US = "Issues Minor Count"
+
+[RID_RESXLS_DP_Modified]
+en-US = "Modified"
+
+[RID_RESXLS_DP_Pages_Sheets_Slides]
+en-US = "Pages, Sheets or  Slides Count"
+
+[RID_RESXLS_DP_Prepareable_Issues_Costs]
+en-US = "Prepareable Issues Savings (min)"
+
+[RID_RESXLS_DP_Prepared_Issues]
+en-US = "Prepareable Document Issues"
+
+[RID_RESXLS_DP_Printed]
+en-US = "Printed"
+
+[RID_RESXLS_DP_Revision]
+en-US = "Revision"
+
+[RID_RESXLS_DP_User_Form_Count]
+en-US = "User Form Count"
+
+[RID_RESXLS_ID_All_Documents_with_Issues___Issue_Details]
+en-US = "All Documents with Issues - Issue Details"
+
+[RID_RESXLS_ID_Application]
+en-US = "Application"
+
+[RID_RESXLS_ID_Column__Left]
+en-US = "Column/ Left"
+
+[RID_RESXLS_ID_Document_Name]
+en-US = "Document Name"
+
+[RID_RESXLS_ID_Document_Name_and_Path]
+en-US = "Document Name and Path"
+
+[RID_RESXLS_ID_Issue_Category]
+en-US = "Issue Category"
+
+[RID_RESXLS_ID_Issue_Details]
+en-US = "Issue Details"
+
+[RID_RESXLS_ID_Issue_Type]
+en-US = "Issue Type"
+
+[RID_RESXLS_ID_Line__Row__Top]
+en-US = "Line/ Row/ Top"
+
+[RID_RESXLS_ID_Location]
+en-US = "Location"
+
+[RID_RESXLS_ID_Location_Type]
+en-US = "Location Type"
+
+[RID_RESXLS_OV_3_to_6_months]
+en-US = "3 - 6 months"
+
+[RID_RESXLS_OV_6_to_12_months]
+en-US = "6 - 12 months"
+
+[RID_RESXLS_OV_Complex]
+en-US = "Complex"
+
+[RID_RESXLS_OV_Cost_estimates_for_migration]
+en-US = "Cost estimates for migration of all analyzed documents"
+
+[RID_RESXLS_OV_Costs]
+en-US = "Costs (MD)"
+
+[RID_RESXLS_OV_Docs_with_DocumentMigrationIssues]
+en-US = "Documents with Document Migration Issues (excludes macro issues)"
+
+[RID_RESXLS_OV_Document_Migration_Costs]
+en-US = "Document Migration Costs<CR>( costs based on: issues listed in Issues Analyzed, excludes macros  issues )"
+
+[RID_RESXLS_OV_Document_Modification_Dates]
+en-US = "Document Modification Dates"
+
+[RID_RESXLS_OV_Document_Type]
+en-US = "Type"
+
+[RID_RESXLS_OV_Documents_with_Macro_Migration_Issues]
+en-US = "Documents with Macro Migration Issues"
+
+[RID_RESXLS_OV_Excel]
+en-US = "Excel"
+
+[RID_RESXLS_OV_Excel_Costs]
+en-US = "Excel "
+
+[RID_RESXLS_OV_Excel_Spreadsheet]
+en-US = "  Spreadsheets (.xls)"
+
+[RID_RESXLS_OV_Excel_Template]
+en-US = "  Templates (.xlt)"
+
+[RID_RESXLS_OV_GREATER_THAN_1_year]
+en-US = "> 1 year"
+
+[RID_RESXLS_OV_Last_Modified]
+en-US = "Last Modified"
+
+[RID_RESXLS_OV_LESS_3_months]
+en-US = "< 3 months"
+
+[RID_RESXLS_OV_LESS_THAN3MONTHS]
+en-US = "Templates (.dot)"
+
+[RID_RESXLS_OV_Macro_Migration_Costs]
+en-US = "Manual Macro Migration Costs<CR>( costs based on: number of lines in unique code modules and number of user form controls )"
+
+[RID_RESXLS_OV_Medium]
+en-US = "Medium"
+
+[RID_RESXLS_OV_Minor]
+en-US = "Minor"
+
+[RID_RESXLS_OV_None]
+en-US = "None"
+
+[RID_RESXLS_OV_Number]
+en-US = "Number"
+
+[RID_RESXLS_OV_Number_of_Documents_Analyzed]
+en-US = "Number of Documents Analyzed"
+
+[RID_RESXLS_OV_NumberOfDocs]
+en-US = "Number of docs"
+
+[RID_RESXLS_OV_Potential_savings_macro_conversion]
+en-US = "Potential Savings with Automated Macro Migration of 20 to 60%"
+
+[RID_RESXLS_OV_Potential_savings_prepared_docs]
+en-US = "Potential Savings with Automated Preparation"
+
+[RID_RESXLS_OV_PowerPoint]
+en-US = "PowerPoint"
+
+[RID_RESXLS_OV_PowerPoint_Costs]
+en-US = "PowerPoint "
+
+[RID_RESXLS_OV_PowerPoint_Document]
+en-US = "  Presentations (.ppt)"
+
+[RID_RESXLS_OV_PowerPoint_Template]
+en-US = "  Templates (.pot)"
+
+[RID_RESXLS_OV_Simple]
+en-US = "Simple"
+
+[RID_RESXLS_OV_Total]
+en-US = "Total"
+
+[RID_RESXLS_OV_Totals]
+en-US = "Totals"
+
+[RID_RESXLS_OV_Word]
+en-US = "Word"
+
+[RID_RESXLS_OV_Word_Costs]
+en-US = "Word "
+
+[RID_RESXLS_OV_Word_Document]
+en-US = "Documents (.doc)"
+
+[RID_RESXLS_OV_Word_Template]
+en-US = "Templates (.dot)"
+
+[RID_RESXLS_PP_Action_Settings]
+en-US = "Action Settings"
+
+[RID_RESXLS_PP_Application]
+en-US = "Application"
+
+[RID_RESXLS_PP_Content___Document_Properties]
+en-US = "Content & Document Properties"
+
+[RID_RESXLS_PP_Document_Name_and_Path]
+en-US = "Document Name and Path"
+
+[RID_RESXLS_PP_Fields]
+en-US = "Fields"
+
+[RID_RESXLS_PP_Format]
+en-US = "Format"
+
+[RID_RESXLS_PP_Notes___Handouts]
+en-US = "Notes & Handouts"
+
+[RID_RESXLS_PP_Objects__Graphics___Textboxes]
+en-US = "Objects, Graphics & Textboxes"
+
+[RID_RESXLS_PP_Portability]
+en-US = "Portability"
+
+[RID_RESXLS_PP_PowerPoint_Documents_with_Issues___Issue_Summary]
+en-US = "PowerPoint Documents with Issues - Issue Summary"
+
+[RID_RESXLS_PP_PowerPoint_Presentation_Name]
+en-US = "PowerPoint Presentation Name"
+
+[RID_RESXLS_PP_VBA_Macros]
+en-US = "VBA Macros"
+
+[RID_RESXLS_RD_All_Documents_with_Macros___Reference_Details]
+en-US = "All Documents with Macros - Reference Details"
+
+[RID_RESXLS_RD_Application]
+en-US = "Application"
+
+[RID_RESXLS_RD_Description]
+en-US = "Description"
+
+[RID_RESXLS_RD_Document_Name]
+en-US = "Document Name"
+
+[RID_RESXLS_RD_Document_Name_and_Path]
+en-US = "Document Name and Path"
+
+[RID_RESXLS_RD_Location]
+en-US = "Location"
+
+[RID_RESXLS_RD_Reference]
+en-US = "Reference"
+
+[RID_RESXLS_RD_Reference_Details]
+en-US = "Reference Details"
+
+[RID_RESXLS_WI_Application]
+en-US = "Application"
+
+[RID_RESXLS_WI_Changes_and_Reviewing]
+en-US = "Changes and Reviewing"
+
+[RID_RESXLS_WI_Content___Document_Properties]
+en-US = "Content & Document Properties"
+
+[RID_RESXLS_WI_Controls]
+en-US = "Controls"
+
+[RID_RESXLS_WI_Document_Name_and_Path]
+en-US = "Document Name and Path"
+
+[RID_RESXLS_WI_Fields]
+en-US = "Fields"
+
+[RID_RESXLS_WI_Format]
+en-US = "Format"
+
+[RID_RESXLS_WI_Index_and_References]
+en-US = "Index and References"
+
+[RID_RESXLS_WI_Objects__Graphics____Frames]
+en-US = "Objects, Graphics  & Frames"
+
+[RID_RESXLS_WI_Portability]
+en-US = "Portability"
+
+[RID_RESXLS_WI_Tables]
+en-US = "Tables"
+
+[RID_RESXLS_WI_VBA_Macros]
+en-US = "VBA Macros"
+
+[RID_RESXLS_WI_Word_Document_Name]
+en-US = "Word Document Name"
+
+[RID_RESXLS_WI_Word_Documents_with_Issues___Issue_Summary]
+en-US = "Word Documents with Issues - Issue Summary"
+
+[RID_RESXLS_XL_Application]
+en-US = "Application"
+
+[RID_RESXLS_XL_Changes___Reviewing]
+en-US = "Changes & Reviewing"
+
+[RID_RESXLS_XL_Charts___Tables]
+en-US = "Charts & Tables"
+
+[RID_RESXLS_XL_Excel_Documents_with_Issues___Issue_Summary]
+en-US = "Excel Documents with Issues - Issue Summary"
+
+[RID_RESXLS_XL_Excel_Spreadsheet_Name]
+en-US = "Excel Spreadsheet Name"
+
+[RID_RESXLS_XL_Filters]
+en-US = "Filters"
+
+[RID_RESXLS_XL_Format]
+en-US = "Format"
+
+[RID_RESXLS_XL_Functions]
+en-US = "Functions"
+
+[RID_RESXLS_XL_Objects___Graphics]
+en-US = "Objects & Graphics"
+
+[RID_STR_DVR_XL_EXCEL_DRIVER]
+en-US = "Excel Driver"
+
+[RID_STR_DVR_XL_ISSUES]
+en-US = "2. Issues"
+
+[RID_STR_DVR_XL_PURPOSE]
+en-US = "1. Purpose"
+
+[RID_STR_DVR_XL_READ_README]
+en-US = "If there are any problems running the Wizard please refer to the Readme.doc"
+
+[RID_STR_DVR_XL_THE_MACROS]
+en-US = "The macros in this document are used by the Analysis Wizard to analyze the collection of Excel documents you specify using the Wizard. It should not be modified in any way, the Wizard will open and close it as required by the tool."
+
+[RID_STR_DVR_XL_THIS_DOC]
+en-US = "This document contains VBA macros which collect and analyse Excel documents for known issues when importing into <PRODUCTNAME>"
+
+[RID_STR_DVR_XL_TITLE]
+en-US = "<PRODUCTNAME> Migration Analysis - Excel Driver"
+
+[RID_STR_DVR_PP_TXT2]
+en-US = "This document contains VBA macros which collect and analyse PowerPoint documents for known issues when importing into <PRODUCTNAME>"
+
+[RID_STR_DVR_PP_TXT3]
+en-US = "<PRODUCTNAME> Migration Analysis - PowerPoint Driver"
+
+[RID_STR_DVR_PP_TXT4]
+en-US = "PowerPoint Driver"
+
+[RID_STR_DVR_PP_TXT5]
+en-US = "Purpose"
+
+[RID_STR_DVR_PP_TXT6]
+en-US = "The macros in this document are used by the Analysis Wizard to analyze the collection of PowerPoint documents you specify using the Wizard. It should not be modified in any way, the Wizard will open and close it as required by the tool."
+
+[RID_STR_DVR_PP_TXT7]
+en-US = "Issues"
+
+[RID_STR_DVR_PP_TXT8]
+en-US = "If there are any problems running the Wizard please refer to the Readme.doc"
+
+[RID_STR_WDVR_SOANA]
+en-US = "<PRODUCTNAME> MIGRATION ANALYSIS - WORD DRIVER"
+
+[RID_STR_WDVR_INTRO]
+en-US = "This document contains VBA macros, which collect and analyse Word documents for known issues when importing into <PRODUCTNAME>"
+
+[RID_STR_WDVR_TITLE]
+en-US = "Word Driver"
+
+[RID_STR_WDVR_PURPO]
+en-US = "Purpose"
+
+[RID_STR_WDVR_PARA1]
+en-US = "The macros in this document are used by the Analysis Wizard to analyze the collection of Word documents you specify using the Wizard. It should not be modified in any way, the Wizard will open and close it as required by the tool."
+
+[RID_STR_WDVR_ISSUE]
+en-US = "Issues"
+
+[RID_STR_WDVR_PARA2]
+en-US = "If there are any problems running the Wizard please refer to the Readme.doc"
+
+[RID_STR_WORD_ATTRIBUTE_ALLOW_ONLY_COMMENTS]
+en-US = "Allow Only Comments"
+
+[RID_STR_WORD_ATTRIBUTE_ALLOW_ONLY_FORM_FIELDS]
+en-US = "Allow Only FormFields"
+
+[RID_STR_WORD_ATTRIBUTE_ALLOW_ONLY_REVISIONS]
+en-US = "Allow Only Revisions"
+
+[RID_STR_WORD_ATTRIBUTE_AUTHOR]
+en-US = "Author"
+
+[RID_STR_WORD_ATTRIBUTE_DATASOURCE]
+en-US = "Datasource"
+
+[RID_STR_WORD_ATTRIBUTE_FIELD_TEXT]
+en-US = "Field Text"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_AUTOSIZE]
+en-US = "Autosize"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_ENTRY_MACRO]
+en-US = "Entry macro"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_EXIT_MACRO]
+en-US = "Exit macro"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_FILLIN_ENABLED]
+en-US = "Fill-in enabled"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_GREYED]
+en-US = "FormFields Greyed"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_HELP_KEY_F1_AUTO_TEXT]
+en-US = "Help Key(F1) [Auto Text]"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_HELP_KEY_F1_OWN_TEXT]
+en-US = "Help Key(F1) [Own Text]"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_LOCKED]
+en-US = "Locked"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_MAX_LENGTH]
+en-US = "Maximum Length"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_STATUS_BAR_HELP_AUTO_TEXT]
+en-US = "Status Bar Help [Auto Text]"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_STATUS_BAR_HELP_OWN_TEXT]
+en-US = "Status Bar Help [Own Text]"
+
+[RID_STR_WORD_ATTRIBUTE_FORM_FIELD_TEXT_FORM_FIELD_TYPE]
+en-US = "Text Form Field Type"
+
+[RID_STR_WORD_ATTRIBUTE_FOOTER]
+en-US = "Footer"
+
+[RID_STR_WORD_ATTRIBUTE_HEADER]
+en-US = "Header"
+
+[RID_STR_WORD_ATTRIBUTE_FRAME]
+en-US = "Frame"
+
+[RID_STR_WORD_ATTRIBUTE_GRAPHIC]
+en-US = "Graphic"
+
+[RID_STR_WORD_ATTRIBUTE_OBJECT_HEIGHT_GT_H]
+en-US = "Height Greater Than Header Height"
+
+[RID_STR_WORD_ATTRIBUTE_OBJECT_HEIGHT_GT_F]
+en-US = "Height Greater Than Footer Height"
+
+[RID_STR_WORD_ATTRIBUTE_NUM_OF_GRAPHIC]
+en-US = "Number of Graphics"
+
+[RID_STR_WORD_ATTRIBUTE_OBJECT_LOCATED_BELOW_HEADER]
+en-US = "Located Below Header"
+
+[RID_STR_WORD_ATTRIBUTE_NUM_OF_FRAME]
+en-US = "Number of Frames"
+
+[RID_STR_WORD_ATTRIBUTE_HEADER_EVEN_PAGES]
+en-US = "Even Page(s)"
+
+[RID_STR_WORD_ATTRIBUTE_HEADER_FIRST_PAGE]
+en-US = "First Page"
+
+[RID_STR_WORD_ATTRIBUTE_HEADER_ODD_PAGES]
+en-US = "Odd Page(s)"
+
+[RID_STR_WORD_ATTRIBUTE_HEADER_PAGE_DEFAULT]
+en-US = "Page Default"
+
+[RID_STR_WORD_ATTRIBUTE_GRAPHICTYPE]
+en-US = "Graphic Type"
+
+[RID_STR_WORD_ATTRIBUTE_INLINESHAPE]
+en-US = "Inline Shape"
+
+[RID_STR_WORD_ATTRIBUTE_INNER_TABLE]
+en-US = "InnerTable"
+
+[RID_STR_WORD_ATTRIBUTE_LEADER]
+en-US = "Leader"
+
+[RID_STR_WORD_ATTRIBUTE_LINK]
+en-US = "Link"
+
+[RID_STR_WORD_ATTRIBUTE_LOCATION]
+en-US = "Location"
+
+[RID_STR_WORD_ATTRIBUTE_NUMBER_CUSTOM_PARAGRAPHS]
+en-US = "Number of custom paragraphs"
+
+[RID_STR_WORD_ATTRIBUTE_OUTER_TABLE]
+en-US = "Outer Table"
+
+[RID_STR_WORD_ATTRIBUTE_PASSWORD_TO_MODIFY]
+en-US = "Password to Modify"
+
+[RID_STR_WORD_ATTRIBUTE_PASSWORD_TO_OPEN]
+en-US = "Password to Open"
+
+[RID_STR_WORD_ATTRIBUTE_PROTECTION]
+en-US = "Protection"
+
+[RID_STR_WORD_ATTRIBUTE_SET]
+en-US = "Set"
+
+[RID_STR_WORD_ATTRIBUTE_START_COL]
+en-US = "Start Column"
+
+[RID_STR_WORD_ATTRIBUTE_START_ROW]
+en-US = "Start Row"
+
+[RID_STR_WORD_ATTRIBUTE_TEXT]
+en-US = "Text"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_ISSUE]
+en-US = "Potential problem with TOC Format matching Modern style"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_NOT_MIGRATE_CLEAN]
+en-US = "TOC Format will not migrate cleanly"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_NOT_ROUNDTRIP_CLEAN]
+en-US = "TOC will not roundtrip cleanly due to following settings"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_FROM_TEMPLATE_WITH_LEVEL]
+en-US = "Format [FromTemplate] Level"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_FROM_TEMPLATE_TAB_DOTS]
+en-US = "Format [FromTemplate] TabLeader [Dots]"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_FORMAL_WITH_LEVEL]
+en-US = "Format [Formal] Level"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_CLASSIC_WITH_LEVEL]
+en-US = "Format [Classic] Level"
+
+[RID_STR_WORD_ATTRIBUTE_TOC_FORMAT_DISTINCTIVE_WITH_LEVEL]
+en-US = "Format [Distinctive] Level"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_CALCULATION]
+en-US = "Calculation"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_CHECK_BOX]
+en-US = "Check Box Form Field"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_CURRENT_DATE]
+en-US = "Current Date"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_CURRENT_TIME]
+en-US = "Current Time"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_DATE]
+en-US = "Date"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_DEFAULT_DATE]
+en-US = "Default date"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_DEFAULT_EXPRESSION]
+en-US = "Expression"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_DEFAULT_NUMBER]
+en-US = "Default number"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_DEFAULT_TEXT]
+en-US = "Default text"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_DEFAULT_TIME]
+en-US = "Default time"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_DROP_DOWN]
+en-US = "Drop-Down Form Field"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_FORMAT_DATE]
+en-US = "Date format"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_FORMAT_NUMBER]
+en-US = "Number format"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_FORMAT_TEXT]
+en-US = "Text format"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_FORMAT_TIME]
+en-US = "Time format"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_NUMBER]
+en-US = "Number"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_REGULAR]
+en-US = "Regular"
+
+[RID_STR_WORD_ENUMERATION_FORM_FIELD_TEXT]
+en-US = "Text Form Field"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_ASK]
+en-US = "Ask"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_AUTO_NUMBER]
+en-US = "Auto Number"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_AUTO_NUMBER_LEGAL]
+en-US = "Auto Number Legal"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_AUTO_NUMBER_OUTLINE]
+en-US = "Auto Number Outline"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_FIELD_NAME_NOT_KNOWN]
+en-US = "Field name not known"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_FILL_IN]
+en-US = "Fill In"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_MERGE_RECORDS]
+en-US = "Merge Records"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_MERGE_FIELDS]
+en-US = "Merge Fields"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_NEXT]
+en-US = "Next"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_REVISION_NUMBER]
+en-US = "Revision Number"
+
+[RID_STR_WORD_ENUMERATION_MAILMERGE_SEQUENCE]
+en-US = "Sequence"
+
+[RID_STR_WORD_ENUMERATION_INDEX_TABLES_CLASSIC]
+en-US = "Classic"
+
+[RID_STR_WORD_ENUMERATION_INDEX_TABLES_DISTINCTIVE]
+en-US = "Distinctive"
+
+[RID_STR_WORD_ENUMERATION_INDEX_TABLES_FANCY]
+en-US = "Fancy"
+
+[RID_STR_WORD_ENUMERATION_INDEX_TABLES_FORMAL]
+en-US = "Formal"
+
+[RID_STR_WORD_ENUMERATION_INDEX_TABLES_MODERN]
+en-US = "Modern"
+
+[RID_STR_WORD_ENUMERATION_INDEX_TABLES_SIMPLE]
+en-US = "Simple"
+
+[RID_STR_WORD_ENUMERATION_INDEX_TABLES_FROM_TEMPLATE]
+en-US = "From Template"
+
+[RID_STR_WORD_ENUMERATION_INDEX_LEADER_DASHES]
+en-US = "Dashes"
+
+[RID_STR_WORD_ENUMERATION_INDEX_LEADER_DOTS]
+en-US = "Dots"
+
+[RID_STR_WORD_ENUMERATION_INDEX_LEADER_HEAVY]
+en-US = "Heavy"
+
+[RID_STR_WORD_ENUMERATION_INDEX_LEADER_LINES]
+en-US = "Lines"
+
+[RID_STR_WORD_ENUMERATION_INDEX_LEADER_MIDDLEDOT]
+en-US = "MiddleDot"
+
+[RID_STR_WORD_ENUMERATION_INDEX_LEADER_SPACES]
+en-US = "Spaces"
+
+[RID_STR_WORD_ENUMERATION_UNKNOWN]
+en-US = "Unknown"
+
+[RID_STR_WORD_FALSE]
+en-US = "False"
+
+[RID_STR_WORD_TRUE]
+en-US = "True"
+
+[RID_STR_WORD_ISSUE_FIELDS]
+en-US = "Fields"
+
+[RID_STR_WORD_ISSUE_INDEX_AND_REFERENCES]
+en-US = "Indexes and References"
+
+[RID_STR_WORD_ISSUE_OBJECTS_GRAPHICS_AND_FRAMES]
+en-US = "Objects, Graphics and Frames"
+
+[RID_STR_WORD_ISSUE_TABLES]
+en-US = "Tables"
+
+[RID_STR_WORD_NOTE_FORM_FIELD_ATTRIBUTES_LOST]
+en-US = "following attribute values lost"
+
+[RID_STR_WORD_NOTE_FORM_FIELD_TYPE_LOST]
+en-US = "Type lost, converted to plain text"
+
+[RID_STR_WORD_NOTE_NESTED_TABLE_WILL_BE_LOST]
+en-US = "The inner table will be lost on roundtrip."
+
+[RID_STR_WORD_NOTE_TOA_FIELD_LOST_ON_ROUNDTRIP]
+en-US = "Field will be lost on roundtrip"
+
+[RID_STR_WORD_NOTE_TOA_MIGRATE_AS_PLAIN_TEXT]
+en-US = "Table will migrate as plain text"
+
+[RID_STR_WORD_SUBISSUE_APPEARANCE]
+en-US = "Appearance"
+
+[RID_STR_WORD_SUBISSUE_COMMENT]
+en-US = "Comment"
+
+[RID_STR_WORD_SUBISSUE_CUSTOM_BULLET_LIST]
+en-US = "Custom bullet list"
+
+[RID_STR_WORD_SUBISSUE_FORM_FIELD]
+en-US = "Form Field"
+
+[RID_STR_WORD_SUBISSUE_MAILMERGE_DATASOURCE]
+en-US = "Mail Merge Datasource"
+
+[RID_STR_WORD_SUBISSUE_MAILMERGE_FIELD]
+en-US = "Mail Merge Field"
+
+[RID_STR_WORD_SUBISSUE_NESTED_TABLES]
+en-US = "Nested Tables"
+
+[RID_STR_WORD_SUBISSUE_OBJECT_IN_HEADER_FOOTER]
+en-US = "Object in Header Footer"
+
+[RID_STR_WORD_SUBISSUE_TABLE_OF_AUTHORITIES]
+en-US = "Table of Authorities"
+
+[RID_STR_WORD_SUBISSUE_TABLE_OF_AUTHORITIES_FIELD]
+en-US = "Table of Authorities Field"
+
+[RID_RESXLT_COST_CHART_Radar_AWF]
+en-US = "Radar chart, Radar with symbol"
+
+[RID_RESXLT_COST_CHART_Radar_Comment]
+en-US = "Although <PRODUCTNAME> Net charts appear similar to Excel Radar charts, but they are not equivalent. Radar charts are drawn clockwise whereas Net charts are drawn counter-clockwise."
+
+[RID_RESXLT_COST_CHART_Scattered_AWF]
+en-US = "Scattered chart"
+
+[RID_RESXLT_COST_CHART_Scattered_Comment]
+en-US = "The XY-Chart of <PRODUCTNAME> has the same appearance as the scattered chart in Excel."
+
+[RID_RESXLT_COST_CHART_Bubble_AWF]
+en-US = "Bubble chart"
+
+[RID_RESXLT_COST_CHART_Bubble_Comment]
+en-US = "XY-Chart has similar functionality to a Bubble chart in Excel but a completely different look."
+
+[RID_RESXLT_COST_CHART_BarOfPie_AWF]
+en-US = "Bar of Pie and Pie of Pie charts"
+
+[RID_RESXLT_COST_CHART_BarOfPie_Comment]
+en-US = "<PRODUCTNAME> imports these types of charts as Column charts, which look completely different."
+
+[RID_RESXLT_COST_CHART_FilledRadar_AWF]
+en-US = "Filled Radar chart"
+
+[RID_RESXLT_COST_CHART_FilledRadar_Comment]
+en-US = "This chart type does not have a <PRODUCTNAME> equivalent. Instead, the import filter in <PRODUCTNAME> converts a Filled Radar chart to a Column chart."
+
+[RID_RESXLT_COST_CHART_Surface_AWF]
+en-US = "Surface chart"
+
+[RID_RESXLT_COST_CHART_Surface_Comment]
+en-US = "This chart type does not have a <PRODUCTNAME> equivalent. The imported chart will look completely different than the original chart."
+
+[RID_RESXLT_COST_PIVOT_MultConsRanges_AWF]
+en-US = "Multiple Consolidation Ranges"
+
+[RID_RESXLT_COST_PIVOT_MultConsRanges_Comment]
+en-US = "A Pivot table from Excel can use data from multiple consolidation ranges, Calc does not support this."
+
+[RID_RESXLT_COST_PIVOT_PivotChart_Comment]
+en-US = "A pivot chart is created dynamically in Excel using a pivot table as it's datasource. <PRODUCTNAME> does not support generating charts from dynamically created tables."
+
+[RID_RESXLT_COST_PIVOT_ManSort_AWF]
+en-US = "Manual Sorting"
+
+[RID_RESXLT_COST_PIVOT_ManSort_Comment]
+en-US = "Pivot table users could sort the results manually. Excel preserves the sorting. Calc does not."
+
+[RID_RESXLT_COST_PIVOT_CalcVal_AWF]
+en-US = "Calculated Values"
+
+[RID_RESXLT_COST_PIVOT_CalcVal_Comment]
+en-US = "Excel users can create a formula that writes the results in a new column within the pivot table. Users can use the same type of formula to replace the content of an existing column. Calc does not support this."
+
+[RID_RESXLT_COST_PIVOT_ExternData_AWF]
+en-US = "External Data"
+
+[RID_RESXLT_COST_PIVOT_ExternData_Comment]
+en-US = "A Pivot table from Excel can use data from external sources. Calc does not support this."
+
+[RID_RESXLS_COST_IAR_Numbering_IssueType]
+en-US = "Numbering Order"
+
+[RID_RESXLS_COST_IAR_Numbering_Comment]
+en-US = "<PRODUCTNAME> first calculates numbering located in frames and then the numbering within the text. Word does not separate this."
+
+[RID_RESXLS_COST_IAR_Numbering_WorkAround]
+en-US = "Move the numberings from within the frames into the text body area."
+
+[RID_RESXLS_COST_WorkbookPartProtection_AWF]
+en-US = "Protection for Parts of Workbooks"
+
+[RID_RESXLS_COST_WorkbookPartProtection_Comment]
+en-US = "In Excel users can protect certain parts of workbooks. Workbooks, sheets, charts and ranges can all be individually protected. These do not all migrate to <PRODUCTNAME>."
+
+[RID_RESXLS_COST_WorkbookPartProtection_WorkAround]
+en-US = "Do not protect Excel workbooks"
+
+[RID_RESXLS_COST_FORMAT_TabStop_IssueType]
+en-US = "Tabstop"
+
+[RID_RESXLS_COST_FORMAT_TabStop_Comment]
+en-US = "The minimum tabstop distance in word is shorter than <PRODUCTNAME>. That means that if, in Word, the user tabs a distance shorter than <PRODUCTNAME>'s minimum, that after migration the text spacing will be pushed one tab further."
+
+[RID_RESXLS_COST_GraphicAnchorEndOfPage_IssueType]
+en-US = "Graphic Object Anchor - End of Page"
+
+[RID_RESXLS_COST_GraphicAnchorEndOfPage_Comment]
+en-US = "If a frame or graphic object (not including AutoShapes) is too close to the end of a page it will be pushed to the next page in <PRODUCTNAME>."
+
+[RID_RESXLS_COST_GraphicAnchorLostGraphic_IssueType]
+en-US = "Graphic Object Anchor - Lost Graphic Object"
+
+[RID_RESXLS_COST_GraphicAnchorLostGraphic_Comment]
+en-US = "If a graphic object is anchored off a paragraph (Format Autoshape | Layout | Advanced | Vertical Position = Paragraph) which contains just a blank carriage return, then this can lead to the graphic object being lost in <PRODUCTNAME>."
+
+[RID_RESXLS_COST_TABLE_Leading_IssueType]
+en-US = "Leading"
+
+[RID_RESXLS_COST_TABLE_Leading_Comment]
+en-US = "Leading can cause extra lines in tables. In a table, if the column width is very close to the text, it can lead to a single character being pushed to new line in <PRODUCTNAME>. This is caused by extra leading in <PRODUCTNAME>."
+
+[RID_RESXLS_COST_TABLE_Misplaced_IssueType]
+en-US = "Misplaced"
+
+[RID_RESXLS_COST_TABLE_Misplaced_Comment]
+en-US = "Text wrapping can cause misplaced tables."
+
+[RID_RESXLS_COST_TOC_HeadlinesWithoutNum_IssueType]
+en-US = "Headings Without Numbering"
+
+[RID_RESXLS_COST_TOC_HeadlinesWithoutNum_Comment]
+en-US = "Many users do not use automatic heading or section numbering. They type the numbers in front of the heading manually instead. Word displays the first TAB of the heading in the TOC. <PRODUCTNAME> does not. The TOC will look different."
+
+[RID_RESXLS_COST_TOC_HeadlinesWithoutNum_WorkAround]
+en-US = "Replace the manual numbering with automatic numbering or add spaces between the manual numbers and the text."
+
+[RID_RESXLS_COST_TABLE_AlignmentOfObjects_IssueType]
+en-US = "Horizontal Alignment of Objects"
+
+[RID_RESXLS_COST_TABLE_AlignmentOfObjects_Comment]
+en-US = "Graphics, WordArt or similar objects located in text tables get displayed in the wrong position when the absolute position of the horizontal alignment is defined instead of a relative position."
+
+[RID_RESXLS_COST_TABLE_AlignmentOfObjects_WorkAround]
+en-US = "Adjust the horizontal alignment manually."
+
+[RID_STR_WORD_ATTRIBUTE_COUNT]
+en-US = "Count"
+
+[RID_STR_EXCEL_NOTE_CELL_FUNCTIONS_DATEDIF]
+en-US = "<PRODUCTNAME> Calc does not have an equivalent 'DATEDIF' function."
+
+[RID_STR_EXCEL_NOTE_CELL_FUNCTIONS_PHONETIC]
+en-US = "<PRODUCTNAME> does not have an equivalent 'PHONETIC' function."
+
+[RID_STR_PP_SUBISSUE_BACKGROUND_NOTE]
+en-US = "Fill style background colors applied to shapes in PowerPoint might be lost after a round trip conversion in <PRODUCTNAME>."
+
+[RID_STR_PP_SUBISSUE_NUMBERING_NOTE]
+en-US = "Only the first paragraph in a numbered sequence can start with "1" in <PRODUCTNAME>. The numbering can only start with "2" or higher in subsequent paragraphs."
+
+[RID_STR_PP_SUBISSUE_HYPERLINK_NOTE]
+en-US = "Unlike PowerPoint, <PRODUCTNAME> does not support multiple text formats in hyperlink text. Instead, <PRODUCTNAME> creates a separate hyperlink for each formatting style in an imported hyperlink."
+
+[RID_STR_PP_SUBISSUE_HYPERLINK_SPLIT_NOTE]
+en-US = "PowerPoint splits the text representation of a hyperlink into several lines when the text box is not wide enough. <PRODUCTNAME> does not split hyperlinks so the hyperlink text might extend out of the text box."
+
+[RID_STR_PP_SUBISSUE_TEMPLATE_NOTE]
+en-US = "<PRODUCTNAME> does not support the PowerPoint 'Title Slide' layout. When you import this layout, most of the subtitle object attributes are converted to hard attributes. PowerPoint 97 users require the multiple master page patch from Microsoft to view 'Title Slide' layouts that are contained in round trip documents."
+
+[RID_STR_PP_SUBISSUE_TABSTOP_NOTE]
+en-US = "Unlike PowerPoint, <PRODUCTNAME> only supports one default tab stop in a document and not one for each text object. If a PowerPoint document uses more than one default tab stop for text objects, <PRODUCTNAME> assigns hard tab stops to these text objects to ensure an identical layout when you import the document. The default tab stops are not reinserted when you save the document in PowerPoint format."
+
+[RID_STR_PP_SUBISSUE_FONTS]
+en-US = "Embedded Fonts"
+
+[RID_STR_PP_SUBISSUE_FONTS_NOTE]
+en-US = "<PRODUCTNAME> doesn't support embedded fonts."
+
+[RID_STR_COMMON_SUBISSUE_TRANSPARENCY_NOTE]
+en-US = "Microsoft Office supports a color attribute that allows you to make a  bitmap color transparent without modifying the orginal bitmap. When you import a document with such a bitmap, <PRODUCTNAME> changes the bitmap to match the transparent color. The transparent color attribute is lost."
+
+[RID_STR_COMMON_SUBISSUE_LINE_NOTE]
+en-US = "<PRODUCTNAME> does not support all of the line styles that you can apply to MS Office AutoShapes. As a result, <PRODUCTNAME> replaces double and triple line styles with a single line."
+
+[RID_STR_COMMON_SUBISSUE_GRADIENT_PRESET_NOTE]
+en-US = "<PRODUCTNAME> does not support preset gradient styles."
+
+[RID_STR_COMMON_SUBISSUE_GRADIENT_CORNER_NOTE]
+en-US = "<PRODUCTNAME> does not support the 'from center' gradient style."
+
+[RID_STR_COMMON_SUBISSUE_GRADIENT_CENTER_NOTE]
+en-US = "<PRODUCTNAME> does not support the 'from corner' gradient style."
+
+[RID_RESXLS_COST_DB_Query]
+en-US = "Database Query"
+
+[RID_RESXLS_COST_DB_Query_Comment]
+en-US = "Issue: <PRODUCTNAME> can not import the database query. "
+
+[RID_RESXLS_COST_LineStyle]
+en-US = "Line Style"
+
+[RID_RESXLS_COST_LineStyle_Comment]
+en-US = "Issue: Line style is not supported."
+
+[RID_RESXLS_COST_Numbering]
+en-US = "Numbering"
+
+[RID_RESXLS_COST_Numbering_Comment]
+en-US = "Issue: Text numbering starts with wrong number."
+
+[RID_RESXLS_COST_Template]
+en-US = "Layout 'Title Slide'"
+
+[RID_RESXLS_COST_Template_Comment]
+en-US = "Issue: 'Title Slide' layout is not supported."
+
+[RID_RESXLS_COST_DATEDIF_Note]
+en-US = "Use a date or time function that <PRODUCTNAME> Calc supports."
+
+[RID_RESXLS_COST_Tabstop]
+en-US = "Default Tabulator"
+
+[RID_RESXLS_COST_Tabstop_Comment]
+en-US = "Issue: Different default tabulators are not supported for text objects."
+
+[RID_RESXLS_COST_Transparent]
+en-US = "Transparent Color"
+
+[RID_RESXLS_COST_Transparent_Comment]
+en-US = "Issue: <PRODUCTNAME> does not support the transparent color attribute in bitmaps."
+
+[RID_RESXLS_COST_GradientStyle]
+en-US = "Gradient Style"
+
+[RID_RESXLS_COST_GradientStyle_Comment]
+en-US = "Issue: Unsupported gradient styles used."
+
+[RID_RESXLS_COST_GradientStyle_Note]
+en-US = "Replacing gradient styles by styles that are supported."
+
+[RID_RESXLS_COST_Hyperlink]
+en-US = "Textrange Hyperlinks"
+
+[RID_RESXLS_COST_Hyperlink_Comment]
+en-US = "Issue: Multiple text formatting is not supported in Hyperlinks."
+
+[RID_RESXLS_COST_HyperlinkSplit]
+en-US = "Split Hyperlinks"
+
+[RID_RESXLS_COST_HyperlinkSplit_Comment]
+en-US = "Issue: Hyperlink will not be split onto several lines."
+
+[RID_RESXLS_COST_Background]
+en-US = "Fill Type Background"
+
+[RID_RESXLS_COST_Background_Comment]
+en-US = "Issue: Fillstyle background is not supported."
+

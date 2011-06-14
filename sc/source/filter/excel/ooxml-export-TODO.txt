@@ -1,0 +1,148 @@
+TODO/Unimplemented Calc OOXML Export Features:
+=============================================
+
+Partially implemented features are not mentioned here; grep for OOXTODO within
+sc/source/filter/*.
+
+In updated OfficeFileFormatsProtocols.zip [MS-XLS].pdf, 
+Section §2.3.1 (p.154) provides the record name :: record number mapping, and 
+Section §2.3.2 (p.165) provides the record number :: record name mapping.
+
+Elements:
+    - Workbook (§3.2):
+        - customWorkbookViews (§3.2.3)
+        - ext (§3.2.7)
+        - externalReference (§3.2.8)
+        - externalReferences (§3.2.9)
+        - extLst (§3.2.10)
+        - fileRecoveryPr (§3.2.11)      [ CRASHRECERR? 865h ]
+        - fileSharing (§3.2.12)         [ FILESHARING 5Bh ]
+        - functionGroup (§3.2.14)       [ FNGRP12 898h; FNGROUPNAME 9Ah ]
+        - functionGroups (§3.2.15)      [ FNGROUPCOUNT: 9Ch ]
+        - oleSize (§3.2.16)             [ OLESIZE DEh ]
+        - smartTagPr (§3.2.21)          [ BOOKEXT 863h ]
+        - smartTagType (§3.2.22)        [ unknown record ]
+        - smartTagTypes (§3.2.23)       [ unknown record ]
+        - webPublishing (§3.2.24)       [ WOPT 80Bh ]
+        - webPublishObject (§3.2.25)    [ WEBPUB 801h ]
+        - webPublishObjects (§3.2.26)   [ unsupported ]
+    - Worksheets (§3.3.1):
+        - autoFilter (§3.3.1.1)         [ AutoFilter 9Eh ]
+        - cellSmartTag (§3.3.1.4)       [ FEAT 868h ]
+        - cellSmartTagPr (§3.3.1.5)     [ FEAT? 868h ]
+        - cellSmartTags (§3.3.1.6)      [ FEAT 868h ]
+        - cellWatch (§3.3.1.7)          [ CELLWATCH 86Ch ]
+        - cellWatches (§3.3.1.8)        [ CELLWATCH 86Ch ]
+        - cfRule (§3.3.1.9)             [ CF 1B1h ]
+        - cfvo (§3.3.1.10)              [ CF12 87Ah ]
+        - chartsheet (§3.3.1.11)        [ CHARTFRTINFO 850h, FRTWRAPPER 851h...]
+        - color (§3.3.1.14)             [ DXF 88Dh xfpropBorder? 
+                                          XFEXT 87Dh xclrType? ]
+        - colorScale (§3.3.1.15)        [ DXF 88Dh? ]
+        - control (§3.3.1.18)           [ ??? ]
+        - controls (§3.3.1.19)          [ ??? ]
+        - customPr (§3.3.1.20)          [ ??? ]
+        - customProperties (§3.3.1.21)  [ ??? ]
+        - customSheetView (§3.3.1.22)   [ ???; for charts; see chartsheet? ]
+        - customSheetView (§3.3.1.23)   [ ??? ]
+        - customSheetViews (§3.3.1.24)  [ ???; for charts; see chartsheet? ]
+        - customSheetViews (§3.3.1.25)  [ ??? ]
+        - dataBar (§3.3.1.26)           [ CF12 87Ah ct=Databar ]
+        - dataConsolidate (§3.3.1.27)   [ DCON 50h ]
+        - dataRef (§3.3.1.28)           [ DCONBIN 1B5h ]
+        - dataRefs (§3.3.1.29)          [ ??? ]
+        - dialogsheet (§3.3.1.32)       [ ??? ]
+        - drawing (§3.3.1.34)           [ ??? ]
+        - evenFooter (§3.3.1.35)        [ HeaderFooter 89Ch ]
+        - evenHeader (§3.3.1.36)        [ HeaderFooter 89Ch ]
+        - firstFooter (§3.3.1.38)       [ HeaderFooter 89Ch ]
+        - firstHeader (§3.3.1.39)       [ HeaderFooter 89Ch ]
+        - formula (§3.3.1.40)           [ CF 1B1h ]
+        - iconSet (§3.3.1.46)           [ CF12 87Ah ct=CFMultistate ]
+        - ignoredError (§3.3.1.47)      [ Feat/FeatForumulaErr2/FFErrorCheck 868h ]
+        - ignoredErrors (§3.3.1.48)     [ Feat 868h ]
+        - legacyDrawing (§3.3.1.51)     [ MsoDrawing ECh ]
+        - legacyDrawingHF (§3.3.1.52)   [ ??? ]
+        - oleObject (§3.3.1.57)         [ ??? ]
+        - oleObjects (§3.3.1.58)        [ ??? ]
+        - outlinePr (§3.3.1.59)         [ ??? ]
+        - pageSetup (§3.3.1.62)         [ ???; for charts; see chartsheet? ]
+        - picture (§3.3.1.65)           [ BkHim E9h; see XclExpBitmap ]
+        - pivotArea (§3.3.1.66)         [ ??? ]
+        - pivotSelection (§3.3.1.67)    [ ??? ]
+        - protectedRange (§3.3.1.69)    [ ??? ]
+        - protectedRanges (§3.3.1.70)   [ ??? ]
+        - sheetCalcPr (§3.3.1.76)       [ REFRESHALL?? ]
+        - sheetFormatPr (§3.3.1.78)     [ lots of records? ]
+            @defaultColWidth:   DefColWidth
+            @defaultRowHeight:  DEFROWHEIGHT
+            @baseColWidth:      ColInfo/coldx?
+            @customHeight:      ColInfo/fUserSet?
+            @zeroHeight:        ColInfo/fHidden?
+            @thickTop:          ?
+            @thickBottom:       ?
+            @outlineLevelRow:   ?
+            @outlineLevelCol:   ColInfo/iOutLevel?
+        - sheetPr (§3.3.1.80)           [ ??? ; for charts ]
+        - sheetView (§3.3.1.84)         [ ??? ; for charts ]
+        - sheetViews (§3.3.1.86)        [ ??? ; for charts ]
+        - smartTags (§3.3.1.87)         [ FEAT 868h; isf=ISFFACTOID ]
+        - sortCondition (§3.3.1.88)     [ SortData 895h? ]
+        - sortState (§3.3.1.89)         [ Sort 90h ]
+        - tabColor (§3.3.1.90)          [ SheetExt 862h ]
+        - tablePart (§3.3.1.91)         [ ??? ]
+        - tableParts (§3.3.1.92)        [ ??? ]
+        - webPublishItem (§3.3.1.94)    [ WebPub 801h ]
+        - webPublishItems (§3.3.1.95)
+    - AutoFilter Settings (§3.3.2):
+        - colorFilter (§3.3.2.1)        [ AutoFilter12 87Eh, 
+                                          DXFN12NoCB struct ]
+        - dateGroupItem (§3.3.2.4)      [ AutoFilter12 87Eh, 
+                                          AF12DateInfo struct ]
+        - dynamicFilter (§3.3.2.5)      [ AutoFilter12 87Eh, cft field ]
+        - filter (§3.3.2.6)             [ AutoFilter12 87Eh, rgCriteria? ]
+        - filters (§3.3.2.9)            [ AutoFilter12 87Eh, rgCriteria? ]
+        - iconFilter (§3.3.2.9)         [ AutoFilter12 87Eh, 
+                                          AF12CellIcon struct ]
+    - Shared String Table (§3.4):
+        - phoneticPr (§3.4.3)
+        - rPh (§3.4.6)
+    - Tables (§3.5.1):
+        - calculatedColumnFormula (§3.5.1.1)
+                                        [ ??? ]
+        - table (§3.5.1.2)              [ ??? ]
+        - tableColumn (§3.5.1.3)        [ ??? ]
+        - tableColumns (§3.5.1.4)       [ ??? ]
+        - tableStyleInfo (§3.5.1.5)     [ ??? ]
+        - totalRowFormula (§3.5.1.6)    [ ??? ]
+        - xmlColumnPr (§3.5.1.7)        [ ??? ]
+    - Single Cell Tables (§3.5.2):
+        - singleXmlCell (§3.5.2.1)      [ ??? ]
+        - singleXmlCells (§3.5.2.2)     [ ??? ]
+        - xmlCellPr (§3.5.2.3)          [ ??? ]
+        - xmlPr (§3.5.2.4)              [ ??? ]
+    - Calculation Chain (§3.6):
+        - c (§3.6.1)                    [ ??? ]
+        - calcChain (§3.6.2)            [ ??? ]
+    - Comments (§3.7):
+        - Note: Excel *requires* that there be a drawing object associated
+          with the comment before it will show it.  If you _just_ generate the
+          <comments/> XML part and create a <Relationship/> for it, Excell
+          will NOT display the comment.
+        - As drawing is not currently implemented, comments support is
+          incomplete.
+        - TODO: text formatting.  Currently we only write unformatted text
+          into comments?.xml, as I'm not sure how formatted text is handled.
+    - Styles (§3.8):
+        - dxf (§3.8.14):                [ DXF 88Dh; unsupported ]
+        - dxfs (§3.8.15):               [ DXF 88Dh ]
+        - gradientFill (§3.8.23):       [ ??? ]
+        - horizontal (§3.8.24):         [ DXF 88Dh fNewBorder, xfprops ]
+        - mruColors (§3.8.28):          [ ??? ]
+        - scheme (§3.8.36):             [ ??? ]
+        - stop (§3.8.38):               [ ??? ]
+        - tableStyle (§3.8.40):         [ TableStyle 88Fh; unsupported ]
+        - tableStyleElement (§3.8.41):  [ TableStyleElement 890h; unsupported ]
+        - tableStyles (§3.8.42):        [ TableStyles 88Eh; unsupported ]
+        - vertical (§3.8.44):           [ DXF 88Dh fNewBorder, xfprops ]
+

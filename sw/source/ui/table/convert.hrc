@@ -1,0 +1,50 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define CB_TAB          1
+#define CB_SEMI         3
+#define CB_PARA         4
+#define FL_DELIM                5
+#define RB_OTHER        6
+#define ED_OTHER        7
+#define CB_KEEPCOLUMN   8
+#define STR_CONVERT_TEXT_TABLE      9
+#define CB_HEADER           13
+#define CB_REPEAT_HEADER    14
+#define CB_DONT_SPLIT       15
+#define CB_BORDER           16
+#define FL_OPTIONS                      17
+#define FT_REPEAT_HEADER    18
+#define NF_REPEAT_HEADER    19
+
+#define BT_OK           100
+#define BT_CANCEL       101
+#define BT_AUTOFORMAT   102
+#define BT_HELP         103
+#define WIN_REPEAT_HEADER   104
+//IAccessibility2 Implementation 2009-----
+#define STR_SYMBOL      105
+//-----IAccessibility2 Implementation 2009

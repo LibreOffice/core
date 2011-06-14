@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_FormulaLanguage_idl__
+#define __com_sun_star_sheet_FormulaLanguage_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** Constants designating the formula language used with
+    <type>XFormulaOpCodeMapper</type> methods.
+ */
+constants FormulaLanguage
+{
+    /** Function names and operators as defined by the OASIS
+        OpenDocument Format (ODF) Formula specification (ODFF aka
+        OpenFormula).
+     */
+    const long ODFF     = 0;
+
+    /** Function names and operators as used in ODF documents prior to
+        the ODFF specification, up to ODF v1.1.
+     */
+    const long ODF_11   = 1;
+
+    /** Function names and operators as used in the English language
+        user interface.
+     */
+    const long ENGLISH  = 2;
+
+    /** Function names and operators as used in the current native
+        language user interface.
+     */
+    const long NATIVE   = 3;
+
+    /** Function names and operators as used in the English version of
+        Excel.  This formula language is also used in VBA formulas and
+        OOXML import/export.
+     */
+    const long XL_ENGLISH = 4;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

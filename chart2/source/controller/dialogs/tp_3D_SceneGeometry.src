@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "tp_3D_SceneGeometry.hrc"
+#include "dlg_View3D.hrc"
+#include "SchSlotIds.hxx"
+#include "HelpIds.hrc"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+#define WIDTH_FL 108
+#define WIDTH_MF 57
+#define WIDTH_FT 50
+
+#define HEIGHT_FL 8
+#define HEIGHT_MF 12
+#define HEIGHT_FT 10
+
+#define POS_X_0 6
+#define POS_X_1 6
+#define POS_X_2 POS_X_1+WIDTH_FT+4
+
+#define POS_Y_0 (8)
+#define POS_Y_1 (POS_Y_0+RSC_CD_FIXEDTEXT_HEIGHT+10)
+#define POS_Y_2 (POS_Y_1+RSC_CD_FIXEDTEXT_HEIGHT+8)
+#define POS_Y_3 (POS_Y_2+RSC_CD_FIXEDTEXT_HEIGHT+8)
+#define POS_Y_4 (POS_Y_3+RSC_CD_FIXEDTEXT_HEIGHT+12)
+
+#define CUSTOMUNITTEXT_DEGREE \
+Border = TRUE ; \
+TabStop = TRUE ; \
+Repeat = TRUE ; \
+Spin = TRUE ; \
+Minimum = -180 ; \
+Maximum = 180 ; \
+StrictFormat = TRUE ; \
+DecimalDigits = 0 ; \
+First = -180 ; \
+Last = 180 ; \
+SpinSize = 1 ; \
+Unit = FUNIT_CUSTOM ; \
+CustomUnitText [ en-US ] = " degrees" ;
+
+TabPage TP_3D_SCENEGEOMETRY
+{
+    HelpID = HID_3D_VIEW ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( VIEW3D_PAGE_WIDTH , VIEW3D_PAGE_HEIGHT ) ;
+
+    CheckBox CBX_RIGHT_ANGLED_AXES
+    {
+        HelpID = "chart2:CheckBox:TP_3D_SCENEGEOMETRY:CBX_RIGHT_ANGLED_AXES";
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_0  ) ;
+        Size = MAP_APPFONT ( (WIDTH_FT+WIDTH_MF) , HEIGHT_FT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Right-angled axes" ;
+    };
+    FixedText FT_X_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_1  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        Text [ en-US ] = "~X rotation" ;
+    };
+    FixedText FT_Y_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_2  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        Text [ en-US ] = "~Y rotation" ;
+    };
+    FixedText FT_Z_ROTATION
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_3  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        Text [ en-US ] = "~Z rotation" ;
+    };
+    MetricField MTR_FLD_X_ROTATION
+    {
+        HelpID = "chart2:MetricField:TP_3D_SCENEGEOMETRY:MTR_FLD_X_ROTATION";
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_1-2  ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        CUSTOMUNITTEXT_DEGREE
+    };
+    MetricField MTR_FLD_Y_ROTATION
+    {
+        HelpID = "chart2:MetricField:TP_3D_SCENEGEOMETRY:MTR_FLD_Y_ROTATION";
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_2-2  ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        CUSTOMUNITTEXT_DEGREE
+    };
+    MetricField MTR_FLD_Z_ROTATION
+    {
+        HelpID = "chart2:MetricField:TP_3D_SCENEGEOMETRY:MTR_FLD_Z_ROTATION";
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_3-2 ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        CUSTOMUNITTEXT_DEGREE
+    };
+
+    CheckBox CBX_PERSPECTIVE
+    {
+        HelpID = "chart2:CheckBox:TP_3D_SCENEGEOMETRY:CBX_PERSPECTIVE";
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_4  ) ;
+        Size = MAP_APPFONT ( WIDTH_FT , HEIGHT_FT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Perspective" ;
+    };
+    MetricField MTR_FLD_PERSPECTIVE
+    {
+        HelpID = "chart2:MetricField:TP_3D_SCENEGEOMETRY:MTR_FLD_PERSPECTIVE";
+        Pos = MAP_APPFONT ( POS_X_2 , POS_Y_4-2  ) ;
+        Size = MAP_APPFONT ( WIDTH_MF , HEIGHT_MF ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 0 ;
+        First = 0 ;
+        Last = 100 ;
+        SpinSize = 5 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+};

@@ -1,0 +1,1 @@
+Create with the Report Builder stylish, smart-looking database reports. The flexible report editor can define group and page headers as well as group and page footers and even calculation fields are available to accomplish complex database reports.

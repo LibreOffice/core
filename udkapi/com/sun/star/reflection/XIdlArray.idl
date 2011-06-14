@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_XIdlArray_idl__
+#define __com_sun_star_reflection_XIdlArray_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/lang/ArrayIndexOutOfBoundsException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** Reflects an IDL sequence and provides dynamic access to instances of
+    that sequence.
+    This interface supports widening conversion when getting or setting elements.
+
+    @attention
+    Although the name of this interface denotes arrays,
+    sequences are meant. Don't be obfuscated, arrays are not supported by UNO!
+*/
+published interface XIdlArray: com::sun::star::uno::XInterface
+{
+    /** Rellocates the length of the sequence instance.
+
+        @param array
+               sequence instance
+        @length
+                new length of sequence
+     */
+    void realloc(
+        [inout] any array,
+        [in] long length )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Returns the length of the given sequence.
+
+        @param array
+               sequence instance
+        @return
+                length of sequence
+    */
+    long getLen( [in] any array )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Returns element at given index.
+
+        @param aArray
+               sequence instance
+        @param nIndex
+               index
+        @return
+                value
+
+        @throws IllegalArgumentException
+        if the specified object is not a sequence or if the specified object is null
+
+        @throws ArrayIndexOutOfBoundsException
+        if the specified index argument is negative, or if it is greater than or equal to the
+        length of the specified sequence.
+    */
+    any get(
+        [in] any aArray,
+        [in] long nIndex )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::ArrayIndexOutOfBoundsException );
+
+    /** Sets a new value at given index.
+
+        @param aArray
+               sequence instance
+        @param nIndex
+               index
+        @param aNewValue
+               new value to be set
+
+        @throws IllegalArgumentException
+        if the specified object is not a sequence or if the specified object is null
+
+        @throws ArrayIndexOutOfBoundsException
+        if the specified index argument is negative, or if it is greater than or equal to the
+        length of the specified sequence.
+    */
+    void set(
+        [inout] any aArray,
+        [in] long nIndex,
+        [in] any aNewValue )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::ArrayIndexOutOfBoundsException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

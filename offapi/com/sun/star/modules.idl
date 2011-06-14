@@ -1,0 +1,259 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_modules_idl__
+#define __com_sun_star_modules_idl__
+
+module com { module sun { module star {
+
+/// security and authenticates interfaces
+module auth {};
+
+/// Java AWT-like user interface toolkit interface specifications for UNO.
+module awt {};
+
+/** UNO Accessibility API
+
+    <p>This modules contains the basic interfaces of the UAA (UNO
+    Accessibility API).  Services that describe how these interfaces are
+    implemented can be found in other modules.  The services in this module
+    describe only what every accessible object has to support.</p>
+
+    <p>Making a class accessible starts by supporting the <type
+    scope="::com::sun::star::accessibility">XAccessible</type> interface.
+    This interface's only method returns the actual accessibility object, an
+    instance of <type
+    scope="::com::sun::star::accessibility">XAccessibleContext</type>.
+    These two interfaces may be implemented by the same class in which case
+    a call to <method scope="::com::sun::star::accessibility"
+    >XAccessible::getAccessible</method> returns the same object that is
+    called.  Alternatively the implementation of the <type
+    scope="::com::sun::star::accessibility">XAccessibleContext</type>
+    interface can be done by another class.  This makes it possible to put
+    all accessibility implementations into their own library which has only
+    to be loaded when necessary.</p>
+
+    <p>Note that all other interfaces have to be implemented by the same
+    class that implements the <type
+    scope="::com::sun::star::accessibility">XAccessibleContext</type>
+    interface.  Note also that there is no way back from an accessibility
+    object to the object from which it has been obtained by means of the
+    UAA.  If you need such a back-link you have to provide one on your
+    own.</p>
+*/
+module accessibility {};
+
+/// Charting diagram interfaces.
+module chart {};
+
+/** New implementation of Charting diagram interfaces.  This module
+    contains only a rather small public API.  In addition there is a
+    private API in the chart2 project.
+ */
+module chart2 {};
+
+/// Access to the tree of configuration data.
+module configuration {};
+
+/// Clipboard and Drag&amp;Drop interfaces.
+module datatransfer {};
+
+/// Office document related interfaces.
+module document {};
+
+/// Office document content related interfaces.
+module office {};
+
+/// Drawing and shape specific interfaces.
+module drawing {};
+
+/// Interfaces for managing forms and controls.
+module form {};
+
+/// Interfaces for mathematical formulas.
+module formula {};
+
+/// Desktop environment framework interfaces.
+module frame {};
+
+/// Interfaces and data types to deal with basic geometric entities
+module geometry {};
+
+/// Interfaces for graphic handling
+module graphic {};
+
+/// Interface for internationalization (deprecated draft).
+module i18n {};
+
+/// Interfaces to control installations.
+module installation {};
+
+/// lightweight directory access protocol (LDAP)
+module ldap {};
+
+/// Spell checker, hyphenation and thesaurus interfaces.
+module linguistic2 {};
+
+/// Interfaces for Email connectivity
+module mail {};
+
+/// Media type interfaces
+module media {};
+
+/// Interfaces for Mozilla integration.
+module mozilla {};
+
+/// Pretty Good Privacy (deprecated).
+module pgp {};
+
+/// Netscape-like plugin interfaces.
+module plugin {};
+
+/// Presentation specific interfaces.
+module presentation {};
+
+/// Interfaces and data structures for rendering
+module rendering {};
+
+/// Interfaces to access (UI) resource files.
+module resource {};
+
+/// Interfaces for scanner control.
+module scanner {};
+
+/// Basic interfaces for database access.
+module sdb {};
+
+/// Database component interfaces.
+module sdbc {};
+
+/// High-level database component interfaces.
+module sdbcx {};
+
+/// Interfaces to control the setup process.
+module setup {};
+
+/// Spreadsheet specific interfaces.
+module sheet {};
+
+/// Formatting and layout style and style sheet interfaces.
+module style {};
+
+/// Interfaces for import/export of Scaleable Vector Format.
+module svg {};
+
+/// Data synchronization interfaces (deprecated).
+module sync {};
+
+/// Data synchronization interfaces (deprecated).
+module sync2 {};
+
+/// Table specific interfaces (for text and spreadsheet).
+module table {};
+
+/// Task management interfaces.
+module task {};
+
+/// Test interfaces for core-reflection, introspection and marshalling.
+module test {};
+
+/// Text specific interfaces.
+module text {};
+
+/// Universal Content Broker interfaces.
+module ucb {};
+
+/// Dialogs and other UI elements.
+module ui {};
+
+/// Miscellaneous interfaces for sorting, connecting objects etc.
+module util {};
+
+/// Document view specific interfaces (e.g. selection access and printing).
+module view {};
+
+/// XML related interfaces.
+module xml {};
+
+/// Host operating system integration interfaces.
+module system {};
+
+/// Package file format interfaces.
+module packages {};
+
+/// image manipulation interfaces.
+module image {};
+
+/// interfaces for XForms (XML-based forms) implementation
+module xforms {};
+
+/// interfaces for report interfaces
+module report {};
+
+/** RDF (Resource Description Framework) and metadata interfaces.
+
+    <p>
+    This module provides interfaces for storing and accessing metadata
+    in <a href="http://www.w3.org/RDF/">Resource Description Framework</a>
+    format.
+    The API consists of two main parts: the RDF data model and the ODF
+    document integration.
+    </p>
+
+    <p>
+    The <a href="http://www.w3.org/TR/rdf-concepts/">RDF data model</a>
+    describes graphs of statements.
+    The nodes in the graph are of type <type scope="rdf">XNode</type>,
+    which has several subtypes: <type scope="rdf">XResource</type>,
+    <type scope="rdf">XBlankNode</type>,
+    <type scope="rdf">XURI</type> and <type scope="rdf">XLiteral</type>.
+    Statements are then triples of nodes, and have type
+    <type scope="rdf">Statement</type>.
+    </p>
+
+    <p>
+    The main part of the RDF data model is the
+    <type scope="rdf">XRepository</type>, which consists of a set of graphs.
+    The repository allows for importing/exporting graphs from/to files,
+    as well as querying the contents of the repository.
+    The type of the graphs is <type scope="rdf">XNamedGraph</type>.
+    </p>
+
+    <p>
+    Documents that support metadata implement the interfaces
+    <type scope="rdf">XRepositorySupplier</type> and
+    <type scope="rdf">XDocumentMetadataAccess</type>.
+    Furthermore, all elements of ODF documents that may have metadata attached
+    implement the interface <type scope="rdf">XMetadatable</type>.
+    </p>
+
+ */
+module rdf {};
+
+}; }; };
+
+#endif
+

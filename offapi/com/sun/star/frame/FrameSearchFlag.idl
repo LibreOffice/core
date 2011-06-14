@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_FrameSearchFlag_idl__
+#define __com_sun_star_frame_FrameSearchFlag_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** these types describe the algorithm to be used to search a frame
+
+    <p>
+    Such flags will be used on methods <member>XFrame::findFrame()</member>,
+    <member>XDispatchProvider::queryDispatch()</member> or
+    <member>XComponentLoader::loadComponentFromURL()</member> if no special target
+    frame name (e.g. "_blank", "_self") is used.
+    </p>
+
+    @see XFrame::findFrame()
+    @see XDispatchProvider::queryDispatch()
+    @see XComponentLoader::loadComponentFromURL()
+ */
+published constants FrameSearchFlag
+{
+    //-------------------------------------------------------------------------
+    /** no longer supported
+
+        <p>
+        Using of this flag will do nothing. Use right combination of other flags
+        instead of this one.
+        </p>
+
+        @deprecated
+     */
+    const long AUTO = 0;
+
+    //-------------------------------------------------------------------------
+    /** allows search on the parent frames
+     */
+    const long PARENT = 1;
+
+    //-------------------------------------------------------------------------
+    /** includes the start frame himself
+     */
+    const long SELF = 2;
+
+    //-------------------------------------------------------------------------
+        /** includes all child frames of the start frame
+
+            <p>
+            Note: That means all direct children and of course her children too.
+                  Search doesn't stop at the next level inside the tree!
+            </p>
+         */
+    const long CHILDREN = 4;
+
+    //-------------------------------------------------------------------------
+    /** frame will be created if not found
+     */
+    const long CREATE = 8;
+
+    //-------------------------------------------------------------------------
+        /** includes the direct siblings of the start frame
+
+            <p>
+            Normally it's interpreted as search on the direct children of the parent
+            only. But in combination with e.g. the CHILDREN flag it can include all
+            children of it too.
+            </p>
+     */
+    const long SIBLINGS = 16;
+
+    //-------------------------------------------------------------------------
+        /** allow the search outside the current sub task tree of the whole possible frame tree
+
+        <p>
+        If this flag isn't present, any search from bottom to top has to stop, if a top frame
+        will be reached. It doesn't influence a search from top to bottom.
+        But it can be used at the root of the frame tree to search on direct children of it only.
+        Because the direct children of the root node are the root's of the task sub trees, which
+        are top frames too. Instead of using the CHILDREN flag there, it's possible so to suppress
+        a deeper search so.
+        </p>
+     */
+    const long TASKS = 32;
+
+    //-------------------------------------------------------------------------
+        /** includes all frames except frames in other tasks sub trees
+        but doesn't create any new frame
+     */
+    const long ALL = 23;
+
+    //-------------------------------------------------------------------------
+    /** searches in the whole hierarchy of frames
+        but doesn't create any new frame
+     */
+    const long GLOBAL = 55;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

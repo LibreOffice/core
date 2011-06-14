@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+
+// strings for unicode range descriptions (used e.g. by Charmap dialog)
+// (see the Unicode spec and TrueType::OS2.ulUnicodeRange description)
+#define RID_SUBSETMAP                   1243
+#define RID_SUBSET_START                (RID_SVX_START + 901)
+#define RID_SUBSET_COUNT                95
+
+#define RID_SUBSETSTR_BASIC_LATIN               (RID_SUBSET_START + 0)
+#define RID_SUBSETSTR_LATIN_1                   (RID_SUBSET_START + 1)
+#define RID_SUBSETSTR_LATIN_EXTENDED_A          (RID_SUBSET_START + 2)
+#define RID_SUBSETSTR_LATIN_EXTENDED_B          (RID_SUBSET_START + 3)
+#define RID_SUBSETSTR_IPA_EXTENSIONS            (RID_SUBSET_START + 4)
+#define RID_SUBSETSTR_SPACING_MODIFIERS         (RID_SUBSET_START + 5)
+#define RID_SUBSETSTR_COMB_DIACRITICAL          (RID_SUBSET_START + 6)
+#define RID_SUBSETSTR_BASIC_GREEK               (RID_SUBSET_START + 7)
+#define RID_SUBSETSTR_GREEK_SYMS_COPTIC         (RID_SUBSET_START + 8)
+#define RID_SUBSETSTR_CYRILLIC                  (RID_SUBSET_START + 9)
+#define RID_SUBSETSTR_CYRILLIC_SUPPL            (RID_SUBSET_START + 200)
+#define RID_SUBSETSTR_ARMENIAN                  (RID_SUBSET_START + 10)
+#define RID_SUBSETSTR_HEBREW_EXTENDED           (RID_SUBSET_START + 11)
+#define RID_SUBSETSTR_BASIC_HEBREW              (RID_SUBSET_START + 12)
+#define RID_SUBSETSTR_BASIC_ARABIC              (RID_SUBSET_START + 13)
+#define RID_SUBSETSTR_ARABIC_EXTENDED           (RID_SUBSET_START + 14)
+#define RID_SUBSETSTR_DEVANAGARI                (RID_SUBSET_START + 15)
+#define RID_SUBSETSTR_BENGALI                   (RID_SUBSET_START + 16)
+#define RID_SUBSETSTR_GURMUKHI                  (RID_SUBSET_START + 17)
+#define RID_SUBSETSTR_GUJARATI                  (RID_SUBSET_START + 18)
+#define RID_SUBSETSTR_ORIYA                     (RID_SUBSET_START + 19)
+#define RID_SUBSETSTR_TAMIL                     (RID_SUBSET_START + 20)
+#define RID_SUBSETSTR_TELUGU                    (RID_SUBSET_START + 21)
+#define RID_SUBSETSTR_KANNADA                   (RID_SUBSET_START + 22)
+#define RID_SUBSETSTR_MALAYALAM                 (RID_SUBSET_START + 23)
+#define RID_SUBSETSTR_THAI                      (RID_SUBSET_START + 24)
+#define RID_SUBSETSTR_LAO                       (RID_SUBSET_START + 25)
+#define RID_SUBSETSTR_BASIC_GEORGIAN            (RID_SUBSET_START + 26)
+#define RID_SUBSETSTR_GEORGIAN_EXTENDED         (RID_SUBSET_START + 27)
+#define RID_SUBSETSTR_HANGUL_JAMO               (RID_SUBSET_START + 28)
+#define RID_SUBSETSTR_LATIN_EXTENDED_ADDS       (RID_SUBSET_START + 29)
+#define RID_SUBSETSTR_GREEK_EXTENDED            (RID_SUBSET_START + 30)
+#define RID_SUBSETSTR_GENERAL_PUNCTUATION       (RID_SUBSET_START + 31)
+#define RID_SUBSETSTR_SUB_SUPER_SCRIPTS         (RID_SUBSET_START + 32)
+#define RID_SUBSETSTR_CURRENCY_SYMBOLS          (RID_SUBSET_START + 33)
+#define RID_SUBSETSTR_COMB_DIACRITIC_SYMS       (RID_SUBSET_START + 34)
+#define RID_SUBSETSTR_LETTERLIKE_SYMBOLS        (RID_SUBSET_START + 35)
+#define RID_SUBSETSTR_NUMBER_FORMS              (RID_SUBSET_START + 36)
+#define RID_SUBSETSTR_ARROWS                    (RID_SUBSET_START + 37)
+#define RID_SUBSETSTR_MATH_OPERATORS            (RID_SUBSET_START + 38)
+#define RID_SUBSETSTR_MISC_TECHNICAL            (RID_SUBSET_START + 39)
+#define RID_SUBSETSTR_CONTROL_PICTURES          (RID_SUBSET_START + 40)
+#define RID_SUBSETSTR_OPTICAL_CHAR_REC          (RID_SUBSET_START + 41)
+#define RID_SUBSETSTR_ENCLOSED_ALPHANUM         (RID_SUBSET_START + 42)
+#define RID_SUBSETSTR_BOX_DRAWING               (RID_SUBSET_START + 43)
+#define RID_SUBSETSTR_BLOCK_ELEMENTS            (RID_SUBSET_START + 44)
+#define RID_SUBSETSTR_GEOMETRIC_SHAPES          (RID_SUBSET_START + 45)
+#define RID_SUBSETSTR_MISC_DINGBATS             (RID_SUBSET_START + 46)
+#define RID_SUBSETSTR_DINGBATS                  (RID_SUBSET_START + 47)
+#define RID_SUBSETSTR_CJK_SYMS_PUNCTUATION      (RID_SUBSET_START + 48)
+#define RID_SUBSETSTR_HIRAGANA                  (RID_SUBSET_START + 49)
+#define RID_SUBSETSTR_KATAKANA                  (RID_SUBSET_START + 50)
+#define RID_SUBSETSTR_BOPOMOFO                  (RID_SUBSET_START + 51)
+#define RID_SUBSETSTR_HANGUL_COMPAT_JAMO        (RID_SUBSET_START + 52)
+#define RID_SUBSETSTR_CJK_MISC                  (RID_SUBSET_START + 53)
+#define RID_SUBSETSTR_ENCLOSED_CJK_LETTERS      (RID_SUBSET_START + 54)
+#define RID_SUBSETSTR_CJK_COMPATIBILITY         (RID_SUBSET_START + 55)
+#define RID_SUBSETSTR_HANGUL                    (RID_SUBSET_START + 56)
+
+#define RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH       (RID_SUBSET_START + 59)
+#define RID_SUBSETSTR_PRIVATE_USE_AREA          (RID_SUBSET_START + 60)
+#define RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS       (RID_SUBSET_START + 61)
+#define RID_SUBSETSTR_ALPHA_PRESENTATION        (RID_SUBSET_START + 62)
+#define RID_SUBSETSTR_ARABIC_PRESENT_A          (RID_SUBSET_START + 63)
+#define RID_SUBSETSTR_COMBINING_HALF_MARKS      (RID_SUBSET_START + 64)
+#define RID_SUBSETSTR_CJK_COMPAT_FORMS          (RID_SUBSET_START + 65)
+#define RID_SUBSETSTR_SMALL_FORM_VARIANTS       (RID_SUBSET_START + 66)
+#define RID_SUBSETSTR_ARABIC_PRESENT_B          (RID_SUBSET_START + 67)
+#define RID_SUBSETSTR_HALFW_FULLW_FORMS         (RID_SUBSET_START + 68)
+#define RID_SUBSETSTR_SPECIALS                  (RID_SUBSET_START + 69)
+
+#define RID_SUBSETSTR_HANGUL_GA                 (RID_SUBSET_START + 150)
+#define RID_SUBSETSTR_HANGUL_NA                 (RID_SUBSET_START + 151)
+#define RID_SUBSETSTR_HANGUL_DA                 (RID_SUBSET_START + 152)
+#define RID_SUBSETSTR_HANGUL_RA                 (RID_SUBSET_START + 153)
+#define RID_SUBSETSTR_HANGUL_MA                 (RID_SUBSET_START + 154)
+#define RID_SUBSETSTR_HANGUL_BA                 (RID_SUBSET_START + 155)
+#define RID_SUBSETSTR_HANGUL_SA                 (RID_SUBSET_START + 156)
+#define RID_SUBSETSTR_HANGUL_AH                 (RID_SUBSET_START + 157)
+#define RID_SUBSETSTR_HANGUL_JA                 (RID_SUBSET_START + 158)
+#define RID_SUBSETSTR_HANGUL_CHA                (RID_SUBSET_START + 159)
+#define RID_SUBSETSTR_HANGUL_KA                 (RID_SUBSET_START + 160)
+#define RID_SUBSETSTR_HANGUL_TA                 (RID_SUBSET_START + 161)
+#define RID_SUBSETSTR_HANGUL_PA                 (RID_SUBSET_START + 162)
+#define RID_SUBSETSTR_HANGUL_HA                 (RID_SUBSET_START + 163)
+#define RID_SUBSETSTR_YI                        (RID_SUBSET_START + 164)
+
+#define RID_SUBSETSTR_SINHALA                   (RID_SUBSET_START + 165)
+#define RID_SUBSETSTR_TIBETAN                   (RID_SUBSET_START + 166)
+#define RID_SUBSETSTR_MYANMAR                   (RID_SUBSET_START + 167)
+#define RID_SUBSETSTR_KHMER                     (RID_SUBSET_START + 168)
+
+#define RID_SUBSETSTR_OGHAM                     (RID_SUBSET_START + 170)
+#define RID_SUBSETSTR_RUNIC                     (RID_SUBSET_START + 171)
+#define RID_SUBSETSTR_SYRIAC                    (RID_SUBSET_START + 172)
+#define RID_SUBSETSTR_THAANA                    (RID_SUBSET_START + 173)
+#define RID_SUBSETSTR_ETHIOPIC                  (RID_SUBSET_START + 174)
+#define RID_SUBSETSTR_CHEROKEE                  (RID_SUBSET_START + 175)
+#define RID_SUBSETSTR_CANADIAN_ABORIGINAL       (RID_SUBSET_START + 176)
+#define RID_SUBSETSTR_MONGOLIAN                 (RID_SUBSET_START + 177)
+#define RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH (RID_SUBSET_START + 178)
+
+#define RID_SUBSETSTR_MISC_MATH_SYMS_A          (RID_SUBSET_START + 210)
+#define RID_SUBSETSTR_SUPPL_ARROWS_A            (RID_SUBSET_START + 211)
+#define RID_SUBSETSTR_BRAILLE_PATTERNS          (RID_SUBSET_START + 212)
+#define RID_SUBSETSTR_SUPPL_ARROWS_B            (RID_SUBSET_START + 213)
+#define RID_SUBSETSTR_MISC_MATH_SYMS_B          (RID_SUBSET_START + 214)
+#define RID_SUBSETSTR_CJK_RADICAL_SUPPL         (RID_SUBSET_START + 215)
+#define RID_SUBSETSTR_KANXI_RADICALS            (RID_SUBSET_START + 216)
+#define RID_SUBSETSTR_IDEO_DESC_CHARS           (RID_SUBSET_START + 217)
+
+#define RID_SUBSETSTR_TAGALOG                   (RID_SUBSET_START + 220)
+#define RID_SUBSETSTR_HANUNOO                   (RID_SUBSET_START + 221)
+#define RID_SUBSETSTR_TAGBANWA                  (RID_SUBSET_START + 222)
+#define RID_SUBSETSTR_BUHID                     (RID_SUBSET_START + 223)
+#define RID_SUBSETSTR_KANBUN                    (RID_SUBSET_START + 224)
+#define RID_SUBSETSTR_BOPOMOFO_EXTENDED         (RID_SUBSET_START + 225)
+#define RID_SUBSETSTR_KATAKANA_PHONETIC         (RID_SUBSET_START + 226)
+
+#define RID_SUBSET_END                          (RID_SUBSET_START + 299)

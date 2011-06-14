@@ -1,0 +1,12 @@
+    <node oor:name="impress_CGM_Computer_Graphics_Metafile" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>cgm</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>CGM - Computer Graphics Metafile</value></prop>
+        <prop oor:name="UIName">
+            <value>CGM - Computer Graphics Metafile</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

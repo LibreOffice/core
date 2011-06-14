@@ -1,0 +1,99 @@
+LibreOffice DbusMenu Integration Source Code
+============================================
+There are three main classes, DesktopJob, FrameJob and FrameHelper implemented
+in their respective .cxx/.h files:
+
+- src/DesktopJob.cxx
+- src/DesktopJob.h
+
+- src/FrameJob.cxx
+- src/FrameJob.h
+
+- src/FrameHelper.cxx
+- src/FrameHelper.h
+
+The first two classes are Jobs executed synchronously on two events, the events
+that trigger these jobs are defined in data/Jobs.xcu. Further explanation on
+each class can be found below.
+
+The FrameHelper class performs most of the tasks regarding communication between
+
+The src/export.cxx code is the entry point for the resulting shared object
+that conforms this extension. It exports the information needed to register and
+access all the interfaces implemented by the two jobs exported.
+
+GLib Integration 
+----------------
+This extension assumes the presence of the GLib mainloop in the application,
+it is not recommended its installation on LibreOffice deployments that do not
+provide integration with the glib mainloop.
+
+g_type_init() is called in DesktopJob for safety.
+
+DesktopJob
+----------
+This class is a XJob that is instantiated and executed on LibreOffice startup
+just once during the lifetime of the process.
+
+This class does nothing but trying to acquire the "org.libreoffice.dbusmenu"
+busname. Once the executed method returns the object instance is destroyed.
+
+FrameJob & FrameHelper
+----------------------
+This class is a XJob that is instantiated and executed every time a document is
+created or loaded. It watches for the presence of the
+com.canonical.AppMenu.Registrar well-known D-Bus name.
+
+Afterwards it creates an instance of the FrameHelper class. FrameHelper is an
+XFrameActionListener that subscribes to the XFrame that represents the current
+Window. The lifetime of this FrameHelper is bound to the life of the current
+document being viewed/edited.
+
+FrameHelper creates the initial structure of Dbusmenu menuitems, and the
+dbusmenu server. If FrameHelper is destroyed, the frame is unregistered and
+the server shutdown. It also stops watching com.canonical.AppMenu.Registrar
+presence.
+
+Listening for menu changes - MenuItemInfo & MenuItemStatusListener
+------------------------------------------------------------------
+FrameHelper subscribes creates a cache in the commandsInfo GHashTable property.
+This cache maps each command URL with a MenuItemInfo object that stores the
+current information for a given menu item.
+
+To listen for menu changes and update the cache, FrameHelper creates an instance
+of MenuItemStatusListener per each command url. This listeners update the data
+for the respective MenuItemInfo associated to the command URL it is listening
+for. The source code for these two classes can be found in the following
+respective files:
+
+- src/MenuItemInfo.h
+- src/MenuItemInfo.cxx
+
+- src/MenuItemStatusListener.h
+- src/MenuItemStatusListener.cxx
+
+Special Popup Menus
+-------------------
+This is the set of special popup menus:
+- .uno:CharFontName
+- .uno:FontHeight
+- .uno:ObjectMenue
+- .uno:InsertPageHeader
+- .uno:InsertPageFooter
+- .uno:ChangeControlType
+- .uno:AvailableToolbars
+- .uno:ScriptOrganizer
+- .uno:RecentFileList
+- .uno:AddDirect
+- .uno:AutoPilotMenu
+
+These menus cannot be introspected as they are created dinamically when the user
+clicks on the menu. Therefor they are treated differently, see the usage of
+isSpecialSubmenu in the rebuildMenu method from the FrameHelper class.
+
+In the case of the recent file list, the command URLs provided by this
+workaround are not enough to open the document. A workaround for this is present
+in the FrameHelper::dispatchCommand method.
+
+For further reference on this type of submenus follow this link:
+http://wiki.services.openoffice.org/wiki/Framework/Tutorial/Popup_Menu_Controller

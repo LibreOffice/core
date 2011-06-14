@@ -1,0 +1,325 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "dialogs.hrc"
+#include "helpids.hrc"
+
+TabDialog RID_XMLSECDLG_CERTVIEWER
+{
+    HelpID = HID_XMLSEC_DLG_CERTVIEWER;
+    Size = MAP_APPFONT( TD_WIDTH, TD_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = TRUE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Text [ en-US ] = "View Certificate";
+    TabControl 1
+    {
+        Pos = MAP_APPFONT( TD_SP_INNERBORDER_LEFT, TD_SP_INNERBORDER_TOP );
+        Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT+RIDDER_HEIGHT );
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_GENERAL;
+                Text [ en-US ] = "General";
+            };
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_DETAILS;
+                Text [ en-US ] = "Details";
+            };
+            PageItem
+            {
+                Identifier = RID_XMLSECTP_CERTPATH;
+                Text [ en-US ] = "Certification Path";
+            };
+        };
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( CV_COL_A, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( CV_COL_C, CV_ROW_A );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+};
+
+TabPage RID_XMLSECTP_GENERAL
+{
+    HelpId = HID_XMLSEC_TP_GENERAL;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    Window WIN_FRAME
+    {
+        SVLook = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_CONT_HEIGHT );
+    };
+    FixedImage IMG_CERT
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_0 );
+        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "certificate_40x56.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_CERTINFO
+    {
+        Pos = MAP_APPFONT( CW_COL_3, CW_ROW_1 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_3, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = " Certificate Information";
+    };
+    FixedLine FL_SEP1
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_3 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    FixedText FI_HINTNOTTRUST
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_4 );
+        Size = MAP_APPFONT( CW_COL_5a-CW_COL_1, CW_ROW_4a-CW_ROW_4 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "This certificate is intended for the following purpose(s):";
+    };
+    FixedLine FL_SEP2
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_5 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    FixedText FI_ISSTOLABEL
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_6 );
+        Size = MAP_APPFONT( CW_COL_4-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Issued to:";
+    };
+    FixedText FI_ISSTO
+    {
+        Pos = MAP_APPFONT( CW_COL_4, CW_ROW_6 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_4, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+    FixedText FI_ISSBYLABEL
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_7 );
+        Size = MAP_APPFONT( CW_COL_4-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Issued by:";
+    };
+    FixedText FI_ISSBY
+    {
+        Pos = MAP_APPFONT( CW_COL_4, CW_ROW_7 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_4, RSC_CD_FIXEDTEXT_HEIGHT );
+    };
+    FixedText FI_VALIDDATE
+    {
+        Pos = MAP_APPFONT( CW_COL_1, CW_ROW_8 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Valid from %SDATE% to %EDATE%";
+    };
+    FixedImage IMG_KEY
+    {
+        Pos = MAP_APPFONT( CW_COL_0, CW_ROW_9 );
+        Size = MAP_APPFONT( IMG2_WIDTH, IMG2_HEIGHT );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "key_12.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_CORRPRIVKEY
+    {
+        Pos = MAP_APPFONT( CW_COL_1a, CW_ROW_10 );
+        Size = MAP_APPFONT( CW_COL_5-CW_COL_1a, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "You have a private key that corresponds to this certificate.";
+    };
+    String STR_CERTIFICATE_NOT_VALIDATED
+    {
+        Text [ en-US ] = "The certificate could not be validated.";
+    };
+    Image IMG_STATE_NOT_VALIDATED
+    {
+        ImageBitmap = Bitmap { File = "notcertificate_40x56.png"; };
+           MaskColor = STD_MASKCOLOR;
+    };
+};
+
+TabPage RID_XMLSECTP_DETAILS
+{
+    HelpId = HID_XMLSEC_TP_DETAILS;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    Control LB_ELEMENTS
+    {
+        HelpId = HID_XMLSEC_CTRL_ELEMENTS;
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0 );
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+    String STR_HEADERBAR
+    {
+        Text [ en-US ] = "Field\tValue";
+    };
+    MultiLineEdit ML_ELEMENT
+    {
+        HelpID = "xmlsecurity:MultiLineEdit:RID_XMLSECTP_DETAILS:ML_ELEMENT";
+        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_3-CV_ROW_2 );
+        ReadOnly = TRUE;
+        Border = TRUE;
+        VSCROLL = TRUE;
+    };
+    String STR_VERSION
+    {
+        Text [ en-US ] = "Version";
+    };
+    String STR_SERIALNUM
+    {
+        Text [ en-US ] = "Serial Number";
+    };
+    String STR_SIGALGORITHM
+    {
+        Text [ en-US ] = "Signature Algorithm";
+    };
+    String STR_ISSUER
+    {
+        Text [ en-US ] = "Issuer";
+    };
+    String STR_ISSUER_ID
+    {
+        Text [ en-US ] = "Issuer Unique ID";
+    };
+    String STR_VALIDFROM
+    {
+        Text [ en-US ] = "Valid From";
+    };
+    String STR_VALIDTO
+    {
+        Text [ en-US ] = "Valid to";
+    };
+    String STR_SUBJECT
+    {
+        Text [ en-US ] = "Subject";
+    };
+    String STR_SUBJECT_ID
+    {
+        Text [ en-US ] = "Subject Unique ID";
+    };
+    String STR_SUBJECT_PUBKEY_ALGO
+    {
+        Text [ en-US ] = "Subject Algorithm";
+    };
+    String STR_SUBJECT_PUBKEY_VAL
+    {
+        Text [ en-US ] = "Public Key";
+    };
+    String STR_SIGNATURE_ALGO
+    {
+        Text [ en-US ] = "Signature Algorithm";
+    };
+    String STR_THUMBPRINT_SHA1
+    {
+        Text [ en-US ] = "Thumbprint SHA1";
+    };
+    String STR_THUMBPRINT_MD5
+    {
+        Text [ en-US ] = "Thumbprint MD5";
+    };
+};
+
+TabPage RID_XMLSECTP_CERTPATH
+{
+    HelpId = HID_XMLSEC_TP_CERTPATH;
+    Size = MAP_APPFONT( TP_WIDTH, TP_HEIGHT );
+    OutputSize = TRUE;
+    Hide = TRUE;
+    SVLook = TRUE;
+    FixedText FT_CERTPATH
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_0 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Certification path";
+    };
+    Control LB_SIGNATURES
+    {
+        HelpId = HID_XMLSEC_CTRL_VIEWSIGNATURES;
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_1 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, REST_HEIGHT/3*2 );
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+    PushButton BTN_VIEWCERT
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_CERTPATH:BTN_VIEWCERT";
+        Pos = MAP_APPFONT( CV_COL_1-(CV_COL_B-CV_COL_A), CVP_ROW_2 );
+        Size = MAP_APPFONT( CV_COL_B-CV_COL_A, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "View Certificate...";
+    };
+    FixedText FT_CERTSTATUS
+    {
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_3 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Certification status";
+    };
+    MultiLineEdit ML_CERTSTATUS
+    {
+        HelpID = "xmlsecurity:MultiLineEdit:RID_XMLSECTP_CERTPATH:ML_CERTSTATUS";
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_4 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, REST_HEIGHT/3 );
+        ReadOnly = TRUE;
+        Border = TRUE;
+    };
+    Image IMG_CERT_SMALL
+    {
+        ImageBitmap = Bitmap { File = "certificate_16.png"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_CERT_NOTVALIDATED_SMALL
+    {
+        ImageBitmap = Bitmap { File = "notcertificate_16.png"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    String STR_PATH_CERT_OK
+    {
+        Text [ en-US ] = "The certificate is OK.";
+    };
+    String STR_PATH_CERT_NOT_VALIDATED
+    {
+        Text [ en-US ] = "The certificate could not be validated.";
+    };
+};

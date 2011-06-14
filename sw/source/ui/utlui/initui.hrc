@@ -1,0 +1,66 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _INITUI_HRC
+#define _INITUI_HRC
+
+#define BMP_FRAME_ANCHOR             1
+#define BMP_FRAME_DRAG_ANCHOR        2
+
+// lokale Resourcen fuer die Shells:
+#define STR_POSTIT_PAGE              1
+#define STR_POSTIT_AUTHOR            2
+#define STR_CALC_SYNTAX              3
+#define STR_CALC_ZERODIV             4
+#define STR_CALC_BRACK               5
+#define STR_CALC_POW                 6
+#define STR_CALC_VARNFND             7
+#define STR_CALC_OVERFLOW            8
+#define STR_CALC_WRONGTIME           9
+#define STR_CALC_DEFAULT            10
+#define STR_CALC_ERROR              11
+#define STR_GETREFFLD_UP            12
+#define STR_GETREFFLD_DOWN          13
+#define STR_ALLPAGE_HEADFOOT        14
+#define STR_TEMPLATE_NONE           15
+#define STR_POSTIT_LINE             16
+#define STR_FIELD_FIXED             17
+#define STR_TOI                     18
+#define STR_TOU                     19
+#define STR_TOC                     20
+#define STR_TOX_ILL                 21
+#define STR_TOX_OBJ                 22
+#define STR_TOX_TBL                 23
+#define STR_TOX_AUTH                24
+#define STR_PAGEDESC_NAME           25
+#define STR_PAGEDESC_FIRSTNAME      26
+#define STR_PAGEDESC_FOLLOWNAME     27
+#define STR_HYPERLINK_CLICK         28
+#define STR_GETREFFLD_REFITEMNOTFOUND   29
+#define STR_DURATION_FORMAT             30
+#endif
+

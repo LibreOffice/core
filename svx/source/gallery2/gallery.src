@@ -1,0 +1,398 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <sfx2/sfxsids.hrc>
+#include "helpid.hrc"
+#include "gallery.hrc"
+
+/******************************************************************************/
+
+#define MASKCOLOR MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+DockingWindow RID_SVXDLG_GALLERYBROWSER
+{
+    HelpId = "SVX_HID_GALLERY_BROWSER" ;
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 211, 100 ) ;
+    Text [ en-US ] = "Gallery";
+    Sizeable = TRUE;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+
+    Control GALLERY_BROWSER1
+    {
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 69, 150 ) ;
+        Border = FALSE;
+    };
+
+    Splitter GALLERY_SPLITTER
+    {
+        Pos = MAP_APPFONT ( 70 , 0 ) ;
+        Size = MAP_APPFONT ( 3, 150 ) ;
+        HScroll = TRUE;
+    };
+
+    Control GALLERY_BROWSER2
+    {
+        Pos = MAP_APPFONT ( 73, 0 ) ;
+        Size = MAP_APPFONT ( 138, 150 ) ;
+        Border = FALSE;
+    };
+};
+
+/******************************************************************************/
+
+String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
+{
+    Text [ en-US ] = "Update";
+};
+String RID_SVXSTR_GALLERY_FOPENERROR
+{
+    Text [ en-US ] = "This file cannot be opened" ;
+};
+String RID_SVXSTR_GALLERY_NOTHEME
+{
+    Text [ en-US ] = "Invalid Theme Name!" ;
+};
+String RID_SVXSTR_GALLERY_DELETEOBJ
+{
+    Text [ en-US ] = "Do you really want to\ndelete this object?" ;
+};
+String RID_SVXSTR_GALLERY_DELETETHEME
+{
+    Text [ en-US ] = "Do you really want to\ndelete this theme?" ;
+};
+String RID_SVXSTR_EXTFORMAT1_SYS
+{
+    Text = "wav" ;
+};
+String RID_SVXSTR_EXTFORMAT1_UI
+{
+    Text [ en-US ] = "Wave - Sound File" ;
+};
+String RID_SVXSTR_EXTFORMAT2_SYS
+{
+    Text = "aif" ;
+};
+String RID_SVXSTR_EXTFORMAT2_UI
+{
+    Text [ en-US ] = "Audio Interchange File Format" ;
+};
+String RID_SVXSTR_EXTFORMAT3_SYS
+{
+    Text = "au" ;
+};
+String RID_SVXSTR_EXTFORMAT3_UI
+{
+    Text [ en-US ] = "AU - Sound File" ;
+};
+String RID_SVXSTR_GALLERY_FILTER
+{
+    Text [ en-US ] = "Graphics filter" ;
+};
+String RID_SVXSTR_GALLERY_LENGTH
+{
+    Text [ en-US ] = "Length:" ;
+};
+String RID_SVXSTR_GALLERY_SIZE
+{
+    Text [ en-US ] = "Size:" ;
+};
+String RID_SVXSTR_GALLERY_DELETEDD
+{
+    Text [ en-US ] = "Do you want to delete the linked file?" ;
+};
+String RID_SVXSTR_GALLERY_SGIERROR
+{
+    Text [ en-US ] = "This file cannot be opened.\nDo you want to enter a different search path? " ;
+};
+String RID_SVXSTR_GALLERY_NEWTHEME
+{
+    Text [ en-US ] = "New Theme" ;
+};
+String RID_SVXSTR_GALLERY_BROWSER
+{
+    Text [ en-US ] = "~Organizer..." ;
+};
+String RID_SVXSTR_GALLERY_THEMEERR
+{
+    Text [ en-US ] = "This theme name already exists.\nPlease choose a different one." ;
+};
+String RID_SVXSTR_GALLERY_IMPORTTHEME
+{
+    Text [ en-US ] = "I~mport..." ;
+};
+String RID_SVXSTR_GALLERY_CREATETHEME
+{
+    Text [ en-US ] = "New Theme..." ;
+};
+String RID_SVXSTR_GALLERY_DIALOGID
+{
+    Text [ en-US ] = "Assign ID" ;
+};
+String RID_SVXSTR_GALLERY_TITLE
+{
+    Text [ en-US ] = "Title" ;
+};
+String RID_SVXSTR_GALLERY_PATH
+{
+    Text [ en-US ] = "Path" ;
+};
+String RID_SVXSTR_GALLERY_ICONVIEW
+{
+    Text [ en-US ] = "Icon View";
+};
+String RID_SVXSTR_GALLERY_LISTVIEW
+{
+    Text [ en-US ] = "Detailed View";
+};
+
+/******************************************************************************/
+
+Bitmap RID_SVXBMP_GALLERY
+{
+    File = "lx03135.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_NORMAL
+{
+    File = "galnors.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_IMPORTED
+{
+    File = "galimps.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_READONLY
+{
+    File = "galrdos.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_DEFAULT
+{
+    File = "galdefs.bmp" ;
+};
+
+Bitmap RID_SVXBMP_GALLERY_MEDIA
+{
+    File = "galmedia.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_1
+{
+    File = "galsnd1.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_2
+{
+    File = "galsnd2.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_3
+{
+    File = "galsnd3.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_4
+{
+    File = "galsnd4.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_5
+{
+    File = "galsnd5.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_6
+{
+    File = "galsnd6.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_7
+{
+    File = "galsnd7.bmp";
+};
+
+Image RID_SVXIMG_GALLERY_VIEW_ICON
+{
+    ImageBitmap = Bitmap { File = "galicon.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_GALLERY_VIEW_LIST
+{
+    ImageBitmap = Bitmap { File = "gallist.bmp"; };
+    MASKCOLOR
+};
+
+/******************************************************************************/
+
+Menu RID_SVXMN_GALLERY1
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_ACTUALIZE;
+            HelpId = HID_GALLERY_ACTUALIZE;
+            Text [ en-US ] = "Update";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_DELETE ;
+            HelpId = HID_GALLERY_MN_DELETE ;
+            Text [ en-US ] = "~Delete" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_RENAME;
+            HelpId = HID_GALLERY_RENAME;
+            Text [ en-US ] = "~Rename" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_ASSIGN_ID;
+            Text [ en-US ] = "Assign ~ID" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_PROPERTIES;
+            HelpId = HID_GALLERY_PROPERTIES;
+            Text [ en-US ] = "Propert~ies..." ;
+        };
+    };
+};
+
+/******************************************************************************/
+
+Menu RID_SVXMN_GALLERY2
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_ADDMENU ;
+            HelpId = HID_GALLERY_MN_ADDMENU ;
+            Text [ en-US ] = "~Insert" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_ADD ;
+                        HelpId = HID_GALLERY_MN_ADD ;
+                        Text [ en-US ] = "~Copy" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_ADD_LINK ;
+                        HelpId = HID_GALLERY_MN_ADD_LINK ;
+                        Text [ en-US ] = "Link" ;
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_BACKGROUND ;
+                        HelpId = HID_GALLERY_MN_BACKGROUND ;
+                        Text [ en-US ] = "Bac~kground" ;
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_PREVIEW ;
+            HelpId = HID_GALLERY_MN_PREVIEW ;
+            Text [ en-US ] = "~Preview" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_TITLE ;
+            HelpId = HID_GALLERY_TITLE;
+            Text [ en-US ] = "~Title" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_DELETE ;
+            HelpId = HID_GALLERY_MN_DELETE ;
+            Text [ en-US ] = "~Delete" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_COPYCLIPBOARD;
+            HelpId = HID_GALLERY_MN_COPYCLIPBOARD;
+            Text [ en-US ] = "~Copy" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_PASTECLIPBOARD;
+            HelpId = HID_GALLERY_MN_PASTECLIPBOARD;
+            Text [ en-US ] = "~Insert" ;
+        };
+    };
+};
+

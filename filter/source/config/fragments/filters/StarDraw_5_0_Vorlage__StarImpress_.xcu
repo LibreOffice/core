@@ -1,0 +1,10 @@
+    <node oor:name="StarDraw 5.0 Vorlage (StarImpress)" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>draw_StarDraw_50_Vorlage</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+    </node>

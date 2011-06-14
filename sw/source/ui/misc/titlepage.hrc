@@ -1,0 +1,50 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *        Caolán McNamara <caolanm@redhat.com> (Red Hat, Inc.)
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Caolán McNamara <caolanm@redhat.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+#define FL_MAKEINSERT         1
+#define RB_USE_EXISTING_PAGES 2
+#define RB_INSERT_NEW_PAGES   3
+#define FT_PAGE_COUNT         4
+#define NF_PAGE_COUNT         5
+#define FT_PAGE_PAGES         6
+#define FT_PAGE_START         7
+#define RB_DOCUMENT_START     8
+#define RB_PAGE_START         9
+#define NF_PAGE_START        10
+#define FL_NUMBERING         11
+#define CB_RESTART_NUMBERING 12
+#define FT_RESTART_NUMBERING 13
+#define NF_RESTART_NUMBERING 14
+#define CB_SET_PAGE_NUMBER   15
+#define FT_SET_PAGE_NUMBER   16
+#define NF_SET_PAGE_NUMBER   17
+#define FL_PAGE_PROPERTIES   18
+#define LB_PAGE_PROPERTIES   19
+#define PB_PAGE_PROPERTIES   20
+#define FL_BOTTOM            21
+#define PB_OK                22
+#define PB_CANCEL            23
+#define PB_HELP              24

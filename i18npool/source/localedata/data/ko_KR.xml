@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>ko</LangID>
+      <DefaultName>Korean</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>KR</CountryID>
+      <DefaultName>Korea</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE>
+    <Separators>
+      <DateSeparator>-</DateSeparator>
+      <ThousandSeparator>,</ThousandSeparator>
+      <DecimalSeparator>.</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>.</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator/>
+      <LongDateDaySeparator>일</LongDateDaySeparator>
+      <LongDateMonthSeparator>월</LongDateMonthSeparator>
+      <LongDateYearSeparator>년</LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>오전</TimeAM>
+    <TimePM>오후</TimePM>
+    <MeasurementSystem>metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT>
+    <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
+      <FormatCode>General</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey2" default="false" type="medium" usage="FIXED_NUMBER" formatindex="1">
+      <FormatCode>0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey3" default="false" type="medium" usage="FIXED_NUMBER" formatindex="2">
+      <FormatCode>0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey4" default="false" type="medium" usage="FIXED_NUMBER" formatindex="3">
+      <FormatCode>#,##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
+      <FormatCode>#,##0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
+      <FormatCode>#,###.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey1" default="true" type="long" usage="SCIENTIFIC_NUMBER" formatindex="6">
+      <FormatCode>0.00E+000</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+      <FormatCode>0.00E+00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey1" default="true" type="medium" usage="PERCENT_NUMBER" formatindex="8">
+      <FormatCode>0%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
+      <FormatCode>0.00%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey1" default="false" type="medium" usage="CURRENCY" formatindex="12">
+      <FormatCode>[$￦-412]#,##0;-[$￦-412]#,##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
+      <FormatCode>[$￦-412]#,##0.00;-[$￦-412]#,##0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
+      <FormatCode>[$￦-412]#,##0;[RED]-[$￦-412]#,##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
+      <FormatCode>[$￦-412]#,##0.00;[RED]-[$￦-412]#,##0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
+      <FormatCode>#,##0.00 CCC</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
+      <FormatCode>[$￦-412]#,##0.--;[RED]-[$￦-412]#,##0.--</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="18">
+      <FormatCode>YY"년" M"월" D"일"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="19">
+      <FormatCode>YYYY"년" M"월" D"일" NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
+      <FormatCode>YY"年" M"月" D"日"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="21">
+      <FormatCode>YYYY/M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey5" default="true" type="short" usage="DATE" formatindex="22">
+      <FormatCode>YY/M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
+      <FormatCode>YYYY"年" M"月" D"日"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
+      <FormatCode>YY"년" M"월"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey4" default="true" type="medium" usage="DATE" formatindex="25">
+      <FormatCode>YYYY"년" M"월" D"일"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="26">
+      <FormatCode>[~hanja]YYYY/M/D NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
+      <FormatCode>YY"년" M"월" D"일" NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
+      <FormatCode>[~hanja]YY"年" M"月" D"日" NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey12" default="false" type="medium" usage="DATE" formatindex="29">
+      <FormatCode>[~hanja]YYYY"年" M"月" D"日" NNNN </FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey13" default="false" type="medium" usage="DATE" formatindex="30">
+      <FormatCode>YY-M-D NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey14" default="false" type="medium" usage="DATE" formatindex="31">
+      <FormatCode>M"월" D"일"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey15" default="false" type="medium" usage="DATE" formatindex="32">
+      <FormatCode>YY-M-D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
+      <FormatCode>YY"년" M"월"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey17" default="false" type="medium" usage="DATE" formatindex="34">
+      <FormatCode>M"月" D"日"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey18" default="false" type="medium" usage="DATE" formatindex="35">
+      <FormatCode>M-D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="36">
+      <FormatCode>M"월"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DataFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
+      <FormatCode>YY"년도 제"Q"사분기"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DataFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
+      <FormatCode>"제"WW"주"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="51">
+      <FormatCode>YYYY"년" M"월"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="52">
+      <FormatCode>YYYY"년도 제"Q"사분기"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="53">
+      <FormatCode>YY"年" M"月"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey25" default="false" type="medium" usage="DATE" formatindex="54">
+      <FormatCode>YYYY"年" M"月"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey26" default="false" type="medium" usage="DATE" formatindex="55">
+      <FormatCode>[NatNum1]YYYY"年度 第"QQ"四分期"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey27" default="false" type="medium" usage="DATE" formatindex="56">
+      <FormatCode>[NatNum1]YY"年度 第"QQ"四分期"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="57">
+      <FormatCode>M"月"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="58">
+      <FormatCode>"第"WW"週"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="59">
+      <FormatCode>YY-M</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey31" default="false" type="long" usage="DATE" formatindex="60">
+      <FormatCode>YYYY-M</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey33" default="false" type="long" usage="DATE" formatindex="61">
+      <FormatCode>YY/M/D NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey34" default="true" type="long" usage="DATE" formatindex="62">
+      <FormatCode>YYYY/M/D NNNN </FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey35" default="false" type="long" usage="DATE" formatindex="63">
+      <FormatCode>YY/M</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey36" default="false" type="long" usage="DATE" formatindex="64">
+      <FormatCode>M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DataFormatskey37" default="false" type="medium" usage="DATE" formatindex="77">
+      <FormatCode>YYYY. M. D.</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey38" default="false" type="medium" usage="DATE" formatindex="78">
+      <FormatCode>YYYY. M. D. (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey39" default="false" type="medium" usage="DATE" formatindex="79">
+      <FormatCode>YYYY. M. D. NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey40" default="false" type="medium" usage="DATE" formatindex="80">
+      <FormatCode>[~hanja]YYYY. M. D. (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey41" default="false" type="medium" usage="DATE" formatindex="81">
+      <FormatCode>[~hanja]YYYY. M. D. NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DataFormatskey42" default="false" type="medium" usage="DATE" formatindex="82">
+      <FormatCode>YY. M. D.</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey43" default="false" type="medium" usage="DATE" formatindex="83">
+      <FormatCode>YY. M. D. (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey44" default="false" type="medium" usage="DATE" formatindex="84">
+      <FormatCode>YY. M. D. NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey45" default="false" type="medium" usage="DATE" formatindex="85">
+      <FormatCode>[~hanja]YY. M. D. (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey46" default="false" type="medium" usage="DATE" formatindex="86">
+      <FormatCode>[~hanja]YY. M. D. NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey47" default="false" type="medium" usage="DATE" formatindex="87">
+      <FormatCode>YY"년" M"월" D"일" (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey48" default="false" type="medium" usage="DATE" formatindex="88">
+      <FormatCode>YYYY"년" M"월" D"일" (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey49" default="false" type="medium" usage="DATE" formatindex="89">
+      <FormatCode>[~hanja]YYYY"年" M"月" D"日" (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey50" default="false" type="medium" usage="DATE" formatindex="90">
+      <FormatCode>[~hanja]YY"年" M"月" D"日" (NN)</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey1" default="false" type="medium" usage="TIME" formatindex="39">
+      <FormatCode>H"시" M"분"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
+      <FormatCode>H"시" M"분" S"초"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey3" default="false" type="medium" usage="TIME" formatindex="41">
+      <FormatCode>AM/PM H"시" M"분"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
+      <FormatCode>AM/PM H"시" M"분" S"초"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
+      <FormatCode>[H]"시" M"분" S"초"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey6" default="false" type="medium" usage="TIME" formatindex="44">
+      <FormatCode>M:S.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
+      <FormatCode>[H]:M:S.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey8" default="false" type="medium" usage="TIME" formatindex="65">
+      <FormatCode>H"時" M"分"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey9" default="false" type="medium" usage="TIME" formatindex="66">
+      <FormatCode>H:M</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey10" default="false" type="medium" usage="TIME" formatindex="67">
+      <FormatCode>H"時" M"分" S"秒"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey11" default="false" type="medium" usage="TIME" formatindex="68">
+      <FormatCode>H:M:S</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey12" default="false" type="medium" usage="TIME" formatindex="69">
+      <FormatCode>[~hanja]AM/PM H"時" M"分" S"秒"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME" formatindex="70">
+      <FormatCode>AM/PM H:M:S</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey14" default="false" type="medium" usage="TIME" formatindex="71">
+      <FormatCode>[~hanja]AM/PM H"時" M"分"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey15" default="false" type="medium" usage="TIME" formatindex="72">
+      <FormatCode>AM/PM H:M</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey1" default="false" type="medium" usage="DATE_TIME" formatindex="46">
+      <FormatCode>YY"년" M"월" D"일" H"시" M"분"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="47">
+      <FormatCode>YYYY. M. D. H:M:S</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey2" default="true" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>YYYY"년" M"월" D"일" H"시" M"분" S"초"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey4" default="false" type="medium" usage="DATE_TIME" formatindex="73">
+      <FormatCode>YY"年" M"月" D"日" H"時" M"分" S"秒"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey5" default="false" type="medium" usage="DATE_TIME" formatindex="74">
+      <FormatCode>YY/M/D H:M</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey6" default="false" type="medium" usage="DATE_TIME" formatindex="75">
+      <FormatCode>YY. M. D. H:M</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey7" default="false" type="medium" usage="DATE_TIME" formatindex="76">
+      <FormatCode>YYYY"年" M"月" D"日" H"時" M"分" S"秒"</FormatCode>
+    </FormatElement>
+  </LC_FORMAT>
+  <LC_COLLATION>
+    <Collator default="false" unoid="charset" />
+    <Collator default="true" unoid="dict" />
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
+  <LC_SEARCH>
+    <SearchOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+      <TransliterationModules>IGNORE_WIDTH</TransliterationModules>
+    </SearchOptions>
+  </LC_SEARCH>
+  <LC_INDEX>
+    <IndexKey phonetic="true" default="true" unoid="dict" module="asian"/>
+    <UnicodeScript>70</UnicodeScript>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>일</DefaultAbbrvName>
+          <DefaultFullName>일요일</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>월</DefaultAbbrvName>
+          <DefaultFullName>월요일</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>화</DefaultAbbrvName>
+          <DefaultFullName>화요일</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>수</DefaultAbbrvName>
+          <DefaultFullName>수요일</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>목</DefaultAbbrvName>
+          <DefaultFullName>목요일</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>금</DefaultAbbrvName>
+          <DefaultFullName>금요일</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>토</DefaultAbbrvName>
+          <DefaultFullName>토요일</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Jan</DefaultAbbrvName>
+          <DefaultFullName>January</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Feb</DefaultAbbrvName>
+          <DefaultFullName>February</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>March</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>April</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>May</DefaultAbbrvName>
+          <DefaultFullName>May</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jun</DefaultAbbrvName>
+          <DefaultFullName>June</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Jul</DefaultAbbrvName>
+          <DefaultFullName>July</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Aug</DefaultAbbrvName>
+          <DefaultFullName>August</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>September</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Oct</DefaultAbbrvName>
+          <DefaultFullName>October</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nov</DefaultAbbrvName>
+          <DefaultFullName>November</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dec</DefaultAbbrvName>
+          <DefaultFullName>December</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>기원전</DefaultAbbrvName>
+          <DefaultFullName>서력기원전</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>서기</DefaultAbbrvName>
+          <DefaultFullName>서력기원</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+    <Calendar unoid="hanja" default="false">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>日</DefaultAbbrvName>
+          <DefaultFullName>日曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>月</DefaultAbbrvName>
+          <DefaultFullName>月曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>火</DefaultAbbrvName>
+          <DefaultFullName>火曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>水</DefaultAbbrvName>
+          <DefaultFullName>水曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>木</DefaultAbbrvName>
+          <DefaultFullName>木曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>金</DefaultAbbrvName>
+          <DefaultFullName>金曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>土</DefaultAbbrvName>
+          <DefaultFullName>土曜日</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>1</DefaultAbbrvName>
+          <DefaultFullName>1</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>2</DefaultAbbrvName>
+          <DefaultFullName>2</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>3</DefaultAbbrvName>
+          <DefaultFullName>3</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>4</DefaultAbbrvName>
+          <DefaultFullName>4</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>5</DefaultAbbrvName>
+          <DefaultFullName>5</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>6</DefaultAbbrvName>
+          <DefaultFullName>6</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>7</DefaultAbbrvName>
+          <DefaultFullName>7</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>8</DefaultAbbrvName>
+          <DefaultFullName>8</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>9</DefaultAbbrvName>
+          <DefaultFullName>9</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>10</DefaultAbbrvName>
+          <DefaultFullName>10</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>11</DefaultAbbrvName>
+          <DefaultFullName>11</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>12</DefaultAbbrvName>
+          <DefaultFullName>12</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>紀元前</DefaultAbbrvName>
+          <DefaultFullName>西曆紀元前</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>西紀</DefaultAbbrvName>
+          <DefaultFullName>西曆紀元</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>KRW</CurrencyID>
+      <CurrencySymbol>￦</CurrencySymbol>
+      <BankSymbol>KRW</BankSymbol>
+      <CurrencyName>대한민국 원</CurrencyName>
+      <DecimalPlaces>0</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION>
+    <Transliteration unoid="IGNORE_CASE"/>
+    <Transliteration unoid="IGNORE_WIDTH"/>
+    <Transliteration unoid="FULLWIDTH_HALFWIDTH"/>
+    <Transliteration unoid="HALFWIDTH_FULLWIDTH"/>
+    <Transliteration unoid="SENTENCE_CASE"/>
+    <Transliteration unoid="LOWERCASE_UPPERCASE"/>
+    <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="TITLE_CASE"/>
+    <Transliteration unoid="TOGGLE_CASE"/>
+    <Transliteration unoid="NumToTextFormalHangul_ko"/>
+    <Transliteration unoid="NumToTextFormalLower_ko"/>
+    <Transliteration unoid="NumToTextFormalUpper_ko"/>
+    <Transliteration unoid="NumToTextInformalHangul_ko"/>
+    <Transliteration unoid="NumToTextInformalLower_ko"/>
+    <Transliteration unoid="NumToTextInformalUpper_ko"/>
+    <Transliteration unoid="NumToCharHangul_ko"/>
+    <Transliteration unoid="NumToCharLower_ko"/>
+    <Transliteration unoid="NumToCharUpper_ko"/>
+  </LC_TRANSLITERATION>
+  <LC_MISC>
+    <ForbiddenCharacters>
+      <ForbiddenLineBeginCharacters>!%),.:;?]}¢￠?&apos;&quot;′″℃&gt;〉＞》」』】〕！％），．：；？］｝｡｣､･ ﾞﾟ</ForbiddenLineBeginCharacters>
+      <ForbiddenLineEndCharacters>$(¥£[\{￡￥&apos;&quot;&lt;＜《「『【〔＄（［｛￦｢</ForbiddenLineEndCharacters>
+      <LineBreakHangingCharacters>!,.:;?、。！，．：；？</LineBreakHangingCharacters>
+    </ForbiddenCharacters>
+    <ReservedWords>
+      <trueWord>참</trueWord>
+      <falseWord>거짓</falseWord>
+      <quarter1Word>1</quarter1Word>
+      <quarter2Word>2</quarter2Word>
+      <quarter3Word>3</quarter3Word>
+      <quarter4Word>4</quarter4Word>
+      <aboveWord>위</aboveWord>
+      <belowWord>아래</belowWord>
+      <quarter1Abbreviation>일</quarter1Abbreviation>
+      <quarter2Abbreviation>이</quarter2Abbreviation>
+      <quarter3Abbreviation>삼</quarter3Abbreviation>
+      <quarter4Abbreviation>사</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel>
+    <NumberingLevel NumType="1" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="4" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="14" Prefix=" " Suffix=" "/>
+    <NumberingLevel NumType="2" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="28" Prefix=" " Suffix=")"/>
+    <NumberingLevel NumType="27" Prefix="(" Suffix=")"/>
+    <NumberingLevel NumType="0" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="3" Prefix=" " Suffix="."/>
+  </LC_NumberingLevel>
+  <LC_OutLineNumberingLevel>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="1" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="2" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="3" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="4" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="14" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="30" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="29" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="28" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="14" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="27" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="(" NumType="28" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix="제" NumType="15" Suffix="장" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="제" NumType="15" Suffix="절" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="제" NumType="15" Suffix="항" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="(" NumType="15" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix="제" NumType="4" Suffix="장" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="제" NumType="4" Suffix="절" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="제" NumType="4" Suffix="항" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+  </LC_OutLineNumberingLevel>
+</Locale>

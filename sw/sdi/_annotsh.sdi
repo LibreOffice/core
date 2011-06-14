@@ -1,0 +1,385 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface _Annotation
+[ Automation = FALSE; ]
+{
+    FN_DELETE_COMMENT
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_DELETE_NOTE_AUTHOR
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_DELETE_ALL_NOTES
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_HIDE_NOTE
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_HIDE_NOTE_AUTHOR
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_HIDE_ALL_NOTES
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
+    FN_POSTIT
+        [
+                ExecMethod = NoteExec ;
+                StateMethod = GetNoteState ;
+        ]
+
+    FN_REPLY
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+    FN_ESCAPE // api:
+    [
+        ExecMethod = NoteExec ;
+    ]
+
+    SfxVoidItem Cut SID_CUT ( )  // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_COPY // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+    ]
+
+    SID_PASTE   // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_PASTE_SPECIAL  // api:
+    [
+        StateMethod = StateClpbrd ;
+        ExecMethod = ExecClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CLIPBOARD_FORMAT_ITEMS  // status(final|play)
+    [
+        StateMethod = StateClpbrd ;
+        ExecMethod = ExecClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_SELECTALL  // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = NoState ;
+    ]
+
+    SID_UNDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+
+        ToolBoxConfig , MenuConfig , AccelConfig;
+    ]
+
+    SID_REDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+
+    ]
+
+    SID_REPEAT // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+    SID_GETUNDOSTRINGS
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    SID_GETREDOSTRINGS
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    FN_FORMAT_RESET  // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Exec ;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Exec ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Exec;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Exec ;
+    ]
+
+    SID_CHARMAP // api:
+    [
+        ExecMethod = Exec ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_STRING
+    [
+            ExecMethod = Exec ;
+            StateMethod = NoState ;
+            DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_FONT // status()
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_FONTHEIGHT // status()
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_COLOR // api:
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_WEIGHT // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_POSTURE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_UNDERLINE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_OVERLINE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_CONTOUR
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_SHADOWED
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_STRIKEOUT
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_LANGUAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_LEFT // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_CENTER // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_RIGHT // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_BLOCK // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_10 // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_15 // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_20 // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CHAR_DLG  // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_PARA_DLG // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SET_SUPER_SCRIPT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SET_SUB_SCRIPT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_SEARCH_ITEM // status()
+    [
+        ExecMethod = ExecSearch ;
+        StateMethod = StateSearch ;
+        Export = FALSE;
+    ]
+    FN_REPEAT_SEARCH // status(final|play)
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_NOW // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    SID_SEARCH_OPTIONS // status()
+    [
+        StateMethod = StateSearch ;
+    ]
+    FID_SEARCH_SEARCHSET // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_REPLACESET // status()
+    [
+        ExecMethod = ExecSearch ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+      // ab hier Export = FALSE;
+    FID_SEARCH_ON // status()
+    [
+        ExecMethod = ExecSearch ;
+        Export = FALSE;
+    ]
+    FID_SEARCH_OFF // status()
+    [
+        ExecMethod = ExecSearch ;
+        Export = FALSE;
+    ]
+}

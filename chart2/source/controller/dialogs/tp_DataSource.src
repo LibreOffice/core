@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "tp_DataSource.hrc"
+#include "HelpIds.hrc"
+
+TabPage TP_DATA_SOURCE
+{
+    HelpID = "chart2:TabPage:TP_DATA_SOURCE";
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 248, 140 );
+    SVLook = TRUE ;
+
+    // ----------------------------------------
+
+    FixedText FT_CAPTION_FOR_WIZARD
+    {
+        Pos = MAP_APPFONT ( 5 , 8  ) ;
+        Size = MAP_APPFONT ( 238 , 10 ) ;
+        Text [ en-US ] = "Customize data ranges for individual data series" ;
+    };
+
+    FixedText FT_SERIES
+    {
+        Pos  = MAP_APPFONT ( 6 , 22  );
+        Size = MAP_APPFONT ( 72 , 8 );
+
+        Text [ en-US ] = "Data ~series";
+    };
+    Control LB_SERIES
+    {
+        HelpID = HID_SCH_SERIES_LIST ;
+        Border = TRUE;
+        TabStop = TRUE;
+        // DropDown = FALSE;
+        Pos  = MAP_APPFONT ( 6 , 32  );
+        Size = MAP_APPFONT ( 72 , 69 );
+    };
+
+    FixedText FT_ROLE
+    {
+        Pos  = MAP_APPFONT ( 82 , 22  );
+        Size = MAP_APPFONT ( 160 , 8 );
+
+        Text [ en-US ] = "~Data ranges";
+    };
+    Control LB_ROLE
+    {
+        HelpID = HID_SCH_DATA_RANGES_LIST ;
+        Border = TRUE;
+        TabStop = TRUE;
+        Pos  = MAP_APPFONT ( 82 , 32  );
+        Size = MAP_APPFONT ( 160 , 43 );
+    };
+
+    // ----------------------------------------
+
+    FixedText FT_RANGE
+    {
+        Pos  = MAP_APPFONT ( 82 , 79  );
+        Size = MAP_APPFONT ( 160 , 8 );
+
+        Text [ en-US ] = "Ran~ge for %VALUETYPE";
+    };
+    Edit EDT_RANGE
+    {
+        HelpID = "chart2:Edit:TP_DATA_SOURCE:EDT_RANGE";
+        Border = TRUE;
+        TabStop = TRUE;
+        Pos  = MAP_APPFONT ( 82 , 89  );
+        Size = MAP_APPFONT ( 144 , 12 );
+    };
+    ImageButton IMB_RANGE_MAIN
+    {
+        HelpID = "chart2:ImageButton:TP_DATA_SOURCE:IMB_RANGE_MAIN";
+        TabStop = TRUE;
+        Pos  = MAP_APPFONT ( 228 , 88  );
+        Size = MAP_APPFONT ( 14 , 14 );
+    };
+
+    // ----------------------------------------
+
+    FixedText FT_CATEGORIES
+    {
+        Pos  = MAP_APPFONT ( 82 , 107  );
+        Size = MAP_APPFONT ( 160 , 8 );
+
+        Text [ en-US ] = "~Categories";
+    };
+
+    FixedText FT_DATALABELS
+    {
+        Pos  = MAP_APPFONT ( 82 , 107  );
+        Size = MAP_APPFONT ( 160 , 8 );
+
+        Text [ en-US ] = "Data ~labels" ;
+    };
+
+    Edit EDT_CATEGORIES
+    {
+        HelpID = "chart2:Edit:TP_DATA_SOURCE:EDT_CATEGORIES";
+        Border = TRUE;
+        TabStop = TRUE;
+        Pos  = MAP_APPFONT ( 82 , 117  );
+        Size = MAP_APPFONT ( 144 , 12 );
+    };
+    ImageButton IMB_RANGE_CAT
+    {
+        HelpID = "chart2:ImageButton:TP_DATA_SOURCE:IMB_RANGE_CAT";
+        TabStop = TRUE;
+        Pos  = MAP_APPFONT ( 228 , 116  );
+        Size = MAP_APPFONT ( 14 , 14 );
+    };
+
+    // ----------------------------------------
+
+    PushButton BTN_ADD
+    {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_ADD";
+        TabStop = TRUE;
+        Disable = FALSE;
+        Pos  = MAP_APPFONT ( 6 , 105  );
+        Size = MAP_APPFONT ( 54 , 14 );
+
+        Text [ en-US ] = "~Add";
+    };
+    PushButton BTN_REMOVE
+    {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_REMOVE";
+        TabStop = TRUE;
+        Disable = TRUE;
+        Pos  = MAP_APPFONT ( 6 , 121  );
+        Size = MAP_APPFONT ( 54 , 14 );
+
+        Text [ en-US ] = "~Remove";
+    };
+
+    // Note: Text is only a black triangle symbol
+    PushButton BTN_UP
+    {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_UP";
+        TabStop = TRUE;
+        Disable = TRUE;
+        Pos  = MAP_APPFONT ( 64 , 105  );
+        Size = MAP_APPFONT ( 14 , 14 );
+    };
+
+    // Note: Text is only a black triangle symbol
+    PushButton BTN_DOWN
+    {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_DOWN";
+        TabStop = TRUE;
+        Disable = TRUE;
+        Pos  = MAP_APPFONT ( 64 , 121  );
+        Size = MAP_APPFONT ( 14 , 14 );
+    };
+};

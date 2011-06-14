@@ -1,0 +1,127 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+module
+"9F76B581-23DD-101C-80B6-000024021835"
+"A1810F00-23DE-101C-80B6-000024021835"
+StarWriter
+[
+HelpText( "StarWriter Application" )
+SlotIdFile( "swslots.hrc" )
+ModulePrefix( "Sw" )
+]
+{
+    include "sfx2/sfxitems.sdi"
+    include "sfx2/sfx.sdi"
+    include "svx/svxitems.sdi"
+    include "svx/xoitems.sdi"
+    include "svx/svx.sdi"
+
+    item String TbxDummyItem;
+/*
+    item String XFillAttrSetItem;
+    item String XFillBitmapItem;
+    item String XFillColorItem;
+    item String XFillGradientItem;
+    item String XFillHatchItem;
+    item String XFillStyleItem;
+    item String XLineAttrSetItem;
+    item String XLineColorItem;
+    item String XLineDashItem;
+    item String XLineEndItem;
+    item String XLineEndWidthItem;
+    item String XLineEndCenterItem;
+    item String XLineStartItem;
+    item String XLineStartWidthItem;
+    item String XLineStartCenterItem;
+    item String XLineStyleItem;
+    item String XLineWidthItem;
+*/
+    include "switems.sdi"
+    include "swriter.sdi"
+
+    include "_docsh.sdi"
+    include "docsh.sdi"
+    include "wdocsh.sdi"
+
+    include "wrtapp.sdi"
+
+    include "_basesh.sdi"
+    include "basesh.sdi"
+
+    include "_textsh.sdi"
+    include "textsh.sdi"
+    include "wtextsh.sdi"
+
+    include "_drwbase.sdi"
+    include "drwbassh.sdi"
+    include "wdrwbase.sdi"
+
+    include "_formsh.sdi"
+    include "formsh.sdi"
+    include "wformsh.sdi"
+
+    include "drawsh.sdi"
+    include "drwtxtsh.sdi"
+
+    include "_listsh.sdi"
+    include "listsh.sdi"
+    include "wlistsh.sdi"
+
+    include "_frmsh.sdi"
+    include "frmsh.sdi"
+    include "wfrmsh.sdi"
+
+    include "_tabsh.sdi"
+    include "tabsh.sdi"
+    include "wtabsh.sdi"
+
+    include "_grfsh.sdi"
+    include "grfsh.sdi"
+    include "wgrfsh.sdi"
+
+    include "_olesh.sdi"
+    include "olesh.sdi"
+    include "wolesh.sdi"
+
+    include "beziersh.sdi"
+
+    include "_viewsh.sdi"
+    include "viewsh.sdi"
+    include "wviewsh.sdi"
+
+    include "_mediash.sdi"
+    include "mediash.sdi"
+
+    include "_annotsh.sdi"
+    include "annotsh.sdi"
+
+    include "_navsh.sdi"
+    include "navsh.sdi"
+}
+
+

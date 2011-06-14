@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=extension
+Type=MimeType
+Patterns=*.oxt
+MimeType=application/vnd.openofficeorg.extension
+Comment=%PRODUCTNAME Extension

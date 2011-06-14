@@ -1,0 +1,207 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+#include "helpids.hrc"
+#include "digitalsignaturesdialog.hrc"
+
+ModalDialog RID_XMLSECDLG_DIGSIG
+{
+    HelpId = HID_XMLSEC_DLG_DIGSIG;
+    Size = MAP_APPFONT( 234, 191 );
+    OutputSize = TRUE;
+    Closeable = TRUE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Text [ en-US ] = "Digital Signatures";
+
+    FixedText FT_HINT_DOC
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 222, 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "The following have signed the document content:";
+    };
+    FixedText FT_HINT_BASIC
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 222, 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "The following have signed the document macro:";
+    };
+    FixedText FT_HINT_PACK
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 222, 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "The following have signed this package:";
+    };
+    Control LB_SIGNATURES
+    {
+        HelpId = HID_XMLSEC_CTRL_SIGNATURESDLG;
+        Pos = MAP_APPFONT( 6, 14 );
+        Size = MAP_APPFONT( 222, 109 );
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+    String STR_HEADERBAR
+    {
+        Text [ en-US ] = "\tSigned by\tDigital ID issued by\tDate";
+    };
+    String STR_VALID_SIGNATURE
+    {
+        Text [ en-US ] = "Valid signature";
+    };
+    String STR_NO_INFO_TO_VERIFY
+    {
+        Text [ en-US ] = "Certificate could not be validated";
+    };
+    String STR_INVALID_SIGNATURE
+    {
+        Text [ en-US ] = "The signatures in this document are invalid";
+    };
+
+    FixedImage IMG_STATE_VALID
+    {
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 33, 22 );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "signet_11x16.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_STATE_VALID
+    {
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "The signatures in this document are valid";
+    };
+    FixedText FI_STATE_OLDSIGNATURE
+    {
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "Not all parts of the document are signed";
+    };
+    FixedImage IMG_STATE_BROKEN
+    {
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 33, 22 );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "caution_11x16.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_STATE_BROKEN
+    {
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "The signatures in this document are invalid";
+    };
+    FixedImage IMG_STATE_NOTVALIDATED
+    {
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 33, 22 );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "notcertificate_16.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_STATE_NOTVALIDATED
+    {
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
+        Hide = TRUE;
+    };
+    PushButton BTN_VIEWCERT
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_VIEWCERT";
+        Pos = MAP_APPFONT( 6, 142 );
+        Size = MAP_APPFONT( 70, 14 );
+        Text [ en-US ] = "View Certificate...";
+    };
+    PushButton BTN_ADDCERT
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_ADDCERT";
+        Pos = MAP_APPFONT( 82, 142 );
+        Size = MAP_APPFONT( 70, 14 );
+        Text [ en-US ] = "Sign Document...";
+    };
+    PushButton BTN_REMOVECERT
+    {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_REMOVECERT";
+        Pos = MAP_APPFONT( 158, 142 );
+        Size = MAP_APPFONT( 70, 14 );
+        Text [ en-US ] = "Remove";
+    };
+    FixedLine FL_BOTTOM_SEP
+    {
+        Pos = MAP_APPFONT( 0, 160 );
+        Size = MAP_APPFONT( 234, 8 );
+    };
+    OKButton BTN_OK
+    {
+        DefButton = TRUE;
+        Pos = MAP_APPFONT( 178, 171 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text [ en-US ] = "Close";
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( 6, 171 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+};
+
+
+ErrorBox RID_XMLSECDLG_OLD_ODF_FORMAT
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message [ en-US ] =
+        "This document contains signatures in ODF 1.1 (OpenOffice.org 2.x) format. "
+        "Signing documents in %PRODUCTNAME %PRODUCTVERSION requires ODF 1.2 format version. "
+        "Thus no signatures can be added or removed to this document.\n\n"
+        "Save document in ODF 1.2 format and add all desired signatures again.";
+};
+
+
+QueryBox MSG_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Adding or removing a macro signature will remove all document signatures.\n"
+        "Do you really want to continue?";
+};
+
+

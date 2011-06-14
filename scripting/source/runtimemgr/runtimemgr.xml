@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   ScriptRuntimeManager    </module-name>
+    <component-description>
+        <author> Alexis Ledoux</author>
+        <name>  drafts.com.sun.star.script.framework.ScriptRuntimeManager   </name>
+        <description>
+    This component is part of the Scripting Framework
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="final"/>
+        <supported-service> drafts.com.sun.star.script.framework.ScriptRuntimeManager   </supported-service>
+        <type>  com.sun.star.lang.XSingleServiceFactory </type>
+        <type>  com.sun.star.lang.XMultiComponentFactory    </type>
+        <type>  com.sun.star.lang.XSingleComponentFactory   </type>
+        <type>  com.sun.star.uno.XNamingService </type>
+        <type>  com.sun.star.uno.XWeak  </type>
+        <type>  com.sun.star.lang.XMain </type>
+        <type>  com.sun.star.uno.XAggregation   </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory  </type>
+        <type>  com.sun.star.lang.XTypeProvider </type>
+        <type>  com.sun.star.registry.XSimpleRegistry   </type>
+        <type>  com.sun.star.loader.XImplementationLoader   </type>
+        <type>  com.sun.star.registry.XImplementationRegistration   </type>
+        <type>  com.sun.star.lang.XComponent    </type>
+        <type>  com.sun.star.connection.XAcceptor   </type>
+        <type>  com.sun.star.connection.XConnector  </type>
+        <type>  com.sun.star.container.XHierarchicalNameAccess  </type>
+        <type>  com.sun.star.lang.XServiceInfo  </type>
+        <type>  com.sun.star.io.XOutputStream   </type>
+        <type>  drafts.com.sun.star.script.framework.storage.XScriptInfoAccess </type>
+        <type>  drafts.com.sun.star.script.framework.storage.XScriptStorageManager </type>
+        <type>  drafts.com.sun.star.script.framework.runtime.XScriptInvocation </type>
+    <type>  drafts.com.sun.star.script.framework.runtime.XScriptNameResolver </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper$(UDK_MAJOR)$(COM)    </runtime-module-dependency>
+    <runtime-module-dependency> salhelper$(UDK_MAJOR)$(COM)     </runtime-module-dependency>
+    <runtime-module-dependency> cppu$(UDK_MAJOR)    </runtime-module-dependency>
+    <runtime-module-dependency> reg$(UDK_MAJOR)     </runtime-module-dependency>
+    <runtime-module-dependency> store$(UDK_MAJOR)   </runtime-module-dependency>
+    <runtime-module-dependency> sal$(UDK_MAJOR)     </runtime-module-dependency>
+</module-description>

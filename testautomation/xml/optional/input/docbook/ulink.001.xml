@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY dh "&#xAD;">
+]>
+<article>
+<articleinfo>
+<title>Unit Test: ulink.001</title>
+<releaseinfo role="CVS">$Id: ulink.001.xml,v 1.2 2008-07-11 08:02:05 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>This article tests ULink hyphenation.</para>
+
+<para>This is a really long URI with explicit discretionary hyphens:
+<ulink url="http://www.example.com/this/is/really/long/for/no/good/reason/except/to/test/what/happens/with/really/long/URIs/-/because/they/are/a/good/test/for/discretionary/hyphens/">http:/&dh;/&dh;www.example.com/&dh;this/&dh;is/&dh;really/&dh;long/&dh;for/&dh;no/&dh;good/&dh;reason/&dh;except/&dh;to/&dh;test/&dh;what/&dh;happens/&dh;with/&dh;really/&dh;long/&dh;URIs/&dh;-/&dh;because/&dh;they/&dh;are/&dh;a/&dh;good/&dh;test/&dh;for/&dh;discretionary/&dh;hyphens/</ulink>.</para>
+
+<para>This is a really long URI without explicit discretionary hyphens:
+<ulink url="http://www.example.com/this/is/really/long/for/no/good/reason/except/to/test/what/happens/with/really/long/URIs/-/because/they/are/a/good/test/for/discretionary/hyphens/"/>.</para>
+
+</article>
