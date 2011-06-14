@@ -41,18 +41,15 @@
 
 class SimpleConfig
 {
-    long            nLine;
-    String          aFileName;
-    SvFileStream    aFileStream;
-    ByteString          aTmpStr;
-    ByteString          aStringBuffer;
+    SvFileStream aFileStream;
+    ByteString aTmpStr;
+    ByteString aStringBuffer;
 
-    ByteString          GetNextLine();
+    ByteString GetNextLine();
 public:
-                    SimpleConfig(String aSimpleConfigFileName);
-                    SimpleConfig(DirEntry& rDirEntry);
-                    ~SimpleConfig();
-    ByteString          GetNext();
+    SimpleConfig(const String& rSimpleConfigFileName);
+    ~SimpleConfig();
+    ByteString GetNext();
 };
 
 #endif

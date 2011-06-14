@@ -43,49 +43,24 @@
 #define PATH_DELIMETER '/'
 #endif
 
-//Link Star::aDBNotFoundHdl;
-
-//
-//  class SimpleConfig
-//
-
-/*****************************************************************************/
-SimpleConfig::SimpleConfig( String aSimpleConfigFileName )
-/*****************************************************************************/
+SimpleConfig::SimpleConfig(const String &rSimpleConfigFileName)
 {
-    nLine = 0;
-    aFileName = aSimpleConfigFileName;
-    aFileStream.Open ( aFileName, STREAM_READ );
+    aFileStream.Open(rSimpleConfigFileName, STREAM_READ);
 }
 
-/*****************************************************************************/
-SimpleConfig::SimpleConfig( DirEntry& rDirEntry )
-/*****************************************************************************/
-{
-    nLine = 0;
-    aFileName = rDirEntry.GetFull();
-    aFileStream.Open ( aFileName, STREAM_READ );
-}
-
-/*****************************************************************************/
 SimpleConfig::~SimpleConfig()
-/*****************************************************************************/
 {
     aFileStream.Close ();
 }
 
-/*****************************************************************************/
 ByteString SimpleConfig::GetNext()
-/*****************************************************************************/
 {
-    ByteString aString;
-
     if ( aStringBuffer =="" )
       while ((aStringBuffer = GetNextLine()) == "\t") ; //solange bis != "\t"
     if ( aStringBuffer =="" )
         return ByteString();
 
-    aString = aStringBuffer.GetToken(0,'\t');
+    ByteString aString = aStringBuffer.GetToken(0,'\t');
     aStringBuffer.Erase(0, aString.Len()+1);
 
     aStringBuffer.EraseLeadingChars( '\t' );
@@ -93,13 +68,8 @@ ByteString SimpleConfig::GetNext()
     return aString;
 }
 
-/*****************************************************************************/
 ByteString  SimpleConfig::GetNextLine()
-/*****************************************************************************/
 {
-    ByteString aSecStr;
-    nLine++;
-
     aFileStream.ReadLine ( aTmpStr );
     if ( aTmpStr.Search( "#" ) == 0 )
         return "\t";
@@ -108,7 +78,6 @@ ByteString  SimpleConfig::GetNextLine()
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
     int nLength = aTmpStr.Len();
     sal_Bool bFound = sal_False;
-    ByteString aEraseString;
     for ( sal_uInt16 i = 0; i<= nLength; i++)
     {
         if ( aTmpStr.GetChar( i ) == 0x20  && !bFound )
