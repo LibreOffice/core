@@ -97,26 +97,6 @@ public:
     virtual sal_Size        GetLen() const;
 };
 
-
-//------------------------------------------------------- class ExcRecordList -
-
-class ExcRecordList : public ExcEmptyRec
-{
-private:
-    std::vector<ExcRecord*> maRecords;
-
-public:
-
-    typedef std::vector<ExcRecord*>::iterator iterator;
-
-    virtual                 ~ExcRecordList();
-
-    inline void             Append( ExcRecord* pNew )   { if( pNew ) maRecords.push_back( pNew ); }
-
-    virtual void            Save( XclExpStream& rStrm );
-};
-
-
 //--------------------------------------------------------- class ExcDummyRec -
 
 class ExcDummyRec : public ExcRecord

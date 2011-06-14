@@ -176,25 +176,6 @@ sal_Size ExcEmptyRec::GetLen() const
     return 0;
 }
 
-
-
-//------------------------------------------------------- class ExcRecordList -
-
-ExcRecordList::~ExcRecordList()
-{
-    for (iterator pIter = maRecords.begin(); pIter != maRecords.end(); ++pIter)
-        delete (*pIter);
-}
-
-
-void ExcRecordList::Save( XclExpStream& rStrm )
-{
-    for (iterator pIter = maRecords.begin(); pIter != maRecords.end(); ++pIter)
-        (*pIter)->Save( rStrm );
-}
-
-
-
 //--------------------------------------------------------- class ExcDummyRec -
 
 void ExcDummyRec::Save( XclExpStream& rStrm )
@@ -207,8 +188,6 @@ sal_uInt16 ExcDummyRec::GetNum( void ) const
 {
     return 0x0000;
 }
-
-
 
 //------------------------------------------------------- class ExcBoolRecord -
 
