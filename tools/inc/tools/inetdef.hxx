@@ -72,29 +72,11 @@
 // The following definitions seem obsolete and might get removed in future.
 
 #if defined __RSC
-#define INET_UNDEFINED 0
 #define INET_NAME_RESOLVE_START 1
-#define INET_NAME_RESOLVE_ERROR 2
-#define INET_NAME_RESOLVE_SUCCESS 3
 #define INET_CONNECT_START 4
-#define INET_CONNECT_ERROR 5
-#define INET_CONNECT_SUCCESS 6
-#define INET_WRITE_START 7
-#define INET_WRITE_STATUS 8
-#define INET_WRITE_ERROR 9
-#define INET_WRITE_SUCCESS 10
-#define INET_READ_START 11
 #define INET_READ_STATUS 12
-#define INET_READ_ERROR 13
 #define INET_READ_SUCCESS 14
-#define INET_CLOSING_CONNECTION 15
 #define INET_CONNECTION_CLOSED 16
-#define INET_REQUEST_CANCELED 17
-#define INET_CONNECTION_CANCELED 18
-#define INET_SESSION_CANCELED 19
-#define INET_AUTHENTICATION 20
-#define INET_OFFLINE_ERROR 21
-#define INET_PROXY_AUTHENTICATION 22
 #endif // __RSC
     // the above definitions are only used in sfx2/source/doc/doc.src
 
