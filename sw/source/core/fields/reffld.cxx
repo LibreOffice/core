@@ -984,7 +984,7 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
 /// @returns The lowest unused ID.
 sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
 {
-    sal_uInt16 num;
+    sal_uInt16 num(0);
     std::set<sal_uInt16>::iterator it;
 
     for( it = rIds.begin(); it != rIds.end(); ++it )
