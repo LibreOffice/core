@@ -614,9 +614,6 @@ public:
                                   rtl_TextEncoding eEncoding,
                                   sal_uInt32 & rCharacter);
 
-    static ByteString decodeUTF8(const ByteString & rText,
-                                 rtl_TextEncoding eEncoding);
-
     static UniString decodeHeaderFieldBody(HeaderFieldType eType,
                                            const ByteString & rBody);
 

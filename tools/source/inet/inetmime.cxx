@@ -3056,25 +3056,6 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
 
 //============================================================================
 // static
-ByteString INetMIME::decodeUTF8(const ByteString & rText,
-                                rtl_TextEncoding eEncoding)
-{
-    const sal_Char * p = rText.GetBuffer();
-    const sal_Char * pEnd = p + rText.Len();
-    ByteString sDecoded;
-    while (p != pEnd)
-    {
-        sal_uInt32 nCharacter = 0;
-        if (translateUTF8Char(p, pEnd, eEncoding, nCharacter))
-            sDecoded += sal_Char(nCharacter);
-        else
-            sDecoded += sal_Char(*p++);
-    }
-    return sDecoded;
-}
-
-//============================================================================
-// static
 UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                           const ByteString & rBody)
 {
