@@ -974,8 +974,8 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
     }
     else
     {
-        GetIdsFromDoc( rDestDoc, aIds );
-        GetIdsFromDoc( rDoc, aDstIds );
+        GetNoteIdsFromDoc( rDestDoc, aIds );
+        GetNoteIdsFromDoc( rDoc, aDstIds );
     }
     bInit = sal_True;
 }
