@@ -36,7 +36,6 @@
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor,
-*               SvUShortsSort
 ***********************************************************************/
 
 #include "svl/svldllapi.h"
@@ -51,51 +50,6 @@ SV_DECL_VARARR_VISIBILITY( SvULongs, sal_uLong, 1, 1, SVL_DLLPUBLIC )
 #ifndef _SVSTDARR_USHORTS_DECL
 SV_DECL_VARARR_VISIBILITY( SvUShorts, sal_uInt16, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_USHORTS_DECL
-#endif
-
-#ifndef _SVSTDARR_USHORTSSORT_DECL
-
-typedef sal_Bool (*FnForEach_SvUShortsSort)( const sal_uInt16&, void* );
-class SVL_DLLPUBLIC SvUShortsSort : private SvUShorts
-{
-public:
-    SvUShortsSort(sal_uInt8 nSize = 1, sal_uInt8 nG = 1)
-        : SvUShorts(nSize,nG) {}
-
-    void Insert( const SvUShortsSort *pI, sal_uInt16 nS=0, sal_uInt16 nE=USHRT_MAX );
-    sal_Bool Insert( const sal_uInt16 aE );
-    sal_Bool Insert( const sal_uInt16 aE, sal_uInt16& rP );
-    void Insert( const sal_uInt16 *pE, sal_uInt16 nL );
-    // remove ab Pos
-    void RemoveAt( const sal_uInt16 nP, sal_uInt16 nL = 1 );
-    // remove ab dem Eintrag
-    void Remove( const sal_uInt16 nP, sal_uInt16 nL = 1 );
-    sal_Bool Seek_Entry( const sal_uInt16 aE, sal_uInt16* pP = 0 ) const;
-
-    sal_uInt16 Count() const  {   return SvUShorts::Count();    }
-    const sal_uInt16* GetData() const { return (const sal_uInt16*)pData; }
-
-    const sal_uInt16& operator[](sal_uInt16 nP) const {
-        return SvUShorts::operator[]( nP );
-    }
-    const sal_uInt16& GetObject(sal_uInt16 nP) const {
-        return SvUShorts::GetObject( nP );
-    }
-    void ForEach( FnForEach_SvUShortsSort fnForEach, void* pArgs = 0 )
-    {
-        _ForEach( 0, nA, (FnForEach_SvUShorts)fnForEach, pArgs );
-    }
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE,
-                    FnForEach_SvUShortsSort fnForEach, void* pArgs = 0 )
-    {
-        _ForEach( nS, nE, (FnForEach_SvUShorts)fnForEach, pArgs );
-    }
-private:
-    SvUShortsSort( const SvUShortsSort& );
-    SvUShortsSort& operator=( const SvUShortsSort& );
-};
-
-#define _SVSTDARR_USHORTSSORT_DECL
 #endif
 
 #include <tools/string.hxx>
