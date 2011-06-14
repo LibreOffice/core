@@ -1284,9 +1284,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         {
             if ( (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ) == mso_fillBackground )
             {
-                if ( !rData.pBackgroundColoredObjects )
-                    rData.pBackgroundColoredObjects = new List;
-                rData.pBackgroundColoredObjects->Insert( pRet, LIST_APPEND );
+                rData.aBackgroundColoredObjects.push_back( pRet );
             }
         }
     }
@@ -2916,12 +2914,10 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                            the current background color */
                         if ( rSlidePersist.ePageKind == PPT_SLIDEPAGE )
                         {
-                            List* pList2 = aProcessData.pBackgroundColoredObjects;
-                            if ( pList2 )
+                            if ( !aProcessData.aBackgroundColoredObjects.empty() )
                             {
                                 if ( rSlidePersist.pBObj )
                                 {
-                                    void* pPtr;
                                     const SfxPoolItem* pPoolItem = NULL;
                                     const SfxItemSet& rObjectItemSet = rSlidePersist.pBObj->GetMergedItemSet();
 
@@ -2932,9 +2928,12 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         aNewSet.Put(*pPoolItem);
                                         aNewSet.Put(XFillStyleItem( XFILL_SOLID ));
 
-                                        for ( pPtr = pList2->First(); pPtr; pPtr = pList2->Next() )
-                                        {
-                                            ((SdrObject*)pPtr)->SetMergedItemSet(aNewSet);
+                                        for (
+                                            size_t i = 0, n = aProcessData.aBackgroundColoredObjects.size();
+                                            i < n;
+                                            ++i
+                                        ) {
+                                            aProcessData.aBackgroundColoredObjects[ i ]->SetMergedItemSet(aNewSet);
                                         }
                                     }
                                 }

@@ -506,17 +506,16 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
 
 struct ProcessData
 {
-    PptSlidePersistEntry&   rPersistEntry;
-    SdPage*                 pPage;
-    List*                   pBackgroundColoredObjects;
-    sal_uInt32*             pTableRowProperties;
+    PptSlidePersistEntry&       rPersistEntry;
+    SdPage*                     pPage;
+    ::std::vector< SdrObject* > aBackgroundColoredObjects;
+    sal_uInt32*                 pTableRowProperties;
 
     ProcessData( PptSlidePersistEntry& rP, SdPage* pP ) :
         rPersistEntry               ( rP ),
         pPage                       ( pP ),
-        pBackgroundColoredObjects   ( NULL ),
         pTableRowProperties         ( NULL ) {};
-    ~ProcessData() { delete pBackgroundColoredObjects; delete[] pTableRowProperties; };
+    ~ProcessData() { delete[] pTableRowProperties; };
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
