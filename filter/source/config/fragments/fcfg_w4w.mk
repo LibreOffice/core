@@ -77,19 +77,6 @@ T4_W4W = \
     writer_Wang_WP_Plus_W4W \
     writer_Win_Write_3x_W4W \
     writer_WiziWord_30_W4W \
-    writer_WordPerfect_Win_51_52_W4W \
-    writer_WordPerfect_Win_60_W4W \
-    writer_WordPerfect_Win_61_W4W \
-    writer_WordPerfect_Win_70_W4W \
-    writer_WordPerfect_41_W4W \
-    writer_WordPerfect_42_W4W \
-    writer_WordPerfect_50_W4W \
-    writer_WordPerfect_51_W4W \
-    writer_WordPerfect_60_W4W \
-    writer_WordPerfect_61_W4W \
-    writer_WordPerfect_Mac_1_W4W \
-    writer_WordPerfect_Mac_2_W4W \
-    writer_WordPerfect_Mac_3_W4W \
     writer_WordStar_Win_1x_20_W4W \
     writer_WordStar_2000_Rel_30_W4W \
     writer_WordStar_2000_Rel_35_W4W \
@@ -190,19 +177,6 @@ F4_W4W = \
     Wang_WP_Plus__W4W_ \
     Win_Write_3_x__W4W_ \
     WiziWord_3_0__W4W_ \
-    WordPerfect__Win__5_1_5_2__W4W_ \
-    WordPerfect__Win__6_0__W4W_ \
-    WordPerfect__Win__6_1__W4W_ \
-    WordPerfect__Win__7_0__W4W_ \
-    WordPerfect_4_1__W4W_ \
-    WordPerfect_4_2__W4W_ \
-    WordPerfect_5_0__W4W_ \
-    WordPerfect_5_1__W4W_ \
-    WordPerfect_6_0__W4W_ \
-    WordPerfect_6_1__W4W_ \
-    WordPerfect_Mac_1__W4W_ \
-    WordPerfect_Mac_2__W4W_ \
-    WordPerfect_Mac_3__W4W_ \
     WordStar__Win__1_x_2_0__W4W_ \
     WordStar_2000_Rel__3_0__W4W_ \
     WordStar_2000_Rel__3_5__W4W_ \
