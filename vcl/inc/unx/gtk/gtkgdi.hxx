@@ -37,13 +37,25 @@
 
 #include <unx/salgdi.h>
 
+#if GTK_CHECK_VERSION(3,0,0)
+
+// Disabled for gtk3 - use legacy theming code
+#define GTK_GRAPHICS_DISABLED
+class GtkSalFrame;
+class GtkSalGraphics : public X11SalGraphics {
+public:
+    GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
+};
+
+#else
+
 class GtkSalGraphics : public X11SalGraphics
 {
     GtkWidget           *m_pWindow;
     Region               m_aClipRegion;
 
 public:
-                        GtkSalGraphics( GtkWidget *window )
+                         GtkSalGraphics( GtkSalFrame *, GtkWidget *window )
                             : m_pWindow( window ),
                               m_aClipRegion( REGION_NULL )
                               {}
@@ -182,6 +194,8 @@ protected:
                             ControlState nState, const ImplControlValue& aValue,
                             const OUString& rCaption );
 };
+
+#endif // !gtk3
 
 #endif // _VCL_GTKGDI_HXX
 

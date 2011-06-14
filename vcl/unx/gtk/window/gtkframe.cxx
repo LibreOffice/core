@@ -65,6 +65,10 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
+#if GTK_CHECK_VERSION(3,0,0)
+#  include <gdk/gdkkeysyms-compat.h>
+#endif
+
 #ifdef ENABLE_DBUS
 #include <dbus/dbus-glib.h>
 
@@ -933,7 +937,11 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
 
     if( pSysData->nSize > sizeof(pSysData->nSize)+sizeof(pSysData->aWindow) && pSysData->bXEmbedSupport )
     {
+#if GTK_CHECK_VERSION(3,0,0)
+        m_pWindow = gtk_plug_new_for_display( getGdkDisplay(), pSysData->aWindow );
+#else
         m_pWindow = gtk_plug_new( pSysData->aWindow );
+#endif
         m_bWindowIsGtkPlug  = true;
         widget_set_can_default( m_pWindow, true );
         widget_set_can_focus( m_pWindow, true );
@@ -1010,7 +1018,7 @@ SalGraphics* GtkSalFrame::GetGraphics()
                 m_aGraphics[i].bInUse = true;
                 if( ! m_aGraphics[i].pGraphics )
                 {
-                    m_aGraphics[i].pGraphics = new GtkSalGraphics( m_pWindow );
+                    m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow );
                     m_aGraphics[i].pGraphics->Init( this, GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)), m_nScreen );
                 }
                 return m_aGraphics[i].pGraphics;
@@ -2357,7 +2365,9 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         bFreeGraphics = true;
     }
 
+#ifndef GTK_GRAPHICS_DISABLED
     pGraphics->updateSettings( rSettings );
+#endif
 
     if( bFreeGraphics )
         ReleaseGraphics( pGraphics );
@@ -2476,7 +2486,9 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
         if( m_aGraphics[i].bInUse )
         {
             m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)), m_nScreen );
+#ifndef GTK_GRAPHICS_DISABLED
             m_aGraphics[i].pGraphics->SetWindow( m_pWindow );
+#endif
         }
     }
 
@@ -3229,12 +3241,14 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
                                         pThis->m_hBackgroundPixmap );
     }
 
+#ifndef GTK_GRAPHICS_DISABLED
     if( ! pThis->m_pParent )
     {
         // signalize theme changed for NWF caches
         // FIXME: should be called only once for a style change
         GtkSalGraphics::bThemeChanged = sal_True;
     }
+#endif
 }
 
 gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame )
@@ -3838,4 +3852,17 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     return sal_False;
 }
 
+#ifdef GTK_GRAPHICS_DISABLED
+
+void GtkData::initNWF() {}
+void GtkData::deInitNWF() {}
+
+GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
+    : X11SalGraphics()
+{
+    Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ),
+          gdk_x11_screen_get_screen_number( gtk_widget_get_screen( pWindow ) ) );
+}
+
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

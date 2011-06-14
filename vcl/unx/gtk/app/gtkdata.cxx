@@ -286,9 +286,16 @@ void GtkSalDisplay::initScreen( int nScreen ) const
 
     // choose visual for screen
     SalDisplay::initScreen( nScreen );
+
+#if GTK_CHECK_VERSION(3,0,0)
+    // no colormaps handling in gtk 3
+#else
     // now set a gdk default colormap matching the chosen visual to the screen
-    GdkVisual* pVis = gdkx_visual_get( rSD.m_aVisual.visualid );
     GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, nScreen );
+//  should really use this:
+//  GdkVisual* pVis = gdk_x11_screen_lookup_visual_get( screen, rSD.m_aVisual.visualid );
+//  and not this:
+    GdkVisual* pVis = gdkx_visual_get( rSD.m_aVisual.visualid );
     if( pVis )
     {
         GdkColormap* pDefCol = gdk_screen_get_default_colormap( pScreen );
@@ -306,6 +313,7 @@ void GtkSalDisplay::initScreen( int nScreen ) const
     else
         fprintf( stderr, "not GdkVisual for visual id %d\n", (int)rSD.m_aVisual.visualid );
     #endif
+#endif
 }
 
 long GtkSalDisplay::Dispatch( XEvent* pEvent )
@@ -330,6 +338,21 @@ GdkCursor* GtkSalDisplay::getFromXPM( const unsigned char *pBitmap,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    g_warning ("FIXME: to use gdk_cursor_new_from_pixbuf instead of spiders");
+    // We need to do something like:
+    /*
+    GdkPixbuf *pPix = gdk_pixbuf_new_from_xpm_data (pBitmap);
+    GdkPixbuf *pMask = gdk_pixbuf_new_from_xpm_data (pMask);
+
+    GdkCursor* gdk_cursor_new_from_pixbuf    (GdkDisplay      *display,
+                    GdkPixbuf       *pixbuf,
+                    gint             x,
+                    gint             y);
+    */
+    return gdk_cursor_new_for_display (gdk_display_get_default(),
+                                       GDK_SPIDER);
+#else
     GdkScreen *pScreen = gdk_display_get_default_screen( m_pGdkDisplay );
     GdkDrawable *pDrawable = GDK_DRAWABLE( gdk_screen_get_root_window (pScreen) );
     GdkBitmap *pBitmapPix = gdk_bitmap_create_from_data
@@ -347,6 +370,7 @@ GdkCursor* GtkSalDisplay::getFromXPM( const unsigned char *pBitmap,
     return gdk_cursor_new_from_pixmap
             ( pBitmapPix, pMaskPix,
               &aBlack, &aWhite, nXHot, nYHot);
+#endif
 }
 
 #define MAKE_CURSOR( vcl_name, name ) \
@@ -590,7 +614,9 @@ void GtkXLib::Init()
 #endif
     XrmInitialize();
 
+#if !GTK_CHECK_VERSION(3,0,0)
     gtk_set_locale();
+#endif
 
     /*
      * open connection to X11 Display

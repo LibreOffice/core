@@ -161,7 +161,11 @@ extern "C"
         if ( hookLocks( pModule ) )
             pYieldMutex = new GtkHookedYieldMutex();
         else
+#if GTK_CHECK_VERSION(3,0,0)
+            g_error ("impossible case for gtk3");
+#else
             pYieldMutex = new GtkYieldMutex();
+#endif
 
         gdk_threads_init();
 
@@ -251,12 +255,23 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 #endif
 }
 
+
+/*
+ * Obsolete, non-working, and crufty code from the
+ * beginning of time. When we update our base platform
+ * we should kill this with extreme prejudice.
+ */
+#if !GTK_CHECK_VERSION(3,0,0)
+#  define HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
+#endif
+
 GtkYieldMutex::GtkYieldMutex()
 {
 }
 
 void GtkYieldMutex::acquire()
 {
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
     oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
     SolarMutexObject::acquire();
@@ -276,10 +291,14 @@ void GtkYieldMutex::acquire()
     mnCount = 1;
     mnThreadId = aCurrentThread;
     SolarMutexObject::release();
+#else
+    g_error ("never called");
+#endif
 }
 
 void GtkYieldMutex::release()
 {
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
     oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
     SolarMutexObject::acquire();
@@ -294,10 +313,14 @@ void GtkYieldMutex::release()
         }
     }
     SolarMutexObject::release();
+#else
+    g_error ("never called");
+#endif
 }
 
 sal_Bool GtkYieldMutex::tryToAcquire()
 {
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
     oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
     SolarMutexObject::acquire();
@@ -328,11 +351,15 @@ sal_Bool GtkYieldMutex::tryToAcquire()
     mnThreadId = aCurrentThread;
     SolarMutexObject::release();
 
+#else
+    g_error ("never called");
+#endif
     return sal_True;
 }
 
 int GtkYieldMutex::Grab()
 {
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
     // this MUST only be called by gdk/gtk callbacks:
     // they are entered with gdk mutex locked; the mutex
     // was unlocked by GtkYieldMutex befor yielding which
@@ -353,10 +380,15 @@ int GtkYieldMutex::Grab()
     mnCount = 1;
     SolarMutexObject::release();
     return nRet;
+#else
+    g_error ("never called");
+    return sal_True;
+#endif
 }
 
 void GtkYieldMutex::Ungrab( int nGrabs )
 {
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
     // this MUST only be called when leaving the callback
     // that locked the mutex with Grab()
     SolarMutexObject::acquire();
@@ -364,6 +396,10 @@ void GtkYieldMutex::Ungrab( int nGrabs )
     if( mnCount == 0 )
         mnThreadId = 0;
     SolarMutexObject::release();
+#else
+    (void)nGrabs;
+    g_error ("never called");
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
