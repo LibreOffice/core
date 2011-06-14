@@ -898,14 +898,6 @@ void INetRFC822Message::SetTo (const UniString& rTo)
         m_nIndex[INETMSG_RFC822_TO]);
 }
 
-void INetRFC822Message::SetXMailer (const UniString& rXMailer)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        HDR(INETMSG_RFC822_X_MAILER), rXMailer,
-        m_nIndex[INETMSG_RFC822_X_MAILER]);
-}
-
 /*
  * operator<<
  */

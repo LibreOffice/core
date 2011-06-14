@@ -441,14 +441,6 @@ public:
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    void      SetXMailer (const UniString& rXMailer);
-    UniString GetXMailer (void) const
-    {
-        return GetHeaderValue_Impl (
-            m_nIndex[INETMSG_RFC822_X_MAILER],
-            INetMIME::HEADER_FIELD_TEXT);
-    }
-
     /** Stream operators.
      */
     friend SvStream& operator<< (
