@@ -133,6 +133,11 @@ extern "C"
 
     VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
+#if OSL_DEBUG_LEVEL > 0
+        fprintf( stderr, "create vcl plugin instance with gtk version %d %d %d\n",
+                 (int) gtk_major_version, (int) gtk_minor_version,
+                 (int) gtk_micro_version );
+#endif
         /* #i92121# workaround deadlocks in the X11 implementation
         */
         static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
@@ -143,7 +148,11 @@ extern "C"
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
 
+#if GTK_CHECK_VERSION(3,0,0)
+        const gchar* pVersion = gtk_check_version( 3, 0, 0 );
+#else
         const gchar* pVersion = gtk_check_version( 2, 2, 0 );
+#endif
         if( pVersion )
         {
 #if OSL_DEBUG_LEVEL > 1
