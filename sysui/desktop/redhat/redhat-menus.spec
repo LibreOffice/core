@@ -82,13 +82,9 @@ fi
 for subdir in `cd ${link_target_root}; ls -d *`
 do
   link_dir="%{gnome_dir}/share/icons/%{gnome_mime_theme}/$subdir/mimetypes"
+  link_target_dir="../../../gnome/$subdir/mimetypes/"
 
-  if [ ! -d "${link_dir}" ]
-  then
-    mkdir -p "${link_dir}"
-    link_target_dir="../../../gnome/$subdir/mimetypes/"
-  fi
-
+  test -d "${link_dir}" || mkdir -p "${link_dir}"
   test -d ${link_dir}/${link_target_dir} || continue
 
   icon=${link_target_dir}%iconprefix-drawing.png;                     test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.png
