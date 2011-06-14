@@ -525,35 +525,7 @@ BigInt::BigInt( const BigInt& rBigInt )
 
 // -----------------------------------------------------------------------
 
-BigInt::BigInt( const ByteString& rString )
-{
-    bIsSet = sal_True;
-    bIsNeg = sal_False;
-    bIsBig = sal_False;
-    nVal   = 0;
-
-    sal_Bool bNeg = sal_False;
-    const sal_Char* p = rString.GetBuffer();
-    if ( *p == '-' )
-    {
-        bNeg = sal_True;
-        p++;
-    }
-    while( *p >= '0' && *p <= '9' )
-    {
-        *this *= 10;
-        *this += *p - '0';
-        p++;
-    }
-    if ( bIsBig )
-        bIsNeg = bNeg;
-    else if( bNeg )
-        nVal = -nVal;
-}
-
-// -----------------------------------------------------------------------
-
-BigInt::BigInt( const UniString& rString )
+BigInt::BigInt( const String& rString )
 {
     bIsSet = sal_True;
     bIsNeg = sal_False;
@@ -686,12 +658,12 @@ BigInt::operator double() const
 
 // -----------------------------------------------------------------------
 
-UniString BigInt::GetString() const
+String BigInt::GetString() const
 {
-    UniString aString;
+    String aString;
 
     if ( !bIsBig )
-        aString = UniString::CreateFromInt32( nVal );
+        aString = String::CreateFromInt32( nVal );
     else
     {
         BigInt aTmp( *this );
@@ -704,23 +676,23 @@ UniString BigInt::GetString() const
             a    %= a1000000000;
             aTmp /= a1000000000;
 
-            UniString aStr = aString;
+            String aStr = aString;
             if ( a.nVal < 100000000L )
             { // leading 0s
-                aString = UniString::CreateFromInt32( a.nVal + 1000000000L );
+                aString = String::CreateFromInt32( a.nVal + 1000000000L );
                 aString.Erase(0,1);
             }
             else
-                aString = UniString::CreateFromInt32( a.nVal );
+                aString = String::CreateFromInt32( a.nVal );
             aString += aStr;
         }
         while( aTmp.bIsBig );
 
-        UniString aStr = aString;
+        String aStr = aString;
         if ( bIsNeg )
-            aString = UniString::CreateFromInt32( -aTmp.nVal );
+            aString = String::CreateFromInt32( -aTmp.nVal );
         else
-            aString = UniString::CreateFromInt32( aTmp.nVal );
+            aString = String::CreateFromInt32( aTmp.nVal );
         aString += aStr;
     }
 
