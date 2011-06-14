@@ -60,9 +60,8 @@ DT_TextToken::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 bool
 DT_TextToken::IsWhiteOnly() const
 {
-    for ( const char * it = sText.c_str();
-          static_cast<UINT8>(*it) > 32;
-          ++it )
+    const char *it = sText.c_str();
+    while (static_cast<UINT8>(*it++) > 32)
     {
         return false;
     }
