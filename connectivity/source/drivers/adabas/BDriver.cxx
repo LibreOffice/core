@@ -1089,7 +1089,6 @@ OSL_TRACE("CreateFile %d",_nSize);
                  ) );
             ::dbtools::throwGenericSQLException(sError,*this);
         }
-        (*pFileStream).SetFiller('\0');
         sal_Int32 nNewSize = 0;
         sal_Int32 nCount = _nSize /2;
         for(sal_Int32 i=0; bOK && i < nCount; ++i)

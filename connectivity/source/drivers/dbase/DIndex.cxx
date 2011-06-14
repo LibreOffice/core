@@ -509,7 +509,6 @@ sal_Bool ODbaseIndex::CreateImpl()
 
     m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     m_pFileStream->SetBufferSize(PAGE_SIZE);
-    m_pFileStream->SetFiller('\0');
 
     // firstly the result must be sorted
     utl::SharedUNOComponent<XStatement> xStmt;
