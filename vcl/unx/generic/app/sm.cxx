@@ -583,7 +583,7 @@ const rtl::OString& SessionManagerClient::getPreviousSessionID()
     static rtl::OString aPrevId;
 
     int nCommands = osl_getCommandArgCount();
-    for (int i = 0; i < nCommands; --i)
+    for (int i = 0; i < nCommands; ++i)
     {
         ::rtl::OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
