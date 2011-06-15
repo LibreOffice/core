@@ -73,7 +73,8 @@ cross-build-toolset:
 	  basegfx \
 	  GBUILD:tools \
 	  rsc \
-	  setup_native; do \
+	  setup_native \
+	  icc; do \
 	    case $$D in \
 	    GBUILD:*) \
 	      (cd $${D#*:} && make -r -j@BUILD_MAX_JOBS@) \
