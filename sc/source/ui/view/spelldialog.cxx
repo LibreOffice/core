@@ -158,6 +158,7 @@ void ScSpellDialogChildWindow::Reset()
     mxUndoDoc.reset();
     mxRedoDoc.reset();
     mxOldSel.reset();
+    mxOldRangeList.reset();
     mpViewShell = 0;
     mpViewData = 0;
     mpDocShell = 0;
@@ -190,6 +191,10 @@ void ScSpellDialogChildWindow::Init()
     SCTAB nTab = rCursor.Tab();
 
     ScMarkData& rMarkData = mpViewData->GetMarkData();
+
+    mxOldRangeList.reset(new ScRangeList);
+    rMarkData.FillRangeListWithMarks(mxOldRangeList.get(), true);
+
     rMarkData.MarkToMulti();
 
     switch( mxOldSel->GetSelectionType() )
@@ -265,15 +270,17 @@ void ScSpellDialogChildWindow::Init()
 
 bool ScSpellDialogChildWindow::IsSelectionChanged()
 {
-    if( !mxOldSel.get() || !mpViewShell || (mpViewShell != PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) )
+    if( !mxOldRangeList.get() || !mpViewShell || (mpViewShell != PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) )
         return true;
 
     if( EditView* pEditView = mpViewData->GetSpellingView() )
         if( pEditView->GetEditEngine() != mxEngine.get() )
             return true;
 
-    ScSelectionState aNewSel( *mpViewData );
-    return mxOldSel->GetSheetSelection() != aNewSel.GetSheetSelection();
+    ScRangeList aCurrentRangeList;
+    mpViewData->GetMarkData().FillRangeListWithMarks(&aCurrentRangeList, true);
+
+    return (*mxOldRangeList != aCurrentRangeList);
 }
 
 // ============================================================================

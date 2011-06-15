@@ -38,6 +38,7 @@ class ScConversionEngineBase;
 class ScSelectionState;
 class ScTabViewShell;
 class ScViewData;
+class ScRangeList;
 class ScDocShell;
 class ScDocument;
 
@@ -85,11 +86,13 @@ private:
     typedef ::std::auto_ptr< ScConversionEngineBase >   ScConvEnginePtr;
     typedef ::std::auto_ptr< ScDocument >               ScDocumentPtr;
     typedef ::std::auto_ptr< ScSelectionState >         ScSelectionStatePtr;
+    typedef ::std::auto_ptr< ScRangeList >              ScRangeListPtr;
 
     ScConvEnginePtr     mxEngine;
     ScDocumentPtr       mxUndoDoc;
     ScDocumentPtr       mxRedoDoc;
-    ScSelectionStatePtr mxOldSel;           /// Old selection state for comparison.
+    ScSelectionStatePtr mxOldSel;           /// For cursor position in selection
+    ScRangeListPtr      mxOldRangeList;     /// Original selection range for comparison.
     ScTabViewShell*     mpViewShell;
     ScViewData*         mpViewData;
     ScDocShell*         mpDocShell;
