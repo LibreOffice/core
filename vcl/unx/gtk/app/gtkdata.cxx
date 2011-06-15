@@ -333,25 +333,70 @@ long GtkSalDisplay::Dispatch( XEvent* pEvent )
     return GDK_FILTER_CONTINUE;
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
+namespace
+{
+    //cairo annoyingly won't take raw xbm data unless it fits
+    //the required cairo stride
+    unsigned char* ensurePaddedForCairo(const unsigned char *pXBM,
+        int nWidth, int nHeight, int nStride)
+    {
+        unsigned char *pPaddedXBM = const_cast<unsigned char*>(pXBM);
+
+        int bytes_per_row = (nWidth + 7) / 8;
+
+        if (nStride != bytes_per_row)
+        {
+            pPaddedXBM = new unsigned char[nStride * nHeight];
+            for (int row = 0; row < nHeight; ++row)
+            {
+                memcpy(pPaddedXBM + (nStride * row),
+                    pXBM + (bytes_per_row * row), bytes_per_row);
+                memset(pPaddedXBM + (nStride * row) + bytes_per_row,
+                    0, nStride - bytes_per_row);
+            }
+        }
+
+        return pPaddedXBM;
+    }
+}
+#endif
+
 GdkCursor* GtkSalDisplay::getFromXPM( const unsigned char *pBitmap,
                                       const unsigned char *pMask,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
 {
 #if GTK_CHECK_VERSION(3,0,0)
-    g_warning ("FIXME: to use gdk_cursor_new_from_pixbuf instead of spiders");
-    // We need to do something like:
-    /*
-    GdkPixbuf *pPix = gdk_pixbuf_new_from_xpm_data (pBitmap);
-    GdkPixbuf *pMask = gdk_pixbuf_new_from_xpm_data (pMask);
+    int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_A1, nWidth);
 
-    GdkCursor* gdk_cursor_new_from_pixbuf    (GdkDisplay      *display,
-                    GdkPixbuf       *pixbuf,
-                    gint             x,
-                    gint             y);
-    */
-    return gdk_cursor_new_for_display (gdk_display_get_default(),
-                                       GDK_SPIDER);
+    unsigned char *pPaddedXBM = ensurePaddedForCairo(pBitmap, nWidth, nHeight, cairo_stride);
+    cairo_surface_t *s = cairo_image_surface_create_for_data(
+        pPaddedXBM,
+        CAIRO_FORMAT_A1, nWidth, nHeight,
+        cairo_stride);
+
+    cairo_t *cr = cairo_create(s);
+    unsigned char *pPaddedMaskXBM = ensurePaddedForCairo(pMask, nWidth, nHeight, cairo_stride);
+    cairo_surface_t *mask = cairo_image_surface_create_for_data(
+        pPaddedMaskXBM,
+        CAIRO_FORMAT_A1, nWidth, nHeight,
+        cairo_stride);
+    cairo_mask_surface(cr, mask, 0, 0);
+    cairo_destroy(cr);
+    cairo_surface_destroy(mask);
+    if (pPaddedMaskXBM != pMask)
+        delete [] pPaddedMaskXBM;
+
+    GdkPixbuf *pixbuf = gdk_pixbuf_get_from_surface(s, 0, 0, nWidth, nHeight);
+    cairo_surface_destroy(s);
+    if (pPaddedXBM != pBitmap)
+        delete [] pPaddedXBM;
+
+    GdkCursor *cursor = gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pixbuf, nXHot, nYHot);
+    g_object_unref(pixbuf);
+
+    return cursor;
 #else
     GdkScreen *pScreen = gdk_display_get_default_screen( m_pGdkDisplay );
     GdkDrawable *pDrawable = GDK_DRAWABLE( gdk_screen_get_root_window (pScreen) );

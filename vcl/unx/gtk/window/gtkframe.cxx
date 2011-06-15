@@ -2371,6 +2371,8 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 
 #ifndef GTK_GRAPHICS_DISABLED
     pGraphics->updateSettings( rSettings );
+#else
+    (void)rSettings;
 #endif
 
     if( bFreeGraphics )
