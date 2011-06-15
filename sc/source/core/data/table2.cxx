@@ -2241,7 +2241,6 @@ sal_Bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 
 
             mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
         }
-        DecRecalcLevel();
 
         if (bChanged)
             InvalidatePageBreaks();
