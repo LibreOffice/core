@@ -66,7 +66,8 @@ class ConfigGroup(ConfigNode):
         fieldType = type(child)
         if type(ConfigNode) == fieldType:
             child.setRoot(self.root)
-            child.readConfiguration(Configuration.getNode(propertyName, configView), prefix)
+            child.readConfiguration(Configuration.getNode(propertyName, configView),
+                prefix)
             field.set(this, Configuration.getString(propertyName, configView))
 
     def setRoot(self, newRoot):

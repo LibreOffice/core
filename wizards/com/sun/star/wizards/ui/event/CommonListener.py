@@ -43,7 +43,8 @@ import inspect
 # When actionPerformed is called, this will call an arbitrary
 #  python procedure, passing it...
 #   1. the oActionEvent
-#   2. any other parameters you specified to this object's constructor (as a tuple).
+#   2. any other parameters you specified to this object's
+# constructor (as a tuple).
 from com.sun.star.awt import XActionListener
 class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
     def __init__( self, oProcToCall, tParams=() ):
@@ -63,7 +64,8 @@ class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
 # When itemStateChanged is called, this will call an arbitrary
 #  python procedure, passing it...
 #   1. the oItemEvent
-#   2. any other parameters you specified to this object's constructor (as a tuple).
+#   2. any other parameters you specified to this object's
+# constructor (as a tuple).
 from com.sun.star.awt import XItemListener
 class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
     def __init__( self, oProcToCall, tParams=() ):
@@ -82,7 +84,8 @@ class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
 # When textChanged is called, this will call an arbitrary
 #  python procedure, passing it...
 #   1. the oTextEvent
-#   2. any other parameters you specified to this object's constructor (as a tuple).
+#   2. any other parameters you specified to this object's
+# constructor (as a tuple).
 from com.sun.star.awt import XTextListener
 class TextListenerProcAdapter( unohelper.Base, XTextListener ):
     def __init__( self, oProcToCall, tParams=() ):
@@ -100,7 +103,8 @@ class TextListenerProcAdapter( unohelper.Base, XTextListener ):
 # When textChanged is called, this will call an arbitrary
 #  python procedure, passing it...
 #   1. the oTextEvent
-#   2. any other parameters you specified to this object's constructor (as a tuple).
+#   2. any other parameters you specified to this object's
+# constructor (as a tuple).
 from com.sun.star.awt import XWindowListener
 class WindowListenerProcAdapter( unohelper.Base, XWindowListener  ):
     def __init__( self, oProcToCall, tParams=() ):

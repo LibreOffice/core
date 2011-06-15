@@ -10,15 +10,20 @@ class CallWizard(object):
     @param xMSF The service manager, who gives access to every known service.
     @param xregistrykey Makes structural information (except regarding tree
     structures) of a single registry key accessible.
-    @return Returns a <code>XSingleServiceFactory</code> for creating the component.
+    @return Returns a <code>XSingleServiceFactory</code>
+    for creating the component.
     @see com.sun.star.comp.loader.JavaLoader#
     '''
 
     @classmethod
-    def __getServiceFactory(self, stringImplementationName, xMSF, xregistrykey):
+    def __getServiceFactory(self, stringImplementationName, xMSF, \
+        xregistrykey):
+
         xsingleservicefactory = None
         if stringImplementationName.equals(WizardImplementation.getName()):
-            xsingleservicefactory = FactoryHelper.getServiceFactory(WizardImplementation, WizardImplementation.__serviceName, xMSF, xregistrykey)
+            xsingleservicefactory = FactoryHelper.getServiceFactory( \
+                WizardImplementation, WizardImplementation.__serviceName,
+                xMSF, xregistrykey)
 
         return xsingleservicefactory
 
@@ -32,18 +37,24 @@ class CallWizard(object):
         #private XMultiServiceFactory xmultiservicefactory
 
         '''
-        The constructor of the inner class has a XMultiServiceFactory parameter.
-        @param xmultiservicefactoryInitialization A special service factory could be
-        introduced while initializing.
+        The constructor of the inner class has a XMultiServiceFactory
+        parameter.
+        @param xmultiservicefactoryInitialization A special service factory
+        could be introduced while initializing.
         '''
 
         @classmethod
-        def WizardImplementation_XMultiServiceFactory(self, xmultiservicefactoryInitialization):
+        def WizardImplementation_XMultiServiceFactory(self, \
+            xmultiservicefactoryInitialization):
+
             tmp = WizardImplementation()
-            tmp.WizardImplementation_body_XMultiServiceFactory(xmultiservicefactoryInitialization)
+            tmp.WizardImplementation_body_XMultiServiceFactory( \
+                xmultiservicefactoryInitialization)
             return tmp
 
-        def WizardImplementation_body_XMultiServiceFactory(self, xmultiservicefactoryInitialization):
+        def WizardImplementation_body_XMultiServiceFactory(self, \
+            xmultiservicefactoryInitialization):
+
             self.xmultiservicefactory = xmultiservicefactoryInitialization
             if self.xmultiservicefactory != None:
                 pass
@@ -55,19 +66,19 @@ class CallWizard(object):
 
         def trigger(self, str):
             if str.equalsIgnoreCase("start"):
-                lw = FaxWizardDialogImpl.FaxWizardDialogImpl_unknown(self.xmultiservicefactory)
+                lw = FaxWizardDialogImpl(self.xmultiservicefactory)
                 if not FaxWizardDialogImpl.running:
                     lw.startWizard(self.xmultiservicefactory, None)
 
         '''
-        The service name, that must be used to get an instance of this service.
+        The service name, that must be used to get an instance of this service
         The service manager, that gives access to all registered services.
-        This method is a member of the interface for initializing an object directly
-        after its creation.
-        @param object This array of arbitrary objects will be passed to the component
-        after its creation.
-        @throws com.sun.star.uno.Exception Every exception will not be handled, but
-        will be passed to the caller.
+        This method is a member of the interface for initializing an object
+        directly after its creation.
+        @param object This array of arbitrary objects will be passed to the
+        component after its creation.
+        @throws com.sun.star.uno.Exception Every exception will not be
+        handled, but will be passed to the caller.
         '''
 
         def initialize(self, object):
@@ -84,8 +95,8 @@ class CallWizard(object):
             return (stringSupportedServiceNames)
 
         '''
-        This method returns true, if the given service will be supported by the
-        component.
+        This method returns true, if the given service will be supported by
+        the component.
         @param stringService Service name.
         @return True, if the given service name will be supported.
         '''
@@ -98,13 +109,14 @@ class CallWizard(object):
             return (booleanSupportsService)
 
         '''
-        This method returns an array of bytes, that can be used to unambiguously
-        distinguish between two sets of types, e.g. to realise hashing functionality
-        when the object is introspected. Two objects that return the same ID also
-        have to return the same set of types in getTypes(). If an unique
-        implementation Id cannot be provided this method has to return an empty
-        sequence. Important: If the object aggregates other objects the ID has to be
-        unique for the whole combination of objects.
+        This method returns an array of bytes, that can be used to
+        unambiguously distinguish between two sets of types,
+        e.g. to realise hashing functionality when the object is introspected.
+        Two objects that return the same ID also have to return the same
+        set of types in getTypes(). If an unique implementation Id cannot be
+        provided this method has to return an empty sequence. Important:
+        If the object aggregates other objects the ID has to be unique for
+        the whole combination of objects.
         @return Array of bytes, in order to distinguish between two sets.
         '''
 
@@ -126,10 +138,10 @@ class CallWizard(object):
             return (WizardImplementation.getName())
 
         '''
-        Provides a sequence of all types (usually interface types) provided by the
-        object.
-        @return Sequence of all types (usually interface types) provided by the
-        service.
+        Provides a sequence of all types (usually interface types) provided
+        by the object.
+        @return Sequence of all types (usually interface types) provided
+        by the service.
         '''
 
         def getTypes(self):

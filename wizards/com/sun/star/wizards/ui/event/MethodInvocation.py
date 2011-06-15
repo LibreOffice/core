@@ -25,7 +25,8 @@ class MethodInvocation(object):
         self.mObject = obj
         self.mWithParam = not (paramClass==None)
 
-    '''Returns the result of calling the method on the object, or null, if no result. '''
+    '''Returns the result of calling the method on the object, or null,
+    if no result. '''
 
     def invoke(self, param=None):
         if self.mWithParam:

@@ -20,10 +20,11 @@ class Helper(object):
     def setUnoPropertyValue(self, xPSet, PropertyName, PropertyValue):
         try:
             if xPSet.getPropertySetInfo().hasPropertyByName(PropertyName):
-                uno.invoke(xPSet,"setPropertyValue", (PropertyName,PropertyValue))
+                uno.invoke(xPSet,"setPropertyValue",
+                    (PropertyName,PropertyValue))
             else:
                 selementnames = xPSet.getPropertySetInfo().getProperties()
-                raise ValueError("No Such Property: '" + PropertyName + "'");
+                raise ValueError("No Such Property: '" + PropertyName + "'")
 
         except UnoException, exception:
             traceback.print_exc()
@@ -61,7 +62,7 @@ class Helper(object):
                 while i < MaxCount:
                     if CurPropertyValue[i] is not None:
                         aValue = CurPropertyValue[i]
-                        if aValue is not None and aValue.Name.equals(PropertyName):
+                        if aValue is not None and aValue.Name == PropertyName:
                             return aValue.Value
 
                     i += 1
@@ -100,7 +101,7 @@ class Helper(object):
     def getUnoStructValue(self, xPSet, PropertyName):
         try:
             if xPSet is not None:
-                if xPSet.getPropertySetInfo().hasPropertyByName(PropertyName) == True:
+                if xPSet.getPropertySetInfo().hasPropertyByName(PropertyName):
                     oObject = xPSet.getPropertyValue(PropertyName)
                     return oObject
 
@@ -110,14 +111,17 @@ class Helper(object):
             return None
 
     @classmethod
-    def setUnoPropertyValues(self, xMultiPSetLst, PropertyNames, PropertyValues):
+    def setUnoPropertyValues(self, xMultiPSetLst, PropertyNames,
+        PropertyValues):
         try:
             if xMultiPSetLst is not None:
-                uno.invoke(xMultiPSetLst, "setPropertyValues", (PropertyNames, PropertyValues))
+                uno.invoke(xMultiPSetLst, "setPropertyValues",
+                    (PropertyNames, PropertyValues))
             else:
                 i = 0
                 while i < len(PropertyNames):
-                    self.setUnoPropertyValue(xMultiPSetLst, PropertyNames[i], PropertyValues[i])
+                    self.setUnoPropertyValue(xMultiPSetLst, PropertyNames[i],
+                        PropertyValues[i])
                     i += 1
 
         except Exception, e:
@@ -125,7 +129,8 @@ class Helper(object):
 
     '''
     checks if the value of an object that represents an array is null.
-    check beforehand if the Object is really an array with "AnyConverter.IsArray(oObject)
+    check beforehand if the Object is really an array with
+    "AnyConverter.IsArray(oObject)
     @param oValue the paramter that has to represent an object
     @return a null reference if the array is empty
     '''
@@ -146,14 +151,16 @@ class Helper(object):
             return None
 
     def getComponentContext(_xMSF):
-        # Get the path to the extension and try to add the path to the class loader
+        #Get the path to the extension and
+        #try to add the path to the class loader
         aHelper = PropertySetHelper(_xMSF);
-        aDefaultContext = aHelper.getPropertyValueAsObject("DefaultContext");
+        aDefaultContext = aHelper.getPropertyValueAsObject("DefaultContext")
         return aDefaultContext;
 
     def getMacroExpander(_xMSF):
         xComponentContext = self.getComponentContext(_xMSF);
-        aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander");
+        aSingleton = xComponentContext.getValueByName(
+            "/singletons/com.sun.star.util.theMacroExpander")
         return aSingleton;
 
     class DateUtils(object):
@@ -168,7 +175,8 @@ class Helper(object):
             date = Helper.getUnoPropertyValue(formatSettings, "NullDate")
             self.calendar.set(date.Year, date.Month - 1, date.Day)
             self.docNullTime = getTimeInMillis()
-            self.formatter = NumberFormatter.createNumberFormatter(xmsf, self.formatSupplier)
+            self.formatter = NumberFormatter.createNumberFormatter(xmsf,
+                self.formatSupplier)
 
         '''
         @param format a constant of the enumeration NumberFormatIndex
@@ -176,7 +184,8 @@ class Helper(object):
         '''
 
         def getFormat(self, format):
-            return NumberFormatter.getNumberFormatterKey(self.formatSupplier, format)
+            return NumberFormatter.getNumberFormatterKey(
+                self.formatSupplier, format)
 
         def getFormatter(self):
             return self.formatter
@@ -192,7 +201,8 @@ class Helper(object):
 
         def getDocumentDateAsDouble(self, date):
             self.calendar.clear()
-            self.calendar.set(date / 10000, (date % 10000) / 100 - 1, date % 100)
+            self.calendar.set(
+                date / 10000, (date % 10000) / 100 - 1, date % 100)
             date1 = getTimeInMillis()
             '''
             docNullTime and date1 are in millis, but
@@ -203,7 +213,8 @@ class Helper(object):
             return daysDiff
 
         def getDocumentDateAsDouble(self, date):
-            return getDocumentDateAsDouble(date.Year * 10000 + date.Month * 100 + date.Day)
+            return getDocumentDateAsDouble(
+                date.Year * 10000 + date.Month * 100 + date.Day)
 
         def getDocumentDateAsDouble(self, javaTimeInMillis):
             self.calendar.clear()
@@ -219,10 +230,13 @@ class Helper(object):
             return daysDiff
 
         def format(self, formatIndex, date):
-            return self.formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date))
+            return self.formatter.convertNumberToString(formatIndex,
+                getDocumentDateAsDouble(date))
 
         def format(self, formatIndex, date):
-            return self.formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date))
+            return self.formatter.convertNumberToString(formatIndex,
+                getDocumentDateAsDouble(date))
 
         def format(self, formatIndex, javaTimeInMillis):
-            return self.formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(javaTimeInMillis))
+            return self.formatter.convertNumberToString(formatIndex,
+                getDocumentDateAsDouble(javaTimeInMillis))
