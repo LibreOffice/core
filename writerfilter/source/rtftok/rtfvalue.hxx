@@ -14,12 +14,13 @@ namespace writerfilter {
         {
             public:
                 typedef ::boost::shared_ptr<RTFValue> Pointer_t;
-                RTFValue(int nValue, rtl::OUString sValue, std::multimap<Id, RTFValue::Pointer_t> rAttributes,
-                        std::multimap<Id, RTFValue::Pointer_t> rSprms, uno::Reference<drawing::XShape> rShape);
+                RTFValue(int nValue, rtl::OUString sValue, std::vector<std::pair<Id, RTFValue::Pointer_t>> rAttributes,
+                        std::vector<std::pair<Id, RTFValue::Pointer_t>> rSprms, uno::Reference<drawing::XShape> rShape);
                 RTFValue(int nValue);
                 RTFValue(rtl::OUString sValue);
-                RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes);
-                RTFValue(std::multimap<Id, RTFValue::Pointer_t> rAttributes, std::multimap<Id, RTFValue::Pointer_t> rSprms);
+                RTFValue(std::vector<std::pair<Id, RTFValue::Pointer_t>> rAttributes);
+                RTFValue(std::vector<std::pair<Id, RTFValue::Pointer_t>> rAttributes,
+                        std::vector<std::pair<Id, RTFValue::Pointer_t>> rSprms);
                 RTFValue(uno::Reference<drawing::XShape> rShape);
                 void setString(rtl::OUString sValue);
                 virtual int getInt() const;
@@ -30,13 +31,13 @@ namespace writerfilter {
                 virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
                 virtual std::string toString() const;
                 virtual RTFValue* Clone();
-                std::multimap<Id, RTFValue::Pointer_t>& getAttributes();
-                std::multimap<Id, RTFValue::Pointer_t>& getSprms();
+                std::vector<std::pair<Id, RTFValue::Pointer_t>>& getAttributes();
+                std::vector<std::pair<Id, RTFValue::Pointer_t>>& getSprms();
             private:
                 int m_nValue;
                 rtl::OUString m_sValue;
-                std::multimap<Id, RTFValue::Pointer_t> m_rAttributes;
-                std::multimap<Id, RTFValue::Pointer_t> m_rSprms;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> m_rAttributes;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> m_rSprms;
                 uno::Reference<drawing::XShape> m_rShape;
         };
     } // namespace rtftok

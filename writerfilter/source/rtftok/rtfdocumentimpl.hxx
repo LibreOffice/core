@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <stack>
-#include <map>
+#include <vector>
 #include <rtl/strbuf.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/storagebase.hxx>
@@ -81,12 +81,12 @@ namespace writerfilter {
                 RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
-                std::multimap<Id, RTFValue::Pointer_t> aTableSprms;
-                std::multimap<Id, RTFValue::Pointer_t> aTableAttributes;
-                std::multimap<Id, RTFValue::Pointer_t> aCharacterSprms;
-                std::multimap<Id, RTFValue::Pointer_t> aCharacterAttributes;
-                std::multimap<Id, RTFValue::Pointer_t> aParagraphSprms;
-                std::multimap<Id, RTFValue::Pointer_t> aParagraphAttributes;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> aTableSprms;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> aTableAttributes;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> aCharacterSprms;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> aCharacterAttributes;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> aParagraphSprms;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> aParagraphAttributes;
 
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
@@ -108,7 +108,7 @@ namespace writerfilter {
                 /// Next list level index to use when parsing list table.
                 int nListLevelNum;
                 /// List level entries, which will form a list entry later.
-                std::multimap<Id, RTFValue::Pointer_t> aListLevelEntries;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> aListLevelEntries;
 
                 /// Text from leveltext destination.
                 rtl::OUStringBuffer aLevelText;
@@ -135,8 +135,8 @@ namespace writerfilter {
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
                 Id getBorderTable(sal_uInt32 nIndex);
                 void skipDestination(bool bParsed);
-                std::multimap<Id, RTFValue::Pointer_t> mergeSprms();
-                std::multimap<Id, RTFValue::Pointer_t> mergeAttributes();
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> mergeSprms();
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> mergeAttributes();
                 int asHex(char ch);
             private:
                 int resolveParse();
@@ -175,7 +175,7 @@ namespace writerfilter {
                 bool m_bFirstRun;
                 bool m_bNeedPap;
                 /// The list table and list override table combined.
-                std::multimap<Id, RTFValue::Pointer_t> m_aListTableSprms;
+                std::vector<std::pair<Id, RTFValue::Pointer_t>> m_aListTableSprms;
 
                 oox::StorageRef m_xStorage;
                 oox::GraphicHelper* m_pGraphicHelper;
