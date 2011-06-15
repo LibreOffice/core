@@ -34,6 +34,8 @@
 #include "aqua/svsys.h"
 #elif defined OS2
 #include "os2/svsys.h"
+#elif defined IOS
+#include "ios/svsys.h"
 #else
 #include "unx/svsys.h"
 #endif
