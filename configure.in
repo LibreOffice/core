@@ -1292,6 +1292,7 @@ if test "$cross_compiling" = "yes"; then
   CROSS_COMPILING=YES
 else
   CROSS_COMPILING=
+  BUILD_TYPE="$BUILD_TYPE NATIVE"
 fi
 AC_SUBST(CROSS_COMPILING)
 
@@ -1529,6 +1530,20 @@ AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
+
+dnl It is useful to have a BUILD_TYPE keyword to distinguish "normal"
+dnl desktop OSes from "mobile" ones.
+
+dnl We assume that a non-DESKTOP build type is also a non-NATIVE one.
+dnl In other words, that when building for an OS that is not a
+dnl "desktop" one but a "mobile" one, we are always cross-compiling.
+
+dnl Note the direction of the implication; there is no assumption that
+dnl cross-compiling would imply a non-desktop OS.
+
+if test $_os != iOS -a $_os != Android; then
+    BUILD_TYPE="$BUILD_TYPE DESKTOP"
+fi
 
 if test $build_os = "cygwin"; then
    dnl ===================================================================
