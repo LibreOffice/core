@@ -34,7 +34,7 @@
 #include <cstddef>
 #include <stdio.h>
 
-#include <tools/string.hxx>
+#include <rtl/strbuf.hxx>
 
 #ifdef WNT
 #define FILE_OPEN_READ  "rb"
@@ -93,13 +93,14 @@ void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
     }
 }
 
-rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
+rtlDigestError calc_md5_checksum(const char *filename, rtl::OString &rChecksum)
 {
     const size_t BUFFER_SIZE  = 0x1000;
     const size_t MINIMAL_SIZE = 512;
 
     sal_uInt8 checksum[RTL_DIGEST_LENGTH_MD5];
-    rtlDigestError  error = rtl_Digest_E_None;
+    rtlDigestError error = rtl_Digest_E_None;
+    rtl::OStringBuffer aChecksumBuf;
 
     FILE *fp = fopen( filename, FILE_OPEN_READ );
 
@@ -136,8 +137,8 @@ rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
             for ( std::size_t i = 0; i < sizeof(checksum); i++ )
             {
                 if ( checksum[i] < 16 )
-                    aChecksum.Append( "0" );
-                aChecksum += ByteString::CreateFromInt32( checksum[i], 16 );
+                    aChecksumBuf.append('0');
+                aChecksumBuf.append(checksum[i], 16);
             }
         }
 
@@ -145,6 +146,8 @@ rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum )
     }
     else
         error = rtl_Digest_E_Unknown;
+
+    rChecksum = aChecksumBuf.makeStringAndClear();
 
     return error;
 }
