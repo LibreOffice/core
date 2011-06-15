@@ -47,7 +47,9 @@ namespace writerfilter {
             DESTINATION_PICPROP,
             DESTINATION_SHAPEPROPERTY,
             DESTINATION_SHAPEPROPERTYNAME,
-            DESTINATION_SHAPEPROPERTYVALUE
+            DESTINATION_SHAPEPROPERTYVALUE,
+            DESTINATION_SHAPE,
+            DESTINATION_SHAPEINSTRUCTION
         };
 
         enum RTFErrors
