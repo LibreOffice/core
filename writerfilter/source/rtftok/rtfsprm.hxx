@@ -22,6 +22,7 @@ namespace writerfilter {
                 virtual Kind getKind();
                 virtual std::string getName() const;
                 virtual std::string toString() const;
+                static RTFValue::Pointer_t find(std::vector<std::pair<Id, RTFValue::Pointer_t>> &rVector, Id nKeyword);
             private:
                 Id m_nKeyword;
                 RTFValue::Pointer_t& m_pValue;

@@ -69,6 +69,15 @@ std::string RTFSprm::toString() const
     return aBuf.makeStringAndClear().getStr();
 }
 
+RTFValue::Pointer_t RTFSprm::find(std::vector<std::pair<Id, RTFValue::Pointer_t>> &rVector, Id nKeyword)
+{
+    for (std::vector<std::pair<Id, RTFValue::Pointer_t>>::iterator i = rVector.begin(); i != rVector.end(); ++i)
+        if (i->first == nKeyword)
+            return i->second;
+    RTFValue::Pointer_t pValue;
+    return pValue;
+}
+
 } // namespace rtftok
 } // namespace writerfilter
 
