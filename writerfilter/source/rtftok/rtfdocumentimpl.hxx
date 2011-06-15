@@ -153,6 +153,7 @@ namespace writerfilter {
             private:
                 int resolveParse();
                 int resolveKeyword();
+                void resolveShapeProperties(std::vector<std::pair<rtl::OUString, rtl::OUString>>& rShapeProperties);
 
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
                 int dispatchFlag(RTFKeyword nKeyword);

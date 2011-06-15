@@ -161,6 +161,10 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
     SvMemoryStream aStream;
     int b = 0, count = 2;
 
+    // TODO this discards properties after the 'pib' property
+    if (!bInline)
+        resolveShapeProperties(m_aStates.top().aShapeProperties);
+
     // Read the group.
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
@@ -247,9 +251,16 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
             if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
                 aAnchorExtentAttributes.push_back(make_pair(i->first, i->second));
         RTFValue::Pointer_t pAnchorExtentValue(new RTFValue(aAnchorExtentAttributes));
+        // anchor docpr sprm
+        RTFSprms_t aAnchorDocprAttributes;
+        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name)
+                aAnchorDocprAttributes.push_back(make_pair(i->first, i->second));
+        RTFValue::Pointer_t pAnchorDocprValue(new RTFValue(aAnchorDocprAttributes));
         RTFSprms_t aAnchorAttributes;
         RTFSprms_t aAnchorSprms;
         aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_extent, pAnchorExtentValue));
+        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_docPr, pAnchorDocprValue));
         aAnchorSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pGraphicValue));
         // anchor sprm
         RTFValue::Pointer_t pValue(new RTFValue(aAnchorAttributes, aAnchorSprms));
@@ -1524,34 +1535,37 @@ int RTFDocumentImpl::popState()
     else if (bPopShapeProperties)
         m_aStates.top().aShapeProperties = aShapeProperties;
     else if (bPicPropEnd)
-    {
-        for (std::vector<std::pair<rtl::OUString, rtl::OUString>>::iterator i = aShapeProperties.begin(); i != aShapeProperties.end(); ++i)
-        {
-            if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
-            {
-                int nValue = i->second.toInt32();
-                switch (nValue)
-                {
-                    case 75: // picture frame
-                        break;
-                    default:
-                        OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nValue);
-                        break;
-                }
-            }
-            else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(i->second));
-                m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
-            }
-            else
-                OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
-                        OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
-                        OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
-        }
-    }
+        resolveShapeProperties(aShapeProperties);
 
     return 0;
+}
+
+void RTFDocumentImpl::resolveShapeProperties(std::vector<std::pair<rtl::OUString, rtl::OUString>>& rShapeProperties)
+{
+    for (std::vector<std::pair<rtl::OUString, rtl::OUString>>::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
+    {
+        if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
+        {
+            int nValue = i->second.toInt32();
+            switch (nValue)
+            {
+                case 75: // picture frame
+                    break;
+                default:
+                    OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nValue);
+                    break;
+            }
+        }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(i->second));
+            m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
+        }
+        else
+            OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
+                    OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
+                    OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
+    }
 }
 
 int RTFDocumentImpl::asHex(char ch)
