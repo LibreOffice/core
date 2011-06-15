@@ -10,7 +10,7 @@
 #include <rtftok/RTFDocument.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfreferencetable.hxx>
-#include <rtfvalue.hxx>
+#include <rtfsprm.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 class SvStream;
@@ -81,12 +81,12 @@ namespace writerfilter {
                 RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> aTableSprms;
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> aTableAttributes;
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> aCharacterSprms;
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> aCharacterAttributes;
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> aParagraphSprms;
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> aParagraphAttributes;
+                RTFSprms_t aTableSprms;
+                RTFSprms_t aTableAttributes;
+                RTFSprms_t aCharacterSprms;
+                RTFSprms_t aCharacterAttributes;
+                RTFSprms_t aParagraphSprms;
+                RTFSprms_t aParagraphAttributes;
 
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
@@ -108,7 +108,7 @@ namespace writerfilter {
                 /// Next list level index to use when parsing list table.
                 int nListLevelNum;
                 /// List level entries, which will form a list entry later.
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> aListLevelEntries;
+                RTFSprms_t aListLevelEntries;
 
                 /// Text from leveltext destination.
                 rtl::OUStringBuffer aLevelText;
@@ -135,8 +135,8 @@ namespace writerfilter {
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
                 Id getBorderTable(sal_uInt32 nIndex);
                 void skipDestination(bool bParsed);
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> mergeSprms();
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> mergeAttributes();
+                RTFSprms_t mergeSprms();
+                RTFSprms_t mergeAttributes();
                 int asHex(char ch);
             private:
                 int resolveParse();
@@ -175,7 +175,7 @@ namespace writerfilter {
                 bool m_bFirstRun;
                 bool m_bNeedPap;
                 /// The list table and list override table combined.
-                std::vector<std::pair<Id, RTFValue::Pointer_t>> m_aListTableSprms;
+                RTFSprms_t m_aListTableSprms;
 
                 oox::StorageRef m_xStorage;
                 oox::GraphicHelper* m_pGraphicHelper;

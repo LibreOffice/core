@@ -8,6 +8,8 @@
 
 namespace writerfilter {
     namespace rtftok {
+        /// A list of RTFSprm
+        typedef std::vector<std::pair<Id, RTFValue::Pointer_t>> RTFSprms_t;
         /// RTF keyword with a parameter
         class RTFSprm
             : public Sprm
@@ -22,7 +24,7 @@ namespace writerfilter {
                 virtual Kind getKind();
                 virtual std::string getName() const;
                 virtual std::string toString() const;
-                static RTFValue::Pointer_t find(std::vector<std::pair<Id, RTFValue::Pointer_t>> &rVector, Id nKeyword);
+                static RTFValue::Pointer_t find(RTFSprms_t& rVector, Id nKeyword);
             private:
                 Id m_nKeyword;
                 RTFValue::Pointer_t& m_pValue;
