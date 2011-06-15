@@ -1842,6 +1842,31 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
     return FSYS_ERR_OK;
 }
 
+ErrCode CreateEntry_Impl( const DirEntry &rPath, DirEntryKind eKind )
+{
+    // versuchen, anzulegen (ausser bei FSYS_KIND_ALL)
+    ErrCode eErr = ERRCODE_NONE;
+    if ( FSYS_KIND_FILE == eKind )
+    {
+        SvFileStream aStream( rPath.GetFull(), STREAM_STD_WRITE );
+        aStream.WriteLine( "" );
+        eErr = aStream.GetError();
+    }
+    else if ( FSYS_KIND_ALL != eKind )
+        eErr = rPath.MakeDir() ? ERRCODE_NONE : ERRCODE_IO_UNKNOWN;
+
+    // erfolgreich?
+    if ( !rPath.Exists() )
+        eErr = ERRCODE_IO_UNKNOWN; // Doch was schiefgegangen ?
+
+    // ggf. wieder l"oschen
+    if ( FSYS_KIND_NONE == eKind )
+        rPath.Kill();
+
+    // Fehlercode zur?ckliefern
+    return eErr;
+}
+
 sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
                         const String &rLongName,
                         DirEntryKind eKind,
