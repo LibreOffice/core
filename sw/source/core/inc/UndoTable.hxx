@@ -209,7 +209,7 @@ public:
 
     void SaveNewBoxes( const SwTableNode& rTblNd, const SwTableSortBoxes& rOld );
     void SaveNewBoxes( const SwTableNode& rTblNd, const SwTableSortBoxes& rOld,
-                       const SwSelBoxes& rBoxes, const SvULongs& rNodeCnts );
+                       const SwSelBoxes& rBoxes, const std::vector<sal_uLong> &rNodeCnts );
     void SaveSection( SwStartNode* pSttNd );
     void ReNewBoxes( const SwSelBoxes& rBoxes );
 

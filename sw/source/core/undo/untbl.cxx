@@ -1663,7 +1663,7 @@ const SwTableLines& lcl_FindParentLines( const SwTable& rTable,
 void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
                                     const SwTableSortBoxes& rOld,
                                     const SwSelBoxes& rBoxes,
-                                    const SvULongs& rNodeCnts )
+                                    const std::vector<sal_uLong> &rNodeCnts )
 {
     const SwTable& rTbl = rTblNd.GetTable();
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();

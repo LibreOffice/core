@@ -2145,7 +2145,7 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
     if( rTbl.ISA( SwDDETable ))
         return sal_False;
 
-    SvULongs aNdsCnts;
+    std::vector<sal_uLong> aNdsCnts;
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -2159,8 +2159,8 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
             for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
             {
                 const SwStartNode* pSttNd = rBoxes[ n ]->GetSttNd();
-                aNdsCnts.Insert( pSttNd->EndOfSectionIndex() -
-                                 pSttNd->GetIndex(), n );
+                aNdsCnts.push_back( pSttNd->EndOfSectionIndex() -
+                                    pSttNd->GetIndex() );
             }
         }
     }
