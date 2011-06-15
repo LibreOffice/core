@@ -51,7 +51,7 @@ protected:
     HelpButton      aHelpButton;
     PushButton      aInsListButton;
 public:
-    ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_Bool bInsList=sal_True );
+    ScNamePasteDlg( Window * pParent, const ScRangeName* pList, const ScRangeName* pLocalList, bool bInsList=true );
 
     String          GetSelectedName() const;
 };

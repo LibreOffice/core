@@ -4708,20 +4708,28 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
-
     sal_Bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
-    const sal_Bool bRecord = pDoc->IsUndoEnabled();
+    const bool bRecord = pDoc->IsUndoEnabled();
     SCTAB nTab = rStartPos.Tab();
     ScDocument* pUndoDoc = NULL;
 
-    ScRangeName* pList = pDoc->GetRangeName();
+    //local names have higher priority than global names
+    ScRangeName* pLocalList = pDoc->GetRangeName(nTab);
     sal_uInt16 nValidCount = 0;
+    ScRangeName::iterator itrLocalBeg = pLocalList->begin(), itrLocalEnd = pLocalList->end();
+    for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
+    {
+        const ScRangeData& r = *itr;
+        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
+            ++nValidCount;
+    }
+    ScRangeName* pList = pDoc->GetRangeName();
     ScRangeName::iterator itrBeg = pList->begin(), itrEnd = pList->end();
     for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
         const ScRangeData& r = *itr;
-        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
+        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByName(r.GetName()))
             ++nValidCount;
     }
 
@@ -4747,10 +4755,16 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
 
             ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
             sal_uInt16 j = 0;
-            for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
+            for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
             {
                 ScRangeData& r = *itr;
                 if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
+                    ppSortArray[j++] = &r;
+            }
+            for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
+            {
+                ScRangeData& r = *itr;
+                if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByName(r.GetName()))
                     ppSortArray[j++] = &r;
             }
 #ifndef ICC

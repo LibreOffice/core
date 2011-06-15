@@ -501,7 +501,7 @@ public:
     virtual AbstractScNameCreateDlg * CreateScNameCreateDlg ( Window * pParent, sal_uInt16 nFlags, int nId ); //add for ScNameCreateDlg
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg
-                                                            int nId , sal_Bool bInsList=sal_True );
+                                                            const ScRangeName* pLocalList, int nId , bool bInsList=true );
 
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent, //add for ScPivotFilterDlg
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId );

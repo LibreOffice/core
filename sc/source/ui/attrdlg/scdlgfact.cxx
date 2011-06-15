@@ -1180,13 +1180,13 @@ AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( 
 
 
  AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList,
-                                                            int nId , sal_Bool bInsList )
+                                                            const ScRangeName* pLocalList, int nId , bool bInsList )
 {
     ScNamePasteDlg * pDlg=NULL;
     switch ( nId )
     {
         case RID_SCDLG_NAMES_PASTE :
-            pDlg = new ScNamePasteDlg( pParent, pList, bInsList );
+            pDlg = new ScNamePasteDlg( pParent, pList, pLocalList, bInsList );
             break;
         default:
             break;

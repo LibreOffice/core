@@ -43,7 +43,7 @@
 
 //==================================================================
 
-ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_Bool bInsList )
+ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, const ScRangeName* pLocalList, bool bInsList )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
     aLabelText      ( this, ScResId( FT_LABEL ) ),
     aNameList       ( this, ScResId( LB_ENTRYLIST ) ),
@@ -60,10 +60,17 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_
     aNameList.SetSelectHdl( LINK( this,ScNamePasteDlg,ListSelHdl) );
     aNameList.SetDoubleClickHdl( LINK( this,ScNamePasteDlg,ListDblClickHdl) );
 
-    ScRangeName::const_iterator itr = pList->begin(), itrEnd = pList->end();
+    ScRangeName::const_iterator itr = pLocalList->begin(), itrEnd = pLocalList->end();
     for (; itr != itrEnd; ++itr)
     {
         if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
+            aNameList.InsertEntry(itr->GetName());
+    }
+
+    itr = pList->begin(), itrEnd = pList->end();
+    for (; itr != itrEnd; ++itr)
+    {
+        if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED) && !pLocalList->findByName(itr->GetName()))
             aNameList.InsertEntry(itr->GetName());
     }
 
