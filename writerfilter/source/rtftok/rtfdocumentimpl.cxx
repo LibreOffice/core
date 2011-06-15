@@ -215,7 +215,7 @@ int RTFDocumentImpl::resolvePict(char ch)
     // inline extent sprm
     RTFSprms_t aInlineExtentAttributes;
     for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-        if (i->first == NS_ooxml::LN_CT_PositiveSize2D_cx || i->first == NS_ooxml::LN_CT_PositiveSize2D_cy)
+        if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
             aInlineExtentAttributes.push_back(make_pair(i->first, i->second));
     RTFValue::Pointer_t pInlineExtentValue(new RTFValue(aInlineExtentAttributes));
     // graphic sprm
@@ -764,8 +764,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     // Trivial character attributes.
     switch (nKeyword)
     {
-        case RTF_PICW: nSprm = NS_ooxml::LN_CT_PositiveSize2D_cx; nParam = m_pGraphicHelper->convertScreenPixelYToHmm(nParam); break;
-        case RTF_PICH: nSprm = NS_ooxml::LN_CT_PositiveSize2D_cy; nParam = m_pGraphicHelper->convertScreenPixelYToHmm(nParam); break;
+        case RTF_PICW: nSprm = NS_rtf::LN_XEXT; if (m_aStates.top().nPictureScaleX) nParam = m_aStates.top().nPictureScaleX * nParam; break;
+        case RTF_PICH: nSprm = NS_rtf::LN_YEXT; if (m_aStates.top().nPictureScaleY) nParam = m_aStates.top().nPictureScaleY * nParam; break;
         default: break;
     }
     if (nSprm > 0)
@@ -1031,6 +1031,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LEVELFOLLOW:
         case RTF_LISTOVERRIDECOUNT:
             // Ignore these for now, the exporter always emits them with a zero parameter.
+            break;
+        case RTF_PICSCALEX:
+            m_aStates.top().nPictureScaleX = 0.01 * nParam;
+            break;
+        case RTF_PICSCALEY:
+            m_aStates.top().nPictureScaleY = 0.01 * nParam;
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -1569,7 +1575,9 @@ RTFParserState::RTFParserState()
     nListLevelNum(0),
     aListLevelEntries(),
     aLevelText(),
-    aLevelNumbers()
+    aLevelNumbers(),
+    nPictureScaleX(0),
+    nPictureScaleY(0)
 {
 }
 

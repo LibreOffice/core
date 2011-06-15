@@ -115,6 +115,9 @@ namespace writerfilter {
 
                 /// List of character positions in leveltext to replace.
                 std::vector<sal_Int32> aLevelNumbers;
+
+                float nPictureScaleX;
+                float nPictureScaleY;
         };
 
         /// Implementation of the RTFDocument interface.
