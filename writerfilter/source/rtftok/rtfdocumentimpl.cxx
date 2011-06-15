@@ -198,20 +198,24 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
 
     // Send it to the dmapper.
+    RTFSprms_t aSprms;
+    RTFSprms_t aAttributes;
     // shape attribute
     RTFSprms_t aPicAttributes;
-    RTFValue::Pointer_t pPicValue(new RTFValue(xShape));
-    aPicAttributes.push_back(make_pair(NS_ooxml::LN_shape, pPicValue));
+    RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
+    aPicAttributes.push_back(make_pair(NS_ooxml::LN_shape, pShapeValue));
     // pic sprm
     RTFSprms_t aGraphicDataAttributes;
     RTFSprms_t aGraphicDataSprms;
-    RTFValue::Pointer_t pGraphicDataValue(new RTFValue(aPicAttributes));
-    aGraphicDataSprms.push_back(make_pair(NS_ooxml::LN_pic_pic, pGraphicDataValue));
+    RTFValue::Pointer_t pPicValue(new RTFValue(aPicAttributes));
+    aGraphicDataSprms.push_back(make_pair(NS_ooxml::LN_pic_pic, pPicValue));
     // graphicData sprm
     RTFSprms_t aGraphicAttributes;
     RTFSprms_t aGraphicSprms;
-    RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicDataAttributes, aGraphicDataSprms));
-    aGraphicSprms.push_back(make_pair(NS_ooxml::LN_CT_GraphicalObject_graphicData, pGraphicValue));
+    RTFValue::Pointer_t pGraphicDataValue(new RTFValue(aGraphicDataAttributes, aGraphicDataSprms));
+    aGraphicSprms.push_back(make_pair(NS_ooxml::LN_CT_GraphicalObject_graphicData, pGraphicDataValue));
+    // graphic sprm
+    RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
     if (bInline)
     {
         // inline extent sprm
@@ -226,36 +230,27 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
             if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name)
                 aInlineDocprAttributes.push_back(make_pair(i->first, i->second));
         RTFValue::Pointer_t pInlineDocprValue(new RTFValue(aInlineDocprAttributes));
-        // graphic sprm
         RTFSprms_t aInlineAttributes;
         RTFSprms_t aInlineSprms;
-        RTFValue::Pointer_t pInlineValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
         aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_extent, pInlineExtentValue));
         aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_docPr, pInlineDocprValue));
-        aInlineSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pInlineValue));
+        aInlineSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pGraphicValue));
         // inline sprm
-        RTFSprms_t aSprms;
         RTFValue::Pointer_t pValue(new RTFValue(aInlineAttributes, aInlineSprms));
         aSprms.push_back(make_pair(NS_ooxml::LN_inline_inline, pValue));
-        RTFSprms_t aAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
-        Mapper().props(pProperties);
     }
-    else
+    else // anchored
     {
         // graphic sprm
         RTFSprms_t aAnchorAttributes;
         RTFSprms_t aAnchorSprms;
-        RTFValue::Pointer_t pAnchorValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
-        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pAnchorValue));
+        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pGraphicValue));
         // anchor sprm
-        RTFSprms_t aSprms;
         RTFValue::Pointer_t pValue(new RTFValue(aAnchorAttributes, aAnchorSprms));
         aSprms.push_back(make_pair(NS_ooxml::LN_anchor_anchor, pValue));
-        RTFSprms_t aAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
-        Mapper().props(pProperties);
     }
+    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+    Mapper().props(pProperties);
 
     return 0;
 }
