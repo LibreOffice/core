@@ -32,6 +32,8 @@ TARGET=rscmis
 
 # --- Settings ------------------------------------------------------
 
+ENABLE_EXCEPTIONS=true
+
 .INCLUDE :  settings.mk
 
 # --- Files ---------------------------------------------------------

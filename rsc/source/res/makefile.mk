@@ -32,6 +32,8 @@ TARGET=rscres
 
 # --- Settings ------------------------------------------------------
 
+ENABLE_EXCEPTIONS=true
+
 .INCLUDE :  settings.mk
 
 OBJFILES=               $(OBJ)$/rscclobj.obj                         \
