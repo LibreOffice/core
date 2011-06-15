@@ -348,7 +348,7 @@ public:
 
     static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    static FSysPathStyle GetPathStyle( const String &rDevice );
+    static FSysPathStyle GetPathStyle();
 };
 
 // --------------

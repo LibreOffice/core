@@ -478,7 +478,7 @@ const char *TempDirImpl( char *pBuf )
 |*
 *************************************************************************/
 
-FSysPathStyle DirEntry::GetPathStyle( const String & )
+FSysPathStyle DirEntry::GetPathStyle()
 {
     return FSYS_STYLE_UNX;
 }

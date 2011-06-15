@@ -114,7 +114,7 @@ int closedir( DIR *pDir )
 |*
 *************************************************************************/
 
-FSysPathStyle DirEntry::GetPathStyle( const String & )
+FSysPathStyle DirEntry::GetPathStyle()
 {
     return FSYS_STYLE_NTFS;
 }

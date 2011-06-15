@@ -1881,7 +1881,7 @@ sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
     // Alle von MSDOS erreichbaren FSYS_STYLES muessen den
     // MSDOS Filenamenanforderungen genuegen. Sonst wird probiert,
     // ob sich eine Datei des gewuenschten Names anlegen laesst.
-    FSysPathStyle eStyle = DirEntry::GetPathStyle( rPath.GetDevice().GetName() );
+    FSysPathStyle eStyle = DirEntry::GetPathStyle();
     DirEntry aPath(rPath);
     DirEntry aName(rLongName, eStyle);
     if ( !aName.IsValid() || aName.Level() != 1 )
