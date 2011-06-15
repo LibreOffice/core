@@ -241,9 +241,15 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
     }
     else // anchored
     {
-        // graphic sprm
+        // anchor extent sprm
+        RTFSprms_t aAnchorExtentAttributes;
+        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+            if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
+                aAnchorExtentAttributes.push_back(make_pair(i->first, i->second));
+        RTFValue::Pointer_t pAnchorExtentValue(new RTFValue(aAnchorExtentAttributes));
         RTFSprms_t aAnchorAttributes;
         RTFSprms_t aAnchorSprms;
+        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_extent, pAnchorExtentValue));
         aAnchorSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pGraphicValue));
         // anchor sprm
         RTFValue::Pointer_t pValue(new RTFValue(aAnchorAttributes, aAnchorSprms));
