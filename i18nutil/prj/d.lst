@@ -10,4 +10,5 @@ mkdir: %_DEST%\inc\i18nutil
 ..\%__SRC%\bin\i18nutil*.dll %_DEST%\bin\i18nutil*.dll
 ..\%__SRC%\lib\libi18nutil*.so %_DEST%\lib\libi18nutil*.so
 ..\%__SRC%\lib\libi18nutil*.dylib %_DEST%\lib\libi18nutil*.dylib
+..\%__SRC%\lib\libi18nutil*.a %_DEST%\lib\libi18nutil*.a
 ..\%__SRC%\lib\ii18nutil.lib %_DEST%\lib\ii18nutil.lib
