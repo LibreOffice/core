@@ -156,7 +156,7 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
     }
 }
 
-int RTFDocumentImpl::resolvePict(char ch)
+int RTFDocumentImpl::resolvePict(char ch, bool bInline)
 {
     SvMemoryStream aStream;
     int b = 0, count = 2;
@@ -212,32 +212,50 @@ int RTFDocumentImpl::resolvePict(char ch)
     RTFSprms_t aGraphicSprms;
     RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicDataAttributes, aGraphicDataSprms));
     aGraphicSprms.push_back(make_pair(NS_ooxml::LN_CT_GraphicalObject_graphicData, pGraphicValue));
-    // inline extent sprm
-    RTFSprms_t aInlineExtentAttributes;
-    for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-        if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
-            aInlineExtentAttributes.push_back(make_pair(i->first, i->second));
-    RTFValue::Pointer_t pInlineExtentValue(new RTFValue(aInlineExtentAttributes));
-    // inline docpr sprm
-    RTFSprms_t aInlineDocprAttributes;
-    for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-        if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name)
-            aInlineDocprAttributes.push_back(make_pair(i->first, i->second));
-    RTFValue::Pointer_t pInlineDocprValue(new RTFValue(aInlineDocprAttributes));
-    // graphic sprm
-    RTFSprms_t aInlineAttributes;
-    RTFSprms_t aInlineSprms;
-    RTFValue::Pointer_t pInlineValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
-    aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_extent, pInlineExtentValue));
-    aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_docPr, pInlineDocprValue));
-    aInlineSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pInlineValue));
-    // inline sprm
-    RTFSprms_t aSprms;
-    RTFValue::Pointer_t pValue(new RTFValue(aInlineAttributes, aInlineSprms));
-    aSprms.push_back(make_pair(NS_ooxml::LN_inline_inline, pValue));
-    RTFSprms_t aAttributes;
-    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
-    Mapper().props(pProperties);
+    if (bInline)
+    {
+        // inline extent sprm
+        RTFSprms_t aInlineExtentAttributes;
+        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+            if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
+                aInlineExtentAttributes.push_back(make_pair(i->first, i->second));
+        RTFValue::Pointer_t pInlineExtentValue(new RTFValue(aInlineExtentAttributes));
+        // inline docpr sprm
+        RTFSprms_t aInlineDocprAttributes;
+        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name)
+                aInlineDocprAttributes.push_back(make_pair(i->first, i->second));
+        RTFValue::Pointer_t pInlineDocprValue(new RTFValue(aInlineDocprAttributes));
+        // graphic sprm
+        RTFSprms_t aInlineAttributes;
+        RTFSprms_t aInlineSprms;
+        RTFValue::Pointer_t pInlineValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
+        aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_extent, pInlineExtentValue));
+        aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_docPr, pInlineDocprValue));
+        aInlineSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pInlineValue));
+        // inline sprm
+        RTFSprms_t aSprms;
+        RTFValue::Pointer_t pValue(new RTFValue(aInlineAttributes, aInlineSprms));
+        aSprms.push_back(make_pair(NS_ooxml::LN_inline_inline, pValue));
+        RTFSprms_t aAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+        Mapper().props(pProperties);
+    }
+    else
+    {
+        // graphic sprm
+        RTFSprms_t aAnchorAttributes;
+        RTFSprms_t aAnchorSprms;
+        RTFValue::Pointer_t pAnchorValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
+        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pAnchorValue));
+        // anchor sprm
+        RTFSprms_t aSprms;
+        RTFValue::Pointer_t pValue(new RTFValue(aAnchorAttributes, aAnchorSprms));
+        aSprms.push_back(make_pair(NS_ooxml::LN_anchor_anchor, pValue));
+        RTFSprms_t aAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+        Mapper().props(pProperties);
+    }
 
     return 0;
 }
@@ -247,7 +265,9 @@ int RTFDocumentImpl::resolveChars(char ch)
     OStringBuffer aBuf;
 
     if (m_aStates.top().nDestinationState == DESTINATION_PICT)
-        return resolvePict(ch);
+        return resolvePict(ch, true);
+    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
+        return resolvePict(ch, false);
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
@@ -430,7 +450,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SHPPICT;
             break;
         case RTF_PICT:
-            m_aStates.top().nDestinationState = DESTINATION_PICT;
+            if (m_aStates.top().nDestinationState != DESTINATION_SHAPEPROPERTYVALUE)
+                m_aStates.top().nDestinationState = DESTINATION_PICT; // as character
+            else
+                m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYVALUEPICT; // anchored inside a shape
             break;
         case RTF_PICPROP:
             m_aStates.top().nDestinationState = DESTINATION_PICPROP;

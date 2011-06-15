@@ -49,7 +49,8 @@ namespace writerfilter {
             DESTINATION_SHAPEPROPERTYNAME,
             DESTINATION_SHAPEPROPERTYVALUE,
             DESTINATION_SHAPE,
-            DESTINATION_SHAPEINSTRUCTION
+            DESTINATION_SHAPEINSTRUCTION,
+            DESTINATION_SHAPEPROPERTYVALUEPICT
         };
 
         enum RTFErrors
@@ -161,7 +162,8 @@ namespace writerfilter {
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
 
                 int resolveChars(char ch);
-                int resolvePict(char ch);
+                /// Resolve a picture: If not inline, then anchored.
+                int resolvePict(char ch, bool bInline);
                 int pushState();
                 int popState();
                 void text(rtl::OUString& rString);
