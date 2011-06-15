@@ -134,15 +134,10 @@ inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
 
 inline const String* NameBuffer::Get ( sal_uInt16 n ) const
 {
-    const String* pObj = NULL;
+    if( n < nBase || n >= maHashes.size() )
+        return NULL;
 
-    if( n > nBase )
-    {
-        if ( n < maHashes.size() )
-         pObj = &(maHashes[n]->aString);
-    }
-
-    return pObj;
+    return &(maHashes[n]->aString);
 }
 
 
