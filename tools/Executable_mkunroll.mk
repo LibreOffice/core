@@ -50,8 +50,4 @@ $(eval $(call gb_Executable_add_exception_objects,mkunroll,\
     tools/bootstrp/mkunroll/mkunroll \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,rscdep,\
-	toolshelpers \
-))
-
 # vim: set noet sw=4 ts=4:
