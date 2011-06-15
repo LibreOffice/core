@@ -262,8 +262,8 @@ void SvGlobalName::MakeFromMemory( void * pData )
 *************************************************************************/
 sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 {
-    ByteString  aStr( rIdStr, RTL_TEXTENCODING_ASCII_US );
-    sal_Char * pStr = (sal_Char *)aStr.GetBuffer();
+    ByteString aStr( rIdStr, RTL_TEXTENCODING_ASCII_US );
+    const sal_Char * pStr = (sal_Char *)aStr.GetBuffer();
     if( rIdStr.Len() == 36
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
       && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
