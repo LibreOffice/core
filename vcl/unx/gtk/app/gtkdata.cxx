@@ -362,7 +362,7 @@ namespace
 }
 #endif
 
-GdkCursor* GtkSalDisplay::getFromXPM( const unsigned char *pBitmap,
+GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
                                       const unsigned char *pMask,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
@@ -420,7 +420,7 @@ GdkCursor* GtkSalDisplay::getFromXPM( const unsigned char *pBitmap,
 
 #define MAKE_CURSOR( vcl_name, name ) \
     case vcl_name: \
-        pCursor = getFromXPM( name##curs##_bits, name##mask##_bits, \
+        pCursor = getFromXBM( name##curs##_bits, name##mask##_bits, \
                               name##curs_width, name##curs_height, \
                               name##curs_x_hot, name##curs_y_hot ); \
         break
