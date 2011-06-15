@@ -40,6 +40,7 @@ mkdir: %_DEST%\inc\i18npool
 ..\%__SRC%\bin\i18nisol*.dll %_DEST%\bin\i18nisol*.dll
 ..\%__SRC%\lib\libi18nisolang*.so %_DEST%\lib\libi18nisolang*.so
 ..\%__SRC%\lib\libi18nisolang*.dylib %_DEST%\lib\libi18nisolang*.dylib
+..\%__SRC%\lib\libi18nisolang*.a %_DEST%\lib\libi18nisolang*.a
 
 ..\%__SRC%\lib\ii18npaper*.lib %_DEST%\lib\ii18npaper*.lib
 ..\%__SRC%\bin\i18npaper*.dll %_DEST%\bin\i18npaper*.dll
