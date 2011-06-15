@@ -226,7 +226,8 @@ static sal_uInt32 GetSvError( int nErrno )
         { EBADF,        SVSTREAM_INVALID_HANDLE },
 #if defined(RS6000) || defined(ALPHA) || defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
-    defined(__FreeBSD_kernel__) || defined (AIX) || defined(DRAGONFLY)
+    defined(__FreeBSD_kernel__) || defined (AIX) || defined(DRAGONFLY) || \
+    defined(IOS)
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else
         { EDEADLOCK,    SVSTREAM_LOCKING_VIOLATION },
