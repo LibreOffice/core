@@ -224,7 +224,7 @@ void XMLIndexTOCContext::StartElement(
                     GetImport().GetTextImport()->InsertTextContent(
                         xTextContent);
                 }
-                catch( IllegalArgumentException e )
+                catch(const IllegalArgumentException& e)
                 {
                     // illegal argument? Then we can't accept indices here!
                     Sequence<OUString> aSeq(1);

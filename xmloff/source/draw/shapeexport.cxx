@@ -300,7 +300,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                             aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
                     }
                 }
-                catch(beans::UnknownPropertyException aException)
+                catch(const beans::UnknownPropertyException&)
                 {
                     // Ignored.
                     DBG_ASSERT(false,
@@ -471,7 +471,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 uno::Reference< table::XColumnRowRange > xRange( xSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
                 GetShapeTableExport()->collectTableAutoStyles( xRange );
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
                 OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): exception caught while collection auto styles for a table!" );
             }
@@ -560,7 +560,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             }
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception&)
     {
         OSL_FAIL("XMLShapeExport::exportShape(): exception during hyperlink export");
     }
@@ -683,7 +683,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
-            catch( uno::Exception e )
+            catch(const uno::Exception& e)
             {
                 OSL_FAIL( "could not export layer name for shape!" );
             }
@@ -717,7 +717,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             if( eDisplayToken != XML_TOKEN_INVALID )
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW_EXT, XML_DISPLAY, eDisplayToken );
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
             OSL_FAIL( "XMLShapeExport::exportShape(), exception caught!" );
         }
@@ -1156,7 +1156,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             }
                         }
                     }
-                    catch( uno::Exception& )
+                    catch(const uno::Exception&)
                     {
                         OSL_FAIL( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
                     }
@@ -1260,7 +1260,7 @@ void XMLShapeExport::ExportGraphicDefaults()
                 aStEx.exportStyleFamily("graphics", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper, sal_False, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
-        catch( lang::ServiceNotRegisteredException& )
+        catch(const lang::ServiceNotRegisteredException&)
         {
         }
     }

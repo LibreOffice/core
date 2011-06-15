@@ -370,7 +370,7 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
             {
                 mxStyle->setParentStyle( sParent );
             }
-            catch( uno::Exception e )
+            catch(const uno::Exception& e)
             {
                 // according to the API definition, I would expect a
                 // container::NoSuchElementException. But it throws an

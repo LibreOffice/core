@@ -300,13 +300,10 @@ void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& )
             {
                 Reference< XShape > xPath;
                 xProps->getPropertyValue( mpImpl->msAnimPath ) >>= xPath;
-// strip        if( xPath.is() )
-// strip            mrExport.getInterfaceToIdentifierMapper()->registerReference( xShape );
-// strip            mpImpl->mxShapeExp->createShapeId( xPath );
             }
         }
     }
-    catch( Exception e )
+    catch(const Exception&)
     {
         OSL_FAIL("exception catched while collection animation information!");
     }
@@ -437,7 +434,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
             }
         }
     }
-    catch( Exception e )
+    catch(const Exception&)
     {
         OSL_FAIL("exception catched while collection animation information!");
     }

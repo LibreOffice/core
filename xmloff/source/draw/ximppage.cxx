@@ -358,9 +358,8 @@ void SdXMLGenericPageContext::EndElement()
                 }
             }
         }
-        catch( uno::Exception& e )
+        catch(const uno::Exception&)
         {
-            (void)e;
             OSL_FAIL("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
         }
     }
@@ -426,7 +425,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                 }
             }
         }
-        catch( uno::Exception )
+        catch(const uno::Exception&)
         {
             OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
         }
@@ -641,7 +640,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         Reference< XPropertySet > xSet( mxShapes, UNO_QUERY_THROW );
         xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NavigationOrder" ) ), Any( Reference< XIndexAccess >( new NavigationOrderAccess( aShapes ) ) ) );
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception&)
     {
         OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
     }

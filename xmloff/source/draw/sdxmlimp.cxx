@@ -916,7 +916,7 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
     {
         xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
     }
-    catch( com::sun::star::uno::Exception /*e*/ )
+    catch(const com::sun::star::uno::Exception&)
     {
 /* #i79978# since old documents may contain invalid view settings, this is nothing to worry the user about.
         uno::Sequence<OUString> aSeq(0);
@@ -950,9 +950,8 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
             if( xInfo->hasPropertyByName( rProperty ) )
                 xProps->setPropertyValue( rProperty, pValues->Value );
         }
-        catch( uno::Exception& e )
+        catch(const uno::Exception&)
         {
-            (void)e;
             OSL_TRACE( "#SdXMLImport::SetConfigurationSettings: Exception!" );
         }
 

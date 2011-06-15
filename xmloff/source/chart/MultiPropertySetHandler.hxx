@@ -246,7 +246,7 @@ sal_Bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Se
             for (I=aPropertyList.begin(),i=0; I!=aPropertyList.end(); I++)
                 I->second->SetValue (aValueList[i++]);
         }
-        catch (::com::sun::star::beans::UnknownPropertyException e)
+        catch (const ::com::sun::star::beans::UnknownPropertyException&)
         {
             return sal_False;
         }
@@ -272,7 +272,7 @@ sal_Bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Se
             for (I=aPropertyList.begin(),i=0; I!=aPropertyList.end(); I++)
                 I->second->SetValue (xSingleSet->getPropertyValue (rNameList[i++]));
         }
-        catch (::com::sun::star::beans::UnknownPropertyException e)
+        catch (const ::com::sun::star::beans::UnknownPropertyException&)
         {
             return sal_False;
         }

@@ -115,7 +115,7 @@ void lcl_MoveDataToCandleStickSeries(
             xSink->setData( aData );
         }
     }
-    catch( uno::Exception & )
+    catch(const uno::Exception&)
     {
         OSL_FAIL( "Exception caught while moving data to candlestick series" );
     }
@@ -173,7 +173,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch(const uno::Exception& ex)
     {
         String aStr( ex.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
@@ -370,7 +370,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 maChartTypeServiceName =  SchXMLTools::GetNewChartTypeName( aOldChartTypeName );
                 xDocProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RefreshAddInAllowed" )) , uno::makeAny( sal_False) );
             }
-            catch( uno::Exception & )
+            catch(const uno::Exception&)
             {
                 OSL_FAIL( "Exception during import SchXMLChartContext::StartElement" );
             }
@@ -709,7 +709,7 @@ void SchXMLChartContext::EndElement()
                     aAny <<= maMainTitle;
                     xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
                 }
-                catch( beans::UnknownPropertyException )
+                catch(const beans::UnknownPropertyException&)
                 {
                     OSL_FAIL( "Property String for Title not available" );
                 }
@@ -726,7 +726,7 @@ void SchXMLChartContext::EndElement()
                     aAny <<= maSubTitle;
                     xTitleProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
                 }
-                catch( beans::UnknownPropertyException )
+                catch(const beans::UnknownPropertyException&)
                 {
                     OSL_FAIL( "Property String for Title not available" );
                 }
@@ -826,7 +826,7 @@ void SchXMLChartContext::EndElement()
                 // (analogously mbColHasLabels means we have "row-descriptions")
                 lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );
             }
-            catch( uno::Exception & )
+            catch(const uno::Exception&)
             {
                 //try to fallback to internal data
                 OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
@@ -842,7 +842,7 @@ void SchXMLChartContext::EndElement()
                         {
                             lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );
                         }
-                        catch( uno::Exception & )
+                        catch(const uno::Exception&)
                         {
                             OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
                         }
@@ -994,7 +994,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
             xDSContainer->setDataSeries( aNewSeries );
         }
     }
-    catch( uno::Exception & )
+    catch(const uno::Exception&)
     {
         OSL_FAIL( "Exception while merging series for stock chart" );
     }

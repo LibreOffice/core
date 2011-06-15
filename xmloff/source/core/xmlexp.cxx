@@ -736,7 +736,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 }
             }
         }
-        catch( com::sun::star::uno::Exception& )
+        catch(const com::sun::star::uno::Exception&)
         {
         }
     }
@@ -913,7 +913,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 
         exportDoc( meClass );
     }
-    catch( uno::Exception e )
+    catch(const uno::Exception& e)
     {
         // We must catch exceptions, because according to the
         // API definition export must not throw one!
@@ -1308,7 +1308,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                     bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
-            catch( com::sun::star::uno::Exception& )
+            catch(const com::sun::star::uno::Exception&)
             {
             }
         }
@@ -1360,7 +1360,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                     mxExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( mxHandler, UNO_QUERY );
                 }
             }
-            catch( com::sun::star::uno::Exception& )
+            catch(const com::sun::star::uno::Exception&)
             {
             }
         }
@@ -1621,14 +1621,16 @@ void SvXMLExport::_ExportStyles( sal_Bool )
 
                             aGradientStyle.exportXML( rStrName, aValue );
                         }
-                        catch( container::NoSuchElementException& )
-                        {}
+                        catch(const container::NoSuchElementException&)
+                        {
+                        }
                     }
                 }
             }
         }
-        catch( lang::ServiceNotRegisteredException& )
-        {}
+        catch(const lang::ServiceNotRegisteredException&)
+        {
+        }
 
         // export (fill-)hatch-styles
         try
@@ -1652,14 +1654,15 @@ void SvXMLExport::_ExportStyles( sal_Bool )
 
                             aHatchStyle.exportXML( rStrName, aValue );
                         }
-                        catch( container::NoSuchElementException& )
+                        catch(const container::NoSuchElementException&)
                         {}
                     }
                 }
             }
         }
-        catch( lang::ServiceNotRegisteredException& )
-        {}
+        catch(const lang::ServiceNotRegisteredException&)
+        {
+        }
 
         // export (fill-)bitmap-styles
         try
@@ -1683,14 +1686,16 @@ void SvXMLExport::_ExportStyles( sal_Bool )
 
                             aImageStyle.exportXML( rStrName, aValue, *this );
                         }
-                        catch( container::NoSuchElementException& )
-                        {}
+                        catch(const container::NoSuchElementException&)
+                        {
+                        }
                     }
                 }
             }
         }
-        catch( lang::ServiceNotRegisteredException& )
-        {}
+        catch(const lang::ServiceNotRegisteredException&)
+        {
+        }
 
         // export transparency-gradient -styles
         try
@@ -1714,14 +1719,16 @@ void SvXMLExport::_ExportStyles( sal_Bool )
 
                             aTransGradientstyle.exportXML( rStrName, aValue );
                         }
-                        catch( container::NoSuchElementException& )
-                        {}
+                        catch(const container::NoSuchElementException&)
+                        {
+                        }
                     }
                 }
             }
         }
-        catch( lang::ServiceNotRegisteredException& )
-        {}
+        catch(const lang::ServiceNotRegisteredException&)
+        {
+        }
 
         // export marker-styles
         try
@@ -1745,14 +1752,16 @@ void SvXMLExport::_ExportStyles( sal_Bool )
 
                             aMarkerStyle.exportXML( rStrName, aValue );
                         }
-                        catch( container::NoSuchElementException& )
-                        {}
+                        catch(const container::NoSuchElementException&)
+                        {
+                        }
                     }
                 }
             }
         }
-        catch( lang::ServiceNotRegisteredException& )
-        {}
+        catch(const lang::ServiceNotRegisteredException&)
+        {
+        }
 
         // export dash-styles
         try
@@ -1776,14 +1785,16 @@ void SvXMLExport::_ExportStyles( sal_Bool )
 
                             aDashStyle.exportXML( rStrName, aValue );
                         }
-                        catch( container::NoSuchElementException& )
-                        {}
+                        catch(const container::NoSuchElementException&)
+                        {
+                        }
                     }
                 }
             }
         }
-        catch( lang::ServiceNotRegisteredException& )
-        {}
+        catch(const lang::ServiceNotRegisteredException&)
+        {
+        }
     }
 }
 
@@ -2226,7 +2237,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
                 sValue = aTemp.smartRel2Abs(sValue, bWasAbsolute ).GetMainURL(INetURLObject::DECODE_TO_IURI);
             }
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
         }
     }
@@ -2262,13 +2273,13 @@ void SvXMLExport::StartElement(const OUString& rName,
                 mxHandler->ignorableWhitespace( msWS );
             mxHandler->startElement( rName, GetXAttrList() );
         }
-        catch ( SAXInvalidCharacterException& e )
+        catch (const SAXInvalidCharacterException& e)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rName;
             SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, NULL );
         }
-        catch ( SAXException& e )
+        catch (const SAXException& e)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rName;
@@ -2288,13 +2299,13 @@ void SvXMLExport::Characters(const ::rtl::OUString& rChars)
         {
             mxHandler->characters(rChars);
         }
-        catch ( SAXInvalidCharacterException& e )
+        catch (const SAXInvalidCharacterException& e)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rChars;
             SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, NULL );
         }
-        catch ( SAXException& e )
+        catch (const SAXException& e)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rChars;
@@ -2336,7 +2347,7 @@ void SvXMLExport::EndElement(const OUString& rName,
                 mxHandler->ignorableWhitespace( msWS );
             mxHandler->endElement( rName );
         }
-        catch ( SAXException& e )
+        catch (const SAXException& e)
         {
             Sequence<OUString> aPars(1);
             aPars[0] = rName;
@@ -2357,7 +2368,7 @@ void SvXMLExport::IgnorableWhitespace()
         {
             mxHandler->ignorableWhitespace( msWS );
         }
-        catch ( SAXException& e )
+        catch (const SAXException& e)
         {
             Sequence<OUString> aPars(0);
             SetError( XMLERROR_SAX|XMLERROR_FLAG_ERROR|XMLERROR_FLAG_SEVERE,

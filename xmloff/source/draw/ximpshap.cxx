@@ -335,7 +335,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
             sal_Int32 nInternalId = mxGluePoints->insert( uno::makeAny( aGluePoint ) );
             GetImport().GetShapeImport()->addGluePointMapping( mxShape, nId, nInternalId );
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
             OSL_FAIL( "exception during setting of glue points!");
         }
@@ -414,7 +414,7 @@ void SdXMLShapeContext::EndElement()
             xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) ), Any( ::com::sun::star::presentation::ClickAction_DOCUMENT ) );
         }
     }
-    catch( Exception& )
+    catch(const Exception&)
     {
         OSL_FAIL("xmloff::SdXMLShapeContext::EndElement(), exception caught while setting hyperlink!");
     }
@@ -458,7 +458,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             if( !mbPrintable )
                 xSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) ), uno::Any( sal_False ) );
         }
-        catch( Exception& )
+        catch(const Exception&)
         {
             OSL_FAIL( "SdXMLShapeContext::AddShape(), exception caught!" );
         }
@@ -519,7 +519,7 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
             if( xShape.is() )
                 AddShape( xShape );
         }
-        catch( const uno::Exception& e )
+        catch(const uno::Exception& e)
         {
             uno::Sequence<rtl::OUString> aSeq( 1 );
             aSeq[0] = OUString::createFromAscii(pServiceName);
@@ -686,7 +686,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                         }
                     }
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception&)
                 {
                     OSL_FAIL( "could not find style for shape!" );
                 }
@@ -701,7 +701,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                     aAny <<= xStyle;
                     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style")), aAny);
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception&)
                 {
                     OSL_FAIL( "could not find style for shape!" );
                 }
@@ -736,7 +736,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
         } while(0);
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception&)
     {
     }
 }
@@ -757,7 +757,7 @@ void SdXMLShapeContext::SetLayer()
                 return;
             }
         }
-        catch( uno::Exception e )
+        catch(const uno::Exception&)
         {
         }
     }
@@ -786,7 +786,7 @@ void SdXMLShapeContext::SetThumbnail()
             xPropSet->setPropertyValue( sProperty, uno::makeAny( aInternalURL ) );
         }
     }
-    catch( uno::Exception e )
+    catch(const uno::Exception&)
     {
     }
 }
@@ -989,7 +989,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 {
                     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), uno::makeAny( mnRadius ) );
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception&)
                 {
                     OSL_FAIL( "exception during setting of corner radius!");
                 }
@@ -1642,7 +1642,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 {
                     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), uno::makeAny( mnRadius ) );
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception&)
                 {
                     OSL_FAIL( "exception during setting of corner radius!");
                 }
@@ -2242,7 +2242,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 {
                     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), uno::makeAny( mnRadius ) );
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception&)
                 {
                     OSL_FAIL( "exception during setting of corner radius!");
                 }
@@ -2345,7 +2345,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
                 xPropset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), Any( FillStyle_NONE ) );
                 xPropset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), Any( LineStyle_NONE ) );
             }
-            catch( Exception& )
+            catch(const Exception&)
             {
             }
 
@@ -2364,7 +2364,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
                         xPropset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
                         xPropset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL") ), aAny );
                     }
-                    catch (lang::IllegalArgumentException const &)
+                    catch (const lang::IllegalArgumentException&)
                     {
                     }
                 }
@@ -2409,7 +2409,7 @@ void SdXMLGraphicObjectShapeContext::EndElement()
                     xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL") ), aAny );
                 }
             }
-            catch (lang::IllegalArgumentException const &)
+            catch (const lang::IllegalArgumentException&)
             {
             }
         }
@@ -3542,7 +3542,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
                 }
             }
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
             OSL_FAIL( "could not set enhanced customshape geometry" );
         }
@@ -3574,7 +3574,7 @@ void SdXMLCustomShapeContext::EndElement()
                 xPropSet->setPropertyValue( sCustomShapeGeometry, aAny );
             }
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
             OSL_FAIL( "could not set enhanced customshape geometry" );
         }
@@ -3685,7 +3685,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
                 Reference< XStyle > xTableStyle( xTableFamily->getByName( msTemplateStyleName ), UNO_QUERY_THROW );
                 xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ), Any( xTableStyle ) );
             }
-            catch( Exception& )
+            catch(const Exception&)
             {
                 OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
             }
@@ -3698,7 +3698,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
                     const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
                     xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i] ) );
                 }
-                catch( Exception& )
+                catch(const Exception&)
                 {
                     OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
                 }

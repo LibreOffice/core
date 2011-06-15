@@ -1630,9 +1630,8 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
             }
         }
     }
-    catch( Exception& e )
+    catch(const Exception&)
     {
-        (void)e;
         OSL_FAIL( "SdXMLExport::ImpPrepDrawPageHeaderFooterDecls(), unexpected exception cought!" );
     }
 
@@ -1945,7 +1944,7 @@ void SdXMLExport::_ExportContent()
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
                     }
                 }
-                catch( Exception& )
+                catch(const Exception&)
                 {
                     OSL_FAIL(" no \"BookmarkURL\" property at page?" );
                 }
@@ -2236,7 +2235,7 @@ void SdXMLExport::exportPresentationSettings()
             }
         }
     }
-    catch( uno::Exception )
+    catch(const uno::Exception&)
     {
         OSL_FAIL( "uno::Exception while exporting <presentation:settings>" );
     }
@@ -2747,7 +2746,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
             }
         }
     }
-    catch( Exception& )
+    catch(const Exception&)
     {
     }
     return sNavOrder.makeStringAndClear();
@@ -2772,7 +2771,7 @@ void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDraw
             }
         }
     }
-    catch( Exception& )
+    catch(const Exception&)
     {
         OSL_FAIL("SdXMLExport::collectAnnotationAutoStyles(), exception caught during export of annotation auto styles");
     }
@@ -2839,7 +2838,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
             while( xAnnotationEnumeration->hasMoreElements() );
         }
     }
-    catch( Exception& )
+    catch(const Exception&)
     {
         OSL_FAIL("SdXMLExport::exportAnnotations(), exception caught during export of annotations");
     }
