@@ -2892,18 +2892,17 @@ sal_Bool ScCompiler::IsNamedRange( const String& rUpperName )
 {
     // IsNamedRange is called only from NextNewToken, with an upper-case string
 
-    // Try global named ranges first, then sheet local next.  BTW does this
-    // order matter?
-    bool bGlobal = true;
-    ScRangeName* pRangeName = pDoc->GetRangeName();
+    // try local names first
+    bool bGlobal = false;
+    ScRangeName* pRangeName = pDoc->GetRangeName(aPos.Tab());
     const ScRangeData* pData = pRangeName->findByUpperName(rUpperName);
     if (!pData)
     {
-        pRangeName = pDoc->GetRangeName(aPos.Tab());
+        pRangeName = pDoc->GetRangeName();
         if (pRangeName)
             pData = pRangeName->findByUpperName(rUpperName);
         if (pData)
-            bGlobal = false;
+            bGlobal = true;
     }
 
     if (pData)
