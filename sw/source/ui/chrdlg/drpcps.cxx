@@ -36,8 +36,6 @@
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_XUB_STRLEN
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
 #include "cmdid.h"
@@ -100,9 +98,18 @@ class SwDropCapsPict : public Control
     sal_Int32       mnLeading;
     Printer*        mpPrinter;
     sal_Bool            mbDelPrinter;
-    SvULongs        maTextWidth;
-    SvXub_StrLens   maScriptChg;
-    SvUShorts       maScriptType;
+    /// The _ScriptInfo structure holds information on where we change from one
+    /// script to another.
+    struct _ScriptInfo
+    {
+        sal_uLong  textWidth;   ///< Physical width of this segment.
+        sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
+        xub_StrLen changePos;   ///< Character position where the script changes.
+        _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, xub_StrLen position)
+            : textWidth(txtWidth), scriptType(scrptType), changePos(position) {}
+        bool operator<(_ScriptInfo other) { return changePos < other.changePos; }
+    };
+    std::vector<_ScriptInfo> maScriptChanges;
     SvxFont         maFont;
     SvxFont         maCJKFont;
     SvxFont         maCTLFont;
@@ -115,6 +122,8 @@ class SwDropCapsPict : public Control
     inline void     InitPrinter( void );
     void            _InitPrinter( void );
     void            GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, sal_uInt16 _nWhich );
+    void            GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType);
+    bool            GetNextScriptSegment(size_t &nIdx, xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType);
 public:
 
     SwDropCapsPict(Window *pParent, const ResId &rResId)
@@ -198,6 +207,41 @@ static void calcFontHeightAnyAscent( OutputDevice* _pWin, Font& _rFont, long& _n
 {
      if( mbDelPrinter )
          delete mpPrinter;
+}
+
+/// Get the details of the first script change.
+/// @param[out] start      The character position of the start of the segment.
+/// @param[out] end        The character position of the end of the segment.
+/// @param[out] scriptType The script type (Latin, Asian, Complex etc.)
+void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType)
+{
+    start = 0;
+    if( maScriptChanges.empty() )
+    {
+        end = maText.Len();
+        scriptType = I18N_SCRIPTTYPE::LATIN;
+    }
+    else
+    {
+        end = maScriptChanges[ 0 ].changePos;
+        scriptType = maScriptChanges[ 0 ].scriptType;
+    }
+}
+
+/// Get the details of the first script change.
+/// @param[in,out] nIdx       Index of the current script change.
+/// @param[out]    start      The character position of the start of the segment.
+/// @param[in,out] end        The character position of the end of the segment.
+/// @param[out]    scriptType The script type (Latin, Asian, Complex etc.)
+/// @returns True if there was a next segment, false if not.
+bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType)
+{
+    if (maScriptChanges.empty() || nIdx >= maScriptChanges.size() - 1 || end >= maText.Len())
+        return false;
+    start = maScriptChanges[nIdx++].changePos;
+    end = maScriptChanges[ nIdx ].changePos;
+    scriptType = maScriptChanges[ nIdx ].scriptType;
+    return true;
 }
 
 #define LINES  10
@@ -350,20 +394,9 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     Font        aOldFont = mpPrinter->GetFont();
     sal_uInt16      nScript;
     size_t      nIdx = 0;
-    xub_StrLen  nStart = 0;
+    xub_StrLen  nStart;
     xub_StrLen  nEnd;
-    size_t      nCnt = maScriptChg.size();
-
-    if( nCnt )
-    {
-        nEnd = maScriptChg[ nIdx ];
-        nScript = maScriptType[ nIdx ];
-    }
-    else
-    {
-        nEnd = maText.Len();
-        nScript = I18N_SCRIPTTYPE::LATIN;
-    }
+    GetFirstScriptSegment(nStart, nEnd, nScript);
     do
     {
         SvxFont&    rFnt = (nScript==I18N_SCRIPTTYPE::ASIAN) ? maCJKFont : ((nScript==I18N_SCRIPTTYPE::COMPLEX) ? maCTLFont : maFont);
@@ -371,14 +404,8 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
 
         rFnt.DrawPrev( this, mpPrinter, aPt, maText, nStart, nEnd - nStart );
 
-        aPt.X() += maTextWidth[ nIdx++ ];
-        if( nEnd < maText.Len() && nIdx < nCnt )
-        {
-            nStart = nEnd;
-            nEnd = maScriptChg[ nIdx ];
-            nScript = maScriptType[ nIdx ];
-        }
-        else
+        aPt.X() += maScriptChanges[ nIdx ].textWidth;
+        if ( !GetNextScriptSegment(nIdx, nStart, nEnd, nScript) )
             break;
     }
     while( sal_True );
@@ -391,14 +418,7 @@ void SwDropCapsPict::CheckScript( void )
         return;
 
     maScriptText = maText;
-    size_t nCnt = maScriptChg.size();
-    if( nCnt )
-    {
-        maScriptChg.clear();
-        maScriptType.Remove( 0, nCnt );
-        maTextWidth.Remove( 0, nCnt );
-        nCnt = 0;
-    }
+    maScriptChanges.clear();
     if( !xBreak.is() )
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
@@ -421,9 +441,7 @@ void SwDropCapsPict::CheckScript( void )
         do
         {
             nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
-            maScriptChg.push_back( nChg );
-            maScriptType.Insert( nScript, nCnt );
-            maTextWidth.Insert( sal_uLong(0), nCnt++ );
+            maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
 
             if( nChg < maText.Len() )
                 nScript = xBreak->getScriptType( maText, nChg );
@@ -439,19 +457,9 @@ Size SwDropCapsPict::CalcTextSize( void )
 
     sal_uInt16      nScript;
     size_t      nIdx = 0;
-    xub_StrLen  nStart = 0;
+    xub_StrLen  nStart;
     xub_StrLen  nEnd;
-    size_t      nCnt = maScriptChg.size();
-    if( nCnt )
-    {
-        nEnd = maScriptChg[ nIdx ];
-        nScript = maScriptType[ nIdx ];
-    }
-    else
-    {
-        nEnd = maText.Len();
-        nScript = I18N_SCRIPTTYPE::LATIN;
-    }
+    GetFirstScriptSegment(nStart, nEnd, nScript);
     long        nTxtWidth = 0;
     long        nCJKHeight = 0;
     long        nCTLHeight = 0;
@@ -465,8 +473,8 @@ Size SwDropCapsPict::CalcTextSize( void )
                                 ( ( nScript == I18N_SCRIPTTYPE::COMPLEX )? maCTLFont : maFont );
         sal_uLong       nWidth = rFnt.GetTxtSize( mpPrinter, maText, nStart, nEnd-nStart ).Width();
 
-        if( nIdx < maTextWidth.Count() )
-            maTextWidth[ nIdx++ ] = nWidth;
+        if( nIdx < maScriptChanges.size() )
+            maScriptChanges[ nIdx ].textWidth = nWidth;
         nTxtWidth += nWidth;
         switch(nScript)
         {
@@ -480,13 +488,7 @@ Size SwDropCapsPict::CalcTextSize( void )
                 calcFontHeightAnyAscent( this, maFont, nHeight, nAscent );
         }
 
-        if( nEnd < maText.Len() && nIdx < nCnt )
-        {
-            nStart = nEnd;
-            nEnd = maScriptChg[ nIdx ];
-            nScript = maScriptType[ nIdx ];
-        }
-        else
+        if ( !GetNextScriptSegment(nIdx, nStart, nEnd, nScript) )
             break;
     }
     while( sal_True );
