@@ -1695,8 +1695,8 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
         xPoolHelper = pSrcDoc->xPoolHelper;
 
         String aString;
-        if ( nTab1 >= static_cast<SCTAB>(maTabs.size()))
-            maTabs.resize(nTab1 + 1, NULL);
+        if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
+            maTabs.resize(nTab2 + 1, NULL);
         for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
         {
             ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
