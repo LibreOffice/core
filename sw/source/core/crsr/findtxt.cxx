@@ -33,7 +33,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
 #include <vcl/svapp.hxx>
@@ -63,12 +62,11 @@ using namespace util;
 String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
 String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
-                      xub_StrLen& rEnde, SvULongs& rArr, String& rRet,
+                      xub_StrLen& rEnde, std::vector<sal_uLong> &rArr, String& rRet,
                       bool bRemoveSoftHyphen )
 {
     rRet = rNd.GetTxt();
-    if( rArr.Count() )
-        rArr.Remove( 0, rArr.Count() );
+    rArr.clear();
 
     const SwpHints *pHts = rNd.GetpSwpHints();
 
@@ -119,7 +117,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
         else
             break;
 
-        const xub_StrLen nAkt = nStt - rArr.Count();
+        const xub_StrLen nAkt = nStt - rArr.size();
 
         if ( bNewHint )
         {
@@ -150,7 +148,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                                 ->GetFld().GetFld()->ExpandField(true).Len());
                         if ( bEmpty && nStart == nAkt )
                            {
-                            rArr.Insert( nAkt, rArr.Count() );
+                            rArr.push_back( nAkt );
                             --rEnde;
                             rRet.Erase( nAkt, 1 );
                            }
@@ -172,7 +170,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
 
         if ( bNewSoftHyphen )
         {
-              rArr.Insert( nAkt, rArr.Count() );
+              rArr.push_back( nAkt );
             --rEnde;
                rRet.Erase( nAkt, 1 );
             ++nSoftHyphen;
@@ -186,7 +184,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
         if( nTmp == rRet.Len() - 1 )
         {
             rRet.Erase( nTmp );
-            rArr.Insert( nTmp, rArr.Count() );
+            rArr.push_back( nTmp );
             --rEnde;
         }
     }
@@ -265,10 +263,6 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
      */
     sal_Bool bFirst = sal_True;
     SwCntntNode * pNode;
-    //testarea
-    //String sCleanStr;
-    //SvULongs aFltArr;
-    //const SwNode* pSttNd = &rNdIdx.GetNode();
 
     xub_StrLen nStart, nEnde, nTxtLen;
 
@@ -429,7 +423,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     const SwNode* pSttNd = &rNdIdx.GetNode();
     String sCleanStr;
-    SvULongs aFltArr;
+    std::vector<sal_uLong> aFltArr;
     LanguageType eLastLang = 0;
     // if the search string contains a soft hypen, we don't strip them from the text:
     bool bRemoveSoftHyphens = true;
@@ -501,19 +495,19 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             SetMark();
 
             // Start und Ende wieder korrigieren !!
-            if( aFltArr.Count() )
+            if( !aFltArr.empty() )
             {
                 xub_StrLen n, nNew;
                 // bei Rueckwaertssuche die Positionen temp. vertauschen
                 if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
 
                 for( n = 0, nNew = nStart;
-                    n < aFltArr.Count() && aFltArr[ n ] <= nStart;
+                    n < aFltArr.size() && aFltArr[ n ] <= nStart;
                     ++n, ++nNew )
                     ;
                 nStart = nNew;
                 for( n = 0, nNew = nEnde;
-                    n < aFltArr.Count() && aFltArr[ n ] < nEnde;
+                    n < aFltArr.size() && aFltArr[ n ] < nEnde;
                     ++n, ++nNew )
                     ;
                 nEnde = nNew;
