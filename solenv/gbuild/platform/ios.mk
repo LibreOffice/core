@@ -242,19 +242,13 @@ $(if $(filter Executable,$(1)),\
 	$$(call gb_Library_get_layer,$(2)))
 endef
 
+# Just create a dummy executable
+# It is pointless to build actual iOS executables here anyway.
+# Hmm, except for the simulator? Nah, use Xcode for that, too.
 define gb_LinkTarget__command_dynamiclink
-$(call gb_LinkTarget__comm_abbreviate_dirs,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_CXX) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(LDFLAGS) \
-		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
-		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
-		$(patsubst lib%.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
-		-o $(1))
+	((echo '#!/bin/sh' && echo 'echo Nope.') >$(1)))
 endef
 
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects
@@ -272,8 +266,8 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 define gb_LinkTarget__command
-$(call gb_Output_announce,$(2),$(true),LIB,4)
-$(if $(filter Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(call gb_Output_announce,$(2),$(true),LNK,4)
+$(if $(filter CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter Library StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
@@ -320,7 +314,6 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_get_target,$(2)) : 
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
 
 endef
@@ -354,7 +347,6 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_get_target,$(2)) :
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Executable_get_layer,$(1))
 
 endef
@@ -378,7 +370,7 @@ endef
 
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice}" \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/LibreOffice.app/Contents/MacOS/soffice}" \
 	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 
