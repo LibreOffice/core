@@ -195,7 +195,6 @@ int RTFDocumentImpl::resolvePict(char ch)
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     OSL_ASSERT(xPropertySet.is());
     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
-    xShape->setSize(awt::Size( 337, 337 )); // TODO hardwired
 
     // Send it to the dmapper.
     // shape attribute
@@ -212,10 +211,17 @@ int RTFDocumentImpl::resolvePict(char ch)
     RTFSprms_t aGraphicSprms;
     RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicDataAttributes, aGraphicDataSprms));
     aGraphicSprms.push_back(make_pair(NS_ooxml::LN_CT_GraphicalObject_graphicData, pGraphicValue));
+    // inline extent sprm
+    RTFSprms_t aInlineExtentAttributes;
+    for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+        if (i->first == NS_ooxml::LN_CT_PositiveSize2D_cx || i->first == NS_ooxml::LN_CT_PositiveSize2D_cy)
+            aInlineExtentAttributes.push_back(make_pair(i->first, i->second));
+    RTFValue::Pointer_t pInlineExtentValue(new RTFValue(aInlineExtentAttributes));
     // graphic sprm
     RTFSprms_t aInlineAttributes;
     RTFSprms_t aInlineSprms;
     RTFValue::Pointer_t pInlineValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
+    aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_extent, pInlineExtentValue));
     aInlineSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pInlineValue));
     // inline sprm
     RTFSprms_t aSprms;
@@ -750,6 +756,21 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aParagraphAttributes.push_back(make_pair(nSprm, pValue));
+        skipDestination(bParsed);
+        return 0;
+    }
+
+    // Trivial character attributes.
+    switch (nKeyword)
+    {
+        case RTF_PICW: nSprm = NS_ooxml::LN_CT_PositiveSize2D_cx; nParam = m_pGraphicHelper->convertScreenPixelYToHmm(nParam); break;
+        case RTF_PICH: nSprm = NS_ooxml::LN_CT_PositiveSize2D_cy; nParam = m_pGraphicHelper->convertScreenPixelYToHmm(nParam); break;
+        default: break;
+    }
+    if (nSprm > 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        m_aStates.top().aCharacterAttributes.push_back(make_pair(nSprm, pValue));
         skipDestination(bParsed);
         return 0;
     }
