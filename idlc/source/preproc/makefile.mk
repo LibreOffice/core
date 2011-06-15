@@ -38,11 +38,6 @@ LIBSALCPPRT=$(0)
 
 .INCLUDE :  settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 # --- Files --------------------------------------------------------
 
 OBJFILES=   \
