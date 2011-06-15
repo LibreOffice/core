@@ -40,7 +40,6 @@ $(eval $(call gb_StaticLibrary_set_cxxflags,toolshelpers,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,toolshelpers,\
-    tools/bootstrp/appdef \
     tools/bootstrp/cppdep \
     tools/bootstrp/prj \
 ))
