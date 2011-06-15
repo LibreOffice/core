@@ -1694,7 +1694,6 @@ ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
-ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 ToFile( "GIT_LINK_SRC", "@GIT_LINK_SRC@",  "e" );
 ToFile( "GIT_REPO_NAMES", "@GIT_REPO_NAMES@",  "e" );
 
