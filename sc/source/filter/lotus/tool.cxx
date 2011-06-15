@@ -533,7 +533,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
     String              aScName( rOrgName );
     ScfTools::ConvertToScDefinedName( aScName );
 
-    ENTRY aInsert( rOrgName, aScName, rCRD );
+    Entry aInsert( rOrgName, aScName, rCRD );
 
     pScTokenArray->Clear();
 
@@ -566,7 +566,7 @@ sal_Bool RangeNameBufferWK3::FindRel( const String& rRef, sal_uInt16& rIndex )
 {
     StringHashEntry     aRef( rRef );
 
-    std::vector<ENTRY>::const_iterator itr;
+    std::vector<Entry>::const_iterator itr;
     for ( itr = maEntries.begin(); itr != maEntries.end(); ++itr )
     {
         if ( aRef == itr->aStrHashEntry )
@@ -585,7 +585,7 @@ sal_Bool RangeNameBufferWK3::FindAbs( const String& rRef, sal_uInt16& rIndex )
     String              aTmp( rRef );
     StringHashEntry     aRef( aTmp.Erase( 0, 1 ) ); // ohne '$' suchen!
 
-    std::vector<ENTRY>::iterator itr;
+    std::vector<Entry>::iterator itr;
     for ( itr = maEntries.begin(); itr != maEntries.end(); ++itr )
     {
         if ( aRef == itr->aStrHashEntry )
