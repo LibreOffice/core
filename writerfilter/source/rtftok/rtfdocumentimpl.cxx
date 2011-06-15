@@ -251,6 +251,12 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
             if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
                 aAnchorExtentAttributes.push_back(make_pair(i->first, i->second));
         RTFValue::Pointer_t pAnchorExtentValue(new RTFValue(aAnchorExtentAttributes));
+        // wrap sprm
+        RTFSprms_t aAnchorWrapAttributes;
+        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+            if (i->first == NS_ooxml::LN_CT_WrapSquare_wrapText)
+                aAnchorWrapAttributes.push_back(make_pair(i->first, i->second));
+        RTFValue::Pointer_t pAnchorWrapValue(new RTFValue(aAnchorWrapAttributes));
         // anchor docpr sprm
         RTFSprms_t aAnchorDocprAttributes;
         for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
@@ -260,6 +266,8 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
         RTFSprms_t aAnchorAttributes;
         RTFSprms_t aAnchorSprms;
         aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_extent, pAnchorExtentValue));
+        if (aAnchorWrapAttributes.size())
+            aAnchorSprms.push_back(make_pair(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue));
         aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_docPr, pAnchorDocprValue));
         aAnchorSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pGraphicValue));
         // anchor sprm
@@ -1104,6 +1112,21 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_PICSCALEY:
             m_aStates.top().nPictureScaleY = 0.01 * nParam;
+            break;
+        case RTF_SHPWRK:
+            {
+                int nValue = 0;
+                switch (nParam)
+                {
+                    case 0: nValue = NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides; break;
+                    case 1: nValue = NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left; break;
+                    case 2: nValue = NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right; break;
+                    case 3: nValue = NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest; break;
+                    default: break;
+                }
+                RTFValue::Pointer_t pValue(new RTFValue(nValue));
+                m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_WrapSquare_wrapText, pValue));
+            }
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
