@@ -37,11 +37,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
 
-.IF "$(OS)" == "IOS"
-all:
-    @echo No point in build-time executables for this platform
-.ENDIF
-
 OBJFILES=   $(OBJ)$/rdbmaker.obj	\
             $(OBJ)$/rdboptions.obj	\
             $(OBJ)$/typeblop.obj	\
