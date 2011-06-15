@@ -89,7 +89,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
         bReadOnly = sal_False;
     }
-    catch( const uno::Exception& )
+    catch(const uno::Exception&)
     {
         //couldn't open the file - maybe it's readonly
     }
@@ -99,7 +99,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         {
             refStg = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READ );
         }
-        catch( const uno::Exception& )
+        catch(const uno::Exception&)
         {
             OSL_FAIL("exception while creating AutoText storage");
         }
@@ -194,7 +194,7 @@ sal_uLong SwXMLTextBlocks::Delete( sal_uInt16 n )
                 xTrans->commit();
             return 0;
         }
-        catch ( uno::Exception)
+        catch (const uno::Exception&)
         {
             return ERR_SWG_WRITE_ERROR;
         }
@@ -230,9 +230,8 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
         {
             xBlkRoot->renameElement ( aOldName, aPackageName );
         }
-        catch( const container::ElementExistException& rEx )
+        catch(const container::ElementExistException&)
         {
-            (void)rEx;
         }
     }
     uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
@@ -279,7 +278,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
         uno::Reference < embed::XStorage > rDestRoot = ((SwXMLTextBlocks&)rDestImp).xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
         rSourceRoot->copyToStorage( rDestRoot );
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         nError = ERR_SWG_WRITE_ERROR;
     }
@@ -311,7 +310,7 @@ sal_uLong SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rP
         ::rtl::OUString aMime( SotExchange::GetFormatMimeType( SOT_FORMATSTR_ID_STARWRITER_8 ) );
         xRootProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
     }
-    catch (uno::Exception&)
+    catch (const uno::Exception&)
     {
     }
     return 0;
@@ -372,7 +371,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
                 xTempStorage->copyToStorage( xRoot );
                 bOK = bTmpOK;
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
             }
 
@@ -397,7 +396,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
                 xTmpTrans->commit();
         }
     }
-    catch (uno::Exception&)
+    catch (const uno::Exception&)
     {
     }
 
@@ -465,7 +464,7 @@ sal_Bool SwXMLTextBlocks::PutMuchEntries( sal_Bool bOn )
                 bInPutMuchBlocks = sal_False;
                 bRet = sal_True;
             }
-            catch (uno::Exception&)
+            catch (const uno::Exception&)
             {
             }
         }
@@ -484,7 +483,7 @@ sal_uLong SwXMLTextBlocks::OpenFile( sal_Bool bRdOnly )
                 bRdOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
         InitBlockMode ( refStg );
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         //TODO/LATER: error handling
         nRet = 1;

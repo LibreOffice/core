@@ -77,7 +77,7 @@ namespace
             strncpy( ( char * ) seq.getArray() , sBuffer, nLen );
             xOut->writeBytes( seq );
         }
-        catch ( uno::Exception )
+        catch (const uno::Exception&)
         {
             written = -1;
         }
@@ -94,7 +94,7 @@ namespace
             uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY_THROW );
             xOut->closeOutput( );
         }
-        catch ( uno::Exception )
+        catch (const uno::Exception&)
         {
             result = -1;
         }

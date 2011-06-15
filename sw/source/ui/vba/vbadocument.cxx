@@ -126,7 +126,7 @@ SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd ) throw ( uno
             xStart = mxTextDocument->getText()->getStart();
             xEnd = mxTextDocument->getText()->getEnd();
         }
-        catch( uno::Exception )
+        catch(const uno::Exception&)
         {
             DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
         }
@@ -503,7 +503,7 @@ SwVbaDocument::getFormControls()
         // implementation detail
         xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception&)
     {
     }
     return xFormControls;

@@ -556,7 +556,8 @@ sal_Int32 SAL_CALL SwVbaFields::Update() throw (uno::RuntimeException)
         uno::Reference< util::XRefreshable > xRef( xSupp->getTextFields(), uno::UNO_QUERY_THROW );
         xRef->refresh();
         nUpdate = 0;
-    }catch( uno::Exception )
+    }
+    catch(const uno::Exception&)
     {
         nUpdate = 1;
     }
