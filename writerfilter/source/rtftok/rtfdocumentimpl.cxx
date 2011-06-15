@@ -218,11 +218,18 @@ int RTFDocumentImpl::resolvePict(char ch)
         if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
             aInlineExtentAttributes.push_back(make_pair(i->first, i->second));
     RTFValue::Pointer_t pInlineExtentValue(new RTFValue(aInlineExtentAttributes));
+    // inline docpr sprm
+    RTFSprms_t aInlineDocprAttributes;
+    for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+        if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name)
+            aInlineDocprAttributes.push_back(make_pair(i->first, i->second));
+    RTFValue::Pointer_t pInlineDocprValue(new RTFValue(aInlineDocprAttributes));
     // graphic sprm
     RTFSprms_t aInlineAttributes;
     RTFSprms_t aInlineSprms;
     RTFValue::Pointer_t pInlineValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
     aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_extent, pInlineExtentValue));
+    aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_docPr, pInlineDocprValue));
     aInlineSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pInlineValue));
     // inline sprm
     RTFSprms_t aSprms;
@@ -304,6 +311,10 @@ int RTFDocumentImpl::resolveChars(char ch)
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
         m_aStates.top().aFieldInstruction.append(aStr);
+    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
+        m_aStates.top().aShapeProperties.push_back(make_pair(aOUStr, OUString()));
+    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
+        m_aStates.top().aShapeProperties.back().second += aOUStr;
 
     return 0;
 }
@@ -420,6 +431,18 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_PICT:
             m_aStates.top().nDestinationState = DESTINATION_PICT;
+            break;
+        case RTF_PICPROP:
+            m_aStates.top().nDestinationState = DESTINATION_PICPROP;
+            break;
+        case RTF_SP:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTY;
+            break;
+        case RTF_SN:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYNAME;
+            break;
+        case RTF_SV:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYVALUE;
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -1317,6 +1340,9 @@ int RTFDocumentImpl::popState()
     bool bListLevelEnd = false;
     bool bListOverrideEntryEnd = false;
     bool bLevelTextEnd = false;
+    std::vector<std::pair<rtl::OUString, rtl::OUString>> aShapeProperties;
+    bool bPopShapeProperties = false;
+    bool bPicPropEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -1416,6 +1442,18 @@ int RTFDocumentImpl::popState()
         }
         pValue->setString(aBuf.makeStringAndClear());
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME
+            || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE
+            || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTY)
+    {
+        aShapeProperties = m_aStates.top().aShapeProperties;
+        bPopShapeProperties = true;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP)
+    {
+        aShapeProperties = m_aStates.top().aShapeProperties;
+        bPicPropEnd = true;
+    }
 
     m_aStates.pop();
 
@@ -1449,6 +1487,35 @@ int RTFDocumentImpl::popState()
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
         m_aStates.top().aTableSprms.push_back(make_pair(NS_ooxml::LN_CT_Lvl_lvlText, pValue));
+    }
+    else if (bPopShapeProperties)
+        m_aStates.top().aShapeProperties = aShapeProperties;
+    else if (bPicPropEnd)
+    {
+        for (std::vector<std::pair<rtl::OUString, rtl::OUString>>::iterator i = aShapeProperties.begin(); i != aShapeProperties.end(); ++i)
+        {
+            if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
+            {
+                int nValue = i->second.toInt32();
+                switch (nValue)
+                {
+                    case 75: // picture frame
+                        break;
+                    default:
+                        OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nValue);
+                        break;
+                }
+            }
+            else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(i->second));
+                m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
+            }
+            else
+                OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
+                        OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
+                        OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
+        }
     }
 
     return 0;
@@ -1577,7 +1644,8 @@ RTFParserState::RTFParserState()
     aLevelText(),
     aLevelNumbers(),
     nPictureScaleX(0),
-    nPictureScaleY(0)
+    nPictureScaleY(0),
+    aShapeProperties()
 {
 }
 

@@ -43,7 +43,11 @@ namespace writerfilter {
             DESTINATION_LEVELTEXT,
             DESTINATION_LEVELNUMBERS,
             DESTINATION_SHPPICT,
-            DESTINATION_PICT
+            DESTINATION_PICT,
+            DESTINATION_PICPROP,
+            DESTINATION_SHAPEPROPERTY,
+            DESTINATION_SHAPEPROPERTYNAME,
+            DESTINATION_SHAPEPROPERTYVALUE
         };
 
         enum RTFErrors
@@ -118,6 +122,7 @@ namespace writerfilter {
 
                 float nPictureScaleX;
                 float nPictureScaleY;
+                std::vector<std::pair<rtl::OUString, rtl::OUString>> aShapeProperties;
         };
 
         /// Implementation of the RTFDocument interface.
