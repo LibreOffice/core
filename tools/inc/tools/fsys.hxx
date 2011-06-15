@@ -215,9 +215,6 @@ public:
     static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
 
-    static ErrCode  QueryDiskSpace( const String &rPath,
-                                    BigInt &rFreeBytes, BigInt &rTotalBytes );
-
     static void     SetDateTime( const String& rFileName,
                                  const DateTime& rNewDateTime );
 };
@@ -521,12 +518,6 @@ public:
 };
 
 #endif // BOOTSTRP
-
-//========================================================================
-
-void FSysEnableSysErrorBox( sal_Bool bEnable );
-
-//========================================================================
 
 #if defined(DBG_UTIL)
 void FSysTest();

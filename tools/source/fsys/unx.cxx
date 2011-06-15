@@ -521,17 +521,4 @@ void FileStat::SetDateTime( const String& rFileName,
     }
 }
 
-//=========================================================================
-
-ErrCode FileStat::QueryDiskSpace( const String &, BigInt &, BigInt & )
-{
-    return ERRCODE_IO_NOTSUPPORTED;
-}
-
-//=========================================================================
-
-void FSysEnableSysErrorBox( sal_Bool )
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

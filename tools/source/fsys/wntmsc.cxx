@@ -872,42 +872,4 @@ const char* TempDirImpl( char *pBuf )
     return pBuf;
 }
 
-//=======================================================================
-
-ErrCode FileStat::QueryDiskSpace( const String &rPath,
-                                  BigInt &rFreeBytes, BigInt &rTotalBytes )
-{
-    DWORD nSectorsPerCluster;   /* address of sectors per cluster   */
-    DWORD nBytesPerSector;      /* address of bytes per sector  */
-    DWORD nFreeClusters;        /* address of number of free clusters   */
-    DWORD nClusters;            /* address of total number of clusters  */
-
-    ByteString aVol( DirEntry(rPath).ImpGetTopPtr()->GetName(), osl_getThreadTextEncoding());
-    bool bOK = GetDiskFreeSpace( aVol.GetBuffer(),
-                        &nSectorsPerCluster, &nBytesPerSector,
-                        &nFreeClusters, &nClusters );
-    if ( !bOK )
-        return Sys2SolarError_Impl( GetLastError() );
-
-    BigInt aBytesPerCluster( BigInt(nSectorsPerCluster) *
-                             BigInt(nBytesPerSector) );
-    rFreeBytes = aBytesPerCluster * BigInt(nFreeClusters);
-    rTotalBytes = aBytesPerCluster * BigInt(nClusters);
-    return 0;
-}
-
-//=========================================================================
-
-void FSysEnableSysErrorBox( sal_Bool bEnable )
-{   // Preserve other Bits!!
-    sal_uInt32 nErrorMode = SetErrorMode( bEnable ? 0 : SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX );
-    if ( bEnable )
-        nErrorMode &= ~(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
-    else
-        nErrorMode |= (SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
-    SetErrorMode( nErrorMode );
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
