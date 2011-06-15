@@ -220,7 +220,7 @@ ScVbaShapes::SelectAll() throw (uno::RuntimeException)
     // viewuno.cxx ScTabViewObj::select will throw IllegalArgumentException
     // if one of the shapes is no 'markable' e.g. a button
     // the method still works
-    catch( lang::IllegalArgumentException& )
+    catch(const lang::IllegalArgumentException&)
     {
     }
 }
@@ -463,7 +463,7 @@ ScVbaShapes::setShape_NameProperty( uno::Reference< css::drawing::XShape > xShap
     {
         xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), uno::makeAny( sName ) );
     }
-    catch( script::BasicErrorException e )
+    catch(const script::BasicErrorException&)
     {
     }
 }

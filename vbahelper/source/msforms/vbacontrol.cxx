@@ -93,7 +93,7 @@ ScVbaControl::getWindowPeer() throw (uno::RuntimeException)
         uno::Reference< awt::XControl > xControl( xControlAccess->getControl( xControlModel ), uno::UNO_QUERY );
         xWinPeer =  xControl->getPeer();
     }
-    catch( uno::Exception )
+    catch(const uno::Exception&)
     {
         throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The Control does not exsit")),
                 uno::Reference< uno::XInterface >() );
@@ -305,7 +305,7 @@ ScVbaControl::getControlSource() throw (uno::RuntimeException)
             xConvertor->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Address") ), uno::makeAny( aAddress ) );
                     xConvertor->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("XL_A1_Representation") ) ) >>= sControlSource;
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
         }
     }
@@ -345,7 +345,7 @@ ScVbaControl::getRowSource() throw (uno::RuntimeException)
             xConvertor->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Address")), uno::makeAny( aAddress ) );
             xConvertor->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("XL_A1_Representation") ) ) >>= sRowSource;
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
         }
     }
@@ -469,7 +469,7 @@ void ScVbaControl::fireEvent( script::ScriptEvent& evt )
             }
         }
     }
-    catch( uno::Exception& e )
+    catch(const uno::Exception&)
     {
     }
 }

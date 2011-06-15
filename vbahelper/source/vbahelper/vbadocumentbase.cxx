@@ -157,7 +157,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
         xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
         bUIClose = sal_True;
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception&)
     {
     }
 
@@ -172,10 +172,11 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
             // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
             // assume ownership if they object the closure by throwing a CloseVetoException
             // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
-            try{
+            try
+            {
                 xCloseable->close(sal_True);
             }
-            catch( util::CloseVetoException )
+            catch(const util::CloseVetoException&)
             {
                 //close is cancelled, nothing to do
             }
@@ -193,7 +194,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
                 {
                     xDisposable->dispose();
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception&)
                 {
                 }
             }
@@ -239,11 +240,11 @@ VbaDocumentBase::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
     {
         xModifiable->setModified( !bSave );
     }
-    catch ( lang::DisposedException& )
+    catch (const lang::DisposedException&)
     {
         // impossibility to set the modified state on disposed document should not trigger an error
     }
-    catch ( beans::PropertyVetoException& )
+    catch (const beans::PropertyVetoException&)
     {
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
@@ -289,7 +290,7 @@ VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
         mxVBProject = xServiceManager->createInstanceWithArgumentsAndContext(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBProject" ) ), aArgs, mxContext );
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception&)
     {
     }
     return uno::Any( mxVBProject );
