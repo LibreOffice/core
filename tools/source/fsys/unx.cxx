@@ -44,7 +44,7 @@ extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
 #elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
-      defined(DRAGONFLY)
+      defined(DRAGONFLY) || defined(IOS)
 struct mnttab
 {
   char *mnt_dir;
@@ -85,7 +85,7 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
-    defined(OPENBSD) || defined(DRAGONFLY)
+    defined(OPENBSD) || defined(DRAGONFLY) || defined(IOS)
 sal_Bool GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
