@@ -566,12 +566,12 @@ sal_Bool RangeNameBufferWK3::FindRel( const String& rRef, sal_uInt16& rIndex )
 {
     StringHashEntry     aRef( rRef );
 
-    std::vector<ENTRY>::const_iterator pIter;
-    for ( pIter = maEntries.begin(); pIter != maEntries.end(); ++pIter )
+    std::vector<ENTRY>::const_iterator itr;
+    for ( itr = maEntries.begin(); itr != maEntries.end(); ++itr )
     {
-        if ( aRef == pIter->aStrHashEntry )
+        if ( aRef == itr->aStrHashEntry )
         {
-            rIndex = pIter->nRelInd;
+            rIndex = itr->nRelInd;
             return true;
         }
     }
@@ -585,37 +585,37 @@ sal_Bool RangeNameBufferWK3::FindAbs( const String& rRef, sal_uInt16& rIndex )
     String              aTmp( rRef );
     StringHashEntry     aRef( aTmp.Erase( 0, 1 ) ); // ohne '$' suchen!
 
-    std::vector<ENTRY>::iterator pIter;
-    for ( pIter = maEntries.begin(); pIter != maEntries.end(); ++pIter )
+    std::vector<ENTRY>::iterator itr;
+    for ( itr = maEntries.begin(); itr != maEntries.end(); ++itr )
     {
-        if ( aRef == pIter->aStrHashEntry )
+        if ( aRef == itr->aStrHashEntry )
         {
             // eventuell neuen Range Name aufbauen
-            if( pIter->nAbsInd )
-                rIndex = pIter->nAbsInd;
+            if( itr->nAbsInd )
+                rIndex = itr->nAbsInd;
             else
             {
-                ScSingleRefData*        pRef = &pIter->aScComplexRefDataRel.Ref1;
+                ScSingleRefData*        pRef = &itr->aScComplexRefDataRel.Ref1;
                 pScTokenArray->Clear();
 
                 pRef->SetColRel( false );
                 pRef->SetRowRel( false );
                 pRef->SetTabRel( sal_True );
 
-                if( pIter->bSingleRef )
+                if( itr->bSingleRef )
                     pScTokenArray->AddSingleReference( *pRef );
                 else
                 {
-                    pRef = &pIter->aScComplexRefDataRel.Ref2;
+                    pRef = &itr->aScComplexRefDataRel.Ref2;
                     pRef->SetColRel( false );
                     pRef->SetRowRel( false );
                     pRef->SetTabRel( sal_True );
-                    pScTokenArray->AddDoubleReference( pIter->aScComplexRefDataRel );
+                    pScTokenArray->AddDoubleReference( itr->aScComplexRefDataRel );
                 }
 
-                ScRangeData*    pData = new ScRangeData( pLotusRoot->pDoc, pIter->aScAbsName, *pScTokenArray );
+                ScRangeData*    pData = new ScRangeData( pLotusRoot->pDoc, itr->aScAbsName, *pScTokenArray );
 
-                rIndex = pIter->nAbsInd = nIntCount;
+                rIndex = itr->nAbsInd = nIntCount;
                 pData->SetIndex( rIndex );
                 nIntCount++;
 
