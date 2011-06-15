@@ -830,7 +830,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
 
                         bool bError = false;
-                        // catch expception if wrong filter is selected - should not happen anymore
+                        // catch exception if wrong filter is selected - should not happen anymore
                         try
                         {
                             xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
