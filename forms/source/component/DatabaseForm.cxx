@@ -163,7 +163,7 @@ private:
             if ( m_xDocumentModify.is() )
                 _enable ? m_xDocumentModify->enableSetModified() : m_xDocumentModify->disableSetModified();
         }
-        catch( const Exception& )
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -410,7 +410,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
                 setPropertyValue( pSourceProperty->Name, xSourceProps->getPropertyValue( pSourceProperty->Name ) );
             }
         }
-        catch( const Exception& )
+        catch(const Exception&)
         {
             throw WrappedTargetException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not clone the given database form." ) ),
@@ -1173,7 +1173,7 @@ bool ODatabaseForm::hasValidParent() const
                 // the parent form is loaded and on a "virtual" row -> not valid
                 return false;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             // parent could be forwardonly?
             return false;
@@ -1261,11 +1261,10 @@ sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNot
         m_xAggregateAsRowSet->execute();
         bSuccess = sal_True;
     }
-    catch( const RowSetVetoException& eVeto )
+    catch(const RowSetVetoException&)
     {
-        (void)eVeto;
     }
-    catch(SQLException& eDb)
+    catch(const SQLException& eDb)
     {
         _rClearForNotifies.clear();
         if (m_sCurrentErrorContext.getLength())
@@ -1307,7 +1306,7 @@ sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNot
                         xUpdate->moveToInsertRow();
                 }
             }
-            catch(SQLException& eDB)
+            catch(const SQLException& eDB)
             {
                 _rClearForNotifies.clear();
                 if (m_sCurrentErrorContext.getLength())
@@ -1750,7 +1749,9 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             {
                 m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
             }
-            catch(Exception&) { }
+            catch(const Exception&)
+            {
+            }
         }
         break;
         case PROPERTY_ID_TARGET_URL:
@@ -2051,7 +2052,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                             if ( aDefault.hasValue() )
                                 xColUpdate->updateObject( aDefault );
                         }
-                        catch(Exception&)
+                        catch(const Exception&)
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
@@ -2059,7 +2060,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                 }
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
 
@@ -2419,7 +2420,7 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
             Reference< XPropertySet > xParentProperties( xParentForm, UNO_QUERY_THROW );
             xParentProperties->removePropertyChangeListener( PROPERTY_ISNEW, this );
         }
-        catch( const Exception& )
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -2441,7 +2442,7 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
             Reference< XPropertySet > xParentProperties( xParentForm, UNO_QUERY_THROW );
             xParentProperties->addPropertyChangeListener( PROPERTY_ISNEW, this );
         }
-        catch( const Exception& )
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -2871,11 +2872,11 @@ sal_Bool ODatabaseForm::implEnsureConnection()
             return xConnection.is();
         }
     }
-    catch(SQLException& eDB)
+    catch(const SQLException& eDB)
     {
         onError(eDB, FRM_RES_STRING(RID_STR_CONNECTERROR));
     }
-    catch( Exception )
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -2962,9 +2963,8 @@ void SAL_CALL ODatabaseForm::unload() throw( RuntimeException )
             if (xCloseable.is())
                 xCloseable->close();
         }
-        catch( const SQLException& e )
+        catch(const SQLException&)
         {
-            (void)e;
         }
         aGuard.reset();
     }
@@ -3020,10 +3020,9 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
         m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_REFRESHING_FORM);
         bSuccess = executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
     }
-    catch( const SQLException& e )
+    catch(const SQLException&)
     {
         OSL_FAIL("ODatabaseForm::reload_impl : shouldn't executeRowSet catch this exception?");
-        (void)e;
     }
 
     if (bSuccess)
@@ -3122,19 +3121,22 @@ bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, con
             if ( !xListener->approveRowSetChange( _rEvent ) )
                 return false;
         }
-        catch ( const DisposedException& e )
+        catch (const DisposedException& e)
         {
             if ( e.Context == xListener )
                 aIter.remove();
         }
-        catch ( const RuntimeException& ) { throw; }
-        catch ( const SQLException& )
+        catch (const RuntimeException&)
+        {
+            throw;
+        }
+        catch (const SQLException&)
         {
             if ( _bAllowSQLException )
                 throw;
             DBG_UNHANDLED_EXCEPTION();
         }
-        catch ( const Exception& )
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -3163,13 +3165,16 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) thr
                 if ( !xListener->approveCursorMove( event ) )
                     return sal_False;
             }
-            catch ( const DisposedException& e )
+            catch (const DisposedException& e)
             {
                 if ( e.Context == xListener )
                     aIter.remove();
             }
-            catch ( const RuntimeException& ) { throw; }
-            catch ( const Exception& )
+            catch (const RuntimeException&)
+            {
+                throw;
+            }
+            catch (const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -3209,13 +3214,16 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) t
                 if ( !xListener->approveRowChange( event ) )
                     return false;
             }
-            catch ( const DisposedException& e )
+            catch (const DisposedException& e)
             {
                 if ( e.Context == xListener )
                     aIter.remove();
             }
-            catch ( const RuntimeException& ) { throw; }
-            catch ( const Exception& )
+            catch (const RuntimeException&)
+            {
+                throw;
+            }
+            catch (const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -3499,12 +3507,11 @@ void SAL_CALL ODatabaseForm::insertRow() throw( SQLException, RuntimeException )
         if (query_aggregation( m_xAggregate, xUpdate))
             xUpdate->insertRow();
     }
-    catch( const RowSetVetoException& eVeto )
+    catch(const RowSetVetoException&)
     {
-        (void)eVeto;
         throw;
     }
-    catch(SQLException& eDb)
+    catch(const SQLException& eDb)
     {
         onError(eDb, FRM_RES_STRING(RID_STR_ERR_INSERTRECORD));
         throw;
@@ -3520,12 +3527,11 @@ void SAL_CALL ODatabaseForm::updateRow() throw( SQLException, RuntimeException )
         if (query_aggregation( m_xAggregate, xUpdate))
             xUpdate->updateRow();
     }
-    catch( const RowSetVetoException& eVeto )
+    catch(const RowSetVetoException&)
     {
-        (void)eVeto;
         throw;
     }
-    catch(SQLException& eDb)
+    catch(const SQLException& eDb)
     {
         onError(eDb, FRM_RES_STRING(RID_STR_ERR_UPDATERECORD));
         throw;
@@ -3541,12 +3547,11 @@ void SAL_CALL ODatabaseForm::deleteRow() throw( SQLException, RuntimeException )
         if (query_aggregation( m_xAggregate, xUpdate))
             xUpdate->deleteRow();
     }
-    catch( const RowSetVetoException& eVeto )
+    catch(const RowSetVetoException&)
     {
-        (void)eVeto;
         throw;
     }
-    catch(SQLException& eDb)
+    catch(const SQLException& eDb)
     {
         onError(eDb, FRM_RES_STRING(RID_STR_ERR_DELETERECORD));
         throw;
@@ -3562,12 +3567,11 @@ void SAL_CALL ODatabaseForm::cancelRowUpdates() throw( SQLException, RuntimeExce
         if (query_aggregation( m_xAggregate, xUpdate))
             xUpdate->cancelRowUpdates();
     }
-    catch( const RowSetVetoException& eVeto )
+    catch(const RowSetVetoException&)
     {
-        (void)eVeto;
         throw;
     }
-    catch(SQLException& eDb)
+    catch(const SQLException& eDb)
     {
         onError(eDb, FRM_RES_STRING(RID_STR_ERR_INSERTRECORD));
         throw;
@@ -3627,12 +3631,11 @@ Sequence<sal_Int32> SAL_CALL ODatabaseForm::deleteRows(const Sequence<Any>& rows
         if (query_aggregation( m_xAggregate, xDelete))
             return xDelete->deleteRows(rows);
     }
-    catch( const RowSetVetoException& eVeto )
+    catch(const RowSetVetoException&)
     {
-        (void)eVeto; // make compiler happy
         throw;
     }
-    catch(SQLException& eDb)
+    catch(const SQLException& eDb)
     {
         onError(eDb, FRM_RES_STRING(RID_STR_ERR_DELETERECORDS));
         throw;
