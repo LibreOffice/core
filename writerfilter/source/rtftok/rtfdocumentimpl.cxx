@@ -684,6 +684,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CKul, pValue));
             }
             break;
+        case RTF_NONSHPPICT:
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
