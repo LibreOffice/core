@@ -16,7 +16,7 @@ class TextFieldHandler(object):
         self.xTextFieldsSupplier = xTextDocument
 
     def refreshTextFields(self):
-        xUp = self.xTextFieldsSupplier.getTextFields()
+        xUp = self.xTextFieldsSupplier.TextFields
         xUp.refresh()
 
     def getUserFieldContent(self, xTextCursor):
@@ -37,38 +37,46 @@ class TextFieldHandler(object):
 
     def insertUserField(self, xTextCursor, FieldName, FieldTitle):
         try:
-            xField = self.xMSFDoc.createInstance("com.sun.star.text.TextField.User")
+            xField = self.xMSFDoc.createInstance(
+                "com.sun.star.text.TextField.User")
 
-            if self.xTextFieldsSupplier.getTextFieldMasters().hasByName("com.sun.star.text.FieldMaster.User." + FieldName):
+            if self.xTextFieldsSupplier.getTextFieldMasters().hasByName(
+                "com.sun.star.text.FieldMaster.User." + FieldName):
                 oMaster = self.xTextFieldsSupplier.getTextFieldMasters().getByName( \
                     "com.sun.star.text.FieldMaster.User." + FieldName)
                 oMaster.dispose()
 
             xPSet = createUserField(FieldName, FieldTitle)
             xField.attachTextFieldMaster(xPSet)
-            xTextCursor.getText().insertTextContent(xTextCursor, xField, False)
+            xTextCursor.getText().insertTextContent(
+                xTextCursor, xField, False)
         except com.sun.star.uno.Exception, exception:
             traceback.print_exc()
 
     def createUserField(self, FieldName, FieldTitle):
-        xPSet = self.xMSFDoc.createInstance("com.sun.star.text.FieldMaster.User")
+        xPSet = self.xMSFDoc.createInstance(
+            "com.sun.star.text.FieldMaster.User")
         xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, FieldName)
         xPSet.setPropertyValue("Content", FieldTitle)
         return xPSet
 
-    def __getTextFieldsByProperty(self, _PropertyName, _aPropertyValue, _TypeName):
+    def __getTextFieldsByProperty(
+            self, _PropertyName, _aPropertyValue, _TypeName):
         try:
-            xDependentVector = []
-            if self.xTextFieldsSupplier.getTextFields().hasElements():
-                xEnum = self.xTextFieldsSupplier.getTextFields().createEnumeration()
+            if self.xTextFieldsSupplier.TextFields.hasElements():
+                xEnum = \
+                    self.xTextFieldsSupplier.TextFields.createEnumeration()
+                xDependentVector = []
                 while xEnum.hasMoreElements():
                     oTextField = xEnum.nextElement()
-                    xPropertySet = oTextField.getTextFieldMaster()
-                    if xPropertySet.getPropertySetInfo().hasPropertyByName(_PropertyName):
+                    xPropertySet = oTextField.TextFieldMaster
+                    if xPropertySet.PropertySetInfo.hasPropertyByName(
+                        _PropertyName):
                         oValue = xPropertySet.getPropertyValue(_PropertyName)
                         if isinstance(oValue,unicode):
                             if _TypeName == "String":
-                                sValue = unicodedata.normalize('NFKD', oValue).encode('ascii','ignore')
+                                sValue = unicodedata.normalize(
+                                    'NFKD', oValue).encode('ascii','ignore')
                                 if sValue == _aPropertyValue:
                                     xDependentVector.append(oTextField)
                         #COMMENTED
@@ -78,9 +86,10 @@ class TextFieldHandler(object):
                                 ishortValue = AnyConverter.toShort(oValue)
                                 if ishortValue == iShortParam:
                                     xDependentVector.append(oTextField) '''
-
-            if len(xDependentVector) > 0:
-                return xDependentVector
+                if xDependentVector:
+                    return xDependentVector
+            else:
+                return None
 
         except Exception, e:
             #TODO Auto-generated catch block
@@ -90,10 +99,12 @@ class TextFieldHandler(object):
 
     def changeUserFieldContent(self, _FieldName, _FieldContent):
         try:
-            xDependentTextFields = self.__getTextFieldsByProperty(PropertyNames.PROPERTY_NAME, _FieldName, "String")
+            xDependentTextFields = self.__getTextFieldsByProperty(
+                PropertyNames.PROPERTY_NAME, _FieldName, "String")
             if xDependentTextFields != None:
                 for i in xDependentTextFields:
-                    i.getTextFieldMaster().setPropertyValue("Content", _FieldContent)
+                    i.getTextFieldMaster().setPropertyValue(
+                        "Content", _FieldContent)
                 self.refreshTextFields()
 
         except Exception, e:
@@ -101,13 +112,15 @@ class TextFieldHandler(object):
 
     def updateDocInfoFields(self):
         try:
-            xEnum = self.xTextFieldsSupplier.getTextFields().createEnumeration()
+            xEnum = self.xTextFieldsSupplier.TextFields.createEnumeration()
             while xEnum.hasMoreElements():
                 oTextField = xEnum.nextElement()
-                if oTextField.supportsService("com.sun.star.text.TextField.ExtendedUser"):
+                if oTextField.supportsService(
+                    "com.sun.star.text.TextField.ExtendedUser"):
                     oTextField.update()
 
-                if oTextField.supportsService("com.sun.star.text.TextField.User"):
+                if oTextField.supportsService(
+                    "com.sun.star.text.TextField.User"):
                     oTextField.update()
 
         except Exception, e:
@@ -115,7 +128,7 @@ class TextFieldHandler(object):
 
     def updateDateFields(self):
         try:
-            xEnum = self.xTextFieldsSupplier.getTextFields().createEnumeration()
+            xEnum = self.xTextFieldsSupplier.TextFields.createEnumeration()
             now = time.localtime(time.time())
             dt = DateTime()
             dt.Day = time.strftime("%d", now)
@@ -124,7 +137,8 @@ class TextFieldHandler(object):
             dt.Month += 1
             while xEnum.hasMoreElements():
                 oTextField = xEnum.nextElement()
-                if oTextField.supportsService("com.sun.star.text.TextField.DateTime"):
+                if oTextField.supportsService(
+                    "com.sun.star.text.TextField.DateTime"):
                     oTextField.setPropertyValue("IsFixed", False)
                     oTextField.setPropertyValue("DateTimeValue", dt)
 
@@ -133,10 +147,11 @@ class TextFieldHandler(object):
 
     def fixDateFields(self, _bSetFixed):
         try:
-            xEnum = self.xTextFieldsSupplier.getTextFields().createEnumeration()
+            xEnum = self.xTextFieldsSupplier.TextFields.createEnumeration()
             while xEnum.hasMoreElements():
                 oTextField = xEnum.nextElement()
-                if oTextField.supportsService("com.sun.star.text.TextField.DateTime"):
+                if oTextField.supportsService(
+                    "com.sun.star.text.TextField.DateTime"):
                     oTextField.setPropertyValue("IsFixed", _bSetFixed)
 
         except Exception, e:
@@ -144,7 +159,8 @@ class TextFieldHandler(object):
 
     def removeUserFieldByContent(self, _FieldContent):
         try:
-            xDependentTextFields = self.__getTextFieldsByProperty("Content", _FieldContent, "String")
+            xDependentTextFields = self.__getTextFieldsByProperty(
+                "Content", _FieldContent, "String")
             if xDependentTextFields != None:
                 i = 0
                 while i < xDependentTextFields.length:
@@ -156,11 +172,13 @@ class TextFieldHandler(object):
 
     def changeExtendedUserFieldContent(self, UserDataPart, _FieldContent):
         try:
-            xDependentTextFields = self.__getTextFieldsByProperty("UserDataType", uno.Any("short",UserDataPart), "Short")
+            xDependentTextFields = self.__getTextFieldsByProperty(
+                "UserDataType", uno.Any("short",UserDataPart), "Short")
             if xDependentTextFields != None:
                 i = 0
                 while i < xDependentTextFields.length:
-                    xDependentTextFields[i].getTextFieldMaster().setPropertyValue("Content", _FieldContent)
+                    xDependentTextFields[i].getTextFieldMaster().setPropertyValue(
+                        "Content", _FieldContent)
                     i += 1
 
             self.refreshTextFields()

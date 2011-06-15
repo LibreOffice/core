@@ -26,7 +26,7 @@ class RadioDataAware(DataAware):
 
     def getFromUI(self):
         for i in self.radioButtons:
-            if i.getState():
+            if i.State:
                 return i
 
         return -1

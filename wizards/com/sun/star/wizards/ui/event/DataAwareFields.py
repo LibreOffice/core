@@ -76,7 +76,9 @@ class DataAwareFields(object):
                 elif self.convertTo.type == uno.Any("short",0).type:
                     return uno.Any("short",b)
                 else:
-                    raise AttributeError("Cannot convert boolean value to given type (" + str(type(self.convertTo)) + ").");
+                    raise AttributeError(
+                        "Cannot convert boolean value to given type (" + \
+                        str(type(self.convertTo)) + ").")
 
             except Exception, ex:
                 traceback.print_exc()
@@ -109,7 +111,9 @@ class DataAwareFields(object):
                 elif self.convertTo.type == uno.Any("short",0).type:
                     return uno.Any("[]short",(i,))
                 else:
-                    raise AttributeError("Cannot convert int value to given type (" + str(type(self.convertTo)) + ").");
+                    raise AttributeError(
+                        "Cannot convert int value to given type (" + \
+                        str(type(self.convertTo)) + ").");
 
             except Exception, ex:
                 traceback.print_exc()
@@ -142,8 +146,9 @@ class DataAwareFields(object):
                     else:
                         return s
                 else:
-                    raise AttributeError("Cannot convert int value to given type (" \
-                        + str(type(self.convertTo)) + ")." )
+                    raise AttributeError(
+                        "Cannot convert int value to given type (" + \
+                        str(type(self.convertTo)) + ")." )
 
             except Exception, ex:
                 traceback.print_exc()

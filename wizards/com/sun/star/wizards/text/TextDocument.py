@@ -24,38 +24,46 @@ class TextDocument(object):
 
         if listener is not None:
             if FrameName is not None:
-                '''creates an instance of TextDocument and creates a named frame.
+                '''creates an instance of TextDocument
+                and creates a named frame.
                 No document is actually loaded into this frame.'''
-                self.xFrame = OfficeDocument.createNewFrame(xMSF, listener, FrameName);
+                self.xFrame = OfficeDocument.createNewFrame(
+                    xMSF, listener, FrameName)
                 return
 
             elif _sPreviewURL is not None:
-                '''creates an instance of TextDocument by loading a given URL as preview'''
+                '''creates an instance of TextDocument by
+                loading a given URL as preview'''
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
                 self.xTextDocument = self.loadAsPreview(_sPreviewURL, True)
 
             elif xArgs is not None:
-                '''creates an instance of TextDocument and creates a frame and loads a document'''
+                '''creates an instance of TextDocument
+                and creates a frame and loads a document'''
                 self.xDesktop = Desktop.getDesktop(xMSF);
-                self.xFrame = OfficeDocument.createNewFrame(xMSF, listener);
-                self.xTextDocument = OfficeDocument.load(xFrame, URL, "_self", xArgs);
+                self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
+                self.xTextDocument = OfficeDocument.load(
+                    xFrame, URL, "_self", xArgs);
                 self.xWindowPeer = xFrame.getComponentWindow()
-                self.m_xDocProps = self.xTextDocument.getDocumentProperties();
-                CharLocale = Helper.getUnoStructValue( self.xTextDocument, "CharLocale");
+                self.m_xDocProps = self.xTextDocument.DocumentProperties
+                CharLocale = Helper.getUnoStructValue(
+                    self.xTextDocument, "CharLocale");
                 return
 
             else:
-                '''creates an instance of TextDocument from the desktop's current frame'''
+                '''creates an instance of TextDocument from
+                the desktop's current frame'''
                 self.xDesktop = Desktop.getDesktop(xMSF);
                 self.xFrame = self.xDesktop.getActiveFrame()
-                self.xTextDocument = self.xFrame.getController().getModel()
+                self.xTextDocument = self.xFrame.getController().Model
 
         elif _moduleIdentifier is not None:
             try:
                 '''create the empty document, and set its module identifier'''
-                self.xTextDocument = xMSF.createInstance("com.sun.star.text.TextDocument")
+                self.xTextDocument = xMSF.createInstance(
+                    "com.sun.star.text.TextDocument")
                 self.xTextDocument.initNew()
-                self.xTextDocument.setIdentifier(_moduleIdentifier.getIdentifier())
+                self.xTextDocument.setIdentifier(_moduleIdentifier.Identifier)
                 # load the document into a blank frame
                 xDesktop = Desktop.getDesktop(xMSF)
                 loadArgs = range(1)
@@ -63,15 +71,17 @@ class TextDocument(object):
                 loadArgs[0] = -1
                 loadArgs[0] = self.xTextDocument
                 loadArgs[0] = DIRECT_VALUE
-                xDesktop.loadComponentFromURL("private:object", "_blank", 0, loadArgs)
+                xDesktop.loadComponentFromURL(
+                    "private:object", "_blank", 0, loadArgs)
                 # remember some things for later usage
-                self.xFrame = self.xTextDocument.getCurrentController().getFrame()
+                self.xFrame = self.xTextDocument.CurrentController.Frame
             except Exception, e:
                 traceback.print_exc()
 
         elif _textDocument is not None:
-            '''creates an instance of TextDocument from a given XTextDocument'''
-            self.xFrame = _textDocument.getCurrentController().getFrame()
+            '''creates an instance of TextDocument
+            from a given XTextDocument'''
+            self.xFrame = _textDocument.CurrentController.Frame
             self.xTextDocument = _textDocument
         if bShowStatusIndicator:
             self.showStatusIndicator()
@@ -80,8 +90,9 @@ class TextDocument(object):
     def init(self):
         self.xWindowPeer = self.xFrame.getComponentWindow()
         self.m_xDocProps = self.xTextDocument.getDocumentProperties()
-        self.CharLocale = Helper.getUnoStructValue(self.xTextDocument, "CharLocale")
-        self.xText = self.xTextDocument.getText()
+        self.CharLocale = Helper.getUnoStructValue(
+            self.xTextDocument, "CharLocale")
+        self.xText = self.xTextDocument.Text
 
     def showStatusIndicator(self):
         self.xProgressBar = self.xFrame.createStatusIndicator()
@@ -91,30 +102,36 @@ class TextDocument(object):
     def loadAsPreview(self, sDefaultTemplate, asTemplate):
         loadValues = range(3)
         #      open document in the Preview mode
-        loadValues[0] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        loadValues[0] = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         loadValues[0].Name = "ReadOnly"
         loadValues[0].Value = True
-        loadValues[1] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        loadValues[1] = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         loadValues[1].Name = "AsTemplate"
         if asTemplate:
             loadValues[1].Value = True
         else:
             loadValues[1].Value = False
 
-        loadValues[2] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        loadValues[2] = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         loadValues[2].Name = "Preview"
         loadValues[2].Value = True
-        #set the preview document to non-modified mode in order to avoid the 'do u want to save' box
+        '''set the preview document to non-modified
+        mode in order to avoid the 'do u want to save' box'''
         if self.xTextDocument is not None:
             try:
                 self.xTextDocument.setModified(False)
             except PropertyVetoException, e1:
                 traceback.print_exc()
-        self.xTextDocument = OfficeDocument.load(self.xFrame, sDefaultTemplate, "_self", loadValues)
+        self.xTextDocument = OfficeDocument.load(
+            self.xFrame, sDefaultTemplate, "_self", loadValues)
         self.DocSize = self.getPageSize()
         myViewHandler = ViewHandler(self.xTextDocument, self.xTextDocument)
         try:
-            myViewHandler.setViewSetting("ZoomType", uno.Any("short",ENTIRE_PAGE))
+            myViewHandler.setViewSetting(
+                "ZoomType", uno.Any("short",ENTIRE_PAGE))
         except Exception, e:
             traceback.print_exc()
         myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
@@ -131,7 +148,8 @@ class TextDocument(object):
             traceback.print_exc()
             return None
 
-    #creates an instance of TextDocument and creates a frame and loads a document
+    '''creates an instance of TextDocument and creates a
+    frame and loads a document'''
 
     def createTextCursor(self, oCursorContainer):
         xTextCursor = oCursorContainer.createTextCursor()
@@ -147,11 +165,12 @@ class TextDocument(object):
         iScale = 200
         self.xTextDocument.lockControllers()
         iScaleLen = ScaleString.length()
-        xTextCursor = createTextCursor(self.xTextDocument.getText())
+        xTextCursor = createTextCursor(self.xTextDocument.Text)
         xTextCursor.gotoStart(False)
-        com.sun.star.wizards.common.Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page")
+        com.sun.star.wizards.common.Helper.setUnoPropertyValue(
+            xTextCursor, "PageDescName", "First Page")
         xTextCursor.setString(ScaleString)
-        xViewCursor = self.xTextDocument.getCurrentController()
+        xViewCursor = self.xTextDocument.CurrentController
         xTextViewCursor = xViewCursor.getViewCursor()
         xTextViewCursor.gotoStart(False)
         iFirstPos = xTextViewCursor.getPosition().X
@@ -175,13 +194,15 @@ class TextDocument(object):
     This method sets the Author of a Wizard-generated template correctly
     and adds a explanatory sentence to the template description.
     @param WizardName The name of the Wizard.
-    @param TemplateDescription The old Description which is being appended with another sentence.
+    @param TemplateDescription The old Description which is being
+    appended with another sentence.
     @return void.
     '''
 
     def setWizardTemplateDocInfo(self, WizardName, TemplateDescription):
         try:
-            xNA = Configuration.getConfigurationRoot(self.xMSF, "/org.openoffice.UserProfile/Data", False)
+            xNA = Configuration.getConfigurationRoot(
+                self.xMSF, "/org.openoffice.UserProfile/Data", False)
             gn = xNA.getByName("givenname")
             sn = xNA.getByName("sn")
             fullname = str(gn) + " " + str(sn)
@@ -198,8 +219,10 @@ class TextDocument(object):
             xDocProps2.setModifiedBy(fullname)
             description = xDocProps2.getDescription()
             description = description + " " + TemplateDescription
-            description = JavaTools.replaceSubString(description, WizardName, "<wizard_name>")
-            description = JavaTools.replaceSubString(description, myDate, "<current_date>")
+            description = JavaTools.replaceSubString(
+                description, WizardName, "<wizard_name>")
+            description = JavaTools.replaceSubString(
+                description, myDate, "<current_date>")
             xDocProps2.setDescription(description)
         except NoSuchElementException, e:
             # TODO Auto-generated catch block
@@ -240,6 +263,7 @@ class TextDocument(object):
         return xPC.getPage()
 
     '''
-    Possible Values for "OptionString" are: "LoadCellStyles", "LoadTextStyles", "LoadFrameStyles",
+    Possible Values for "OptionString" are: "LoadCellStyles",
+    "LoadTextStyles", "LoadFrameStyles",
     "LoadPageStyles", "LoadNumberingStyles", "OverwriteStyles"
     '''

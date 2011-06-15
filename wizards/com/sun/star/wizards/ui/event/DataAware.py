@@ -139,13 +139,16 @@ class DataAware(object):
     sets the given DataObject to each DataAware object
     in the given collection
     @param dataAwares a collection of DataAware objects.
-    @param dataObject new data object to set to the DataAware objects in the given collection.
+    @param dataObject new data object to set to the DataAware
+    objects in the given collection.
     @param updateUI if true, calls updateUI() on each DataAware object.
     '''
 
     def setDataObject(self, dataObject, updateUI):
-        if dataObject != None and not (type(self._value) is not type(dataObject)):
-            raise ClassCastException ("can not cast new DataObject to original Class");
+        if dataObject != None and not (type(self._value) is not
+            type(dataObject)):
+            raise ClassCastException (
+                "can not cast new DataObject to original Class")
         self._dataObject = dataObject
         if updateUI:
             self.updateUI()
@@ -155,7 +158,8 @@ class DataAware(object):
     sets the given DataObject to each DataAware object
     in the given collection
     @param dataAwares a collection of DataAware objects.
-    @param dataObject new data object to set to the DataAware objects in the given collection.
+    @param dataObject new data object to set to the DataAware objects
+    in the given collection.
     @param updateUI if true, calls updateUI() on each DataAware object.
     '''
 
@@ -218,13 +222,15 @@ class DataAware(object):
         '''
         creates a PropertyValue for the property with
         the given name, of the given JavaBean object.
-        @param propertyName the property to access. Must be a Cup letter (e.g. PropertyNames.PROPERTY_NAME for getName() and setName("..."). )
-        @param propertyOwner the object which "own" or "contains" the property.
+        @param propertyName the property to access. Must be a Cup letter
+        (e.g. PropertyNames.PROPERTY_NAME for getName() and setName("..."). )
+        @param propertyOwner the object which "own" or "contains" the property
         '''
 
         def __init__(self, propertyName, propertyOwner):
             self.getMethod = createGetMethod(propertyName, propertyOwner)
-            self.setMethod = createSetMethod(propertyName, propertyOwner, self.getMethod.getReturnType())
+            self.setMethod = createSetMethod(
+                propertyName, propertyOwner, self.getMethod.getReturnType())
 
         '''
         called from the constructor, and creates a get method reflection object
@@ -238,15 +244,19 @@ class DataAware(object):
             m = None
             try:
                 #try to get a "get" method.
-                m = obj.getClass().getMethod("get" + propName, self.__class__.__EMPTY_ARRAY)
+                m = obj.getClass().getMethod(
+                    "get" + propName, self.__class__.__EMPTY_ARRAY)
             except NoSuchMethodException, ex1:
-                raise IllegalArgumentException ("get" + propName + "() method does not exist on " + obj.getClass().getName());
+                raise IllegalArgumentException (
+                    "get" + propName + "() method does not exist on " + \
+                    obj.Class.Name)
 
             return m
 
         def Get(self, target):
             try:
-                return self.getMethod.invoke(target, self.__class__.__EMPTY_ARRAY)
+                return self.getMethod.invoke(
+                    target, self.__class__.__EMPTY_ARRAY)
             except IllegalAccessException, ex1:
                 ex1.printStackTrace()
             except InvocationTargetException, ex2:
@@ -271,7 +281,9 @@ class DataAware(object):
             try:
                 m = obj.getClass().getMethod("set" + propName, [paramClass])
             except NoSuchMethodException, ex1:
-                raise IllegalArgumentException ("set" + propName + "(" + self.getMethod.getReturnType().getName() + ") method does not exist on " + obj.getClass().getName());
+                raise IllegalArgumentException ("set" + propName + "(" + \
+                    self.getMethod.getReturnType().getName() + \
+                    ") method does not exist on " + obj.Class.Name);
 
             return m
 
@@ -284,5 +296,6 @@ class DataAware(object):
                 ex2.printStackTrace()
 
         def isAssignable(self, type):
-            return self.getMethod.getDeclaringClass().isAssignableFrom(type) and self.setMethod.getDeclaringClass().isAssignableFrom(type)
+            return self.getMethod.getDeclaringClass().isAssignableFrom(type) \
+                and self.setMethod.getDeclaringClass().isAssignableFrom(type)
 

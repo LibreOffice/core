@@ -5,26 +5,28 @@ class TextSectionHandler(object):
     def __init__(self, xMSF, xTextDocument):
         self.xMSFDoc = xMSF
         self.xTextDocument = xTextDocument
-        self.xText = xTextDocument.getText()
+        self.xText = xTextDocument.Text
 
     def removeTextSectionbyName(self, SectionName):
         try:
-            xAllTextSections = self.xTextDocument.getTextSections()
+            xAllTextSections = self.xTextDocument.TextSections
             if xAllTextSections.hasByName(SectionName) == True:
-                oTextSection = self.xTextDocument.getTextSections().getByName(SectionName)
+                oTextSection = self.xTextDocument.TextSections.getByName(
+                    SectionName)
                 removeTextSection(oTextSection)
 
         except Exception, exception:
             traceback.print_exc()
 
     def hasTextSectionByName(self, SectionName):
-        xAllTextSections = self.xTextDocument.getTextSections()
+        xAllTextSections = self.xTextDocument.TextSections
         return xAllTextSections.hasByName(SectionName)
 
     def removeLastTextSection(self):
         try:
-            xAllTextSections = self.xTextDocument.getTextSections()
-            oTextSection = xAllTextSections.getByIndex(xAllTextSections.getCount() - 1)
+            xAllTextSections = self.xTextDocument.TextSections
+            oTextSection = xAllTextSections.getByIndex(
+                xAllTextSections.getCount() - 1)
             removeTextSection(oTextSection)
         except Exception, exception:
             traceback.print_exc()
@@ -37,13 +39,12 @@ class TextSectionHandler(object):
 
     def removeInvisibleTextSections(self):
         try:
-            xAllTextSections = self.xTextDocument.getTextSections()
+            xAllTextSections = self.xTextDocument.TextSections
             TextSectionCount = xAllTextSections.getCount()
             i = TextSectionCount - 1
             while i >= 0:
                 xTextContentTextSection = xAllTextSections.getByIndex(i)
-                bRemoveTextSection = (not AnyConverter.toBoolean(xTextContentTextSection.getPropertyValue("IsVisible")))
-                if bRemoveTextSection:
+                if not bool(xTextContentTextSection.getPropertyValue("IsVisible")):
                     self.xText.removeTextContent(xTextContentTextSection)
 
                 i -= 1
@@ -52,7 +53,7 @@ class TextSectionHandler(object):
 
     def removeAllTextSections(self):
         try:
-            TextSectionCount = self.xTextDocument.getTextSections().getCount()
+            TextSectionCount = self.xTextDocument.TextSections.getCount()
             i = TextSectionCount - 1
             while i >= 0:
                 xTextContentTextSection = xAllTextSections.getByIndex(i)
@@ -63,13 +64,15 @@ class TextSectionHandler(object):
 
     def breakLinkofTextSections(self):
         try:
-            iSectionCount = self.xTextDocument.getTextSections().getCount()
+            iSectionCount = self.xTextDocument.TextSections.getCount()
             oSectionLink = SectionFileLink.SectionFileLink()
             oSectionLink.FileURL = ""
             i = 0
             while i < iSectionCount:
                 oTextSection = xAllTextSections.getByIndex(i)
-                Helper.setUnoPropertyValues(oTextSection, ["FileLink", "LinkRegion"], [oSectionLink, ""])
+                Helper.setUnoPropertyValues(
+                    oTextSection, ["FileLink", "LinkRegion"],
+                    [oSectionLink, ""])
                 i += 1
         except Exception, exception:
             traceback.print_exc()
@@ -77,11 +80,13 @@ class TextSectionHandler(object):
     def breakLinkOfTextSection(self, oTextSection):
         oSectionLink = SectionFileLink.SectionFileLink()
         oSectionLink.FileURL = ""
-        Helper.setUnoPropertyValues(oTextSection, ["FileLink", "LinkRegion"],[oSectionLink, ""])
+        Helper.setUnoPropertyValues(
+            oTextSection, ["FileLink", "LinkRegion"],[oSectionLink, ""])
 
     def linkSectiontoTemplate(self, TemplateName, SectionName):
         try:
-            oTextSection = self.xTextDocument.getTextSections().getByName(SectionName)
+            oTextSection = self.xTextDocument.TextSections.getByName(
+                SectionName)
             linkSectiontoTemplate(oTextSection, TemplateName, SectionName)
         except Exception, e:
             traceback.print_exc()
@@ -89,7 +94,9 @@ class TextSectionHandler(object):
     def linkSectiontoTemplate(self, oTextSection, TemplateName, SectionName):
         oSectionLink = SectionFileLink.SectionFileLink()
         oSectionLink.FileURL = TemplateName
-        Helper.setUnoPropertyValues(oTextSection, ["FileLink", "LinkRegion"],[oSectionLink, SectionName])
+        Helper.setUnoPropertyValues(
+            oTextSection, ["FileLink", "LinkRegion"],
+            [oSectionLink, SectionName])
         NewSectionName = oTextSection.getName()
         if NewSectionName.compareTo(SectionName) != 0:
             oTextSection.setName(SectionName)
@@ -98,7 +105,8 @@ class TextSectionHandler(object):
         try:
             if _bAddParagraph:
                 xTextCursor = self.xText.createTextCursor()
-                self.xText.insertControlCharacter(xTextCursor, ControlCharacter.PARAGRAPH_BREAK, False)
+                self.xText.insertControlCharacter(
+                    xTextCursor, ControlCharacter.PARAGRAPH_BREAK, False)
                 xTextCursor.collapseToEnd()
 
             xSecondTextCursor = self.xText.createTextCursor()
@@ -109,11 +117,14 @@ class TextSectionHandler(object):
 
     def insertTextSection(self, sectionName, templateName, position):
         try:
-            if self.xTextDocument.getTextSections().hasByName(sectionName) == True:
-                xTextSection = self.xTextDocument.getTextSections().getByName(sectionName)
+            if self.xTextDocument.TextSections.hasByName(sectionName):
+                xTextSection = \
+                    self.xTextDocument.TextSections.getByName(sectionName)
             else:
-                xTextSection = self.xMSFDoc.createInstance("com.sun.star.text.TextSection")
-                position.getText().insertTextContent(position, xTextSection, False)
+                xTextSection = self.xMSFDoc.createInstance(
+                    "com.sun.star.text.TextSection")
+                position.getText().insertTextContent(
+                    position, xTextSection, False)
 
             linkSectiontoTemplate(xTextSection, templateName, sectionName)
         except Exception, exception:

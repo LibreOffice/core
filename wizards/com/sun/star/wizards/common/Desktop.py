@@ -57,7 +57,8 @@ class Desktop(object):
     @classmethod
     def getDispatchURL(self, xMSF, _sURL):
         try:
-            oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer")
+            oTransformer = xMSF.createInstance(
+                "com.sun.star.util.URLTransformer")
             oURL = range(1)
             oURL[0] = com.sun.star.util.URL.URL()
             oURL[0].Complete = _sURL
@@ -87,7 +88,7 @@ class Desktop(object):
     def connect(self, connectStr):
         localContext = uno.getComponentContext()
         resolver = localContext.ServiceManager.createInstanceWithContext(
-				        "com.sun.star.bridge.UnoUrlResolver", localContext )
+				        "com.sun.star.bridge.UnoUrlResolver", localContext)
         ctx = resolver.resolve( connectStr )
         orb = ctx.ServiceManager
         return orb
@@ -96,8 +97,10 @@ class Desktop(object):
     def checkforfirstSpecialCharacter(self, _xMSF, _sString, _aLocale):
         try:
             nStartFlags = ANY_LETTER_OR_NUMBER + ASC_UNDERSCORE
-            ocharservice = _xMSF.createInstance("com.sun.star.i18n.CharacterClassification")
-            aResult = ocharservice.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, "", nStartFlags, " ")
+            ocharservice = _xMSF.createInstance(
+                "com.sun.star.i18n.CharacterClassification")
+            aResult = ocharservice.parsePredefinedToken(KParseType.IDENTNAME,
+                _sString, 0, _aLocale, nStartFlags, "", nStartFlags, " ")
             return aResult.EndPos
         except UnoException, e:
             e.printStackTrace(System.out)
@@ -108,16 +111,18 @@ class Desktop(object):
         snewname = _sname
         i = 0
         while i < snewname.length():
-            i = Desktop.checkforfirstSpecialCharacter(_xMSF, snewname, _aLocale)
+            i = Desktop.checkforfirstSpecialCharacter(_xMSF, snewname,
+                _aLocale)
             if i < snewname.length():
                 sspecialchar = snewname.substring(i, i + 1)
-                snewname = JavaTools.replaceSubString(snewname, "", sspecialchar)
+                snewname = JavaTools.replaceSubString(snewname, "",
+                    sspecialchar)
 
         return snewname
 
     '''
-    Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
-    suffix to make it unique
+    Checks if the passed Element Name already exists in the  ElementContainer.
+    If yes it appends a suffix to make it unique
     @param xElementContainer
     @param sElementName
     @return a unique Name ready to be added to the container.
@@ -141,8 +146,8 @@ class Desktop(object):
         return sElementName + sIncSuffix
 
     '''
-    Checks if the passed Element Name already exists in the list If yes it appends a
-    suffix to make it unique
+    Checks if the passed Element Name already exists in the list If yes it
+    ppends a suffix to make it unique
     @param _slist
     @param _sElementName
     @param _sSuffixSeparator
@@ -171,7 +176,8 @@ class Desktop(object):
         return ""
 
     '''
-    @deprecated  use Configuration.getConfigurationRoot() with the same parameters instead
+    @deprecated  use Configuration.getConfigurationRoot() with the same
+    arameters instead
     @param xMSF
     @param KeyName
     @param bForUpdate
@@ -182,14 +188,20 @@ class Desktop(object):
     def getRegistryKeyContent(self, xMSF, KeyName, bForUpdate):
         try:
             aNodePath = range(1)
-            oConfigProvider = xMSF.createInstance("com.sun.star.configuration.ConfigurationProvider")
-            aNodePath[0] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+            oConfigProvider = xMSF.createInstance(
+                "com.sun.star.configuration.ConfigurationProvider")
+            aNodePath[0] = uno.createUnoStruct(
+                'com.sun.star.beans.PropertyValue')
             aNodePath[0].Name = "nodepath"
             aNodePath[0].Value = KeyName
             if bForUpdate:
-                return oConfigProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", aNodePath)
+                return oConfigProvider.createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationUpdateAccess",
+                    aNodePath)
             else:
-                return oConfigProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aNodePath)
+                return oConfigProvider.createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationAccess",
+                    aNodePath)
 
         except UnoException, exception:
             exception.printStackTrace(System.out)
@@ -199,10 +211,14 @@ class OfficePathRetriever:
 
     def OfficePathRetriever(self, xMSF):
         try:
-            TemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard")
-            UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "")
-            BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath, "/../wizard/bitmap")
-            WorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "")
+            TemplatePath = FileAccess.getOfficePath(xMSF,
+                "Template", "share", "/wizard")
+            UserTemplatePath = FileAccess.getOfficePath(xMSF,
+                "Template", "user", "")
+            BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath,
+                "/../wizard/bitmap")
+            WorkPath = FileAccess.getOfficePath(xMSF,
+                "Work", "", "")
         except NoValidPathException, nopathexception:
             pass
 
@@ -210,7 +226,8 @@ class OfficePathRetriever:
     def getTemplatePath(self, _xMSF):
         sTemplatePath = ""
         try:
-            sTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "share", "/wizard")
+            sTemplatePath = FileAccess.getOfficePath(_xMSF,
+                "Template", "share", "/wizard")
         except NoValidPathException, nopathexception:
             pass
         return sTemplatePath
@@ -219,7 +236,8 @@ class OfficePathRetriever:
     def getUserTemplatePath(self, _xMSF):
         sUserTemplatePath = ""
         try:
-            sUserTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "user", "")
+            sUserTemplatePath = FileAccess.getOfficePath(_xMSF,
+                "Template", "user", "")
         except NoValidPathException, nopathexception:
             pass
         return sUserTemplatePath
@@ -228,7 +246,8 @@ class OfficePathRetriever:
     def getBitmapPath(self, _xMSF):
         sBitmapPath = ""
         try:
-            sBitmapPath = FileAccess.combinePaths(_xMSF, getTemplatePath(_xMSF), "/../wizard/bitmap")
+            sBitmapPath = FileAccess.combinePaths(_xMSF,
+                getTemplatePath(_xMSF), "/../wizard/bitmap")
         except NoValidPathException, nopathexception:
             pass
 
@@ -249,7 +268,8 @@ class OfficePathRetriever:
     def createStringSubstitution(self, xMSF):
         xPathSubst = None
         try:
-            xPathSubst = xMSF.createInstance("com.sun.star.util.PathSubstitution")
+            xPathSubst = xMSF.createInstance(
+                "com.sun.star.util.PathSubstitution")
         except com.sun.star.uno.Exception, e:
             e.printStackTrace()
 

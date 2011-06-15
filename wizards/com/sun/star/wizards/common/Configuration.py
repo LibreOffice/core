@@ -5,14 +5,16 @@ import traceback
 import uno
 '''
 This class gives access to the OO configuration api.
-It contains 4 get and 4 set convenience methods for getting and settings properties
-in the configuration. <br/>
-For the get methods, two parameters must be given: name and parent, where name is the
-name of the property, parent is a HierarchyElement (::com::sun::star::configuration::HierarchyElement)<br/>
-The get and set methods support hieryrchical property names like "options/gridX". <br/>
+It contains 4 get and 4 set convenience methods for getting and settings
+properties in the configuration. <br/>
+For the get methods, two parameters must be given: name and parent, where
+name is the name of the property, parent is a HierarchyElement
+(::com::sun::star::configuration::HierarchyElement)<br/>
+The get and set methods support hieryrchical property names like
+"options/gridX". <br/>
 NOTE: not yet supported, but sometime later,
-If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from
-the root of the registry.
+If you will ommit the "parent" parameter, then the "name" parameter must be
+in hierarchy form from the root of the registry.
 '''
 
 class Configuration(object):
@@ -86,22 +88,26 @@ class Configuration(object):
 
     @classmethod
     def getConfigurationRoot(self, xmsf, sPath, updateable):
-        oConfigProvider = xmsf.createInstance("com.sun.star.configuration.ConfigurationProvider")
+        oConfigProvider = xmsf.createInstance(
+            "com.sun.star.configuration.ConfigurationProvider")
         if updateable:
             sView = "com.sun.star.configuration.ConfigurationUpdateAccess"
         else:
             sView = "com.sun.star.configuration.ConfigurationAccess"
 
-        aPathArgument = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        aPathArgument = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         aPathArgument.Name = "nodepath"
         aPathArgument.Value = sPath
-        aModeArgument = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        aModeArgument = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         if updateable:
             aModeArgument.Name = "lazywrite"
             aModeArgument.Value = False
 
 
-        return oConfigProvider.createInstanceWithArguments(sView,(aPathArgument,aModeArgument,))
+        return oConfigProvider.createInstanceWithArguments(sView,
+            (aPathArgument,aModeArgument,))
 
     @classmethod
     def getChildrenNames(self, configView):
@@ -110,7 +116,8 @@ class Configuration(object):
     @classmethod
     def getProductName(self, xMSF):
         try:
-            oProdNameAccess = self.getConfigurationRoot(xMSF, "org.openoffice.Setup/Product", False)
+            oProdNameAccess = self.getConfigurationRoot(xMSF,
+                "org.openoffice.Setup/Product", False)
             ProductName = Helper.getUnoObjectbyName(oProdNameAccess, "ooName")
             return ProductName
         except UnoException:
@@ -122,7 +129,8 @@ class Configuration(object):
         sLocale = ""
         try:
             aLocLocale = Locale.Locale()
-            oMasterKey = self.getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", False)
+            oMasterKey = self.getConfigurationRoot(xMSF,
+                "org.openoffice.Setup/L10N/", False)
             sLocale = (String)
             Helper.getUnoObjectbyName(oMasterKey, "ooLocale")
         except UnoException, exception:
@@ -144,7 +152,8 @@ class Configuration(object):
     @classmethod
     def getOfficeLinguistic(self, xMSF):
         try:
-            oMasterKey = self.getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", False)
+            oMasterKey = self.getConfigurationRoot(xMSF,
+                "org.openoffice.Setup/L10N/", False)
             sLinguistic = Helper.getUnoObjectbyName(oMasterKey, "ooLocale")
             return sLinguistic
         except UnoException, exception:
@@ -202,7 +211,8 @@ class Configuration(object):
     @classmethod
     def getNodeDisplayNames(self, _xNameAccessNode):
         snames = None
-        return getNodeChildNames(_xNameAccessNode, PropertyNames.PROPERTY_NAME)
+        return getNodeChildNames(_xNameAccessNode,
+            PropertyNames.PROPERTY_NAME)
 
     @classmethod
     def getNodeChildNames(self, xNameAccessNode, _schildname):
@@ -212,10 +222,12 @@ class Configuration(object):
             sdisplaynames = range(snames.length)
             i = 0
             while i < snames.length:
-                oContent = Helper.getUnoPropertyValue(xNameAccessNode.getByName(snames[i]), _schildname)
+                oContent = Helper.getUnoPropertyValue(
+                    xNameAccessNode.getByName(snames[i]), _schildname)
                 if not AnyConverter.isVoid(oContent):
                     sdisplaynames[i] = (String)
-                    Helper.getUnoPropertyValue(xNameAccessNode.getByName(snames[i]), _schildname)
+                    Helper.getUnoPropertyValue(xNameAccessNode.getByName(
+                        snames[i]), _schildname)
                 else:
                     sdisplaynames[i] = snames[i]
 
@@ -249,17 +261,21 @@ class Configuration(object):
     @classmethod
     def getChildNodebyDisplayName(self, _xNameAccessNode, _displayname):
         snames = None
-        return getChildNodebyDisplayName(_xNameAccessNode, _displayname, PropertyNames.PROPERTY_NAME)
+        return getChildNodebyDisplayName(_xNameAccessNode, _displayname,
+            PropertyNames.PROPERTY_NAME)
 
     @classmethod
-    def getChildNodebyDisplayName(self, _xNameAccessNode, _displayname, _nodename):
+    def getChildNodebyDisplayName(self, _xNameAccessNode, _displayname,
+        _nodename):
+
         snames = None
         try:
             snames = _xNameAccessNode.getElementNames()
             sdisplaynames = range(snames.length)
             i = 0
             while i < snames.length:
-                curdisplayname = Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename)
+                curdisplayname = Helper.getUnoPropertyValue(
+                    _xNameAccessNode.getByName(snames[i]), _nodename)
                 if curdisplayname.equals(_displayname):
                     return _xNameAccessNode.getByName(snames[i])
 
@@ -270,18 +286,24 @@ class Configuration(object):
         return None
 
     @classmethod
-    def getChildNodebyDisplayName(self, _xMSF, _aLocale, _xNameAccessNode, _displayname, _nodename, _nmaxcharcount):
+    def getChildNodebyDisplayName(self, _xMSF, _aLocale, _xNameAccessNode,
+        _displayname, _nodename, _nmaxcharcount):
+
         snames = None
         try:
             snames = _xNameAccessNode.getElementNames()
             sdisplaynames = range(snames.length)
             i = 0
             while i < snames.length:
-                curdisplayname = Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename)
-                if (_nmaxcharcount > 0) and (_nmaxcharcount < curdisplayname.length()):
-                    curdisplayname = curdisplayname.substring(0, _nmaxcharcount)
+                curdisplayname = Helper.getUnoPropertyValue(
+                    _xNameAccessNode.getByName(snames[i]), _nodename)
+                if (_nmaxcharcount > 0) and (_nmaxcharcount < \
+                        curdisplayname.length()):
+                    curdisplayname = curdisplayname.substring(0,
+                        _nmaxcharcount)
 
-                curdisplayname = Desktop.removeSpecialCharacters(_xMSF, _aLocale, curdisplayname)
+                curdisplayname = Desktop.removeSpecialCharacters(_xMSF,
+                    _aLocale, curdisplayname)
                 if curdisplayname.equals(_displayname):
                     return _xNameAccessNode.getByName(snames[i])
 

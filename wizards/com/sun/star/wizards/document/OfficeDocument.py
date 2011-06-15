@@ -13,7 +13,8 @@ com_sun_star_awt_WindowAttribute_SIZEABLE \
 com_sun_star_awt_WindowAttribute_MOVEABLE \
     = uno.getConstantByName( "com.sun.star.awt.WindowAttribute.MOVEABLE" )
 com_sun_star_awt_VclWindowPeerAttribute_CLIPCHILDREN \
-    = uno.getConstantByName( "com.sun.star.awt.VclWindowPeerAttribute.CLIPCHILDREN" )
+    = uno.getConstantByName(
+        "com.sun.star.awt.VclWindowPeerAttribute.CLIPCHILDREN" )
 
 class OfficeDocument(object):
     '''Creates a new instance of OfficeDocument '''
@@ -25,22 +26,25 @@ class OfficeDocument(object):
     def attachEventCall(self, xComponent, EventName, EventType, EventURL):
         try:
             oEventProperties = range(2)
-            oEventProperties[0] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+            oEventProperties[0] = uno.createUnoStruct(
+                'com.sun.star.beans.PropertyValue')
             oEventProperties[0].Name = "EventType"
             oEventProperties[0].Value = EventType
             # "Service", "StarBasic"
-            oEventProperties[1] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+            oEventProperties[1] = uno.createUnoStruct(
+                'com.sun.star.beans.PropertyValue')
             oEventProperties[1].Name = "Script" #"URL";
             oEventProperties[1].Value = EventURL
-            uno.invoke(xComponent.getEvents(), "replaceByName", (EventName, uno.Any( \
-                "[]com.sun.star.beans.PropertyValue", tuple(oEventProperties))))
+            uno.invoke(xComponent.Events, "replaceByName",
+                (EventName, uno.Any("[]com.sun.star.beans.PropertyValue",
+                    tuple(oEventProperties))))
         except Exception, exception:
             traceback.print_exc()
 
     def dispose(self, xMSF, xComponent):
         try:
             if xComponent != None:
-                xFrame = xComponent.getCurrentController().getFrame()
+                xFrame = xComponent.CurrentController.Frame
                 if xComponent.isModified():
                     xComponent.setModified(False)
 
@@ -54,19 +58,22 @@ class OfficeDocument(object):
     @param desktop
     @param frame
     @param sDocumentType e.g. swriter, scalc, ( simpress, scalc : not tested)
-    @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
+    @return the document Component
+    (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
     '''
 
     def createNewDocument(self, frame, sDocumentType, preview, readonly):
         loadValues = range(2)
-        loadValues[0] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        loadValues[0] = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         loadValues[0].Name = "ReadOnly"
         if readonly:
             loadValues[0].Value = True
         else:
             loadValues[0].Value = False
 
-        loadValues[1] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        loadValues[1] = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         loadValues[1].Name = "Preview"
         if preview:
             loadValues[1].Value = True
@@ -75,8 +82,8 @@ class OfficeDocument(object):
 
         sURL = "private:factory/" + sDocumentType
         try:
-
-            xComponent = frame.loadComponentFromURL(sURL, "_self", 0, loadValues)
+            xComponent = frame.loadComponentFromURL(
+                sURL, "_self", 0, loadValues)
 
         except Exception, exception:
             traceback.print_exc()
@@ -157,7 +164,8 @@ class OfficeDocument(object):
     def load(self, xInterface, sURL, sFrame, xValues):
         xComponent = None
         try:
-            xComponent = xInterface.loadComponentFromURL(sURL, sFrame, 0, tuple(xValues))
+            xComponent = xInterface.loadComponentFromURL(
+                sURL, sFrame, 0, tuple(xValues))
         except Exception, exception:
             traceback.print_exc()
 
@@ -168,12 +176,15 @@ class OfficeDocument(object):
         try:
             if FilterName.length() > 0:
                 oStoreProperties = range(2)
-                oStoreProperties[0] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+                oStoreProperties[0] = uno.createUnoStruct(
+                    'com.sun.star.beans.PropertyValue')
                 oStoreProperties[0].Name = "FilterName"
                 oStoreProperties[0].Value = FilterName
-                oStoreProperties[1] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+                oStoreProperties[1] = uno.createUnoStruct(
+                    'com.sun.star.beans.PropertyValue')
                 oStoreProperties[1].Name = "InteractionHandler"
-                oStoreProperties[1].Value = xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler")
+                oStoreProperties[1].Value = xMSF.createInstance(
+                    "com.sun.star.comp.uui.UUIInteractionHandler")
             else:
                 oStoreProperties = range(0)
 
@@ -209,16 +220,20 @@ class OfficeDocument(object):
             if rowcount > 0:
                 colcount = datalist[0].length
                 if colcount > 0:
-                    xNewRange = oTable.getCellRangeByPosition(xpos, ypos, (colcount + xpos) - 1, (rowcount + ypos) - 1)
+                    xNewRange = oTable.getCellRangeByPosition(
+                        xpos, ypos, (colcount + xpos) - 1,
+                            (rowcount + ypos) - 1)
                     xNewRange.setDataArray(datalist)
 
         except Exception, e:
             traceback.print_exc()
 
     def getFileMediaDecriptor(self, xmsf, url):
-        typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection")
+        typeDetect = xmsf.createInstance(
+            "com.sun.star.document.TypeDetection")
         mediaDescr = range(1)
-        mediaDescr[0][0] = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+        mediaDescr[0][0] = uno.createUnoStruct(
+            'com.sun.star.beans.PropertyValue')
         mediaDescr[0][0].Name = "URL"
         mediaDescr[0][0].Value = url
         Type = typeDetect.queryTypeByDescriptor(mediaDescr, True)
@@ -228,7 +243,8 @@ class OfficeDocument(object):
             return typeDetect.getByName(type)
 
     def getTypeMediaDescriptor(self, xmsf, type):
-        typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection")
+        typeDetect = xmsf.createInstance(
+            "com.sun.star.document.TypeDetection")
         return typeDetect.getByName(type)
 
     '''
@@ -244,9 +260,11 @@ class OfficeDocument(object):
     def getDocumentProperties(self, document):
         return document.getDocumentProperties()
 
-    def showMessageBox(self, xMSF, windowServiceName, windowAttribute, MessageText):
+    def showMessageBox(
+        self, xMSF, windowServiceName, windowAttribute, MessageText):
 
-        return SystemDialog.showMessageBox(xMSF, windowServiceName, windowAttribute, MessageText)
+        return SystemDialog.showMessageBox(
+            xMSF, windowServiceName, windowAttribute, MessageText)
 
     def getWindowPeer(self):
         return self.xWindowPeer

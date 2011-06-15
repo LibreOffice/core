@@ -14,14 +14,17 @@ from com.sun.star.style.NumberingType import ARABIC
 class FaxDocument(TextDocument):
 
     def __init__(self, xMSF, listener):
-        super(FaxDocument,self).__init__(xMSF, listener, None, "WIZARD_LIVE_PREVIEW")
+        super(FaxDocument,self).__init__(xMSF, listener, None,
+            "WIZARD_LIVE_PREVIEW")
         self.keepLogoFrame = True
         self.keepTypeFrame = True
 
     def switchElement(self, sElement, bState):
         try:
-            mySectionHandler = TextSectionHandler(self.xMSF, self.xTextDocument)
-            oSection = mySectionHandler.xTextDocument.getTextSections().getByName(sElement)
+            mySectionHandler = TextSectionHandler(self.xMSF,
+                self.xTextDocument)
+            oSection = \
+                mySectionHandler.xTextDocument.TextSections.getByName(sElement)
             Helper.setUnoPropertyValue(oSection, "IsVisible", bState)
         except UnoException, exception:
             traceback.print_exc()
@@ -35,7 +38,8 @@ class FaxDocument(TextDocument):
             self.xTextDocument.lockControllers()
             try:
 
-                xPageStyleCollection = self.xTextDocument.getStyleFamilies().getByName("PageStyles")
+                xPageStyleCollection = \
+                    self.xTextDocument.StyleFamilies.getByName("PageStyles")
                 xPageStyle = xPageStyleCollection.getByName(sPageStyle)
 
                 if bState:
@@ -47,16 +51,21 @@ class FaxDocument(TextDocument):
                         #Adding the Page Number
                         myCursor = xFooterText.Text.createTextCursor()
                         myCursor.gotoEnd(False)
-                        xFooterText.insertControlCharacter(myCursor, PARAGRAPH_BREAK, False)
+                        xFooterText.insertControlCharacter(myCursor,
+                            PARAGRAPH_BREAK, False)
                         myCursor.setPropertyValue("ParaAdjust", CENTER )
 
-                        xPageNumberField = xMSFDoc.createInstance("com.sun.star.text.TextField.PageNumber")
-                        xPageNumberField.setPropertyValue("NumberingType", uno.Any("short",ARABIC))
+                        xPageNumberField = xMSFDoc.createInstance(
+                            "com.sun.star.text.TextField.PageNumber")
+                        xPageNumberField.setPropertyValue(
+                            "NumberingType", uno.Any("short",ARABIC))
                         xPageNumberField.setPropertyValue("SubType", CURRENT)
-                        xFooterText.insertTextContent(xFooterText.getEnd(), xPageNumberField, False)
+                        xFooterText.insertTextContent(xFooterText.getEnd(),
+                            xPageNumberField, False)
 
                 else:
-                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", False)
+                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn",
+                        False)
 
                 self.xTextDocument.unlockControllers()
             except UnoException, exception:
@@ -64,7 +73,8 @@ class FaxDocument(TextDocument):
 
     def hasElement(self, sElement):
         if self.xTextDocument != None:
-            mySectionHandler = TextSectionHandler(self.xMSF, self.xTextDocument)
+            mySectionHandler = TextSectionHandler(self.xMSF,
+                self.xTextDocument)
             return mySectionHandler.hasTextSectionByName(sElement)
         else:
             return False
@@ -78,14 +88,24 @@ class FaxDocument(TextDocument):
 
     def fillSenderWithUserData(self):
         try:
-            myFieldHandler = TextFieldHandler(self.xTextDocument, self.xTextDocument)
-            oUserDataAccess = Configuration.getConfigurationRoot(self.xMSF, "org.openoffice.UserProfile/Data", False)
-            myFieldHandler.changeUserFieldContent("Company", Helper.getUnoObjectbyName(oUserDataAccess, "o"))
-            myFieldHandler.changeUserFieldContent("Street", Helper.getUnoObjectbyName(oUserDataAccess, "street"))
-            myFieldHandler.changeUserFieldContent("PostCode", Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"))
-            myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, Helper.getUnoObjectbyName(oUserDataAccess, "st"))
-            myFieldHandler.changeUserFieldContent("City", Helper.getUnoObjectbyName(oUserDataAccess, "l"))
-            myFieldHandler.changeUserFieldContent("Fax", Helper.getUnoObjectbyName(oUserDataAccess, "facsimiletelephonenumber"))
+            myFieldHandler = TextFieldHandler(self.xTextDocument,
+                self.xTextDocument)
+            oUserDataAccess = Configuration.getConfigurationRoot(
+                self.xMSF, "org.openoffice.UserProfile/Data", False)
+            myFieldHandler.changeUserFieldContent("Company",
+                Helper.getUnoObjectbyName(oUserDataAccess, "o"))
+            myFieldHandler.changeUserFieldContent("Street",
+                Helper.getUnoObjectbyName(oUserDataAccess, "street"))
+            myFieldHandler.changeUserFieldContent("PostCode",
+                Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"))
+            myFieldHandler.changeUserFieldContent(
+                PropertyNames.PROPERTY_STATE,
+                Helper.getUnoObjectbyName(oUserDataAccess, "st"))
+            myFieldHandler.changeUserFieldContent("City",
+                Helper.getUnoObjectbyName(oUserDataAccess, "l"))
+            myFieldHandler.changeUserFieldContent("Fax",
+                Helper.getUnoObjectbyName(oUserDataAccess,
+                "facsimiletelephonenumber"))
         except UnoException, exception:
             traceback.print_exc()
 
@@ -96,12 +116,14 @@ class FaxDocument(TextDocument):
     def killEmptyFrames(self):
         try:
             if not self.keepLogoFrame:
-                xTF = TextFrameHandler.getFrameByName("Company Logo", self.xTextDocument)
+                xTF = TextFrameHandler.getFrameByName("Company Logo",
+                self.xTextDocument)
                 if xTF != None:
                     xTF.dispose()
 
             if not self.keepTypeFrame:
-                xTF = TextFrameHandler.getFrameByName("Communication Type", self.xTextDocument)
+                xTF = TextFrameHandler.getFrameByName("Communication Type",
+                self.xTextDocument)
                 if xTF != None:
                     xTF.dispose()
 

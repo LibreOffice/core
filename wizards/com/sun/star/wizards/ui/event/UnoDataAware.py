@@ -96,7 +96,8 @@ class UnoDataAware(DataAware):
         return Helper.getUnoPropertyValue(self.unoModel, self.unoPropName)
 
     @classmethod
-    def __attachTextControl(self, data, prop, unoText, listener, unoProperty, field, value):
+    def __attachTextControl(
+        self, data, prop, unoText, listener, unoProperty, field, value):
         if field:
             aux = DataAwareFields.getFieldValueFor(data, prop, value)
         else:
@@ -121,22 +122,27 @@ class UnoDataAware(DataAware):
 
     @classmethod
     def attachEditControl(self, data, prop, unoControl, listener, field):
-        return self.__attachTextControl(data, prop, unoControl, listener, "Text", field, "")
+        return self.__attachTextControl(
+            data, prop, unoControl, listener, "Text", field, "")
 
     @classmethod
     def attachDateControl(self, data, prop, unoControl, listener, field):
-        return self.__attachTextControl(data, prop, unoControl, listener, "Date", field, 0)
+        return self.__attachTextControl(
+            data, prop, unoControl, listener, "Date", field, 0)
 
     def attachTimeControl(self, data, prop, unoControl, listener, field):
-        return self.__attachTextControl(data, prop, unoControl, listener, "Time", field, 0)
+        return self.__attachTextControl(
+            data, prop, unoControl, listener, "Time", field, 0)
 
     def attachNumericControl(self, data, prop, unoControl, listener, field):
-        return self.__attachTextControl(data, prop, unoControl, listener, "Value", field, float(0))
+        return self.__attachTextControl(
+            data, prop, unoControl, listener, "Value", field, float(0))
 
     @classmethod
     def attachCheckBox(self, data, prop, checkBox, listener, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(data, prop, uno.Any("short",0))
+            aux = DataAwareFields.getFieldValueFor(
+                data, prop, uno.Any("short",0))
         else:
             aux = DataAware.PropertyValue (prop, data)
         uda = UnoDataAware(data, aux , checkBox, PropertyNames.PROPERTY_STATE)
@@ -167,7 +173,8 @@ class UnoDataAware(DataAware):
     @classmethod
     def attachListBox(self, data, prop, listBox, listener, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(data, prop, uno.Any("short",0))
+            aux = DataAwareFields.getFieldValueFor(
+                data, prop, uno.Any("short",0))
         else:
             aux = DataAware.PropertyValue (prop, data)
         uda = UnoDataAware(data, aux, listBox, "SelectedItems")
@@ -181,4 +188,5 @@ class UnoDataAware(DataAware):
         setEnabled(control, enabled)
 
     def setEnabled(self, control, enabled):
-        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled)
+        Helper.setUnoPropertyValue(
+            getModel(control), PropertyNames.PROPERTY_ENABLED, enabled)

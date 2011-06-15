@@ -5,5 +5,6 @@ class NoValidPathException(Exception):
         # TODO: NEVER open a dialog in an exception
         from SystemDialog import SystemDialog
         if xMSF:
-            SystemDialog.showErrorBox(xMSF, "dbwizres", "dbw", 521) #OfficePathnotavailable
+            SystemDialog.showErrorBox(xMSF,
+                "dbwizres", "dbw", 521) #OfficePathnotavailable
 

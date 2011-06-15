@@ -1,4 +1,6 @@
 from com.sun.star.awt.VclWindowPeerAttribute import OK
+from Configuration import Configuration
+from SystemDialog import SystemDialog
 import traceback
 
 class Resource(object):
@@ -14,7 +16,8 @@ class Resource(object):
         self.xMSF = _xMSF
         self.Module = _Module
         try:
-            xResource = self.xMSF.createInstanceWithArguments("org.libreoffice.resource.ResourceIndexAccess", (self.Module,))
+            xResource = self.xMSF.createInstanceWithArguments(
+                "org.libreoffice.resource.ResourceIndexAccess", (self.Module,))
             if xResource is None:
                 raise Exception ("could not initialize ResourceIndexAccess")
 
@@ -36,14 +39,14 @@ class Resource(object):
             return self.xStringIndexAccess.getByIndex(nID)
         except Exception, exception:
             traceback.print_exc()
-            raise ValueError("Resource with ID not " + str(nID) + " not found");
+            raise ValueError("Resource with ID not " + str(nID) + " not found")
 
     def getStringList(self, nID):
         try:
             return self.xStringListIndexAccess.getByIndex(nID)
         except Exception, exception:
             traceback.print_exc()
-            raise ValueError("Resource with ID not " + str(nID) + " not found");
+            raise ValueError("Resource with ID not " + str(nID) + " not found")
 
     def getResArray(self, nID, iCount):
         try:
@@ -55,12 +58,13 @@ class Resource(object):
             return ResArray
         except Exception, exception:
             traceback.print_exc()
-            raise ValueError("Resource with ID not" + str(nID) + " not found");
+            raise ValueError("Resource with ID not" + str(nID) + " not found")
 
-
+    @classmethod
     def showCommonResourceError(self, xMSF):
         ProductName = Configuration.getProductName(xMSF)
-        sError = "The files required could not be found.\nPlease start the %PRODUCTNAME Setup and choose 'Repair'."
-        sError = JavaTools.replaceSubString(sError, ProductName, "%PRODUCTNAME")
+        sError = "The files required could not be found.\n" + \
+            "Please start the %PRODUCTNAME Setup and choose 'Repair'."
+        sError = sError.replace("%PRODUCTNAME", ProductName)
         SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sError)
 

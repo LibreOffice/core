@@ -6,17 +6,19 @@ class ViewHandler(object):
     def __init__ (self, xMSF, xTextDocument):
         self.xMSFDoc = xMSF
         self.xTextDocument = xTextDocument
-        self.xTextViewCursorSupplier = self.xTextDocument.getCurrentController()
+        self.xTextViewCursorSupplier = self.xTextDocument.CurrentController
 
     def selectFirstPage(self, oTextTableHandler):
         try:
-            xPageCursor = self.xTextViewCursorSupplier.getViewCursor()
+            xPageCursor = self.xTextViewCursorSupplier.ViewCursor
             xPageCursor.jumpToFirstPage()
             xPageCursor.jumpToStartOfPage()
-            Helper.setUnoPropertyValue(xPageCursor, "PageDescName", "First Page")
-            oPageStyles = self.xTextDocument.getStyleFamilies().getByName("PageStyles")
+            Helper.setUnoPropertyValue(
+                xPageCursor, "PageDescName", "First Page")
+            oPageStyles = self.xTextDocument.StyleFamilies.getByName(
+                "PageStyles")
             oPageStyle = oPageStyles.getByName("First Page")
-            xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables()
+            xAllTextTables = oTextTableHandler.xTextTablesSupplier.TextTables
             xTextTable = xAllTextTables.getByIndex(0)
             xRange = xTextTable.getAnchor().getText()
             xPageCursor.gotoRange(xRange, False)
@@ -30,9 +32,10 @@ class ViewHandler(object):
             exception.printStackTrace(System.out)
 
     def setViewSetting(self, Setting, Value):
-        uno.invoke(self.xTextViewCursorSupplier.getViewSettings(),"setPropertyValue",(Setting, Value))
+        uno.invoke(self.xTextViewCursorSupplier.ViewSettings,"setPropertyValue",(
+            Setting, Value))
 
     def collapseViewCursorToStart(self):
-        xTextViewCursor = self.xTextViewCursorSupplier.getViewCursor()
+        xTextViewCursor = self.xTextViewCursorSupplier.ViewCursor
         xTextViewCursor.collapseToStart()
 

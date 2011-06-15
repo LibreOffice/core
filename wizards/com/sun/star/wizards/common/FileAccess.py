@@ -2,6 +2,7 @@ import traceback
 from NoValidPathException import *
 from com.sun.star.ucb import CommandAbortedException
 from com.sun.star.uno import Exception as UnoException
+from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO
 import types
 
 '''
@@ -27,8 +28,12 @@ class FileAccess(object):
     def addOfficePath(self, xMSF, sPath, sAddPath):
         xSimpleFileAccess = None
         ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess)
-        # As there are several conventions about the look of Url  (e.g. with " " or with "%20") you cannot make a
-        # simple String comparison to find out, if a path is already in "ResultPath"
+        '''
+        As there are several conventions about the look of Url
+        (e.g. with " " or with "%20") you cannot make a
+        simple String comparison to find out, if a path
+        is already in "ResultPath
+        '''
         PathList = JavaTools.ArrayoutofString(ResultPath, ";")
         MaxIndex = PathList.length - 1
         CompAddPath = JavaTools.replaceSubString(sAddPath, "", "/")
@@ -56,7 +61,8 @@ class FileAccess(object):
     @param xMSF
     @param sPath
     @param xSimpleFileAccess
-    @return the respective path of the office application. A probable following "/" at the end is trimmed.
+    @return the respective path of the office application.
+    A probable following "/" at the end is trimmed.
     '''
 
     @classmethod
@@ -76,7 +82,8 @@ class FileAccess(object):
     chapter 6.2.7
     @param xMSF
     @param sPath
-    @param sType use "share" or "user". Set to "" if not needed eg for the WorkPath;
+    @param sType use "share" or "user". Set to ""
+    f not needed eg for the WorkPath;
     In the return Officepath a possible slash at the end is cut off
     @param sSearchDir
     @return
@@ -88,13 +95,18 @@ class FileAccess(object):
         #This method currently only works with sPath="Template"
         bexists = False
         try:
-            xPathInterface = xMSF.createInstance("com.sun.star.util.PathSettings")
+            xPathInterface = xMSF.createInstance(
+                "com.sun.star.util.PathSettings")
             ResultPath = ""
             ReadPaths = ()
-            xUcbInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
-            Template_writable = xPathInterface.getPropertyValue(sPath + "_writable")
-            Template_internal = xPathInterface.getPropertyValue(sPath + "_internal")
-            Template_user = xPathInterface.getPropertyValue(sPath + "_user")
+            xUcbInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
+            Template_writable = xPathInterface.getPropertyValue(
+                sPath + "_writable")
+            Template_internal = xPathInterface.getPropertyValue(
+                sPath + "_internal")
+            Template_user = xPathInterface.getPropertyValue(
+                sPath + "_user")
             if type(Template_internal) is not types.InstanceType:
                 if isinstance(Template_internal,tuple):
                     ReadPaths = ReadPaths + Template_internal
@@ -134,16 +146,20 @@ class FileAccess(object):
         aPathList = []
         Template_writable = ""
         try:
-            xPathInterface = xMSF.createInstance("com.sun.star.util.PathSettings")
-            Template_writable = xPathInterface.getPropertyValue(_sPath + "_writable")
-            Template_internal = xPathInterface.getPropertyValue(_sPath + "_internal")
+            xPathInterface = xMSF.createInstance(
+                "com.sun.star.util.PathSettings")
+            Template_writable = xPathInterface.getPropertyValue(
+                _sPath + "_writable")
+            Template_internal = xPathInterface.getPropertyValue(
+                _sPath + "_internal")
             Template_user = xPathInterface.getPropertyValue(_sPath + "_user")
             i = 0
             while i < len(Template_internal):
                 sPath = Template_internal[i]
                 if sPath.startsWith("vnd."):
-                    # if there exists a language in the directory, we try to add the right language
-                    sPathToExpand = sPath.substring("vnd.sun.star.Expand:".length())
+                    # if there exists a language in the directory,
+                    # we try to add the right language
+                    sPathToExpand = sPath.substring(len("vnd.sun.star.Expand:"))
                     xExpander = Helper.getMacroExpander(xMSF)
                     sPath = xExpander.expandMacros(sPathToExpand)
 
@@ -179,7 +195,8 @@ class FileAccess(object):
             aLocaleAll = StringBuffer.StringBuffer()
             aLocaleAll.append(sLanguage).append('-').append(sCountry).append('-').append(sVariant)
             sPath = _sPath + "/" + aLocaleAll.toString()
-            xInterface = _xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            xInterface = _xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             if xInterface.exists(sPath):
                 # de-DE
                 return sPath
@@ -230,7 +247,8 @@ class FileAccess(object):
     def isPathValid(self, xMSF, _sPath):
         bExists = False
         try:
-            xUcbInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            xUcbInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             bExists = xUcbInterface.exists(_sPath)
         except Exception, exception:
             traceback.print_exc()
@@ -242,7 +260,8 @@ class FileAccess(object):
         bexists = False
         ReturnPath = ""
         try:
-            xUcbInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            xUcbInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             ReturnPath = _sFirstPath + _sSecondPath
             bexists = xUcbInterface.exists(ReturnPath)
         except Exception, exception:
@@ -264,10 +283,12 @@ class FileAccess(object):
                 sMsgDirNotThere = oResource.getResText(1051)
                 sQueryForNewCreation = oResource.getResText(1052)
                 OSPath = JavaTools.convertfromURLNotation(Path)
-                sQueryMessage = JavaTools.replaceSubString(sMsgDirNotThere, OSPath, "%1")
+                sQueryMessage = JavaTools.replaceSubString(sMsgDirNotThere,
+                    OSPath, "%1")
                 sQueryMessage = sQueryMessage + (char)
                 13 + sQueryForNewCreation
-                icreate = SystemDialog.showMessageBox(xMSF, "QueryBox", VclWindowPeerAttribute.YES_NO, sQueryMessage)
+                icreate = SystemDialog.showMessageBox(xMSF, "QueryBox",
+                    YES_NO, sQueryMessage)
                 if icreate == 2:
                     xSimpleFileAccess.createFolder(Path)
                     return True
@@ -275,31 +296,40 @@ class FileAccess(object):
             return False
         except CommandAbortedException, exception:
             sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1")
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgNoDir)
+            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sMsgNoDir)
             return False
         except com.sun.star.uno.Exception, unoexception:
             sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1")
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgNoDir)
+            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sMsgNoDir)
             return False
 
-    # checks if the root of a path exists. if the parameter xWindowPeer is not null then also the directory is
-    # created when it does not exists and the user
+    '''
+    checks if the root of a path exists. if the parameter
+    xWindowPeer is not null then also the directory is
+    created when it does not exists and the user
+    '''
 
     @classmethod
-    def PathisValid(self, xMSF, Path, sMsgFilePathInvalid, baskbeforeOverwrite):
+    def PathisValid(self, xMSF, Path, sMsgFilePathInvalid,
+        baskbeforeOverwrite):
         try:
             SubDirPath = ""
             bSubDirexists = True
             NewPath = Path
-            xInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            xInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             if baskbeforeOverwrite:
                 if xInterface.exists(Path):
-                    oResource = Resource.Resource_unknown(xMSF, "ImportWizard", "imp")
+                    oResource = Resource.Resource_unknown(xMSF,
+                        "ImportWizard", "imp")
                     sFileexists = oResource.getResText(1053)
                     NewString = JavaTools.convertfromURLNotation(Path)
-                    sFileexists = JavaTools.replaceSubString(sFileexists, NewString, "<1>")
-                    sFileexists = JavaTools.replaceSubString(sFileexists, String.valueOf(13), "<CR>")
-                    iLeave = SystemDialog.showMessageBox(xMSF, "QueryBox", VclWindowPeerAttribute.YES_NO, sFileexists)
+                    sFileexists = JavaTools.replaceSubString(sFileexists,
+                        NewString, "<1>")
+                    sFileexists = JavaTools.replaceSubString(sFileexists,
+                        str(13), "<CR>")
+                    iLeave = SystemDialog.showMessageBox(xMSF, "QueryBox",
+                        YES_NO, sFileexists)
                     if iLeave == 3:
                         return False
 
@@ -320,11 +350,15 @@ class FileAccess(object):
                         bexists = xSimpleFileAccess.exists(NewPath)
                         if bexists:
                             LowerCasePath = NewPath.toLowerCase()
-                            bexists = (((LowerCasePath.equals("file:#/")) or (LowerCasePath.equals("file:#")) or (LowerCasePath.equals("file:/")) or (LowerCasePath.equals("file:"))) == False)
+                            bexists = (((LowerCasePath.equals("file:#/")) or
+                                (LowerCasePath.equals("file:#")) or
+                                (LowerCasePath.equals("file:/")) or
+                                (LowerCasePath.equals("file:"))) == False)
 
                         if bexists:
                             if bSubDirexists == False:
-                                bSubDiriscreated = createSubDirectory(xMSF, xSimpleFileAccess, SubDirPath)
+                                bSubDiriscreated = createSubDirectory(xMSF,
+                                    xSimpleFileAccess, SubDirPath)
                                 return bSubDiriscreated
 
                             return True
@@ -333,21 +367,23 @@ class FileAccess(object):
 
                     i -= 1
 
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgFilePathInvalid)
+            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK,
+                sMsgFilePathInvalid)
             return False
         except com.sun.star.uno.Exception, exception:
             traceback.print_exc()
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgFilePathInvalid)
+            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK,
+                sMsgFilePathInvalid)
             return False
 
     '''
     searches a directory for files which start with a certain
     prefix, and returns their URLs and document-titles.
     @param xMSF
-    @param FilterName the prefix of the filename. a "-" is added to the prefix !
+    @param FilterName the prefix of the filename. a "-" is added to the prefix
     @param FolderName the folder (URL) to look for files...
-    @return an array with two array members. The first one, with document titles,
-    the second with the corresponding URLs.
+    @return an array with two array members. The first one, with document
+    titles, the second with the corresponding URLs.
     @deprecated please use the getFolderTitles() with ArrayList
     '''
 
@@ -357,8 +393,10 @@ class FileAccess(object):
         try:
             TitleVector = None
             NameVector = None
-            xDocInterface = xMSF.createInstance("com.sun.star.document.DocumentProperties")
-            xInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            xDocInterface = xMSF.createInstance(
+                "com.sun.star.document.DocumentProperties")
+            xInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             nameList = xInterface.getFolderContents(FolderName, False)
             TitleVector = []
             NameVector = []
@@ -406,7 +444,8 @@ class FileAccess(object):
     def getPathFromList(self, xMSF, _aList, _sFile):
         sFoundFile = ""
         try:
-            xInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            xInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             i = 0
             while i < _aList.size():
                 sPath = _aList.get(i)
@@ -424,7 +463,8 @@ class FileAccess(object):
     def getTitle(self, xMSF, _sFile):
         sTitle = ""
         try:
-            xDocInterface = xMSF.createInstance("com.sun.star.document.DocumentProperties")
+            xDocInterface = xMSF.createInstance(
+                "com.sun.star.document.DocumentProperties")
             noArgs = []
             xDocInterface.loadFromMedium(_sFile, noArgs)
             sTitle = xDocInterface.getTitle()
@@ -434,7 +474,9 @@ class FileAccess(object):
         return sTitle
 
     @classmethod
-    def getFolderTitles2(self, xMSF, _sStartFilterName, FolderName, _sEndFilterName=""):
+    def getFolderTitles2(self, xMSF, _sStartFilterName, FolderName,
+        _sEndFilterName=""):
+
         LocLayoutFiles = [[2],[]]
         if FolderName.size() == 0:
             raise NoValidPathException (None, "Path not given.");
@@ -443,7 +485,8 @@ class FileAccess(object):
         URLVector = []
         xInterface = None
         try:
-            xInterface = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            xInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
         except com.sun.star.uno.Exception, e:
             traceback.print_exc()
             raise NoValidPathException (None, "Internal error.");
@@ -462,11 +505,13 @@ class FileAccess(object):
                 i = 0
                 while i < nameList.length:
                     fileName = self.getFilename(i)
-                    if _sStartFilterName == None or fileName.startsWith(_sStartFilterName):
+                    if _sStartFilterName == None or \
+                        fileName.startsWith(_sStartFilterName):
                         if _sEndFilterName.equals(""):
                             sTitle = getTitle(xMSF, nameList[i])
                         elif fileName.endsWith(_sEndFilterName):
-                            fileName = fileName.replaceAll(_sEndFilterName + "$", "")
+                            fileName = fileName.replaceAll(
+                                _sEndFilterName + "$", "")
                             sTitle = fileName
                         else:
                             # no or wrong (start|end) filter
@@ -498,9 +543,11 @@ class FileAccess(object):
 
     def __init__(self, xmsf):
         #get a simple file access...
-        self.fileAccess = xmsf.createInstance("com.sun.star.ucb.SimpleFileAccess")
+        self.fileAccess = xmsf.createInstance(
+            "com.sun.star.ucb.SimpleFileAccess")
         #get the file identifier converter
-        self.filenameConverter = xmsf.createInstance("com.sun.star.ucb.FileContentProvider")
+        self.filenameConverter = xmsf.createInstance(
+            "com.sun.star.ucb.FileContentProvider")
 
     def getURL(self, path, childPath=None):
         if childPath is not None:
@@ -509,14 +556,16 @@ class FileAccess(object):
         else:
             f = open(path)
 
-        r = self.filenameConverter.getFileURLFromSystemPath(path, f.getAbsolutePath())
+        r = self.filenameConverter.getFileURLFromSystemPath(path,
+            f.getAbsolutePath())
         return r
 
     def getPath(self, parentURL, childURL):
         string = ""
         if childURL is not None and childURL is not "":
             string = "/" + childURL
-        return self.filenameConverter.getSystemPathFromFileURL(parentURL + string)
+        return self.filenameConverter.getSystemPathFromFileURL(
+            parentURL + string)
 
     '''
     @author rpiterman
@@ -648,7 +697,8 @@ class FileAccess(object):
     def getBasename(self, path, pathSeparator):
         filename = self.getFilename(path, pathSeparator)
         sExtension = getExtension(filename)
-        basename = filename.substring(0, filename.length() - (sExtension.length() + 1))
+        basename = filename.substring(0, filename.length() - \
+            (sExtension.length() + 1))
         return basename
 
     '''
@@ -746,10 +796,12 @@ class FileAccess(object):
         sFileData = None
         try:
             oDataVector = []
-            oSimpleFileAccess = _xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess")
+            oSimpleFileAccess = _xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             if oSimpleFileAccess.exists(_filepath):
                 xInputStream = oSimpleFileAccess.openFileRead(_filepath)
-                oTextInputStream = _xMSF.createInstance("com.sun.star.io.TextInputStream")
+                oTextInputStream = _xMSF.createInstance(
+                    "com.sun.star.io.TextInputStream")
                 oTextInputStream.setInputStream(xInputStream)
                 while not oTextInputStream.isEOF():
                     oDataVector.addElement(oTextInputStream.readLine())

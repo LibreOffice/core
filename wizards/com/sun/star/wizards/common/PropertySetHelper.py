@@ -16,7 +16,8 @@ class PropertySetHelper(object):
         return self.m_aHashMap
 
     '''
-    set a property, don't throw any exceptions, they will only write down as a hint in the helper debug output
+    set a property, don't throw any exceptions,
+    they will only write down as a hint in the helper debug output
     @param _sName name of the property to set
     @param _aValue property value as object
     '''
@@ -25,7 +26,9 @@ class PropertySetHelper(object):
         try:
             setPropertyValue(_sName, _aValue)
         except Exception, e:
-            DebugHelper.writeInfo("Don't throw the exception with property name(" + _sName + " ) : " + e.getMessage())
+            DebugHelper.writeInfo(
+                "Don't throw the exception with property name(" \
+                + _sName + " ) : " + e.getMessage())
 
     '''
     set a property,
@@ -52,7 +55,6 @@ class PropertySetHelper(object):
                 DebugHelper.exception(e)
 
         else:
-            // DebugHelper.writeInfo("PropertySetHelper.setProperty() can't get XPropertySet");
             getHashMap().put(_sName, _aValue)
 
     '''
@@ -77,7 +79,8 @@ class PropertySetHelper(object):
             try:
                 nValue = NumericalHelper.toInt(aObject)
             except ValueError, e:
-                DebugHelper.writeInfo("can't convert a object to integer.")
+                DebugHelper.writeInfo(
+                    "can't convert a object to integer.")
 
         return nValue
 
@@ -152,7 +155,8 @@ class PropertySetHelper(object):
                 aObject = self.m_xPropertySet.getPropertyValue(_sName)
             except com.sun.star.beans.UnknownPropertyException, e:
                 DebugHelper.writeInfo(e.getMessage())
-                DebugHelper.writeInfo("UnknownPropertyException caught: Name:=" + _sName)
+                DebugHelper.writeInfo(
+                    "UnknownPropertyException caught: Name:=" + _sName)
             except com.sun.star.lang.WrappedTargetException, e:
                 DebugHelper.writeInfo(e.getMessage())
 
@@ -209,7 +213,8 @@ class PropertySetHelper(object):
         return aObject
 
     '''
-    Debug helper, to show all properties which are available in the given object.
+    Debug helper, to show all properties
+    which are available in the given object.
     @param _xObj the object of which the properties should shown
     '''
 
@@ -219,7 +224,8 @@ class PropertySetHelper(object):
         aHelper.showProperties()
 
     '''
-    Debug helper, to show all properties which are available in the current object.
+    Debug helper, to show all properties which are available
+    in the current object.
     '''
 
     def showProperties(self):
@@ -232,11 +238,13 @@ class PropertySetHelper(object):
 
             xInfo = self.m_xPropertySet.getPropertySetInfo()
             aAllProperties = xInfo.getProperties()
-            DebugHelper.writeInfo("Show all properties of Implementation of :'" + sName + "'")
+            DebugHelper.writeInfo(
+                "Show all properties of Implementation of :'" + sName + "'")
             i = 0
             while i < aAllProperties.length:
                 DebugHelper.writeInfo(" - " + aAllProperties[i].Name)
                 i += 1
         else:
-            DebugHelper.writeInfo("The given object don't support XPropertySet interface.")
+            DebugHelper.writeInfo(
+                "The given object don't support XPropertySet interface.")
 

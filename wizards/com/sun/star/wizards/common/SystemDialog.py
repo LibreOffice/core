@@ -1,7 +1,7 @@
 import uno
 import traceback
 from Configuration import Configuration
-from Resource import Resource
+
 from Desktop import Desktop
 from Helper import Helper
 
@@ -12,7 +12,6 @@ from com.sun.star.awt.WindowClass import MODALTOP
 from com.sun.star.uno import Exception as UnoException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.awt.VclWindowPeerAttribute import OK
-
 
 class SystemDialog(object):
 
@@ -36,19 +35,23 @@ class SystemDialog(object):
 
     @classmethod
     def createStoreDialog(self, xmsf):
-        return SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", FILESAVE_AUTOEXTENSION)
+        return SystemDialog(
+            xmsf, "com.sun.star.ui.dialogs.FilePicker",FILESAVE_AUTOEXTENSION)
 
     @classmethod
     def createOpenDialog(self, xmsf):
-        return SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", FILEOPEN_SIMPLE)
+        return SystemDialog(
+            xmsf, "com.sun.star.ui.dialogs.FilePicker", FILEOPEN_SIMPLE)
 
     @classmethod
     def createFolderDialog(self, xmsf):
-        return SystemDialog(xmsf, "com.sun.star.ui.dialogs.FolderPicker", 0)
+        return SystemDialog(
+            xmsf, "com.sun.star.ui.dialogs.FolderPicker", 0)
 
     @classmethod
     def createOfficeFolderDialog(self, xmsf):
-        return SystemDialog(xmsf, "com.sun.star.ui.dialogs.OfficeFolderPicker", 0)
+        return SystemDialog(
+            xmsf, "com.sun.star.ui.dialogs.OfficeFolderPicker", 0)
 
     def subst(self, path):
         try:
@@ -85,7 +88,8 @@ class SystemDialog(object):
 
     def callFolderDialog(self, title, description, displayDir):
         try:
-            self.systemDialog.setDisplayDirectoryxPropertyValue(subst(displayDir))
+            self.systemDialog.setDisplayDirectoryxPropertyValue(
+                subst(displayDir))
         except IllegalArgumentException, iae:
             traceback.print_exc()
             raise AttributeError(iae.getMessage());
@@ -152,7 +156,8 @@ class SystemDialog(object):
 
     def getFilterUIName_(self, filterName):
         try:
-            oFactory = self.xMSF.createInstance("com.sun.star.document.FilterFactory")
+            oFactory = self.xMSF.createInstance(
+                "com.sun.star.document.FilterFactory")
             oObject = Helper.getUnoObjectbyName(oFactory, filterName)
             xPropertyValue = list(oObject)
             i = 0
@@ -162,13 +167,15 @@ class SystemDialog(object):
                     return str(aValue.Value)
 
                 i += 1
-            raise NullPointerException ("UIName property not found for Filter " + filterName);
+            raise NullPointerException(
+                "UIName property not found for Filter " + filterName);
         except UnoException, exception:
             traceback.print_exc()
             return None
 
     @classmethod
-    def showErrorBox(self, xMSF, ResName, ResPrefix, ResID,AddTag=None, AddString=None):
+    def showErrorBox(self, xMSF, ResName, ResPrefix,
+            ResID,AddTag=None, AddString=None):
         ProductName = Configuration.getProductName(xMSF)
         oResource = Resource(xMSF, ResPrefix)
         sErrorMessage = oResource.getResText(ResID)
@@ -191,7 +198,8 @@ class SystemDialog(object):
     other values check for yourself ;-)
     '''
     @classmethod
-    def showMessageBox(self, xMSF, windowServiceName, windowAttribute, MessageText, peer=None):
+    def showMessageBox(self, xMSF, windowServiceName, windowAttribute,
+            MessageText, peer=None):
 
         if MessageText is None:
             return 0
@@ -222,7 +230,8 @@ class SystemDialog(object):
     def createStringSubstitution(self, xMSF):
         xPathSubst = None
         try:
-            xPathSubst = xMSF.createInstance("com.sun.star.util.PathSubstitution")
+            xPathSubst = xMSF.createInstance(
+                "com.sun.star.util.PathSubstitution")
             return xPathSubst
         except UnoException, e:
             traceback.print_exc()
