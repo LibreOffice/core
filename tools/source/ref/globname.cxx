@@ -33,6 +33,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <rtl/strbuf.hxx>
+
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 
@@ -262,8 +264,9 @@ void SvGlobalName::MakeFromMemory( void * pData )
 *************************************************************************/
 sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 {
-    ByteString aStr( rIdStr, RTL_TEXTENCODING_ASCII_US );
-    const sal_Char * pStr = (sal_Char *)aStr.GetBuffer();
+    rtl::OString aStr(rtl::OUStringToOString(rIdStr,
+        RTL_TEXTENCODING_ASCII_US));
+    const sal_Char *pStr = aStr.getStr();
     if( rIdStr.Len() == 36
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
       && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
@@ -342,29 +345,29 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 *************************************************************************/
 String SvGlobalName::GetctorName() const
 {
-    ByteString aRet;
+    rtl::OStringBuffer aStrBuffer;
 
     sal_Char buf[ 20 ];
     sal_uInt32 Data1;
     memcpy(&Data1, pImp->szData, sizeof(sal_uInt32));
     sprintf( buf, "0x%8.8" SAL_PRIXUINT32, Data1 );
-    aRet += buf;
+    aStrBuffer.append(buf);
     sal_uInt16 i;
     for( i = 4; i < 8; i += 2 )
     {
-        aRet += ',';
+        aStrBuffer.append(',');
         sal_uInt16 Data2;
         memcpy(&Data2, pImp->szData+i, sizeof(sal_uInt16));
         sprintf( buf, "0x%4.4X", Data2 );
-        aRet += buf;
+        aStrBuffer.append(buf);
     }
     for( i = 8; i < 16; i++ )
     {
-        aRet += ',';
+        aStrBuffer.append(',');
         sprintf( buf, "0x%2.2x", pImp->szData[ i ] );
-        aRet += buf;
+        aStrBuffer.append(buf);
     }
-    return String( aRet, RTL_TEXTENCODING_ASCII_US );
+    return rtl::OStringToOUString(aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
 /*************************************************************************
@@ -372,35 +375,35 @@ String SvGlobalName::GetctorName() const
 *************************************************************************/
 String SvGlobalName::GetHexName() const
 {
-    ByteString aRet;
+    rtl::OStringBuffer aHexBuffer;
 
     sal_Char buf[ 10 ];
     sal_uInt32 Data1;
     memcpy(&Data1, pImp->szData, sizeof(sal_uInt32));
     sprintf( buf, "%8.8" SAL_PRIXUINT32, Data1 );
-    aRet += buf;
-    aRet += '-';
+    aHexBuffer.append(buf);
+    aHexBuffer.append('-');
     sal_uInt16 i ;
     for( i = 4; i < 8; i += 2 )
     {
         sal_uInt16 Data2;
         memcpy(&Data2, pImp->szData+i, sizeof(sal_uInt16));
         sprintf( buf, "%4.4X", Data2 );
-        aRet += buf;
-        aRet += '-';
+        aHexBuffer.append(buf);
+        aHexBuffer.append('-');
     }
     for( i = 8; i < 10; i++ )
     {
         sprintf( buf, "%2.2x", pImp->szData[ i ] );
-        aRet += buf;
+        aHexBuffer.append(buf);
     }
-    aRet += '-';
+    aHexBuffer.append('-');
     for( i = 10; i < 16; i++ )
     {
         sprintf( buf, "%2.2x", pImp->szData[ i ] );
-        aRet += buf;
+        aHexBuffer.append(buf);
     }
-    return String( aRet, RTL_TEXTENCODING_ASCII_US );
+    return rtl::OStringToOUString(aHexBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
 /************** SvGlobalNameList ****************************************/
