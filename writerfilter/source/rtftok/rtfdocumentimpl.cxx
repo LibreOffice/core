@@ -69,7 +69,8 @@ RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
-        uno::Reference<lang::XComponent> const& xDstDoc)
+        uno::Reference<lang::XComponent> const& xDstDoc,
+        uno::Reference<frame::XFrame>    const& xFrame)
     : m_xContext(xContext),
     m_xModel(xDstDoc),
     m_nGroup(0),
@@ -91,7 +92,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xModelFactory.set(m_xModel, uno::UNO_QUERY);
     OSL_ASSERT(m_xModelFactory.is());
 
-    m_pGraphicHelper = new oox::GraphicHelper(m_xContext, NULL, m_xStorage);
+    m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()

@@ -35,6 +35,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <rtftok/RTFDocument.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -87,10 +88,13 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
             aMediaDesc.addInputStream();
             aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
 
+            uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
+                    uno::Reference<frame::XFrame>());
+
             writerfilter::Stream::Pointer_t pStream(
                     new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, writerfilter::dmapper::DOCUMENT_RTF));
             writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
-                    writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc) );
+                    writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame));
             pDocument->resolve(*pStream);
 #ifdef DEBUG_IMPORT
             dmapperLogger->endDocument();

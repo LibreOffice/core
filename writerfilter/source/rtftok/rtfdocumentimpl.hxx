@@ -124,7 +124,8 @@ namespace writerfilter {
             public:
                 RTFDocumentImpl(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& xContext,
                                 com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& xInputStream,
-                                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc);
+                                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc,
+                                com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& xFrame);
                 virtual ~RTFDocumentImpl();
                 virtual void resolve(Stream & rHandler);
                 virtual std::string getType() const;

@@ -5,6 +5,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 namespace writerfilter {
     namespace rtftok {
@@ -33,7 +34,8 @@ namespace writerfilter {
                     createDocument(
                             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext,
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > const & xInputStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > const & xDstDoc);
+                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > const & xDstDoc,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & xFrame);
         };
     } // namespace rtftok
 } // namespace writerfilter
