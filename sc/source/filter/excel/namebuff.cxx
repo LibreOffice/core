@@ -182,7 +182,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
     if ( !nExcIndex || nExcIndex > maEntries.size() )
         return false;
 
-    Cont*       pCur = &(maEntries[ nExcIndex ]);
+    Cont*       pCur = &maEntries[ nExcIndex - 1 ];
     sal_uInt16&     rTabNum = pCur->nTabNum;
 
     if( rTabNum < 0xFFFD )
