@@ -412,8 +412,6 @@ FieldUnitStringList* ImplGetCleanedFieldUnits();
 
 inline const String& ImplGetSVEmptyStr()
     { return String::EmptyString(); }
-inline const ByteString& ImplGetSVEmptyByteStr()
-    { return ByteString::EmptyString(); }
 
 // -----------------------------------------------------------------------
 
