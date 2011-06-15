@@ -796,7 +796,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         }
     }
 
-    SvULongs aBkmkArr( 15, 15 );
+    std::vector<sal_uLong> aBkmkArr;
     _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                     aBkmkArr, SAVEFLY_SPLIT );
     // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
@@ -805,7 +805,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     if (pNode)
     {
         // verschiebe noch alle Bookmarks/TOXMarks/FlyAtCnt
-        if( aBkmkArr.Count() )
+        if( !aBkmkArr.empty() )
             _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
 
         if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))

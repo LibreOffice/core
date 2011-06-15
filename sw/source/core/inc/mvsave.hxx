@@ -39,7 +39,6 @@ namespace sfx2 {
 }
 
 class SvNumberFormatter;
-class SvULongs;
 class SwDoc;
 class SwFmtAnchor;
 class SwFrmFmt;
@@ -92,11 +91,11 @@ void _DelBookmarks(const SwNodeIndex& rStt,
     const SwIndex* pSttIdx =0,
     const SwIndex* pEndIdx =0);
 void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, xub_StrLen nCntnt,
-                    SvULongs& rSaveArr, sal_uInt8 nSaveFly = 0 );
-void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
+                    std::vector<sal_uLong>& rSaveArr, sal_uInt8 nSaveFly = 0 );
+void _RestoreCntntIdx( SwDoc* pDoc, std::vector<sal_uLong>& rSaveArr,
                         sal_uLong nNode, xub_StrLen nOffset = 0,
                         sal_Bool bAuto = sal_False );
-void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
+void _RestoreCntntIdx( std::vector<sal_uLong>& rSaveArr, const SwNode& rNd,
                         xub_StrLen nLen, xub_StrLen nCorrLen );
 
 

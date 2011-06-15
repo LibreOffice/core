@@ -977,7 +977,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwStartNode* pSttNd;
         SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
 
-        SvULongs aBkmkArr( 15, 15 );
+        std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().Len(), aBkmkArr );
 
         const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
@@ -989,7 +989,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     aCntPos.nContent = nChPos;
                     SwCntntNode* pNewNd = pTxtNd->SplitCntntNode( aCntPos );
 
-                    if( aBkmkArr.Count() )
+                    if( !aBkmkArr.empty() )
                         _RestoreCntntIdx( aBkmkArr, *pNewNd, nChPos,
                                             nChPos + 1 );
 
@@ -1013,7 +1013,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 }
 
         // und jetzt den letzten Teil-String
-        if( aBkmkArr.Count() )
+        if( !aBkmkArr.empty() )
             _RestoreCntntIdx( aBkmkArr, *pTxtNd, pTxtNd->GetTxt().Len(),
                                 pTxtNd->GetTxt().Len()+1 );
 
@@ -1508,14 +1508,14 @@ sal_Bool lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
-                SvULongs aBkmkArr( 4, 4 );
+                std::vector<sal_uLong> aBkmkArr;
                 xub_StrLen nOldTxtLen = aCntIdx.GetIndex();
                 _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().Len(),
                                 aBkmkArr );
 
                 pDelPara->pLastNd->JoinNext();
 
-                if( aBkmkArr.Count() )
+                if( !aBkmkArr.empty() )
                     _RestoreCntntIdx( pDoc, aBkmkArr,
                                         pDelPara->pLastNd->GetIndex(),
                                         nOldTxtLen );

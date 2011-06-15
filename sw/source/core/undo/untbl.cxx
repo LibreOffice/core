@@ -570,7 +570,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.Count(), 0 );
     pTblNd->GetTable().GetTabLines().C40_INSERT( SwTableLine, pLine, 0 );
 
-    SvULongs aBkmkArr( 0, 4 );
+    std::vector<sal_uLong> aBkmkArr;
     for( sal_uInt16 n = rSavedData.Count(); n; )
     {
         SwTblToTxtSave* pSave = rSavedData[ --n ];
@@ -589,14 +589,13 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
             pTxtNd->EraseText( aCntPos, 1 );
             SwCntntNode* pNewNd = pTxtNd->SplitCntntNode(
                                         SwPosition( aSttIdx, aCntPos ));
-            if( aBkmkArr.Count() )
+            if( !aBkmkArr.empty() )
                 _RestoreCntntIdx( aBkmkArr, *pNewNd, pSave->m_nCntnt,
                                                      pSave->m_nCntnt + 1 );
         }
         else
         {
-            if( aBkmkArr.Count() )
-                aBkmkArr.Remove( 0, aBkmkArr.Count() );
+            aBkmkArr.clear();
             if( pTxtNd )
                 _SaveCntntIdx( GetDoc(), aSttIdx.GetIndex(),
                                 pTxtNd->GetTxt().Len(), aBkmkArr );

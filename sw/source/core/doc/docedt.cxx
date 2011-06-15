@@ -949,13 +949,13 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         bSplit = sal_True;
         xub_StrLen nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
 
-        SvULongs aBkmkArr( 15, 15 );
+        std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                         aBkmkArr, SAVEFLY_SPLIT );
 
         pTNd = static_cast<SwTxtNode*>(pTNd->SplitCntntNode( rPos ));
 
-        if( aBkmkArr.Count() )
+        if( !aBkmkArr.empty() )
             _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
 
         // jetzt noch den Pam berichtigen !!
@@ -1381,7 +1381,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 }
                 pOldTxtNd->FmtToTxtAttr( pTxtNd );
 
-                SvULongs aBkmkArr( 15, 15 );
+                std::vector<sal_uLong> aBkmkArr;
                 ::_SaveCntntIdx( pDoc, aOldIdx.GetIndex(),
                                     pOldTxtNd->Len(), aBkmkArr );
 
@@ -1392,7 +1392,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 pDoc->CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, sal_True );
 
                 // verschiebe noch alle Bookmarks/TOXMarks
-                if( aBkmkArr.Count() )
+                if( !aBkmkArr.empty() )
                     ::_RestoreCntntIdx( pDoc, aBkmkArr, aIdx.GetIndex() );
 
                 // falls der uebergebene PaM nicht im Crsr-Ring steht,

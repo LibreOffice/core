@@ -904,15 +904,15 @@ namespace
                 SetTypeAndCount( nType, 0 );
                 nContent = 0;
             }
-        _SwSaveTypeCountContent( const SvULongs& rArr, sal_uInt16& rPos )
+        _SwSaveTypeCountContent( const std::vector<sal_uLong> &rArr, sal_uInt16& rPos )
             {
                 TYPECOUNT.nTypeCount = rArr[ rPos++ ];
                 nContent = static_cast<xub_StrLen>(rArr[ rPos++ ]);
             }
-        void Add( SvULongs& rArr )
+        void Add( std::vector<sal_uLong> &rArr )
         {
-            rArr.Insert( TYPECOUNT.nTypeCount, rArr.Count() );
-            rArr.Insert( nContent, rArr.Count() );
+            rArr.push_back( TYPECOUNT.nTypeCount );
+            rArr.push_back( nContent );
         }
 
         void SetType( sal_uInt16 n )        { TYPECOUNT.TC.nType = n; }
@@ -966,7 +966,7 @@ namespace
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }
 
-    static void lcl_ChkPaM( SvULongs& rSaveArr, sal_uLong nNode, xub_StrLen nCntnt,
+    static void lcl_ChkPaM( std::vector<sal_uLong> &rSaveArr, sal_uLong nNode, xub_StrLen nCntnt,
                     const SwPaM& rPam, _SwSaveTypeCountContent& rSave,
                     sal_Bool bChkSelDirection )
     {
@@ -1213,7 +1213,7 @@ void _DelBookmarks(
 void _SaveCntntIdx(SwDoc* pDoc,
     sal_uLong nNode,
     xub_StrLen nCntnt,
-    SvULongs& rSaveArr,
+    std::vector<sal_uLong> &rSaveArr,
     sal_uInt8 nSaveFly)
 {
     // 1. Bookmarks
@@ -1429,7 +1429,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
 
 
 void _RestoreCntntIdx(SwDoc* pDoc,
-    SvULongs& rSaveArr,
+    std::vector<sal_uLong> &rSaveArr,
     sal_uLong nNode,
     xub_StrLen nOffset,
     sal_Bool bAuto)
@@ -1439,7 +1439,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
     SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     sal_uInt16 n = 0;
-    while( n < rSaveArr.Count() )
+    while( n < rSaveArr.size() )
     {
         _SwSaveTypeCountContent aSave( rSaveArr, n );
         SwPosition* pPos = 0;
@@ -1590,7 +1590,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
     }
 }
 
-void _RestoreCntntIdx(SvULongs& rSaveArr,
+void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
     const SwNode& rNd,
     xub_StrLen nLen,
     xub_StrLen nChkLen)
@@ -1602,7 +1602,7 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
 
     sal_uInt16 n = 0;
-    while( n < rSaveArr.Count() )
+    while( n < rSaveArr.size() )
     {
         _SwSaveTypeCountContent aSave( rSaveArr, n );
         if( aSave.GetContent() >= nChkLen )
@@ -1748,7 +1748,7 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
                 pPos->nContent.Assign( pCNd, Min( aSave.GetContent(), nLen ) );
             }
             n -= 2;
-            rSaveArr.Remove( n, 2 );
+            rSaveArr.erase( rSaveArr.begin() + n, rSaveArr.begin() + n + 2);
         }
     }
 }

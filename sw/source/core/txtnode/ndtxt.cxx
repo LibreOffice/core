@@ -38,7 +38,6 @@
 #include <editeng/tstpitem.hxx>
 #include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 #endif
 #include <svl/ctloptions.hxx>
@@ -633,7 +632,7 @@ SwCntntNode *SwTxtNode::JoinNext()
     if( SwCntntNode::CanJoinNext( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        SvULongs aBkmkArr( 15, 15 );
+        std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         xub_StrLen nOldLen = m_Text.Len();
@@ -700,7 +699,7 @@ SwCntntNode *SwTxtNode::JoinNext()
             pTxtNode->CutText( this, SwIndex(pTxtNode), pTxtNode->Len() );
         }
         // verschiebe noch alle Bookmarks/TOXMarks
-        if( aBkmkArr.Count() )
+        if( !aBkmkArr.empty() )
             _RestoreCntntIdx( pDoc, aBkmkArr, GetIndex(), nOldLen );
 
         if( pTxtNode->HasAnyIndex() )
@@ -728,7 +727,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
     if( SwCntntNode::CanJoinPrev( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        SvULongs aBkmkArr( 15, 15 );
+        std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         xub_StrLen nLen = pTxtNode->Len();
@@ -795,7 +794,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
             pTxtNode->CutText( this, SwIndex(this), SwIndex(pTxtNode), nLen );
         }
         // verschiebe noch alle Bookmarks/TOXMarks
-        if( aBkmkArr.Count() )
+        if( !aBkmkArr.empty() )
             _RestoreCntntIdx( pDoc, aBkmkArr, GetIndex() );
 
         if( pTxtNode->HasAnyIndex() )
