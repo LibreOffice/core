@@ -34,6 +34,11 @@ PACKAGE = com$/sun$/star$/filter$/config$/tools$/utils
 
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)" == "YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 #----- compile .java files -----------------------------------------
 
 

@@ -40,6 +40,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)" == "YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 .IF "$(SYSTEM_EXPAT)" == "YES"
 CFLAGS+=-DSYSTEM_EXPAT
 .ENDIF
