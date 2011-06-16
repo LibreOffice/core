@@ -450,8 +450,6 @@ public:
                          FSysSort nSort, ... );
                     ~Dir();
 
-    const WildCard& GetNameMask() const { return aNameMask; }
-
     FSysError       SetSort( FSysSort nSort, ... );
 
     void            Reset();
