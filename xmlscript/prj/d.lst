@@ -3,6 +3,7 @@ mkdir: %_DEST%\inc\xmlscript
 ..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
 ..\%__SRC%\lib\lib*.so %_DEST%\lib\lib*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
 
 ..\inc\xmlscript\xml_helper.hxx %_DEST%\inc\xmlscript\xml_helper.hxx
 ..\inc\xmlscript\xmldlg_imexp.hxx %_DEST%\inc\xmlscript\xmldlg_imexp.hxx
