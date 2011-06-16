@@ -260,6 +260,9 @@ namespace
 
     class thePropertyHandler
         : public rtl::Static<SfxPropertyHandler, thePropertyHandler> {};
+
+    class theApplicationMutex
+        : public rtl::Static<osl::Mutex, theApplicationMutex> {};
 }
 
 #include <framework/imageproducer.hxx>
@@ -268,23 +271,15 @@ namespace
 #include "sfx2/imagemgr.hxx"
 #include "fwkhelper.hxx"
 
-::osl::Mutex SfxApplication::gMutex;
-
 SfxApplication* SfxApplication::GetOrCreate()
 {
     // SFX on demand
-    ::osl::MutexGuard aGuard(SfxApplication::gMutex);
-    if ( !pApp )
+    ::osl::MutexGuard aGuard(theApplicationMutex::get());
+    if (!pApp)
     {
-        SfxApplication *pNew = new SfxApplication;
-
-        //TODO/CLEANUP
-        // Is the Mutex-Handling OK?
-        static ::osl::Mutex aProtector;
-        ::osl::MutexGuard aGuard2( aProtector );
-
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
-        pApp = pNew;
+
+        pApp = new SfxApplication;
 
         // at the moment a bug may occur when Initialize_Impl returns FALSE,
         // but this is only temporary because all code that may cause such
