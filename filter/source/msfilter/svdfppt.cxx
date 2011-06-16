@@ -1235,9 +1235,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
         if ( rPersistEntry.pSolverContainer )
         {
-            for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)rPersistEntry.pSolverContainer->aCList.First();
-                pPtr; pPtr = (SvxMSDffConnectorRule*)rPersistEntry.pSolverContainer->aCList.Next() )
+            for ( size_t i = 0; i < rPersistEntry.pSolverContainer->aCList.size(); ++i )
             {
+                SvxMSDffConnectorRule* pPtr = rPersistEntry.pSolverContainer->aCList[ i ];
                 if ( rObjData.nShapeId == pPtr->nShapeC )
                     pPtr->pCObj = pRet;
                 else
@@ -7500,9 +7500,9 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 // possibly connections to the group object have to be removed.
                 if ( pSolverContainer )
                 {
-                    for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)pSolverContainer->aCList.First();
-                        pPtr; pPtr = (SvxMSDffConnectorRule*)pSolverContainer->aCList.Next() )
+                    for ( size_t i = 0; i < pSolverContainer->aCList.size(); ++i )
                     {
+                        SvxMSDffConnectorRule* pPtr = pSolverContainer->aCList[ i ];
                         SdrObjListIter aIter( *pGroup, IM_DEEPWITHGROUPS );
                         while( aIter.IsMore() )
                         {

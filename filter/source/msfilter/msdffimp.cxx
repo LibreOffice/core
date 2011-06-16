@@ -894,9 +894,10 @@ SvxMSDffSolverContainer::SvxMSDffSolverContainer()
 
 SvxMSDffSolverContainer::~SvxMSDffSolverContainer()
 {
-    for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)aCList.First();
-            pPtr; pPtr = (SvxMSDffConnectorRule*)aCList.Next() )
-        delete pPtr;
+    for( size_t i = 0, n = aCList.size(); i < n; ++i ) {
+        delete aCList[ i ];
+    }
+    aCList.clear();
 }
 
 SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
@@ -913,7 +914,7 @@ SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
             {
                 SvxMSDffConnectorRule* pRule = new SvxMSDffConnectorRule;
                 rIn >> *pRule;
-                rContainer.aCList.Insert( pRule, LIST_APPEND );
+                rContainer.aCList.push_back( pRule );
             }
             aCRule.SeekToEndOfRecord( rIn );
         }
@@ -923,10 +924,10 @@ SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
 
 void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 {
-    sal_Int32 i, nCnt;
-    for ( i = 0, nCnt = rSolver.aCList.Count(); i < nCnt; i++ )
+    size_t i, nCnt;
+    for ( i = 0, nCnt = rSolver.aCList.size(); i < nCnt; i++ )
     {
-        SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)rSolver.aCList.GetObject( i );
+        SvxMSDffConnectorRule* pPtr = rSolver.aCList[ i ];
         if ( pPtr->pCObj )
         {
             for ( int nN = 0; nN < 2; nN++ )

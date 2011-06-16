@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <sot/storage.hxx>
+#include <vector>
 
 class Graphic;
 class SvStream;
@@ -227,9 +228,11 @@ struct SvxMSDffConnectorRule
     friend SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
 };
 
+typedef ::std::vector< SvxMSDffConnectorRule* > SvxMSDffConnectorRuleList;
+
 struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 {
-    List    aCList;
+    SvxMSDffConnectorRuleList   aCList;
 
             SvxMSDffSolverContainer();
             ~SvxMSDffSolverContainer();
