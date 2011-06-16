@@ -237,6 +237,8 @@ extern "C" int CDECL compare_strings( const void *arg1, const void *arg2 )
 }
 
 
+namespace {
+
 class LetterTable
 {
     bool        IsLetterTab[256];
@@ -251,6 +253,8 @@ public:
     }
     bool isLetterUnicode( sal_Unicode c );
 };
+
+}
 
 class BasicSimpleCharClass
 {
