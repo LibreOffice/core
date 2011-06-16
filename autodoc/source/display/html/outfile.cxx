@@ -365,12 +365,7 @@ HtmlDocuFile::WriteBody( csv::File & io_aFile )
     if ( sCopyright.length() > 0 )
     {
         aBodyData
-#ifndef COMPATIBLE_NETSCAPE_47
-            >> *new html::HorizontalLine
-                    <<  new html::SizeAttr( "3" );
-#else
             << new xml::XmlCode("<hr size=\"3\">");
-#endif
 
         aBodyData
             >> *new html::Paragraph
