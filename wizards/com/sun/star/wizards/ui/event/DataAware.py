@@ -77,7 +77,7 @@ class DataAware(object):
     def updateUI(self):
         data = self.getFromData()
         ui = self.getFromUI()
-        if data != ui:
+        if data is not ui:
             try:
                 self.setToUI(data)
             except Exception, ex:
@@ -145,10 +145,11 @@ class DataAware(object):
     '''
 
     def setDataObject(self, dataObject, updateUI):
-        if dataObject != None and not (type(self._value) is not
-            type(dataObject)):
-            raise ClassCastException (
-                "can not cast new DataObject to original Class")
+        if dataObject is not None:
+            if not (type(self._value) is not
+                type(dataObject)):
+                raise ClassCastException (
+                    "can not cast new DataObject to original Class")
         self._dataObject = dataObject
         if updateUI:
             self.updateUI()
@@ -166,7 +167,7 @@ class DataAware(object):
     @classmethod
     def setDataObjects(self, dataAwares, dataObject, updateUI):
         for i in dataAwares:
-            i.setDataObject(dataObject, updateUI);
+            i.setDataObject(dataObject, updateUI)
 
     '''
     Value objects read and write a value from and

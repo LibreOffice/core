@@ -34,7 +34,7 @@ class FaxDocument(TextDocument):
         FH.updateDateFields()
 
     def switchFooter(self, sPageStyle, bState, bPageNumber, sText):
-        if self.xTextDocument != None:
+        if self.xTextDocument is not None:
             self.xTextDocument.lockControllers()
             try:
 
@@ -45,7 +45,7 @@ class FaxDocument(TextDocument):
                 if bState:
                     xPageStyle.setPropertyValue("FooterIsOn", True)
                     xFooterText = propertySet.getPropertyValue("FooterText")
-                    xFooterText.setString(sText)
+                    xFooterText.String = sText
 
                     if bPageNumber:
                         #Adding the Page Number
@@ -60,9 +60,8 @@ class FaxDocument(TextDocument):
                         xPageNumberField.setPropertyValue(
                             "NumberingType", uno.Any("short",ARABIC))
                         xPageNumberField.setPropertyValue("SubType", CURRENT)
-                        xFooterText.insertTextContent(xFooterText.getEnd(),
+                        xFooterText.insertTextContent(xFooterText.End,
                             xPageNumberField, False)
-
                 else:
                     Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn",
                         False)
@@ -72,7 +71,7 @@ class FaxDocument(TextDocument):
                 traceback.print_exc()
 
     def hasElement(self, sElement):
-        if self.xTextDocument != None:
+        if self.xTextDocument is not None:
             mySectionHandler = TextSectionHandler(self.xMSF,
                 self.xTextDocument)
             return mySectionHandler.hasTextSectionByName(sElement)
@@ -118,13 +117,13 @@ class FaxDocument(TextDocument):
             if not self.keepLogoFrame:
                 xTF = TextFrameHandler.getFrameByName("Company Logo",
                 self.xTextDocument)
-                if xTF != None:
+                if xTF is not None:
                     xTF.dispose()
 
             if not self.keepTypeFrame:
                 xTF = TextFrameHandler.getFrameByName("Communication Type",
                 self.xTextDocument)
-                if xTF != None:
+                if xTF is not None:
                     xTF.dispose()
 
         except UnoException, e:

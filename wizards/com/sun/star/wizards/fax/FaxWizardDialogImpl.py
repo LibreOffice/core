@@ -98,7 +98,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
 
-            self.xContainerWindow = self.myFaxDoc.xFrame.getContainerWindow()
+            self.xContainerWindow = self.myFaxDoc.xFrame.ContainerWindow
             self.createWindowPeer(self.xContainerWindow)
 
             #add the Roadmap to the dialog:
@@ -116,7 +116,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.initializeElements()
 
             #disable the document, so that the user cannot change anything:
-            self.myFaxDoc.xFrame.getComponentWindow().Enable = False
+            self.myFaxDoc.xFrame.ComponentWindow.Enable = False
 
             self.executeDialogFromComponent(self.myFaxDoc.xFrame)
             self.removeTerminateListener()
@@ -133,16 +133,16 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.running = False
 
     def finishWizard(self):
-        self.switchToStep(self.getCurrentStep(), self.nMaxStep)
+        self.switchToStep(self.CurrentStep, self.nMaxStep)
         self.myFaxDoc.setWizardTemplateDocInfo( \
             self.resources.resFaxWizardDialog_title,
             self.resources.resTemplateDescription)
         try:
             fileAccess = FileAccess(self.xMSF)
-            self.sPath = self.myPathSelection.getSelectedPath()
+            self.sPath = self.myPathSelection.SelectedPath
             if self.sPath == "":
                 self.myPathSelection.triggerPathPicker()
-                self.sPath = self.myPathSelection.getSelectedPath()
+                self.sPath = self.myPathSelection.SelectedPath
             print self.sPath
 
             self.sPath = fileAccess.getURL(self.sPath)
@@ -152,7 +152,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             if not self.__filenameChanged:
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox( \
-                        xMSF, xControl.getPeer(), "MessBox",
+                        xMSF, xControl.Peer, "MessBox",
                         VclWindowPeerAttribute.YES_NO + \
                         VclWindowPeerAttribute.DEF_NO,
                         self.resources.resOverwriteWarning)
@@ -198,7 +198,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
                 oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF),
                     self.sPath, "_default", loadValues)
-                myViewHandler = oDoc.getCurrentController().getViewSettings()
+                myViewHandler = oDoc.CurrentController.ViewSettings
                 myViewHandler.setPropertyValue("ZoomType",
                     uno.Any("short",OPTIMAL))
             else:
@@ -445,7 +445,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.__setPossibleFooter(True)
     def lstBusinessStyleItemChanged(self):
         self.xTextDocument = self.myFaxDoc.loadAsPreview( \
-            self.BusinessFiles[1][self.lstBusinessStyle.getSelectedItemPos()],
+            self.BusinessFiles[1][self.lstBusinessStyle.SelectedItemPos],
                 False)
         self.initializeElements()
         self.setElements()
@@ -467,13 +467,13 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def lstPrivateStyleItemChanged(self):
         self.xTextDocument = self.myFaxDoc.loadAsPreview( \
-            self.PrivateFiles[1][self.lstPrivateStyle.getSelectedItemPos()],
+            self.PrivateFiles[1][self.lstPrivateStyle.SelectedItemPos],
                 False)
         self.initializeElements()
         self.setElements()
 
     def txtTemplateNameTextChanged(self):
-        xDocProps = self.xTextDocument.getDocumentProperties()
+        xDocProps = self.xTextDocument.DocumentProperties
         xDocProps.Title = self.txtTemplateName.Text
 
     def optSenderPlaceholderItemChanged(self):

@@ -169,17 +169,17 @@ class TextDocument(object):
         xTextCursor.gotoStart(False)
         com.sun.star.wizards.common.Helper.setUnoPropertyValue(
             xTextCursor, "PageDescName", "First Page")
-        xTextCursor.setString(ScaleString)
+        xTextCursor.String = ScaleString
         xViewCursor = self.xTextDocument.CurrentController
-        xTextViewCursor = xViewCursor.getViewCursor()
+        xTextViewCursor = xViewCursor.ViewCursor
         xTextViewCursor.gotoStart(False)
-        iFirstPos = xTextViewCursor.getPosition().X
+        iFirstPos = xTextViewCursor.Position.X
         xTextViewCursor.gotoEnd(False)
-        iLastPos = xTextViewCursor.getPosition().X
+        iLastPos = xTextViewCursor.Position.X
         iScale = (iLastPos - iFirstPos) / iScaleLen
         xTextCursor.gotoStart(False)
         xTextCursor.gotoEnd(True)
-        xTextCursor.setString("")
+        xTextCursor.String = ""
         unlockallControllers()
         return iScale
 
