@@ -61,6 +61,7 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_linked_libs,hwp,\
     ole32 \
+    user32 \
     uuid \
 ))
 
