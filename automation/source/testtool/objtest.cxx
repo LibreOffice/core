@@ -462,6 +462,10 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "27" );  // DragonFly/i386
 #elif defined DRAGONFLY && defined X86_64
     abGP.Append( "28" );  // DragonFly/x86-64
+#elif defined IOS && defined ARM
+    abGP.Append( "29" );  // iOS
+#elif defined ANDROID && defined ARM
+    abGP.Append( "30" );  // Android
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
