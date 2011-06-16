@@ -1114,9 +1114,12 @@ public:
 
 };
 
+class EscherShapeListEntry;
+typedef ::std::vector< EscherShapeListEntry* > EscherShapeList_impl;
+
 class MSFILTER_DLLPUBLIC EscherSolverContainer
 {
-    List            maShapeList;
+    EscherShapeList_impl    maShapeList;
     List            maConnectorList;
 
 public:

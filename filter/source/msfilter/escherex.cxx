@@ -4142,31 +4142,34 @@ EscherSolverContainer::~EscherSolverContainer()
 {
     void* pP;
 
-    for( pP = maShapeList.First(); pP; pP = maShapeList.Next() )
-        delete (EscherShapeListEntry*)pP;
+    for( size_t i = 0, n = maShapeList.size(); i < n; ++i ) {
+        delete maShapeList[ i ];
+    }
     for( pP = maConnectorList.First(); pP; pP = maConnectorList.Next() )
         delete (EscherConnectorListEntry*)pP;
 }
 
 void EscherSolverContainer::AddShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, sal_uInt32 nId )
 {
-    maShapeList.Insert( new EscherShapeListEntry( rXShape, nId ), LIST_APPEND );
+    maShapeList.push_back( new EscherShapeListEntry( rXShape, nId ) );
 }
 
-void EscherSolverContainer::AddConnector( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConnector,
-                                        const ::com::sun::star::awt::Point& rPA,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConA,
-                                        const ::com::sun::star::awt::Point& rPB,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB )
+void EscherSolverContainer::AddConnector(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConnector,
+    const ::com::sun::star::awt::Point& rPA,
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConA,
+    const ::com::sun::star::awt::Point& rPB,
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB
+)
 {
     maConnectorList.Insert( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ), LIST_APPEND );
 }
 
 sal_uInt32 EscherSolverContainer::GetShapeId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape ) const
 {
-    for ( EscherShapeListEntry* pPtr = (EscherShapeListEntry*)((List&)maShapeList).First();
-            pPtr; pPtr = (EscherShapeListEntry*)((List&)maShapeList).Next() )
+    for ( size_t i = 0, n = maShapeList.size(); i < n; ++i )
     {
+        EscherShapeListEntry* pPtr = maShapeList[ i ];
         if ( rXShape == pPtr->aXShape )
             return ( pPtr->n_EscherId );
     }
