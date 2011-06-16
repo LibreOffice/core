@@ -138,7 +138,7 @@ rtlDigestError calc_md5_checksum(const char *filename, rtl::OString &rChecksum)
             {
                 if ( checksum[i] < 16 )
                     aChecksumBuf.append('0');
-                aChecksumBuf.append(checksum[i], 16);
+                aChecksumBuf.append(static_cast<sal_Int32>(checksum[i]), 16);
             }
         }
 
