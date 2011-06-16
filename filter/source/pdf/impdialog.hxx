@@ -190,6 +190,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     CheckBox                    maCbReduceImageResolution;
     ComboBox                    maCoReduceImageResolution;
 
+    FixedLine m_aVerticalLine;
+
     FixedLine                   maFlGeneral;
     CheckBox                    maCbPDFA1b;
     CheckBox                    maCbTaggedPDF;
@@ -254,6 +256,8 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     RadioButton                 maRbMagnZoom;
     MetricField                 maNumZoom;
 
+    FixedLine m_aVerticalLine;
+
     FixedLine                   maFlPageLayout;
     RadioButton                 maRbPgLyDefault;
     RadioButton                 maRbPgLySinglePage;
@@ -286,6 +290,8 @@ class ImpPDFTabViewerPage : public SfxTabPage
     CheckBox                    maCbCenterWindow;
     CheckBox                    maCbOpenFullScreen;
     CheckBox                    maCbDispDocTitle;
+
+    FixedLine m_aVerticalLine;
 
     FixedLine                   maFlUIOptions;
     CheckBox                    maCbHideViewerMenubar;
@@ -329,6 +335,8 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     String                      maOwnerPwdSet;
     String                      maOwnerPwdUnset;
     String                      maOwnerPwdPdfa;
+
+    FixedLine m_aVerticalLine;
 
     FixedLine                   maFlPrintPermissions;
     RadioButton                 maRbPrintNone;

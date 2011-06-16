@@ -434,6 +434,8 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCbReduceImageResolution( this, PDFFilterResId( CB_REDUCEIMAGERESOLUTION ) ),
     maCoReduceImageResolution( this, PDFFilterResId( CO_REDUCEIMAGERESOLUTION ) ),
 
+    m_aVerticalLine(this, PDFFilterResId(FL_GENERAL_VERTICAL)),
+
     maFlGeneral( this, PDFFilterResId( FL_GENERAL ) ),
     maCbPDFA1b( this, PDFFilterResId( CB_PDFA_1B_SELECT ) ),
 
@@ -791,6 +793,8 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
     maRbMagnZoom( this, PDFFilterResId( RB_MAGNF_ZOOM ) ),
     maNumZoom( this, PDFFilterResId( NUM_MAGNF_ZOOM ) ),
 
+    m_aVerticalLine(this, PDFFilterResId(FL_INITVIEW_VERTICAL)),
+
     maFlPageLayout( this, PDFFilterResId( FL_PAGE_LAYOUT ) ),
     maRbPgLyDefault( this, PDFFilterResId( RB_PGLY_DEFAULT ) ),
     maRbPgLySinglePage( this, PDFFilterResId( RB_PGLY_SINGPG ) ),
@@ -955,6 +959,8 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
     maCbOpenFullScreen( this, PDFFilterResId( CB_WNDOPT_OPNFULL ) ),
     maCbDispDocTitle( this, PDFFilterResId( CB_DISPDOCTITLE ) ),
 
+    m_aVerticalLine(this, PDFFilterResId(FL_VPREFER_VERTICAL)),
+
     maFlUIOptions( this, PDFFilterResId( FL_USRIFOPT ) ),
     maCbHideViewerMenubar( this, PDFFilterResId( CB_UOP_HIDEVMENUBAR ) ),
     maCbHideViewerToolbar( this, PDFFilterResId( CB_UOP_HIDEVTOOLBAR ) ),
@@ -1052,6 +1058,8 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
     maOwnerPwdSet( PDFFilterResId( STR_OWNER_PWD_SET ) ),
     maOwnerPwdUnset( PDFFilterResId( STR_OWNER_PWD_UNSET ) ),
     maOwnerPwdPdfa( PDFFilterResId( STR_OWNER_PWD_PDFA ) ),
+
+    m_aVerticalLine(this, PDFFilterResId(FL_SECURITY_VERTICAL)),
 
     maFlPrintPermissions( this, PDFFilterResId( FL_PRINT_PERMISSIONS ) ),
     maRbPrintNone( this, PDFFilterResId( RB_PRINT_NONE ) ),
