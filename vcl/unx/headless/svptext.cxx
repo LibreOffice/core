@@ -43,9 +43,9 @@
 #include <impfont.hxx>
 #include <rtl/instance.hxx>
 
-#include "svpgdi.hxx"
-#include "svpbmp.hxx"
-#include "svppspgraphics.hxx"
+#include "unx/headless/svpgdi.hxx"
+#include "unx/headless/svpbmp.hxx"
+#include "unx/headless/svppspgraphics.hxx"
 
 using namespace basegfx;
 using namespace basebmp;

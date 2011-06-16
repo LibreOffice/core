@@ -25,4 +25,6 @@
  * instead of those above.
  */
 
-#include "../../gtk/gdi/salnativewidgets-gtk.cxx"
+#include "../../headless/svpdi.hxx"
+#include "../../headless/svpdi.hxx"
+

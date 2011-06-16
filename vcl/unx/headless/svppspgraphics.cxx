@@ -54,8 +54,8 @@
 #include "outfont.hxx"
 #include "fontsubset.hxx"
 #include "printergfx.hxx"
-#include "svppspgraphics.hxx"
-#include "svpbmp.hxx"
+#include "unx/headless/svppspgraphics.hxx"
+#include "unx/headless/svpbmp.hxx"
 #include "region.h"
 
 using namespace psp;

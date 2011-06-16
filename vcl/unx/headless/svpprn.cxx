@@ -41,9 +41,9 @@
 #include "print.h"
 #include "salptype.hxx"
 
-#include "svpprn.hxx"
-#include "svppspgraphics.hxx"
-#include "svpinst.hxx"
+#include "unx/headless/svpprn.hxx"
+#include "unx/headless/svppspgraphics.hxx"
+#include "unx/headless/svpinst.hxx"
 
 using namespace psp;
 
