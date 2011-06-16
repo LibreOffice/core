@@ -189,13 +189,13 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
         { \
             xListener->MethodName( aMulti, aMulti2 ); \
         } \
-        catch( ::com::sun::star::lang::DisposedException e ) \
+        catch(const ::com::sun::star::lang::DisposedException& e) \
         { \
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
             if ( e.Context == xListener || !e.Context.is() ) \
                 aIt.remove(); \
         } \
-        catch( ::com::sun::star::uno::RuntimeException e ) \
+        catch(const ::com::sun::star::uno::RuntimeException& e) \
         { \
             DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
         } \
@@ -214,13 +214,13 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
         { \
             xListener->MethodName( aMulti ); \
         } \
-        catch( ::com::sun::star::lang::DisposedException e ) \
+        catch(const ::com::sun::star::lang::DisposedException& e) \
         { \
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
             if ( e.Context == xListener || !e.Context.is() ) \
                 aIt.remove(); \
         } \
-        catch( ::com::sun::star::uno::RuntimeException e ) \
+        catch(const ::com::sun::star::uno::RuntimeException& e) \
         { \
             DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
         } \
@@ -240,13 +240,13 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
         { \
             xListener->MethodName( aMulti ); \
         } \
-        catch( ::com::sun::star::lang::DisposedException e ) \
+        catch(const ::com::sun::star::lang::DisposedException& e) \
         { \
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
             if ( e.Context == xListener || !e.Context.is() ) \
                 aIt.remove(); \
         } \
-        catch( ::com::sun::star::uno::RuntimeException e ) \
+        catch(const ::com::sun::star::uno::RuntimeException& e) \
         { \
             DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
         } \
