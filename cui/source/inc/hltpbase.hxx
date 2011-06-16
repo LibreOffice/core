@@ -28,8 +28,6 @@
 #ifndef _SVX_TABBASE_HYPERLINK_HXX
 #define _SVX_TABBASE_HYPERLINK_HXX
 
-#define INET_TELNET_SCHEME      "telnet://"
-
 #include <sfx2/app.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>

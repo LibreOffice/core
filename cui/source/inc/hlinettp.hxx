@@ -44,7 +44,6 @@ private:
     FixedLine           maGrpLinkTyp;
     RadioButton         maRbtLinktypInternet;
     RadioButton         maRbtLinktypFTP;
-    RadioButton         maRbtLinktypTelnet;
     FixedText           maFtTarget;
     SvxHyperURLBox      maCbbTarget;
     ImageButton         maBtBrowse;
@@ -62,10 +61,10 @@ private:
 
     String              maStrStdDocURL;
 
-    DECL_LINK (Click_SmartProtocol_Impl  , void * );        // Radiobutton clicked: Type Internet, FTP or Telnet
-    DECL_LINK (ClickAnonymousHdl_Impl    , void * );        // Checkbox : Anonymer Benutzer
+    DECL_LINK (Click_SmartProtocol_Impl  , void * );        // Radiobutton clicked: Type HTTP or FTP
+    DECL_LINK (ClickAnonymousHdl_Impl    , void * );        // Checkbox : Anonymous User
     DECL_LINK (ClickBrowseHdl_Impl       , void * );        // Button : Browse
-    DECL_LINK (ClickTargetHdl_Impl       , void * );        // Button : Ziel
+    DECL_LINK (ClickTargetHdl_Impl       , void * );        // Button : Target
     DECL_LINK (ModifiedLoginHdl_Impl     , void * );        // Contens of editfield "Login" modified
     DECL_LINK (LostFocusTargetHdl_Impl   , void * );        // Combobox "Target" lost its focus
     DECL_LINK (ModifiedTargetHdl_Impl    , void * );        // Contens of editfield "Target" modified

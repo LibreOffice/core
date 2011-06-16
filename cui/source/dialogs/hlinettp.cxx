@@ -41,7 +41,6 @@ sal_Char const sAnonymous[]    = "anonymous";
 sal_Char const sHTTPScheme[]   = INET_HTTP_SCHEME;
 sal_Char const sHTTPSScheme[]  = INET_HTTPS_SCHEME;
 sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
-sal_Char const sTelnetScheme[] = INET_TELNET_SCHEME;
 
 /*************************************************************************
 |*
@@ -56,7 +55,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maGrpLinkTyp           ( this, CUI_RES (GRP_LINKTYPE) ),
     maRbtLinktypInternet    ( this, CUI_RES (RB_LINKTYP_INTERNET) ),
     maRbtLinktypFTP         ( this, CUI_RES (RB_LINKTYP_FTP) ),
-    maRbtLinktypTelnet      ( this, CUI_RES (RB_LINKTYP_TELNET) ),
     maFtTarget              ( this, CUI_RES (FT_TARGET_HTML) ),
     maCbbTarget             ( this, INET_PROT_HTTP ),
     maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
@@ -112,7 +110,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     Link aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     maRbtLinktypInternet.SetClickHdl( aLink );
     maRbtLinktypFTP.SetClickHdl     ( aLink );
-    maRbtLinktypTelnet.SetClickHdl  ( aLink );
     maCbAnonymous.SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
     maBtBrowse.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
     maBtTarget.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickTargetHdl_Impl ) );
@@ -308,14 +305,10 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
     //if  aScheme is empty or unknown the default beaviour is like it where HTTP
 
     sal_Bool bFTP = aScheme.SearchAscii( sFTPScheme ) == 0;
-    sal_Bool bTelnet = sal_False;
-    if( !bFTP )
-        bTelnet = aScheme.SearchAscii( sTelnetScheme ) == 0;
-    sal_Bool bInternet = !(bFTP || bTelnet);
+    sal_Bool bInternet = !(bFTP);
 
     //update protocol button selection:
     maRbtLinktypFTP.Check(bFTP);
-    maRbtLinktypTelnet.Check(bTelnet);
     maRbtLinktypInternet.Check(bInternet);
 
     //update target:
@@ -338,7 +331,7 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
     }
     else
     {
-        //disable for https, ftp and telnet
+        //disable for https and ftp
         maBtTarget.Disable();
         if ( mbMarkWndOpen )
             HideMarkWnd ();
@@ -371,10 +364,6 @@ String SvxHyperlinkInternetTp::GetSchemeFromButtons() const
     {
         return String::CreateFromAscii( INET_FTP_SCHEME );
     }
-    else if( maRbtLinktypTelnet.IsChecked() )
-    {
-        return String::CreateFromAscii( INET_TELNET_SCHEME );
-    }
     return String::CreateFromAscii( INET_HTTP_SCHEME );
 }
 
@@ -384,16 +373,12 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
     {
         return INET_PROT_FTP;
     }
-    else if( maRbtLinktypTelnet.IsChecked() )
-    {
-        return INET_PROT_TELNET;
-    }
     return INET_PROT_HTTP;
 }
 
 /*************************************************************************
 |*
-|* Click on Radiobutton : Internet, FTP or Telnet
+|* Click on Radiobutton : Internet or FTP
 |*
 |************************************************************************/
 

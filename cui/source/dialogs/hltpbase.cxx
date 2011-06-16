@@ -578,10 +578,6 @@ String SvxHyperlinkTabPageBase::GetSchemeFromURL( String aStrURL )
         {
             aStrScheme = String::CreateFromAscii( INET_NEWS_SCHEME );
         }
-        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_TELNET_SCHEME, 0, 9 ) )
-        {
-            aStrScheme = String::CreateFromAscii( INET_TELNET_SCHEME );
-        }
     }
     else
         aStrScheme = INetURLObject::GetScheme( aProtocol );
