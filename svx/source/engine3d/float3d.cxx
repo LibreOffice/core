@@ -234,7 +234,6 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         pFmPage             ( NULL ),
         pVDev               ( NULL ),
         p3DView             ( NULL ),
-        pMatFavSetList      ( NULL ),
 
         pBindings           ( pInBindings ),
         pControllerItem(0L),
@@ -449,7 +448,6 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 // -----------------------------------------------------------------------
 Svx3DWin::~Svx3DWin()
 {
-    //delete pMatFavSetList;
     delete p3DView;
     delete pVDev;
     delete pModel;

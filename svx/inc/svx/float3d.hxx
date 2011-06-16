@@ -205,7 +205,6 @@ private:
     FmFormPage*         pFmPage;
     VirtualDevice*      pVDev;
     E3dView*            p3DView;
-    List*               pMatFavSetList;
 
     SfxBindings*                pBindings;
     Svx3DCtrlItem*              pControllerItem;
