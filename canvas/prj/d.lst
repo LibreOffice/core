@@ -14,6 +14,7 @@
 ..\%__SRC%\lib\simplecanvas.uno.so %_DEST%\lib\simplecanvas.uno.so
 ..\%__SRC%\lib\canvasfactory.uno.so %_DEST%\lib\canvasfactory.uno.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
 ..\%__SRC%\class\javacanvas.uno.jar %_DEST%\bin\javacanvas.uno.jar
 ..\%__SRC%\misc\cairocanvas.component %_DEST%\xml\cairocanvas.component
 
