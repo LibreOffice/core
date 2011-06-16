@@ -75,7 +75,10 @@ class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
     # oItemEvent is a com.sun.star.awt.ItemEvent struct.
     def itemStateChanged( self, oItemEvent ):
         if callable( self.oProcToCall ):
-            apply( self.oProcToCall )
+            try:
+                apply( self.oProcToCall)
+            except:
+                apply( self.oProcToCall, (oItemEvent,) + self.tParams )
 
 
 #--------------------------------------------------

@@ -502,7 +502,7 @@ class UnoDialog(object):
     '''
 
     def executeDialogFromParent(self, parent):
-        return self.executeDialog(parent.xWindow.getPosSize())
+        return self.executeDialog(parent.xWindow.PosSize)
 
     '''
     @param XComponent
@@ -511,10 +511,10 @@ class UnoDialog(object):
     '''
 
     def executeDialogFromComponent(self, xComponent):
-        if xComponent != None:
-            w = xComponent.getComponentWindow()
-            if w != None:
-                return self.executeDialog(w.getPosSize())
+        if xComponent is not None:
+            w = xComponent.ComponentWindow
+            if w is not None:
+                return self.executeDialog(w.PosSize)
 
         return self.executeDialog( Rectangle (0, 0, 640, 400))
 

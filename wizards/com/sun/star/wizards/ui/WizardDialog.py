@@ -37,9 +37,9 @@ class WizardDialog(UnoDialog2):
         super(WizardDialog,self).__init__(xMSF)
         self.__hid = hid_
         self.__iButtonWidth = 50
-        self.__nNewStep = 1
-        self.__nOldStep = 1
-        self.__nMaxStep = 1
+        self.nNewStep = 1
+        self.nOldStep = 1
+        self.nMaxStep = 1
         self.__bTerminateListenermustberemoved = True
         self.__oWizardResource = Resource(xMSF, "dbw")
         self.sMsgEndAutopilot = self.__oWizardResource.getResText(
@@ -59,35 +59,14 @@ class WizardDialog(UnoDialog2):
             pass
             # do nothing;
 
-    def setMaxStep(self, i):
-        self.__nMaxStep = i
-
-    def getMaxStep(self):
-        return self.__nMaxStep
-
-    def setOldStep(self, i):
-        self.__nOldStep = i
-
-    def getOldStep(self):
-        return self.__nOldStep
-
-    def setNewStep(self, i):
-        self.__nNewStep = i
-
-    def getNewStep(self):
-        return self.__nNewStep
-
-    def vetoableChange(self, arg0):
-        self.__nNewStep = self.__nOldStep
-
     def itemStateChanged(self, itemEvent):
         try:
-            self.__nNewStep = itemEvent.ItemId
-            self.__nOldStep = int(Helper.getUnoPropertyValue(
+            self.nNewStep = itemEvent.ItemId
+            self.nOldStep = int(Helper.getUnoPropertyValue(
                 self.xDialogModel,
                 PropertyNames.PROPERTY_STEP))
-            if self.__nNewStep != self.__nOldStep:
-                switchToStep()
+            if self.nNewStep != self.nOldStep:
+                self.switchToStep()
 
         except IllegalArgumentException, exception:
             traceback.print_exc()
@@ -142,10 +121,10 @@ class WizardDialog(UnoDialog2):
             self.oRoadmap.setPropertyValue(
                 PropertyNames.PROPERTY_NAME, "rdmNavi")
 
-            mi = MethodInvocation("itemStateChanged", self)
             self.xRoadmapControl = self.xUnoDialog.getControl("rdmNavi")
+            method = getattr(self, "itemStateChanged")
             self.xRoadmapControl.addItemListener(
-                ItemListenerProcAdapter(None))
+                ItemListenerProcAdapter(method))
 
             Helper.setUnoPropertyValue(
                 self.oRoadmap, "Text",
@@ -157,17 +136,15 @@ class WizardDialog(UnoDialog2):
 
     def setRMItemLabels(self, _oResource, StartResID):
         self.sRMItemLabels = _oResource.getResArray(
-            StartResID, self.__nMaxStep)
+            StartResID, self.nMaxStep)
 
     def getRMItemLabels(self):
         return self.sRMItemLabels
 
-    def insertRoadmapItem(self, _Index, _bEnabled, _LabelID, _CurItemID):
-        return insertRoadmapItem(
-            _Index, _bEnabled, self.sRMItemLabels(_LabelID), _CurItemID)
-
     def insertRoadmapItem(self, Index, _bEnabled, _sLabel, _CurItemID):
         try:
+            if isinstance(_sLabel, int):
+                _sLabel = self.sRMItemLabels(_sLabel)
             oRoadmapItem = self.oRoadmap.createInstance()
             Helper.setUnoPropertyValue(oRoadmapItem,
                 PropertyNames.PROPERTY_LABEL, _sLabel)
@@ -201,12 +178,12 @@ class WizardDialog(UnoDialog2):
 
     def switchToStep(self,_nOldStep=None, _nNewStep=None):
         if _nOldStep is not None and _nNewStep is not None:
-            self.__nOldStep = _nOldStep
-            self.__nNewStep = _nNewStep
+            self.nOldStep = _nOldStep
+            self.nNewStep = _nNewStep
 
-        self.leaveStep(self.__nOldStep, self.__nNewStep)
-        if self.__nNewStep != self.__nOldStep:
-            if self.__nNewStep == self.__nMaxStep:
+        self.leaveStep(self.nOldStep, self.nNewStep)
+        if self.nNewStep != self.nOldStep:
+            if self.nNewStep == self.nMaxStep:
                 self.setControlProperty(
                     "btnWizardNext", "DefaultButton", False)
                 self.setControlProperty(
@@ -217,8 +194,8 @@ class WizardDialog(UnoDialog2):
                 self.setControlProperty(
                     "btnWizardFinish", "DefaultButton", False)
 
-            self.changeToStep(self.__nNewStep)
-            self.enterStep(self.__nOldStep, self.__nNewStep)
+            self.changeToStep(self.nNewStep)
+            self.enterStep(self.nOldStep, self.nNewStep)
             return True
 
         return False
@@ -382,16 +359,16 @@ class WizardDialog(UnoDialog2):
                 PropertyNames.PROPERTY_ENABLED, bEnabled)
 
     def enablefromStep(self, _iStep, _bDoEnable):
-        if _iStep <= self.__nMaxStep:
+        if _iStep <= self.nMaxStep:
             i = _iStep
-            while i <= self.__nMaxStep:
+            while i <= self.nMaxStep:
                 setStepEnabled(i, _bDoEnable)
                 i += 1
             enableFinishButton(_bDoEnable)
             if not _bDoEnable:
                 enableNextButton(_iStep > getCurrentStep() + 1)
             else:
-                enableNextButton(not (getCurrentStep() == self.__nMaxStep))
+                enableNextButton(not (getCurrentStep() == self.nMaxStep))
 
     def isStepEnabled(self, _nStep):
         try:
@@ -408,17 +385,17 @@ class WizardDialog(UnoDialog2):
 
     def gotoPreviousAvailableStep(self):
         try:
-            if self.__nNewStep > 1:
-                self.__nOldStep = self.__nNewStep
-                self.__nNewStep -= 1
-                while self.__nNewStep > 0:
-                    bIsEnabled = self.isStepEnabled(self.__nNewStep)
+            if self.nNewStep > 1:
+                self.nOldStep = self.nNewStep
+                self.nNewStep -= 1
+                while self.nNewStep > 0:
+                    bIsEnabled = self.isStepEnabled(self.nNewStep)
                     if bIsEnabled:
                         break;
 
-                    self.__nNewStep -= 1
-                if (self.__nNewStep == 0):
-                    self.__nNewStep = self.__nOldStep
+                    self.nNewStep -= 1
+                if (self.nNewStep == 0):
+                    self.nNewStep = self.nOldStep
                 self.switchToStep()
         except Exception, e:
             traceback.print_exc()
@@ -427,8 +404,8 @@ class WizardDialog(UnoDialog2):
 
     def getNextAvailableStep(self):
         if self.isRoadmapComplete():
-            i = self.__nNewStep + 1
-            while i <= self.__nMaxStep:
+            i = self.nNewStep + 1
+            while i <= self.nMaxStep:
                 if self.isStepEnabled(i):
                     return i
 
@@ -438,9 +415,9 @@ class WizardDialog(UnoDialog2):
 
     def gotoNextAvailableStep(self):
         try:
-            self.__nOldStep = self.__nNewStep
-            self.__nNewStep = self.getNextAvailableStep()
-            if self.__nNewStep > -1:
+            self.nOldStep = self.nNewStep
+            self.nNewStep = self.getNextAvailableStep()
+            if self.nNewStep > -1:
                 self.switchToStep()
         except Exception, e:
             traceback.print_exc()
@@ -467,7 +444,7 @@ class WizardDialog(UnoDialog2):
              traceback.print_exc()
 
     def getMaximalStep(self):
-        return self.__nMaxStep
+        return self.nMaxStep
 
     def getCurrentStep(self):
         try:
@@ -478,15 +455,15 @@ class WizardDialog(UnoDialog2):
             return -1
 
     def setCurrentStep(self, _nNewstep):
-        self.__nNewStep = _nNewstep
-        changeToStep(self.__nNewStep)
+        self.nNewStep = _nNewstep
+        changeToStep(self.nNewStep)
 
     def setRightPaneHeaders(self, _oResource, StartResID, _nMaxStep):
         self.sRightPaneHeaders = _oResource.getResArray(StartResID, _nMaxStep)
         setRightPaneHeaders(self.sRightPaneHeaders)
 
     def setRightPaneHeaders(self, _sRightPaneHeaders):
-        self.__nMaxStep = _sRightPaneHeaders.length
+        self.nMaxStep = _sRightPaneHeaders.length
         self.sRightPaneHeaders = _sRightPaneHeaders
         oFontDesc = FontDescriptor.FontDescriptor()
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD
