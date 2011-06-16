@@ -1069,7 +1069,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
 
-        // #103939# Don't through assertion, may be it's a system dependend window, used in ImplCreateWindow.
+        // #103939# Don't throw assertion, may be it's a system dependend window, used in ImplCreateWindow.
         // DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
 
         if ( pParentComponent )
