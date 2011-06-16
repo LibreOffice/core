@@ -65,7 +65,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.running = True
         try:
             #Number of steps on WizardDialog:
-            self.setMaxStep(5)
+            self.nMaxStep = 5
 
             #instatiate The Document Frame for the Preview
             self.myFaxDoc = FaxDocument(xMSF, self)
@@ -133,7 +133,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.running = False
 
     def finishWizard(self):
-        self.switchToStep(self.getCurrentStep(), self.getMaxStep())
+        self.switchToStep(self.getCurrentStep(), self.nMaxStep)
         self.myFaxDoc.setWizardTemplateDocInfo( \
             self.resources.resFaxWizardDialog_title,
             self.resources.resTemplateDescription)

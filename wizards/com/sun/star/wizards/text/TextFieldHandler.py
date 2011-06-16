@@ -4,6 +4,8 @@ from com.sun.star.util import DateTime
 from common.PropertyNames import PropertyNames
 import unicodedata
 
+import inspect
+
 class TextFieldHandler(object):
     '''
     Creates a new instance of TextFieldHandler
@@ -11,9 +13,16 @@ class TextFieldHandler(object):
     @param xTextDocument
     '''
 
+    xTextFieldsSupplierAux = None
+    dictTextFields = None
+
     def __init__(self, xMSF, xTextDocument):
         self.xMSFDoc = xMSF
         self.xTextFieldsSupplier = xTextDocument
+        if TextFieldHandler.xTextFieldsSupplierAux is not \
+                self.xTextFieldsSupplier:
+            self.__getTextFields()
+            TextFieldHandler.xTextFieldsSupplierAux = self.xTextFieldsSupplier
 
     def refreshTextFields(self):
         xUp = self.xTextFieldsSupplier.TextFields
@@ -40,9 +49,9 @@ class TextFieldHandler(object):
             xField = self.xMSFDoc.createInstance(
                 "com.sun.star.text.TextField.User")
 
-            if self.xTextFieldsSupplier.getTextFieldMasters().hasByName(
+            if self.xTextFieldsSupplier.TextFieldMasters.hasByName(
                 "com.sun.star.text.FieldMaster.User." + FieldName):
-                oMaster = self.xTextFieldsSupplier.getTextFieldMasters().getByName( \
+                oMaster = self.xTextFieldsSupplier.TextFieldMasters.getByName( \
                     "com.sun.star.text.FieldMaster.User." + FieldName)
                 oMaster.dispose()
 
@@ -60,55 +69,52 @@ class TextFieldHandler(object):
         xPSet.setPropertyValue("Content", FieldTitle)
         return xPSet
 
-    def __getTextFieldsByProperty(
-            self, _PropertyName, _aPropertyValue, _TypeName):
+    def __getTextFields(self):
         try:
             if self.xTextFieldsSupplier.TextFields.hasElements():
+                TextFieldHandler.dictTextFields = {}
                 xEnum = \
                     self.xTextFieldsSupplier.TextFields.createEnumeration()
-                xDependentVector = []
                 while xEnum.hasMoreElements():
                     oTextField = xEnum.nextElement()
                     xPropertySet = oTextField.TextFieldMaster
-                    if xPropertySet.PropertySetInfo.hasPropertyByName(
-                        _PropertyName):
-                        oValue = xPropertySet.getPropertyValue(_PropertyName)
-                        if isinstance(oValue,unicode):
-                            if _TypeName == "String":
-                                sValue = unicodedata.normalize(
-                                    'NFKD', oValue).encode('ascii','ignore')
-                                if sValue == _aPropertyValue:
-                                    xDependentVector.append(oTextField)
-                        #COMMENTED
-                        '''elif AnyConverter.isShort(oValue):
-                            if _TypeName.equals("Short"):
-                                iShortParam = (_aPropertyValue).shortValue()
-                                ishortValue = AnyConverter.toShort(oValue)
-                                if ishortValue == iShortParam:
-                                    xDependentVector.append(oTextField) '''
-                if xDependentVector:
-                    return xDependentVector
-            else:
-                return None
-
+                    if len(xPropertySet.Name) is not 0:
+                        TextFieldHandler.dictTextFields[xPropertySet.Name] = \
+                            oTextField
         except Exception, e:
             #TODO Auto-generated catch block
             traceback.print_exc()
 
-        return None
+    def __getTextFieldsByProperty(
+            self, _PropertyName, _aPropertyValue, _TypeName):
+        try:
+            xProperty = TextFieldHandler.dictTextFields[_aPropertyValue]
+            xPropertySet = xProperty.TextFieldMaster
+            if xPropertySet.PropertySetInfo.hasPropertyByName(
+                    _PropertyName):
+                oValue = xPropertySet.getPropertyValue(_PropertyName)
+                if _TypeName == "String":
+                    sValue = unicodedata.normalize(
+                        'NFKD', oValue).encode('ascii','ignore')
+                    if sValue == _aPropertyValue:
+                        return xProperty
+            #COMMENTED
+            '''elif AnyConverter.isShort(oValue):
+                        if _TypeName.equals("Short"):
+                            iShortParam = (_aPropertyValue).shortValue()
+                            ishortValue = AnyConverter.toShort(oValue)
+                            if ishortValue == iShortParam:
+                                xDependentVector.append(oTextField) '''
+            return None
+        except KeyError, e:
+            return None
 
     def changeUserFieldContent(self, _FieldName, _FieldContent):
-        try:
-            xDependentTextFields = self.__getTextFieldsByProperty(
+        DependentTextFields = self.__getTextFieldsByProperty(
                 PropertyNames.PROPERTY_NAME, _FieldName, "String")
-            if xDependentTextFields != None:
-                for i in xDependentTextFields:
-                    i.getTextFieldMaster().setPropertyValue(
-                        "Content", _FieldContent)
-                self.refreshTextFields()
-
-        except Exception, e:
-            traceback.print_exc()
+        if DependentTextFields is not None:
+            DependentTextFields.TextFieldMaster.setPropertyValue("Content", _FieldContent)
+            self.refreshTextFields()
 
     def updateDocInfoFields(self):
         try:
