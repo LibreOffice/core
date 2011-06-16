@@ -322,6 +322,11 @@ private:
     bool bExtensionMode;
 };
 
+inline char tocharlower(char c)
+{
+    return static_cast<char>(tolower(c));
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

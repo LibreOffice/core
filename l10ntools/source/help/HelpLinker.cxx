@@ -351,7 +351,7 @@ void HelpLinker::addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishi
     size_t i = 0;
     dataB[i++] = static_cast<unsigned char>(fileLen);
     for (size_t j = 0; j < fileB.length(); ++j)
-        dataB[i++] = fileB[j];
+        dataB[i++] = static_cast<unsigned char>(fileB[j]);
     if (!anchorB.empty())
     {
         dataB[i++] = '#';
@@ -386,7 +386,7 @@ void HelpLinker::initIndexerPreProcessor()
     if( m_pIndexerPreProcessor )
         delete m_pIndexerPreProcessor;
     std::string mod = module;
-    std::transform (mod.begin(), mod.end(), mod.begin(), tolower);
+    std::transform (mod.begin(), mod.end(), mod.begin(), tocharlower);
     m_pIndexerPreProcessor = new IndexerPreProcessor( mod, indexDirParentName,
          idxCaptionStylesheet, idxContentStylesheet );
 }
@@ -413,7 +413,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 #endif
 
     std::string mod = module;
-    std::transform (mod.begin(), mod.end(), mod.begin(), tolower);
+    std::transform (mod.begin(), mod.end(), mod.begin(), tocharlower);
 
     // do the work here
     // continue with introduction of the overall process thing into the
@@ -666,7 +666,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             if (document)
             {
                 std::string temp = module;
-                std::transform (temp.begin(), temp.end(), temp.begin(), tolower);
+                std::transform (temp.begin(), temp.end(), temp.begin(), tocharlower);
                 m_pIndexerPreProcessor->processDocument(document, URLEncoder::encode(documentPath) );
             }
         }
