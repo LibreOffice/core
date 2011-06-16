@@ -558,16 +558,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_ROW:
             {
+                writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
+                        new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                        );
+                Mapper().props(pParagraphProperties);
+
                 RTFSprms_t aAttributes;
                 RTFSprms_t aSprms;
-                {
-                    RTFValue::Pointer_t pValue(new RTFValue(1));
-                    aSprms.push_back(make_pair(NS_sprm::LN_PFInTable, pValue));
-                }
-                {
-                    RTFValue::Pointer_t pValue(new RTFValue(1));
-                    aSprms.push_back(make_pair(NS_sprm::LN_PRow, pValue));
-                }
+                RTFValue::Pointer_t pValue(new RTFValue(1));
+                aSprms.push_back(make_pair(NS_sprm::LN_PRow, pValue));
                 writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
                 Mapper().props(pProperties);
 
