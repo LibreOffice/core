@@ -2,7 +2,7 @@ mkdir: %_DEST%\inc\jvmfwk
 ..\inc\jvmfwk\framework.h %_DEST%\inc\jvmfwk\framework.h
 ..\inc\jvmfwk\vendorplugin.h %_DEST%\inc\jvmfwk\vendorplugin.h
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib\ijvmfwk.lib
-..\%__SRC%\lib\libjvmfwk.*.* %_DEST%\lib\*
+..\%__SRC%\lib\libjvmfwk.* %_DEST%\lib\*
 ..\%__SRC%\bin\jvmfwk*.dll %_DEST%\bin\*
 ..\%__SRC%\bin\sunjavap*.dll %_DEST%\bin\*
 ..\%__SRC%\lib\sunjavaplugin*.so %_DEST%\lib\*
