@@ -231,7 +231,7 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
         // inline docpr sprm
         RTFSprms_t aInlineDocprAttributes;
         for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name)
+            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
                 aInlineDocprAttributes.push_back(make_pair(i->first, i->second));
         RTFValue::Pointer_t pInlineDocprValue(new RTFValue(aInlineDocprAttributes));
         RTFSprms_t aInlineAttributes;
@@ -260,7 +260,7 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
         // anchor docpr sprm
         RTFSprms_t aAnchorDocprAttributes;
         for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name)
+            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
                 aAnchorDocprAttributes.push_back(make_pair(i->first, i->second));
         RTFValue::Pointer_t pAnchorDocprValue(new RTFValue(aAnchorDocprAttributes));
         RTFSprms_t aAnchorAttributes;
@@ -1615,6 +1615,12 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector<std::pair<rtl::OUString
         {
             RTFValue::Pointer_t pValue(new RTFValue(i->second));
             m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
+        }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzDescription")))
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(i->second));
+            m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue));
+            OSL_TRACE("debug, adding wzDescription");
         }
         else
             OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
