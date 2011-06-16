@@ -141,8 +141,7 @@ int
 #else
 void
 #endif
-catch (sig)
-    int sig;
+catch (int sig)
 {
     fflush (stdout);
     fatalerr ("got signal %d\n", sig);
