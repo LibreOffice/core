@@ -365,12 +365,6 @@ AnElement::inq_Attrs() const
 
 //***************************     APureElement      **************************//
 
-APureElement::APureElement( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-        // pContent
-{
-}
-
 APureElement::APureElement( const char * i_sTagName )
     :   sTagName( i_sTagName )
         // pContent

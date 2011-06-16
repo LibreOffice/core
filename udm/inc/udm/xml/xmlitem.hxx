@@ -231,8 +231,6 @@ class APureElement : public PureElement
 {
   public:
                         APureElement(
-                            const ::csv::String &   i_sTagName );
-                        APureElement(
                             const char *            i_sTagName );
                         ~APureElement();
   private:

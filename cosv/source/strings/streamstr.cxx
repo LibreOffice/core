@@ -581,13 +581,6 @@ StreamStr::strip_back(char i_cToRemove)
 }
 
 void
-StreamStr::strip_frontback(char i_cToRemove)
-{
-    strip_front(i_cToRemove);
-    strip_back(i_cToRemove);
-}
-
-void
 StreamStr::strip_front_whitespace()
 {
     const_iterator it = begin();
