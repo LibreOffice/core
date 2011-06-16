@@ -20,7 +20,7 @@ class CallWizard(object):
         xregistrykey):
 
         xsingleservicefactory = None
-        if stringImplementationName.equals(WizardImplementation.getName()):
+        if stringImplementationName.equals(WizardImplementation.Name):
             xsingleservicefactory = FactoryHelper.getServiceFactory( \
                 WizardImplementation, WizardImplementation.__serviceName,
                 xMSF, xregistrykey)
@@ -123,7 +123,7 @@ class CallWizard(object):
         def getImplementationId(self):
             byteReturn = []
             try:
-                byteReturn = ("" + self.hashCode()).getBytes()
+                byteReturn = ("" + self.hashCode()).Bytes
             except Exception, exception:
                 traceback.print_exc()
 
@@ -135,7 +135,7 @@ class CallWizard(object):
         '''
 
         def getImplementationName(self):
-            return (WizardImplementation.getName())
+            return (WizardImplementation.Name)
 
         '''
         Provides a sequence of all types (usually interface types) provided

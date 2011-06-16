@@ -42,7 +42,7 @@ class PeerConfig(object):
             i = 0
             while i < self.m_aPeerTasks.size():
                 aPeerTask = self.m_aPeerTasks.elementAt(i)
-                xVclWindowPeer = aPeerTask.xControl.getPeer()
+                xVclWindowPeer = aPeerTask.xControl.Peer
                 n = 0
                 while n < aPeerTask.propnames.length:
                     xVclWindowPeer.setProperty(aPeerTask.propnames[n],

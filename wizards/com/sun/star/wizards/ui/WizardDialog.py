@@ -159,12 +159,12 @@ class WizardDialog(UnoDialog2):
             return -1
 
     def getRMItemCount(self):
-        return self.oRoadmap.getCount()
+        return self.oRoadmap.Count
 
     def getRoadmapItemByID(self, _ID):
         try:
             i = 0
-            while i < self.oRoadmap.getCount():
+            while i < self.oRoadmap.Count:
                 CurRoadmapItem = self.oRoadmap.getByIndex(i)
                 CurID = int(Helper.getUnoPropertyValue(CurRoadmapItem, "ID"))
                 if CurID == _ID:

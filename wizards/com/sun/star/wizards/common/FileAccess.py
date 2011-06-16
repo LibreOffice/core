@@ -391,8 +391,6 @@ class FileAccess(object):
     def getFolderTitles(self, xMSF, FilterName, FolderName):
         LocLayoutFiles = [[2],[]]
         try:
-            TitleVector = None
-            NameVector = None
             xDocInterface = xMSF.createInstance(
                 "com.sun.star.document.DocumentProperties")
             xInterface = xMSF.createInstance(
@@ -400,17 +398,19 @@ class FileAccess(object):
             nameList = xInterface.getFolderContents(FolderName, False)
             TitleVector = []
             NameVector = []
-            if FilterName == None or FilterName == "":
+            if FilterName is None or FilterName == "":
                 FilterName = None
             else:
                 FilterName = FilterName + "-"
             fileName = ""
+            NameVectorAppend = NameVector.append
+            TitleVectoAppend = TitleVector.append
             for i in nameList:
                 fileName = self.getFilename(i)
-                if FilterName == None or fileName.startswith(FilterName):
+                if FilterName is None or fileName.startswith(FilterName):
                     xDocInterface.loadFromMedium(i, tuple())
-                    NameVector.append(i)
-                    TitleVector.append(xDocInterface.Title)
+                    NameVectorAppend(i)
+                    TitleVectoAppend(xDocInterface.Title)
 
             LocLayoutFiles[1] = NameVector
             LocLayoutFiles[0] = TitleVector
