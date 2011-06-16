@@ -4140,13 +4140,12 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
 
 EscherSolverContainer::~EscherSolverContainer()
 {
-    void* pP;
-
     for( size_t i = 0, n = maShapeList.size(); i < n; ++i ) {
         delete maShapeList[ i ];
     }
-    for( pP = maConnectorList.First(); pP; pP = maConnectorList.Next() )
-        delete (EscherConnectorListEntry*)pP;
+    for( size_t i = 0, n = maConnectorList.size(); i < n; ++i ) {
+        delete maConnectorList[ i ];
+    }
 }
 
 void EscherSolverContainer::AddShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, sal_uInt32 nId )
@@ -4162,7 +4161,7 @@ void EscherSolverContainer::AddConnector(
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB
 )
 {
-    maConnectorList.Insert( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ), LIST_APPEND );
+    maConnectorList.push_back( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ) );
 }
 
 sal_uInt32 EscherSolverContainer::GetShapeId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape ) const
@@ -4178,7 +4177,7 @@ sal_uInt32 EscherSolverContainer::GetShapeId( const ::com::sun::star::uno::Refer
 
 void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 {
-    sal_uInt32 nCount = maConnectorList.Count();
+    sal_uInt32 nCount = maConnectorList.size();
     if ( nCount )
     {
         sal_uInt32  nRecHdPos, nCurrentPos, nSize;
@@ -4190,10 +4189,10 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 
         EscherConnectorRule aConnectorRule;
         aConnectorRule.nRuleId = 2;
-        for ( EscherConnectorListEntry* pPtr = (EscherConnectorListEntry*)maConnectorList.First();
-                pPtr; pPtr = (EscherConnectorListEntry*)maConnectorList.Next() )
+        for ( size_t i = 0, n = maConnectorList.size(); i < n; ++i )
         {
-            aConnectorRule.ncptiA = aConnectorRule.ncptiB = 0xffffffff;
+            EscherConnectorListEntry* pPtr = maConnectorList[ i ];
+            aConnectorRule.ncptiA  = aConnectorRule.ncptiB = 0xffffffff;
             aConnectorRule.nShapeC = GetShapeId( pPtr->mXConnector );
             aConnectorRule.nShapeA = GetShapeId( pPtr->mXConnectToA );
             aConnectorRule.nShapeB = GetShapeId( pPtr->mXConnectToB );
