@@ -568,6 +568,28 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_bNeedPap = true;
             }
             break;
+        case RTF_ROW:
+            {
+                RTFSprms_t aAttributes;
+                RTFSprms_t aSprms;
+                {
+                    RTFValue::Pointer_t pValue(new RTFValue(1));
+                    aSprms.push_back(make_pair(NS_sprm::LN_PFInTable, pValue));
+                }
+                {
+                    RTFValue::Pointer_t pValue(new RTFValue(1));
+                    aSprms.push_back(make_pair(NS_sprm::LN_PRow, pValue));
+                }
+                writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+                Mapper().props(pProperties);
+
+                sal_uInt8 sRowEnd[] = { 0x8 };
+                Mapper().text(sRowEnd, 1);
+                Mapper().endParagraphGroup();
+                Mapper().startParagraphGroup();
+                m_bNeedPap = true;
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
