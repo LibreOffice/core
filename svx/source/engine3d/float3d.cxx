@@ -234,7 +234,6 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         pFmPage             ( NULL ),
         pVDev               ( NULL ),
         p3DView             ( NULL ),
-        pFavorSetList       ( NULL ),
         pMatFavSetList      ( NULL ),
 
         pBindings           ( pInBindings ),
