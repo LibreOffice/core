@@ -649,6 +649,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     // Border types
     switch (nKeyword)
     {
+        // brdrhair and brdrs are the same, brdrw will make a difference
+        case RTF_BRDRHAIR: nParam = editeng::SOLID; break;
         case RTF_BRDRS: nParam = editeng::SOLID; break;
         case RTF_BRDRDOT: nParam = editeng::DOTTED; break;
         case RTF_BRDRDASH: nParam = editeng::DASHED; break;
