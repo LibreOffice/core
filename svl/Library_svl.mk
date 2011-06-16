@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
     cppuhelper \
     i18nisolang1 \
     i18nutil \
-    $(if $(SOLAR_JAVA),jvmfwk) \
+    jvmfwk \
     sal \
     sot \
     tl \
