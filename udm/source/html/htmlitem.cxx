@@ -58,21 +58,6 @@ Body::LineBreakAfterBeginTag() const
      return true;
 }
 
-
-Image::Image( const String &   i_sSrc,
-              const String &   i_sWidth,
-              const String &   i_sHeight,
-              const String &   i_sAlign,
-              const String &   i_sBorder )
-    :   AnEmptyElement( "img" )
-{
-    *this << new AnAttribute(String("src"),i_sSrc)
-          << new AnAttribute(String("width"),i_sWidth)
-          << new AnAttribute(String("height"),i_sHeight)
-          << new AnAttribute(String("align"),i_sAlign)
-          << new AnAttribute(String("border"),i_sBorder);
-}
-
 bool
 Paragraph::LineBreakAfterEndTag() const
 {

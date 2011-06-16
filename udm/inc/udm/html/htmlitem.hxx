@@ -61,19 +61,6 @@ class HorizontalLine : public xml::XmlCode
                                 :   xml::XmlCode("<hr>\n") {}
 };
 
-/** <IMG .... >
-*/
-class Image : public csi::xml::AnEmptyElement
-{
-  public:
-                        Image(
-                            const ::csv::String & i_sSrc,
-                            const ::csv::String & i_sWidth,
-                            const ::csv::String & i_sHeight,
-                            const ::csv::String & i_sAlign,
-                            const ::csv::String & i_sBorder );
-};
-
 /** <A name="">
 */
 class Label : public csi::xml::AnElement
