@@ -940,10 +940,6 @@ public:
     void                RemoveConnectorRules();
 
 private:
-    /** Returns the first connector rule from the internal list. */
-    SvxMSDffConnectorRule* GetFirstRule();
-    /** Returns the next connector rule from the internal list. */
-    SvxMSDffConnectorRule* GetNextRule();
     /** Updates the data of a connected shape in a connector rule. */
     void                UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags = 0 );
 

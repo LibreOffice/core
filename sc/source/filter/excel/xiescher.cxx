@@ -3076,8 +3076,9 @@ void XclImpSolverContainer::RemoveSdrObjectInfo( SdrObject& rSdrObj )
 
 void XclImpSolverContainer::UpdateConnectorRules()
 {
-    for( SvxMSDffConnectorRule* pRule = GetFirstRule(); pRule; pRule = GetNextRule() )
+    for ( size_t i = 0, n = aCList.size(); i < n; ++i )
     {
+        SvxMSDffConnectorRule* pRule = aCList[ i ];
         UpdateConnection( pRule->nShapeA, pRule->pAObj, &pRule->nSpFlagsA );
         UpdateConnection( pRule->nShapeB, pRule->pBObj, &pRule->nSpFlagsB );
         UpdateConnection( pRule->nShapeC, pRule->pCObj );
@@ -3087,22 +3088,12 @@ void XclImpSolverContainer::UpdateConnectorRules()
 void XclImpSolverContainer::RemoveConnectorRules()
 {
     // base class from SVX uses plain untyped tools/List
-    for( SvxMSDffConnectorRule* pRule = GetFirstRule(); pRule; pRule = GetNextRule() )
-        delete pRule;
-    aCList.Clear();
-
+    for ( size_t i = 0, n = aCList.size(); i < n; ++i ) {
+        delete aCList[ i ];
+    }
+    aCList.clear();
     maSdrInfoMap.clear();
     maSdrObjMap.clear();
-}
-
-SvxMSDffConnectorRule* XclImpSolverContainer::GetFirstRule()
-{
-    return static_cast< SvxMSDffConnectorRule* >( aCList.First() );
-}
-
-SvxMSDffConnectorRule* XclImpSolverContainer::GetNextRule()
-{
-    return static_cast< SvxMSDffConnectorRule* >( aCList.Next() );
 }
 
 void XclImpSolverContainer::UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags )
