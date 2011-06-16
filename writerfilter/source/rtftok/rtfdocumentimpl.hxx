@@ -132,6 +132,9 @@ namespace writerfilter {
                 float nPictureScaleX;
                 float nPictureScaleY;
                 std::vector<std::pair<rtl::OUString, rtl::OUString>> aShapeProperties;
+
+                /// Current cellx value.
+                int nCellX;
         };
 
         /// Implementation of the RTFDocument interface.

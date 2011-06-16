@@ -726,6 +726,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_TROWD:
             m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
             m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
+            m_aStates.top().nCellX = 0;
             break;
         case RTF_NOWIDCTLPAR:
             {
@@ -1149,6 +1150,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 }
                 RTFValue::Pointer_t pValue(new RTFValue(nValue));
                 m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_WrapSquare_wrapText, pValue));
+            }
+            break;
+        case RTF_CELLX:
+            {
+                /* Here we could send nCellx as NS_ooxml::LN_CT_TcPrBase_tcW, but that's not supported by dmapper.
+                int nCellx = nParam - m_aStates.top().nCellX;
+                m_aStates.top().nCellX += nParam;*/
             }
             break;
         default:
@@ -1746,7 +1754,8 @@ RTFParserState::RTFParserState()
     aLevelNumbers(),
     nPictureScaleX(0),
     nPictureScaleY(0),
-    aShapeProperties()
+    aShapeProperties(),
+    nCellX(0)
 {
 }
 
