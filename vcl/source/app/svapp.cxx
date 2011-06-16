@@ -2067,12 +2067,8 @@ void Application::Property( ApplicationProperty& rProp )
 
 void Application::SetPropertyHandler( PropertyHandler* p )
 {
-    if ( pHandler )
-        delete pHandler;
     pHandler = p;
 }
-
-
 
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
