@@ -26,7 +26,9 @@
  * instead of those above.
  */
 
-#include "../../headless/svpdi.hxx"
-#include "../../headless/svpdi.hxx"
+// Gross inclusion hacks for now ...
+
+#include "../../headless/svpgdi.cxx"
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

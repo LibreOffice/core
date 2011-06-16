@@ -45,6 +45,9 @@
 
 #include "tools/link.hxx"
 
+#include <basebmp/bitmapdevice.hxx>
+#include <basebmp/scanlineformats.hxx>
+
 #include <list>
 #include <vector>
 
@@ -175,6 +178,9 @@ class GtkSalFrame : public SalFrame
 
     int                             m_nScreen;
     GtkWidget*                      m_pWindow;
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    basebmp::BitmapDeviceSharedPtr  m_aFrame;
+#endif
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
@@ -285,6 +291,8 @@ class GtkSalFrame : public SalFrame
     void setMinMaxSize();
     void createNewWindow( XLIB_Window aParent, bool bXEmbed, int nScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
+
+    void AllocateFrame();
 
     void updateWMClass();
 

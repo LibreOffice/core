@@ -36,6 +36,8 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/atkbridge.hxx>
+#include <unx/headless/svpvd.hxx>
+#include <unx/headless/svpbmp.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -408,6 +410,29 @@ void GtkYieldMutex::Ungrab( int nGrabs )
 #else
     (void)nGrabs;
     g_error ("never called");
+#endif
+}
+
+SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
+                                                    long nDX, long nDY,
+                                                    sal_uInt16 nBitCount,
+                                                    const SystemGraphicsData *pGd )
+{
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
+    pNew->SetSize( nDX, nDY );
+    return pNew;
+#else
+    return X11SalInstance::CreateVirtualDevice( pG, nDX, nDY, nBitCount, pGd );
+#endif
+}
+
+SalBitmap* GtkInstance::CreateSalBitmap()
+{
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    return new SvpSalBitmap();
+#else
+    return X11SalInstance::CreateSalBitmap();
 #endif
 }
 

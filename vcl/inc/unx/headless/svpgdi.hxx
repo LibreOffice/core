@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #ifndef _SVP_SVPGDI_HXX
+#define _SVP_SVPGDI_HXX
 
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>

@@ -90,6 +90,11 @@ public:
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
     virtual SalSystem*          CreateSalSystem();
     virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
+                                                     long nDX, long nDY,
+                                                     sal_uInt16 nBitCount,
+                                                     const SystemGraphicsData* );
+    virtual SalBitmap*			CreateSalBitmap();
 };
 
 class GtkSalSystem : public X11SalSystem

@@ -43,11 +43,21 @@
 
 // Disabled for gtk3 - use legacy theming code
 #define GTK_GRAPHICS_DISABLED
+
 class GtkSalFrame;
+
+#ifdef GTK3_X11_RENDER
 class GtkSalGraphics : public X11SalGraphics {
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
 };
+#else
+class GtkSalGraphics : public SvpSalGraphics {
+public:
+    GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
+};
+#endif // GTK3_X11_RENDER
+
 #else
 
 class GtkSalGraphics : public X11SalGraphics

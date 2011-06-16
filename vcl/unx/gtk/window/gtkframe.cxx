@@ -53,6 +53,8 @@
 #include <svids.hrc>
 #include <sal/macros.h>
 
+#include <basegfx/vector/b2ivector.hxx>
+
 #include <algorithm>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -434,7 +436,9 @@ GtkSalFrame::~GtkSalFrame()
     {
         if( !m_aGraphics[i].pGraphics )
             continue;
+#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
         m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
+#endif
         m_aGraphics[i].bInUse = false;
     }
 
@@ -593,9 +597,11 @@ void GtkSalFrame::InitCommon()
     m_ePointerStyle     = 0xffff;
     m_bSetFocusOnMap    = false;
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
     gtk_widget_set_app_paintable( m_pWindow, sal_True );
     gtk_widget_set_double_buffered( m_pWindow, FALSE );
     gtk_widget_set_redraw_on_allocate( m_pWindow, FALSE );
+#endif
     gtk_widget_add_events( m_pWindow,
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                            GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
@@ -1023,7 +1029,13 @@ SalGraphics* GtkSalFrame::GetGraphics()
                 if( ! m_aGraphics[i].pGraphics )
                 {
                     m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow );
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+                    if( !m_aFrame.get() )
+                        AllocateFrame();
+                    m_aGraphics[i].pGraphics->setDevice( m_aFrame );
+#else // common case:
                     m_aGraphics[i].pGraphics->Init( this, GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)), m_nScreen );
+#endif
                 }
                 return m_aGraphics[i].pGraphics;
             }
@@ -1496,6 +1508,37 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
     }
 }
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+void GtkSalFrame::AllocateFrame()
+{
+    basegfx::B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
+    if( ! m_aFrame.get() || m_aFrame->getSize() != aFrameSize )
+    {
+        if( aFrameSize.getX() == 0 )
+            aFrameSize.setX( 1 );
+        if( aFrameSize.getY() == 0 )
+            aFrameSize.setY( 1 );
+        fprintf( stderr, "allocate m_aFrame size of %dx%d\n",
+                 (int)maGeometry.nWidth, (int)maGeometry.nHeight );
+        m_aFrame = basebmp::createBitmapDevice( aFrameSize, true,
+                                                basebmp::Format::TWENTYFOUR_BIT_TC_MASK );
+//                                              basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB );
+
+#if OSL_DEBUG_LEVEL > 0
+        m_aFrame->clear( basebmp::Color( 255, 127, 0 ) );
+#endif
+
+        // update device in existing graphics
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i )
+        {
+            if( !m_aGraphics[i].pGraphics )
+                continue;
+            m_aGraphics[i].pGraphics->setDevice( m_aFrame );
+        }
+    }
+}
+#endif
+
 void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     if( !m_pWindow || isChild( true, false ) )
@@ -1535,6 +1578,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             nY += m_pParent->maGeometry.nY;
         }
 
+#if GTK_CHECK_VERSION(3,0,0) && defined GTK3_X11_RENDER
         // adjust position to avoid off screen windows
         // but allow toolbars to be positioned partly off screen by the user
         Size aScreenSize = GetX11SalData()->GetDisplay()->GetScreenSize( m_nScreen );
@@ -1560,6 +1604,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             if( nY > (long)aScreenSize.Height() - 10 )
                 nY = (long)aScreenSize.Height() - 10;
         }
+#endif
 
         if( nX != maGeometry.nX || nY != maGeometry.nY )
             bMoved = true;
@@ -1576,6 +1621,11 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         Center();
 
     m_bDefaultPos = false;
+
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    if( bSized)
+        AllocateFrame();
+#endif
 
     if( bSized && ! bMoved )
         CallCallback( SALEVENT_RESIZE, NULL );
@@ -1719,6 +1769,7 @@ sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
 
 void GtkSalFrame::moveToScreen( int nScreen )
 {
+#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
     if( isChild() )
         return;
 
@@ -1759,6 +1810,7 @@ void GtkSalFrame::moveToScreen( int nScreen )
         (*it)->moveToScreen( m_nScreen );
 
     // FIXME: SalObjects
+#endif
 }
 
 void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
@@ -2359,6 +2411,9 @@ SalBitmap* GtkSalFrame::SnapShot()
 
 void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 {
+    (void)rSettings;
+
+#ifdef GTK3_X11_RENDER
     if( ! m_pWindow )
         return;
 
@@ -2372,12 +2427,11 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 
 #ifndef GTK_GRAPHICS_DISABLED
     pGraphics->updateSettings( rSettings );
-#else
-    (void)rSettings;
 #endif
 
     if( bFreeGraphics )
         ReleaseGraphics( pGraphics );
+#endif
 }
 
 void GtkSalFrame::Beep( SoundType eType )
@@ -2446,10 +2500,12 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
         }
     }
 
+#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
     // free xrender resources
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
         if( m_aGraphics[i].bInUse )
             m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
+#endif
 
     // first deinit frame
     if( m_pIMHandler )
@@ -2487,6 +2543,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
         Init( (m_pParent && m_pParent->m_nScreen == m_nScreen) ? m_pParent : NULL, m_nStyle );
     }
 
+#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
     // update graphics
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
     {
@@ -2498,6 +2555,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
 #endif
         }
     }
+#endif
 
     if( m_aTitle.Len() )
         SetTitle( m_aTitle );
@@ -2882,9 +2940,115 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     // FIXME: qutie possibly we have some co-ordinate system / translation madness here.
     // pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
     struct SalPaintEvent aEvent( x1, y1, x2 - x1, y2 - y1 );
+    aEvent.mbImmediateUpdate = true;
 
     GTK_YIELD_GRAB();
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
+
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    if( !pThis->m_aFrame.get() )
+        return sal_False;
+
+    basebmp::RawMemorySharedArray data = pThis->m_aFrame->getBuffer();
+    basegfx::B2IVector size = pThis->m_aFrame->getSize();
+    sal_Int32 nStride = pThis->m_aFrame->getScanlineStride();
+
+    // Get the data from our m_aFrame to cairo ...
+    g_warning ("Get pixels from bmpdev to cairo (%g,%g %gx%g) vs %dx%d stride %d",
+               x1, y1, x2 - x1, y2 - y1, (int)size.getX(), (int)size.getY(), (int)nStride);
+    // ARGB == ARGB32 ... map straight across from bmpdev (?) ...
+
+#if 1
+    // Draw flat white rectangle first:
+    cairo_save( cr );
+    cairo_set_line_width( cr, 1.0 );
+    cairo_set_source_rgba( cr, 1.0, 1.0, 1.0, 1.0 );
+    cairo_rectangle( cr, 0, 0, size.getX(), size.getY() );
+    cairo_fill( cr );
+    cairo_stroke( cr );
+    cairo_restore( cr );
+#endif
+
+#if 1
+    if (getenv ("BREAKME")) {
+    cairo_save( cr );
+
+    int cairo_stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, size.getX());
+    // This is incredibly lame ... but so is cairo's insistance on -exactly-
+    // its own stride - neither more nor less - particularly not more aligned
+    // we like 8byte aligned, it likes 4 - most odd.
+    unsigned char *p, *src, *mem = (unsigned char *)malloc (32 * cairo_stride * size.getY());
+    p = mem; src = data.get();
+    for (int y = 0; y < size.getY(); ++y)
+    {
+        for (int x = 0; x < size.getX(); ++x)
+        {
+            p[x*4 + 0] = src[x*3 + 0]; // B
+            p[x*4 + 1] = src[x*3 + 1]; // G
+            p[x*4 + 2] = src[x*3 + 2]; // R
+            p[x*4 + 3] = 255; // A
+        }
+        src += nStride;
+        p += cairo_stride;
+    }
+    cairo_surface_t *pSurface =
+        cairo_image_surface_create_for_data( mem,
+                                             CAIRO_FORMAT_ARGB32,
+                                             size.getX(), size.getY(),
+                                             cairo_stride );
+    g_warning( "Fixed cairo status %d %d strides: %d vs %d, mask %d\n",
+               (int) cairo_status( cr ),
+               (int) cairo_surface_status( pSurface ),
+               (int) nStride,
+               (int) cairo_stride,
+               (int) (cairo_stride & (sizeof (uint32_t)-1)) );
+#endif
+    if (!pSurface)
+        g_warning ("null surface!");
+    //    cairo_scale( cr, x2 - x1, y2 - y1 );
+    cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
+    cairo_set_source_surface( cr, pSurface, 0, 0 );
+    cairo_paint( cr );
+    cairo_surface_destroy( pSurface );
+    free (mem);
+    cairo_restore( cr );
+    }
+
+#if 0
+    cairo_save( cr );
+    cairo_set_line_width( cr, 1.0 );
+    cairo_set_source_rgb( cr, 1.0, 1.0, 0 );
+    cairo_rectangle( cr, 30, 30, size.getX()/2, size.getY()/2 );
+    cairo_fill( cr );
+    cairo_stroke( cr );
+    cairo_restore( cr );
+#endif
+
+/*
+   basebmp::Format::TWENTYFOUR_BIT_TC_MASK );
+ * cairo_format_t:
+ * @CAIRO_FORMAT_ARGB32: each pixel is a 32-bit quantity, with
+ *   alpha in the upper 8 bits, then red, then green, then blue.
+ *   The 32-bit quantities are stored native-endian. Pre-multiplied
+ *   alpha is used. (That is, 50% transparent red is 0x80800000,
+ *   not 0x80ff0000.)
+ * @CAIRO_FORMAT_RGB24: each pixel is a 32-bit quantity, with
+ *   the upper 8 bits unused. Red, Green, and Blue are stored
+ *   in the remaining 24 bits in that order.
+ * @CAIRO_FORMAT_A8: each pixel is a 8-bit quantity holding
+ *   an alpha value.
+ * @CAIRO_FORMAT_A1: each pixel is a 1-bit quantity holding
+ *   an alpha value. Pixels are packed together into 32-bit
+ *   quantities. The ordering of the bits matches the
+ *   endianess of the platform. On a big-endian machine, the
+ *   first pixel is in the uppermost bit, on a little-endian
+ *   machine the first pixel is in the least-significant bit.
+ * @CAIRO_FORMAT_RGB16_565: each pixel is a 16-bit quantity
+ *   with red in the upper 5 bits, then green in the middle
+ *   6 bits, and blue in the lower 5 bits.
+ */
+
+#endif
 
     return sal_False;
 }
@@ -3885,12 +4049,23 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
 void GtkData::initNWF() {}
 void GtkData::deInitNWF() {}
 
+#if defined GTK3_X11_RENDER
+
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     : X11SalGraphics()
 {
     Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ),
           gdk_x11_screen_get_screen_number( gtk_widget_get_screen( pWindow ) ) );
 }
+
+#else
+
+GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
+    : SvpSalGraphics()
+{
+}
+
+#endif // GTK3_X11_RENDER
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
