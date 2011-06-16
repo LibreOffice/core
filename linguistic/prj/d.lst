@@ -1,6 +1,6 @@
 ..\%__SRC%\bin\lng* %_DEST%\bin\lng*
 ..\%__SRC%\lib\ilng* %_DEST%\lib\ilng*
-..\%__SRC%\lib\liblng.a %_DEST%\lib\liblng.a
+..\%__SRC%\lib\liblng*.a %_DEST%\lib\liblng*.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
 ..\%__SRC%\lib\liblng*.so %_DEST%\lib\liblng*.so
 
