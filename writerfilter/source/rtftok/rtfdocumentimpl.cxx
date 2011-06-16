@@ -559,6 +559,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_HEXCHAR:
             m_aStates.top().nInternalState = INTERNAL_HEX;
             break;
+        case RTF_CELL:
+            {
+                sal_uInt8 sCellEnd[] = { 0x7 };
+                Mapper().text(sCellEnd, 1);
+                Mapper().endParagraphGroup();
+                Mapper().startParagraphGroup();
+                m_bNeedPap = true;
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -671,6 +680,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
         case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
         case RTF_WIDCTLPAR: nParam = NS_sprm::LN_PFWidowControl; break;
+        case RTF_INTBL: nParam = NS_sprm::LN_PFInTable; break;
         default: break;
     }
     if (nParam >= 0)
