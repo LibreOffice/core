@@ -88,12 +88,18 @@ namespace writerfilter {
                 RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
+                // font table, stylesheet table
                 RTFSprms_t aTableSprms;
                 RTFSprms_t aTableAttributes;
+                // reset by plain
                 RTFSprms_t aCharacterSprms;
                 RTFSprms_t aCharacterAttributes;
+                // reset by pard
                 RTFSprms_t aParagraphSprms;
                 RTFSprms_t aParagraphAttributes;
+                // reset by trowd
+                RTFSprms_t aTableRowSprms;
+                RTFSprms_t aTableRowAttributes;
 
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;

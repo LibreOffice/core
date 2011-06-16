@@ -563,12 +563,12 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         );
                 Mapper().props(pParagraphProperties);
 
-                RTFSprms_t aAttributes;
-                RTFSprms_t aSprms;
                 RTFValue::Pointer_t pValue(new RTFValue(1));
-                aSprms.push_back(make_pair(NS_sprm::LN_PRow, pValue));
-                writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
-                Mapper().props(pProperties);
+                m_aStates.top().aTableRowSprms.push_back(make_pair(NS_sprm::LN_PRow, pValue));
+                writerfilter::Reference<Properties>::Pointer_t const pTableRowProperties(
+                        new RTFReferenceProperties(m_aStates.top().aTableRowAttributes, m_aStates.top().aTableRowSprms)
+                        );
+                Mapper().props(pTableRowProperties);
 
                 sal_uInt8 sRowEnd[] = { 0x8 };
                 Mapper().text(sRowEnd, 1);
@@ -722,6 +722,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
+            break;
+        case RTF_TROWD:
+            m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
+            m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
             break;
         case RTF_NOWIDCTLPAR:
             {
@@ -1725,6 +1729,8 @@ RTFParserState::RTFParserState()
     aCharacterAttributes(),
     aParagraphSprms(),
     aParagraphAttributes(),
+    aTableRowSprms(),
+    aTableRowAttributes(),
     aFontTableEntries(),
     nCurrentFontIndex(0),
     aCurrentColor(),
