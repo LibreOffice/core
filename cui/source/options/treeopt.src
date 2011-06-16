@@ -119,7 +119,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
         {
             < "This dialog is used to define general settings when working with %PRODUCTNAME. Enter your personal data, the defaults to be used when saving documents, and paths to important files. These settings will be saved automatically and used in later sessions as well."; SID_GENERAL_OPTIONS; > ;
             < "This is where you make settings concerning language and writing aids for your work with %PRODUCTNAME."; SID_LANGUAGE_OPTIONS; > ;
-            < "This is where you configure %PRODUCTNAME for the Internet. You can define search engines or save your proxy settings." ; SID_INET_DLG; > ;
+            < "This is where you configure %PRODUCTNAME for the Internet. You can save your proxy settings." ; SID_INET_DLG; > ;
             < "This is where you specify various settings for text documents. These settings determine how your text documents are handled in %PRODUCTNAME and are valid for all new %PRODUCTNAME Writer documents. You can also define a few settings for the active text document if you save it afterwards." ; SID_SW_EDITOPTIONS; > ;
             < "This is where you define the basic settings for %PRODUCTNAME documents in HTML format. For example, you decide which contents should be displayed on the screen or printed, how the pages are scrolled on the screen, in which color keywords are highlighted in the source text and much more." ; SID_SW_ONLINEOPTIONS; > ;
             < "This is where you define various global settings for spreadsheets. For example, you can define which contents should be displayed and in which direction the cursor will move after you enter data in a cell. You also define sort lists, the number of the decimal places displayed, etc." ; SID_SC_EDITOPTIONS; > ;
@@ -184,7 +184,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         {
             < "Internet" ; 0; > ;
             < "Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
-            < "Search" ;  RID_SVXPAGE_INET_SEARCH; > ;
             < "E-mail" ;  RID_SVXPAGE_INET_MAIL; > ;
             < "Browser Plug-in" ;  RID_SVXPAGE_INET_MOZPLUGIN; > ;
         };

@@ -51,7 +51,6 @@ class SvtInetOptions;
 #ifndef SV_NODIALOG
 #define PROXY_CONTROLS  23
 #define CACHE_CONTROLS  20
-#define INET_SEARCH     19
 
 #define TYPE_CONTROLS  18
 
@@ -136,70 +135,6 @@ private:
 
     SvxProxyTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxProxyTabPage();
-
-public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-};
-
-// class SvxSearchTabPage ------------------------------------------------
-class SvxSearchConfig;
-class SvxSearchTabPage : public SfxTabPage
-{
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
-private:
-    FixedLine       aSearchGB;
-    ListBox         aSearchLB;
-    FixedText       aSearchNameFT;
-    SvxNoSpaceEdit  aSearchNameED;
-
-    FixedText       aSearchFT;
-    RadioButton     aAndRB;
-    RadioButton     aOrRB;
-    RadioButton     aExactRB;
-
-    FixedText       aURLFT;
-    SvxNoSpaceEdit  aURLED;
-
-    FixedText       aPostFixFT;
-    SvxNoSpaceEdit  aPostFixED;
-    FixedText       aSeparatorFT;
-    SvxNoSpaceEdit  aSeparatorED;
-    FixedText       aCaseFT;
-    ListBox         aCaseED;
-
-    PushButton      aNewPB;
-    PushButton      aAddPB;
-    PushButton      aChangePB;
-    PushButton      aDeletePB;
-
-    String          sLastSelectedEntry;
-    String          sModifyMsg;
-
-    SvxSearchConfig     aSearchConfig;
-    SvxSearchEngineData aCurrentSrchData;
-
-#ifdef _SVX_OPTINET2_CXX
-    void        InitControls_Impl();
-
-    DECL_LINK(  NewSearchHdl_Impl, PushButton * );
-    DECL_LINK(  AddSearchHdl_Impl, PushButton * );
-    DECL_LINK(  ChangeSearchHdl_Impl, PushButton * );
-    DECL_LINK(  DeleteSearchHdl_Impl, PushButton * );
-    DECL_LINK(  SearchEntryHdl_Impl, ListBox * );
-    DECL_LINK(  SearchModifyHdl_Impl, SvxNoSpaceEdit * );
-    DECL_LINK(  SearchPartHdl_Impl, RadioButton * );
-#endif
-
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    sal_Bool                ConfirmLeave( const String& rStringSelection );
-
-    SvxSearchTabPage( Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxSearchTabPage();
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
