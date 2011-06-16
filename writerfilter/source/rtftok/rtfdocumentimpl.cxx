@@ -220,24 +220,24 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
     aGraphicSprms.push_back(make_pair(NS_ooxml::LN_CT_GraphicalObject_graphicData, pGraphicDataValue));
     // graphic sprm
     RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
+    // extent sprm
+    RTFSprms_t aExtentAttributes;
+    for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+        if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
+            aExtentAttributes.push_back(make_pair(i->first, i->second));
+    RTFValue::Pointer_t pExtentValue(new RTFValue(aExtentAttributes));
+    // docpr sprm
+    RTFSprms_t aDocprAttributes;
+    for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+        if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
+            aDocprAttributes.push_back(make_pair(i->first, i->second));
+    RTFValue::Pointer_t pDocprValue(new RTFValue(aDocprAttributes));
     if (bInline)
     {
-        // inline extent sprm
-        RTFSprms_t aInlineExtentAttributes;
-        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-            if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
-                aInlineExtentAttributes.push_back(make_pair(i->first, i->second));
-        RTFValue::Pointer_t pInlineExtentValue(new RTFValue(aInlineExtentAttributes));
-        // inline docpr sprm
-        RTFSprms_t aInlineDocprAttributes;
-        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
-                aInlineDocprAttributes.push_back(make_pair(i->first, i->second));
-        RTFValue::Pointer_t pInlineDocprValue(new RTFValue(aInlineDocprAttributes));
         RTFSprms_t aInlineAttributes;
         RTFSprms_t aInlineSprms;
-        aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_extent, pInlineExtentValue));
-        aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_docPr, pInlineDocprValue));
+        aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_extent, pExtentValue));
+        aInlineSprms.push_back(make_pair(NS_ooxml::LN_CT_Inline_docPr, pDocprValue));
         aInlineSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pGraphicValue));
         // inline sprm
         RTFValue::Pointer_t pValue(new RTFValue(aInlineAttributes, aInlineSprms));
@@ -245,30 +245,18 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
     }
     else // anchored
     {
-        // anchor extent sprm
-        RTFSprms_t aAnchorExtentAttributes;
-        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-            if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
-                aAnchorExtentAttributes.push_back(make_pair(i->first, i->second));
-        RTFValue::Pointer_t pAnchorExtentValue(new RTFValue(aAnchorExtentAttributes));
         // wrap sprm
         RTFSprms_t aAnchorWrapAttributes;
         for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
             if (i->first == NS_ooxml::LN_CT_WrapSquare_wrapText)
                 aAnchorWrapAttributes.push_back(make_pair(i->first, i->second));
         RTFValue::Pointer_t pAnchorWrapValue(new RTFValue(aAnchorWrapAttributes));
-        // anchor docpr sprm
-        RTFSprms_t aAnchorDocprAttributes;
-        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-            if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
-                aAnchorDocprAttributes.push_back(make_pair(i->first, i->second));
-        RTFValue::Pointer_t pAnchorDocprValue(new RTFValue(aAnchorDocprAttributes));
         RTFSprms_t aAnchorAttributes;
         RTFSprms_t aAnchorSprms;
-        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_extent, pAnchorExtentValue));
+        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_extent, pExtentValue));
         if (aAnchorWrapAttributes.size())
             aAnchorSprms.push_back(make_pair(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue));
-        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_docPr, pAnchorDocprValue));
+        aAnchorSprms.push_back(make_pair(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue));
         aAnchorSprms.push_back(make_pair(NS_ooxml::LN_graphic_graphic, pGraphicValue));
         // anchor sprm
         RTFValue::Pointer_t pValue(new RTFValue(aAnchorAttributes, aAnchorSprms));
