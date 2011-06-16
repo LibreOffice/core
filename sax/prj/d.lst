@@ -2,6 +2,7 @@
 ..\%__SRC%\lib\*.so %_DEST%\lib\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
 ..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
 ..\%__SRC%\misc\fastsax.component %_DEST%\xml\fastsax.component
 ..\%__SRC%\misc\sax.component %_DEST%\xml\sax.component
 ..\%__SRC%\misc\sax.inbuild.component %_DEST%\xml\sax.inbuild.component
