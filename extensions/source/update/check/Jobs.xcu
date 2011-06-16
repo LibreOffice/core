@@ -8,7 +8,7 @@
             </prop>
             <node oor:name="Arguments">
                 <prop oor:name="AutoCheckEnabled" oor:type="xs:boolean" oor:op="replace">
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="LastCheck" oor:type="xs:long" oor:op="replace">
                     <value>0</value>
