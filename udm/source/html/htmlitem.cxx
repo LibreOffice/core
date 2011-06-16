@@ -58,14 +58,6 @@ Body::LineBreakAfterBeginTag() const
      return true;
 }
 
-#ifndef COMPATIBLE_NETSCAPE_47
-bool
-HorizontalLine::LineBreakAfterBeginTag() const
-{
-     return true;
-}
-#endif
-
 
 Image::Image( const String &   i_sSrc,
               const String &   i_sWidth,
@@ -96,22 +88,11 @@ Headline::LineBreakAfterEndTag() const
      return true;
 }
 
-#ifndef COMPATIBLE_NETSCAPE_47
-bool
-LineBreak::LineBreakAfterBeginTag() const
-{
-     return true;
-}
-#endif
-
-
 bool
 TableCell::LineBreakAfterEndTag() const
 {
      return true;
 }
-
-
 
 TableCell &
 TableRow::AddCell( DYN Item * let_dpItem )

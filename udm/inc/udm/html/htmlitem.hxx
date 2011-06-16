@@ -36,14 +36,10 @@
     // PARAMETERS
 
 
-#define COMPATIBLE_NETSCAPE_47
-
 namespace csi
 {
 namespace html
 {
-
-
 
 /** <BODY>
 */
@@ -56,8 +52,6 @@ class Body : public csi::xml::AnElement
     virtual bool        LineBreakAfterBeginTag() const;
 };
 
-
-#ifdef COMPATIBLE_NETSCAPE_47
 /** <BR>
 */
 class HorizontalLine : public xml::XmlCode
@@ -66,20 +60,6 @@ class HorizontalLine : public xml::XmlCode
                         HorizontalLine()
                                 :   xml::XmlCode("<hr>\n") {}
 };
-
-#else
-/** <HR>
-*/
-class HorizontalLine : public csi::xml::AnEmptyElement
-{
-  public:
-                        HorizontalLine()
-                                :   csi::xml::AnEmptyElement("hr") {}
-  private:
-    virtual bool        LineBreakAfterBeginTag() const;
-};
-#endif
-
 
 /** <IMG .... >
 */
@@ -129,7 +109,6 @@ class Headline : public csi::xml::APureElement
     virtual bool        LineBreakAfterEndTag() const;
 };
 
-#ifdef COMPATIBLE_NETSCAPE_47
 /** <BR>
 */
 class LineBreak : public xml::XmlCode
@@ -138,20 +117,6 @@ class LineBreak : public xml::XmlCode
                         LineBreak()
                                 :   xml::XmlCode("<br>\n") {}
 };
-
-#else
-/** <BR>
-*/
-class LineBreak : public csi::xml::ASglTag
-{
-  public:
-                        LineBreak()
-                                :   csi::xml::ASglTag("br") {}
-  private:
-    virtual bool        LineBreakAfterBeginTag() const;
-};
-#endif
-
 
 /** <b>
 */
