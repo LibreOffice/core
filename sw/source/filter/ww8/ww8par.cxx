@@ -4834,23 +4834,24 @@ namespace
         {
             String sUniPassword = QueryPasswordForMedium( rMedium );
 
-            ByteString sPassword(sUniPassword, WW8Fib::GetFIBCharset( pWwFib->chseTables ) );
+            rtl::OString sPassword(rtl::OUStringToOString(sUniPassword,
+                WW8Fib::GetFIBCharset(pWwFib->chseTables)));
 
-            xub_StrLen nLen = sPassword.Len();
+            sal_Int32 nLen = sPassword.getLength();
             if( nLen <= 15 )
             {
                 sal_uInt8 pPassword[16];
-                memset( pPassword, 0, sizeof( pPassword ) );
-
-                for (xub_StrLen nChar = 0; nChar < sPassword.Len(); ++nChar )
-                    pPassword[nChar] = sPassword.GetChar(nChar);
+                memcpy(pPassword, sPassword.getStr(), nLen);
+                memset(pPassword+nLen, 0, sizeof(pPassword)-nLen);
 
                 rCodec.InitKey( pPassword );
                 aEncryptionData = rCodec.GetEncryptionData();
 
-                // the export supports RC4 algorithm only, so we have to generate the related EncryptionData as well,
-                // so that Save can export the document without asking for a password;
-                // as result there will be EncryptionData for both algorithms in the MediaDescriptor
+                // the export supports RC4 algorithm only, so we have to
+                // generate the related EncryptionData as well, so that Save
+                // can export the document without asking for a password;
+                // as result there will be EncryptionData for both algorithms
+                // in the MediaDescriptor
                 ::msfilter::MSCodec_Std97 aCodec97;
 
                 // Generate random number with a seed of time as salt.
