@@ -1088,7 +1088,7 @@ class MSFILTER_DLLPUBLIC EscherGraphicProvider
 
 protected:
 
-    al_uInt32                  ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry );
+    sal_uInt32              ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry );
 
 public:
 
@@ -1116,8 +1116,8 @@ public:
 
 class MSFILTER_DLLPUBLIC EscherSolverContainer
 {
-    List                maShapeList;
-    List                maConnectorList;
+    List            maShapeList;
+    List            maConnectorList;
 
 public:
 
@@ -1129,6 +1129,7 @@ public:
                         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &,
                         sal_uInt32 nId
                     );
+
     void            AddConnector(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &,
                         const ::com::sun::star::awt::Point& rA,
