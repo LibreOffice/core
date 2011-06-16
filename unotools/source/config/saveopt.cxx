@@ -469,7 +469,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     {
         for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
                 sal_Int32 nTemp = 0;
