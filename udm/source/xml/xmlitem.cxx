@@ -363,39 +363,6 @@ AnElement::inq_Attrs() const
     return &aAttrs;
 }
 
-
-//***************************     AnEmptyElement    **************************//
-
-AnEmptyElement::AnEmptyElement( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-        // aAttrs
-{
-}
-
-AnEmptyElement::AnEmptyElement( const char * i_sTagName )
-    :   sTagName( i_sTagName )
-        // aAttrs
-{
-}
-
-AnEmptyElement::~AnEmptyElement()
-{
-
-}
-
-const String &
-AnEmptyElement::inq_TagName() const
-{
-    return sTagName;
-}
-
-AttrList &
-AnEmptyElement::inq_RefAttrs()
-{
-    return aAttrs;
-}
-
-
 //***************************     APureElement      **************************//
 
 APureElement::APureElement( const String &   i_sTagName )

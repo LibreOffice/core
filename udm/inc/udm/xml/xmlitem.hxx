@@ -227,27 +227,6 @@ class AnElement : public Element
     AttrList            aAttrs;
 };
 
-
-class AnEmptyElement : public EmptyElement
-{
-  public:
-                        AnEmptyElement(
-                            const ::csv::String & i_sTagName );
-                        AnEmptyElement(
-                            const char * i_sTagName );
-                        ~AnEmptyElement();
-  private:
-    // Interface Element:
-    virtual const ::csv::String &
-                        inq_TagName() const;
-    // Interface EmptyElement:
-    virtual AttrList &  inq_RefAttrs();
-
-    // DATA
-    ::csv::String       sTagName;
-    AttrList            aAttrs;
-};
-
 class APureElement : public PureElement
 {
   public:
