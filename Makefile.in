@@ -72,6 +72,7 @@ cross-build-toolset:
 	  o3tl \
 	  basegfx \
 	  GBUILD:tools \
+	  idl \
 	  rsc \
 	  setup_native \
 	  icc; do \
