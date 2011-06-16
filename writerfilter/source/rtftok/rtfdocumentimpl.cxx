@@ -571,7 +571,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     bool bParsed = true;
-    int nParam = 0;
+    int nParam = -1;
 
     // Indentation
     switch (nKeyword)
@@ -583,7 +583,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_QD: nParam = 4; break;
         default: break;
     }
-    if (nParam > 0)
+    if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PJc, pValue));
@@ -599,7 +599,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_TQDEC: nParam = 3; break;
         default: break;
     }
-    if (nParam > 0)
+    if (nParam >= 0)
     {
         RTFSprms_t& rAttributes = lcl_getTabsTab(m_aStates);
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
@@ -619,7 +619,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_TLEQ: nParam = 0; break; // equal sign isn't, either
         default: break;
     }
-    if (nParam > 0)
+    if (nParam >= 0)
     {
         RTFSprms_t& rAttributes = lcl_getTabsTab(m_aStates);
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
@@ -648,7 +648,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_BRDRNONE: nParam = editeng::NO_STYLE; break;
         default: break;
     }
-    if (nParam > 0)
+    if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
 
@@ -673,7 +673,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_WIDCTLPAR: nParam = NS_sprm::LN_PFWidowControl; break;
         default: break;
     }
-    if (nParam > 0)
+    if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(1));
         m_aStates.top().aParagraphSprms.push_back(make_pair(nParam, pValue));
