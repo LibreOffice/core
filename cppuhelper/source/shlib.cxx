@@ -275,13 +275,14 @@ static OUString getLibEnv(OUString         const & aModulePath,
                           uno::Environment       * pEnv,
                           OUString               * pSourceEnv_name,
                           uno::Environment const & cTargetEnv,
-                          OUString         const & cImplName = OUString())
+                          OUString         const & cImplName = OUString(),
+                          OUString         const & rPrefix = OUString())
 {
     OUString aExcMsg;
 
     sal_Char const * pEnvTypeName = NULL;
 
-    OUString aGetEnvNameExt = OUSTR(COMPONENT_GETENVEXT);
+    OUString aGetEnvNameExt = rPrefix + OUSTR(COMPONENT_GETENVEXT);
     component_getImplementationEnvironmentExtFunc pGetImplEnvExt =
         (component_getImplementationEnvironmentExtFunc)osl_getFunctionSymbol(lib, aGetEnvNameExt.pData);
 
@@ -292,7 +293,7 @@ static OUString getLibEnv(OUString         const & aModulePath,
     }
     else
     {
-        OUString aGetEnvName = OUSTR(COMPONENT_GETENV);
+        OUString aGetEnvName = rPrefix + OUSTR(COMPONENT_GETENV);
         component_getImplementationEnvironmentFunc pGetImplEnv =
             (component_getImplementationEnvironmentFunc)osl_getFunctionSymbol(
                 lib, aGetEnvName.pData );
@@ -348,7 +349,8 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rLibName, OUString const & rPath,
     OUString const & rImplName,
     Reference< lang::XMultiServiceFactory > const & xMgr,
-    Reference< registry::XRegistryKey > const & xKey )
+    Reference< registry::XRegistryKey > const & xKey,
+    OUString const & rPrefix )
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
@@ -376,10 +378,10 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     OUString aEnvTypeName;
 
-    OUString aExcMsg = getLibEnv(aModulePath, lib, &env, &aEnvTypeName, currentEnv, rImplName);
+    OUString aExcMsg = getLibEnv(aModulePath, lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
     if (!aExcMsg.getLength())
     {
-        OUString aGetFactoryName = OUSTR(COMPONENT_GETFACTORY);
+        OUString aGetFactoryName = rPrefix + OUSTR(COMPONENT_GETFACTORY);
         oslGenericFunction pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
         if (pSym != 0)
         {

@@ -48,6 +48,7 @@ namespace cppu
     @param rImplName implementation to be retrieved from the library
     @param xMgr service manager to be provided to the component
     @param xKey registry key to be provided to the component
+    @param rPrefix optional component prefix
     @return
     factory instance (::com::sun::star::lang::XSingleComponentFactory or
     ::com::sun::star::lang::XSingleComponentFactory)
@@ -57,7 +58,8 @@ SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
+    ::rtl::OUString const & rPrefix = ::rtl::OUString() )
     SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) );
 
 /** Invokes component_writeInfo() function of specified component library.  You can give either
