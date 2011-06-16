@@ -138,7 +138,7 @@ ifeq (@DO_FETCH_TARBALLS@,YES)
 	@. ./*Env.Set.sh && \
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 else
-        @echo "Automatic fetching of external tarballs is disabled."
+	@echo "Automatic fetching of external tarballs is disabled."
 endif
 
 fetch: src.downloaded
