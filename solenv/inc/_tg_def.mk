@@ -70,7 +70,7 @@ $(DEF1TARGETN) .PHONY :
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL1TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL1TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL1TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL1TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL1TARGET).exp
@@ -239,7 +239,7 @@ $(DEF2TARGETN) .PHONY :
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL2TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL2TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL2TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL2TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL2TARGET).exp
@@ -408,7 +408,7 @@ $(DEF3TARGETN) .PHONY :
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL3TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL3TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL3TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL3TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL3TARGET).exp
@@ -577,7 +577,7 @@ $(DEF4TARGETN) .PHONY :
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL4TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL4TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL4TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL4TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL4TARGET).exp
@@ -746,7 +746,7 @@ $(DEF5TARGETN) .PHONY :
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL5TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL5TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL5TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL5TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL5TARGET).exp
@@ -915,7 +915,7 @@ $(DEF6TARGETN) .PHONY :
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL6TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL6TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL6TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL6TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL6TARGET).exp
@@ -1084,7 +1084,7 @@ $(DEF7TARGETN) .PHONY :
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL7TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL7TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL7TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL7TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL7TARGET).exp
@@ -1253,7 +1253,7 @@ $(DEF8TARGETN) .PHONY :
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL8TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL8TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL8TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL8TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL8TARGET).exp
@@ -1422,7 +1422,7 @@ $(DEF9TARGETN) .PHONY :
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL9TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL9TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL9TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL9TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL9TARGET).exp
@@ -1591,7 +1591,7 @@ $(DEF10TARGETN) .PHONY :
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL10TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL10TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL10TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL10TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL10TARGET).exp

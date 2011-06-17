@@ -99,7 +99,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(COM)"=="GCC"
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
-    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL$(TNR)TARGET).exp --export-all-symbols \
+    $(COMMAND_ECHO)$(DLLTOOL) --output-def $(MISC)/$(SHL$(TNR)TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
     $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
