@@ -224,7 +224,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                     atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
             }
-            catch(const lang::IndexOutOfBoundsException &e)
+            catch (const lang::IndexOutOfBoundsException&)
             {
                 g_warning("Focused object has invalid index in parent");
             }
@@ -559,7 +559,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
             {
                 aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
             }
-            catch( const uno::Exception &e )
+            catch (const uno::Exception&)
             {
                 g_warning( "Exception caught processing focus events" );
             }
@@ -593,7 +593,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
             }
         }
     }
-    catch( const uno::Exception& e )
+    catch (const uno::Exception&)
     {
         g_warning( "Exception caught processing menu highlight events" );
     }
@@ -603,74 +603,76 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 
 long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
 {
-    try {
-    switch (pEvent->GetId())
+    try
     {
-    case VCLEVENT_WINDOW_SHOW:
-        break;
-    case VCLEVENT_WINDOW_HIDE:
-        break;
-    case VCLEVENT_WINDOW_CLOSE:
-        break;
-    case VCLEVENT_WINDOW_GETFOCUS:
-        handle_get_focus(static_cast< ::VclWindowEvent const * >(pEvent));
-        break;
-    case VCLEVENT_WINDOW_LOSEFOCUS:
-        break;
-    case VCLEVENT_WINDOW_MINIMIZE:
-        break;
-    case VCLEVENT_WINDOW_NORMALIZE:
-        break;
-    case VCLEVENT_WINDOW_KEYINPUT:
-    case VCLEVENT_WINDOW_KEYUP:
-    case VCLEVENT_WINDOW_COMMAND:
-    case VCLEVENT_WINDOW_MOUSEMOVE:
-        break;
-
-    case VCLEVENT_MENU_HIGHLIGHT:
-        if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(pEvent))
+        switch (pEvent->GetId())
         {
-            handle_menu_highlighted(pMenuEvent);
+        case VCLEVENT_WINDOW_SHOW:
+            break;
+        case VCLEVENT_WINDOW_HIDE:
+            break;
+        case VCLEVENT_WINDOW_CLOSE:
+            break;
+        case VCLEVENT_WINDOW_GETFOCUS:
+            handle_get_focus(static_cast< ::VclWindowEvent const * >(pEvent));
+            break;
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+            break;
+        case VCLEVENT_WINDOW_MINIMIZE:
+            break;
+        case VCLEVENT_WINDOW_NORMALIZE:
+            break;
+        case VCLEVENT_WINDOW_KEYINPUT:
+        case VCLEVENT_WINDOW_KEYUP:
+        case VCLEVENT_WINDOW_COMMAND:
+        case VCLEVENT_WINDOW_MOUSEMOVE:
+            break;
+
+        case VCLEVENT_MENU_HIGHLIGHT:
+            if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(pEvent))
+            {
+                handle_menu_highlighted(pMenuEvent);
+            }
+            else if (const VclAccessibleEvent* pAccEvent = dynamic_cast<const VclAccessibleEvent*>(pEvent))
+            {
+                uno::Reference< accessibility::XAccessible > xAccessible = pAccEvent->GetAccessible();
+                if (xAccessible.is())
+                    atk_wrapper_focus_tracker_notify_when_idle(xAccessible);
+            }
+            break;
+
+        case VCLEVENT_TOOLBOX_HIGHLIGHT:
+            handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            break;
+
+        case VCLEVENT_TOOLBOX_BUTTONSTATECHANGED:
+            handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(pEvent));
+            break;
+
+        case VCLEVENT_OBJECT_DYING:
+            g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow() );
+            // fallthrough intentional !
+        case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
+            handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            break;
+
+        case VCLEVENT_TABPAGE_ACTIVATE:
+            handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            break;
+
+        case VCLEVENT_COMBOBOX_SETTEXT:
+            // This looks quite strange to me. Stumbled over this when fixing #i104290#.
+            // This kicked in when leaving the combobox in the toolbar, after that the events worked.
+            // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
+            // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
+            // create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            break;
+
+        default:
+            break;
         }
-        else if (const VclAccessibleEvent* pAccEvent = dynamic_cast<const VclAccessibleEvent*>(pEvent))
-        {
-            uno::Reference< accessibility::XAccessible > xAccessible = pAccEvent->GetAccessible();
-            if (xAccessible.is())
-                atk_wrapper_focus_tracker_notify_when_idle(xAccessible);
-        }
-        break;
-
-    case VCLEVENT_TOOLBOX_HIGHLIGHT:
-        handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
-        break;
-
-    case VCLEVENT_TOOLBOX_BUTTONSTATECHANGED:
-        handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(pEvent));
-        break;
-
-    case VCLEVENT_OBJECT_DYING:
-        g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow() );
-        // fallthrough intentional !
-    case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
-        handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
-        break;
-
-    case VCLEVENT_TABPAGE_ACTIVATE:
-        handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
-        break;
-
-    case VCLEVENT_COMBOBOX_SETTEXT:
-        // This looks quite strange to me. Stumbled over this when fixing #i104290#.
-        // This kicked in when leaving the combobox in the toolbar, after that the events worked.
-        // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
-        // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
-        // create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
-        break;
-
-    default:
-        break;
     }
-    } catch(lang::IndexOutOfBoundsException)
+    catch (const lang::IndexOutOfBoundsException&)
     {
         g_warning("Focused object has invalid index in parent");
     }

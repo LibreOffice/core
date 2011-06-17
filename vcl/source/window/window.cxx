@@ -4340,8 +4340,7 @@ Window::~Window()
             if( xComponent.is() )
                 xComponent->dispose();
         }
-
-        catch ( Exception )
+        catch (const Exception&)
         {
             // can be safely ignored here.
         }
@@ -8378,8 +8377,7 @@ uno::Reference< XDropTarget > Window::GetDropTarget()
                             mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = sal_True;
 
                     }
-
-                    catch( RuntimeException )
+                    catch (const RuntimeException&)
                     {
                         // release all instances
                         mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8452,7 +8450,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
             }
 
             // createInstance can throw any exception
-            catch( Exception )
+            catch (const Exception&)
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8532,7 +8530,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
             }
 
             // createInstance can throw any exception
-            catch( Exception )
+            catch (const Exception&)
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxClipboard.clear();
@@ -8584,7 +8582,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
             }
 
             // createInstance can throw any exception
-            catch( Exception )
+            catch (const Exception&)
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxSelection.clear();
