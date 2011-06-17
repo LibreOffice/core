@@ -64,8 +64,10 @@ APP1OBJS=$(OBJ)$/cpp.obj
 APP1LIBS= $(LB)$/idlcpp.lib
 
 .IF "$(HAVE_GETOPT)" != "YES"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)$(COM)" == "WNTMSC"
 APP1STDLIBS=gnu_getopt.lib
+.ELIF "$(GUI)$(COM)" == "WNTGCC"
+APP1STDLIBS=-lgnu_getopt
 .ENDIF
 .ENDIF
 
