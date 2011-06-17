@@ -65,6 +65,8 @@
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
 
+const int indeterminate = 2;
+
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
@@ -78,7 +80,7 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, bool bExpected);
+    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
     bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
 
     bool testLoad(const rtl::OUString &rFilter,
@@ -115,7 +117,7 @@ bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     return xDocShRef->DoLoad(&aSrcMed);
 }
 
-void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, bool bExpected)
+void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected)
 {
     osl::Directory aDir(rURL);
 
@@ -127,7 +129,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
         aItem.getFileStatus(aFileStatus);
         rtl::OUString sURL = aFileStatus.getFileURL();
         if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(rFilter, sURL, rUserData, bExpected);
+            recursiveScan(rFilter, sURL, rUserData, nExpected);
         else
         {
             sal_Int32 nGitIndex = sURL.lastIndexOfAsciiL(
@@ -138,7 +140,12 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
 
             bool bRes = load(rFilter, sURL, rUserData);
             rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
+            if (nExpected == indeterminate)
+            {
+                printf("indeterminate pass/fail %s was %d\n", aRes.getStr(), bRes);
+                continue;
+            }
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
         }
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
@@ -175,6 +182,8 @@ void FiltersTest::testCVEs()
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);
+
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/indeterminate")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), indeterminate);
 
 #endif
 }
