@@ -32,11 +32,11 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 #endif
 
 #include <vector>
+#include <set>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
 
@@ -90,7 +90,7 @@ class SwUndoTxtToTbl : public SwUndo, public SwUndRng
 {
     String sTblNm;
     SwInsertTableOptions aInsTblOpts;
-    SvULongs* pDelBoxes;
+    std::vector<sal_uLong>* pDelBoxes;
     SwTableAutoFmt* pAutoFmt;
     SwHistory* pHistory;
     sal_Unicode cTrenner;
@@ -179,13 +179,16 @@ public:
 class SwUndoTblNdsChg : public SwUndo
 {
     _SaveTable* pSaveTbl;
-    SvULongs aBoxes;
-
-    union {
-        SvULongs* pNewSttNds;
-        SwUndoSaveSections* pDelSects;
-    } Ptrs;
-    std::vector<bool> aMvBoxes;       // for SplitRow (split Nodes of Box)
+    std::set<sal_uLong> aBoxes;
+    struct _BoxMove
+    {
+        sal_uLong index;    ///< Index of this box.
+        bool      hasMoved; ///< Has this box been moved already.
+        _BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
+        bool operator<(const _BoxMove other) const { return index < other.index; };
+    };
+    std::set<_BoxMove> *pNewSttNds;
+    SwUndoSaveSections *pDelSects;
     long nMin, nMax;        // for redo of delete column
     sal_uLong nSttNode, nCurrBox;
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;
@@ -230,7 +233,8 @@ class SwUndoTblMerge : public SwUndo, private SwUndRng
 {
     sal_uLong nTblNode;
     _SaveTable* pSaveTbl;
-    SvULongs aBoxes, aNewSttNds;
+    std::set<sal_uLong> aBoxes;
+    std::vector<sal_uLong> aNewSttNds;
     SwUndoMoves* pMoves;
     SwHistory* pHistory;
 
@@ -247,7 +251,7 @@ public:
     void SetSelBoxes( const SwSelBoxes& rBoxes );
 
     void AddNewBox( sal_uLong nSttNdIdx )
-        { aNewSttNds.Insert( nSttNdIdx, aNewSttNds.Count() ); }
+        { aNewSttNds.push_back( nSttNdIdx ); }
 
     void SaveCollection( const SwTableBox& rBox );
 

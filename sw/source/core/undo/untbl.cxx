@@ -192,7 +192,6 @@ public:
 };
 
 void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
-void InsertSort( SvULongs& rArr, sal_uLong nIdx, sal_uInt16* pInsPos = 0 );
 
 #if OSL_DEBUG_LEVEL > 1
 #include "shellio.hxx"
@@ -766,7 +765,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     if( pDelBoxes )
     {
         SwTable& rTbl = pTNd->GetTable();
-        for( sal_uInt16 n = pDelBoxes->Count(); n; )
+        for( sal_uInt16 n = pDelBoxes->size(); n; )
         {
             SwTableBox* pBox = rTbl.GetTblBox( (*pDelBoxes)[ --n ] );
             if( pBox )
@@ -847,8 +846,8 @@ void SwUndoTxtToTbl::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoTxtToTbl::AddFillBox( const SwTableBox& rBox )
 {
     if( !pDelBoxes )
-        pDelBoxes = new SvULongs;
-    pDelBoxes->Insert( rBox.GetSttIdx(), pDelBoxes->Count() );
+        pDelBoxes = new std::vector<sal_uLong>;
+    pDelBoxes->push_back( rBox.GetSttIdx() );
 }
 
 SwHistory& SwUndoTxtToTbl::GetHistory()
@@ -1546,7 +1545,6 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
                                     long nMn, long nMx,
                                     sal_uInt16 nCnt, sal_Bool bFlg, sal_Bool bSmHght )
     : SwUndo( nAction ),
-    aBoxes( rBoxes.Count() < 255 ? (sal_uInt8)rBoxes.Count() : 255, 10 ),
     nMin( nMn ), nMax( nMx ),
     nSttNode( rTblNd.GetIndex() ), nCurrBox( 0 ),
     nCount( nCnt ), nRelDiff( 0 ), nAbsDiff( 0 ),
@@ -1554,14 +1552,13 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
     bFlag( bFlg ),
     bSameHeight( bSmHght )
 {
-    Ptrs.pNewSttNds = 0;
+    pNewSttNds = 0;
 
     const SwTable& rTbl = rTblNd.GetTable();
     pSaveTbl = new _SaveTable( rTbl );
 
     // und die Selektion merken
-    for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
-        aBoxes.Insert( rBoxes[n]->GetSttIdx(), n );
+    ReNewBoxes( rBoxes );
 }
 
 
@@ -1569,7 +1566,6 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
                                     const SwSelBoxes& rBoxes,
                                     const SwTableNode& rTblNd )
     : SwUndo( nAction ),
-    aBoxes( rBoxes.Count() < 255 ? (sal_uInt8)rBoxes.Count() : 255, 10 ),
     nMin( 0 ), nMax( 0 ),
     nSttNode( rTblNd.GetIndex() ), nCurrBox( 0 ),
     nCount( 0 ), nRelDiff( 0 ), nAbsDiff( 0 ),
@@ -1577,23 +1573,22 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
     bFlag( sal_False ),
     bSameHeight( sal_False )
 {
-    Ptrs.pNewSttNds = 0;
+    pNewSttNds = 0;
 
     const SwTable& rTbl = rTblNd.GetTable();
     pSaveTbl = new _SaveTable( rTbl );
 
     // und die Selektion merken
-    for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
-        aBoxes.Insert( rBoxes[n]->GetSttIdx(), n );
+    ReNewBoxes( rBoxes );
 }
 
 void SwUndoTblNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 {
-    if( rBoxes.Count() != aBoxes.Count() )
+    if( rBoxes.Count() != aBoxes.size() )
     {
-        aBoxes.Remove( 0, aBoxes.Count() );
+        aBoxes.clear();
         for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
-            aBoxes.Insert( rBoxes[n]->GetSttIdx(), n );
+            aBoxes.insert( rBoxes[n]->GetSttIdx() );
     }
 }
 
@@ -1602,9 +1597,9 @@ SwUndoTblNdsChg::~SwUndoTblNdsChg()
     delete pSaveTbl;
 
     if( IsDelBox() )
-        delete Ptrs.pDelSects;
+        delete pDelSects;
     else
-        delete Ptrs.pNewSttNds;
+        delete pNewSttNds;
 }
 
 void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
@@ -1616,7 +1611,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     sal_uInt16 i;
 
     OSL_ENSURE( ! IsDelBox(), "falsche Action" );
-    Ptrs.pNewSttNds = new SvULongs( (sal_uInt8)(rTblBoxes.Count() - rOld.Count()), 5 );
+    pNewSttNds = new std::set<_BoxMove>;
 
     for( n = 0, i = 0; n < rOld.Count(); ++i )
     {
@@ -1624,12 +1619,12 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             ++n;
         else
             // neue Box: sortiert einfuegen!!
-            InsertSort( *Ptrs.pNewSttNds, rTblBoxes[ i ]->GetSttIdx() );
+            pNewSttNds->insert( _BoxMove(rTblBoxes[ i ]->GetSttIdx()) );
     }
 
     for( ; i < rTblBoxes.Count(); ++i )
         // neue Box: sortiert einfuegen!!
-        InsertSort( *Ptrs.pNewSttNds, rTblBoxes[ i ]->GetSttIdx() );
+        pNewSttNds->insert( _BoxMove(rTblBoxes[ i ]->GetSttIdx()) );
 }
 
 
@@ -1669,7 +1664,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();
 
     OSL_ENSURE( ! IsDelBox(), "falsche Action" );
-    Ptrs.pNewSttNds = new SvULongs( (sal_uInt8)(rTblBoxes.Count() - rOld.Count()), 5 );
+    pNewSttNds = new std::set<_BoxMove>;
 
     OSL_ENSURE( rTbl.IsNewModel() || rOld.Count() + nCount * rBoxes.Count() == rTblBoxes.Count(),
         "unexpected boxes" );
@@ -1685,9 +1680,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
         else
         {
             // new box found: insert (obey sort order)
-            sal_uInt16 nInsPos;
             const SwTableBox* pBox = rTblBoxes[ i ];
-            InsertSort( *Ptrs.pNewSttNds, pBox->GetSttIdx(), &nInsPos );
 
             // find the source box. It must be one in rBoxes.
             // We found the right one if it's in the same column as pBox.
@@ -1734,14 +1727,11 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             // then pBox received nodes from elsewhere.
             // If bNodesMoved is set for pBox the undo must move the
             // boxes back, otherwise it must delete them.
-            // The bNodesMoved flag is stored in a seperate array
-            // which mirrors Ptrs.pNewSttNds, i.e. Ptrs.pNewSttNds[i]
-            // and aMvBoxes[i] belong together.
             sal_Bool bNodesMoved =
                 ( nNodes != ( pSourceBox->GetSttNd()->EndOfSectionIndex() -
                               pSourceBox->GetSttIdx() ) )
                 && ( nNodes - 1 > nLineDiff );
-            aMvBoxes.insert( aMvBoxes.begin() + nInsPos, bNodesMoved );
+            pNewSttNds->insert( _BoxMove(pBox->GetSttIdx(), bNodesMoved) );
         }
     }
 }
@@ -1750,14 +1740,14 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
 {
     OSL_ENSURE( IsDelBox(), "falsche Action" );
-    if( !Ptrs.pDelSects )
-        Ptrs.pDelSects = new SwUndoSaveSections( 10, 5 );
+    if( !pDelSects )
+        pDelSects = new SwUndoSaveSections( 10, 5 );
 
     SwTableNode* pTblNd = pSttNd->FindTableNode();
     SwUndoSaveSection* pSave = new SwUndoSaveSection;
     pSave->SaveSection( pSttNd->GetDoc(), SwNodeIndex( *pSttNd ));
 
-    Ptrs.pDelSects->Insert( pSave, Ptrs.pDelSects->Count() );
+    pDelSects->Insert( pSave, pDelSects->Count() );
     nSttNode = pTblNd->GetIndex();
 }
 
@@ -1789,9 +1779,9 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTableBoxes& rLnBoxes = pCpyBox->GetUpper()->GetTabBoxes();
 
         // die Sections wieder herstellen
-        for( sal_uInt16 n = Ptrs.pDelSects->Count(); n; )
+        for( sal_uInt16 n = pDelSects->Count(); n; )
         {
-            SwUndoSaveSection* pSave = (*Ptrs.pDelSects)[ --n ];
+            SwUndoSaveSection* pSave = (*pDelSects)[ --n ];
             pSave->RestoreSection( &rDoc, &aIdx, SwTableBoxStartNode );
             if( pSave->GetHistory() )
                 pSave->GetHistory()->Rollback( &rDoc );
@@ -1799,20 +1789,19 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                                                 pCpyBox->GetUpper() );
             rLnBoxes.C40_INSERT( SwTableBox, pBox, rLnBoxes.Count() );
         }
-        Ptrs.pDelSects->DeleteAndDestroy( 0, Ptrs.pDelSects->Count() );
+        pDelSects->DeleteAndDestroy( 0, pDelSects->Count() );
     }
-    else if( !aMvBoxes.empty() )
+    else if( !pNewSttNds->empty() )
     {
         // dann muessen Nodes verschoben und nicht geloescht werden!
         // Dafuer brauchen wir aber ein temp Array
-        SvULongs aTmp( 0, 5);
-        aTmp.Insert( Ptrs.pNewSttNds, 0 );
+        std::vector<_BoxMove> aTmp( pNewSttNds->begin(), pNewSttNds->end() );
 
         // von hinten anfangen
-        for( sal_uInt16 n = aTmp.Count(); n; )
+        for( int n = aTmp.size() - 1; n >= 0 ; --n)
         {
             // Box aus der Tabellen-Struktur entfernen
-            sal_uLong nIdx = aTmp[ --n ];
+            sal_uLong nIdx = aTmp[n].index;
             SwTableBox* pBox = pTblNd->GetTable().GetTblBox( nIdx );
             OSL_ENSURE( pBox, "Wo ist meine TabellenBox geblieben?" );
 
@@ -1820,7 +1809,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             if (pPCD)
                 pPCD->DeleteBox( &pTblNd->GetTable(), *pBox );
 
-            if( aMvBoxes[ n ] )
+            if( aTmp[n].hasMoved )
             {
                 SwNodeRange aRg( *pBox->GetSttNd(), 1,
                             *pBox->GetSttNd()->EndOfSectionNode() );
@@ -1832,8 +1821,8 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 sal_uInt16 i = n;
                 sal_uLong nSttIdx = aInsPos.GetIndex() - 2,
                        nNdCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
-                while( i && aTmp[ --i ] > nSttIdx )
-                    aTmp[ i ] += nNdCnt;
+                while( i && aTmp[ --i ].index > nSttIdx )
+                    aTmp[ i ].index += nNdCnt;
 
                 // erst die Box loeschen
                 delete pBox;
@@ -1848,9 +1837,10 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     else
     {
         // Remove nodes from nodes array (backwards!)
-        for( sal_uInt16 n = Ptrs.pNewSttNds->Count(); n; )
+        std::set<_BoxMove>::reverse_iterator it;
+        for( it = pNewSttNds->rbegin(); it != pNewSttNds->rend(); ++it )
         {
-            sal_uLong nIdx = (*Ptrs.pNewSttNds)[ --n ];
+            sal_uLong nIdx = (*it).index;
             SwTableBox* pBox = pTblNd->GetTable().GetTblBox( nIdx );
             OSL_ENSURE( pBox, "Where's my table box?" );
             // TL_CHART2: notify chart about box to be removed
@@ -1890,9 +1880,9 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     CHECK_TABLE( pTblNd->GetTable() )
 
     SwSelBoxes aSelBoxes;
-    for( sal_uInt16 n = 0; n < aBoxes.Count(); ++n )
+    for( std::set<sal_uLong>::iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
     {
-        SwTableBox* pBox = pTblNd->GetTable().GetTblBox( aBoxes[ n ] );
+        SwTableBox* pBox = pTblNd->GetTable().GetTblBox( *it );
         aSelBoxes.Insert( pBox );
     }
 
@@ -1976,8 +1966,8 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             if( pUndo )
             {
-                Ptrs.pDelSects->Insert( pUndo->Ptrs.pDelSects, 0 );
-                pUndo->Ptrs.pDelSects->Remove( 0, pUndo->Ptrs.pDelSects->Count() );
+                pDelSects->Insert( pUndo->pDelSects, 0 );
+                pUndo->pDelSects->Remove( 0, pUndo->pDelSects->Count() );
 
                 delete pUndo;
             }
@@ -2043,9 +2033,10 @@ CHECKTABLE(pTblNd->GetTable())
     SwTxtFmtColl* pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
     sal_uInt16 n;
 
-    for( n = 0; n < aBoxes.Count(); ++n )
+    std::set<sal_uLong>::iterator it;
+    for( it = aBoxes.begin(); it != aBoxes.end(); ++it )
     {
-        aIdx = aBoxes[ n ];
+        aIdx = *it;
         SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx,
                                             SwTableBoxStartNode, pColl );
         pBox = new SwTableBox( (SwTableBoxFmt*)pCpyBox->GetFrmFmt(), *pSttNd,
@@ -2060,7 +2051,7 @@ CHECKTABLE(pTblNd->GetTable())
     SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
     // 2. die eingefuegten Boxen loeschen
     // die Nodes loeschen (von Hinten!!)
-    for( n = aNewSttNds.Count(); n; )
+    for( n = aNewSttNds.size(); n; )
     {
         // Box aus der Tabellen-Struktur entfernen
         sal_uLong nIdx = aNewSttNds[ --n ];
@@ -2191,10 +2182,10 @@ void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 {
     // die Selektion merken
     for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
-        InsertSort( aBoxes, rBoxes[n]->GetSttIdx() );
+        aBoxes.insert( rBoxes[n]->GetSttIdx() );
 
     // als Trennung fuers einfuegen neuer Boxen nach dem Verschieben!
-    aNewSttNds.Insert( (sal_uLong)0, aNewSttNds.Count() );
+    aNewSttNds.push_back( (sal_uLong)0 );
 
      // The new table model does not delete overlapped cells (by row span),
      // so the rBoxes array might be empty even some cells have been merged.
@@ -3206,33 +3197,6 @@ void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
             if( *(rArr.GetData() + nM) == nIdx )
             {
                 OSL_FAIL( "Index already exists. This should never happen." );
-                return;
-            }
-            if( *(rArr.GetData() + nM) < nIdx )
-                nU = nM + 1;
-            else if( nM == 0 )
-                break;
-            else
-                nO = nM - 1;
-        }
-    }
-    rArr.Insert( nIdx, nU );
-    if( pInsPos )
-        *pInsPos = nU;
-}
-
-void InsertSort( SvULongs& rArr, sal_uLong nIdx, sal_uInt16* pInsPos )
-{
-    sal_uInt16 nO   = rArr.Count(), nM, nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            if( *(rArr.GetData() + nM) == nIdx )
-            {
-                OSL_FAIL( "Index ist schon vorhanden, darf nie sein!" );
                 return;
             }
             if( *(rArr.GetData() + nM) < nIdx )
