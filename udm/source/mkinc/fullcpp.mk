@@ -37,7 +37,9 @@
 .IF "$(GUI)"=="WNT"
 
 # RTTI
+.IF "$(COM)"=="MSC"
 CFLAGS+= -GR
+.ENDIF
 
 .IF "$(NP_LOCALBUILD)"!=""
 
@@ -54,7 +56,8 @@ CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBU
 
 .ENDIF
 
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
+# Or should we simple check for $(COM)==GCC ?
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(COM)"=="WNTGCC"
 CFLAGSCXX+= -frtti
 .ENDIF
 
