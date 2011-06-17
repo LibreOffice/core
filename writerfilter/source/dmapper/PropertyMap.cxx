@@ -837,130 +837,130 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( m_nColumnCount > 0 && xSection.is())
             ApplyColumnProperties( xSection );
     }
-    else
+    //get the properties and create appropriate page styles
+    uno::Reference< beans::XPropertySet > xFollowPageStyle = GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
+
+    if( m_nDzaGutter > 0 )
     {
-        //get the properties and create appropriate page styles
-        uno::Reference< beans::XPropertySet > xFollowPageStyle = GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
+        //todo: iGutterPos from DocProperties are missing
+        if( m_bGutterRTL )
+            m_nRightMargin += m_nDzaGutter;
+        else
+            m_nLeftMargin += m_nDzaGutter;
+    }
+    operator[]( PropertyDefinition( PROP_LEFT_MARGIN, false )) =  uno::makeAny( m_nLeftMargin  );
+    operator[]( PropertyDefinition( PROP_RIGHT_MARGIN, false )) = uno::makeAny( m_nRightMargin );
 
-        if( m_nDzaGutter > 0 )
+    /*** if headers/footers are available then the top/bottom margins of the
+        header/footer are copied to the top/bottom margin of the page
+    */
+    CopyLastHeaderFooter( false, rDM_Impl );
+    PrepareHeaderFooterProperties( false );
+
+    const ::rtl::OUString sTrayIndex = rPropNameSupplier.GetName( PROP_PRINTER_PAPER_TRAY_INDEX );
+    if( m_nPaperBin >= 0 )
+        xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( m_nPaperBin ) );
+    uno::Reference< text::XTextColumns > xColumns;
+    if( m_nColumnCount > 0 )
+        xColumns = ApplyColumnProperties( xFollowPageStyle );
+
+    //prepare text grid properties
+    sal_Int32 nHeight = 1;
+    PropertyMap::iterator aElement = find(PropertyDefinition( PROP_HEIGHT, false ));
+    if( aElement != end())
+        aElement->second >>= nHeight;
+
+    sal_Int32 nWidth = 1;
+    aElement = find(PropertyDefinition( PROP_WIDTH, false ));
+    if( aElement != end())
+        aElement->second >>= nWidth;
+
+    text::WritingMode eWritingMode = text::WritingMode_LR_TB;
+    aElement = find(PropertyDefinition( PROP_WRITING_MODE, false ));
+    if( aElement != end())
+        aElement->second >>= eWritingMode;
+
+
+
+    sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
+    nHeight - m_nTopMargin - m_nBottomMargin :
+    nWidth - m_nLeftMargin - m_nRightMargin;
+
+    operator[]( PropertyDefinition( PROP_GRID_LINES, false )) =
+    uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/m_nGridLinePitch));
+
+    sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
+    //todo: is '0' the right index here?
+    const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(::rtl::OUString::valueOf(static_cast<sal_Int32>(0), 16));
+    if( pEntry.get( ) )
+    {
+        PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN, false ));
+        if( aElement_ != pEntry->pProperties->end())
         {
-            //todo: iGutterPos from DocProperties are missing
-            if( m_bGutterRTL )
-                m_nRightMargin += m_nDzaGutter;
-            else
-                m_nLeftMargin += m_nDzaGutter;
+            double fHeight = 0;
+            if( aElement_->second >>= fHeight )
+                nCharWidth = ConversionHelper::convertTwipToMM100( (long)( fHeight * 20.0 + 0.5 ));
         }
-        operator[]( PropertyDefinition( PROP_LEFT_MARGIN, false )) =  uno::makeAny( m_nLeftMargin  );
-        operator[]( PropertyDefinition( PROP_RIGHT_MARGIN, false )) = uno::makeAny( m_nRightMargin );
+    }
 
-        /*** if headers/footers are available then the top/bottom margins of the
-            header/footer are copied to the top/bottom margin of the page
-          */
-        CopyLastHeaderFooter( false, rDM_Impl );
-        PrepareHeaderFooterProperties( false );
+    //dxtCharSpace
+    if(m_nDxtCharSpace)
+    {
+        sal_Int32 nCharSpace = m_nDxtCharSpace;
+        //main lives in top 20 bits, and is signed.
+        sal_Int32 nMain = (nCharSpace & 0xFFFFF000);
+        nMain /= 0x1000;
+        nCharWidth += ConversionHelper::convertTwipToMM100( nMain * 20 );
 
-        const ::rtl::OUString sTrayIndex = rPropNameSupplier.GetName( PROP_PRINTER_PAPER_TRAY_INDEX );
-        if( m_nPaperBin >= 0 )
-            xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( m_nPaperBin ) );
-        uno::Reference< text::XTextColumns > xColumns;
-        if( m_nColumnCount > 0 )
-            xColumns = ApplyColumnProperties( xFollowPageStyle );
+        sal_Int32 nFraction = (nCharSpace & 0x00000FFF);
+        nFraction = (nFraction * 20)/0xFFF;
+        nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
+    }
+    operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT, false )) = uno::makeAny( nCharWidth );
+    sal_Int32 nRubyHeight = m_nGridLinePitch - nCharWidth;
+    if(nRubyHeight < 0 )
+        nRubyHeight = 0;
+    operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
 
-        //prepare text grid properties
-        sal_Int32 nHeight = 1;
-        PropertyMap::iterator aElement = find(PropertyDefinition( PROP_HEIGHT, false ));
-        if( aElement != end())
-            aElement->second >>= nHeight;
+    sal_Int16 nGridMode = text::TextGridMode::NONE;
 
-        sal_Int32 nWidth = 1;
-        aElement = find(PropertyDefinition( PROP_WIDTH, false ));
-        if( aElement != end())
-            aElement->second >>= nWidth;
+    switch (m_nGridType)
+    {
+        case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_lines:
+            nGridMode = text::TextGridMode::LINES;
+            break;
+        case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_linesAndChars:
+            nGridMode = text::TextGridMode::LINES_AND_CHARS;
+            break;
+        default:
+            break;
+    }
 
-        text::WritingMode eWritingMode = text::WritingMode_LR_TB;
-        aElement = find(PropertyDefinition( PROP_WRITING_MODE, false ));
-        if( aElement != end())
-            aElement->second >>= eWritingMode;
+    operator[](PropertyDefinition(PROP_GRID_MODE, false)) = uno::makeAny(nGridMode);
 
+    _ApplyProperties( xFollowPageStyle );
 
+    //todo: creating a "First Page" style depends on HasTitlePage und _fFacingPage_
+    if( m_bTitlePage )
+    {
+        CopyLastHeaderFooter( true, rDM_Impl );
+        PrepareHeaderFooterProperties( true );
+        uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(
+        rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), true );
+        _ApplyProperties( xFirstPageStyle );
 
-        sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
-            nHeight - m_nTopMargin - m_nBottomMargin :
-            nWidth - m_nLeftMargin - m_nRightMargin;
+        sal_Int32 nPaperBin = m_nFirstPaperBin >= 0 ? m_nFirstPaperBin : m_nPaperBin >= 0 ? m_nPaperBin : 0;
+        if( nPaperBin )
+            xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( nPaperBin ) );
+        if( xColumns.is() )
+            xFollowPageStyle->setPropertyValue(
+        rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
+    }
 
-        operator[]( PropertyDefinition( PROP_GRID_LINES, false )) =
-                uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/m_nGridLinePitch));
+    ApplyBorderToPageStyles( rDM_Impl.GetPageStyles( ), rDM_Impl.GetTextFactory( ), m_nBorderParams );
 
-        sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
-        //todo: is '0' the right index here?
-        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(::rtl::OUString::valueOf(static_cast<sal_Int32>(0), 16));
-        if( pEntry.get( ) )
-        {
-            PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN, false ));
-            if( aElement_ != pEntry->pProperties->end())
-            {
-                double fHeight = 0;
-                if( aElement_->second >>= fHeight )
-                    nCharWidth = ConversionHelper::convertTwipToMM100( (long)( fHeight * 20.0 + 0.5 ));
-            }
-        }
-
-        //dxtCharSpace
-        if(m_nDxtCharSpace)
-        {
-            sal_Int32 nCharSpace = m_nDxtCharSpace;
-            //main lives in top 20 bits, and is signed.
-            sal_Int32 nMain = (nCharSpace & 0xFFFFF000);
-            nMain /= 0x1000;
-            nCharWidth += ConversionHelper::convertTwipToMM100( nMain * 20 );
-
-            sal_Int32 nFraction = (nCharSpace & 0x00000FFF);
-            nFraction = (nFraction * 20)/0xFFF;
-            nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
-        }
-        operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT, false )) = uno::makeAny( nCharWidth );
-        sal_Int32 nRubyHeight = m_nGridLinePitch - nCharWidth;
-        if(nRubyHeight < 0 )
-            nRubyHeight = 0;
-        operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
-
-        sal_Int16 nGridMode = text::TextGridMode::NONE;
-
-        switch (m_nGridType)
-        {
-            case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_lines:
-                nGridMode = text::TextGridMode::LINES;
-                break;
-            case NS_ooxml::LN_Value_wordprocessingml_ST_DocGrid_linesAndChars:
-                nGridMode = text::TextGridMode::LINES_AND_CHARS;
-                break;
-            default:
-                break;
-        }
-
-        operator[](PropertyDefinition(PROP_GRID_MODE, false)) = uno::makeAny(nGridMode);
-
-        _ApplyProperties( xFollowPageStyle );
-
-        //todo: creating a "First Page" style depends on HasTitlePage und _fFacingPage_
-        if( m_bTitlePage )
-        {
-            CopyLastHeaderFooter( true, rDM_Impl );
-            PrepareHeaderFooterProperties( true );
-            uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(
-                                rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), true );
-            _ApplyProperties( xFirstPageStyle );
-
-            sal_Int32 nPaperBin = m_nFirstPaperBin >= 0 ? m_nFirstPaperBin : m_nPaperBin >= 0 ? m_nPaperBin : 0;
-            if( nPaperBin )
-                xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( nPaperBin ) );
-            if( xColumns.is() )
-                xFollowPageStyle->setPropertyValue(
-                    rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
-        }
-
-        ApplyBorderToPageStyles( rDM_Impl.GetPageStyles( ), rDM_Impl.GetTextFactory( ), m_nBorderParams );
-
+    if ( m_nBreakType != 0 )
+    {
         try
         {
             {
@@ -992,7 +992,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         {
             OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup");
             (void)rEx;
-       }
+        }
     }
 }
 
