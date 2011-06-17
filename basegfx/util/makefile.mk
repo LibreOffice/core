@@ -52,7 +52,11 @@ LIB1FILES=\
     $(SLB)$/raster.lib
 
 SHL1TARGET= basegfx$(DLLPOSTFIX)
+.IF "$(COM)" == "MSC"
 SHL1IMPLIB= ibasegfx
+.ELSE
+SHL1IMPLIB= $(SHL1TARGET)
+.ENDIF
 
 SHL1STDLIBS=\
         $(SALLIB)		 \
