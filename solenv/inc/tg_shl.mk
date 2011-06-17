@@ -101,7 +101,9 @@ USE_$(TNR)IMPLIB=-Wl,--out-implib=$(SHL$(TNR)IMPLIBN)
 ALLTAR : $(SHL$(TNR)IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_$(TNR)IMPLIB_DEPS=$(LB)/$(SHL$(TNR)IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL$(TNR)DEF=$(SHL$(TNR)DEF)
@@ -338,13 +340,13 @@ $(SHL$(TNR)TARGETN) : \
     @noop $(assign DEF$(TNR)OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF$(TNR)OBJLIST) $(assign ALL$(TNR)OBJLIST:=$(ALL$(TNR)OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL$(TNR)VERSIONOBJ) \
-        @(ALL$(TNR)OBJLIST)
-    )
+        $(ALL$(TNR)OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \

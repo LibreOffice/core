@@ -72,7 +72,9 @@ USE_1IMPLIB=-Wl,--out-implib=$(SHL1IMPLIBN)
 ALLTAR : $(SHL1IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_1IMPLIB_DEPS=$(LB)/$(SHL1IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL1DEF=$(SHL1DEF)
@@ -309,13 +311,13 @@ $(SHL1TARGETN) : \
     @noop $(assign DEF1OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF1OBJLIST) $(assign ALL1OBJLIST:=$(ALL1OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB1NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL1TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL1VERSIONOBJ) \
-        @(ALL1OBJLIST)
-    )
+        $(ALL1OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -577,7 +579,9 @@ USE_2IMPLIB=-Wl,--out-implib=$(SHL2IMPLIBN)
 ALLTAR : $(SHL2IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_2IMPLIB_DEPS=$(LB)/$(SHL2IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL2DEF=$(SHL2DEF)
@@ -814,13 +818,13 @@ $(SHL2TARGETN) : \
     @noop $(assign DEF2OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF2OBJLIST) $(assign ALL2OBJLIST:=$(ALL2OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB2NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL2TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL2VERSIONOBJ) \
-        @(ALL2OBJLIST)
-    )
+        $(ALL2OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -1082,7 +1086,9 @@ USE_3IMPLIB=-Wl,--out-implib=$(SHL3IMPLIBN)
 ALLTAR : $(SHL3IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_3IMPLIB_DEPS=$(LB)/$(SHL3IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL3DEF=$(SHL3DEF)
@@ -1319,13 +1325,13 @@ $(SHL3TARGETN) : \
     @noop $(assign DEF3OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF3OBJLIST) $(assign ALL3OBJLIST:=$(ALL3OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB3NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL3TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL3VERSIONOBJ) \
-        @(ALL3OBJLIST)
-    )
+        $(ALL3OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -1587,7 +1593,9 @@ USE_4IMPLIB=-Wl,--out-implib=$(SHL4IMPLIBN)
 ALLTAR : $(SHL4IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_4IMPLIB_DEPS=$(LB)/$(SHL4IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL4DEF=$(SHL4DEF)
@@ -1824,13 +1832,13 @@ $(SHL4TARGETN) : \
     @noop $(assign DEF4OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF4OBJLIST) $(assign ALL4OBJLIST:=$(ALL4OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB4NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL4TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL4VERSIONOBJ) \
-        @(ALL4OBJLIST)
-    )
+        $(ALL4OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -2092,7 +2100,9 @@ USE_5IMPLIB=-Wl,--out-implib=$(SHL5IMPLIBN)
 ALLTAR : $(SHL5IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_5IMPLIB_DEPS=$(LB)/$(SHL5IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL5DEF=$(SHL5DEF)
@@ -2329,13 +2339,13 @@ $(SHL5TARGETN) : \
     @noop $(assign DEF5OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF5OBJLIST) $(assign ALL5OBJLIST:=$(ALL5OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB5NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL5TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL5VERSIONOBJ) \
-        @(ALL5OBJLIST)
-    )
+        $(ALL5OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -2597,7 +2607,9 @@ USE_6IMPLIB=-Wl,--out-implib=$(SHL6IMPLIBN)
 ALLTAR : $(SHL6IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_6IMPLIB_DEPS=$(LB)/$(SHL6IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL6DEF=$(SHL6DEF)
@@ -2834,13 +2846,13 @@ $(SHL6TARGETN) : \
     @noop $(assign DEF6OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF6OBJLIST) $(assign ALL6OBJLIST:=$(ALL6OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB6NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL6TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL6VERSIONOBJ) \
-        @(ALL6OBJLIST)
-    )
+        $(ALL6OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -3102,7 +3114,9 @@ USE_7IMPLIB=-Wl,--out-implib=$(SHL7IMPLIBN)
 ALLTAR : $(SHL7IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_7IMPLIB_DEPS=$(LB)/$(SHL7IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL7DEF=$(SHL7DEF)
@@ -3339,13 +3353,13 @@ $(SHL7TARGETN) : \
     @noop $(assign DEF7OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF7OBJLIST) $(assign ALL7OBJLIST:=$(ALL7OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB7NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL7TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL7VERSIONOBJ) \
-        @(ALL7OBJLIST)
-    )
+        $(ALL7OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -3607,7 +3621,9 @@ USE_8IMPLIB=-Wl,--out-implib=$(SHL8IMPLIBN)
 ALLTAR : $(SHL8IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_8IMPLIB_DEPS=$(LB)/$(SHL8IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL8DEF=$(SHL8DEF)
@@ -3844,13 +3860,13 @@ $(SHL8TARGETN) : \
     @noop $(assign DEF8OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF8OBJLIST) $(assign ALL8OBJLIST:=$(ALL8OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB8NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL8TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL8VERSIONOBJ) \
-        @(ALL8OBJLIST)
-    )
+        $(ALL8OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -4112,7 +4128,9 @@ USE_9IMPLIB=-Wl,--out-implib=$(SHL9IMPLIBN)
 ALLTAR : $(SHL9IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_9IMPLIB_DEPS=$(LB)/$(SHL9IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL9DEF=$(SHL9DEF)
@@ -4349,13 +4367,13 @@ $(SHL9TARGETN) : \
     @noop $(assign DEF9OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF9OBJLIST) $(assign ALL9OBJLIST:=$(ALL9OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB9NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL9TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL9VERSIONOBJ) \
-        @(ALL9OBJLIST)
-    )
+        $(ALL9OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -4617,7 +4635,9 @@ USE_10IMPLIB=-Wl,--out-implib=$(SHL10IMPLIBN)
 ALLTAR : $(SHL10IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_10IMPLIB_DEPS=$(LB)/$(SHL10IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL10DEF=$(SHL10DEF)
@@ -4854,13 +4874,13 @@ $(SHL10TARGETN) : \
     @noop $(assign DEF10OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF10OBJLIST) $(assign ALL10OBJLIST:=$(ALL10OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB10NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
         --dllname $(SHL10TARGET)$(DLLPOST) \
         --kill-at \
         --output-exp $(MISC)/$(@:b)_exp.o \
         $(SHL10VERSIONOBJ) \
-        @(ALL10OBJLIST)
-    )
+        $(ALL10OBJLIST) \
+    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) \
