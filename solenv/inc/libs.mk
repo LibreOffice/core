@@ -87,11 +87,7 @@ OPENSSLLIBST=-lssl_static -lcrypto_static
 OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
 .ENDIF          # "$(GUI)$(COM)"=="WNTGCC"
 .ENDIF          # "$(SYSTEM_OPENSSL)" == "YES"
-.IF "$(GUI)$(COM)"=="WNTGCC"
-REGLIB=-lreg$(UDK_MAJOR)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
 .IF "$(GUI)$(COM)"=="WNTGCC"
