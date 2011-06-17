@@ -5341,7 +5341,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
         m_bRegardHindiDigits = aVal[ 12 ] > 0;
     }
 
-    sal_uInt16 nMagic;
+    sal_uInt16 nMagic(0);
     *pStrm >> nMagic;
 
     // beachte: 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
