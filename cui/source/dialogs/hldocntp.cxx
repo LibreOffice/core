@@ -395,7 +395,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 }
             }
         }
-        catch( uno::Exception )
+        catch (const uno::Exception&)
         {
         }
 

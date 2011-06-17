@@ -205,13 +205,13 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
             }
         }
     }
-    catch( const ContentCreationException& )
+    catch (const ContentCreationException&)
     {
     }
-    catch( const ::com::sun::star::uno::RuntimeException& )
+    catch (const ::com::sun::star::uno::RuntimeException&)
     {
     }
-        catch( const ::com::sun::star::uno::Exception& )
+    catch (const ::com::sun::star::uno::Exception&)
     {
     }
 }
@@ -1091,7 +1091,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
                 }
             }
         }
-        catch(IllegalArgumentException)
+        catch (const IllegalArgumentException&)
         {
             OSL_FAIL( "Folder picker failed with illegal arguments" );
         }
