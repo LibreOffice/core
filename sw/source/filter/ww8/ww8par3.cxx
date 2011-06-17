@@ -470,20 +470,7 @@ SV_IMPL_PTRARR( WW8LFOInfos, WW8LFOInfo_Ptr );
 sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     sal_uInt8 nLen)
 {
-    sal_uInt8* pSprms = &rSprms;
-    sal_uInt16 nRemLen=nLen;
-    while (nRemLen > (maSprmParser.getVersion()?1:0))
-    {
-        sal_uInt16 nAktId = maSprmParser.GetSprmId(pSprms);
-        if( nAktId == nId ) // Sprm found
-            return pSprms + maSprmParser.DistanceToData(nId);
-
-        // gib Zeiger auf Daten
-        sal_uInt16 nSize = maSprmParser.GetSprmSize(nAktId, pSprms);
-        pSprms += nSize;
-        nRemLen -= nSize;
-    }
-    return 0;                           // Sprm not found
+    return maSprmParser.findSprmData(nId, &rSprms, nLen);
 }
 
 class ListWithId : public std::unary_function<const WW8LSTInfo *, bool>
