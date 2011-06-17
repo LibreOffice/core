@@ -34,9 +34,6 @@
 #include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx"
 
-#define STD_DOC_SUBPATH     "internal"
-#define STD_DOC_NAME        "url_transfer.htm"
-
 sal_Char const sAnonymous[]    = "anonymous";
 sal_Char const sHTTPScheme[]   = INET_HTTP_SCHEME;
 sal_Char const sHTTPSScheme[]  = INET_HTTPS_SCHEME;
@@ -44,7 +41,7 @@ sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
 
 /*************************************************************************
 |*
-|* Contructor / Destructor
+|* Constructor / Destructor
 |*
 |************************************************************************/
 
@@ -79,19 +76,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbbTarget.Show();
     maCbbTarget.SetHelpId( HID_HYPERDLG_INET_PATH );
 
-    // Find Path to Std-Doc
-    String aStrBasePaths( SvtPathOptions().GetTemplatePath() );
-    for( xub_StrLen n = 0; n < aStrBasePaths.GetTokenCount(); n++ )
-    {
-        INetURLObject aURL( aStrBasePaths.GetToken( n ) );
-        aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_SUBPATH ) ) );
-        aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_NAME ) ) );
-        if ( FileExists( aURL ) )
-        {
-            maStrStdDocURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
-            break;
-        }
-    }
     SetExchangeSupport ();
 
     ///////////////////////////////////////
@@ -103,7 +87,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maEdPassword.Show( sal_False );
     maCbAnonymous.Show( sal_False );
     maBtTarget.Enable( sal_False );
-    maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
+    maBtBrowse.Enable( sal_True );
 
     ///////////////////////////////////////
     // overload handlers
@@ -250,7 +234,7 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 
 /*************************************************************************
 |*
-|* Contens of editfield "Taregt" modified
+|* Contents of editfield "Target" modified
 |*
 |************************************************************************/
 
@@ -269,7 +253,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 
 /*************************************************************************
 |*
-|* If target-field was modify, to browse the new doc afeter timeout
+|* If target-field was modify, to browse the new doc after timeout
 |*
 |************************************************************************/
 
@@ -281,7 +265,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
 
 /*************************************************************************
 |*
-|* Contens of editfield "Login" modified
+|* Contents of editfield "Login" modified
 |*
 |************************************************************************/
 
@@ -442,7 +426,8 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, void *, EMPTYARG )
     /////////////////////////////////////////////////
     // Open URL if available
 
-    SfxStringItem aName( SID_FILE_NAME, maStrStdDocURL );
+    SfxStringItem aName( SID_FILE_NAME, UniString::CreateFromAscii(
+                                RTL_CONSTASCII_STRINGPARAM( "http://" ) ) );
     SfxStringItem aRefererItem( SID_REFERER, UniString::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_True );

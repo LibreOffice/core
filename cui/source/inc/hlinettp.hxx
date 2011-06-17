@@ -59,8 +59,6 @@ private:
 
     sal_Bool                mbMarkWndOpen;
 
-    String              maStrStdDocURL;
-
     DECL_LINK (Click_SmartProtocol_Impl  , void * );        // Radiobutton clicked: Type HTTP or FTP
     DECL_LINK (ClickAnonymousHdl_Impl    , void * );        // Checkbox : Anonymous User
     DECL_LINK (ClickBrowseHdl_Impl       , void * );        // Button : Browse
