@@ -1032,6 +1032,8 @@ VALGRINDTOOL=valgrind --tool=$(VALGRIND) --num-callers=50
 VALGRINDTOOL+=--leak-check=yes
 G_SLICE*:=always-malloc
 .EXPORT : G_SLICE
+GLIBCXX_FORCE_NEW*:=1
+.EXPORT : GLIBCXX_FORCE_NEW
 .ENDIF
 .ENDIF
 
