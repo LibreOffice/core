@@ -54,7 +54,6 @@ class SdrModel;
 class SdrView;
 class SdrPageView;
 class SdrObject;
-class List;
 class SvxShapeDescriptor;
 class SvxShape;
 class SvxShapeGroup;
