@@ -78,6 +78,8 @@ if [ "$VALGRIND" != "" ]; then
     if [ "$VALGRIND" = "memcheck" ]; then
         G_SLICE=always-malloc
         export G_SLICE
+        GLIBCXX_FORCE_NEW=1
+        export GLIBCXX_FORCE_NEW
     fi
 fi
 
