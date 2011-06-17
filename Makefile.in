@@ -31,6 +31,7 @@ cross-build-toolset:
 	  external \
 	  cppunit \
 	  xml2cmp \
+	  lucene \
 	  sal \
 	  cosv \
 	  udm \
@@ -63,6 +64,7 @@ cross-build-toolset:
 	  GBUILD:comphelper \
 	  jvmfwk \
 	  regexp \
+	  berkeleydb \
 	  sax \
 	  stoc \
 	  i18npool \
@@ -73,6 +75,7 @@ cross-build-toolset:
 	  basegfx \
 	  GBUILD:tools \
 	  idl \
+	  l10ntools \
 	  rsc \
 	  setup_native \
 	  icc; do \
