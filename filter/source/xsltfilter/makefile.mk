@@ -43,6 +43,10 @@ LIBXSLTINCDIR=external$/libxslt
 CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
 .ENDIF
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+= $(LIBXML_CFLAGS)
+.ENDIF
+
 SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/LibXSLTTransformer.obj $(SLO)/OleHandler.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk

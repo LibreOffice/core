@@ -176,6 +176,15 @@ ALLTAR : $(ALL_FLAGS)
 
 $(ALL_FLAGS) : $(INCLUDE_FRAGMENTS)
 
+.IF "$(CROSS_COMPILING)" == "YES"
+
+# Just assume cross-compiling from a sane system with a sane java
+# command... Too bored now to start propagating all the crazy
+# possibilities for Java as FOR_BUILD variants
+
+MERGE    := java -jar $(SOLARBINDIR)$/FCFGMerge.jar
+
+.ELSE
 .IF "$(SOLAR_JAVA)"==""
 #cmc, hack to workaround the java build requirement
 .IF "$(SYSTEM_PYTHON)" == "YES"
@@ -185,6 +194,7 @@ MERGE:=$(AUGMENT_LIBRARY_PATH) PYTHONPATH=$(SOLARLIBDIR)/python $(SOLARBINDIR)/p
 .ENDIF
 .ELSE
 MERGE    := $(JAVAI) $(JAVAIFLAGS) -jar $(SOLARBINDIR)$/FCFGMerge.jar
+.ENDIF
 .ENDIF
 
 PACKLANG := $(XSLTPROC) --nonet
