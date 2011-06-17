@@ -32,7 +32,7 @@
 
 
 # RTTI
-.IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="MSC"
 CFLAGS+= -GR
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
