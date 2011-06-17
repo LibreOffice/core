@@ -105,7 +105,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -132,7 +131,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP$(TNR)OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
@@ -161,7 +159,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP$(TNR)LINKRES)" != "" || "$(APP$(TNR)RES)" != ""
     @cat $(APP$(TNR)LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP$(TNR)RESO)

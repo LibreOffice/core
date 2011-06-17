@@ -76,7 +76,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -103,7 +102,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP1OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_1.cmd
@@ -132,7 +130,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
     @cat $(APP1LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP1RESO)
@@ -288,7 +285,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -315,7 +311,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP2OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_2.cmd
@@ -344,7 +339,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
     @cat $(APP2LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP2RESO)
@@ -500,7 +494,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -527,7 +520,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP3OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_3.cmd
@@ -556,7 +548,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
     @cat $(APP3LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP3RESO)
@@ -712,7 +703,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -739,7 +729,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP4OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_4.cmd
@@ -768,7 +757,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
     @cat $(APP4LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP4RESO)
@@ -924,7 +912,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -951,7 +938,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP5OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_5.cmd
@@ -980,7 +966,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
     @cat $(APP5LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP5RESO)
@@ -1136,7 +1121,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1163,7 +1147,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP6OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_6.cmd
@@ -1192,7 +1175,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
     @cat $(APP6LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP6RESO)
@@ -1348,7 +1330,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1375,7 +1356,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP7OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_7.cmd
@@ -1404,7 +1384,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
     @cat $(APP7LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP7RESO)
@@ -1560,7 +1539,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1587,7 +1565,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP8OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_8.cmd
@@ -1616,7 +1593,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
     @cat $(APP8LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP8RESO)
@@ -1772,7 +1748,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1799,7 +1774,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP9OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_9.cmd
@@ -1828,7 +1802,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
     @cat $(APP9LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP9RESO)
@@ -1984,7 +1957,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -2011,7 +1983,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP10OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_10.cmd
@@ -2040,7 +2011,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
     @cat $(APP10LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP10RESO)
