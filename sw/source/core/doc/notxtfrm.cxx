@@ -947,6 +947,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
     else if( pOLENd )
     {
+        // Fix for bug fdo#33781
+        if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
+        {
+            pOut->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+        }
+
         // #i99665#
         // Adjust AntiAliasing mode at output device for chart OLE
         const sal_uInt16 nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
