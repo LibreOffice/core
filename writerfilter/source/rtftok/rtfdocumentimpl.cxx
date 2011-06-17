@@ -67,6 +67,25 @@ RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
     return p->getSprms();
 }
 
+RTFSprms_t& lcl_getCellBordersSprms(std::stack<RTFParserState>& aStates)
+{
+    if (aStates.top().bNeedTableCellBorders)
+    {
+        RTFSprms::Pointer_t pTableCellAttributes(new RTFSprms_t());
+        aStates.top().aTableCellsAttributes.push_back(pTableCellAttributes);
+        RTFSprms::Pointer_t pTableCellSprms(new RTFSprms_t());
+        aStates.top().aTableCellsSprms.push_back(pTableCellSprms);
+
+        RTFSprms_t aAttributes;
+        RTFSprms_t aSprms;
+        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue));
+
+        aStates.top().bNeedTableCellBorders = false;
+    }
+    return RTFSprm::find(*aStates.top().aTableCellsSprms.back(), NS_ooxml::LN_CT_TcPrBase_tcBorders)->getSprms();
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -776,22 +795,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_CLBRDRT:
             {
-                if (m_aStates.top().bNeedTableCellBorders)
-                {
-                    RTFSprms::Pointer_t pTableCellAttributes(new RTFSprms_t());
-                    m_aStates.top().aTableCellsAttributes.push_back(pTableCellAttributes);
-                    RTFSprms::Pointer_t pTableCellSprms(new RTFSprms_t());
-                    m_aStates.top().aTableCellsSprms.push_back(pTableCellSprms);
-
-                    RTFSprms_t aAttributes;
-                    RTFSprms_t aSprms;
-                    RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-                    m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue));
-
-                    m_aStates.top().bNeedTableCellBorders = false;
-                }
-                RTFSprms_t& rBordersSprms = RTFSprm::find(*m_aStates.top().aTableCellsSprms.back(),
-                        NS_ooxml::LN_CT_TcPrBase_tcBorders)->getSprms();
+                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
                 RTFSprms_t aAttributes;
                 RTFSprms_t aSprms;
                 RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
