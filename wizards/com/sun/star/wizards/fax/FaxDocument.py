@@ -115,13 +115,13 @@ class FaxDocument(TextDocument):
     def killEmptyFrames(self):
         try:
             if not self.keepLogoFrame:
-                xTF = TextFrameHandler.getFrameByName("Company Logo",
+                xTF = self.getFrameByName("Company Logo",
                 self.xTextDocument)
                 if xTF is not None:
                     xTF.dispose()
 
             if not self.keepTypeFrame:
-                xTF = TextFrameHandler.getFrameByName("Communication Type",
+                xTF = self.getFrameByName("Communication Type",
                 self.xTextDocument)
                 if xTF is not None:
                     xTF.dispose()

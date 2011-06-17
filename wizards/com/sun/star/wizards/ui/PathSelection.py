@@ -102,11 +102,11 @@ class PathSelection(object):
                         self.sDefaultName, self.sDefaultFilter)
                     sStorePath = myFilePickerDialog.sStorePath
                     if sStorePath is not None:
-                        myFA = FileAccess(xMSF);
-                        xSaveTextBox.setText(myFA.getPath(sStorePath, None))
+                        myFA = FileAccess(self.xMSF);
+                        self.xSaveTextBox.Text = myFA.getPath(sStorePath, None)
                         self.sDefaultDirectory = \
                             FileAccess.getParentDir(sStorePath)
-                        self.sDefaultName = myFA.getFilename(sStorePath)
+                        self.sDefaultName = myFA.getFilename(self.sStorePath)
                     return
             elif iTransferMode == TransferMode.LOAD:
                 if iDialogType == DialogTypes.FOLDER:

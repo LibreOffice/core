@@ -20,59 +20,11 @@ in hierarchy form from the root of the registry.
 class Configuration(object):
 
     @classmethod
-    def getInt(self, name, parent):
-        o = getNode(name, parent)
-        if AnyConverter.isVoid(o):
-            return 0
-
-        return AnyConverter.toInt(o)
-
-    @classmethod
-    def getShort(self, name, parent):
-        o = getNode(name, parent)
-        if AnyConverter.isVoid(o):
-            return 0
-
-        return AnyConverter.toShort(o)
-
-    @classmethod
-    def getFloat(self, name, parent):
-        o = getNode(name, parent)
-        if AnyConverter.isVoid(o):
-            return 0
-
-        return AnyConverter.toFloat(o)
-
-    @classmethod
-    def getDouble(self, name, parent):
-        o = getNode(name, parent)
-        if AnyConverter.isVoid(o):
-            return 0
-
-        return AnyConverter.toDouble(o)
-
-    @classmethod
-    def getString(self, name, parent):
-        o = getNode(name, parent)
-        if AnyConverter.isVoid(o):
-            return ""
-
-        return o
-
-    @classmethod
-    def getBoolean(self, name, parent):
-        o = getNode(name, parent)
-        if AnyConverter.isVoid(o):
-            return False
-
-        return AnyConverter.toBoolean(o)
-
-    @classmethod
     def getNode(self, name, parent):
         return parent.getByName(name)
 
     @classmethod
-    def set(self, value, name, parent):
+    def Set(self, value, name, parent):
         parent.setHierarchicalPropertyValue(name, value)
 
     '''
@@ -90,24 +42,25 @@ class Configuration(object):
     def getConfigurationRoot(self, xmsf, sPath, updateable):
         oConfigProvider = xmsf.createInstance(
             "com.sun.star.configuration.ConfigurationProvider")
-        if updateable:
-            sView = "com.sun.star.configuration.ConfigurationUpdateAccess"
-        else:
-            sView = "com.sun.star.configuration.ConfigurationAccess"
+        args = []
 
         aPathArgument = uno.createUnoStruct(
             'com.sun.star.beans.PropertyValue')
         aPathArgument.Name = "nodepath"
         aPathArgument.Value = sPath
-        aModeArgument = uno.createUnoStruct(
-            'com.sun.star.beans.PropertyValue')
+
+        args.append(aPathArgument)
         if updateable:
+            sView = "com.sun.star.configuration.ConfigurationUpdateAccess"
+            aModeArgument = uno.createUnoStruct(
+                'com.sun.star.beans.PropertyValue')
             aModeArgument.Name = "lazywrite"
             aModeArgument.Value = False
+            args.append(aModeArgument)
+        else:
+            sView = "com.sun.star.configuration.ConfigurationAccess"
 
-
-        return oConfigProvider.createInstanceWithArguments(sView,
-            (aPathArgument,aModeArgument,))
+        return oConfigProvider.createInstanceWithArguments(sView, tuple(args))
 
     @classmethod
     def getChildrenNames(self, configView):
@@ -176,14 +129,16 @@ class Configuration(object):
 
     @classmethod
     def addConfigNode(self, configView, name):
-        if configView == None:
+        if configView is None:
             return configView.getByName(name)
         else:
-            # the new element is the result !
-            newNode = configView.createInstance()
+            print configView
             # insert it - this also names the element
-            xNameContainer.insertByName(name, newNode)
-            return newNode
+            try:
+                configView.insertByName(name, configView.createInstance())
+            except Exception,e:
+                traceback.print_exc()
+            #return newNode
 
     @classmethod
     def removeNode(self, configView, name):
@@ -197,14 +152,14 @@ class Configuration(object):
 
     @classmethod
     def updateConfiguration(self, xmsf, path, name, node, param):
-        view = Configuration.self.getConfigurationRoot(xmsf, path, True)
+        view = self.getConfigurationRoot(xmsf, path, True)
         addConfigNode(path, name)
         node.writeConfiguration(view, param)
         view.commitChanges()
 
     @classmethod
     def removeNode(self, xmsf, path, name):
-        view = Configuration.self.getConfigurationRoot(xmsf, path, True)
+        view = self.getConfigurationRoot(xmsf, path, True)
         removeNode(view, name)
         view.commitChanges()
 

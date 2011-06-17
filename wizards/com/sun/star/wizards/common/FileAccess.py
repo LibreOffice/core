@@ -4,6 +4,7 @@ from com.sun.star.ucb import CommandAbortedException
 from com.sun.star.uno import Exception as UnoException
 from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO
 import types
+from os import path as osPath
 
 '''
 This class delivers static convenience methods
@@ -412,11 +413,9 @@ class FileAccess(object):
                     NameVectorAppend(i)
                     TitleVectorAppend(xDocInterface.Title)
 
-            LocLayoutFiles[1] = NameVector
-            LocLayoutFiles[0] = TitleVector
+            LocLayoutFiles[1] = sorted(NameVector)
+            LocLayoutFiles[0] = sorted(TitleVector)
 
-            #COMMENTED
-            #JavaTools.bubblesortList(LocLayoutFiles)
         except Exception, exception:
             traceback.print_exc()
 
@@ -557,7 +556,7 @@ class FileAccess(object):
             f = open(path)
 
         r = self.filenameConverter.getFileURLFromSystemPath(path,
-            f.getAbsolutePath())
+             osPath.abspath(path))
         return r
 
     def getPath(self, parentURL, childURL):
@@ -737,15 +736,9 @@ class FileAccess(object):
 
     @classmethod
     def getParentDir(self, url):
-        if url.endsWith("/"):
-            return getParentDir(url.substring(0, url.length() - 1))
-
-        pos = url.indexOf("/", pos + 1)
-        lastPos = 0
-        while pos > -1:
-            lastPos = pos
-            pos = url.indexOf("/", pos + 1)
-        return url.substring(0, lastPos)
+        while url[-1] == "/":
+            url = hello[:-1]
+        return url[:url.rfind("/")]
 
     def createNewDir(self, parentDir, name):
         s = getNewFile(parentDir, name, "")

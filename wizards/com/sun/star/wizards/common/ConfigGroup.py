@@ -1,4 +1,5 @@
 from ConfigNode import *
+from Configuration import Configuration
 import traceback
 
 class ConfigGroup(ConfigNode):
@@ -13,16 +14,17 @@ class ConfigGroup(ConfigNode):
                     traceback.print_exc()
 
     def writeField(self, field, configView, prefix):
-        propertyName = field.getName().substring(prefix.length())
-        fieldType = field.getType()
-        if ConfigNode.isAssignableFrom(fieldType):
-            childView = Configuration.addConfigNode(configView, propertyName)
-            child = field.get(this)
-            child.writeConfiguration(childView, prefix)
-        elif fieldType.isPrimitive():
-            Configuration.set(convertValue(field), propertyName, configView)
-        elif isinstance(fieldType,str):
-            Configuration.set(field.get(this), propertyName, configView)
+        propertyName = field[len(prefix):]
+        field = getattr(self,field)
+        fieldType = type(field)
+        if isinstance(field, ConfigNode):
+            pass
+            #COMMENTED
+            #childView = Configuration.addConfigNode(configView, propertyName)
+            #self.writeConfiguration(childView, prefix)
+        else:
+            Configuration.Set(self.convertValue(field), propertyName,
+                configView)
 
     '''
     convert the primitive type value of the
@@ -34,22 +36,19 @@ class ConfigGroup(ConfigNode):
     '''
 
     def convertValue(self, field):
-        if field.getType().equals(Boolean.TYPE):
-            return field.getBoolean(this)
+        if isinstance(field,bool):
+            return bool(field)
+        elif isinstance(field,int):
+            return int(field)
 
-        if field.getType().equals(Integer.TYPE):
-            return field.getInt(this)
-
-        if field.getType().equals(Short.TYPE):
-            return field.getShort(this)
-
-        if field.getType().equals(Float.TYPE):
-            return field.getFloat(this)
-
-        if (field.getType().equals(Double.TYPE)):
-            return field.getDouble(this)
-        return None
-        #and good luck with it :-) ...
+    def readConfiguration(self, configurationView, param):
+        for i in dir(self):
+            if i.startswith(param):
+                try:
+                    self.readField( i, configurationView, param)
+                except Exception, ex:
+                    print "Error reading field: " + i
+                    traceback.print_exc()
 
     def readConfiguration(self, configurationView, param):
         for i in dir(self):
