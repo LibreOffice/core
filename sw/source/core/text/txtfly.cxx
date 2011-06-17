@@ -1779,7 +1779,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         MSHORT nIdx = 0;
         while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )
             ++nIdx;
-        sal_Bool bOdd = nIdx % 2 ? sal_True : sal_False;
+        sal_Bool bOdd = (nIdx % 2) ? sal_True : sal_False;
         sal_Bool bSet = sal_True;
         if( bOdd )
             --nIdx; // innerhalb eines Intervalls

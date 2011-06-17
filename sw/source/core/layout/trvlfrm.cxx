@@ -1731,7 +1731,7 @@ sal_Bool SwFrm::WannaRightPage() const
     OSL_ENSURE( pDesc, "No pagedescriptor" );
     sal_Bool bOdd;
     if( nPgNum )
-        bOdd = nPgNum % 2 ? sal_True : sal_False;
+        bOdd = (nPgNum % 2) ? sal_True : sal_False;
     else
     {
         bOdd = pPage->OnRightPage();

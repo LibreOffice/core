@@ -376,7 +376,7 @@ void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
             while ( pTmp )
             {
                 // the frames have to be shrunk
-                if ( pTmp && pTmp->IsTabFrm() )
+                if ( pTmp->IsTabFrm() )
                 {
                     SwRowFrm* pTmpRow = (SwRowFrm*)((SwTabFrm*)pTmp)->Lower();
                     while ( pTmpRow )
@@ -3454,7 +3454,7 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
             if( Abs( nNewWidth - nOldWidth ) < 2 )
             {
                 if( sal_False ==
-                    ( bMoveAnyway = BwdMoveNecessary( pOldPage, Frm() ) > 1 ) )
+                    ( bMoveAnyway = (BwdMoveNecessary( pOldPage, Frm() ) > 1) ) )
                 {
                     SwRect aRect( pNewUpper->Prt() );
                     aRect.Pos() += pNewUpper->Frm().Pos();
