@@ -1089,17 +1089,25 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_BRDRW:
             {
-                // dmapper expects it in 1/8 pt, we have it in twip
-                RTFValue::Pointer_t pValue(new RTFValue(nParam * 2 / 5));
+                // dmapper expects it in 1/8 pt, we have it in twip - but avoid rounding 1 to 0
+                if (nParam > 1)
+                    nParam = nParam * 2 / 5;
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
 
-                for (int i = 0; i < 4; i++)
-                {
-                    RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
-                    if (p.get())
+                if (!m_aStates.top().aTableCellsAttributes.size())
+                    for (int i = 0; i < 4; i++)
                     {
-                        RTFSprms_t& rAttributes = p->getAttributes();
-                        rAttributes.push_back(make_pair(NS_rtf::LN_DPTLINEWIDTH, pValue));
+                        RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
+                        if (p.get())
+                        {
+                            RTFSprms_t& rAttributes = p->getAttributes();
+                            rAttributes.push_back(make_pair(NS_rtf::LN_DPTLINEWIDTH, pValue));
+                        }
                     }
+                else
+                {
+                    RTFSprms_t& rAttributes = lcl_getCellBordersSprms(m_aStates).back().second->getAttributes();
+                    rAttributes.push_back(make_pair(NS_rtf::LN_DPTLINEWIDTH, pValue));
                 }
             }
             break;
