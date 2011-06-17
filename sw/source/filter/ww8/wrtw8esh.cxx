@@ -2717,8 +2717,7 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
     ::lcl_makeZOrderArray(rWrt, rSrcArr, rDstArr);
 
     //Now set up the follow IDs
-    if (aFollowShpIds.Count())
-        aFollowShpIds.Remove(0, aFollowShpIds.Count());
+    aFollowShpIds.clear();
 
     for (size_t n = 0; n < rDstArr.size(); ++n)
     {
@@ -2734,7 +2733,7 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
 
         sal_uLong nShapeId = bNeedsShapeId ? GenerateShapeId() : 0;
 
-        aFollowShpIds.Insert(nShapeId, n);
+        aFollowShpIds.push_back(nShapeId);
     }
 }
 
