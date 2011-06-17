@@ -165,7 +165,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
                     }
                 }
             }
-            catch( Exception& )
+            catch (const Exception&)
             {
                 // configuration is awry
                 m_xConfigProvider.clear();
@@ -173,7 +173,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
             }
         }
     }
-    catch( WrappedTargetException& )
+    catch (const WrappedTargetException&)
     {
     }
     #if OSL_DEBUG_LEVEL > 1
@@ -214,10 +214,10 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
                         it->second.xAccess = xNode;
                 }
             }
-            catch( NoSuchElementException )
+            catch (const NoSuchElementException&)
             {
             }
-            catch( WrappedTargetException )
+            catch (const WrappedTargetException&)
             {
             }
         }
@@ -231,10 +231,10 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
                     aAny >>= aRet;
                 }
             }
-            catch( NoSuchElementException& )
+            catch (const NoSuchElementException&)
             {
             }
-            catch( WrappedTargetException& )
+            catch (const WrappedTargetException&)
             {
             }
         }
@@ -451,7 +451,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
                     }
                 }
             }
-            catch( Exception& )
+            catch (const Exception&)
             {
                 // configuration is awry
                 m_xConfigProvider.clear();
@@ -459,7 +459,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
             }
         }
     }
-    catch( WrappedTargetException& )
+    catch (const WrappedTargetException&)
     {
     }
     #if OSL_DEBUG_LEVEL > 1
@@ -994,10 +994,10 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
             }
         }
     }
-    catch( NoSuchElementException )
+    catch (const NoSuchElementException&)
     {
     }
-    catch( WrappedTargetException )
+    catch (const WrappedTargetException&)
     {
     }
 }
@@ -1025,10 +1025,10 @@ FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Re
 #endif
         }
     }
-    catch( NoSuchElementException )
+    catch (const NoSuchElementException&)
     {
     }
-    catch( WrappedTargetException )
+    catch (const WrappedTargetException&)
     {
     }
     return (FontWeight)( weight >= 0 ? pWeightNames[weight].nEnum : WEIGHT_DONTKNOW );
@@ -1057,10 +1057,10 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
 #endif
         }
     }
-    catch( NoSuchElementException )
+    catch (const NoSuchElementException&)
     {
     }
-    catch( WrappedTargetException )
+    catch (const WrappedTargetException&)
     {
     }
     return (FontWidth)( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
@@ -1092,10 +1092,10 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
             }
         }
     }
-    catch( NoSuchElementException )
+    catch (const NoSuchElementException&)
     {
     }
-    catch( WrappedTargetException )
+    catch (const WrappedTargetException&)
     {
     }
 
@@ -1117,10 +1117,10 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                 Any aAny = m_xConfigAccess->getByName( it->second.aConfigLocaleString );
                 aAny >>= xNode;
             }
-            catch( NoSuchElementException )
+            catch (const NoSuchElementException&)
             {
             }
-            catch( WrappedTargetException )
+            catch (const WrappedTargetException&)
             {
             }
             if( xNode.is() )
@@ -1147,10 +1147,10 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                         Any aAny = xNode->getByName( pFontNames[i] );
                         aAny >>= xFont;
                     }
-                    catch( NoSuchElementException )
+                    catch (const NoSuchElementException&)
                     {
                     }
-                    catch( WrappedTargetException )
+                    catch (const WrappedTargetException&)
                     {
                     }
                     if( ! xFont.is() )
