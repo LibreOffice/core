@@ -802,39 +802,23 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_CLBRDRT:
-            {
-                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
-                RTFSprms_t aAttributes;
-                RTFSprms_t aSprms;
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-                rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_top, pValue));
-            }
-            break;
         case RTF_CLBRDRL:
-            {
-                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
-                RTFSprms_t aAttributes;
-                RTFSprms_t aSprms;
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-                rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_left, pValue));
-            }
-            break;
         case RTF_CLBRDRB:
-            {
-                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
-                RTFSprms_t aAttributes;
-                RTFSprms_t aSprms;
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-                rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_bottom, pValue));
-            }
-            break;
         case RTF_CLBRDRR:
             {
                 RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
                 RTFSprms_t aAttributes;
                 RTFSprms_t aSprms;
                 RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-                rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_right, pValue));
+                switch (nKeyword)
+                {
+                    case RTF_CLBRDRT: nParam = NS_ooxml::LN_CT_TcBorders_top; break;
+                    case RTF_CLBRDRL: nParam = NS_ooxml::LN_CT_TcBorders_left; break;
+                    case RTF_CLBRDRB: nParam = NS_ooxml::LN_CT_TcBorders_bottom; break;
+                    case RTF_CLBRDRR: nParam = NS_ooxml::LN_CT_TcBorders_right; break;
+                    default: break;
+                }
+                rBordersSprms.push_back(make_pair(nParam, pValue));
             }
             break;
         default:
