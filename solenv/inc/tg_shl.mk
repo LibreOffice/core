@@ -315,7 +315,7 @@ $(SHL$(TNR)TARGETN) : \
     $(WINDRES) $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \

@@ -286,7 +286,7 @@ $(SHL1TARGETN) : \
     $(WINDRES) $(SHL1LINKRES) $(SHL1LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL1ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -786,7 +786,7 @@ $(SHL2TARGETN) : \
     $(WINDRES) $(SHL2LINKRES) $(SHL2LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL2ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -1286,7 +1286,7 @@ $(SHL3TARGETN) : \
     $(WINDRES) $(SHL3LINKRES) $(SHL3LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL3ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -1786,7 +1786,7 @@ $(SHL4TARGETN) : \
     $(WINDRES) $(SHL4LINKRES) $(SHL4LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL4ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -2286,7 +2286,7 @@ $(SHL5TARGETN) : \
     $(WINDRES) $(SHL5LINKRES) $(SHL5LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL5ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -2786,7 +2786,7 @@ $(SHL6TARGETN) : \
     $(WINDRES) $(SHL6LINKRES) $(SHL6LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL6ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -3286,7 +3286,7 @@ $(SHL7TARGETN) : \
     $(WINDRES) $(SHL7LINKRES) $(SHL7LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL7ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -3786,7 +3786,7 @@ $(SHL8TARGETN) : \
     $(WINDRES) $(SHL8LINKRES) $(SHL8LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL8ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -4286,7 +4286,7 @@ $(SHL9TARGETN) : \
     $(WINDRES) $(SHL9LINKRES) $(SHL9LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL9ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
@@ -4786,7 +4786,7 @@ $(SHL10TARGETN) : \
     $(WINDRES) $(SHL10LINKRES) $(SHL10LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL10ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
