@@ -1011,10 +1011,19 @@ DLLPOSTFIX=lo
 # an existing office/URE installation; the ": &&" enables this to work at the
 # start of a recipe line that is not prefixed by "+" as well as in the middle of
 # an existing && chain:
+.IF "$(CROSS_COMPILING)"=="YES" && "$(OS)"=="WNT"
+# Sigh, special-case cross-compiling to Windows. Here OOO_LIBRARY_PATH_VAR is the correct one
+# for the BUILD platform but SOLARSHAREDBIN is the one for Windows, i.e. "foo/bin".
+AUGMENT_LIBRARY_PATH = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARLIBDIR_FOR_BUILD))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+AUGMENT_LIBRARY_PATH_LOCAL = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+.ELSE
 AUGMENT_LIBRARY_PATH = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+.ENDIF
 .END
 
 # for multiprocess building in external modules
