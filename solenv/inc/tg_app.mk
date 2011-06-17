@@ -170,7 +170,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) \
         -Wl,--start-group $(APP$(TNR)STDLIBS) -Wl,--end-group $(APP$(TNR)STDLIB) \
         $(STDLIB$(TNR)) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
   .ENDIF

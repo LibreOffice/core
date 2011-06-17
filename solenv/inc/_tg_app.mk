@@ -141,7 +141,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP_LINKTYPE) $(APP1LIBSALCPPRT) \
         -Wl,--start-group $(APP1STDLIBS) -Wl,--end-group $(APP1STDLIB) \
         $(STDLIB1) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_1.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_1.cmd
   .ENDIF
@@ -350,7 +350,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP_LINKTYPE) $(APP2LIBSALCPPRT) \
         -Wl,--start-group $(APP2STDLIBS) -Wl,--end-group $(APP2STDLIB) \
         $(STDLIB2) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_2.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_2.cmd
   .ENDIF
@@ -559,7 +559,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP_LINKTYPE) $(APP3LIBSALCPPRT) \
         -Wl,--start-group $(APP3STDLIBS) -Wl,--end-group $(APP3STDLIB) \
         $(STDLIB3) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_3.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_3.cmd
   .ENDIF
@@ -768,7 +768,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP_LINKTYPE) $(APP4LIBSALCPPRT) \
         -Wl,--start-group $(APP4STDLIBS) -Wl,--end-group $(APP4STDLIB) \
         $(STDLIB4) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_4.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_4.cmd
   .ENDIF
@@ -977,7 +977,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP_LINKTYPE) $(APP5LIBSALCPPRT) \
         -Wl,--start-group $(APP5STDLIBS) -Wl,--end-group $(APP5STDLIB) \
         $(STDLIB5) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_5.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_5.cmd
   .ENDIF
@@ -1186,7 +1186,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP_LINKTYPE) $(APP6LIBSALCPPRT) \
         -Wl,--start-group $(APP6STDLIBS) -Wl,--end-group $(APP6STDLIB) \
         $(STDLIB6) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_6.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_6.cmd
   .ENDIF
@@ -1395,7 +1395,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP_LINKTYPE) $(APP7LIBSALCPPRT) \
         -Wl,--start-group $(APP7STDLIBS) -Wl,--end-group $(APP7STDLIB) \
         $(STDLIB7) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_7.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_7.cmd
   .ENDIF
@@ -1604,7 +1604,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP_LINKTYPE) $(APP8LIBSALCPPRT) \
         -Wl,--start-group $(APP8STDLIBS) -Wl,--end-group $(APP8STDLIB) \
         $(STDLIB8) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_8.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_8.cmd
   .ENDIF
@@ -1813,7 +1813,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP_LINKTYPE) $(APP9LIBSALCPPRT) \
         -Wl,--start-group $(APP9STDLIBS) -Wl,--end-group $(APP9STDLIB) \
         $(STDLIB9) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_9.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_9.cmd
   .ENDIF
@@ -2022,7 +2022,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP_LINKTYPE) $(APP10LIBSALCPPRT) \
         -Wl,--start-group $(APP10STDLIBS) -Wl,--end-group $(APP10STDLIB) \
         $(STDLIB10) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_10.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_10.cmd
   .ENDIF
