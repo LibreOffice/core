@@ -95,8 +95,8 @@ SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
 USE_$(TNR)IMPLIB=-implib:$(LB)/$(SHL$(TNR)IMPLIB).lib
 SHL$(TNR)IMPLIBN=$(LB)/$(SHL$(TNR)IMPLIB).lib
 .ELSE
-SHL$(TNR)IMPLIBN=$(LB)/lib$(SHL$(TNR)IMPLIB).dll.a
 USE_$(TNR)IMPLIB=-Wl,--out-implib=$(SHL$(TNR)IMPLIBN)
+SHL$(TNR)IMPLIBN=$(LB)/lib$(SHL$(TNR)IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL$(TNR)IMPLIBN)
 
@@ -271,6 +271,10 @@ $(SHL$(TNR)LINKLIST) : $(SHL$(TNR)LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL$(TNR)IMPLIBN)" != ""
+$(SHL$(TNR)IMPLIBN) : $(SHL$(TNR)TARGETN)
+.ENDIF
 
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\

@@ -66,8 +66,8 @@ SHL1IMPLIB=i$(TARGET)_t1
 USE_1IMPLIB=-implib:$(LB)/$(SHL1IMPLIB).lib
 SHL1IMPLIBN=$(LB)/$(SHL1IMPLIB).lib
 .ELSE
-SHL1IMPLIBN=$(LB)/lib$(SHL1IMPLIB).dll.a
 USE_1IMPLIB=-Wl,--out-implib=$(SHL1IMPLIBN)
+SHL1IMPLIBN=$(LB)/lib$(SHL1IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL1IMPLIBN)
 
@@ -242,6 +242,10 @@ $(SHL1LINKLIST) : $(SHL1LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL1IMPLIBN)" != ""
+$(SHL1IMPLIBN) : $(SHL1TARGETN)
+.ENDIF
 
 $(SHL1TARGETN) : \
                     $(SHL1OBJS)\
@@ -566,8 +570,8 @@ SHL2IMPLIB=i$(TARGET)_t2
 USE_2IMPLIB=-implib:$(LB)/$(SHL2IMPLIB).lib
 SHL2IMPLIBN=$(LB)/$(SHL2IMPLIB).lib
 .ELSE
-SHL2IMPLIBN=$(LB)/lib$(SHL2IMPLIB).dll.a
 USE_2IMPLIB=-Wl,--out-implib=$(SHL2IMPLIBN)
+SHL2IMPLIBN=$(LB)/lib$(SHL2IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL2IMPLIBN)
 
@@ -742,6 +746,10 @@ $(SHL2LINKLIST) : $(SHL2LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL2IMPLIBN)" != ""
+$(SHL2IMPLIBN) : $(SHL2TARGETN)
+.ENDIF
 
 $(SHL2TARGETN) : \
                     $(SHL2OBJS)\
@@ -1066,8 +1074,8 @@ SHL3IMPLIB=i$(TARGET)_t3
 USE_3IMPLIB=-implib:$(LB)/$(SHL3IMPLIB).lib
 SHL3IMPLIBN=$(LB)/$(SHL3IMPLIB).lib
 .ELSE
-SHL3IMPLIBN=$(LB)/lib$(SHL3IMPLIB).dll.a
 USE_3IMPLIB=-Wl,--out-implib=$(SHL3IMPLIBN)
+SHL3IMPLIBN=$(LB)/lib$(SHL3IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL3IMPLIBN)
 
@@ -1242,6 +1250,10 @@ $(SHL3LINKLIST) : $(SHL3LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL3IMPLIBN)" != ""
+$(SHL3IMPLIBN) : $(SHL3TARGETN)
+.ENDIF
 
 $(SHL3TARGETN) : \
                     $(SHL3OBJS)\
@@ -1566,8 +1578,8 @@ SHL4IMPLIB=i$(TARGET)_t4
 USE_4IMPLIB=-implib:$(LB)/$(SHL4IMPLIB).lib
 SHL4IMPLIBN=$(LB)/$(SHL4IMPLIB).lib
 .ELSE
-SHL4IMPLIBN=$(LB)/lib$(SHL4IMPLIB).dll.a
 USE_4IMPLIB=-Wl,--out-implib=$(SHL4IMPLIBN)
+SHL4IMPLIBN=$(LB)/lib$(SHL4IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL4IMPLIBN)
 
@@ -1742,6 +1754,10 @@ $(SHL4LINKLIST) : $(SHL4LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL4IMPLIBN)" != ""
+$(SHL4IMPLIBN) : $(SHL4TARGETN)
+.ENDIF
 
 $(SHL4TARGETN) : \
                     $(SHL4OBJS)\
@@ -2066,8 +2082,8 @@ SHL5IMPLIB=i$(TARGET)_t5
 USE_5IMPLIB=-implib:$(LB)/$(SHL5IMPLIB).lib
 SHL5IMPLIBN=$(LB)/$(SHL5IMPLIB).lib
 .ELSE
-SHL5IMPLIBN=$(LB)/lib$(SHL5IMPLIB).dll.a
 USE_5IMPLIB=-Wl,--out-implib=$(SHL5IMPLIBN)
+SHL5IMPLIBN=$(LB)/lib$(SHL5IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL5IMPLIBN)
 
@@ -2242,6 +2258,10 @@ $(SHL5LINKLIST) : $(SHL5LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL5IMPLIBN)" != ""
+$(SHL5IMPLIBN) : $(SHL5TARGETN)
+.ENDIF
 
 $(SHL5TARGETN) : \
                     $(SHL5OBJS)\
@@ -2566,8 +2586,8 @@ SHL6IMPLIB=i$(TARGET)_t6
 USE_6IMPLIB=-implib:$(LB)/$(SHL6IMPLIB).lib
 SHL6IMPLIBN=$(LB)/$(SHL6IMPLIB).lib
 .ELSE
-SHL6IMPLIBN=$(LB)/lib$(SHL6IMPLIB).dll.a
 USE_6IMPLIB=-Wl,--out-implib=$(SHL6IMPLIBN)
+SHL6IMPLIBN=$(LB)/lib$(SHL6IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL6IMPLIBN)
 
@@ -2742,6 +2762,10 @@ $(SHL6LINKLIST) : $(SHL6LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL6IMPLIBN)" != ""
+$(SHL6IMPLIBN) : $(SHL6TARGETN)
+.ENDIF
 
 $(SHL6TARGETN) : \
                     $(SHL6OBJS)\
@@ -3066,8 +3090,8 @@ SHL7IMPLIB=i$(TARGET)_t7
 USE_7IMPLIB=-implib:$(LB)/$(SHL7IMPLIB).lib
 SHL7IMPLIBN=$(LB)/$(SHL7IMPLIB).lib
 .ELSE
-SHL7IMPLIBN=$(LB)/lib$(SHL7IMPLIB).dll.a
 USE_7IMPLIB=-Wl,--out-implib=$(SHL7IMPLIBN)
+SHL7IMPLIBN=$(LB)/lib$(SHL7IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL7IMPLIBN)
 
@@ -3242,6 +3266,10 @@ $(SHL7LINKLIST) : $(SHL7LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL7IMPLIBN)" != ""
+$(SHL7IMPLIBN) : $(SHL7TARGETN)
+.ENDIF
 
 $(SHL7TARGETN) : \
                     $(SHL7OBJS)\
@@ -3566,8 +3594,8 @@ SHL8IMPLIB=i$(TARGET)_t8
 USE_8IMPLIB=-implib:$(LB)/$(SHL8IMPLIB).lib
 SHL8IMPLIBN=$(LB)/$(SHL8IMPLIB).lib
 .ELSE
-SHL8IMPLIBN=$(LB)/lib$(SHL8IMPLIB).dll.a
 USE_8IMPLIB=-Wl,--out-implib=$(SHL8IMPLIBN)
+SHL8IMPLIBN=$(LB)/lib$(SHL8IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL8IMPLIBN)
 
@@ -3742,6 +3770,10 @@ $(SHL8LINKLIST) : $(SHL8LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL8IMPLIBN)" != ""
+$(SHL8IMPLIBN) : $(SHL8TARGETN)
+.ENDIF
 
 $(SHL8TARGETN) : \
                     $(SHL8OBJS)\
@@ -4066,8 +4098,8 @@ SHL9IMPLIB=i$(TARGET)_t9
 USE_9IMPLIB=-implib:$(LB)/$(SHL9IMPLIB).lib
 SHL9IMPLIBN=$(LB)/$(SHL9IMPLIB).lib
 .ELSE
-SHL9IMPLIBN=$(LB)/lib$(SHL9IMPLIB).dll.a
 USE_9IMPLIB=-Wl,--out-implib=$(SHL9IMPLIBN)
+SHL9IMPLIBN=$(LB)/lib$(SHL9IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL9IMPLIBN)
 
@@ -4242,6 +4274,10 @@ $(SHL9LINKLIST) : $(SHL9LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL9IMPLIBN)" != ""
+$(SHL9IMPLIBN) : $(SHL9TARGETN)
+.ENDIF
 
 $(SHL9TARGETN) : \
                     $(SHL9OBJS)\
@@ -4566,8 +4602,8 @@ SHL10IMPLIB=i$(TARGET)_t10
 USE_10IMPLIB=-implib:$(LB)/$(SHL10IMPLIB).lib
 SHL10IMPLIBN=$(LB)/$(SHL10IMPLIB).lib
 .ELSE
-SHL10IMPLIBN=$(LB)/lib$(SHL10IMPLIB).dll.a
 USE_10IMPLIB=-Wl,--out-implib=$(SHL10IMPLIBN)
+SHL10IMPLIBN=$(LB)/lib$(SHL10IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL10IMPLIBN)
 
@@ -4742,6 +4778,10 @@ $(SHL10LINKLIST) : $(SHL10LIBS)
 $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
+
+.IF "$(COM)" == "GCC" && "$(SHL10IMPLIBN)" != ""
+$(SHL10IMPLIBN) : $(SHL10TARGETN)
+.ENDIF
 
 $(SHL10TARGETN) : \
                     $(SHL10OBJS)\
