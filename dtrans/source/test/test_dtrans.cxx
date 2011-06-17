@@ -465,13 +465,13 @@ int SAL_CALL main( int argc, const char* argv[] )
             xClipboardManager->getClipboard( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) );
             TRACE( "FAILED\n" );
         }
-        catch( NoSuchElementException e )
+        catch (const NoSuchElementException&)
         {
             TRACE( "passed\n" );
         }
     }
 
-    catch ( Exception aException )
+    catch (const Exception&)
     {
         ENSURE( sal_False, "*** ERROR *** exception caught." );
     }
