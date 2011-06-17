@@ -32,7 +32,11 @@ $(eval $(call gb_Library_add_precompiled_header,hwp,$(SRCDIR)/hwpfilter/inc/pch/
 $(eval $(call gb_Library_set_include,hwp,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/hwpfilter/inc/pch) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,hwp,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,hwp,\

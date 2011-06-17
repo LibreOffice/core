@@ -46,8 +46,12 @@ $(eval $(call gb_CppunitTest_add_linked_libs,hwpfilter_test_hwpfilter, \
 
 $(eval $(call gb_CppunitTest_set_include,hwpfilter_test_hwpfilter,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,hwpfilter_test_hwpfilter,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,hwpfilter_test_hwpfilter))
