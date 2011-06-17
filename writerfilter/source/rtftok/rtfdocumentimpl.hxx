@@ -158,7 +158,6 @@ namespace writerfilter {
                 Stream& Mapper();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
-                Id getBorderTable(sal_uInt32 nIndex);
                 void skipDestination(bool bParsed);
                 RTFSprms_t mergeSprms();
                 RTFSprms_t mergeAttributes();

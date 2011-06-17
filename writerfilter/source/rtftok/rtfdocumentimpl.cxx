@@ -86,6 +86,37 @@ RTFSprms_t& lcl_getCellBordersSprms(std::stack<RTFParserState>& aStates)
     return RTFSprm::find(*aStates.top().aTableCellsSprms.back(), NS_ooxml::LN_CT_TcPrBase_tcBorders)->getSprms();
 }
 
+Id lcl_getBorderTable(sal_uInt32 nIndex)
+{
+    static const Id aBorderIds[] =
+    {
+        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft, NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight
+    };
+
+    return aBorderIds[nIndex];
+}
+
+void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
+{
+    // Paragraph or cell property?
+    if (!aStates.top().aTableCellsAttributes.size())
+        for (int i = 0; i < 4; i++)
+        {
+            RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aParagraphSprms, lcl_getBorderTable(i));
+            if (p.get())
+            {
+                RTFSprms_t& rAttributes = p->getAttributes();
+                rAttributes.push_back(make_pair(nId, pValue));
+            }
+        }
+    else
+    {
+        // Attributes of the last border type
+        RTFSprms_t& rAttributes = lcl_getCellBordersSprms(aStates).back().second->getAttributes();
+        rAttributes.push_back(make_pair(nId, pValue));
+    }
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -133,16 +164,6 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
     if (nIndex < m_aColorTable.size())
         return m_aColorTable[nIndex];
     return 0;
-}
-
-Id RTFDocumentImpl::getBorderTable(sal_uInt32 nIndex)
-{
-    static const Id aBorderIds[] =
-    {
-        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft, NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight
-    };
-
-    return aBorderIds[nIndex];
 }
 
 sal_uInt32 RTFDocumentImpl::getEncodingTable(sal_uInt32 nFontIndex)
@@ -702,24 +723,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-
-        // Paragraph or cell property?
-        if (!m_aStates.top().aTableCellsAttributes.size())
-            for (int i = 0; i < 4; i++)
-            {
-                RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
-                if (p.get())
-                {
-                    RTFSprms_t& rAttributes = p->getAttributes();
-                    rAttributes.push_back(make_pair(NS_rtf::LN_BRCTYPE, pValue));
-                }
-            }
-        else
-        {
-            // Attributes of the last border type
-            RTFSprms_t& rAttributes = lcl_getCellBordersSprms(m_aStates).back().second->getAttributes();
-            rAttributes.push_back(make_pair(NS_rtf::LN_BRCTYPE, pValue));
-        }
+        lcl_putBorderProperty(m_aStates, NS_rtf::LN_BRCTYPE, pValue);
         skipDestination(bParsed);
         return 0;
     }
@@ -1104,59 +1108,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (nParam > 1)
                     nParam = nParam * 2 / 5;
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
-
-                if (!m_aStates.top().aTableCellsAttributes.size())
-                    for (int i = 0; i < 4; i++)
-                    {
-                        RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
-                        if (p.get())
-                        {
-                            RTFSprms_t& rAttributes = p->getAttributes();
-                            rAttributes.push_back(make_pair(NS_rtf::LN_DPTLINEWIDTH, pValue));
-                        }
-                    }
-                else
-                {
-                    RTFSprms_t& rAttributes = lcl_getCellBordersSprms(m_aStates).back().second->getAttributes();
-                    rAttributes.push_back(make_pair(NS_rtf::LN_DPTLINEWIDTH, pValue));
-                }
+                lcl_putBorderProperty(m_aStates, NS_rtf::LN_DPTLINEWIDTH, pValue);
             }
             break;
         case RTF_BRDRCF:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
-
-                if (!m_aStates.top().aTableCellsAttributes.size())
-                    for (int i = 0; i < 4; i++)
-                    {
-                        RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
-                        if (p.get())
-                        {
-                            RTFSprms_t& rAttributes = p->getAttributes();
-                            rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Border_color, pValue));
-                        }
-                    }
-                else
-                {
-                    RTFSprms_t& rAttributes = lcl_getCellBordersSprms(m_aStates).back().second->getAttributes();
-                    rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Border_color, pValue));
-                }
+                lcl_putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_color, pValue);
             }
             break;
         case RTF_BRSP:
             {
                 // dmapper expects it in points, we have it in twip
                 RTFValue::Pointer_t pValue(new RTFValue(nParam / 20));
-
-                for (int i = 0; i < 4; i++)
-                {
-                    RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
-                    if (p.get())
-                    {
-                        RTFSprms_t& rAttributes = p->getAttributes();
-                        rAttributes.push_back(make_pair(NS_rtf::LN_DPTSPACE, pValue));
-                    }
-                }
+                lcl_putBorderProperty(m_aStates, NS_rtf::LN_DPTSPACE, pValue);
             }
             break;
         case RTF_TX:
