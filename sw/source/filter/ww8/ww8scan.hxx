@@ -145,6 +145,11 @@ public:
     /// The minimum acceptable sprm len possible for this type of parser
     int MinSprmLen() const { return (IsSevenMinus(meVersion)) ? 2 : 3; }
 
+    /// Returns the offset to data of the first sprm of id nId, 0
+    //  if not found. nLen must be the <= length of pSprms
+    sal_uInt8* findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_uInt16 nLen)
+        const;
+
     inline int getVersion() const { return meVersion; } //cmc, I'm dubious about the usage of this, how can it be 0
 };
 

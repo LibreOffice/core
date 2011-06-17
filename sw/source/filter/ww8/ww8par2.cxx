@@ -3687,21 +3687,7 @@ const sal_uInt8* WW8RStyle::HasParaSprm( sal_uInt16 nId ) const
     if( !pParaSprms || !nSprmsLen )
         return 0;
 
-    const sal_uInt8* pSprms = pParaSprms;
-    sal_uInt16 i, x;
-
-    for( i=0; i < nSprmsLen; )
-    {
-        sal_uInt16 nAktId = maSprmParser.GetSprmId(pSprms);
-        // Sprm found ?
-        if( nAktId == nId )
-            return pSprms + maSprmParser.DistanceToData(nId);
-
-        x = maSprmParser.GetSprmSize(nAktId, pSprms);
-        i = i + x;
-        pSprms += x;
-    }
-    return 0;                               // Sprm not found
+    return maSprmParser.findSprmData(nId, pParaSprms, nSprmsLen);
 }
 
 void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)

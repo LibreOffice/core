@@ -7278,6 +7278,27 @@ sal_uInt16 wwSprmParser::DistanceToData(sal_uInt16 nId) const
     return 1 + mnDelta + SprmDataOfs(nId);
 }
 
+sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
+    sal_uInt16 nLen) const
+{
+    while (nLen > (getVersion()?1:0))
+    {
+        sal_uInt16 nAktId = GetSprmId(pSprms);
+        if (nAktId == nId) // Sprm found
+            return pSprms + DistanceToData(nId);
+
+        // gib Zeiger auf Daten
+        sal_uInt16 nSize = GetSprmSize(nAktId, pSprms);
+        OSL_ENSURE(nSize <= nLen, "sprm longer than remaining bytes");
+        //Clip to available size if wrong
+        nSize = std::min(nSize, nLen);
+        pSprms += nSize;
+        nLen -= nSize;
+    }
+    // Sprm not found
+    return 0;
+}
+
 SEPr::SEPr() :
     bkc(2), fTitlePage(0), fAutoPgn(0), nfcPgn(0), fUnlocked(0), cnsPgn(0),
     fPgnRestart(0), fEndNote(1), lnc(0), grpfIhdt(0), nLnnMod(0), dxaLnn(0),
