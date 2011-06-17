@@ -630,7 +630,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (uno.Any("short",0), 10, "private:resource/dbu/image/19205", 92, 145,
+            (uno.Any("short",0), 10, UIConsts.INFOIMAGEURL, 92, 145,
                 False, 5, uno.Any("short",47), 10))
         self.lblTemplateName = self.insertLabel("lblTemplateName",
             (PropertyNames.PROPERTY_HEIGHT,

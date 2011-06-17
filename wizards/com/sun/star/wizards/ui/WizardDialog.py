@@ -7,7 +7,6 @@ from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
 from common.HelpIds import *
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
-from event.MethodInvocation import *
 from event.EventNames import EVENT_ITEM_CHANGED
 
 class WizardDialog(UnoDialog2):
@@ -52,7 +51,7 @@ class WizardDialog(UnoDialog2):
 
     def activate(self):
         try:
-            if self.xUnoDialog != None:
+            if self.xUnoDialog is not None:
                 self.xUnoDialog.toFront()
 
         except UnoException, ex:
@@ -313,13 +312,6 @@ class WizardDialog(UnoDialog2):
                     uno.Any("short",(curtabindex + 1)),
                     iButtonWidth), self)
             self.setControlProperty("btnWizardNext", "DefaultButton", True)
-            # add a window listener, to know
-            # if the user used "escape" key to
-            # close the dialog.
-            windowHidden = MethodInvocation("windowHidden", self)
-            self.xUnoDialog.addWindowListener(WindowListenerProcAdapter(None))
-            dialogName = Helper.getUnoPropertyValue(self.xDialogModel,
-                PropertyNames.PROPERTY_NAME)
         except Exception, exception:
             traceback.print_exc()
 
@@ -488,9 +480,8 @@ class WizardDialog(UnoDialog2):
 
     def removeTerminateListener(self):
         if self.__bTerminateListenermustberemoved:
-            #COMMENTED
-            #Desktop.getDesktop(self.xMSF).removeTerminateListener( \
-            #    ActionListenerProcAdapter(self))
+            Desktop.getDesktop(self.xMSF).removeTerminateListener( \
+                TerminateListenerProcAdapter(self))
             self.__bTerminateListenermustberemoved = False
 
     '''
@@ -507,16 +498,6 @@ class WizardDialog(UnoDialog2):
         except Exception,e:
             traceback.print_exc()
 
-
-    def windowHidden(self):
-        cancelWizard_1()
-
-    def notifyTermination(self, arg0):
-        cancelWizard_1()
-
-    def queryTermination(self, arg0):
-        activate()
-        raise TerminationVetoException ();
-
-    def disposing(self, arg0):
-        cancelWizard_1()
+    def queryTermination(self):
+        self.activate()
+        raise TerminationVetoException()

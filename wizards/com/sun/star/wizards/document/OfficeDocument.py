@@ -1,6 +1,7 @@
 from com.sun.star.awt.WindowClass import TOP
 import traceback
 import uno
+from ui.event.CommonListener import TerminateListenerProcAdapter
 from common.Desktop import Desktop
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle
@@ -98,10 +99,10 @@ class OfficeDocument(object):
         else:
             xF = Desktop.getDesktop(xMSF)
             xFrame = xF.findFrame(FrameName, 0)
-            if listener != None:
+            if listener is not None:
                 xFF = xF.getFrames()
                 xFF.remove(xFrame)
-                xF.addTerminateListener(listener)
+                xF.addTerminateListener(TerminateListenerProcAdapter(listener))
 
         return xFrame
 
@@ -153,10 +154,9 @@ class OfficeDocument(object):
         #from now this frame is useable ...
         #and not part of the desktop tree.
         #You are alone with him .-)
-        if listener != None:
-            pass
-            #COMMENTED
-            #Desktop.getDesktop(xMSF).addTerminateListener(listener)
+        if listener is not None:
+            Desktop.getDesktop(xMSF).addTerminateListener(
+                TerminateListenerProcAdapter(listener))
 
         return xFrame
 

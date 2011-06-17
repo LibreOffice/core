@@ -1,7 +1,7 @@
 from UnoDialog import *
 from ui.event.CommonListener import *
 from common.Desktop import Desktop
-from UIConsts import *
+import UIConsts
 
 '''
 This class contains convenience methods for inserting components to a dialog.
@@ -10,7 +10,7 @@ description files to a Java class which builds
 the same dialog through the UNO API.<br/>
 It uses an Event-Listener method, which calls a method through reflection
 wenn an event on a component is trigered.
-see the classes AbstractListener, CommonListener, MethodInvocation for details
+see the classes CommonListener for details
 '''
 
 class UnoDialog2(UnoDialog):
@@ -138,10 +138,6 @@ class UnoDialog2(UnoDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (uno.Any("short",0), 10,
                 UIConsts.INFOIMAGEURL, _posx, _posy, False, _iStep, 10))
-        self.getPeerConfiguration().setImageUrl(
-            self.getModel(xImgControl),
-                UIConsts.INFOIMAGEURL,
-                UIConsts.INFOIMAGEURL_HC)
         return xImgControl
 
     '''

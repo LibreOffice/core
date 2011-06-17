@@ -3,7 +3,6 @@ import traceback
 from common.PropertyNames import PropertyNames
 from com.sun.star.awt import Rectangle
 from common.Helper import Helper
-from PeerConfig import PeerConfig
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS
 
