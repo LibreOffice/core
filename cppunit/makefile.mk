@@ -93,8 +93,11 @@ BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
 
+# WTF? A *Cygwin* DLL?
+#OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
+#    ooo-install/bin/cygcppunit-1-12-1.dll
 OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
-    ooo-install/bin/cygcppunit-1-12-1.dll
+    ooo-install/bin/libcppunit-1-12-1.dll
 OUT2LIB = ooo-install/lib/libcppunit.dll.a
 
 .INCLUDE: set_ext.mk
