@@ -1084,7 +1084,7 @@ ProfileItem gid_Brand_Profileitem_Version_Updateurl
     Section = "Version";
     Order = 15;
     Key = "UpdateURL";
-  #if defined(BUILD_SPECIAL)
+  #if defined(ENABLE_ONLINE_UPDATE)
   #ifdef WNT
     Value = "${UPDATEURL}";
   #else  // defined WNT

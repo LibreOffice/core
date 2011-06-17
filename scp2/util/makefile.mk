@@ -215,7 +215,7 @@ SCP1FILES += cairocanvas.par
 SCP1FILES += layout.par
 .ENDIF # ENABLE_LAYOUT == TRUE
 
-.IF "$(BUILD_SPECIAL)"!=""
+.IF "$(ENABLE_ONLINE_UPDATE)"!=""
 SCP1FILES += \
              module_onlineupdate.par   \
              file_onlineupdate.par
@@ -392,7 +392,7 @@ SCP2FILES += \
 SCP2FILES += layout.par
 .ENDIF # ENABLE_LAYOUT == TRUE
 
-.IF "$(BUILD_SPECIAL)"!=""
+.IF "$(ENABLE_ONLINE_UPDATE)"!=""
 SCP2FILES += \
              module_onlineupdate.par   \
              file_onlineupdate.par

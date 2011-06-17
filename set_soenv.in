@@ -1965,6 +1965,7 @@ ToFile( "DB_LIB",            "@DB_LIB@",           "e" );
 ToFile( "DB_CPPLIB",         "@DB_CPPLIB@",        "e" );
 ToFile( "ENABLE_MYSQLC",     "@ENABLE_MYSQLC@",    "e" );
 ToFile( "ENABLE_LOMENUBAR",  "@ENABLE_LOMENUBAR@", "e" );
+ToFile( "ENABLE_ONLINE_UPDATE","@ENABLE_ONLINE_UPDATE@", "e" );
 ToFile( "SYSTEM_MYSQL",      "@SYSTEM_MYSQL@",     "e" );
 ToFile( "SYSTEM_MYSQL_CPPCONN","@SYSTEM_MYSQL_CPPCONN@","e" );
 ToFile( "MYSQL_INC",         "@MYSQL_INC@",        "e" );
