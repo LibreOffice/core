@@ -862,6 +862,21 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue));
             }
             break;
+        case RTF_CLVERTALT:
+        case RTF_CLVERTALC:
+        case RTF_CLVERTALB:
+            {
+                switch (nKeyword)
+                {
+                    case RTF_CLVERTALT: nParam = 0; break;
+                    case RTF_CLVERTALC: nParam = 1; break;
+                    case RTF_CLVERTALB: nParam = 3; break;
+                    default: break;
+                }
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vAlign, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
