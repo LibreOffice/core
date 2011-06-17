@@ -703,14 +703,22 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
 
-        for (int i = 0; i < 4; i++)
-        {
-            RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
-            if (p.get())
+        // Paragraph or cell property?
+        if (!m_aStates.top().aTableCellsAttributes.size())
+            for (int i = 0; i < 4; i++)
             {
-                RTFSprms_t& rAttributes = p->getAttributes();
-                rAttributes.push_back(make_pair(NS_rtf::LN_BRCTYPE, pValue));
+                RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
+                if (p.get())
+                {
+                    RTFSprms_t& rAttributes = p->getAttributes();
+                    rAttributes.push_back(make_pair(NS_rtf::LN_BRCTYPE, pValue));
+                }
             }
+        else
+        {
+            // Attributes of the last border type
+            RTFSprms_t& rAttributes = lcl_getCellBordersSprms(m_aStates).back().second->getAttributes();
+            rAttributes.push_back(make_pair(NS_rtf::LN_BRCTYPE, pValue));
         }
         skipDestination(bParsed);
         return 0;
