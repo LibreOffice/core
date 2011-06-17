@@ -388,13 +388,12 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
 
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to ouer internal member.
+    // Copy values from list in right order to our internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
-    sal_Int32 nProperty = 0;
-
-    for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    for(sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nInvalid property value for property detected!\n" );
+        if (seqValues[nProperty].hasValue()==sal_False)
+            continue;
 
         switch( nProperty )
         {
