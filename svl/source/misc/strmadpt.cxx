@@ -178,7 +178,7 @@ ErrCode SvOutputStreamOpenLockBytes::Flush() const
     {
         m_xOutputStream->flush();
     }
-    catch (io::IOException)
+    catch (const io::IOException&)
     {
         return ERRCODE_IO_CANTWRITE;
     }
@@ -223,7 +223,7 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
             writeBytes(uno::Sequence< sal_Int8 >(
                            static_cast< sal_Int8 const * >(pBuffer), nCount));
     }
-    catch (io::IOException)
+    catch (const io::IOException&)
     {
         return ERRCODE_IO_CANTWRITE;
     }
@@ -252,11 +252,15 @@ sal_uLong SvOutputStreamOpenLockBytes::Seek(sal_uLong)
 void SvOutputStreamOpenLockBytes::Terminate()
 {
     if (m_xOutputStream.is())
+    {
         try
         {
             m_xOutputStream->closeOutput();
         }
-        catch (io::IOException) {}
+        catch (const io::IOException&)
+        {
+        }
+    }
 }
 
 //============================================================================
@@ -492,7 +496,7 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
             {
                 m_xSeekable->seek(m_nSeekedFrom);
             }
-            catch (io::IOException)
+            catch (const io::IOException&)
             {
                 SetError(ERRCODE_IO_CANTREAD);
                 return 0;
@@ -513,7 +517,7 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
             {
                 nCount = m_xStream->readBytes(aBuffer, nRemain);
             }
-            catch (io::IOException)
+            catch (const io::IOException&)
             {
                 SetError(ERRCODE_IO_CANTREAD);
                 return nRead;
@@ -550,7 +554,7 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
                 {
                     nCount = m_xStream->readBytes(aBuffer, nRemain);
                 }
-                catch (io::IOException)
+                catch (const io::IOException&)
                 {
                     SetError(ERRCODE_IO_CANTREAD);
                     break;
@@ -604,7 +608,9 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
                             return sal_uLong(nLength);
                         }
                     }
-                    catch (io::IOException) {}
+                    catch (const io::IOException&)
+                    {
+                    }
                 else
                     return Tell(); //@@@
             }
@@ -617,13 +623,17 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
             return nPos;
         }
         else if (m_xSeekable.is())
+        {
             try
             {
                 m_xSeekable->seek(nPos);
                 m_nSeekedFrom = STREAM_SEEK_TO_END;
                 return nPos;
             }
-            catch (io::IOException) {}
+            catch (const io::IOException&)
+            {
+            }
+        }
         else if (m_pPipe->setReadPosition(nPos) == SvDataPipe_Impl::SEEK_OK)
         {
             m_nSeekedFrom = STREAM_SEEK_TO_END;
@@ -658,11 +668,15 @@ SvInputStream::SvInputStream(
 SvInputStream::~SvInputStream()
 {
     if (m_xStream.is())
+    {
         try
         {
             m_xStream->closeInput();
         }
-        catch (io::IOException) {}
+        catch (const io::IOException&)
+        {
+        }
+    }
     delete m_pPipe;
 }
 
@@ -727,7 +741,7 @@ sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
                                           + nWritten,
                                       nRemain));
         }
-        catch (io::IOException)
+        catch (const io::IOException&)
         {
             SetError(ERRCODE_IO_CANTWRITE);
             break;
@@ -758,7 +772,9 @@ void SvOutputStream::FlushData()
     {
         m_xStream->flush();
     }
-    catch (io::IOException) {}
+    catch (const io::IOException&)
+    {
+    }
 }
 
 //============================================================================
@@ -781,11 +797,15 @@ SvOutputStream::SvOutputStream(uno::Reference< io::XOutputStream > const &
 SvOutputStream::~SvOutputStream()
 {
     if (m_xStream.is())
+    {
         try
         {
             m_xStream->closeOutput();
         }
-        catch (io::IOException) {}
+        catch (const io::IOException&)
+        {
+        }
+    }
 }
 
 //============================================================================
