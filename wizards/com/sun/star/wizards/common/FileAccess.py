@@ -404,13 +404,13 @@ class FileAccess(object):
                 FilterName = FilterName + "-"
             fileName = ""
             NameVectorAppend = NameVector.append
-            TitleVectoAppend = TitleVector.append
+            TitleVectorAppend = TitleVector.append
             for i in nameList:
                 fileName = self.getFilename(i)
                 if FilterName is None or fileName.startswith(FilterName):
                     xDocInterface.loadFromMedium(i, tuple())
                     NameVectorAppend(i)
-                    TitleVectoAppend(xDocInterface.Title)
+                    TitleVectorAppend(xDocInterface.Title)
 
             LocLayoutFiles[1] = NameVector
             LocLayoutFiles[0] = TitleVector
