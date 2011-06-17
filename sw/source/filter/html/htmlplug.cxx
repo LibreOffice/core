@@ -1171,7 +1171,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         SvCommandList aCommands;
         aCommands.FillFromSequence( aProps );
-        SvULongs aParams;
+        std::vector<sal_uLong> aParams;
         size_t i = aCommands.size();
         while( i > 0 )
         {
@@ -1188,7 +1188,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             }
             else if( SWHTML_OPTTYPE_PARAM == nType )
             {
-                aParams.Insert( i, aParams.Count() );
+                aParams.push_back( i );
             }
         }
 
@@ -1196,7 +1196,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         rHTMLWrt.IncIndentLevel(); // Inhalt von Applet einruecken
 
-        sal_uInt16 ii = aParams.Count();
+        sal_uInt16 ii = aParams.size();
         while( ii > 0  )
         {
             const SvCommand& rCommand = aCommands[ aParams[--ii] ];
