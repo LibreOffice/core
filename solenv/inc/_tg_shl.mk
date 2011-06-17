@@ -289,7 +289,7 @@ $(SHL1TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -311,13 +311,6 @@ $(SHL1TARGETN) : \
     @noop $(assign DEF1OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF1OBJLIST) $(assign ALL1OBJLIST:=$(ALL1OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB1NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL1TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL1VERSIONOBJ) \
-        $(ALL1OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -325,7 +318,7 @@ $(SHL1TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL1DEF) \
         $(USE_1IMPLIB) \
         $(STDOBJ) \
         $(SHL1VERSIONOBJ) $(SHL1OBJS) \
@@ -796,7 +789,7 @@ $(SHL2TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -818,13 +811,6 @@ $(SHL2TARGETN) : \
     @noop $(assign DEF2OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF2OBJLIST) $(assign ALL2OBJLIST:=$(ALL2OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB2NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL2TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL2VERSIONOBJ) \
-        $(ALL2OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -832,7 +818,7 @@ $(SHL2TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL2DEF) \
         $(USE_2IMPLIB) \
         $(STDOBJ) \
         $(SHL2VERSIONOBJ) $(SHL2OBJS) \
@@ -1303,7 +1289,7 @@ $(SHL3TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -1325,13 +1311,6 @@ $(SHL3TARGETN) : \
     @noop $(assign DEF3OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF3OBJLIST) $(assign ALL3OBJLIST:=$(ALL3OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB3NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL3TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL3VERSIONOBJ) \
-        $(ALL3OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -1339,7 +1318,7 @@ $(SHL3TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL3DEF) \
         $(USE_3IMPLIB) \
         $(STDOBJ) \
         $(SHL3VERSIONOBJ) $(SHL3OBJS) \
@@ -1810,7 +1789,7 @@ $(SHL4TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -1832,13 +1811,6 @@ $(SHL4TARGETN) : \
     @noop $(assign DEF4OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF4OBJLIST) $(assign ALL4OBJLIST:=$(ALL4OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB4NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL4TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL4VERSIONOBJ) \
-        $(ALL4OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -1846,7 +1818,7 @@ $(SHL4TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL4DEF) \
         $(USE_4IMPLIB) \
         $(STDOBJ) \
         $(SHL4VERSIONOBJ) $(SHL4OBJS) \
@@ -2317,7 +2289,7 @@ $(SHL5TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -2339,13 +2311,6 @@ $(SHL5TARGETN) : \
     @noop $(assign DEF5OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF5OBJLIST) $(assign ALL5OBJLIST:=$(ALL5OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB5NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL5TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL5VERSIONOBJ) \
-        $(ALL5OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -2353,7 +2318,7 @@ $(SHL5TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL5DEF) \
         $(USE_5IMPLIB) \
         $(STDOBJ) \
         $(SHL5VERSIONOBJ) $(SHL5OBJS) \
@@ -2824,7 +2789,7 @@ $(SHL6TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -2846,13 +2811,6 @@ $(SHL6TARGETN) : \
     @noop $(assign DEF6OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF6OBJLIST) $(assign ALL6OBJLIST:=$(ALL6OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB6NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL6TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL6VERSIONOBJ) \
-        $(ALL6OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -2860,7 +2818,7 @@ $(SHL6TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL6DEF) \
         $(USE_6IMPLIB) \
         $(STDOBJ) \
         $(SHL6VERSIONOBJ) $(SHL6OBJS) \
@@ -3331,7 +3289,7 @@ $(SHL7TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -3353,13 +3311,6 @@ $(SHL7TARGETN) : \
     @noop $(assign DEF7OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF7OBJLIST) $(assign ALL7OBJLIST:=$(ALL7OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB7NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL7TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL7VERSIONOBJ) \
-        $(ALL7OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -3367,7 +3318,7 @@ $(SHL7TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL7DEF) \
         $(USE_7IMPLIB) \
         $(STDOBJ) \
         $(SHL7VERSIONOBJ) $(SHL7OBJS) \
@@ -3838,7 +3789,7 @@ $(SHL8TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -3860,13 +3811,6 @@ $(SHL8TARGETN) : \
     @noop $(assign DEF8OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF8OBJLIST) $(assign ALL8OBJLIST:=$(ALL8OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB8NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL8TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL8VERSIONOBJ) \
-        $(ALL8OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -3874,7 +3818,7 @@ $(SHL8TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL8DEF) \
         $(USE_8IMPLIB) \
         $(STDOBJ) \
         $(SHL8VERSIONOBJ) $(SHL8OBJS) \
@@ -4345,7 +4289,7 @@ $(SHL9TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -4367,13 +4311,6 @@ $(SHL9TARGETN) : \
     @noop $(assign DEF9OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF9OBJLIST) $(assign ALL9OBJLIST:=$(ALL9OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB9NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL9TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL9VERSIONOBJ) \
-        $(ALL9OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -4381,7 +4318,7 @@ $(SHL9TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL9DEF) \
         $(USE_9IMPLIB) \
         $(STDOBJ) \
         $(SHL9VERSIONOBJ) $(SHL9OBJS) \
@@ -4852,7 +4789,7 @@ $(SHL10TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -4874,13 +4811,6 @@ $(SHL10TARGETN) : \
     @noop $(assign DEF10OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF10OBJLIST) $(assign ALL10OBJLIST:=$(ALL10OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB10NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL10TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL10VERSIONOBJ) \
-        $(ALL10OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -4888,7 +4818,7 @@ $(SHL10TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL10DEF) \
         $(USE_10IMPLIB) \
         $(STDOBJ) \
         $(SHL10VERSIONOBJ) $(SHL10OBJS) \

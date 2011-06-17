@@ -318,7 +318,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -340,13 +340,6 @@ $(SHL$(TNR)TARGETN) : \
     @noop $(assign DEF$(TNR)OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF$(TNR)OBJLIST) $(assign ALL$(TNR)OBJLIST:=$(ALL$(TNR)OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @$(mktmp $(strip \
-        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL$(TNR)VERSIONOBJ) \
-        $(ALL$(TNR)OBJLIST) \
-    ))
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -354,7 +347,7 @@ $(SHL$(TNR)TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL$(TNR)DEF) \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ) \
         $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) \
