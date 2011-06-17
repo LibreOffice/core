@@ -810,6 +810,33 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_top, pValue));
             }
             break;
+        case RTF_CLBRDRL:
+            {
+                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
+                RTFSprms_t aAttributes;
+                RTFSprms_t aSprms;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_left, pValue));
+            }
+            break;
+        case RTF_CLBRDRB:
+            {
+                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
+                RTFSprms_t aAttributes;
+                RTFSprms_t aSprms;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_bottom, pValue));
+            }
+            break;
+        case RTF_CLBRDRR:
+            {
+                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
+                RTFSprms_t aAttributes;
+                RTFSprms_t aSprms;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                rBordersSprms.push_back(make_pair(NS_ooxml::LN_CT_TcBorders_right, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -1115,14 +1142,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
 
-                for (int i = 0; i < 4; i++)
-                {
-                    RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
-                    if (p.get())
+                if (!m_aStates.top().aTableCellsAttributes.size())
+                    for (int i = 0; i < 4; i++)
                     {
-                        RTFSprms_t& rAttributes = p->getAttributes();
-                        rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Border_color, pValue));
+                        RTFValue::Pointer_t p = RTFSprm::find(m_aStates.top().aParagraphSprms, getBorderTable(i));
+                        if (p.get())
+                        {
+                            RTFSprms_t& rAttributes = p->getAttributes();
+                            rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Border_color, pValue));
+                        }
                     }
+                else
+                {
+                    RTFSprms_t& rAttributes = lcl_getCellBordersSprms(m_aStates).back().second->getAttributes();
+                    rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Border_color, pValue));
                 }
             }
             break;
