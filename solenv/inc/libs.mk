@@ -68,11 +68,10 @@ LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
 BPICONVLIB=-lbpiconv
 TOOLSLIB=-ltl$(DLLPOSTFIX)
+CPPULIB=-luno_cppu
 .IF "$(GUI)$(COM)"=="WNTGCC"
-CPPULIB=-lcppu$(UDK_MAJOR)
 CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
-CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
