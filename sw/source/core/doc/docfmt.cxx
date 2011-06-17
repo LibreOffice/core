@@ -443,7 +443,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     SfxItemSet aDelSet( GetAttrPool(), aResetableSetRange );
     if( !rAttrs.empty() )
     {
-        for( std::set<sal_uInt16>::reverse_iterator it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
+        for( std::set<sal_uInt16>::const_reverse_iterator it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
         {
             if( POOLATTR_END > *it )
                 aDelSet.Put( *GetDfltAttr( *it ));
