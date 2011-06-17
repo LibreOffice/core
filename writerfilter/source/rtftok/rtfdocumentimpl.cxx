@@ -117,6 +117,21 @@ void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue
     }
 }
 
+// This works on any container (sprm, attribute), as long as the nested value is an attribute.
+void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue)
+{
+    RTFValue::Pointer_t pParent = RTFSprm::find(rSprms, nParent);
+    if (!pParent.get())
+    {
+        RTFSprms_t aAttributes;
+        RTFValue::Pointer_t pParentValue(new RTFValue(aAttributes));
+        rSprms.push_back(make_pair(nParent, pParentValue));
+        pParent = pParentValue;
+    }
+    RTFSprms_t& rAttributes = pParent->getAttributes();
+    rAttributes.push_back(make_pair(nId, pValue));
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -1055,29 +1070,21 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_CHCBPAT:
             {
-                RTFSprms_t aAttributes;
-                RTFValue::Pointer_t pInnerValue(new RTFValue(getColorTable(nParam)));
-                aAttributes.push_back(make_pair(NS_ooxml::LN_CT_Shd_fill, pInnerValue));
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
-                m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CShd, pValue));
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, NS_sprm::LN_CShd, NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_CLCBPAT:
             {
-                RTFSprms_t aAttributes;
-                RTFValue::Pointer_t pInnerValue(new RTFValue(getColorTable(nParam)));
-                aAttributes.push_back(make_pair(NS_ooxml::LN_CT_Shd_fill, pInnerValue));
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
-                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_shd, pValue));
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                lcl_putNestedAttribute(*m_aStates.top().aTableCellsSprms.back(),
+                        NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_CBPAT:
             {
-                RTFSprms_t aAttributes;
-                RTFValue::Pointer_t pInnerValue(new RTFValue(getColorTable(nParam)));
-                aAttributes.push_back(make_pair(NS_ooxml::LN_CT_Shd_fill, pInnerValue));
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
-                m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PShd, pValue));
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_sprm::LN_PShd, NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_ULC:
