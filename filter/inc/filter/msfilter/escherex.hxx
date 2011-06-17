@@ -1342,22 +1342,24 @@ public:
 
 // ---------------------------------------------------------------------------------------------
 
+typedef ::std::vector< EscherPersistEntry* > EscherPersistTable_impl;
+
 class MSFILTER_DLLPUBLIC EscherPersistTable
 {
 
-    public:
-        List    maPersistTable;
+public:
+    EscherPersistTable_impl maPersistTable;
 
-        sal_Bool    PtIsID( sal_uInt32 nID );
-        void    PtInsert( sal_uInt32 nID, sal_uInt32 nOfs );
-        sal_uInt32  PtDelete( sal_uInt32 nID );
-        sal_uInt32  PtGetOffsetByID( sal_uInt32 nID );
-        sal_uInt32  PtReplace( sal_uInt32 nID, sal_uInt32 nOfs );
-        sal_uInt32  PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs );
-        sal_uInt32  PtGetCount() const { return maPersistTable.Count(); };
+    sal_Bool    PtIsID( sal_uInt32 nID );
+    void        PtInsert( sal_uInt32 nID, sal_uInt32 nOfs );
+    sal_uInt32  PtDelete( sal_uInt32 nID );
+    sal_uInt32  PtGetOffsetByID( sal_uInt32 nID );
+    sal_uInt32  PtReplace( sal_uInt32 nID, sal_uInt32 nOfs );
+    sal_uInt32  PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs );
+    sal_uInt32  PtGetCount() const { return maPersistTable.size(); };
 
                 EscherPersistTable();
-        virtual ~EscherPersistTable();
+    virtual     ~EscherPersistTable();
 };
 
 // ---------------------------------------------------------------------------------------------

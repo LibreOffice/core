@@ -3283,32 +3283,37 @@ EscherPersistTable::EscherPersistTable()
 
 EscherPersistTable::~EscherPersistTable()
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-        delete (EscherPersistEntry*)pPtr;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        delete maPersistTable[ i ];
+    }
 }
 
 sal_Bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
             return sal_True;
+        }
     }
     return sal_False;
 }
 
 void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    maPersistTable.Insert( new EscherPersistEntry( nID, nOfs ) );
+    maPersistTable.push_back( new EscherPersistEntry( nID, nOfs ) );
 }
 
 sal_uInt32 EscherPersistTable::PtDelete( sal_uInt32 nID )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            delete (EscherPersistEntry*) maPersistTable.Remove();
+    for(
+        EscherPersistTable_impl::iterator it = maPersistTable.begin();
+        it < maPersistTable.end();
+        ++it
+    ) {
+        if ( (*it)->mnID == nID ) {
+            delete *it;
+            maPersistTable.erase( it );
         }
     }
     return 0;
@@ -3316,22 +3321,22 @@ sal_uInt32 EscherPersistTable::PtDelete( sal_uInt32 nID )
 
 sal_uInt32 EscherPersistTable::PtGetOffsetByID( sal_uInt32 nID )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
             return ((EscherPersistEntry*)pPtr)->mnOffset;
+        }
     }
     return 0;
 };
 
 sal_uInt32 EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            sal_uInt32 nRetValue = ((EscherPersistEntry*)pPtr)->mnOffset;
-            ((EscherPersistEntry*)pPtr)->mnOffset = nOfs;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
+            sal_uInt32 nRetValue = pPtr->mnOffset;
+            pPtr->mnOffset = nOfs;
             return nRetValue;
         }
     }
@@ -3340,12 +3345,11 @@ sal_uInt32 EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 
 sal_uInt32 EscherPersistTable::PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            sal_uInt32 nRetValue = ((EscherPersistEntry*)pPtr)->mnOffset;
-            ((EscherPersistEntry*)pPtr)->mnOffset = nOfs;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
+            sal_uInt32 nRetValue = pPtr->mnOffset;
+            pPtr->mnOffset = nOfs;
             return nRetValue;
         }
     }
@@ -3355,10 +3359,10 @@ sal_uInt32 EscherPersistTable::PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOf
 
 sal_Bool EscherPropertyValueHelper::GetPropertyValue(
     ::com::sun::star::uno::Any& rAny,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-            const String& rString,
-                    sal_Bool bTestPropertyAvailability )
-{
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+    const String& rString,
+    sal_Bool bTestPropertyAvailability
+) {
     sal_Bool bRetValue = sal_True;
     if ( bTestPropertyAvailability )
     {
@@ -4409,11 +4413,12 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     sal_uInt8*  pBuf;
 
     // Persist table anpassen
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        sal_uInt32 nOfs = ((EscherPersistEntry*)pPtr)->mnOffset;
-        if ( nOfs >= nCurPos )
-            ((EscherPersistEntry*)pPtr)->mnOffset += nBytes;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        sal_uInt32 nOfs = pPtr->mnOffset;
+        if ( nOfs >= nCurPos ) {
+            pPtr->mnOffset += nBytes;
+        }
     }
 
     // container und atom sizes anpassen
