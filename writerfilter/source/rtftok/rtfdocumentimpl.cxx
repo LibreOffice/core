@@ -1216,9 +1216,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_CELLX:
             {
-                /* Here we could send nCellx as NS_ooxml::LN_CT_TcPrBase_tcW, but that's not supported by dmapper.
                 int nCellx = nParam - m_aStates.top().nCellX;
-                m_aStates.top().nCellX += nParam;*/
+                m_aStates.top().nCellX += nParam;
+                RTFValue::Pointer_t pValue(new RTFValue(nCellx));
+                m_aStates.top().aTableRowSprms.push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pValue));
 
                 m_aStates.top().bNeedTableCellBorders = true;
             }
