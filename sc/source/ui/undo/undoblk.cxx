@@ -2084,6 +2084,9 @@ void ScUndoRemoveMerge::Undo()
     for (set<SCTAB>::const_iterator itr = maOption.maTabs.begin(), itrEnd = maOption.maTabs.end();
           itr != itrEnd; ++itr)
     {
+        OSL_ENSURE(pUndoDoc, "NULL pUndoDoc!");
+        if (!pUndoDoc)
+            continue;
         // There is no need to extend merge area because it's already been extended.
         ScRange aRange = maOption.getSingleRange(*itr);
         pDoc->DeleteAreaTab(aRange, IDF_ATTRIB);
