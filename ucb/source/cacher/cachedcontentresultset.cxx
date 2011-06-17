@@ -112,10 +112,10 @@ if ( m_bLastCachedReadWasNull && rValue.hasValue() )    \
                     const Type * >( 0 ) ) );            \
             m_bLastCachedReadWasNull = !( aConvAny >>= aRet ); \
         }                                               \
-        catch ( IllegalArgumentException )              \
+        catch (const IllegalArgumentException&)         \
         {                                               \
         }                                               \
-        catch ( CannotConvertException )                \
+        catch (const CannotConvertException&)           \
         {                                               \
         }                                               \
     }                                                   \
@@ -327,7 +327,7 @@ const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
         return (* reinterpret_cast< const OUString * >
                 (getRowAny( nRow ).getValue() ));
     }
-    catch( SQLException )
+    catch(const SQLException&)
     {
         throw RuntimeException();
     }
@@ -350,7 +350,7 @@ const Reference< XContentIdentifier >& SAL_CALL CachedContentResultSet::CCRS_Cac
         return (* reinterpret_cast< const Reference< XContentIdentifier > * >
                 (getRowAny( nRow ).getValue() ));
     }
-    catch( SQLException )
+    catch(const SQLException&)
     {
         throw RuntimeException();
     }
@@ -373,7 +373,7 @@ const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
         return (* reinterpret_cast< const Reference< XContent > * >
                 (getRowAny( nRow ).getValue() ));
     }
-    catch( SQLException )
+    catch (const SQLException&)
     {
         throw RuntimeException();
     }
@@ -792,7 +792,7 @@ sal_Bool SAL_CALL CachedContentResultSet
                 return bValid;
             }
         }
-        catch( SQLException& rEx )
+        catch (const SQLException& rEx)
         {
             if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly() )
             {
@@ -1452,7 +1452,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         {
             bValid = m_xResultSetOrigin->absolute( row );
         }
-        catch (ResultSetException &)
+        catch (const ResultSetException&)
         {
             throw;
         }

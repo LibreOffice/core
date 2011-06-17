@@ -619,19 +619,19 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
             {
                 xOutputStream->writeBytes( seq );
             }
-            catch( io::NotConnectedException )
+            catch (const io::NotConnectedException&)
             {
                 installError( CommandId,
                               TASKHANDLING_NOTCONNECTED_FOR_PAGING );
                 break;
             }
-            catch( io::BufferSizeExceededException )
+            catch (const io::BufferSizeExceededException&)
             {
                 installError( CommandId,
                               TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_PAGING );
                 break;
             }
-            catch( io::IOException )
+            catch (const io::IOException&)
             {
                 installError( CommandId,
                               TASKHANDLING_IOEXCEPTION_FOR_PAGING );
@@ -655,13 +655,13 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
     {
         xOutputStream->closeOutput();
     }
-    catch( io::NotConnectedException )
+    catch (const io::NotConnectedException&)
     {
     }
-    catch( io::BufferSizeExceededException )
+    catch (const io::BufferSizeExceededException&)
     {
     }
-    catch( io::IOException )
+    catch (const io::IOException&)
     {
     }
 }
@@ -888,7 +888,7 @@ shell::setv( const rtl::OUString& aUnqPath,
             {
                 it->second.xS->setPropertyValue( values[i].Name,values[i].Value );
             }
-            catch( const uno::Exception& e )
+            catch (const uno::Exception&e)
             {
                 --propChanged; // unsuccessful setting
                 ret[i] <<= e;

@@ -1461,7 +1461,10 @@ void SortedResultSet::Initialize(
             nIndex++;
         }
     }
-    catch ( SQLException ) { OSL_FAIL( "SortedResultSet::Initialize() : Got unexpected SQLException" ); }
+    catch (const SQLException&)
+    {
+        OSL_FAIL( "SortedResultSet::Initialize() : Got unexpected SQLException" );
+    }
 
     // when we have fetched all the elements, we can create the
     // original to sorted mapping list from the s2o list
@@ -1516,8 +1519,8 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
             }
         }
     }
-    catch ( UnknownPropertyException ) {}
-    catch ( WrappedTargetException ) {}
+    catch (const UnknownPropertyException&) {}
+    catch (const WrappedTargetException&) {}
 }
 
 //-------------------------------------------------------------------------
@@ -1816,7 +1819,10 @@ void SortedResultSet::ResortModified( EventList* pList )
             }
         }
     }
-    catch ( SQLException ) { OSL_FAIL( "SortedResultSet::ResortModified() : Got unexpected SQLException" ); }
+    catch (const SQLException&)
+    {
+        OSL_FAIL( "SortedResultSet::ResortModified() : Got unexpected SQLException" );
+    }
 
     maModList.Clear();
 }
@@ -1849,7 +1855,10 @@ void SortedResultSet::ResortNew( EventList* pList )
             pList->AddEvent( ListActionType::INSERTED, nNewPos, 1 );
         }
     }
-    catch ( SQLException ) { OSL_FAIL( "SortedResultSet::ResortNew() : Got unexpected SQLException" ); }
+    catch (const SQLException&)
+    {
+        OSL_FAIL( "SortedResultSet::ResortNew() : Got unexpected SQLException" );
+    }
 }
 
 //-------------------------------------------------------------------------

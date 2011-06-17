@@ -344,8 +344,8 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     try {
         aRet = pCurSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) );
     }
-    catch ( UnknownPropertyException ) {}
-    catch ( WrappedTargetException ) {}
+    catch (const UnknownPropertyException&) {}
+    catch (const WrappedTargetException&) {}
 
     long nOldCount = pCurSet->GetCount();
     sal_Bool bWasFinal = false;

@@ -549,7 +549,7 @@ BaseContent::getContentType()
                     OSL_FAIL( "BaseContent::getContentType - Property value was null!" );
                 }
             }
-            catch ( sdbc::SQLException const & )
+            catch (const sdbc::SQLException&)
             {
                 OSL_FAIL( "BaseContent::getContentType - Caught SQLException!" );
             }
@@ -681,7 +681,7 @@ BaseContent::createNewContent(
 //              return Reference< XContent >();
         }
     }
-    catch ( sdbc::SQLException const & )
+    catch (const sdbc::SQLException&)
     {
         OSL_FAIL( "BaseContent::createNewContent - Caught SQLException!" );
         return Reference< XContent >();
@@ -757,7 +757,7 @@ BaseContent::getParent(
         Reference< XContent > content = m_pMyShell->m_pProvider->queryContent( Identifier );
         return Reference<XInterface>(content,UNO_QUERY);
     }
-    catch( IllegalIdentifierException )
+    catch (const IllegalIdentifierException&)
     {
         return Reference< XInterface >();
     }
@@ -979,7 +979,7 @@ BaseContent::setPropertyValues(
             {
                 endTask( nMyCommandIdentifier );
             }
-            catch( const Exception& e )
+            catch(const Exception& e)
             {
                 ret[i] <<= e;
             }
@@ -1209,7 +1209,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             contentTypeSet = false;
 
     }
-    catch ( sdbc::SQLException const & )
+    catch (const sdbc::SQLException&)
     {
         OSL_FAIL( "BaseContent::insert - Caught SQLException!" );
         contentTypeSet = false;
