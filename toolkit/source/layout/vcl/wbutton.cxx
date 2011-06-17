@@ -276,7 +276,6 @@ public:
         if ( !mxRadioButton.is() )
             return;
 
-#if 1
         // Have setState fire item event for
         // RadioGroups::RadioGroup::itemStateChanged ()
         ::RadioButton *r = static_cast<RadioButton*>(mpWindow)->GetRadioButton ();
@@ -284,9 +283,6 @@ public:
         r->EnableRadioCheck();
         mxRadioButton->setState( !!bCheck );
         r->EnableRadioCheck (state);
-#else
-        mxRadioButton->setState( !!bCheck );
-#endif
         fireToggle();
     }
 

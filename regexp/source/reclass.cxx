@@ -1362,13 +1362,6 @@ Regexpr::regex_compile()
       case (sal_Unicode)')':
     goto normal_backslash;
 
-    // unreachable (after goto):
-#if 0
-    if (COMPILE_STACK_EMPTY) {
-      FREE_STACK_RETURN(REG_ERPAREN);
-    }
-#endif
-
       handle_close:
     if (fixup_alt_jump) {
       /* Push a dummy failure point at the end of the

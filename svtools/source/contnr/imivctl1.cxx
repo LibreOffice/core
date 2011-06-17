@@ -2754,15 +2754,8 @@ void SvxIconChoiceCtrl_Impl::Command( const CommandEvent& rCEvt )
         (rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
         (rCEvt.GetCommand() == COMMAND_AUTOSCROLL) )
     {
-#if 1
         if( HandleScrollCommand( rCEvt ) )
             return;
-#else
-        ScrollBar* pHor = aHorSBar.IsVisible() ? &aHorSBar : 0;
-        ScrollBar* pVer = aVerSBar.IsVisible() ? &aVerSBar : 0;
-        if( pView->HandleScrollCommand( rCEvt, pHor, pVer ) )
-            return;
-#endif
     }
 }
 

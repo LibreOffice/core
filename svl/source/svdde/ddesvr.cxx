@@ -88,7 +88,6 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
         {
             int nTopics = 0;
 
-#if 1
             TCHAR chTopicBuf[250];
             if( hText1 )
                 DdeQueryString( pInst->hDdeInstSvr, hText1, chTopicBuf,
@@ -117,20 +116,6 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                 }
             }
 
-#else
-            for( pService = rAll.First();pService;pService = rAll.Next() )
-            {
-                if ( !hText2 || ( *pService->pName == hText2 ) )
-                {
-                    std::vector<DdeTopic*>::const_iterator iter;
-                    for (iter = pService->aTopics.begin(); iter != pService->aTopics.end(); ++iter)
-                    {
-                        if ( !hText1 || iter->pName == hText1 )
-                            nTopics++;
-                    }
-                }
-            }
-#endif
             if( !nTopics )
                 return (HDDEDATA)NULL;
 
@@ -143,18 +128,6 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
             {
                 if ( !hText2 || (*pService->pName == hText2 ) )
                 {
-#if 0
-                    for ( pTopic = pService->aTopics.First(); pTopic;
-                          pTopic = pService->aTopics.Next() )
-                    {
-                        if ( !hText1 || (*pTopic->pName == hText1) )
-                        {
-                            q->hszSvc   = *pService->pName;
-                            q->hszTopic = *pTopic->pName;
-                            q++;
-                        }
-                    }
-#else
                     String sTopics( pService->Topics() );
                     sal_uInt16 n = 0;
                     while( STRING_NOTFOUND != n )
@@ -173,8 +146,6 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                             }
                         }
                     }
-
-#endif
                 }
             }
 

@@ -88,8 +88,6 @@ static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
     return OUString::createFromAscii( (const char *) pGroup->readEntryUntranslated( pKey ).toAscii() );
 }
 
-#if 0
-#endif
 /** Helper function to add information to Font from QFont.
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
