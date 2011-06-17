@@ -94,7 +94,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP1RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -112,7 +111,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -146,7 +144,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_1.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP1LINKER) @$(mktmp \
@@ -303,7 +300,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP2RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -321,7 +317,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -355,7 +350,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_2.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP2LINKER) @$(mktmp \
@@ -512,7 +506,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP3RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -530,7 +523,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -564,7 +556,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_3.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP3LINKER) @$(mktmp \
@@ -721,7 +712,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP4RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -739,7 +729,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -773,7 +762,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_4.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP4LINKER) @$(mktmp \
@@ -930,7 +918,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP5RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -948,7 +935,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -982,7 +968,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_5.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP5LINKER) @$(mktmp \
@@ -1139,7 +1124,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP6RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1157,7 +1141,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1191,7 +1174,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_6.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP6LINKER) @$(mktmp \
@@ -1348,7 +1330,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP7RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1366,7 +1347,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1400,7 +1380,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_7.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP7LINKER) @$(mktmp \
@@ -1557,7 +1536,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP8RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1575,7 +1553,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1609,7 +1586,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_8.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP8LINKER) @$(mktmp \
@@ -1766,7 +1742,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP9RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1784,7 +1759,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1818,7 +1792,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_9.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP9LINKER) @$(mktmp \
@@ -1975,7 +1948,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP10RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1993,7 +1965,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -2027,7 +1998,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_10.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP10LINKER) @$(mktmp \

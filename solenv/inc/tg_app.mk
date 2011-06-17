@@ -123,7 +123,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP$(TNR)RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -141,7 +140,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -175,7 +173,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP$(TNR)LINKER) @$(mktmp \
