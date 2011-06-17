@@ -589,6 +589,14 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_CELL:
             {
+                if (m_bNeedPap)
+                {
+                    // There were no runs in the cell, so we need to send paragraph properties here.
+                    writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
+                            new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                            );
+                    Mapper().props(pParagraphProperties);
+                }
                 if (m_aStates.top().aTableCellsAttributes.size())
                 {
                     RTFSprms_t& rAttributes = *m_aStates.top().aTableCellsAttributes.front();
@@ -825,6 +833,18 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     default: break;
                 }
                 rBordersSprms.push_back(make_pair(nParam, pValue));
+            }
+            break;
+        case RTF_CLVMGF:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_Merge_restart));
+                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue));
+            }
+            break;
+        case RTF_CLVMRG:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_Merge_continue));
+                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue));
             }
             break;
         default:
