@@ -98,6 +98,10 @@ CONFIGURE_FLAGS= --disable-shared --with-pic \
     HUNSPELL_CFLAGS=-I$(SOLARINCDIR)$/hunspell \
     HUNSPELL_LIBS="-L$(SOLARLIBDIR) -lhunspell-1.2"
 
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no
+.ENDIF
+
 BUILD_ACTION=make
 
 .ELSE
