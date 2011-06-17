@@ -593,6 +593,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 {
                     RTFSprms_t& rAttributes = *m_aStates.top().aTableCellsAttributes.front();
                     RTFSprms_t& rSprms = *m_aStates.top().aTableCellsSprms.front();
+                    RTFValue::Pointer_t pValue(new RTFValue(1));
+                    rSprms.push_back(make_pair(NS_sprm::LN_PCell, pValue));
                     writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
                             new RTFReferenceProperties(rAttributes, rSprms)
                             );
@@ -601,7 +603,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aStates.top().aTableCellsSprms.pop_front();
                 }
 
-                sal_uInt8 sCellEnd[] = { 0x7 };
+                sal_uInt8 sCellEnd[] = { 0xd };
                 Mapper().text(sCellEnd, 1);
                 Mapper().endParagraphGroup();
                 Mapper().startParagraphGroup();
@@ -622,7 +624,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         );
                 Mapper().props(pTableRowProperties);
 
-                sal_uInt8 sRowEnd[] = { 0x8 };
+                sal_uInt8 sRowEnd[] = { 0xd };
                 Mapper().text(sRowEnd, 1);
                 Mapper().endParagraphGroup();
                 Mapper().startParagraphGroup();
