@@ -9,6 +9,7 @@ from ui.XPathSelectionListener import XPathSelectionListener
 from common.Configuration import *
 from document.OfficeDocument import OfficeDocument
 from text.TextFieldHandler import TextFieldHandler
+from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 
 from common.NoValidPathException import *
 from com.sun.star.uno import RuntimeException
@@ -133,17 +134,16 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.running = False
 
     def finishWizard(self):
-        self.switchToStep(self.CurrentStep, self.nMaxStep)
+        self.switchToStep(self.getCurrentStep(), self.nMaxStep)
         self.myFaxDoc.setWizardTemplateDocInfo( \
             self.resources.resFaxWizardDialog_title,
             self.resources.resTemplateDescription)
         try:
             fileAccess = FileAccess(self.xMSF)
-            self.sPath = self.myPathSelection.SelectedPath
-            if self.sPath == "":
+            self.sPath = self.myPathSelection.getSelectedPath()
+            if self.sPath is "":
                 self.myPathSelection.triggerPathPicker()
-                self.sPath = self.myPathSelection.SelectedPath
-            print self.sPath
+                self.sPath = self.myPathSelection.getSelectedPath()
 
             self.sPath = fileAccess.getURL(self.sPath)
             #first, if the filename was not changed, thus
@@ -151,12 +151,10 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             # file exists and warn the user.
             if not self.__filenameChanged:
                 if fileAccess.exists(self.sPath, True):
-                    answer = SystemDialog.showMessageBox( \
-                        xMSF, xControl.Peer, "MessBox",
-                        VclWindowPeerAttribute.YES_NO + \
-                        VclWindowPeerAttribute.DEF_NO,
-                        self.resources.resOverwriteWarning)
-                    if (answer == 3): # user said: no, do not overwrite...
+                    answer = SystemDialog.showMessageBox(
+                        self.xMSF, self.xUnoDialog.Peer, "MessBox",
+                        YES_NO + DEF_NO, self.resources.resOverwriteWarning)
+                    if answer == 3: # user said: no, do not overwrite...
                         return False
 
 
@@ -168,13 +166,13 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.myFaxDoc.keepTypeFrame = \
                 (self.chkUseCommunicationType.State is not 0)
             self.myFaxDoc.killEmptyFrames()
-            self.bSaveSuccess = OfficeDocument.store(xMSF, self.xTextDocument,
+            self.bSaveSuccess = OfficeDocument.store(self.xMSF, self.xTextDocument,
                 self.sPath, "writer8_template", False)
             if self.bSaveSuccess:
-                saveConfiguration()
-                xIH = xMSF.createInstance( \
+                self.saveConfiguration()
+                xIH = self.xMSF.createInstance( \
                     "com.sun.star.comp.uui.UUIInteractionHandler")
-                loadValues = range(3)
+                loadValues = range(4)
                 loadValues[0] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
                 loadValues[0].Name = "AsTemplate"
@@ -196,10 +194,10 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 else:
                     loadValues[0].Value = True
 
-                oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF),
+                oDoc = OfficeDocument.load(Desktop.getDesktop(self.xMSF),
                     self.sPath, "_default", loadValues)
-                myViewHandler = oDoc.CurrentController.ViewSettings
-                myViewHandler.setPropertyValue("ZoomType",
+                myViewHandler = ViewHandler(self.xMSF, oDoc)
+                myViewHandler.setViewSetting("ZoomType",
                     uno.Any("short",OPTIMAL))
             else:
                 pass
@@ -415,7 +413,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def saveConfiguration(self):
         try:
-            root = Configuration.getConfigurationRoot(xMSF,
+            root = Configuration.getConfigurationRoot(self.xMSF,
                 "/org.openoffice.Office.Writer/Wizards/Fax", True)
             self.myConfig.writeConfiguration(root, "cp_")
             Configuration.commit(root)

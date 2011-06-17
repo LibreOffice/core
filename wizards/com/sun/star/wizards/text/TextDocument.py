@@ -262,6 +262,12 @@ class TextDocument(object):
         xPC.jumpToLastPage()
         return xPC.getPage()
 
+    def getFrameByName(self, sFrameName, xTD):
+        if xTD.TextFrames.hasByName(sFrameName):
+            return xTD.TextFrames.getByName(sFrameName)
+
+        return None
+
     '''
     Possible Values for "OptionString" are: "LoadCellStyles",
     "LoadTextStyles", "LoadFrameStyles",

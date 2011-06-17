@@ -174,7 +174,7 @@ class OfficeDocument(object):
     @classmethod
     def store(self, xMSF, xComponent, StorePath, FilterName, bStoreToUrl):
         try:
-            if FilterName.length() > 0:
+            if len(FilterName):
                 oStoreProperties = range(2)
                 oStoreProperties[0] = uno.createUnoStruct(
                     'com.sun.star.beans.PropertyValue')
@@ -188,10 +188,10 @@ class OfficeDocument(object):
             else:
                 oStoreProperties = range(0)
 
-            if bStoreToUrl == True:
-                xComponent.storeToURL(StorePath, oStoreProperties)
+            if bStoreToUrl:
+                xComponent.storeToURL(StorePath, tuple(oStoreProperties))
             else:
-                xStoreable.storeAsURL(StorePath, oStoreProperties)
+                xComponent.storeAsURL(StorePath, tuple(oStoreProperties))
 
             return True
         except Exception, exception:

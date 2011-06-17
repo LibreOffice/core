@@ -431,7 +431,7 @@ class WizardDialog(UnoDialog2):
                     self.enableFinishButton(True)
 
             if success:
-                removeTerminateListener()
+                self.removeTerminateListener()
         except Exception, e:
              traceback.print_exc()
 
