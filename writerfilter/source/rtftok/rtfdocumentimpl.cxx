@@ -1062,6 +1062,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CShd, pValue));
             }
             break;
+        case RTF_CLCBPAT:
+            {
+                RTFSprms_t aAttributes;
+                RTFValue::Pointer_t pInnerValue(new RTFValue(getColorTable(nParam)));
+                aAttributes.push_back(make_pair(NS_ooxml::LN_CT_Shd_fill, pInnerValue));
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_shd, pValue));
+            }
+            break;
         case RTF_CBPAT:
             {
                 RTFSprms_t aAttributes;
