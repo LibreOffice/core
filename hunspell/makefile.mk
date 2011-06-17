@@ -80,9 +80,6 @@ OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-PATCH_FILES=\
-    hunspell-mingw.patch
-
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --disable-nls --with-pic LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 BUILD_ACTION=make
