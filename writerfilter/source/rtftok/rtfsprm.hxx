@@ -10,6 +10,9 @@ namespace writerfilter {
     namespace rtftok {
         /// A list of RTFSprm
         typedef std::vector<std::pair<Id, RTFValue::Pointer_t>> RTFSprms_t;
+        namespace RTFSprms {
+            typedef ::boost::shared_ptr<RTFSprms_t> Pointer_t;
+        }
         /// RTF keyword with a parameter
         class RTFSprm
             : public Sprm

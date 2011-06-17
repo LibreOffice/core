@@ -135,6 +135,8 @@ namespace writerfilter {
 
                 /// Current cellx value.
                 int nCellX;
+                std::deque<RTFSprms::Pointer_t> aTableCellsSprms;
+                std::deque<RTFSprms::Pointer_t> aTableCellsAttributes;
         };
 
         /// Implementation of the RTFDocument interface.

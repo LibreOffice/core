@@ -549,6 +549,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_CELL:
             {
+                RTFSprms_t& rAttributes = *m_aStates.top().aTableCellsAttributes.front();
+                RTFSprms_t& rSprms = *m_aStates.top().aTableCellsSprms.front();
+                writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
+                        new RTFReferenceProperties(rAttributes, rSprms)
+                        );
+                Mapper().props(pTableCellProperties);
+                m_aStates.top().aTableCellsAttributes.pop_front();
+                m_aStates.top().aTableCellsSprms.pop_front();
+
                 sal_uInt8 sCellEnd[] = { 0x7 };
                 Mapper().text(sCellEnd, 1);
                 Mapper().endParagraphGroup();
@@ -1159,6 +1168,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 /* Here we could send nCellx as NS_ooxml::LN_CT_TcPrBase_tcW, but that's not supported by dmapper.
                 int nCellx = nParam - m_aStates.top().nCellX;
                 m_aStates.top().nCellX += nParam;*/
+
+                RTFSprms::Pointer_t pTableCellAttributes(new RTFSprms_t());
+                m_aStates.top().aTableCellsAttributes.push_back(pTableCellAttributes);
+                RTFSprms::Pointer_t pTableCellSprms(new RTFSprms_t());
+                m_aStates.top().aTableCellsSprms.push_back(pTableCellSprms);
+
+                RTFSprms_t aAttributes;
+                RTFSprms_t aSprms;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue));
             }
             break;
         default:
@@ -1757,7 +1776,9 @@ RTFParserState::RTFParserState()
     nPictureScaleX(0),
     nPictureScaleY(0),
     aShapeProperties(),
-    nCellX(0)
+    nCellX(0),
+    aTableCellsSprms(),
+    aTableCellsAttributes()
 {
 }
 
