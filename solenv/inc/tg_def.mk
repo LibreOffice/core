@@ -85,95 +85,95 @@ $(DEF$(TNR)TARGETN) : \
 .ELSE			# "$(link_always)"==""
 $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
-    @-$(RM) $@.tmpfile
+    $(COMMAND_ECHO)-$(RM) $@.tmpfile
     @echo "Making:    module definition file" $(@:f)
-    @echo LIBRARY	  $(EMQ)"$(SHL$(TNR)TARGETN:f)$(EMQ)" 								 >$@.tmpfile
+    $(COMMAND_ECHO)echo LIBRARY	  $(EMQ)"$(SHL$(TNR)TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
-    @echo HEAPSIZE	  0 											>>$@.tmpfile
+    $(COMMAND_ECHO)echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
-    @echo EXPORTS													>>$@.tmpfile
+    $(COMMAND_ECHO)echo EXPORTS													>>$@.tmpfile
 .IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
-    @echo GetVersionInfo		>>$@.tmpfile
+    $(COMMAND_ECHO)echo GetVersionInfo		>>$@.tmpfile
 .ENDIF
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
+    $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
     $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL$(TNR)TARGET).exp --export-all-symbols \
         `$(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
     $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
+    $(COMMAND_ECHO)-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
 .ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"==""
-    @-$(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL$(TNR)TARGET).exp $(SLB)/$(DEFLIB$(TNR)NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL$(TNR)TARGET).flt $(MISC)/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)-$(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
+    $(COMMAND_ECHO)$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL$(TNR)TARGET).exp $(SLB)/$(DEFLIB$(TNR)NAME).lib
+    $(COMMAND_ECHO)$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL$(TNR)TARGET).flt $(MISC)/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
     $(COMMAND_ECHO)$(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL$(TNR)TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF$(TNR)FILTER) $(MISC)/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+    $(COMMAND_ECHO)$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL$(TNR)TARGET).direct
+    $(COMMAND_ECHO)$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF$(TNR)FILTER) $(MISC)/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(DEF$(TNR)EXPORT1)"!=""
-    @echo $(DEF$(TNR)EXPORT1)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT1)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT2)"!=""
-    @echo $(DEF$(TNR)EXPORT2)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT2)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT3)"!=""
-    @echo $(DEF$(TNR)EXPORT3)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT3)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT4)"!=""
-    @echo $(DEF$(TNR)EXPORT4)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT4)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT5)"!=""
-    @echo $(DEF$(TNR)EXPORT5)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT5)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT6)"!=""
-    @echo $(DEF$(TNR)EXPORT6)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT6)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT7)"!=""
-    @echo $(DEF$(TNR)EXPORT7)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT7)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT8)"!=""
-    @echo $(DEF$(TNR)EXPORT8)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT8)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT9)"!=""
-    @echo $(DEF$(TNR)EXPORT9)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT9)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT10)"!=""
-    @echo $(DEF$(TNR)EXPORT10)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT10)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT11)"!=""
-    @echo $(DEF$(TNR)EXPORT11)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT11)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT12)"!=""
-    @echo $(DEF$(TNR)EXPORT12)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT12)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT13)"!=""
-    @echo $(DEF$(TNR)EXPORT13)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT13)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT14)"!=""
-    @echo $(DEF$(TNR)EXPORT14)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT14)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT15)"!=""
-    @echo $(DEF$(TNR)EXPORT15)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT15)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT16)"!=""
-    @echo $(DEF$(TNR)EXPORT16)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT16)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT17)"!=""
-    @echo $(DEF$(TNR)EXPORT17)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT17)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT18)"!=""
-    @echo $(DEF$(TNR)EXPORT18)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT18)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT19)"!=""
-    @echo $(DEF$(TNR)EXPORT19)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT19)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT20)"!=""
-    @echo $(DEF$(TNR)EXPORT20)										>>$@.tmpfile
+    $(COMMAND_ECHO)echo $(DEF$(TNR)EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
@@ -182,15 +182,15 @@ $(DEF$(TNR)TARGETN) .PHONY :
     $(COMMAND_ECHO)$(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
-    @-$(RM) $@
-    @$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(RENAME) $@.tmpfile $@
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
 $(DEF$(TNR)TARGETN): \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
-    @echo just a dummy for UNIX > $@
+    $(COMMAND_ECHO)echo just a dummy for UNIX > $@
 .ENDIF
 .ENDIF			# "$(DEF$(TNR)TARGETN)"!=""
 
