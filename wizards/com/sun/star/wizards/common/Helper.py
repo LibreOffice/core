@@ -1,5 +1,4 @@
 import uno
-import calendar
 import traceback
 from datetime import date as DateTime
 from com.sun.star.uno import Exception as UnoException
