@@ -111,10 +111,10 @@ $(eval $(call gb_Helper_make_clean_targets,\
     AllLangResTarget \
     ComponentTarget \
     JavaClassSet \
+	Jar \
     JunitTest \
     LinkTarget \
     Module \
-    WinResTarget \
     NoexPrecompiledHeader \
     PackagePart \
     PrecompiledHeader \
@@ -124,6 +124,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
     CppunitTest \
     CustomTarget \
     WinResTarget \
+	Zip \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\

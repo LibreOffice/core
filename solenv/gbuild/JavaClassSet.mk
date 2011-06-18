@@ -38,18 +38,18 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-$(call gb_JavaClassSet_get_clean_target,%) : vaClassSet_get_target,%) :
+$(call gb_JavaClassSet_get_clean_target,%) :
    $(call gb_Output_announce,$*,$(true),JCS,3)
    $(call gb_JavaClassSet__command,$@,$*,$?,$^)
 
-$(call gb_Output_announce,$*,$(false),JCS,3)
+$(call gb_JavaClassSet_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),JCS,3)
     $(call gb_Helper_abbreviate_dirs,\
         rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
 # no initialization of scoped variable CLASSPATH as it is "inherited" from controlling instance (e.g. JUnitTest, Jar)
 # UGLY: cannot use target local variable for REPO because it's needed in prereq
 define gb_JavaClassSet_JavaClassSet
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
 $(if $(filter $(2),$(gb_JavaClassSet_REPOSITORYNAMES)),,\
   $(error JavaClassSet: no or invalid repository given; known repositories: \
   $(gb_JavaClassSet_REPOSITORYNAMES)))

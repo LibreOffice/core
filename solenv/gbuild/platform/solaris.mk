@@ -265,8 +265,6 @@ gb_Library_PLAINLIBS_NONE += \
 	nsl \
     pthread \
 	socket \
-    ICE \
-    SM \
     X11 \
     Xext \
     SM \

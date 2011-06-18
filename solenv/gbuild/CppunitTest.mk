@@ -88,7 +88,6 @@ $(eval $(foreach method,\
     set_cflags \
 	add_cxxflags \
 	set_yaccflags \
-    set_cxxflags \
 	add_objcxxflags \
     set_objcxxflags \
 	add_defs \

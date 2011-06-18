@@ -227,7 +227,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
         -v REPODIR=$(REPODIR)/ \
-+	> $(2))
+	> $(2))
 endef
 else
 gb_Object__command_deponcompile =

@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
 	basebmp \
 	basegfx \
+    dbaccess \
 	canvas \
     comphelper \
 	cppcanvas \
@@ -55,6 +56,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     unotools \
     unoxml \
     vbahelper \
+    wizards \
     writerfilter \
     vcl \
     xmloff \
