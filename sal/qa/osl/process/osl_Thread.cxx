@@ -1097,9 +1097,11 @@ namespace osl_Thread
 
                 case osl_Thread_PriorityAboveNormal:
                     sPrioStr = "AboveNormal";
+                    break;
 
                 case osl_Thread_PriorityNormal:
                     sPrioStr = "Normal";
+                    break;
 
                 case osl_Thread_PriorityBelowNormal:
                     sPrioStr = "BelowNormal";
