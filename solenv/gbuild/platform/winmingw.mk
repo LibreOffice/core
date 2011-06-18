@@ -158,7 +158,6 @@ gb_LinkTarget_LDFLAGS := \
 	--exclude-libs ALL \
 	--enable-stdcall-fixup \
 	--enable-runtime-pseudo-reloc-v2 \
-	-L$(gb_Library_DLLDIR) \
 	$(patsubst %,-L%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
 ifeq ($(MINGW_GCCLIB_EH),YES)
@@ -206,6 +205,14 @@ $(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst
 endef
 
 # convert parameters filesystem root to native notation
+ifeq ($(OS_FOR_BUILD),WNT)
+gb_Helper_set_ld_path := PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH
+else ifeq ($(OS_FOR_BUILD),MACOSX)
+gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+else
+gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+endif
+
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -634,7 +641,7 @@ gb_Executable_Executable_platform =
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND :=
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
@@ -651,11 +658,11 @@ endef
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_SdiTarget_SVIDLPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # SrsPartMergeTarget
 
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # SrsPartTarget class
 
@@ -726,22 +733,22 @@ endif
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_XSLTPROCPRECOMMAND := $(gb_Helper_set_ld_path)
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 # UnoApiTarget
 
-gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc.exe
-gb_UnoApiTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_IDLCTARGET)
-gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/regmerge.exe
-gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
-gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR_FOR_BUILD)/bin/regcompare.exe
-gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
-gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR_FOR_BUILD)/bin/cppumaker.exe
-gb_UnoApiTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
-gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview.exe
-gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR_FOR_BUILD)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR_FOR_BUILD)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4:
