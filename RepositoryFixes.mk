@@ -30,7 +30,8 @@
 
 # Make has no support for 'or' clauses in conditionals,
 # we use a filter expression instead.
-ifneq (,$(filter LINUX MACOSX DRAGONFLY OPENBSD FREEBSD NETBSD IOS ANDROID, $(OS)))
+ifneq (,$(filter LINUX-GCC MACOSX-GCC WNT-GCC DRAGONFLY-GCC OPENBSD-GCC FREEBSD-GCC NETBSD-GCC IOS-GCC ANDROID-GCC, $(OS)-$(COM)))
+# Could we in fact just check for $(COM) == "GCC" here?
 gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
@@ -42,6 +43,11 @@ endif
 
 
 ifeq ($(OS),WNT)
+
+# USE_MINGW refers to the OOo idea of using MinGW natively on Windows,
+# which we don't want to bother with in LibreOffice, I think. If you
+# want to build natively on Windows, use MSVC.
+
 ifneq ($(USE_MINGW),)
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:libcppunit.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
