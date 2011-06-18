@@ -431,6 +431,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/graphite_serverfont \
 ))
 endif
+
+$(call gb_Library_use_external,vcl,graphite)
 endif
 
 ifeq ($(OS),LINUX)
@@ -451,8 +453,6 @@ $(eval $(call gb_Library_add_ldflags,vcl,\
     -R/usr/sfw/lib \
 ))
 endif
-
-$(call gb_Library_use_external,vcl,graphite)
 endif
 
 ifeq ($(GUIBASE),aqua)
