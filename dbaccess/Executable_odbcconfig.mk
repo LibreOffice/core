@@ -53,5 +53,3 @@ $(eval $(call gb_Executable_add_exception_objects,odbcconfig,\
 ))
 
 # vim: set noet sw=4 ts=4:
-endif
-# vim: set noet sw=4 ts=4:

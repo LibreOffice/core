@@ -65,4 +65,3 @@ $(eval $(call gb_Library_add_noexception_objects,sdbt, \
 ))
 
 # vim: set noet sw=4 ts=4:
-# vim: set noet sw=4 ts=4:
