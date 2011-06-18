@@ -114,7 +114,6 @@ gb_CFLAGS := \
 	-fmessage-length=0 \
 	-fno-strict-aliasing \
 	-pipe \
-	-nostdinc \
 
 gb_CXXFLAGS := \
 	-Wall \
@@ -128,7 +127,6 @@ gb_CXXFLAGS := \
 	-fmessage-length=0 \
 	-fno-strict-aliasing \
 	-pipe \
-	-nostdinc \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
@@ -429,7 +427,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		@$${RESPONSEFILE} \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) --end-group \
-		--start-group $(patsubst %.dll,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
+		--start-group $(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
 		$(MINGW_CLIB_DIR)/crtend.o \
 		-Map $(basename $(1)).map \
 		-o $(1))
@@ -453,7 +451,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		@$${RESPONSEFILE} \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) --end-group \
-		--start-group $(patsubst %.dll,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
+		--start-group $(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
 		$(MINGW_CLIB_DIR)/crtend.o \
 		-Map $(basename $(DLLTARGET)).map \
 		-o $(DLLTARGET) && touch $(1))
@@ -485,8 +483,28 @@ gb_Library_DEFS := -D_DLL
 gb_Library_TARGETTYPEFLAGS := -shared
 gb_Library_get_rpath :=
 
-gb_Library_SYSPRE := i
-gb_Library_PLAINEXT := .lib
+gb_Library_SYSPRE := lib
+gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
+gb_Library_PLAINEXT := .dll.a
+
+# These refer to *import* library names, I think.
+
+# Except that actually I think there might be confusion here whether
+# things refers to import library or actual DLL names.  As the MinGW
+# work is highly experimental and not even in theory will produce
+# stuff that is binary compatible with MSVC-build binary extensions
+# anyway, we could just unify the names. But on the other hand until
+# complete gbuildification is achieved we want to keep the libs.mk
+# simple, i.e.  avoid lots of WNTGCC special casing in -l flags
+# there. Sigh.
+
+gb_Library_DLLEXT := .dll.a
+gb_Library_UDK_MAJORVER := 3
+gb_Library_RTEXT := gcc3$(gb_Library_DLLEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
+gb_Library_UNOEXT := $(gb_Library_DLLEXT)
+gb_Library_UNOVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_DLLEXT)
+gb_Library_RTVEREXT := $(gb_Library_RTEXT)
 
 gb_Library_PLAINLIBS_NONE += \
 	mingwthrd \
@@ -523,27 +541,29 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 
+# These refer to *import* libraries. We want the same -l switches to
+# work as on Unix, I think, so we don't bother with any RT or UNO
+# version numbers in the import libraries.
+
+# It's the names of some of the DLLs that have version numbers. But
+# whether even that makes any sense, I don't know. Anyway, those DLLs
+# are so far build in the old dmake way, so this file doesn't affect
+# them. Also, one is not supposed to install the bloody DLLs in
+# quesiton system-wide anyway on Windows, so it doesn't really matter
+# whether at some point when we do an ABI break the DLL names stay the
+# same or not.
+
 gb_Library_FILENAMES :=\
-	$(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
-
-gb_Library_DLLEXT := .dll
-gb_Library_MAJORVER := 3
-gb_Library_RTEXT := gcc3$(gb_Library_DLLEXT)
-gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
-gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
-gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
-gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
-
-gb_Library_DLLFILENAMES := \
-	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOOEXT)) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
-	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTVEREXT)) \
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTVEREXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_UNOEXT)) \
+
 
 gb_Library_IARCSYSPRE := lib
 gb_Library_IARCEXT := .a
@@ -585,7 +605,7 @@ $(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : N
 endef
 
 define gb_Library_get_dllname
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
 
 
