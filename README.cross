@@ -72,10 +72,12 @@ Cygwin gcc in its -mno-cygwin mode, and a native MinGW compiler.  The
 it isn't already, and I have not attempted to check that it keeps
 working. Ditto for native MinGW; if one compiles natively on Windows,
 why not use Microsoft's compiler, as OOo/LO has been build for Windows
-all the time using that and it works fine. In my opinion, it makes
-sense to use MinGW only for cross-compilation. (Because of obvious
-benefits like speed improvement, easier automation in systems like the
-openSUSE Build Servce, etc.)
+all the time using that and it works fine.
+
+In my opinion, the only case where it makes sense to use MinGW is for
+cross-compilation. There is just too much crack on Windows anyway, and
+it is a semi-miracle (well, make that the result of years of work)
+that the MSVC build under Cygwin works as nicely as it does.
 
 MinGW is available as cross-build toolchains pre-packaged in more or
 less official packages for many Linux distros including Debian, Fedora
@@ -83,9 +85,9 @@ and openSUSE. Personally I use the mingw32 packages in the openSUSE
 Build Service, running on openSUSE.
 
 It is somewhat unclear how well thought-out the conditionals and code
-for MinGW inside the LibreOffice code actually is. The little I have
-seen of it seems a bit randomish, with copy-pasting haveing been
-preferred to factoring out differences.
+for MinGW inside the OOo-originated code in LibreOffice actually
+is. The little I have seen of it seems a bit randomish, with
+copy-pasting having been preferred to factoring out differences.
 
 The autogen.lastrun I use for my MinGW cross-compilation experimentation is:
 
@@ -114,12 +116,14 @@ CXX_FOR_BUILD=ccache g++
 --with-max-jobs=1
 --with-system-altlinuxhyph
 --with-system-boost
+--with-system-cairo
 --with-system-curl
 --with-system-db
 --with-system-expat
 --with-system-gettext
 --with-system-hunspell
 --with-system-icu
+--with-system-libpng
 --with-system-libwpd
 --with-system-libwpg
 --with-system-libwps
