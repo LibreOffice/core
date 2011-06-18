@@ -6850,7 +6850,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             PPTCharPropSet* pCurrent = (PPTCharPropSet*)aCharPropList.GetObject( nIdx );
                                                             sal_Int32       nNextStringLen = pCurrent->maString.Len();
 
-                                                            DBG_ASSERT( pFE->pField1, "missing field!" );
+                                                            DBG_ASSERT( (*FE)->pField1, "missing field!" );
                                                             if (!(*FE)->pField1)
                                                                 break;
 
@@ -6912,8 +6912,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     }
                                     n--;
                                 }
-                                for( size_t i = 0, n = FieldList.size(); i < n; ++i ) {
-                                    delete FieldList[ i ];
+                                for( size_t j = 0, n2 = FieldList.size(); j < n2; ++j ) {
+                                    delete FieldList[ j ];
                                 }
                             }
                             mpImplTextObj->mpParagraphList = new PPTParagraphObj*[ nParagraphs ];
