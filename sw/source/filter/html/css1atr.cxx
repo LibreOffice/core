@@ -2561,9 +2561,6 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_SMALL_CAPS) )
-        return rWrt;
-
     switch( ((const SvxCaseMapItem&)rHt).GetCaseMap() )
     {
     case SVX_CASEMAP_NOT_MAPPED:

@@ -1505,8 +1505,8 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_CASEMAP:
-        if( IsHTMLMode(HTMLMODE_SMALL_CAPS) )
-            eState = HTML_STYLE_VALUE;
+        eState = HTML_STYLE_VALUE;
+        break;
 
     case RES_CHRATR_KERNING:
         if( IsHTMLMode(HTMLMODE_FULL_STYLES) )
