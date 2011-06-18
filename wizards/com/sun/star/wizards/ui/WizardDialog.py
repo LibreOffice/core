@@ -7,7 +7,6 @@ from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
 from common.HelpIds import *
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
-from event.EventNames import EVENT_ITEM_CHANGED
 
 class WizardDialog(UnoDialog2):
 
