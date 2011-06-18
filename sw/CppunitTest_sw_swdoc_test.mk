@@ -76,8 +76,12 @@ $(eval $(call gb_CppunitTest_set_include,sw_swdoc_test,\
     -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sw/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,sw_swdoc_test,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_swdoc_test))
