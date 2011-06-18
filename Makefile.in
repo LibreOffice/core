@@ -122,10 +122,11 @@ clean:
 	. ./*Env.Set.sh && \
 	rm -rf */$$INPATH && \
 	rm -rf solver/*/$$INPATH && \
-	rm -rf install && \
+	rm -rf install
 ifeq (@BUILD_DMAKE@,YES)
+	. ./*Env.Set.sh && \
 	-$$GNUMAKE -C dmake clean && \
-	rm -f solenv/*/bin/dmake* && \
+	rm -f solenv/*/bin/dmake*
 endif
 ifeq (@CROSS_COMPILING@,YES)
 	. ./*Env.Set.sh && \
