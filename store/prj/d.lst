@@ -5,7 +5,6 @@ mkdir: %_DEST%\inc\store
 ..\util\store.xml %_DEST%\xml\store.xml
 
 ..\%__SRC%\lib\istore.lib %_DEST%\lib\istore.lib
-..\%__SRC%\lib\libstore*.dll.a %_DEST%\lib\libstore*.dll.a
 ..\%__SRC%\lib\libstore.*.* %_DEST%\lib\*
 ..\%__SRC%\bin\sto*.dll %_DEST%\bin\sto*.dll
 
