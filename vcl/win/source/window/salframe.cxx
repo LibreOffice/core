@@ -232,9 +232,6 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
 // if pParentRect is set, the workarea of the monitor that contains pParentRect is returned
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
 {
-    static int winVerChecked = 0;
-    static int winVerOk = 0;
-
     // check if we or our parent is fullscreen, then the taskbar should be ignored
     bool bIgnoreTaskbar = false;
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -254,87 +251,9 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         }
     }
 
-    if( !winVerChecked )
-    {
-        winVerChecked = 1;
-        winVerOk = 1;
-
-        // multi monitor calls not available on Win95/NT
-        if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
-        {
-            if ( aSalShlData.maVersionInfo.dwMajorVersion <= 4 )
-                winVerOk = 0;   // NT
-        }
-        else if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
-        {
-            if ( aSalShlData.maVersionInfo.dwMajorVersion == 4 && aSalShlData.maVersionInfo.dwMinorVersion == 0 )
-                winVerOk = 0;   // Win95
-        }
-    }
-
     // calculates the work area taking multiple monitors into account
-    if( winVerOk )
-    {
-        static int nMonitors = GetSystemMetrics( SM_CMONITORS );
-        if( nMonitors == 1 )
-        {
-            if( bIgnoreTaskbar )
-            {
-                pRect->left = pRect->top = 0;
-                pRect->right   = GetSystemMetrics( SM_CXSCREEN );
-                pRect->bottom  = GetSystemMetrics( SM_CYSCREEN );
-            }
-            else
-                SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
-        }
-        else
-        {
-            if( pParentRect != NULL )
-            {
-                // return the size of the monitor where pParentRect lives
-                HMONITOR hMonitor;
-                MONITORINFO mi;
-
-                // get the nearest monitor to the passed rect.
-                hMonitor = MonitorFromRect(pParentRect, MONITOR_DEFAULTTONEAREST);
-
-                // get the work area or entire monitor rect.
-                mi.cbSize = sizeof(mi);
-                GetMonitorInfo(hMonitor, &mi);
-                if( !bIgnoreTaskbar )
-                    *pRect = mi.rcWork;
-                else
-                    *pRect = mi.rcMonitor;
-            }
-            else
-            {
-                // return the union of all monitors
-                pRect->left = GetSystemMetrics( SM_XVIRTUALSCREEN );
-                pRect->top = GetSystemMetrics( SM_YVIRTUALSCREEN );
-                pRect->right = pRect->left + GetSystemMetrics( SM_CXVIRTUALSCREEN );
-                pRect->bottom = pRect->top + GetSystemMetrics( SM_CYVIRTUALSCREEN );
-
-                // virtualscreen does not take taskbar into account, so use the corresponding
-                // diffs between screen and workarea from the default screen
-                // however, this is still not perfect: the taskbar might not be on the primary screen
-                if( !bIgnoreTaskbar )
-                {
-                    RECT wRect, scrRect;
-                    SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
-                    scrRect.left = 0;
-                    scrRect.top = 0;
-                    scrRect.right = GetSystemMetrics( SM_CXSCREEN );
-                    scrRect.bottom = GetSystemMetrics( SM_CYSCREEN );
-
-                    pRect->left += wRect.left;
-                    pRect->top += wRect.top;
-                    pRect->right -= scrRect.right - wRect.right;
-                    pRect->bottom -= scrRect.bottom - wRect.bottom;
-                }
-            }
-        }
-    }
-    else
+    static int nMonitors = GetSystemMetrics( SM_CMONITORS );
+    if( nMonitors == 1 )
     {
         if( bIgnoreTaskbar )
         {
@@ -344,6 +263,52 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         }
         else
             SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+    }
+    else
+    {
+        if( pParentRect != NULL )
+        {
+            // return the size of the monitor where pParentRect lives
+            HMONITOR hMonitor;
+            MONITORINFO mi;
+
+            // get the nearest monitor to the passed rect.
+            hMonitor = MonitorFromRect(pParentRect, MONITOR_DEFAULTTONEAREST);
+
+            // get the work area or entire monitor rect.
+            mi.cbSize = sizeof(mi);
+            GetMonitorInfo(hMonitor, &mi);
+            if( !bIgnoreTaskbar )
+                *pRect = mi.rcWork;
+            else
+                *pRect = mi.rcMonitor;
+        }
+        else
+        {
+            // return the union of all monitors
+            pRect->left = GetSystemMetrics( SM_XVIRTUALSCREEN );
+            pRect->top = GetSystemMetrics( SM_YVIRTUALSCREEN );
+            pRect->right = pRect->left + GetSystemMetrics( SM_CXVIRTUALSCREEN );
+            pRect->bottom = pRect->top + GetSystemMetrics( SM_CYVIRTUALSCREEN );
+
+            // virtualscreen does not take taskbar into account, so use the corresponding
+            // diffs between screen and workarea from the default screen
+            // however, this is still not perfect: the taskbar might not be on the primary screen
+            if( !bIgnoreTaskbar )
+            {
+                RECT wRect, scrRect;
+                SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
+                scrRect.left = 0;
+                scrRect.top = 0;
+                scrRect.right = GetSystemMetrics( SM_CXSCREEN );
+                scrRect.bottom = GetSystemMetrics( SM_CYSCREEN );
+
+                pRect->left += wRect.left;
+                pRect->top += wRect.top;
+                pRect->right -= scrRect.right - wRect.right;
+                pRect->bottom -= scrRect.bottom - wRect.bottom;
+            }
+        }
     }
 }
 
