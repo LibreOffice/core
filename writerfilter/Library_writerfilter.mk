@@ -47,8 +47,7 @@ $(eval $(call gb_Library_set_include,writerfilter,\
 	-I$(SRCDIR)/writerfilter/source/ooxml \
 ))
 
-$(eval $(call gb_Library_set_defs,writerfilter,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,writerfilter,\
 	-DWRITERFILTER_DLLIMPLEMENTATION \
 ))
 
@@ -96,6 +95,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
 	writerfilter/source/dmapper/TablePropertiesHandler \
 	writerfilter/source/dmapper/TblStylePrHandler \
 	writerfilter/source/dmapper/ThemeTable \
+	writerfilter/source/dmapper/WrapPolygonHandler \
 	writerfilter/source/doctok/Dff \
 	writerfilter/source/doctok/DffImpl \
 	writerfilter/source/doctok/WW8Annotation \
@@ -132,6 +132,8 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
 	writerfilter/source/ooxml/OOXMLParserState \
 	writerfilter/source/ooxml/OOXMLPropertySetImpl \
 	writerfilter/source/ooxml/OOXMLStreamImpl \
+	writerfilter/source/resourcemodel/Fraction \
+	writerfilter/source/resourcemodel/LoggedResources \
 	writerfilter/source/resourcemodel/Protocol \
 	writerfilter/source/resourcemodel/ResourceModelHelper \
 	writerfilter/source/resourcemodel/TagLogger \

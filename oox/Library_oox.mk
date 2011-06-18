@@ -57,33 +57,7 @@ $(eval $(call gb_Library_add_linked_libs,oox,\
 	$(gb_STDLIBS) \
 ))
 
-ifeq ($(SYSTEM_OPENSSL),YES)
-$(eval $(call gb_Library_add_linked_libs,oox,\
-	crypto \
-	ssl \
-))
-else
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,oox,\
-	crypto \
-	ssl \
-))
-else
-$(eval $(call gb_Library_add_linked_static_libs,oox,\
-	crypto \
-	ssl \
-))
-endif
-endif
-
-# this is for openssl
-ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Library_add_linked_libs,oox,\
-	nsl \
-	socket \
-))
-endif
-#probably not necessary:	dl \
+$(call gb_Library_use_external,oox,openssl)
 
 # object files ----------------------------------------------------------------
 

@@ -33,10 +33,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_doctok, \
 
 $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_doctok, \
 	cppuhelper \
-	cppunit \
 	cppu \
 	sal \
 	stl \
+	ucbhelper \
+	writerfilter \
 	$(gb_STDLIBS) \
 ))
 
