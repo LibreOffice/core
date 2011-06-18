@@ -49,7 +49,6 @@ cross-build-toolset:
 	  offapi \
 	  oovbaapi \
 	  codemaker \
-	  offuh \
 	  cppu \
 	  cppuhelper \
 	  rdbmaker \
