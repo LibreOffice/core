@@ -1708,6 +1708,7 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
 	--disable-mozilla \
 	--disable-build-mozilla \
+	--disable-zenity \
         $sub_conf_opts \
 	2>&1 | sed -e 's/^/    /'
     test -f ./*Env.Set.sh 2>/dev/null || exit
