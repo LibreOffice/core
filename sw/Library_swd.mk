@@ -43,6 +43,8 @@ $(eval $(call gb_Library_set_include,swd,\
 
 $(eval $(call gb_Library_add_defs,swd,\
 	-DSWD_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_add_linked_libs,swd,\
     comphelper \
     cppu \
