@@ -733,15 +733,15 @@ gb_Library_COMPONENTPREFIXES := \
 
 # UnoApiTarget
 
-gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc.exe
-gb_UnoApiTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
-gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge.exe
-gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
-gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare.exe
-gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
-gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker.exe
-gb_UnoApiTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
-gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview.exe
-gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc.exe
+gb_UnoApiTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/regmerge.exe
+gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR_FOR_BUILD)/bin/regcompare.exe
+gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR_FOR_BUILD)/bin/cppumaker.exe
+gb_UnoApiTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview.exe
+gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4:
