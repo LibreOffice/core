@@ -506,8 +506,8 @@ sub init_globals
                 [ '%GUI%',              $gui            ]
               );
 
-    # find out if the system supports symlinks
-    $has_symlinks = eval { symlink("",""); 1 };
+    # find out if the *HOST* system supports symlinks. They all do except Windows
+    $has_symlinks = $ENV{GUI} ne 'WNT';
 }
 
 sub get_base
