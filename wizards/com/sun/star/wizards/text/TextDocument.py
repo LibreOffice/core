@@ -11,7 +11,9 @@ from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import WrappedTargetException
 from common.Configuration import Configuration
 import time
+from datetime import date as dateTimeObject
 from com.sun.star.util import DateTime
+from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DDMMYY
 
 class TextDocument(object):
 
@@ -208,22 +210,24 @@ class TextDocument(object):
             fullname = str(gn) + " " + str(sn)
             currentDate = DateTime()
             now = time.localtime(time.time())
-            currentDate.Day = time.strftime("%d", now)
-            currentDate.Year = time.strftime("%Y", now)
-            currentDate.Month = time.strftime("%m", now)
+            year = time.strftime("%Y", now)
+            month = time.strftime("%m", now)
+            day = time.strftime("%d", now)
+            currentDate.Day = day
+            currentDate.Year = year
+            currentDate.Month = month
+            dateObject = dateTimeObject(int(year), int(month), int(day))
             du = Helper.DateUtils(self.xMSF, self.xTextDocument)
-            ff = du.getFormat(NumberFormatIndex.DATE_SYS_DDMMYY)
-            myDate = du.format(ff, currentDate)
-            xDocProps2 = self.xTextDocument.getDocumentProperties()
-            xDocProps2.setAuthor(fullname)
-            xDocProps2.setModifiedBy(fullname)
-            description = xDocProps2.getDescription()
+            ff = du.getFormat(DATE_SYS_DDMMYY)
+            myDate = du.format(ff, dateObject)
+            xDocProps2 = self.xTextDocument.DocumentProperties
+            xDocProps2.Author = fullname
+            xDocProps2.ModifiedBy = fullname
+            description = xDocProps2.Description
             description = description + " " + TemplateDescription
-            description = JavaTools.replaceSubString(
-                description, WizardName, "<wizard_name>")
-            description = JavaTools.replaceSubString(
-                description, myDate, "<current_date>")
-            xDocProps2.setDescription(description)
+            description = description.replace("<wizard_name>", WizardName)
+            description = description.replace("<current_date>", myDate)
+            xDocProps2.Description = description
         except NoSuchElementException, e:
             # TODO Auto-generated catch block
             traceback.print_exc()
