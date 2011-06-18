@@ -123,9 +123,10 @@ clean:
 	rm -rf */$$INPATH && \
 	rm -rf solver/*/$$INPATH && \
 	rm -rf install && \
-	$$GNUMAKE -C dmake clean && \
+ifeq (@BUILD_DMAKE@,YES)
+	-$$GNUMAKE -C dmake clean && \
 	rm -f solenv/*/bin/dmake* && \
-	$$GNUMAKE -f GNUmakefile.mk -sr clean
+endif
 ifeq (@CROSS_COMPILING@,YES)
 	. ./*Env.Set.sh && \
 	rm -rf */$$INPATH_FOR_BUILD && \
