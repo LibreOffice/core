@@ -221,8 +221,12 @@ void LayoutManager::impl_clearUpMenuBar()
                     {
                         xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
                     }
-                    catch ( beans::UnknownPropertyException ) {}
-                    catch ( lang::WrappedTargetException ) {}
+                    catch (const beans::UnknownPropertyException&)
+                    {
+                    }
+                    catch (const lang::WrappedTargetException&)
+                    {
+                    }
                 }
 
                 VCLXMenu* pAwtMenuBar = VCLXMenu::GetImplementation( xMenuBar );
@@ -310,7 +314,9 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                         // Remove listener to old module ui configuration manager
                         xModuleCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                     }
-                    catch ( Exception& ) {}
+                    catch (const Exception&)
+                    {
+                    }
                 }
 
                 try
@@ -320,7 +326,9 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     if ( xModuleCfgMgr.is() )
                         xModuleCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                 }
-                catch ( Exception& ) {}
+                catch (const Exception&)
+                {
+                }
 
                 try
                 {
@@ -328,8 +336,12 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     if ( xPersistentWindowStateSupplier.is() )
                         xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= xPersistentWindowState;
                 }
-                catch ( NoSuchElementException& ) {}
-                catch ( WrappedTargetException& ) {}
+                catch (const NoSuchElementException&)
+                {
+                }
+                catch (const WrappedTargetException&)
+                {
+                }
             }
 
             xModel = impl_getModelFromFrame( xFrame );
@@ -345,7 +357,9 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                             // Remove listener to old ui configuration manager
                             xDocCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                         }
-                        catch ( Exception& ) {}
+                        catch (const Exception&)
+                        {
+                        }
                     }
 
                     try
@@ -354,7 +368,9 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                         if ( xDocCfgMgr.is() )
                             xDocCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                     }
-                    catch ( Exception& ) {}
+                    catch (const Exception&)
+                    {
+                    }
                 }
             }
         }
@@ -368,7 +384,9 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     xModuleCfgMgr->removeConfigurationListener(
                         Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                 }
-                catch ( Exception& ) {}
+                catch (const Exception&)
+                {
+                }
             }
 
             if ( xDocCfgMgr.is() )
@@ -378,7 +396,9 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     xDocCfgMgr->removeConfigurationListener(
                         Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                 }
-                catch ( Exception& ) {}
+                catch (const Exception&)
+                {
+                }
             }
 
             // Release references to our configuration managers as we currently don't have
@@ -636,7 +656,9 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
 
             return sal_True;
         }
-        catch ( NoSuchElementException& ) {}
+        catch (const NoSuchElementException&)
+        {
+        }
     }
 
     return sal_False;
@@ -660,12 +682,14 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
             // Check persistent flag of the user interface element
             xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ))) >>= bPersistent;
         }
-        catch ( beans::UnknownPropertyException )
+        catch (const beans::UnknownPropertyException&)
         {
             // Non-configurable elements should at least store their dimension/position
             bPersistent = sal_True;
         }
-        catch ( lang::WrappedTargetException ) {}
+        catch (const lang::WrappedTargetException&)
+        {
+        }
     }
 
     if ( bPersistent && xPersistentWindowState.is() )
@@ -714,7 +738,9 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
                 xInsert->insertByName( aName, makeAny( aWindowState ));
             }
         }
-        catch ( Exception& ) {}
+        catch (const Exception&)
+        {
+        }
     }
 
     // Reset flag
@@ -752,8 +778,12 @@ Reference< XUIElement > LayoutManager::implts_createElement( const rtl::OUString
     {
         xUIElement = m_xUIElementFactoryManager->createUIElement( aName, aPropSeq );
     }
-    catch ( NoSuchElementException& ) {}
-    catch ( IllegalArgumentException& ) {}
+    catch (const NoSuchElementException&)
+    {
+    }
+    catch (const IllegalArgumentException&)
+    {
+    }
 
     return xUIElement;
 }
@@ -1412,8 +1442,13 @@ void LayoutManager::implts_reparentChildWindows()
         {
             xStatusBarWindow = Reference< awt::XWindow >( aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
         }
-        catch ( RuntimeException& ) { throw; }
-        catch ( Exception& ) {}
+        catch (const RuntimeException&)
+        {
+            throw;
+        }
+        catch (const Exception&)
+        {
+        }
     }
 
     if ( xStatusBarWindow.is() )
@@ -1519,8 +1554,12 @@ throw (RuntimeException)
                             {
                                 xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
                             }
-                            catch ( beans::UnknownPropertyException ) {}
-                            catch ( lang::WrappedTargetException ) {}
+                            catch (const beans::UnknownPropertyException&)
+                            {
+                            }
+                            catch (const lang::WrappedTargetException&)
+                            {
+                            }
                         }
 
                         if ( xMenuBar.is() )
@@ -2917,7 +2956,9 @@ throw( RuntimeException )
                 xModuleCfgMgr->removeConfigurationListener(
                     Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& ) {}
+            catch (const Exception&)
+            {
+            }
         }
 
         if ( m_xDocCfgMgr.is() )
@@ -2928,7 +2969,9 @@ throw( RuntimeException )
                 xDocCfgMgr->removeConfigurationListener(
                     Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& ) {}
+            catch (const Exception&)
+            {
+            }
         }
 
         m_xDocCfgMgr.clear();

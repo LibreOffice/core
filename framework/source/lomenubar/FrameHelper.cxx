@@ -647,7 +647,7 @@ FrameHelper::getLabelFromCommandURL (OUString commandURL)
     {
         m_xUICommands->getByName (commandURL) >>= commandProps;
     }
-    catch (com::sun::star::container::NoSuchElementException e)
+    catch (const com::sun::star::container::NoSuchElementException&)
     {
         return label;
     }

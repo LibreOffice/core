@@ -506,7 +506,9 @@ bool ToolbarLayoutManager::destroyToolbar( const ::rtl::OUString& rResourceURL )
                     xWindow->removeWindowListener( uno::Reference< awt::XWindowListener >(
                         static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
             }
-            catch( uno::Exception& ) {}
+            catch (const uno::Exception&)
+            {
+            }
 
             try
             {
@@ -514,7 +516,9 @@ bool ToolbarLayoutManager::destroyToolbar( const ::rtl::OUString& rResourceURL )
                     xDockWindow->removeDockableWindowListener( uno::Reference< awt::XDockableWindowListener >(
                         static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
             }
-            catch ( uno::Exception& ) {}
+            catch (const uno::Exception&)
+            {
+            }
         }
         else
         {
@@ -768,7 +772,9 @@ bool ToolbarLayoutManager::dockToolbar( const ::rtl::OUString& rResourceURL, ui:
                 return true;
             }
         }
-        catch ( lang::DisposedException& ) {}
+        catch (const lang::DisposedException&)
+        {
+        }
     }
 
     return false;
@@ -844,9 +850,17 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                 const sal_uInt32 nCount = aListenerArray.size();
                 for ( sal_uInt32 i = 0; i < nCount; ++i )
                 {
-                    try { aListenerArray[i]->functionExecute( aToolbarName, aCommand ); }
-                    catch ( uno::RuntimeException& ) { throw; }
-                    catch ( uno::Exception& ) {}
+                    try
+                    {
+                        aListenerArray[i]->functionExecute( aToolbarName, aCommand );
+                    }
+                    catch (const uno::RuntimeException&)
+                    {
+                        throw;
+                    }
+                    catch (const uno::Exception&)
+                    {
+                    }
                 }
             }
         }
@@ -1012,7 +1026,9 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                         if ( xWindow.is() )
                             xWindow->addWindowListener( uno::Reference< awt::XWindowListener >( static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
                     }
-                    catch ( uno::Exception& ) {}
+                    catch (const uno::Exception&)
+                    {
+                    }
                 }
 
                 ::rtl::OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
@@ -1060,8 +1076,12 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                 }
             }
         }
-        catch ( container::NoSuchElementException& ) {}
-        catch ( lang::IllegalArgumentException& ) {}
+        catch (const container::NoSuchElementException&)
+        {
+        }
+        catch (const lang::IllegalArgumentException&)
+        {
+        }
     }
 }
 
@@ -1158,8 +1178,13 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         }
     }
-    catch ( uno::RuntimeException& ) { throw; }
-    catch ( uno::Exception& ) {}
+    catch (const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const uno::Exception&)
+    {
+    }
 
     if ( !aMakeVisibleToolbars.empty() )
         ::std::for_each( aMakeVisibleToolbars.begin(), aMakeVisibleToolbars.end(),::boost::bind( &ToolbarLayoutManager::requestToolbar, this,_1 ));
@@ -1233,8 +1258,13 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                     // possible that all elements have been disposed!
                     xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
                 }
-                catch ( uno::RuntimeException& ) { throw; }
-                catch ( uno::Exception& ) {}
+                catch (const uno::RuntimeException&)
+                {
+                    throw;
+                }
+                catch (const uno::Exception&)
+                {
+                }
 
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
@@ -1306,7 +1336,9 @@ void ToolbarLayoutManager::implts_createToolBar( const ::rtl::OUString& aName, b
                         static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
                     xDockWindow->enableDocking( sal_True );
                 }
-                catch ( uno::Exception& ) {}
+                catch (const uno::Exception&)
+                {
+                }
             }
 
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -1378,8 +1410,12 @@ uno::Reference< ui::XUIElement > ToolbarLayoutManager::implts_createElement( con
         if ( xUIElementFactory.is() )
             xUIElement = xUIElementFactory->createUIElement( aName, aPropSeq );
     }
-    catch ( container::NoSuchElementException& ) {}
-    catch ( lang::IllegalArgumentException& ) {}
+    catch (const container::NoSuchElementException&)
+    {
+    }
+    catch (const lang::IllegalArgumentException&)
+    {
+    }
     implts_setToolbarCreation( false );
 
     return xUIElement;
@@ -1674,7 +1710,9 @@ sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const rtl::OUString& 
 
             return sal_True;
         }
-        catch ( container::NoSuchElementException& ) {}
+        catch (const container::NoSuchElementException&)
+        {
+        }
     }
 
     return sal_False;
@@ -1696,11 +1734,13 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             // Check persistent flag of the user interface element
             xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ))) >>= bPersistent;
         }
-        catch ( beans::UnknownPropertyException )
+        catch (const beans::UnknownPropertyException&)
         {
             bPersistent = true; // Non-configurable elements should at least store their dimension/position
         }
-        catch ( lang::WrappedTargetException ) {}
+        catch (const lang::WrappedTargetException&)
+        {
+        }
     }
 
     if ( bPersistent && xPersistentWindowState.is() )
@@ -1749,7 +1789,9 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
                 xInsert->insertByName( aName, uno::makeAny( aWindowState ));
             }
         }
-        catch ( uno::Exception& ) {}
+        catch (const uno::Exception&)
+        {
+        }
     }
 
     // Reset flag
@@ -3342,11 +3384,15 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                             xReplace->replaceByName( aWindowElements[i], makeAny( aPropValueSeq ));
                         }
                     }
-                    catch ( uno::Exception& ) {}
+                    catch (const uno::Exception&)
+                    {
+                    }
                 }
             }
         }
-        catch ( uno::Exception& ) {}
+        catch (const uno::Exception&)
+        {
+        }
     }
 }
 
@@ -3641,7 +3687,9 @@ throw (uno::RuntimeException)
                 m_aDockUIElement.m_aFloatingData = aUIDockingElement.m_aFloatingData;
             aWriteLock.unlock();
         }
-        catch ( uno::Exception& ) {}
+        catch (const uno::Exception&)
+        {
+        }
     }
 
     return aDockingData;
@@ -4004,9 +4052,15 @@ throw (uno::RuntimeException)
                     if ( xPropSet.is() )
                         xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
                 }
-                catch ( container::NoSuchElementException& ) {}
-                catch ( beans::UnknownPropertyException& ) {}
-                catch ( lang::WrappedTargetException& ) {}
+                catch (const container::NoSuchElementException&)
+                {
+                }
+                catch (const beans::UnknownPropertyException&)
+                {
+                }
+                catch (const lang::WrappedTargetException&)
+                {
+                }
 
                 {
                     SolarMutexGuard aGuard;
@@ -4151,7 +4205,9 @@ bool ToolbarLayoutManager::floatToolbar( const ::rtl::OUString& rResourceURL )
                 return true;
             }
         }
-        catch ( lang::DisposedException& ) {}
+        catch (const lang::DisposedException&)
+        {
+        }
     }
 
     return false;
@@ -4176,7 +4232,9 @@ bool ToolbarLayoutManager::lockToolbar( const ::rtl::OUString& rResourceURL )
                 return true;
             }
         }
-        catch ( lang::DisposedException& ) {}
+        catch (const lang::DisposedException&)
+        {
+        }
     }
 
     return false;
@@ -4201,7 +4259,9 @@ bool ToolbarLayoutManager::unlockToolbar( const ::rtl::OUString& rResourceURL )
                 return true;
             }
         }
-        catch ( lang::DisposedException& ) {}
+        catch (const lang::DisposedException&)
+        {
+        }
     }
 
     return false;

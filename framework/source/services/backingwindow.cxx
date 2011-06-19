@@ -185,7 +185,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
             }
         }
     }
-    catch (Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -920,7 +920,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                  xProductRegistration->trigger( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RegistrationRequired" ) ) );
             }
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
         }
         break;
@@ -967,7 +967,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                 }
             }
         }
-        catch (Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -1060,7 +1060,7 @@ static long implDispatchDelayed( void*, void* pArg )
     {
         pDispatch->xDispatch->dispatch( pDispatch->aDispatchURL, pDispatch->aArgs );
     }
-    catch( Exception )
+    catch (const Exception&)
     {
     }
 
@@ -1108,11 +1108,11 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
                     delete pDisp; // event could not be posted for unknown reason, at least don't leak
             }
         }
-        catch ( com::sun::star::uno::RuntimeException& )
+        catch (const com::sun::star::uno::RuntimeException&)
         {
             throw;
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch (const com::sun::star::uno::Exception&)
         {
         }
     }
