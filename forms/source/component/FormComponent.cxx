@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,6 @@
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <functional>
-#include <algorithm>
 
 #include <functional>
 #include <algorithm>
@@ -566,7 +564,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
+        OSL_FAIL("OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
     }
 }
 
@@ -581,7 +579,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
+        OSL_FAIL("OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
     }
     ::comphelper::operator<<( _rxOutStream, sHelpText);
 }
@@ -601,7 +599,7 @@ OControlModel::OControlModel(
     ,m_bNativeLook( sal_False )
         // form controls are usually embedded into documents, not dialogs, and in documents
         // the native look is ugly ....
-        // #i37342# / 2004-11-19 / frank.schoenheit@sun.com
+        // #i37342#
 {
     DBG_CTOR(OControlModel, NULL);
     if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
@@ -621,7 +619,7 @@ OControlModel::OControlModel(
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OControlModel::OControlModel: caught an exception!" );
+                    OSL_FAIL( "OControlModel::OControlModel: caught an exception!" );
                 }
             }
         }
@@ -783,7 +781,7 @@ Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Sta
 {
     Sequence< ::rtl::OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
-    aServiceNames[ 1 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.FormControlModel" );
+    aServiceNames[ 1 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.FormControlModel") );
     return aServiceNames;
 }
 
@@ -994,7 +992,7 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
             else
-                OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
+                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
     }
     return aReturn;
 }
@@ -1052,7 +1050,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 bModified = m_aPropertyBagHelper.convertDynamicFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
             else
-                OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
+                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
             break;
     }
     return bModified;
@@ -1086,7 +1084,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
             else
-                OSL_ENSURE( false, "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
+                OSL_FAIL( "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
             break;
     }
 }
@@ -1653,7 +1651,7 @@ StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(Run
 Sequence< ::rtl::OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > aOwnServiceNames( 1 );
-    aOwnServiceNames[ 0 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.DataAwareControlModel" );
+    aOwnServiceNames[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.DataAwareControlModel") );
 
     return ::comphelper::concatSequences(
         OControlModel::getSupportedServiceNames_Static(),
@@ -1682,7 +1680,6 @@ void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputSt
     // in anything from data loss to crash.
     // (use writeCommonProperties instead, this is called in derived classes write-method)
     // !!! EOIN !!!
-    // FS - 68876 - 28.09.1999
 }
 
 //------------------------------------------------------------------------------
@@ -1807,7 +1804,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aControlSource);
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            DBG_ERROR( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
+            OSL_FAIL( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
@@ -1863,7 +1860,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             OSL_VERIFY( rValue >>= m_aControlSource );
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            DBG_ERROR("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
+            OSL_FAIL("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
         {
@@ -1969,7 +1966,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
+            OSL_FAIL( "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
         }
     }
 }
@@ -2135,7 +2132,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OBoundControlModel::connectToField: property NAME not supported!");
+                    OSL_FAIL("OBoundControlModel::connectToField: property NAME not supported!");
                     impl_setField_noNotify( NULL );
                 }
             }
@@ -2159,7 +2156,7 @@ void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
             transferDbValueToControl();
         else
             // reset the field if the row set is empty
-            // #i30661# / 2004-12-16 / frank.schoenheit@sun.com
+            // #i30661#
             resetNoBroadcast();
     }
 }
@@ -2332,7 +2329,6 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
         // release our mutex once (it's acquired in one of the the calling methods), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
-        // #72451# / 2000-01-31 / frank.schoenheit@sun.com
         MutexRelease aRelease( m_aMutex );
         if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
         {
@@ -2345,7 +2341,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::doSetControlValue: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::doSetControlValue: caught an exception!" );
     }
 }
 
@@ -2365,7 +2361,7 @@ void OBoundControlModel::onConnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::onConnectedValidator: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::onConnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2383,7 +2379,7 @@ void OBoundControlModel::onDisconnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2471,12 +2467,9 @@ void OBoundControlModel::reset() throw (RuntimeException)
     }
     catch( const SQLException& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::reset: caught an SQL exception!" );
+        OSL_FAIL( "OBoundControlModel::reset: caught an SQL exception!" );
     }
-    // don't count the insert row as "invalid"
-    // @since  #i24495#
-    // @date   2004-05-14
-    // @author fs@openoffice.org
+    // #i24495# - don't count the insert row as "invalid"
 
     sal_Bool bSimpleReset =
                         (   !m_xColumn.is()                     // no connection to a database column
@@ -2520,7 +2513,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
         }
         catch(Exception&)
         {
-            DBG_ERROR("OBoundControlModel::reset: this should have succeeded in all cases!");
+            OSL_FAIL("OBoundControlModel::reset: this should have succeeded in all cases!");
         }
 
         sal_Bool bNeedValueTransfer = sal_True;
@@ -2683,7 +2676,7 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -2711,8 +2704,8 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::setValueBinding: How did you reach this method?" );
         // the interface for this method should not have been exposed if we do not
         // support binding to external data
-
-    if ( !impl_approveValueBinding_nolock( _rxBinding ) )
+    // allow reset
+    if ( _rxBinding.is() && !impl_approveValueBinding_nolock( _rxBinding ) )
     {
         throw IncompatibleTypesException(
             FRM_RES_STRING( RID_STR_INCOMPATIBLE_TYPES ),
@@ -3052,7 +3045,7 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::recheckValidity: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::recheckValidity: caught an exception!" );
     }
 }
 
@@ -3074,3 +3067,4 @@ void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps 
 }
 //... namespace frm .......................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

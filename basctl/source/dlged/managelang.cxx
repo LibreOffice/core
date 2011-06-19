@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,17 +40,12 @@
 #include "dlgresid.hrc"
 #include "helpid.hrc"
 
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/unohelp.hxx>
-#ifndef _VCL_I18NHELP_HXX
-//#include <vcl/i18nhelp.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -428,3 +424,4 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     return aLocaleSeq;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

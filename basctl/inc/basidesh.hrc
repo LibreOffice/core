@@ -27,14 +27,9 @@
 #ifndef _BASIDESH_HRC
 #define _BASIDESH_HRC
 
-#ifndef _SVTOOLS_IMAGEMGR_HRC
-#include <svtools/imagemgr.hrc>
-#endif
-
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
 
 // Resource-ID's...
 #ifndef _SVX_NOIDERESIDS
@@ -57,29 +52,16 @@
 #define RID_POPUP_DLGED                 ( RID_BASICIDE_START + 62 )
 #define RID_PRINTDLG_STRLIST            ( RID_BASICIDE_START + 78 )
 
-#define RID_IMG_LOCKED_HC               ( RID_BASICIDE_START +  6 )
 #define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
-#define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
-#define RID_IMGLST_LAYOUT_HC            ( RID_BASICIDE_START + 14 )
-#define RID_IMG_REMOVEWATCH_HC          ( RID_BASICIDE_START + 15 )
 #define RID_IMG_INSTALLATION            ( RID_BASICIDE_START + 20 )
-#define RID_IMG_INSTALLATION_HC         ( RID_BASICIDE_START + 21 )
 #define RID_IMG_DOCUMENT                ( RID_BASICIDE_START + 22 )
-#define RID_IMG_DOCUMENT_HC             ( RID_BASICIDE_START + 23 )
 #define RID_IMG_MODLIB                  ( RID_BASICIDE_START + 24 )
-#define RID_IMG_MODLIB_HC               ( RID_BASICIDE_START + 25 )
 #define RID_IMG_MODLIBNOTLOADED         ( RID_BASICIDE_START + 26 )
-#define RID_IMG_MODLIBNOTLOADED_HC      ( RID_BASICIDE_START + 27 )
 #define RID_IMG_MODULE                  ( RID_BASICIDE_START + 28 )
-#define RID_IMG_MODULE_HC               ( RID_BASICIDE_START + 29 )
 #define RID_IMG_MACRO                   ( RID_BASICIDE_START + 30 )
-#define RID_IMG_MACRO_HC                ( RID_BASICIDE_START + 31 )
 #define RID_IMG_DLGLIB                  ( RID_BASICIDE_START + 32 )
-#define RID_IMG_DLGLIB_HC               ( RID_BASICIDE_START + 33 )
 #define RID_IMG_DLGLIBNOTLOADED         ( RID_BASICIDE_START + 34 )
-#define RID_IMG_DLGLIBNOTLOADED_HC      ( RID_BASICIDE_START + 35 )
 #define RID_IMG_DIALOG                  ( RID_BASICIDE_START + 36 )
-#define RID_IMG_DIALOG_HC               ( RID_BASICIDE_START + 37 )
 #define RID_IMG_LOCKED                  ( RID_BASICIDE_START + 41 )
 #define RID_IMGLST_LAYOUT               ( RID_BASICIDE_START + 49 )
 

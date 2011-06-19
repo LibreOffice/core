@@ -39,7 +39,6 @@
 #define TBX_SUBSTNEWDEL         6
 #define BT_SUBSTAPPLY           7
 #define BT_SUBSTDELETE          8
-//#define BT_SUBSTINFO            9
 
 #define STR_HEADER1             10
 #define STR_HEADER2             11
@@ -58,5 +57,3 @@
 #define STR_AUTOMATIC           28
 
 #endif
-
-

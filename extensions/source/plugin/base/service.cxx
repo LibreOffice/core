@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#if STLPORT_VERSION>=321
-#include <cstdarg>
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
 #endif
+
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
+#include <cstdarg>
 
 #include <plugin/impl.hxx>
 #include <tools/debug.hxx>
@@ -47,14 +58,14 @@
 using namespace cppu;
 
 extern "C" {
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName,
         uno_Environment** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    void* SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,
         void* /*pXUnoKey*/
@@ -91,3 +102,5 @@ extern "C" {
         return pRet;
     }
 } /* extern "C" */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

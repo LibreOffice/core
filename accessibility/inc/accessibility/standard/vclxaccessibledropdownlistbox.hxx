@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,8 @@
 #include <accessibility/standard/vclxaccessiblebox.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX
 #include <cppuhelper/weakref.hxx>
-#endif
 
 
 /** The accessible drop down combobox has two children.  The first is the
@@ -69,3 +66,4 @@ protected:
 
 #endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLEDROPDOWNLISTBOX_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

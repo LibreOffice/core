@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX
 #include <cppuhelper/implbase3.hxx>
-#endif
 
 class ZipPackage;
 
@@ -82,3 +81,5 @@ public:
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

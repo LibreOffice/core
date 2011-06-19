@@ -55,7 +55,6 @@ SHL1STDLIBS= \
             $(SVLLIB)       \
             $(VCLLIB) \
             $(BASICLIB) \
-            $(VOSLIB) \
             $(SALLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
@@ -86,7 +85,6 @@ SHL2IMPLIB= isimplecm
 
 SHL2STDLIBS= \
             $(TOOLSLIB) \
-            $(VOSLIB) \
             $(SALLIB)
 
 
@@ -109,9 +107,7 @@ SHL3STDLIBS= \
             $(TOOLSLIB) \
             $(SVLLIB)       \
             $(VCLLIB) \
-            $(VOSLIB) \
             $(SALLIB) \
-            $(VOSLIB) \
             $(SIMPLECMLIB)
 
 
@@ -153,7 +149,6 @@ APP1STDLIBS+= \
             $(SVLLIB) \
             $(VCLLIB) \
             $(SALLIB) \
-            $(VOSLIB) \
             $(UCBHELPERLIB) \
             $(COMPHELPERLIB) \
             $(BASICLIB) \
@@ -162,7 +157,7 @@ APP1STDLIBS+= \
 
 .IF "$(GUI)"=="UNX"
 APP1STDLIBS+= \
-            $(VOSLIB) $(SALLIB) $(BASICLIB)
+             $(SALLIB) $(BASICLIB)
 APP1STDLIBS+=$(CPPULIB)
 .ENDIF
 .IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
@@ -219,13 +214,8 @@ APP3STDLIBS= \
             $(VCLLIB)
 
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="MACOSX"
 APP3STDLIBS+= \
-            $(VOSLIB) $(SALLIB) $(LIBSTLPORT)
-.ELSE
-APP3STDLIBS+= \
-            $(VOSLIB) $(SALLIB)
-.ENDIF
+             $(SALLIB)
 .ENDIF
 # $(AUTOMATIONLIB) is build in SHL1TARGET
 .IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")

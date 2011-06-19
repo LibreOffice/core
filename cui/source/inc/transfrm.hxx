@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <svx/dlgctrl.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
 // #i75273#
 #include <basegfx/range/b2drange.hxx>
@@ -150,8 +149,6 @@ private:
     DECL_LINK( ChangeSizeProtectHdl, void * );
     DECL_LINK( ChangePosXHdl, void * );
     DECL_LINK( ChangePosYHdl, void * );
-//  DECL_LINK( SetAnchorHdl, ListBox * );
-//  DECL_LINK( SetOrientHdl, ListBox * );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
@@ -184,7 +181,6 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
 
-//  void         ShowAnchorCtrls(sal_uInt16 nAnchorCtrls); // Writer-spezifische Controls anzeigen
     virtual void FillUserData();
 
     void        DisableResize();
@@ -264,11 +260,9 @@ private:
     FixedLine           aFlRadius;
     FixedText           aFtRadius;
     MetricField         aMtrRadius;
-    //TriStateBox           aTsbVertical;
     FixedLine           aFlAngle;
     FixedText           aFtAngle;
     MetricField         aMtrAngle;
-    //SvxRectCtl            aCtlAngle;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -303,3 +297,4 @@ public:
 
 #endif // _SVX_TRANSFRM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

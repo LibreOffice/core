@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // SODispatchInterceptor.h: Definition of the SODispatchInterceptor class
 //
 //////////////////////////////////////////////////////////////////////
@@ -153,3 +154,5 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODISPATCHINTERCEPTOR)
 };
 
 #endif // __SODISPATCHINTERCEPTOR_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

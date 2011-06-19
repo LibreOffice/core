@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/grfmgr.hxx>
@@ -61,7 +60,6 @@
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
-#include <cuires.hrc>
 #include "optmemory.hrc"
 #include "optmemory.hxx"
 #include <svx/ofaitem.hxx>
@@ -151,8 +149,8 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
 #endif
     FreeResource();
 
-    //quick launch only available in Win and OS/2
-#if !defined(WNT) && !defined(OS2) && !defined(ENABLE_GTK)
+    //quick launch only available in Win
+#if !defined(WNT) && !defined(ENABLE_GTK)
     aQuickLaunchFL.Hide();
     aQuickLaunchCB.Hide();
 #endif
@@ -269,3 +267,4 @@ IMPL_LINK( OfaMemoryOptionsPage, GraphicCacheConfigHdl, NumericField*, EMPTYARG 
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

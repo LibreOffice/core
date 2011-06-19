@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,7 +105,7 @@ class PluginModel : public BroadcasterHelperHolder,
     static rtl::OUString SAL_CALL getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */
-        return rtl::OUString::createFromAscii( "com.sun.star.extensions.PluginModel" );
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.extensions.PluginModel" ));
     }
 
     // OPropertySetHelper
@@ -134,3 +135,5 @@ class PluginModel : public BroadcasterHelperHolder,
 Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
 
 #endif // __PLUGIN_MODEL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

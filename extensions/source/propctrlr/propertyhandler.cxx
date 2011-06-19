@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,14 +248,14 @@ namespace pcr
     //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
-        DBG_ERROR( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
+        OSL_FAIL( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL PropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
-        DBG_ERROR( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
+        OSL_FAIL( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
     }
 
     //--------------------------------------------------------------------
@@ -462,3 +463,4 @@ namespace pcr
 }   // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

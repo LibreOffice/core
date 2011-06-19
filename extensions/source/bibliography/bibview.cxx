@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
-#include "bibmod.hxx"
 #include "general.hxx"
 #include "bibview.hxx"
 #include "datman.hxx"
@@ -115,9 +113,6 @@ namespace bib
         m_xGeneralPage = NULL;
     }
 
-    /* -----------------16.11.99 13:13-------------------
-
-     --------------------------------------------------*/
     void BibView::UpdatePages()
     {
         // TODO:
@@ -169,8 +164,6 @@ namespace bib
             }
         }
     }
-    //---------------------------------------------------------------------
-    //--- 19.10.01 16:55:49 -----------------------------------------------
 
     void BibView::_loaded( const EventObject& _rEvent )
     {
@@ -184,17 +177,12 @@ namespace bib
         FormControlContainer::_loaded( _rEvent );
     }
 
-    /* -----------------------------02.02.00 16:49--------------------------------
-
-     ---------------------------------------------------------------------------*/
     IMPL_STATIC_LINK( BibView, CallMappingHdl, BibView*, EMPTYARG )
     {
         pThis->m_pDatMan->CreateMappingDialog( pThis );
         return 0;
     }
-    /* -----------------------------13.04.00 16:12--------------------------------
 
-     ---------------------------------------------------------------------------*/
     void BibView::Resize()
     {
         if ( m_pGeneralPage )
@@ -204,9 +192,6 @@ namespace bib
         }
         Window::Resize();
     }
-
-    //---------------------------------------------------------------------
-    //--- 18.10.01 18:52:45 -----------------------------------------------
 
     Reference< awt::XControlContainer > BibView::getControlContainer()
     {
@@ -230,3 +215,5 @@ namespace bib
 //.........................................................................
 }   // namespace bib
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

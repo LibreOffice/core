@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -62,8 +60,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     maFtSubject     ( this, CUI_RES (FT_SUBJECT) ),
     maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
 {
-    // Set HC bitmaps and disable display of bitmap names.
-    maBtAdrBook.SetModeImage( Image( CUI_RES( IMG_ADRESSBOOK_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    // Disable display of bitmap names.
     maBtAdrBook.EnableTextDisplay (sal_False);
 
     InitStdControls();
@@ -313,52 +310,8 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
     }
 
 
-/*  uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
-    if ( xProv.is() )
-    {
-!!! (pb) we need a new config item here
-        SfxAppIniManagerProperty aProp;
-        GetpApp()->Property( aProp );
-        if( !aProp.GetIniManager() )
-            return ( 0L );
-
-        String aAddressBook = aProp.GetIniManager()->Get( SFX_KEY_ADDRESSBOOK );
-        INetURLObject aObj;
-        aObj.SetSmartProtocol( INET_PROT_FILE );
-        aObj.SetURL( aAddressBook.GetToken( 0, sal_Unicode( ';' ) ) );
-
-        String aMark( RTL_CONSTASCII_USTRINGPARAM( "db:Table;" ) );
-        aMark += aAddressBook.GetToken( 1, sal_Unicode( ';' ) );
-        aObj.SetMark( aMark );
-
-        util::URL aURL;
-        aURL.Complete = ::rtl::OUString( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        if( xFactory.is() )
-        {
-            uno::Reference< util::XURLTransformer > xTrans( xFactory->createInstance
-                ( OUString::createFromAscii( "com.sun.star.util.URLTransformer" ) ),
-                                  uno::UNO_QUERY);
-            xTrans->parseStrict( aURL );
-
-            uno::Reference< frame::XDispatch > aDisp = xProv->queryDispatch( aURL,
-                                                        OUString::createFromAscii( "_beamer" ),
-                                                        frame::FrameSearchFlag::GLOBAL |
-                                                        frame::FrameSearchFlag::CREATE );
-            if ( aDisp.is() )
-            {
-                uno::Sequence< beans::PropertyValue > aArgs(1);
-                beans::PropertyValue* pArg = aArgs.getArray();
-                pArg[0].Name = DEFINE_CONST_UNICODE("Referer");
-                pArg[0].Value = uno::makeAny( OUString( DEFINE_CONST_UNICODE("private:user") ) );
-                aDisp->dispatch( aURL, aArgs );
-            }
-        }
-    }
-*/
-
     return( 0L );
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

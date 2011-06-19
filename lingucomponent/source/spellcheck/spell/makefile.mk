@@ -33,7 +33,7 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell -DHUNSPELL_STATIC
 .ENDIF
 
 #----- Settings ---------------------------------------------------------

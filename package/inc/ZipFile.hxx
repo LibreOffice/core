@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,6 @@
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-#include <rtl/ref.hxx>
-
 #include <ByteGrabber.hxx>
 #include <HashMaps.hxx>
 #include <Inflater.hxx>
@@ -47,6 +46,10 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace ucb  { class XProgressHandler; }
 } } }
+namespace rtl
+{
+    template < class T > class Reference;
+}
 
 /*
  * We impose arbitrary but reasonable limit on ZIP files.
@@ -66,7 +69,7 @@ protected:
     ::rtl::OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
-    Inflater        aInflater;
+    ZipUtils::Inflater aInflater;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
@@ -95,7 +98,7 @@ protected:
             sal_Bool bDecrypt,
             ::rtl::OUString aMediaType = ::rtl::OUString() );
 
-    sal_Bool hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference < EncryptionData > &rData );
+    sal_Bool hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData );
 
     sal_Bool checkSizeAndCRC( const ZipEntry& aEntry );
 
@@ -210,3 +213,5 @@ protected:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

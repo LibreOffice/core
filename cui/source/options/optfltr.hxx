@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef _OFA_OPTFLTR_HXX
 #define _OFA_OPTFLTR_HXX
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/simptabl.hxx>
@@ -43,6 +40,7 @@ class OfaMSFilterTabPage : public SfxTabPage
 {
     FixedLine       aMSWordGB;
     CheckBox        aWBasicCodeCB;
+    CheckBox        aWBasicWbctblCB;
     CheckBox        aWBasicStgCB;
     FixedLine       aMSExcelGB;
     CheckBox        aEBasicCodeCB;
@@ -55,6 +53,7 @@ class OfaMSFilterTabPage : public SfxTabPage
     OfaMSFilterTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
 
+    DECL_LINK( LoadWordBasicCheckHdl_Impl, CheckBox* );
     DECL_LINK( LoadExcelBasicCheckHdl_Impl, CheckBox* );
 public:
 
@@ -113,3 +112,4 @@ public:
 #endif //
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

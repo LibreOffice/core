@@ -77,7 +77,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Maximum = 999 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Pixel" ;
+        CustomUnitText [ en-US ] = " Pixel" ;
         First = 1 ;
         Last = 999 ;
         SpinSize = 1 ;
@@ -103,7 +103,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Maximum = 999 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Pixel" ;
+        CustomUnitText [ en-US ] = " Pixel" ;
         First = 1 ;
         Last = 999 ;
         SpinSize = 1 ;
@@ -183,7 +183,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Maximum = 100 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 100 ;
         SpinSize = 1 ;
     };
@@ -264,7 +264,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Maximum = 100 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;
@@ -428,35 +428,3 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         TabStop = TRUE ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -38,7 +51,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <osl/file.hxx>
 
 #ifdef UNX
@@ -54,10 +67,12 @@ using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::plugin;
-using namespace rtl;
 using namespace osl;
 
-class PluginDisposer : public vos::OTimer
+using ::rtl::OUString;
+using ::rtl::OString;
+
+class PluginDisposer : public salhelper::Timer
 {
 private:
     XPlugin_Impl*       m_pPlugin;
@@ -65,8 +80,8 @@ private:
     virtual void SAL_CALL onShot();
 public:
     PluginDisposer( XPlugin_Impl* pPlugin ) :
-        OTimer( vos::TTimeValue( 2, 0 ),
-                vos::TTimeValue( 2, 0 ) ),
+        salhelper::Timer( salhelper::TTimeValue( 2, 0 ),
+                          salhelper::TTimeValue( 2, 0 ) ),
         m_pPlugin( pPlugin )
         { start(); }
     ~PluginDisposer() {}
@@ -455,7 +470,7 @@ OUString XPlugin_Impl::getCreationURL()
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     if( xPS.is() )
     {
-        Any aValue = xPS->getPropertyValue( OUString::createFromAscii( "URL" ) );
+        Any aValue = xPS->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) );
         aValue >>= aRet;
     }
     return aRet;
@@ -531,7 +546,7 @@ void XPlugin_Impl::loadPlugin()
                                            sv[0],
                                            sv[1]
                                            );
-#elif (defined WNT || defined OS2)
+#elif defined WNT
             PluginComm* pComm = new PluginComm_Impl( m_aDescription.Mimetype,
                                                      m_aDescription.PluginName,
                                                      (HWND)pEnvData->hWnd );
@@ -542,7 +557,7 @@ void XPlugin_Impl::loadPlugin()
             return;
     }
 
-    NPError aError = getPluginComm()->
+    getPluginComm()->
         NPP_New( (char*)OUStringToOString( m_aDescription.Mimetype,
                                                   m_aEncoding).getStr(),
                  getNPPInstance(),
@@ -589,7 +604,7 @@ void XPlugin_Impl::loadPlugin()
     m_aNPWindow.width   = aPosSize.Width ? aPosSize.Width : 600;
     m_aNPWindow.height  = aPosSize.Height ? aPosSize.Height : 600;
 
-    aError = getPluginComm()->NPP_SetWindow( this );
+    getPluginComm()->NPP_SetWindow( this );
 }
 
 void XPlugin_Impl::destroyStreams()
@@ -643,9 +658,9 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         {
             try
             {
-                xPS->setPropertyValue( OUString::createFromAscii( "URL" ), aAny );
+                xPS->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("URL")), aAny );
                 aAny <<= mimetype;
-                xPS->setPropertyValue( OUString::createFromAscii( "TYPE" ), aAny );
+                xPS->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE")), aAny );
             }
             catch(...)
             {
@@ -707,7 +722,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
              {
                  Any aAny;
                  aAny <<= m_aDescription.Mimetype;
-                 xPS->setPropertyValue( OUString::createFromAscii( "TYPE" ), aAny );
+                 xPS->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE")), aAny );
              }
              catch(...)
              {
@@ -717,22 +732,8 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
      // there may be plugins that can use the file length information,
      // but currently none are known. Since this file opening/seeking/closing
-     // is rather costly, it is #if'ed out. If there are plugins known to
+     // is rather costly, it is not implemented. If there are plugins known to
      // make use of the file length, simply put it in
-#if 0
-    if( isfile && ! length )
-    {
-        osl::File aFile( url );
-        if( aFile.open( OpenFlag_Read ) == FileBase::E_None )
-        {
-            aFile.setPos( Pos_End, 0 );
-            sal_uInt64 nPos = 0;
-            if( aFile.getPos( nPos ) == FileBase::E_None )
-                length = nPos;
-            aFile.close();
-        }
-    }
-#endif
 
      PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
                                                         length, lastmodified );
@@ -884,7 +885,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 
 PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
 {
-    uno::Reference< XPluginManager >  xPMgr( m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), UNO_QUERY );
+    uno::Reference< XPluginManager >  xPMgr( m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), UNO_QUERY );
     if( !xPMgr.is() )
     {
         m_nProvidingState = PROVIDING_NONE;
@@ -990,7 +991,7 @@ PluginInputStream::~PluginInputStream()
     {
         ByteString aFileName( aFile, m_pPlugin->getTextEncoding() );
         if( m_pPlugin->getPluginComm() && m_nMode != -1 )
-            // mode -1 means either an error occured,
+            // mode -1 means either an error occurred,
             // or the plugin is already disposing
         {
             m_pPlugin->getPluginComm()->addFileToDelete( aFile );
@@ -1134,7 +1135,7 @@ PluginOutputStream::PluginOutputStream( XPlugin_Impl* pPlugin,
                                         sal_uInt32 len,
                                         sal_uInt32 lastmod ) :
         PluginStream( pPlugin, url, len, lastmod ),
-        m_xStream( pPlugin->getServiceManager()->createInstance( OUString::createFromAscii( "com.sun.star.io.DataOutputStream" ) ), UNO_QUERY )
+        m_xStream( pPlugin->getServiceManager()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataOutputStream")) ), UNO_QUERY )
 {
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
@@ -1153,3 +1154,4 @@ PluginStreamType PluginOutputStream::getStreamType()
     return OutputStream;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

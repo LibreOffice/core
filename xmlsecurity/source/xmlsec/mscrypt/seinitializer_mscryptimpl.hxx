@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _SEINITIALIZERIMPL_HXX
 
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#ifndef _COM_SUN_STAR_XML_CRYPTO_SEINITIALIZER_HPP_
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#endif
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -54,9 +53,6 @@ class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper2
  *  Use this class to initialize a XmlSec based Security Context
  *  instance. After this instance is used up, use this class to free this
  *  instance.
- *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XSEInitializer, XSEInitializer
  *
  *   AUTHOR
  *  Michael Mi
@@ -106,3 +102,4 @@ SAL_CALL SEInitializer_MSCryptImpl_createInstance( const com::sun::star::uno::Re
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

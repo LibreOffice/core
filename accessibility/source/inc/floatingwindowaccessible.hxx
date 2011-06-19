@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef ACCESSIBILITY_FLOATINGWINDOWACCESSIBLE_HXX
 #define ACCESSIBILITY_FLOATINGWINDOWACCESSIBLE_HXX
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
 
 class FloatingWindowAccessible : public VCLXAccessibleComponent
 {
@@ -43,3 +42,4 @@ public:
 
 #endif // ACCESSIBILITY_FLOATINGWINDOWACCESSIBLE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

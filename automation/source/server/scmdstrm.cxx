@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@ SCmdStream::SCmdStream(SvStream *pIn)
 {
     pSammel = pIn;
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
 }
 
 SCmdStream::~SCmdStream()
@@ -86,24 +86,24 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
     Read( nType );
     switch (nType)
     {
-        case BinUSHORT:
+        case BinUINT16:
             {
-                comm_USHORT nNr;
+                comm_UINT16 nNr;
                 Read (nNr );
                 pItem = new SfxUInt16Item(nId,nNr);
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "USHORT:" );
+                StatementList::m_pDbgWin->AddText( "UINT16" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
 #endif
             }
             break;
-        case BinULONG:
+        case BinUINT32:
             {
-                comm_ULONG nNr;
+                comm_UINT32 nNr;
                 Read (nNr );
                 pItem = new SfxUInt32Item(nId,nNr);
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "ULONG:" );
+                StatementList::m_pDbgWin->AddText( "UINT32" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
 #endif
             }
@@ -132,7 +132,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
             }
             break;
         default:
-            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
+            OSL_TRACE( "Ungültiger Typ im Stream:%hu", nType );
 #if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif
@@ -157,24 +157,24 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
     nType = GetNextType();
     switch (nType)
     {
-        case BinUSHORT:
+        case BinUINT16:
             {
-                comm_USHORT nNr;
+                comm_UINT16 nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "USHORT:" );
+                StatementList::m_pDbgWin->AddText( "UINT16" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
 #endif
             }
             break;
-        case BinULONG:
+        case BinUINT32:
             {
-                comm_ULONG nNr;
+                comm_UINT32 nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
 #if OSL_DEBUG_LEVEL > 1
-                StatementList::m_pDbgWin->AddText( "ULONG:" );
+                StatementList::m_pDbgWin->AddText( "UINT32" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
 #endif
             }
@@ -202,7 +202,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
             }
             break;
         default:
-            DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
+            OSL_TRACE( "Ungültiger Typ im Stream:%hu", nType );
 #if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif
@@ -213,3 +213,4 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

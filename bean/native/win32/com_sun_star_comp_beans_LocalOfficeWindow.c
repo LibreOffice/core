@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,6 @@
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
 #define SYSTEM_JAVA    3
-#define SYSTEM_OS2     4
 #define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
 
@@ -150,7 +150,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
      */
     if (GetProp( hWnd, OLD_PROC_KEY )==0)
     {
-        hFuncPtr = SetWindowLong( hWnd, GWL_WNDPROC, (DWORD)OpenOfficeWndProc );
+        hFuncPtr = SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)OpenOfficeWndProc );
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
@@ -206,12 +206,4 @@ static LRESULT APIENTRY OpenOfficeWndProc(
 #endif
 }
 
-
-
-
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

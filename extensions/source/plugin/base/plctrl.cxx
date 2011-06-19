@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,7 +162,7 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
 {
     if (_xPeer.is())
     {
-        DBG_ERROR( "### Peer is already set!" );
+        OSL_FAIL( "### Peer is already set!" );
         return;
     }
 
@@ -189,7 +190,7 @@ void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XTo
     }
     else
     {
-        DBG_ERROR( "### cannot get implementation of parent peer!" );
+        OSL_FAIL( "### cannot get implementation of parent peer!" );
     }
 
     getMultiplexer()->setPeer( _xPeerWindow );
@@ -321,3 +322,4 @@ void PluginControl_Impl::focusLost( const ::com::sun::star::awt::FocusEvent & /*
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

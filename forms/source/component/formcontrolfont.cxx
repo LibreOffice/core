@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "formcontrolfont.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "property.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/property.hxx>
@@ -124,7 +123,7 @@ namespace frm
                 break;
 
             default:
-                OSL_ENSURE( sal_False, "lcl_extractFontDescriptorAggregate: invalid handle!" );
+                OSL_FAIL( "lcl_extractFontDescriptorAggregate: invalid handle!" );
                 break;
             }
             return aValue;
@@ -358,7 +357,7 @@ namespace frm
             break;
 
         default:
-            DBG_ERROR( "FontControlModel::convertFastPropertyValue: no font aggregate!" );
+            OSL_FAIL( "FontControlModel::convertFastPropertyValue: no font aggregate!" );
         }
         return bModified;
     }
@@ -461,7 +460,7 @@ namespace frm
         break;
 
         default:
-            DBG_ERROR( "FontControlModel::setFastPropertyValue_NoBroadcast: invalid property!" );
+            OSL_FAIL( "FontControlModel::setFastPropertyValue_NoBroadcast: invalid property!" );
         }
     }
 
@@ -540,7 +539,7 @@ namespace frm
             break;
 
         default:
-            DBG_ERROR( "FontControlModel::getPropertyDefaultByHandle: invalid property!" );
+            OSL_FAIL( "FontControlModel::getPropertyDefaultByHandle: invalid property!" );
         }
 
         return aReturn;
@@ -549,3 +548,5 @@ namespace frm
 //.........................................................................
 }   // namespace frm
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

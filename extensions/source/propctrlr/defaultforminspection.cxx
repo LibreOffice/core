@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,9 @@
 #include "precompiled_extensions.hxx"
 #include "defaultforminspection.hxx"
 #include "pcrcommon.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "propctrlr.hrc"
 #include "formmetadata.hxx"
 
@@ -47,6 +42,7 @@
 /** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include <osl/diagnose.h>
+#include <sal/macros.h>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_DefaultFormComponentInspectorModel()
@@ -106,14 +102,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString DefaultFormComponentInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.extensions.DefaultFormComponentInspectorModel");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.DefaultFormComponentInspectorModel"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.form.inspection.DefaultFormComponentInspectorModel" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.DefaultFormComponentInspectorModel"));
         return aSupported;
     }
 
@@ -149,7 +145,7 @@ namespace pcr
             { "com.sun.star.form.inspection.EventHandler", false },
 
             // a handler which introduces virtual properties for binding controls to spreadsheet cells
-            { "com.sun.star.form.inspection.CellBindingPropertyHandler", true },
+            { "com.sun.star.form.inspection.CellBindingPropertyHandler", false },
 
             // properties related to binding to an XForms DOM node
             { "com.sun.star.form.inspection.XMLFormsPropertyHandler", true },
@@ -164,7 +160,7 @@ namespace pcr
             { "com.sun.star.form.inspection.FormGeometryHandler", true }
         };
 
-        sal_Int32 nFactories = sizeof( aFactories ) / sizeof( aFactories[ 0 ] );
+        sal_Int32 nFactories = SAL_N_ELEMENTS( aFactories );
         Sequence< Any > aReturn( nFactories );
         Any* pReturn = aReturn.getArray();
         for ( sal_Int32 i = 0; i < nFactories; ++i )
@@ -194,7 +190,7 @@ namespace pcr
             { "Events",     RID_STR_EVENTS,             HID_FM_PROPDLG_TAB_EVT }
         };
 
-        sal_Int32 nCategories = sizeof( aCategories ) / sizeof( aCategories[0] );
+        sal_Int32 nCategories = SAL_N_ELEMENTS( aCategories );
         Sequence< PropertyCategoryDescriptor > aReturn( nCategories );
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( sal_Int32 i=0; i<nCategories; ++i, ++pReturn )
@@ -268,3 +264,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

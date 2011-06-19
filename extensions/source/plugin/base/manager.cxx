@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#if STLPORT_VERSION>=321
-#include <cstdarg>
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
 #endif
+
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
+#include <cstdarg>
 
 #include "plugin/impl.hxx"
 
@@ -122,7 +133,7 @@ Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames(void) 
 Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.plugin.PluginManager" );
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager"));
     return aSNS;
 }
 
@@ -223,3 +234,4 @@ Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPlugi
     return xRef;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

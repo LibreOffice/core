@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <svl/itemprop.hxx>
 #include <uno/environment.h>
 #include <svl/urihelper.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -65,9 +64,7 @@
 #include <svtools/svmedit.hxx>
 
 #include "bibresid.hxx"
-#ifndef BIB_HRC
 #include "bib.hrc"
-#endif
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "bibmod.hxx"
@@ -219,13 +216,13 @@ Sequence< rtl::OUString > BibliographyLoader::getSupportedServiceNames_Static(vo
 
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
     {
         void * pRet = 0;
@@ -260,7 +257,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
 {
     //!
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     m_pBibMod = OpenBibModul();
 
     String aURLStr( rURL );
@@ -283,7 +280,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
         const Sequence< PropertyValue >& /*rArgs*/,
         const Reference< XLoadEventListener > & rListener)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     //!
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
@@ -384,9 +381,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     if ( xLayoutManager.is() )
         xLayoutManager->createElement( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
 }
-/* -----------------06.12.99 14:37-------------------
 
- --------------------------------------------------*/
 BibDataManager* BibliographyLoader::GetDataManager()const
 {
     if(!m_pDatMan)
@@ -398,9 +393,7 @@ BibDataManager* BibliographyLoader::GetDataManager()const
     }
     return m_pDatMan;
 }
-/* -----------------06.12.99 14:39-------------------
 
- --------------------------------------------------*/
 Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
 {
     if (!m_xColumns.is())
@@ -456,9 +449,7 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
 
     return m_xColumns;
 }
-/* -----------------17.12.99 12:29-------------------
 
- --------------------------------------------------*/
 Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
 {
     BibDataManager* pDatMan = GetDataManager();
@@ -474,9 +465,6 @@ Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
     return xReturn;
 }
 
-/* -----------------06.12.99 15:05-------------------
-
- --------------------------------------------------*/
 Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
 {
     if (!m_xCursor.is())
@@ -486,9 +474,6 @@ Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
     return m_xCursor;
 }
 
-/*-- 17.11.99 12:51:38---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 rtl::OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
         const Mapping* pMapping, const String& rColumnName)
 {
@@ -568,9 +553,7 @@ Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
     }
     return aRet;
 }
-/*-- 17.11.99 12:51:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( RuntimeException )
 {
     Sequence< rtl::OUString > aRet(10);
@@ -605,9 +588,7 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
     aRet.realloc(nRealNameCount);
     return aRet;
 }
-/*-- 17.11.99 12:51:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( RuntimeException )
 {
     sal_Bool bRet = sal_False;
@@ -636,16 +617,12 @@ sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( Runti
     }
     return bRet;
 }
-/*-- 17.11.99 12:51:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Type  BibliographyLoader::getElementType(void) throw ( RuntimeException )
 {
     return ::getCppuType((Sequence<PropertyValue>*)0);
 }
-/*-- 17.11.99 12:51:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool BibliographyLoader::hasElements(void) throw ( RuntimeException )
 {
     Reference< XResultSet >  xCursor = GetDataCursor();
@@ -653,9 +630,6 @@ sal_Bool BibliographyLoader::hasElements(void) throw ( RuntimeException )
     return xColumns.is() && (xColumns->getElementNames().getLength() != 0);
 }
 
-/*-- 07.12.99 14:28:39---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) throw
                                             ( RuntimeException )
 {
@@ -668,9 +642,7 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) thro
         SfxItemPropertySet(aBibProps_Impl).getPropertySetInfo();
     return xRet;
 }
-/*-- 07.12.99 14:28:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BibliographyLoader::setPropertyValue(const rtl::OUString& /*PropertyName*/,
                                         const Any& /*aValue*/)
     throw( UnknownPropertyException, PropertyVetoException,
@@ -679,9 +651,7 @@ void BibliographyLoader::setPropertyValue(const rtl::OUString& /*PropertyName*/,
     throw UnknownPropertyException();
     //no changeable properties
 }
-/*-- 07.12.99 14:28:39---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any BibliographyLoader::getPropertyValue(const rtl::OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
@@ -736,36 +706,28 @@ Any BibliographyLoader::getPropertyValue(const rtl::OUString& rPropertyName)
         throw UnknownPropertyException();
     return aRet;
 }
-/*-- 07.12.99 14:28:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BibliographyLoader::addPropertyChangeListener(
         const rtl::OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     //no bound properties
 }
-/*-- 07.12.99 14:28:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BibliographyLoader::removePropertyChangeListener(
         const rtl::OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     //no bound properties
 }
-/*-- 07.12.99 14:28:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BibliographyLoader::addVetoableChangeListener(
     const rtl::OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     //no vetoable properties
 }
-/*-- 07.12.99 14:28:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void BibliographyLoader::removeVetoableChangeListener(
     const rtl::OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
@@ -775,3 +737,4 @@ void BibliographyLoader::removeVetoableChangeListener(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
             "serviceManager - "
             "Cannot create simple registry" ) ;
 
-        xSimpleRegistry->open(rtl::OUString::createFromAscii( "demo.rdb" ), sal_True, sal_False);
+        xSimpleRegistry->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("demo.rdb")), sal_True, sal_False);
         OSL_ENSURE( xSimpleRegistry->isValid() ,
             "serviceManager - "
             "Cannot open xml security registry rdb" ) ;
@@ -109,3 +110,5 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
 
     return xOutputStream;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

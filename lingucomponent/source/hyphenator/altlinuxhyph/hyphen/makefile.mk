@@ -32,9 +32,7 @@ TARGET	= hyphen_lib
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-.IF "$(GUI)"=="OS2"
-HNJLIB=hyphen.lib
-.ELIF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 HNJLIB=-lhyphen
 .ELSE
 HNJLIB=hyphen.lib
@@ -47,7 +45,7 @@ HNJLIB=hyphen.lib
 # --- Files --------------------------------------------------------
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell -DHUNSPELL_STATIC
 .ENDIF
 
 CFLAGS += -I..$/..$/..$/lingutil $(HUNSPELL_CFLAGS)

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,7 +84,7 @@ using namespace ::com::sun::star::frame;
 class SvxSearchItem;
 
 //  Egal was, einfach ans aktuelle Fenster:
-void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
+void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 {
     if ( !pCurWin )
         return;
@@ -264,7 +265,7 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 }
 
 //  Egal, wer oben, Einfluss auf die Shell:
-void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
+void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 {
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
@@ -597,11 +598,10 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             String aName( rSbxItem.GetName() );
             if ( !m_aCurLibName.Len() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
-                IDEBaseWindow* pWin = 0;
                 if ( rSbxItem.GetType() == BASICIDE_TYPE_MODULE )
-                    pWin = FindBasWin( aDocument, aLibName, aName, sal_True );
+                    FindBasWin( aDocument, aLibName, aName, sal_True );
                 else if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
-                    pWin = FindDlgWin( aDocument, aLibName, aName, sal_True );
+                    FindDlgWin( aDocument, aLibName, aName, sal_True );
             }
         }
         break;
@@ -778,7 +778,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
     }
 }
 
-void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
+void BasicIDEShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
@@ -1159,13 +1159,10 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar
 
 void BasicIDEShell::ManageToolbars()
 {
-    static ::rtl::OUString aLayoutManagerName = ::rtl::OUString::createFromAscii( "LayoutManager" );
-    static ::rtl::OUString aMacroBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/macrobar" );
-    static ::rtl::OUString aDialogBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/dialogbar" );
-    static ::rtl::OUString aInsertControlsBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/insertcontrolsbar" );
+    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
+    static ::rtl::OUString aMacroBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/macrobar" ));
+    static ::rtl::OUString aDialogBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/dialogbar" ));
+    static ::rtl::OUString aInsertControlsBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ));
     (void)aInsertControlsBarResName;
 
     if( !pCurWin )
@@ -1256,10 +1253,7 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
         {
             if ( bAppWindowDisabled )
                 Application::GetDefDialogParent()->Enable( sal_False );
-        /*
-            if ( bDispatcherLocked )
-                SFX_APP()->LockDispatcher( sal_True );
-        */
+
             if ( nWaitCount )
             {
                 BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -1308,14 +1302,13 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
     return 0;
 }
 
-void __EXPORT BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
+void BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     // Nicht wenn minimiert, weil dann bei Restore der Text verschoben ist.
     if ( GetViewFrame()->GetWindow().GetOutputSizePixel().Height() == 0 )
         return;
 
     Size aSz( rSize );
-//  long nScrollbarWidthPixel = aVScrollBar.GetSizePixel().Width();
     Size aScrollBarBoxSz( aScrollBarBox.GetSizePixel() );
     aSz.Height() -= aScrollBarBoxSz.Height();
 
@@ -1358,7 +1351,7 @@ Reference< XModel > BasicIDEShell::GetCurrentDocument() const
     return xDocument;
 }
 
-void __EXPORT BasicIDEShell::Activate( sal_Bool bMDI )
+void BasicIDEShell::Activate( sal_Bool bMDI )
 {
     SfxViewShell::Activate( bMDI );
 
@@ -1371,7 +1364,7 @@ void __EXPORT BasicIDEShell::Activate( sal_Bool bMDI )
     }
 }
 
-void __EXPORT BasicIDEShell::Deactivate( sal_Bool bMDI )
+void BasicIDEShell::Deactivate( sal_Bool bMDI )
 {
     // bMDI sal_True heisst, dass ein anderes MDI aktiviert wurde, bei einem
     // Deactivate durch eine MessageBox ist bMDI FALSE
@@ -1439,3 +1432,4 @@ IMPL_LINK( BasicIDEShell, AccelSelectHdl, Accelerator*, pAccel )
     return bDone;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

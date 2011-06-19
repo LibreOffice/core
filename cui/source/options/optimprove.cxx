@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -172,22 +170,22 @@ IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
 {
     uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     uno::Reference< com::sun::star::oooimprovement::XCoreController > core_c(
-            xSMGR->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
+            xSMGR->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.CoreController") ) ),
             uno::UNO_QUERY);
     if(core_c.is())
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-            ::rtl::OUString::createFromAscii("Participation"),
-            ::rtl::OUString::createFromAscii("ShowedInvitation"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Participation") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowedInvitation") ),
             uno::makeAny( true ),
             ::comphelper::ConfigurationHelper::E_STANDARD );
         ::comphelper::ConfigurationHelper::writeDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-            ::rtl::OUString::createFromAscii("Participation"),
-            ::rtl::OUString::createFromAscii("InvitationAccepted"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Participation") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InvitationAccepted") ),
             uno::makeAny( m_pPage->IsYesChecked() ),
             ::comphelper::ConfigurationHelper::E_STANDARD );
         // TODO: refactor
@@ -197,3 +195,5 @@ IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
     EndDialog( RET_OK );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

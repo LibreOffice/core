@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,9 +120,6 @@ public:
 
     ControlItem( const char *Name, rtl::OString aUIdP );
     ControlItem( const String &Name, rtl::OString aUIdP );
-//  ControlItem( const String &Name, const String &URL, const URLType aType );
-//    ControlItem( const String &Name, const String &URL, const sal_uLong nUId );
-//    ControlItem( const char *Name, const String &URL, const sal_uLong nUId );
     ControlItem( ControlData *pDataP );
     virtual ~ControlItem() {
 DBG_DTOR(ControlItem,0);
@@ -129,7 +127,6 @@ DBG_DTOR(ControlItem,0);
     }
     virtual sal_Bool operator < (const ControlItem &rPar)=0;
     virtual sal_Bool operator == (const ControlItem &rPar)=0;
-//  void Write( SvStream &aStream );
 };
 
 SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
@@ -142,12 +139,11 @@ SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
 class ControlSon
 {
 protected:
-    CNames *pSons;      // um sicherzustelle, daß nur Söhne des richtien Type reinkommen
+    CNames *pSons;      // um sicherzustelle, daï¿½ nur Sï¿½hne des richtien Type reinkommen
 
 public:
     ControlSon() : pSons( NULL ) {};
     ~ControlSon();
-//  void Write( SvStream &aStream );
 
     sal_uInt16 Son_Count() { return pSons->Count(); }
     void Sons( CNames *pNewSons ) { pSons = pNewSons; }
@@ -160,10 +156,6 @@ public:
     ControlItemSon(const char *Name, rtl::OString aUIdP )
         : ControlItem( Name, aUIdP ) {}
     ControlItemSon(const String &Name, rtl::OString aUIdP );
-//  ControlItemSon(const String &Name, const String &URL, const URLType aType );
-//    ControlItemSon(const String &Name, const String &URL, const sal_uLong nUId );
-//    ControlItemSon(const char *Name, const String &URL, const sal_uLong nUId );
-//  void Write( SvStream &aStream );
 };
 
 class ControlDef : public ControlItemSon
@@ -172,7 +164,6 @@ public:
     ControlDef(const char *Name, rtl::OString aUIdP )
         : ControlItemSon( Name, aUIdP ) {DBG_CTOR(ControlDef,0);}
     ControlDef(const String &Name, rtl::OString aUIdP );
-//  ControlDef(const String &Name, const String &URL, const URLType aType );
     ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, sal_Bool bWithSons = sal_False );
     ~ControlDef() {DBG_DTOR(ControlDef,0);}
     virtual sal_Bool operator < (const ControlItem &rPar);
@@ -234,7 +225,7 @@ public:
     virtual SbxVariable* Find( const String&, SbxClassType );
     SbxTransportMethodRef pMethodVar;     // zum Transport von Find nach Notify
     static CNames  *pClasses;
-    static ControlDefLoad __READONLY_DATA arClasses [];
+    static ControlDefLoad const arClasses [];
 };
 SV_DECL_IMPL_REF(Controls);
 
@@ -243,13 +234,10 @@ typedef std::map< String, String > Environment;
 class ImplTestToolObj
 {
 public:
-//  ImplTestToolObj()
-//  ~ImplTestToolObj()
+    String ProgParam;           // Parameter der zu Testenden APP; Gesetzt ï¿½ber Start
 
-    String ProgParam;           // Parameter der zu Testenden APP; Gesetzt über Start
-
-    DirEntry aFileBase;         // Grundpfad für die *.sid und *.win Dateien (Aus Configdatei)
-    DirEntry aLogFileBase;      // Grundpfad für die *.res Dateien (Aus Configdatei)
+    DirEntry aFileBase;         // Grundpfad fï¿½r die *.sid und *.win Dateien (Aus Configdatei)
+    DirEntry aLogFileBase;      // Grundpfad fï¿½r die *.res Dateien (Aus Configdatei)
     DirEntry aHIDDir;           // Verzeichnis, in dem die hid.lst gesucht wird
 
     SbxTransportMethodRef pNextReturn;  // Verweis auf die Var, die den Returnwert aufnimmt.
@@ -257,7 +245,7 @@ public:
     ControlsRef pControlsObj;           // Jeweiliges Objekt, an dem Methoden aufgerufen weden.
 
 #define VAR_POOL_SIZE 8
-    SbxTransportMethodRef pMyVars[VAR_POOL_SIZE];  // Falls in Ausdrücken mehrere verwendet werden
+    SbxTransportMethodRef pMyVars[VAR_POOL_SIZE];  // Falls in Ausdrï¿½cken mehrere verwendet werden
 
     Time aServerTimeout;
 
@@ -274,7 +262,7 @@ public:
     sal_uLong nMaxRemoteCommandDelay;
     sal_Bool bDoRemoteCommandDelay;
 
-    sal_Bool bLnaguageExtensionLoaded;      // Wurde über 'use' was geladen? Für syntax highlighting
+    sal_Bool bLnaguageExtensionLoaded;      // Wurde ï¿½ber 'use' was geladen? Fï¿½r syntax highlighting
     SfxBroadcaster *pTTSfxBroadcaster;
 
     sal_uLong nErrorCount;
@@ -400,3 +388,5 @@ public:
     }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

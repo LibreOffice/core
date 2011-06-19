@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "formmetadata.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
-#include "propctrlr.hrc"
-#endif
 #include "formstrings.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
-
+#include <sal/macros.h>
 #include <algorithm>
 #include <functional>
 
@@ -138,6 +134,7 @@ namespace pcr
         DEF_INFO_3( LABEL,             LABEL,              LABEL,             FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( CONTROLLABEL,      LABELCONTROL,       CONTROLLABEL,      FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( WRITING_MODE,      WRITING_MODE,       WRITING_MODE,      FORM_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_3( GROUP_NAME,        GROUP_NAME,         GROUP_NAME,        FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( TEXT,              TEXT,               TEXT,              DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( MAXTEXTLEN,        MAXTEXTLEN,         MAXTEXTLEN,        FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( EDITMASK,          EDITMASK,           EDITMASK,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
@@ -362,7 +359,7 @@ namespace pcr
         };
 
         s_pPropertyInfos = aPropertyInfos;
-        s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
+        s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
 
         // sort
         ::std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );
@@ -520,7 +517,7 @@ namespace pcr
                 nStringItemsResId = RID_RSC_ENUM_SHEET_ANCHOR_TYPE;
                 break;
             default:
-                OSL_ENSURE( sal_False, "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
+                OSL_FAIL( "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
                 break;
         }
 
@@ -654,7 +651,7 @@ namespace pcr
         }
         else
         {
-            DBG_ERROR( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
+            OSL_FAIL( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
             _out_rValue.clear();
         }
     }
@@ -678,7 +675,7 @@ namespace pcr
         }
         else
         {
-            DBG_ERROR( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
+            OSL_FAIL( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
         }
         return sReturn;
     }
@@ -704,3 +701,4 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

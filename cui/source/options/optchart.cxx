@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,13 +26,12 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <unotools/pathoptions.hxx>
 #include <cuires.hrc>
 #include "optchart.hxx"
 #include "optchart.hrc"
 #include <dialmgr.hxx>
+#include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc> // for SID_SCH_EDITOPTIONS
 
 // ====================
@@ -61,18 +61,22 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSe
     aLbChartColors  ( this, CUI_RES( LB_CHART_COLOR_LIST ) ),
     aGbColorBox     ( this, CUI_RES( FL_COLOR_BOX ) ),
     aValSetColorBox ( this, CUI_RES( CT_COLOR_BOX ) ),
-    aPBDefault      ( this, CUI_RES( PB_RESET_TO_DEFAULT ) )
+    aPBDefault      ( this, CUI_RES( PB_RESET_TO_DEFAULT ) ),
+    aPBAdd              ( this, CUI_RES( PB_ADD_CHART_COLOR ) ),
+    aPBRemove           ( this, CUI_RES( PB_REMOVE_CHART_COLOR ) )
 {
     FreeResource();
 
     aPBDefault.SetClickHdl( LINK( this, SvxDefaultColorOptPage, ResetToDefaults ) );
+    aPBAdd.SetClickHdl( LINK( this, SvxDefaultColorOptPage, AddChartColor ) );
+    aPBRemove.SetClickHdl( LINK( this, SvxDefaultColorOptPage, RemoveChartColor ) );
     aLbChartColors.SetSelectHdl( LINK( this, SvxDefaultColorOptPage, ListClickedHdl ) );
     aValSetColorBox.SetSelectHdl( LINK( this, SvxDefaultColorOptPage, BoxClickedHdl ) );
 
     aValSetColorBox.SetStyle( aValSetColorBox.GetStyle()
-                                    | WB_VSCROLL | WB_ITEMBORDER | WB_NAMEFIELD );
+                                    | WB_ITEMBORDER | WB_NAMEFIELD );
     aValSetColorBox.SetColCount( 8 );
-    aValSetColorBox.SetLineCount( 12 );
+    aValSetColorBox.SetLineCount( 13 );
     aValSetColorBox.SetExtraSpacing( 0 );
     aValSetColorBox.Show();
 
@@ -118,12 +122,12 @@ void SvxDefaultColorOptPage::Construct()
 }
 
 
-SfxTabPage* __EXPORT SvxDefaultColorOptPage::Create( Window* pParent, const SfxItemSet& rAttrs )
+SfxTabPage* SvxDefaultColorOptPage::Create( Window* pParent, const SfxItemSet& rAttrs )
 {
     return new SvxDefaultColorOptPage( pParent, rAttrs );
 }
 
-sal_Bool __EXPORT SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
+sal_Bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     if( pColorConfig )
         rOutAttrs.Put( *SAL_STATIC_CAST( SfxPoolItem*, pColorConfig ));
@@ -131,7 +135,7 @@ sal_Bool __EXPORT SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
     return sal_True;
 }
 
-void __EXPORT SvxDefaultColorOptPage::Reset( const SfxItemSet& )
+void SvxDefaultColorOptPage::Reset( const SfxItemSet& )
 {
     aLbChartColors.SelectEntryPos( 0 );
     ListClickedHdl( &aLbChartColors );
@@ -143,6 +147,9 @@ void SvxDefaultColorOptPage::FillColorBox()
 
     long nCount = pColorTab->Count();
     XColorEntry* pColorEntry;
+
+    if( nCount > 104 )
+        aValSetColorBox.SetStyle( aValSetColorBox.GetStyle() | WB_VSCROLL );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -188,6 +195,67 @@ IMPL_LINK( SvxDefaultColorOptPage, ResetToDefaults, void *, EMPTYARG )
         aLbChartColors.FillBox( pColorConfig->GetColorTable() );
 
         aLbChartColors.GetFocus();
+        aLbChartColors.SelectEntryPos( 0 );
+        aPBRemove.Enable( sal_True );
+    }
+
+    return 0L;
+}
+
+// AddChartColor
+// ------------
+
+IMPL_LINK( SvxDefaultColorOptPage, AddChartColor, void *, EMPTYARG )
+{
+    if( pColorConfig )
+    {
+        ColorData black = RGB_COLORDATA( 0x00, 0x00, 0x00 );
+
+        pColorConfig->GetColorTable().append (XColorEntry ( black, pColorConfig->GetColorTable().getDefaultName(pColorConfig->GetColorTable().size())));
+
+        aLbChartColors.Clear();
+        aLbChartColors.FillBox( pColorConfig->GetColorTable() );
+
+        aLbChartColors.GetFocus();
+        aLbChartColors.SelectEntryPos( pColorConfig->GetColorTable().size() - 1 );
+        aPBRemove.Enable( sal_True );
+    }
+
+    return 0L;
+}
+
+// RemoveChartColor
+// ----------------
+
+IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
+{
+    size_t nIndex = aLbChartColors.GetSelectEntryPos();
+
+    if (aLbChartColors.GetSelectEntryCount() == 0)
+        return 0L;
+
+    if( pColorConfig )
+    {
+        OSL_ENSURE(pColorConfig->GetColorTable().size() > 1, "don't delete the last chart color");
+        QueryBox aQuery(pButton, CUI_RES(RID_OPTQB_COLOR_CHART_DELETE));
+        aQuery.SetText(String(CUI_RES(RID_OPTSTR_COLOR_CHART_DELETE)));
+        if(RET_YES == aQuery.Execute())
+        {
+
+            pColorConfig->GetColorTable().remove( nIndex  );
+
+            aLbChartColors.Clear();
+            aLbChartColors.FillBox( pColorConfig->GetColorTable() );
+
+            aLbChartColors.GetFocus();
+
+            if (nIndex == aLbChartColors.GetEntryCount() && aLbChartColors.GetEntryCount() > 0)
+                aLbChartColors.SelectEntryPos( pColorConfig->GetColorTable().size() - 1 );
+            else if (aLbChartColors.GetEntryCount() > 0)
+                aLbChartColors.SelectEntryPos( nIndex );
+            else
+                aPBRemove.Enable( sal_False );
+        }
     }
 
     return 0L;
@@ -234,3 +302,4 @@ IMPL_LINK( SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, EMPTYARG )
     return 0L;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

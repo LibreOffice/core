@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,8 +36,6 @@
 #include <cppuhelper/implbase4.hxx>
 
 #include "saxhelper.hxx"
-//#include "libxml/parserInternals.h"
-//#include "libxslt/xslt.h"
 
 #define NODEPOSITION_NORMAL        1
 #define NODEPOSITION_STARTELEMENT  2
@@ -60,11 +59,6 @@ class XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper4
  *   FUNCTION
  *  Converts SAX events into a libxml2 document, converts the document back
  *  into SAX event stream, and manipulate nodes in the document.
- *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XXMLDocumentWrapper,
- *          XDocumentHandler, XCompressedDocumentHandler,
- *          XServiceInfo
  *
  *   AUTHOR
  *  Michael Mi
@@ -282,3 +276,4 @@ SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

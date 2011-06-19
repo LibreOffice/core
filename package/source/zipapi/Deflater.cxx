@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star;
+using namespace ZipUtils;
 
 /** Provides general purpose compression using the ZLIB compression
  * library.
@@ -210,3 +212,5 @@ void SAL_CALL Deflater::end(  )
     }
     pStream = NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

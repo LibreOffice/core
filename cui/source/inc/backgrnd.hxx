@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svtools/valueset.hxx>
 #include <svx/dlgctrl.hxx>
 
@@ -72,11 +69,11 @@ public:
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void                ShowSelector(); // Umschalt-ListBox aktivieren
-    void                ShowTblControl(); // fuer den Writer (Zellen/Zeilen/Tabelle)
-    void                ShowParaControl(sal_Bool bCharOnly = sal_False); // fuer den Writer (Absatz/Zeichen)
+    void                ShowSelector(); // Shift-ListBox activation
+    void                ShowTblControl(); // for the Writer (cells/rows/tables)
+    void                ShowParaControl(sal_Bool bCharOnly = sal_False); // for the Writer (paragraph/characters)
     void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -91,7 +88,6 @@ private:
      FixedText               aTblDesc;
      ListBox                 aTblLBox;
      ListBox                 aParaLBox;
-    // Hintergrundfarbe ------------------------------------
     Control                 aBorderWin;
     ValueSet                aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
@@ -100,7 +96,7 @@ private:
     FixedText               aColTransFT;
     MetricField             aColTransMF;
     CheckBox                aBtnPreview;
-    // Hintergrund-Bitmap ----------------------------------
+    // Background Bitmap ----------------------------------
      FixedLine               aGbFile;
     PushButton              aBtnBrowse;
     CheckBox                aBtnLink;
@@ -116,7 +112,7 @@ private:
 
     BackgroundPreviewImpl*  pPreviewWin2;
 
-    // DDListBox fuer Writer -------------------------------
+    // DDListBox for Writer -------------------------------
     //------------------------------------------------------
     Color       aBgdColor;
     sal_uInt16      nHtmlMode;
@@ -133,9 +129,9 @@ private:
     SvxBackgroundPage_Impl* pPageImpl;
     SvxOpenGraphicDialog* pImportDlg;
 
-    // Items fuer Sw-Tabelle muessen gesammelt werden
+    // Items for Sw-Table must be corrected
     SvxBackgroundTable_Impl*    pTableBck_Impl;
-    // auch fuer die Absatzvorlage
+    // also for the paragraph style
     SvxBackgroundPara_Impl* pParaBck_Impl;
 
 #ifdef _SVX_BACKGRND_CXX
@@ -165,3 +161,4 @@ private:
 #endif // #ifndef _SVX_BACKGRND_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

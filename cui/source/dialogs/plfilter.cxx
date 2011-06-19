@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include <set>
 #include <map>
@@ -61,7 +59,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
 {
     Reference< XMultiServiceFactory > xMan( ::utl::getProcessServiceFactory() );
     Reference< XPluginManager > xPMgr( xMan->createInstance(
-        rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager") ), UNO_QUERY );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager") ) ), UNO_QUERY );
 
     if ( xPMgr.is() )
     {
@@ -124,3 +122,4 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.plugin.PluginManager" ) ), sal_True );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

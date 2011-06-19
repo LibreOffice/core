@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,10 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-
 #include <osl/security.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>
+#include <sal/macros.h>
 
 #ifdef WNT
 #ifdef _MSC_VER
@@ -92,7 +93,7 @@ static const sal_Char * const aUpdateEntryProperties[] = {
     OLD_VERSION
 };
 
-static const sal_uInt32 nUpdateEntryProperties = sizeof(aUpdateEntryProperties) / sizeof(sal_Char *);
+static const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
 
 //------------------------------------------------------------------------------
 
@@ -212,7 +213,7 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
     // This should become a desktop specific setting in some system backend ..
     rtl::OUString aHomeDir;
     osl::Security().getHomeDir( aHomeDir );
-    aRet = aHomeDir + rtl::OUString::createFromAscii("/Desktop");
+    aRet = aHomeDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Desktop"));
 
     // Set path to home directory when there is no /Desktop directory
     osl::Directory aDocumentsDir( aRet );
@@ -808,3 +809,4 @@ UpdateCheckConfig::getSupportedServiceNames()  throw (uno::RuntimeException)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

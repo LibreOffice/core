@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 
 #include "align.hxx"
@@ -40,6 +38,7 @@
 
 #include <svx/algitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <tools/shl.hxx>
@@ -49,9 +48,9 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/localresaccess.hxx>
-#include <svx/flagsdef.hxx> //CHINA001
-#include <svl/intitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/request.hxx>
 
 namespace svx {
 
@@ -70,6 +69,7 @@ static const HorJustConnection::MapEntryType s_pHorJustMap[] =
     { ALIGNDLG_HORALIGN_RIGHT,  SVX_HOR_JUSTIFY_RIGHT       },
     { ALIGNDLG_HORALIGN_BLOCK,  SVX_HOR_JUSTIFY_BLOCK       },
     { ALIGNDLG_HORALIGN_FILL,   SVX_HOR_JUSTIFY_REPEAT      },
+    { ALIGNDLG_HORALIGN_DISTRIBUTED, SVX_HOR_JUSTIFY_BLOCK  },
     { LISTBOX_ENTRY_NOTFOUND,   SVX_HOR_JUSTIFY_STANDARD    }
 };
 
@@ -84,6 +84,8 @@ static const VerJustConnection::MapEntryType s_pVerJustMap[] =
     { ALIGNDLG_VERALIGN_TOP,    SVX_VER_JUSTIFY_TOP         },
     { ALIGNDLG_VERALIGN_MID,    SVX_VER_JUSTIFY_CENTER      },
     { ALIGNDLG_VERALIGN_BOTTOM, SVX_VER_JUSTIFY_BOTTOM      },
+    { ALIGNDLG_VERALIGN_BLOCK,  SVX_VER_JUSTIFY_BLOCK       },
+    { ALIGNDLG_VERALIGN_DISTRIBUTED, SVX_VER_JUSTIFY_BLOCK  },
     { LISTBOX_ENTRY_NOTFOUND,   SVX_VER_JUSTIFY_STANDARD    }
 };
 
@@ -115,6 +117,48 @@ static sal_uInt16 s_pRanges[] =
     SID_ATTR_ALIGN_SHRINKTOFIT,SID_ATTR_ALIGN_SHRINKTOFIT,
     0
 };
+
+// ============================================================================
+
+namespace {
+
+template<typename _JustContainerType, typename _JustEnumType>
+void lcl_MaybeResetAlignToDistro(
+    ListBox& rLB, sal_uInt16 nListPos, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, _JustEnumType eBlock)
+{
+    const SfxPoolItem* pItem;
+    if (rCoreAttrs.GetItemState(nWhichAlign, sal_True, &pItem) != SFX_ITEM_SET)
+        // alignment not set.
+        return;
+
+    const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
+    _JustContainerType eVal = static_cast<_JustContainerType>(p->GetEnumValue());
+    if (eVal != eBlock)
+        // alignment is not 'justify'.  No need to go further.
+        return;
+
+    if (rCoreAttrs.GetItemState(nWhichJM, sal_True, &pItem) != SFX_ITEM_SET)
+        // justification method is not set.
+        return;
+
+    p = static_cast<const SfxEnumItem*>(pItem);
+    SvxCellJustifyMethod eMethod = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
+    if (eMethod == SVX_JUSTIFY_METHOD_DISTRIBUTE)
+        // Select the 'distribute' entry in the specified list box.
+        rLB.SelectEntryPos(nListPos);
+}
+
+void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const ListBox& rLB, sal_uInt16 nListPos)
+{
+    SvxCellJustifyMethod eJM = SVX_JUSTIFY_METHOD_AUTO;
+    if (rLB.GetSelectEntryPos() == nListPos)
+        eJM = SVX_JUSTIFY_METHOD_DISTRIBUTE;
+
+    SvxJustifyMethodItem aItem(eJM, nWhichJM);
+    rSet.Put(aItem);
+}
+
+}
 
 // ============================================================================
 
@@ -174,7 +218,7 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
         maLbFrameDir.Hide();
     }
 
-    // diese Page braucht ExchangeSupport
+    // This page needs ExchangeSupport.
     SetExchangeSupport();
 
     FreeResource();
@@ -217,9 +261,43 @@ sal_uInt16* AlignmentTabPage::GetRanges()
     return s_pRanges;
 }
 
+sal_Bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
+{
+    bool bChanged = SfxTabPage::FillItemSet(rSet);
+
+    // Special treatment for distributed alignment; we need to set the justify
+    // method to 'distribute' to distinguish from the normal justification.
+
+    sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
+    lcl_SetJustifyMethodToItemSet(rSet, nWhichHorJM, maLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
+    if (!bChanged)
+        bChanged = HasAlignmentChanged(rSet, nWhichHorJM);
+
+    sal_uInt16 nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
+    lcl_SetJustifyMethodToItemSet(rSet, nWhichVerJM, maLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
+    if (!bChanged)
+        bChanged = HasAlignmentChanged(rSet, nWhichVerJM);
+
+    return bChanged;
+}
+
 void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
 {
     SfxTabPage::Reset( rCoreAttrs );
+
+    // Special treatment for distributed alignment; we need to set the justify
+    // method to 'distribute' to distinguish from the normal justification.
+
+    lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
+        maLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, rCoreAttrs,
+        GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY), GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD),
+        SVX_HOR_JUSTIFY_BLOCK);
+
+    lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
+        maLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, rCoreAttrs,
+        GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY), GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD),
+        SVX_VER_JUSTIFY_BLOCK);
+
     UpdateEnableControls();
 }
 
@@ -245,7 +323,7 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     sal_uInt16 nSel = maVsRefEdge.GetSelectItemId();
 
-    ResId aResId( GetSettings().GetStyleSettings().GetHighContrastMode() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, CUI_MGR() );
+    ResId aResId( IL_LOCK_BMPS, CUI_MGR() );
     ImageList aImageList( aResId );
     Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
 
@@ -268,6 +346,7 @@ void AlignmentTabPage::UpdateEnableControls()
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
+    bool bHorDist  = (nHorAlign == ALIGNDLG_HORALIGN_DISTRIBUTED);
 
     // indent edit field only for left alignment
     maFtIndent.Enable( bHorLeft );
@@ -279,13 +358,34 @@ void AlignmentTabPage::UpdateEnableControls()
     // hyphenation only for automatic line breaks or for block alignment
     maBtnHyphen.Enable( maBtnWrap.IsChecked() || bHorBlock );
 
-    // shrink only without automatic line break, and not for block and fill
-    maBtnShrink.Enable( (maBtnWrap.GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill );
+    // shrink only without automatic line break, and not for block, fill or distribute.
+    maBtnShrink.Enable( (maBtnWrap.GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill && !bHorDist );
 
     // visibility of fixed lines
     maFlAlignment.Show( maLbHorAlign.IsVisible() || maEdIndent.IsVisible() || maLbVerAlign.IsVisible() );
     maFlOrient.Show( maCtrlDial.IsVisible() || maVsRefEdge.IsVisible() || maCbStacked.IsVisible() || maCbAsianMode.IsVisible() );
     maFlProperties.Show( maBtnWrap.IsVisible() || maBtnHyphen.IsVisible() || maBtnShrink.IsVisible() || maLbFrameDir.IsVisible() );
+}
+
+bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const
+{
+    const SfxItemSet& rOld = GetItemSet();
+    const SfxPoolItem* pItem;
+    SvxCellJustifyMethod eMethodOld = SVX_JUSTIFY_METHOD_AUTO;
+    SvxCellJustifyMethod eMethodNew = SVX_JUSTIFY_METHOD_AUTO;
+    if (rOld.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
+    {
+        const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
+        eMethodOld = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
+    }
+
+    if (rNew.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
+    {
+        const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
+        eMethodNew = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
+    }
+
+    return eMethodOld != eMethodNew;
 }
 
 IMPL_LINK( AlignmentTabPage, UpdateEnableHdl, void*, EMPTYARG )
@@ -298,3 +398,4 @@ IMPL_LINK( AlignmentTabPage, UpdateEnableHdl, void*, EMPTYARG )
 
 } // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -174,7 +175,7 @@ namespace pcr
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
 
             // also reset the list entries if the cell range is reset
-            // #i28319# - 2004-04-27 - fs@openoffice.org
+            // #i28319#
             if ( !_bFirstTimeInit )
             {
                 try
@@ -184,7 +185,7 @@ namespace pcr
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
+                    OSL_FAIL( "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
                 }
             }
         }
@@ -201,7 +202,7 @@ namespace pcr
         break;  // case PROPERTY_ID_CONTROLSOURCE
 
         default:
-            DBG_ERROR( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
+            OSL_FAIL( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
         }
 
         for ( ::std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
@@ -237,7 +238,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            OSL_FAIL( "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
         }
     }
 
@@ -281,7 +282,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "CellBindingPropertyHandler::getPropertyValue: cannot handle this!" );
+            OSL_FAIL( "CellBindingPropertyHandler::getPropertyValue: cannot handle this!" );
             break;
         }
         return aReturn;
@@ -341,7 +342,7 @@ namespace pcr
             break;
 
             default:
-                DBG_ERROR( "CellBindingPropertyHandler::setPropertyValue: cannot handle this!" );
+                OSL_FAIL( "CellBindingPropertyHandler::setPropertyValue: cannot handle this!" );
                 break;
             }
 
@@ -355,7 +356,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CellBindingPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_FAIL( "CellBindingPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 
@@ -400,7 +401,7 @@ namespace pcr
                 break;
 
             default:
-                DBG_ERROR( "CellBindingPropertyHandler::convertToPropertyValue: cannot handle this!" );
+                OSL_FAIL( "CellBindingPropertyHandler::convertToPropertyValue: cannot handle this!" );
                 break;
         }
 
@@ -455,7 +456,7 @@ namespace pcr
                 break;
 
             default:
-                DBG_ERROR( "CellBindingPropertyHandler::convertToControlValue: cannot handle this!" );
+                OSL_FAIL( "CellBindingPropertyHandler::convertToControlValue: cannot handle this!" );
                 break;
         }
 
@@ -502,3 +503,5 @@ namespace pcr
 //........................................................................
 }   // namespace pcr
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

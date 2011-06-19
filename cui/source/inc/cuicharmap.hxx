@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,12 +89,10 @@ friend class SvxCharacterMap;
 
     SvxShowCharSet  aShowSet;
     SvxShowText     aShowText;
-//    SvxShowText     aShowShortcut;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
     PushButton      aDeleteBtn;
-//    PushButton        aAssignBtn;
     FixedText       aFontText;
     ListBox         aFontLB;
     FixedText       aSubsetText;
@@ -101,7 +100,6 @@ friend class SvxCharacterMap;
     FixedText       aSymbolText;
     SvxShowText     aShowChar;
     FixedText       aCharCodeText;
-//  FixedText       aAssignText;
     Font            aFont;
     sal_Bool            bOne;
     const SubsetMap* pSubsetMap;
@@ -141,3 +139,5 @@ public:
 
 #endif
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

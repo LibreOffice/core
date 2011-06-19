@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,6 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -67,13 +67,17 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
+
 // XML-header of SPELLML queries
 #define SPELLML_HEADER "<?xml?>"
 
 ///////////////////////////////////////////////////////////////////////////
 
-SpellChecker::SpellChecker() :
-    aEvtListeners   ( GetLinguMutex() )
+SpellChecker::SpellChecker()
+    : aEvtListeners(GetLinguMutex())
 {
     aDicts = NULL;
     aDEncs = NULL;
@@ -84,31 +88,29 @@ SpellChecker::SpellChecker() :
     numdict = 0;
 }
 
-
 SpellChecker::~SpellChecker()
 {
     if (aDicts)
     {
-       for (int i = 0; i < numdict; i++)
+       for (int i = 0; i < numdict; ++i)
        {
-            if (aDicts[i]) delete aDicts[i];
+            delete aDicts[i];
             aDicts[i] = NULL;
        }
        delete[] aDicts;
     }
     aDicts = NULL;
     numdict = 0;
-    if (aDEncs) delete[] aDEncs;
+    delete[] aDEncs;
     aDEncs = NULL;
-    if (aDLocs) delete[] aDLocs;
+    delete[] aDLocs;
     aDLocs = NULL;
-    if (aDNames) delete[] aDNames;
+    delete[] aDNames;
     aDNames = NULL;
-    if (pPropHelper)
+    if (xPropHelper.is())
         pPropHelper->RemoveAsPropListener();
     delete pPropHelper;
 }
-
 
 PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
 {
@@ -578,9 +580,8 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
             pPropHelper = new PropertyHelper_Spelling( (XSpellChecker *) this, xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
-        else
-        {
-            DBG_ERROR( "wrong number of arguments in sequence" );
+        else {
+            OSL_FAIL( "wrong number of arguments in sequence" );
         }
     }
 }
@@ -596,6 +597,7 @@ void SAL_CALL SpellChecker::dispose()
         bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
+        xPropHelper.clear();
     }
 }
 
@@ -687,3 +689,5 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
 
 
 ///////////////////////////////////////////////////////////////////////////
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

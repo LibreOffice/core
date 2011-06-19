@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -506,7 +507,7 @@ namespace frm
     {
         if ( m_pEngine.get() )
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bSettingEngineText = true;
             m_pEngine->SetText( _rText );
             m_bSettingEngineText = false;
@@ -548,7 +549,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "ORichTextModel::getEditEngine: caught an exception!" );
+                OSL_FAIL( "ORichTextModel::getEditEngine: caught an exception!" );
             }
         }
         return pEngine;
@@ -636,3 +637,5 @@ namespace frm
 //........................................................................
 } // namespace frm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -89,7 +89,9 @@
 #define RID_QRY_NOTABLES                ( RID_QUERYBOX_START +  0 )
 // please adjust RID_QUERYBOX_END (below) when adding new query boxes
 
-#define RID_QUERYBOX_END                RID_QRY_NOTABLES
+#define RID_QRY_NO_EVO_GW               ( RID_QUERYBOX_START +  1 )
+
+#define RID_QUERYBOX_END                RID_QRY_NO_EVO_GW
 
 //========================================================================
 // untyped resources

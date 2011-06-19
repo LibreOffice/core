@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,15 +67,6 @@ namespace svt {
 // ============================================================================
 
 namespace accessibility {
-
-// ============================================================================
-
-/** Aquire the solar mutex. */
-class BBSolarGuard : public ::vos::OGuard
-{
-public:
-    inline BBSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-};
 
 // ============================================================================
 
@@ -361,11 +353,6 @@ protected:
     Rectangle getBoundingBoxOnScreen()
         throw ( ::com::sun::star::lang::DisposedException );
 
-    /** Creates a new UUID, if rId is empty.
-        @attention  This method requires locked global mutex to prevent double
-                    creation of an UUID. */
-    static void implCreateUuid( ::com::sun::star::uno::Sequence< sal_Int8 >& rId );
-
     ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
     void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
 
@@ -476,11 +463,11 @@ private:
 
 typedef ::osl::MutexGuard OslMutexGuard;
 
-class SolarMethodGuard : public BBSolarGuard, public OslMutexGuard
+class SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
 {
 public:
     inline SolarMethodGuard( AccessibleBrowseBoxBase& _rOwner, bool _bEnsureAlive = true )
-        :BBSolarGuard( )
+        :SolarMutexGuard( )
         ,OslMutexGuard( _rOwner.getMutex( AccessibleBrowseBoxBase::AccessControl() ) )
     {
         if ( _bEnsureAlive )
@@ -525,3 +512,4 @@ inline void AccessibleBrowseBoxBase::implSetDescription(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

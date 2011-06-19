@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,7 @@
 
 //==================================================================
 // ugly dependencies for the OColorControl
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 //==================================================================
@@ -55,9 +54,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/datetime.hxx>
 #include <i18npool/mslangid.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/svapp.hxx>
 //==================================================================
 
@@ -593,7 +590,7 @@ namespace pcr
             // everything which survived the checks above should result in a factor of 1, i.e.,
             // it should have a direct counterpart as FieldUnit
             throw RuntimeException();
-        getTypedControlWindow()->SetUnit( eFieldUnit );
+        getTypedControlWindow()->MetricFormatter::SetUnit( eFieldUnit );
     }
 
     //--------------------------------------------------------------------
@@ -696,9 +693,7 @@ namespace pcr
         }
 
         if ( !pColorTable )
-        {
-            pColorTable = XColorTable::GetStdColorTable();
-        }
+            pColorTable = &XColorTable::GetStdColorTable();
 
 
         DBG_ASSERT(pColorTable, "OColorControl::OColorControl: no color table!");
@@ -1440,3 +1435,4 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

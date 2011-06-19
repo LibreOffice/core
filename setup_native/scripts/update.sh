@@ -99,7 +99,7 @@ elevate() {
 
 
 update_pkg() {
-  ADMINFILE=`make_tempfile 'OpenOffice.org-Online-Update-admin'`
+  ADMINFILE=`make_tempfile 'LibreOffice-Online-Update-admin'`
 
 cat >> $ADMINFILE << EOF
 action=nocheck

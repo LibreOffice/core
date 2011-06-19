@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,12 @@
 #include <ManifestReader.hxx>
 #include <ManifestWriter.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <ZipPackage.hxx>
 
 #include <zipfileaccess.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -47,9 +45,11 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::packages::manifest;
 
+using rtl::OUString;
+
 // C functions to implement this as a component
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -62,7 +62,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
  * @param pRegistryKey registry data key to read and write component persistent data
  * @return a component factory (generic uno interface)
  */
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
@@ -90,3 +90,4 @@ extern "C" void * SAL_CALL component_getFactory(
     return pRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

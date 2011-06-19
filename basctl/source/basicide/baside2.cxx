@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
 #include <ide_pch.hxx>
-
 
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
@@ -42,15 +41,12 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <basic/basrdll.hxx>
-
 
 #include <baside2.hrc>
 #include <baside2.hxx>
@@ -61,13 +57,7 @@
 #include <basobj.hxx>
 #include <brkdlg.hxx>
 
-#include <svx/srchdlg.hxx>
-
 #include <vcl/sound.hxx>
-
-//#ifndef _TXTCMP_HXX //autogen
-//#include <svtools/txtcmp.hxx>
-//#endif
 
 #include <unotools/textsearch.hxx>
 #include <tools/diagnose_ex.h>
@@ -91,8 +81,6 @@ using namespace ::com::sun::star::uno;
 
 #if defined(OW) || defined(MTF)
 #define FILTERMASK_ALL "*"
-#elif defined(PM2)
-#define FILTERMASK_ALL ""
 #else
 #define FILTERMASK_ALL "*.*"
 #endif
@@ -232,7 +220,7 @@ SbModuleRef ModulWindow::XModule()
     return xModule;
 }
 
-__EXPORT ModulWindow::~ModulWindow()
+ModulWindow::~ModulWindow()
 {
     DBG_DTOR( ModulWindow, 0 );
     nValid = 0;
@@ -241,7 +229,7 @@ __EXPORT ModulWindow::~ModulWindow()
 }
 
 
-void __EXPORT ModulWindow::GetFocus()
+void ModulWindow::GetFocus()
 {
     if ( nValid != VALIDWINDOW  )
         return;
@@ -257,17 +245,15 @@ void ModulWindow::DoInit()
     if ( GetVScrollBar() )
         GetVScrollBar()->Hide();
     GetHScrollBar()->Show();
-//  GetEditorWindow().SetScrollBarRanges();
     GetEditorWindow().InitScrollBars();
-//  GetEditorWindow().GrabFocus();
 }
 
 
-void __EXPORT ModulWindow::Paint( const Rectangle& )
+void ModulWindow::Paint( const Rectangle& )
 {
 }
 
-void __EXPORT ModulWindow::Resize()
+void ModulWindow::Resize()
 {
     aXEditorWindow.SetPosSizePixel( Point( 0, 0 ),
                                     Size( GetOutputSizePixel() ) );
@@ -339,7 +325,7 @@ sal_Bool ModulWindow::BasicExecute()
 
     if ( XModule().Is() && xModule->IsCompiled() && !aStatus.bError )
     {
-        if ( GetBreakPoints().Count() )
+        if ( GetBreakPoints().size() )
             aStatus.nBasicFlags = aStatus.nBasicFlags | SbDEBUG_BREAK;
 
         if ( !aStatus.bIsRunning )
@@ -348,8 +334,8 @@ sal_Bool ModulWindow::BasicExecute()
             AddStatus( BASWIN_RUNNINGBASIC );
             sal_uInt16 nStart, nEnd, nCurMethodStart = 0;
             TextSelection aSel = GetEditView()->GetSelection();
-            if ( aDocument.isInVBAMode() )
-                nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
+            // Init cursor to top
+            nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
             SbMethod* pMethod = 0;
             // erstes Macro, sonst blind "Main" (ExtSearch?)
             for ( sal_uInt16 nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
@@ -357,26 +343,17 @@ sal_Bool ModulWindow::BasicExecute()
                 SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
                 DBG_ASSERT( pM, "Method?" );
                 pM->GetLineRange( nStart, nEnd );
-                if ( aDocument.isInVBAMode() )
+                if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
                 {
-                    if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
-                    {
-                        pMethod = pM;
-                        break;
-                    }
-                }
-                else if  ( !pMethod || ( nStart < nCurMethodStart && !pM->IsHidden() ) )
-                {
+                    // matched a method to the cursor position
                     pMethod = pM;
-                    nCurMethodStart = nStart;
+                    break;
                 }
             }
             if ( !pMethod )
             {
-                if ( aDocument.isInVBAMode() )
-                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).getLength() > 0 ) ? sal_True : sal_False;
-                else
-                    pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
+                // If not in a method then prompt the user
+                return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).getLength() > 0 ) ? sal_True : sal_False;
             }
             if ( pMethod )
             {
@@ -474,8 +451,6 @@ sal_Bool ModulWindow::LoadBasic()
     if ( aCurPath.Len() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    //xFP->setTitle( String( IDEResId( RID_STR_OPEN ) ) );
-
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
     xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
@@ -535,8 +510,6 @@ sal_Bool ModulWindow::SaveBasicSource()
 
     if ( aCurPath.Len() )
         xFP->setDisplayDirectory ( aCurPath );
-
-    //xFP->setTitle( String( IDEResId( RID_STR_SAVE ) ) );
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
@@ -598,7 +571,7 @@ sal_Bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
         if ( pBrk ) // entfernen
         {
             xModule->ClearBP( (sal_uInt16)nLine );
-            delete GetBreakPoints().Remove( pBrk );
+            delete GetBreakPoints().remove( pBrk );
         }
         else // einen erzeugen
         {
@@ -733,8 +706,6 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
     sal_Bool bMarkError = ( pBasic == GetBasic() ) ? sal_True : sal_False;
     if ( bMarkError )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine, sal_True );
-//  ErrorBox( this, WB_OK | WB_DEF_OK, String( aErrorTextPrefix + aErrorText ) ).Execute();
-//  ErrorHandler::HandleError( pBasic->GetErrorCode() );
 
     // #i47002#
     Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
@@ -751,12 +722,9 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
     return sal_False;
 }
 
-long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
+long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    // Ein GoOnTop aktiviert da Fenster, das veraendert aber den Context fuer
-    // das Programm!
-//  GoOnTop();
 
     // #i69280 Required in Window despite normal usage in next command!
     (void)pBasic;
@@ -809,7 +777,6 @@ void ModulWindow::BasicAddWatch()
     sal_Bool bAdd = sal_True;
     if ( !GetEditView()->HasSelection() )
     {
-//      bAdd = GetEditView()->SelectCurrentWord();
         TextPaM aWordStart;
         String aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
         if ( aWord.Len() )
@@ -817,7 +784,6 @@ void ModulWindow::BasicAddWatch()
             TextSelection aSel( aWordStart );
             sal_uInt16& rIndex = aSel.GetEnd().GetIndex();
             rIndex = rIndex + aWord.Len();
-            // aSel.GetEnd().GetIndex() += sal::static_int_cast<int>( aWord.Len() );
             GetEditView()->SetSelection( aSel );
             bAdd = sal_True;
         }
@@ -896,7 +862,7 @@ void ModulWindow::EditMacro( const String& rMacroName )
 }
 
 
-void __EXPORT ModulWindow::StoreData()
+void ModulWindow::StoreData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     // StoreData wird gerufen, wenn der BasicManager zerstoert oder
@@ -904,25 +870,22 @@ void __EXPORT ModulWindow::StoreData()
     // => Keine Unterbrechungen erwuenscht!
     // Und bei SAVE, wenn AppBasic...
     GetEditorWindow().SetSourceInBasic( sal_True );
-    // Nicht das Modify loeschen, sonst wird das Basic nicht gespeichert
-    // Es wird beim Speichern sowieso geloescht.
-//  xModule->SetModified( sal_False );
 }
 
-sal_Bool __EXPORT ModulWindow::CanClose()
+sal_Bool ModulWindow::CanClose()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     return sal_True;
 }
 
 
-sal_Bool __EXPORT ModulWindow::AllowUndo()
+sal_Bool ModulWindow::AllowUndo()
 {
     return GetEditorWindow().CanModify();
 }
 
 
-void __EXPORT ModulWindow::UpdateData()
+void ModulWindow::UpdateData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
@@ -970,7 +933,6 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     MapMode eOldMapMode( pPrinter->GetMapMode() );
     Font aOldFont( pPrinter->GetFont() );
 
-//  Font aFont( GetEditEngine()->CreateFontFromItemSet( GetEditEngine()->GetEmptyItemSet() ) );
     Font aFont( GetEditEngine()->GetFont() );
     aFont.SetAlign( ALIGN_BOTTOM );
     aFont.SetTransparent( sal_True );
@@ -1026,13 +988,22 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 }
 
 
-void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
+void ModulWindow::ExecuteCommand( SfxRequest& rReq )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
+        case SID_DELETE:
+        {
+            KeyEvent aFakeDelete( 0, KEY_DELETE );
+            GetEditView()->KeyInput( aFakeDelete );
+            break;
+        }
+        case SID_SELECTALL:
+            GetEditView()->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+            break;
         case SID_BASICRUN:
         {
             BasicRun();
@@ -1141,7 +1112,7 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
 
 
 
-void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
+void ModulWindow::GetState( SfxItemSet &rSet )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     SfxWhichIter aIter(rSet);
@@ -1207,7 +1178,7 @@ void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
 }
 
 
-void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
+void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     if ( ( pCurScrollBar == GetHScrollBar() ) && GetEditView() )
@@ -1223,14 +1194,14 @@ void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 }
 
 
-sal_Bool __EXPORT ModulWindow::IsModified()
+sal_Bool ModulWindow::IsModified()
 {
     return GetEditEngine() ? GetEditEngine()->IsModified() : sal_False;
 }
 
 
 
-void __EXPORT ModulWindow::GoOnTop()
+void ModulWindow::GoOnTop()
 {
     IDE_DLL()->GetShell()->GetViewFrame()->ToTop();
 }
@@ -1245,7 +1216,7 @@ String ModulWindow::GetSbModuleName()
 
 
 
-String __EXPORT ModulWindow::GetTitle()
+String ModulWindow::GetTitle()
 {
     return GetSbModuleName();
 }
@@ -1254,8 +1225,6 @@ String __EXPORT ModulWindow::GetTitle()
 
 void ModulWindow::FrameWindowMoved()
 {
-//  if ( GetEditEngine() && GetEditEngine()->IsInSelectionMode() )
-//      GetEditEngine()->StopSelectionMode();
 }
 
 
@@ -1276,7 +1245,7 @@ void ModulWindow::ShowCursor( sal_Bool bOn )
 }
 
 
-Window* __EXPORT ModulWindow::GetLayoutWindow()
+Window* ModulWindow::GetLayoutWindow()
 {
     return pLayout;
 }
@@ -1332,14 +1301,14 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
     return nFound;
 }
 
-::svl::IUndoManager* __EXPORT ModulWindow::GetUndoManager()
+::svl::IUndoManager* ModulWindow::GetUndoManager()
 {
     if ( GetEditEngine() )
         return &GetEditEngine()->GetUndoManager();
     return NULL;
 }
 
-sal_uInt16 __EXPORT ModulWindow::GetSearchOptions()
+sal_uInt16 ModulWindow::GetSearchOptions()
 {
     sal_uInt16 nOptions = SEARCH_OPTIONS_SEARCH |
                       SEARCH_OPTIONS_WHOLE_WORDS |
@@ -1358,13 +1327,13 @@ sal_uInt16 __EXPORT ModulWindow::GetSearchOptions()
     return nOptions;
 }
 
-void __EXPORT ModulWindow::BasicStarted()
+void ModulWindow::BasicStarted()
 {
     if ( XModule().Is() )
     {
         aStatus.bIsRunning = sal_True;
         BreakPointList& rList = GetBreakPoints();
-        if ( rList.Count() )
+        if ( rList.size() )
         {
             rList.ResetHitCount();
             rList.SetBreakPointsInBasic( xModule );
@@ -1378,7 +1347,7 @@ void __EXPORT ModulWindow::BasicStarted()
     }
 }
 
-void __EXPORT ModulWindow::BasicStopped()
+void ModulWindow::BasicStopped()
 {
     aStatus.bIsRunning = sal_False;
     GetBreakPointWindow().SetMarkerPos( MARKER_NOMARKER );
@@ -1475,8 +1444,7 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     bVSplitted(sal_False),
     bHSplitted(sal_False),
     m_pModulWindow(0),
-    m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT)),
-    m_aImagesHighContrast(IDEResId(RID_IMGLST_LAYOUT_HC))
+    m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT))
 {
     SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
@@ -1523,14 +1491,13 @@ ModulWindowLayout::~ModulWindowLayout()
     m_aColorConfig.RemoveListener(this);
 }
 
-void __EXPORT ModulWindowLayout::Resize()
+void ModulWindowLayout::Resize()
 {
     // ScrollBars, etc. passiert in BasicIDEShell:Adjust...
     ArrangeWindows();
-//  Invalidate();
 }
 
-void __EXPORT ModulWindowLayout::Paint( const Rectangle& )
+void ModulWindowLayout::Paint( const Rectangle& )
 {
     DrawText( Point(), String( IDEResId( RID_STR_NOMODULE ) ) );
 }
@@ -1664,9 +1631,9 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
         // evtl. Sonderbehandlung...
         ArrangeWindows();
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     else
-        DBG_ERROR( "Wer will sich denn hier andocken ?" );
+        OSL_FAIL( "Wer will sich denn hier andocken ?" );
 #endif
 }
 
@@ -1764,8 +1731,9 @@ void ModulWindowLayout::updateSyntaxHighlighting()
     }
 }
 
-Image ModulWindowLayout::getImage(sal_uInt16 nId, bool bHighContrastMode) const
+Image ModulWindowLayout::getImage(sal_uInt16 nId) const
 {
-    return (bHighContrastMode ? m_aImagesHighContrast : m_aImagesNormal).
-        GetImage(nId);
+    return m_aImagesNormal.GetImage(nId);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

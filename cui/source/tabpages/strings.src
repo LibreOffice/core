@@ -29,110 +29,74 @@
 
 String RID_SVXSTR_DESC_GRADIENT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den Farbverlauf ein: */
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den Farbverlauf ein: */
     Text [ en-US ] = "Please enter a name for the gradient:" ;
 };
 String RID_SVXSTR_ASK_DEL_GRADIENT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
     Text [ en-US ] = "Do you want to delete the gradient?" ;
 };
 String RID_SVXSTR_ASK_CHANGE_GRADIENT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
-    /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
     Text [ en-US ] = "The gradient was modified without saving. \nModify the selected gradient or add a new gradient." ;
 };
 String RID_SVXSTR_DESC_NEW_BITMAP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Bitmap ein: : Geben Sie hier bitte den Namen f³r die Bitmap ein: */
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Bitmap ein: : Geben Sie hier bitte den Namen f³r die Bitmap ein: */
     Text [ en-US ] = "Please enter a name for the bitmap:" ;
 };
 String RID_SVXSTR_DESC_EXT_BITMAP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
     Text [ en-US ] = "Please enter a name for the external bitmap:" ;
 };
 String RID_SVXSTR_ASK_DEL_BITMAP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
     Text [ en-US ] = "Are you sure you want to delete the bitmap?" ;
 };
 String RID_SVXSTR_ASK_CHANGE_BITMAP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
-    /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
     Text [ en-US ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
 };
 String RID_SVXSTR_DESC_LINESTYLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Linienstil ein: : Geben Sie hier bitte den Namen f³r den Linienstil ein: */
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Linienstil ein: : Geben Sie hier bitte den Namen f³r den Linienstil ein: */
     Text [ en-US ] = "Please enter a name for the line style:" ;
 };
 String RID_SVXSTR_ASK_DEL_LINESTYLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
     Text [ en-US ] = "Do you want to delete the line style?" ;
 };
 String RID_SVXSTR_ASK_CHANGE_LINESTYLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
-    /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
     Text [ en-US ] = "The line style was modified without saving. \nModify the selected line style or add a new line style." ;
 };
 String RID_SVXSTR_DESC_HATCH
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Schraffur ein: : Geben Sie hier bitte den Namen f³r die Schraffur ein: */
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Schraffur ein: : Geben Sie hier bitte den Namen f³r die Schraffur ein: */
     Text [ en-US ] = "Please enter a name for the hatching:" ;
 };
 String RID_SVXSTR_ASK_DEL_HATCH
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Soll die Schraffur wirklich gelöscht werden? : Soll die Schraffur wirklich gel÷scht werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Soll die Schraffur wirklich gelöscht werden? : Soll die Schraffur wirklich gel÷scht werden? */
     Text [ en-US ] = "Do you want to delete the hatching?" ;
 };
 String RID_SVXSTR_ASK_CHANGE_HATCH
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen. : Die Schraffur wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Schraffur õndern \noder eine neue Schraffur hinzuf³gen. */
-    /* ### ACHTUNG: Neuer Text in Resource? Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen. : Die Schraffur wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Schraffur õndern \noder eine neue Schraffur hinzuf³gen. */
     Text [ en-US ] = "The hatching type was modified but not saved. \nModify the selected hatching type or add a new hatching type." ;
 };
 String RID_SVXSTR_CHANGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Ändern : ndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Ändern : ndern */
     Text [ en-US ] = "Modify" ;
 };
 String RID_SVXSTR_ADD
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
     Text [ en-US ] = "Add" ;
 };
 String RID_SVXSTR_DESC_COLOR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Farbe ein: : Geben Sie hier bitte den Namen f³r die neue Farbe ein: */
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Farbe ein: : Geben Sie hier bitte den Namen f³r die neue Farbe ein: */
     Text [ en-US ] = "Please enter a name for the new color:" ;
 };
 String RID_SVXSTR_ASK_DEL_COLOR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Soll die Farbe wirklich gelöscht werden? : Soll die Farbe wirklich gel÷scht werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Soll die Farbe wirklich gelöscht werden? : Soll die Farbe wirklich gel÷scht werden? */
     Text [ en-US ] = "Do you want to delete the color?" ;
 };
 String RID_SVXSTR_ASK_CHANGE_COLOR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen. : Die Farbe wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Farbe õndern \noder eine neue Farbe hinzuf³gen. */
-    /* ### ACHTUNG: Neuer Text in Resource? Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen. : Die Farbe wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Farbe õndern \noder eine neue Farbe hinzuf³gen. */
     Text [ en-US ] = "The color was modified without saving.\nModify the selected color or add a new color." ;
 };
 String RID_SVXSTR_TABLE
@@ -149,8 +113,6 @@ String RID_SVXSTR_READ_DATA_ERROR
 };
 String RID_SVXSTR_WARN_TABLE_OVERWRITE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? : Die Tabelle wurde geõndert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? : Die Tabelle wurde geõndert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? */
     Text [ en-US ] = "The list was modified without saving. Would you like to save the list now?" ;
 };
 String RID_SVXSTR_WARN_NAME_DUPLICATE
@@ -159,20 +121,14 @@ String RID_SVXSTR_WARN_NAME_DUPLICATE
 };
 String RID_SVXSTR_DESC_LINEEND
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für das neue Linienende ein: : Geben Sie hier bitte den Namen f³r das neue Linienende ein: */
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für das neue Linienende ein: : Geben Sie hier bitte den Namen f³r das neue Linienende ein: */
     Text [ en-US ] = "Please enter a name for the new arrowhead:" ;
 };
 String RID_SVXSTR_ASK_DEL_LINEEND
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Soll das Linienende wirklich gelöscht werden? : Soll das Linienende wirklich gel÷scht werden? */
-    /* ### ACHTUNG: Neuer Text in Resource? Soll das Linienende wirklich gelöscht werden? : Soll das Linienende wirklich gel÷scht werden? */
     Text [ en-US ] = "Do you want to delete the arrowhead?" ;
 };
 String RID_SVXSTR_ASK_CHANGE_LINEEND
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern? : Das Linienende wurde geõndert und nicht gesichert. \nM÷chten Sie das Linienende jetzt sichern? */
-    /* ### ACHTUNG: Neuer Text in Resource? Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern? : Das Linienende wurde geõndert und nicht gesichert. \nM÷chten Sie das Linienende jetzt sichern? */
     Text [ en-US ] = "The arrowhead was modified without saving.\nWould you like to save the arrowhead now?" ;
 };
 

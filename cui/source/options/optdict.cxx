@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
@@ -552,8 +550,8 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 
     if (aWordsLB.GetEntryCount())
     {
-        aWordED   .SetText( aWordsLB.GetEntryText(0LU, 0) );
-        aReplaceED.SetText( aWordsLB.GetEntryText(0LU, 1) );
+        aWordED   .SetText( aWordsLB.GetEntryText((sal_uLong)0, 0) );
+        aReplaceED.SetText( aWordsLB.GetEntryText((sal_uLong)0, 1) );
     }
 
     LeaveWait();
@@ -807,3 +805,4 @@ void SvxDictEdit::KeyInput( const KeyEvent& rKEvt )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

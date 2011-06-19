@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 #include "componentmodule.hxx"
 #include <tools/resmgr.hxx>
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
 
@@ -204,7 +203,7 @@ namespace COMPMOD_NAMESPACE
     {
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
             return;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -247,7 +246,7 @@ namespace COMPMOD_NAMESPACE
 
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
             return NULL;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -291,3 +290,4 @@ namespace COMPMOD_NAMESPACE
 }   // namespace COMPMOD_NAMESPACE
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

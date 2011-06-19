@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,6 @@
 #include <svx/srchdlg.hxx>
 #include <svx/lboxctrl.hxx>
 #include <svx/tbcontrl.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -87,7 +87,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-static const rtl::OUString sStandardLibName(  rtl::OUString::createFromAscii("Standard") );
+static const rtl::OUString sStandardLibName( RTL_CONSTASCII_USTRINGPARAM("Standard"));
 
 typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListenerBASE;
 
@@ -173,7 +173,6 @@ SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 #define IDE_VIEWSHELL_FLAGS     SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW
 
 
-// Hack for #101048
 static sal_Int32 GnBasicIDEShellCount;
 sal_Int32 getBasicIDEShellCount( void )
     { return GnBasicIDEShellCount; }
@@ -250,7 +249,7 @@ void BasicIDEShell::Init()
     UpdateWindows();
 }
 
-__EXPORT BasicIDEShell::~BasicIDEShell()
+BasicIDEShell::~BasicIDEShell()
 {
     m_aNotifier.dispose();
 
@@ -282,10 +281,6 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
         // Destroy all ContainerListeners for Basic Container.
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
-
-    // MI: Das gab einen GPF im SDT beim Schliessen da dann der ViewFrame die
-    // ObjSh loslaesst. Es wusste auch keiner mehr wozu das gut war.
-    // GetViewFrame()->GetObjectShell()->Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
 
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_False;
 
@@ -411,7 +406,7 @@ void BasicIDEShell::StoreAllWindowData( sal_Bool bPersistent )
 }
 
 
-sal_uInt16 __EXPORT BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     (void)bForBrowsing;
 
@@ -430,14 +425,11 @@ sal_uInt16 __EXPORT BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrow
     }
     else
     {
-        // Hier unguenstig, wird zweimal gerufen...
-//      StoreAllWindowData();
-
         sal_Bool bCanClose = sal_True;
         for ( sal_uLong nWin = 0; bCanClose && ( nWin < aIDEWindowTable.Count() ); nWin++ )
         {
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
-            if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
+            if ( !pWin->CanClose() )
             {
                 if ( m_aCurLibName.Len() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
                     SetCurLib( ScriptDocument::getApplicationScriptDocument(), String(), false );
@@ -476,14 +468,14 @@ void BasicIDEShell::InitTabBar()
 }
 
 
-Size __EXPORT BasicIDEShell::GetOptimalSizePixel() const
+Size BasicIDEShell::GetOptimalSizePixel() const
 {
     return Size( 400, 300 );
 }
 
 
 
-void __EXPORT BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rSize )
+void BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rSize )
 {
     // Adjust fliegt irgendwann raus...
     AdjustPosSizePixel( rPos, rSize );
@@ -609,7 +601,7 @@ void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy 
 
 
 
-void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
+void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                                         const SfxHint& rHint, const TypeId& )
 {
     if ( IDE_DLL()->GetShell() )
@@ -1006,14 +998,14 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName,
     {
         ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
 
-        if ( pListener )
-            pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
-
         m_aCurDocument = rDocument;
-
-        pListener->addContainerListener( m_aCurDocument, aLibName );
-
         m_aCurLibName = aLibName;
+
+        if ( pListener )
+        {
+            pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
+            pListener->addContainerListener( m_aCurDocument, aLibName );
+        }
 
         if ( bUpdateWindows )
             UpdateWindows();
@@ -1058,4 +1050,4 @@ void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
     StartListening( pBasic->GetBroadcaster(), sal_True /* Nur einmal anmelden */ );
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

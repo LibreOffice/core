@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,7 +103,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PushButtonNavigation::PushButtonNavigation: caught an exception!" );
+            OSL_FAIL( "PushButtonNavigation::PushButtonNavigation: caught an exception!" );
         }
     }
 
@@ -141,7 +142,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PushButtonNavigation::getCurrentButtonType: caught an exception!" );
+            OSL_FAIL( "PushButtonNavigation::getCurrentButtonType: caught an exception!" );
         }
         return aReturn;
     }
@@ -173,7 +174,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PushButtonNavigation::setCurrentButtonType: caught an exception!" );
+            OSL_FAIL( "PushButtonNavigation::setCurrentButtonType: caught an exception!" );
         }
     }
 
@@ -205,7 +206,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PushButtonNavigation::getCurrentButtonTypeState: caught an exception!" );
+            OSL_FAIL( "PushButtonNavigation::getCurrentButtonTypeState: caught an exception!" );
         }
 
         return eState;
@@ -236,7 +237,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PushButtonNavigation::getCurrentTargetURL: caught an exception!" );
+            OSL_FAIL( "PushButtonNavigation::getCurrentTargetURL: caught an exception!" );
         }
         return aReturn;
     }
@@ -253,7 +254,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
+            OSL_FAIL( "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
         }
     }
 
@@ -272,7 +273,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
+            OSL_FAIL( "PushButtonNavigation::setCurrentTargetURL: caught an exception!" );
         }
 
         return eState;
@@ -304,3 +305,5 @@ namespace pcr
 //............................................................................
 }   // namespace pcr
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

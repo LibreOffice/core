@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,44 +67,10 @@ IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, E
 }
 IMPL_LINK_INLINE_END( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
 
-/*
-IMPL_LINK( BasicIDEShell, ObjectDialogInsertHdl, ObjectCatalog *, pObjCat )
-{
-    if ( !pCurWin )
-        return 0;
-
-    if ( pCurWin->IsA( TYPE( ModulWindow ) ) )
-    {
-        ModulWindow* pEditWin = (ModulWindow*)pCurWin;
-        pEditWin->InsertFromObjectCatalog( pObjCat );
-    }
-    else
-        Sound::Beep();
-
-    return 0;
-}
-*/
-
 Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 {
     return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
 }
-
-#if 0
-sal_uInt16 __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog )
-{
-    if ( pCurWin )
-    {
-        SfxPrinter* pPrinter = GetPrinter( sal_True );
-        if ( pPrinter )
-        {
-            SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
-            pCurWin->PrintData( pPrinter );
-        }
-    }
-    return 0;
-}
-#endif
 
 sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
 {
@@ -127,10 +94,7 @@ String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
         {
             if ( bWholeWord && !pEditView->HasSelection() )
             {
-                // String aStrCurrentDelimiters = pEngine->GetWordDelimiters();
-                // pEngine->SetWordDelimiters( " .,;\"'" );
                 aText = pEditView->GetTextEngine()->GetWord( pEditView->GetSelection().GetEnd() );
-                // pEngine->SetWordDelimiters( aStrCurrentDelimiters );
             }
             else
             {
@@ -143,7 +107,7 @@ String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
     return aText;
 }
 
-SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( sal_Bool bCreate )
+SfxPrinter* BasicIDEShell::GetPrinter( sal_Bool bCreate )
 {
     if ( pCurWin ) // && pCurWin->ISA( ModulWindow ) )
     {
@@ -154,7 +118,7 @@ SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( sal_Bool bCreate )
     return 0;
 }
 
-sal_uInt16 __EXPORT BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
+sal_uInt16 BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
 {
     (void)nDiffFlags;
     BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
@@ -322,23 +286,23 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
     return pModWin;
 }
 
-void __EXPORT BasicIDEShell::Move()
+void BasicIDEShell::Move()
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
         ((ModulWindow*)pCurWin)->FrameWindowMoved();
 }
 
-void __EXPORT BasicIDEShell::ShowCursor( FASTBOOL bOn )
+void BasicIDEShell::ShowCursor( bool bOn )
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
-        ((ModulWindow*)pCurWin)->ShowCursor( (sal_Bool)bOn );
+        ((ModulWindow*)pCurWin)->ShowCursor( bOn );
 }
 
 // Hack for #101048
 sal_Int32 getBasicIDEShellCount( void );
 
 // Nur wenn Basicfenster oben:
-void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
+void BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
     if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
         return;
@@ -349,3 +313,4 @@ void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
         CheckWindows();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

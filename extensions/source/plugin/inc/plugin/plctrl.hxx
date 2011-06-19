@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,6 @@ public:
     { return _xContext; }
 
     virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( ::com::sun::star::uno::RuntimeException ) = 0;
-//  { DBG_ERROR( "### setModel() illegal on plugincontrol!" ); return sal_False; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw( ::com::sun::star::uno::RuntimeException )
@@ -179,3 +179,4 @@ protected:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

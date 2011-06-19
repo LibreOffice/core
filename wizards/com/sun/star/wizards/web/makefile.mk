@@ -33,7 +33,7 @@ PACKAGE = com$/sun$/star$/wizards$/web
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar 
 
 .IF "$(SYSTEM_SAXON)" == "YES"

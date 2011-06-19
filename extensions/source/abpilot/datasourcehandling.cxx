@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ namespace abp
     //---------------------------------------------------------------------
     static Reference< XNameAccess > lcl_getDataSourceContext( const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW (( Exception ))
     {
-        Reference< XNameAccess > xContext( _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ) ), UNO_QUERY );
+        Reference< XNameAccess > xContext( _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatabaseContext" )) ), UNO_QUERY );
         DBG_ASSERT(xContext.is(), "lcl_getDataSourceContext: could not access the data source context!");
         return xContext;
     }
@@ -135,7 +136,7 @@ namespace abp
             if (xNewDataSource.is())
             {
                 xNewDataSource->setPropertyValue(
-                    ::rtl::OUString::createFromAscii( "URL" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" )),
                     makeAny( ::rtl::OUString::createFromAscii( _pInitialAsciiURL ) )
                 );
             }
@@ -144,7 +145,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "lcl_implCreateAndSetURL: caught an exception while creating the data source!" );
+            OSL_FAIL( "lcl_implCreateAndSetURL: caught an exception while creating the data source!" );
         }
 
         return aReturn;
@@ -216,7 +217,7 @@ namespace abp
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "ODataSourceContext::ODataSourceContext: caught an exception!" );
+            OSL_FAIL( "ODataSourceContext::ODataSourceContext: caught an exception!" );
         }
     }
 
@@ -356,9 +357,11 @@ namespace abp
     //---------------------------------------------------------------------
     ODataSource& ODataSource::operator=( const ODataSource& _rSource )
     {
-        delete m_pImpl;
-        m_pImpl = new ODataSourceImpl( *_rSource.m_pImpl );
-
+        if( this != &_rSource )
+        {
+            delete m_pImpl;
+            m_pImpl = new ODataSourceImpl( *_rSource.m_pImpl );
+        }
         return *this;
     }
 
@@ -392,7 +395,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
         }
     }
     //---------------------------------------------------------------------
@@ -409,7 +412,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
         }
     }
 
@@ -441,7 +444,7 @@ namespace abp
         }
         catch(const Exception&)
         {
-            DBG_ERROR( "ODataSource::remove: caught an exception while creating the data source!" );
+            OSL_FAIL( "ODataSource::remove: caught an exception while creating the data source!" );
         }
     }
 
@@ -480,7 +483,7 @@ namespace abp
         m_pImpl->aTables.clear();
         if ( !isConnected() )
         {
-            DBG_ERROR( "ODataSource::getTableNames: not connected!" );
+            OSL_FAIL( "ODataSource::getTableNames: not connected!" );
         }
         else
         {
@@ -523,7 +526,7 @@ namespace abp
 
         // ................................................................
         // create the interaction handler (needed for authentication and error handling)
-        static ::rtl::OUString s_sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler");
+        static ::rtl::OUString s_sInteractionHandlerServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"));
         Reference< XInteractionHandler > xInteractions;
         try
         {
@@ -561,7 +564,7 @@ namespace abp
         catch( const SQLException& e ) { aError <<= e; }
         catch( const Exception& )
         {
-            DBG_ERROR( "ODataSource::connect: caught a generic exception!" );
+            OSL_FAIL( "ODataSource::connect: caught a generic exception!" );
         }
 
         // ................................................................
@@ -590,7 +593,7 @@ namespace abp
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "ODataSource::connect: caught an exception while trying to display the error!" );
+                OSL_FAIL( "ODataSource::connect: caught an exception while trying to display the error!" );
             }
         }
 
@@ -635,3 +638,4 @@ namespace abp
 }   // namespace abp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

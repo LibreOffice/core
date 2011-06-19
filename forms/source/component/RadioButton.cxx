@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "RadioButton.hxx"
+#include "GroupManager.hxx"
 #include "property.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
@@ -89,7 +89,7 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
     // (formerly this switch-off was done in the toolkit - but the correct place is here ...)
 //  Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
 //  if (xVclWindowPeer.is())
-//      xVclWindowPeer->setProperty(::rtl::OUString::createFromAscii("AutoToggle"), ::cppu::bool2any(sal_False));
+//      xVclWindowPeer->setProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoToggle")), ::cppu::bool2any(sal_False));
     // new order: do _not_ switch off the auto toggle because:
     // * today, it is not necessary anymore to handle the toggling ourself (everything works fine without it)
     // * without auto toggle, the AccessibleEvents as fired by the radio buttons are
@@ -119,6 +119,7 @@ ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxF
     m_nClassId = FormComponentType::RADIOBUTTON;
     m_aLabelServiceName = FRM_SUN_COMPONENT_GROUPBOX;
     initValueProperty( PROPERTY_STATE, PROPERTY_ID_STATE );
+    startAggregatePropertyListening( PROPERTY_GROUP_NAME );
 }
 
 //------------------------------------------------------------------
@@ -165,8 +166,12 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
 //------------------------------------------------------------------------------
 void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, const Any& rValue)
 {
-    // mein Name
-    ::rtl::OUString sMyName(m_aName);
+    // my name
+    ::rtl::OUString sMyGroup;
+    if (hasProperty(PROPERTY_GROUP_NAME, this))
+        this->getPropertyValue(PROPERTY_GROUP_NAME) >>= sMyGroup;
+    if (sMyGroup.getLength() == 0)
+        sMyGroup = m_aName;
 
     // meine Siblings durchiterieren
     Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
@@ -174,8 +179,9 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
     {
         Reference<XPropertySet> xMyProps;
         query_interface(static_cast<XWeak*>(this), xMyProps);
-        ::rtl::OUString sCurrentName;
-        for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
+        ::rtl::OUString sCurrentGroup;
+        sal_Int32 nNumSiblings = xIndexAccess->getCount();
+        for (sal_Int32 i=0; i<nNumSiblings; ++i)
         {
             Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
             if (!xSiblingProperties.is())
@@ -192,8 +198,8 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
                 continue;
 
             // das 'zur selben Gruppe gehoeren' wird am Namen festgemacht
-            xSiblingProperties->getPropertyValue(PROPERTY_NAME) >>= sCurrentName;
-            if (sCurrentName == sMyName)
+            sCurrentGroup = OGroupManager::GetGroupName( xSiblingProperties );
+            if (sCurrentGroup == sMyGroup)
                 xSiblingProperties->setPropertyValue(rPropName, rValue);
         }
     }
@@ -220,40 +226,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
     // die andere Richtung : wenn sich mein Name aendert ...
     if (nHandle == PROPERTY_ID_NAME)
     {
-        // ... muss ich testen, ob ich Siblings mit dem selben Namen habe, damit ich deren ControlSource uebernehmen kann
-        Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
-        if (xIndexAccess.is())
-        {
-            ::rtl::OUString         sName;
-            ::rtl::OUString         sControlSource;
-
-            Reference<XPropertySet> xMyProps;
-            query_interface(static_cast<XWeak*>(this), xMyProps);
-            for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
-            {
-                Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
-                if (!xSiblingProperties.is())
-                    continue;
-
-                if (xMyProps == xSiblingProperties)
-                    // nur wenn ich nicht mich selber gefunden habe
-                    continue;
-
-                sal_Int16 nType = 0;
-                xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
-                if (nType != FormComponentType::RADIOBUTTON)
-                    // nur Radio-Buttons
-                    continue;
-
-                xSiblingProperties->getPropertyValue(PROPERTY_NAME) >>= sName;
-                // Control, das zur gleichen Gruppe gehoert ?
-                if (rValue == sName)
-                {
-                    setPropertyValue(PROPERTY_CONTROLSOURCE, xSiblingProperties->getPropertyValue(PROPERTY_CONTROLSOURCE));
-                    break;
-                }
-            }
-        }
+        setControlSource();
     }
 
     if (nHandle == PROPERTY_ID_DEFAULT_STATE)
@@ -267,6 +240,52 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
             nValue = 0;
             aZero <<= nValue;
             SetSiblingPropsTo(PROPERTY_DEFAULT_STATE, aZero);
+        }
+    }
+}
+
+void ORadioButtonModel::setControlSource()
+{
+    Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
+    if (xIndexAccess.is())
+    {
+        ::rtl::OUString sName, sGroupName;
+
+        if (hasProperty(PROPERTY_GROUP_NAME, this))
+            this->getPropertyValue(PROPERTY_GROUP_NAME) >>= sGroupName;
+        this->getPropertyValue(PROPERTY_NAME) >>= sName;
+
+        Reference<XPropertySet> xMyProps;
+        query_interface(static_cast<XWeak*>(this), xMyProps);
+        for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
+        {
+            Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
+            if (!xSiblingProperties.is())
+                continue;
+
+            if (xMyProps == xSiblingProperties)
+                // nur wenn ich nicht mich selber gefunden habe
+                continue;
+
+            sal_Int16 nType = 0;
+            xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
+            if (nType != FormComponentType::RADIOBUTTON)
+                // nur Radio-Buttons
+                continue;
+
+            ::rtl::OUString sSiblingName, sSiblingGroupName;
+            if (hasProperty(PROPERTY_GROUP_NAME, xSiblingProperties))
+                xSiblingProperties->getPropertyValue(PROPERTY_GROUP_NAME) >>= sSiblingGroupName;
+            xSiblingProperties->getPropertyValue(PROPERTY_NAME) >>= sSiblingName;
+
+            if ((sGroupName.getLength() == 0 && sSiblingGroupName.getLength() == 0 &&   // (no group name
+                 sName == sSiblingName) ||                                              //  names match) or
+                (sGroupName.getLength() != 0 && sSiblingGroupName.getLength() != 0 &&   // (have group name
+                 sGroupName == sSiblingGroupName))                                      //  they match)
+            {
+                setPropertyValue(PROPERTY_CONTROLSOURCE, xSiblingProperties->getPropertyValue(PROPERTY_CONTROLSOURCE));
+                break;
+            }
         }
     }
 }
@@ -332,7 +351,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
             readCommonProperties(_rxInStream);
             break;
         default :
-            DBG_ERROR("ORadioButtonModel::read : unknown version !");
+            OSL_FAIL("ORadioButtonModel::read : unknown version !");
             defaultCommonProperties();
             break;
     }
@@ -359,6 +378,13 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) thr
             aZero <<= (sal_Int16)0;
             SetSiblingPropsTo( PROPERTY_STATE, aZero );
         }
+    }
+    else if ( _rEvent.PropertyName.equals( PROPERTY_GROUP_NAME ) )
+    {
+        setControlSource();
+        // Can't call OReferenceValueComponent::_propertyChanged(), as it
+        // doesn't know what to do with the GroupName property.
+        return;
     }
 
     OReferenceValueComponent::_propertyChanged( _rEvent );
@@ -399,7 +425,7 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         }
         catch(Exception&)
         {
-            DBG_ERROR("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
+            OSL_FAIL("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
         }
     }
     return sal_True;
@@ -409,3 +435,4 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

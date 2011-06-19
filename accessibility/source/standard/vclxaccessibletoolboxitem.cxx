@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,17 +138,6 @@ VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
     if ( m_pToolBox && m_nItemId > 0 && ( _bAsName || m_pToolBox->GetButtonType() != BUTTON_SYMBOL ) )
     {
         sRet = m_pToolBox->GetItemText( m_nItemId );
-//OJ #108243# we only read the name of the toolboxitem
-//
-//      Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
-//      if ( pItemWindow && pItemWindow->GetAccessible().is() &&
-//           pItemWindow->GetAccessible()->getAccessibleContext().is() )
-//      {
-//          ::rtl::OUString sWinText = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
-//          if ( ( sRet.getLength() > 0 ) && ( sWinText.getLength() > 0 ) )
-//              sRet += String( RTL_CONSTASCII_USTRINGPARAM( " " ) );
-//          sRet += sWinText;
-//      }
     }
     return sRet;
 }
@@ -270,11 +260,10 @@ void VCLXAccessibleToolBoxItem::implGetSelection( sal_Int32& nStartIndex, sal_In
 IMPLEMENT_FORWARD_REFCOUNT( VCLXAccessibleToolBoxItem, AccessibleTextHelper_BASE )
 Any SAL_CALL VCLXAccessibleToolBoxItem::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
-    // --> PB 2004-09-03 #i33611# - toolbox buttons without text don't support XAccessibleText
+    // #i33611# - toolbox buttons without text don't support XAccessibleText
     if ( _rType == ::getCppuType( ( const Reference< XAccessibleText >* ) 0 )
         && ( !m_pToolBox || m_pToolBox->GetButtonType() == BUTTON_SYMBOL ) )
         return Any();
-    // <--
 
     ::com::sun::star::uno::Any aReturn = AccessibleTextHelper_BASE::queryInterface( _rType );
     if ( !aReturn.hasValue() )
@@ -298,7 +287,7 @@ void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString VCLXAccessibleToolBoxItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleToolBoxItem" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleToolBoxItem" ));
 }
 // -----------------------------------------------------------------------------
 sal_Bool VCLXAccessibleToolBoxItem::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
@@ -315,10 +304,10 @@ sal_Bool VCLXAccessibleToolBoxItem::supportsService( const ::rtl::OUString& rSer
 Sequence< ::rtl::OUString > VCLXAccessibleToolBoxItem::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(4);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleContext" );
-    aNames[1] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleComponent" );
-    aNames[2] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleExtendedComponent" );
-    aNames[3] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleToolBoxItem" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ));
+    aNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComponent" ));
+    aNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleExtendedComponent" ));
+    aNames[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleToolBoxItem" ));
     return aNames;
 }
 // -----------------------------------------------------------------------------
@@ -716,3 +705,4 @@ Any VCLXAccessibleToolBoxItem::getMinimumValue(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

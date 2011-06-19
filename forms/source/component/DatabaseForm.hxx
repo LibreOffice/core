@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,9 +71,7 @@
 #include <connectivity/filtermanager.hxx>
 #include <connectivity/warningscontainer.hxx>
 
-#ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
-#endif
 #include "ids.hxx"
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
@@ -567,3 +566,4 @@ inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::c
 #endif // _FRM_DATABASEFORM_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

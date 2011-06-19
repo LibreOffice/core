@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,6 @@
 **   Es gibt immer nur eine Statementliste, die verpointert ist.
 **       jederzeit kann das der Anfang der Kette abgefragt werden.
 **
-**
-**
-**
-**
-**
-**
 ***************************************************************************/
 #ifndef _STATEMNT_HXX
 #define _STATEMNT_HXX
@@ -44,9 +39,6 @@
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-#ifndef _SV_DRAG_HXX //autogen
-//#include <vcl/drag.hxx>
-#endif
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/fsys.hxx>
@@ -115,10 +107,9 @@ public:
 };
 
 sal_Bool IsDialog(Window *pWin);        // Ist *pWin von SystemWindow abgeleitet (Kann es Active sein)
-sal_Bool IsAccessable(Window *pWin);    // Ist *pWin Zugreifbar (über IsEnabled und Parents geprüft)
+sal_Bool IsAccessable(Window *pWin);    // Ist *pWin Zugreifbar (ï¿½ber IsEnabled und Parents geprï¿½ft)
 
 
-//class SafePointer : CriticalSection
 class SafePointer
 {
     SafePointer *pSelf;
@@ -126,8 +117,6 @@ public:
     SafePointer()   { pSelf = this; }
     virtual ~SafePointer()  { DBG_ASSERT(pSelf==this,"Destructor von Nicht existierendem Objekt aufgerufen");
                               pSelf = NULL; }
-//  static sal_Bool IsValid( SafePointer *pThis ) { return pThis == pThis->pSelf; }
-// virtual      operator -> (); { DBG_ASSERT(pMyself == this,"-> von Nicht existierendem Objekt aufgerufen"); }
 };
 
 
@@ -174,12 +163,12 @@ protected:
 
     static sal_Bool bIsInReschedule;
         static sal_uInt16 nModalCount;
-    static Window *pLastFocusWindow;        // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
-    static sal_Bool bWasDragManager;            // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
-    static sal_Bool bWasPopupMenu;              // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
+    static Window *pLastFocusWindow;        // Wenn dieses sich ï¿½ndert wird Safe Reschedule abgebrochen
+    static sal_Bool bWasDragManager;            // Wenn dieses sich ï¿½ndert wird Safe Reschedule abgebrochen
+    static sal_Bool bWasPopupMenu;              // Wenn dieses sich ï¿½ndert wird Safe Reschedule abgebrochen
        static sal_Bool bBasicWasRunning;
 
-    static sal_uInt16 nMinTypeKeysDelay;                /// Verzögerung der einzelnen Anschläge für TypeKeys
+    static sal_uInt16 nMinTypeKeysDelay;                /// Verzï¿½gerung der einzelnen Anschlï¿½ge fï¿½r TypeKeys
     static sal_uInt16 nMaxTypeKeysDelay;
     static sal_Bool bDoTypeKeysDelay;
 
@@ -189,7 +178,7 @@ protected:
 
 public:
     static sal_Bool IsInReschedule() { return bIsInReschedule; }
-    void SafeReschedule( sal_Bool bYield = sal_False )  // Setzt Flag, so daß nicht schon der nächste Befehl ausgeführt wird
+    void SafeReschedule( sal_Bool bYield = sal_False )  // Setzt Flag, so daï¿½ nicht schon der nï¿½chste Befehl ausgefï¿½hrt wird
     {
         nModalCount = Application::GetModalModeCount();
         bIsInReschedule = sal_True;
@@ -211,13 +200,12 @@ public:
         nModalCount = 0;
     }
     static sal_Bool MaybeResetSafeReschedule()
-    {       // Implementierung muß hier zwar nicht sein, ist aber übersichtlicher so
+    {       // Implementierung muï¿½ hier zwar nicht sein, ist aber ï¿½bersichtlicher so
         if ( !bIsInReschedule )
             return sal_False;
 
         if ( pLastFocusWindow != GetpApp()->GetFocusWindow()
             || ( Application::GetModalModeCount() > nModalCount )
-//          || ( DragManager::GetDragManager() && !bWasDragManager )
             || ( PopupMenu::GetActivePopupMenu() && !bWasPopupMenu )
             || ( StarBASIC::IsRunning() && !bBasicWasRunning ) )
         {
@@ -257,17 +245,15 @@ protected:
     sal_uInt16 GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, Menu *&pMenu );
 
 public:
-//  void AddStatement( StatementList *pNewStatement );
-
     virtual ~StatementList();
     void Advance();
     virtual sal_Bool Execute() = 0;
 /***************************************************************************
-** Bestimmt erst den nächsten Befehl, setzt Current
-** und führt dann aus.
-** Returnwert gibt an, ob Befehl nochmal ausgeführt
-** werden soll. Dann muß auch der UserEvent verlassen werden, um der Applikation
-** normales Arbeiten zu ermöglichen (Dialog schliessen)
+** Bestimmt erst den nï¿½chsten Befehl, setzt Current
+** und fï¿½hrt dann aus.
+** Returnwert gibt an, ob Befehl nochmal ausgefï¿½hrt
+** werden soll. Dann muï¿½ auch der UserEvent verlassen werden, um der Applikation
+** normales Arbeiten zu ermï¿½glichen (Dialog schliessen)
 ** sal_True bedeutet, dass alles klar gegangen ist
 ** sal_False bedeutet nochmal Bitte
 ***************************************************************************/
@@ -293,7 +279,7 @@ public:
     static sal_Bool bDying;
     static sal_Bool bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
     sal_Bool bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
-    static sal_uInt16 aSubMenuId1;          // Untermenüs bei PopupMenus
+    static sal_uInt16 aSubMenuId1;          // Untermenï¿½s bei PopupMenus
     static sal_uInt16 aSubMenuId2;          // erstmal 2-Stufig
     static sal_uInt16 aSubMenuId3;          // and now even 3 levels #i31512#
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
@@ -344,14 +330,20 @@ public:
     StatementUnoSlot(SCmdStream *pIn);
 };
 
-class StatementCommand : public StatementList   // Befehl ausführen (wintree, resetaplication ...)
+union munge
+{
+    comm_UINT32 nLNr1;
+    Window *pWindow;
+};
+
+class StatementCommand : public StatementList   // Befehl ausfï¿½hren (wintree, resetaplication ...)
 {
     friend class ImplRemoteControl;
 protected:
     sal_uInt16 nMethodId;
     sal_uInt16 nParams;
-    comm_USHORT nNr1,nNr2,nNr3,nNr4;
-    comm_ULONG nLNr1;
+    comm_UINT16 nNr1,nNr2,nNr3,nNr4;
+    munge nLNr1_and_Pointer;
     String aString1,aString2;
     sal_Bool bBool1,bBool2;
 
@@ -386,8 +378,8 @@ protected:
     rtl::OString aUId;
     sal_uInt16 nMethodId;
     sal_uInt16 nParams;
-    comm_USHORT nNr1,nNr2,nNr3,nNr4;
-    comm_ULONG nLNr1;
+    comm_UINT16 nNr1,nNr2,nNr3,nNr4;
+    comm_UINT32 nLNr1;
     String aString1,aString2;
     sal_Bool bBool1,bBool2;
     sal_Bool ControlOK( Window *pControl, const sal_Char* aBezeichnung );
@@ -410,8 +402,8 @@ class StatementFlow : public StatementList      // Kommunikation mit Sequence
     sal_uInt16 nArt;
 
     sal_uInt16 nParams;
-    comm_USHORT nSNr1;
-    comm_ULONG nLNr1;
+    comm_UINT16 nSNr1;
+    comm_UINT32 nLNr1;
     String aString1;
     sal_Bool bBool1;
 
@@ -423,8 +415,8 @@ public:
     static CommunicationLink *pCommLink;
     static sal_Bool bSending;
 
-    static sal_Bool bUseIPC;    // Soll zur rückmeldung IPC verwendet werden?
-    static ImplRemoteControl *pRemoteControl;   // Static für 2. Constructor
+    static sal_Bool bUseIPC;    // Soll zur rï¿½ckmeldung IPC verwendet werden?
+    static ImplRemoteControl *pRemoteControl;   // Static fï¿½r 2. Constructor
 
 private:
     void SendViaSocket();
@@ -496,3 +488,5 @@ void ImplCommand( Window* pWin, CommandEvent &aCmdEvnt );
 void ImplEventWait( sal_uLong nID );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,13 +42,6 @@
 #include <svx/langbox.hxx>
 #include <svx/fontlb.hxx>
 
-//CHINA001 #define SVX_NUMVAL_STANDARD      -1234.12345678901234
-//CHINA001 #define SVX_NUMVAL_CURRENCY      -1234
-//CHINA001 #define SVX_NUMVAL_PERCENT       -0.1295
-//CHINA001 #define SVX_NUMVAL_TIME      36525.5678935185
-//CHINA001 #define SVX_NUMVAL_DATE      36525.5678935185
-//CHINA001 #define SVX_NUMVAL_BOOLEAN       1
-
 //------------------------------------------------------------------------
 
 class SvxNumberFormatShell;
@@ -76,7 +70,6 @@ public:
 };
 
 // -----------------------------------------------------------------------
-
 #include <sfx2/layout.hxx>
 #include <layout/layout-pre.hxx>
 
@@ -87,8 +80,11 @@ class SvxNumberFormatTabPage : public SfxTabPage
 public:
     ~SvxNumberFormatTabPage();
 
-#undef SfxTabPage
-#define SfxTabPage ::SfxTabPage
+#if ENABLE_LAYOUT
+#  undef SfxTabPage
+#  define SfxTabPage ::SfxTabPage
+#endif
+
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
     static sal_uInt16*          GetRanges();
@@ -104,7 +100,7 @@ public:
     void                    SetOkHdl( const Link& rOkHandler );
     void                    HideLanguage(sal_Bool nFlag=sal_True);
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual void            PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void            PageCreated (SfxAllItemSet aSet);
 private:
     SvxNumberFormatTabPage( Window* pParent,
                             const SfxItemSet& rCoreAttrs );
@@ -185,3 +181,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

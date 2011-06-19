@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "taborder.hxx"
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HRC
 #include "taborder.hrc"
-#endif
 
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "formstrings.hxx"
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
@@ -111,9 +106,7 @@ namespace pcr
         aPB_OK.SetClickHdl( LINK( this, TabOrderDialog, OKClickHdl ) );
         aPB_OK.Disable();
 
-        sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-        pImageList = new ImageList( PcrRes( bIsHighContrast ? RID_IL_FORMEXPLORER_HC : RID_IL_FORMEXPLORER ) );
-
+        pImageList = new ImageList( PcrRes( RID_IL_FORMEXPLORER ) );
 
         if ( m_xModel.is() )
             m_xTempModel = new OSimpleTabModel( m_xModel->getControlModels() );
@@ -178,7 +171,7 @@ namespace pcr
             case FormComponentType::SPINBUTTON:     nImageId = RID_SVXIMG_SPINBUTTON; break;
             case FormComponentType::NAVIGATIONBAR:  nImageId = RID_SVXIMG_NAVIGATIONBAR; break;
             default:
-                DBG_ERROR( "TabOrderDialog::GetImage: unknown control type" );
+                OSL_FAIL( "TabOrderDialog::GetImage: unknown control type" );
             }
         }
 
@@ -222,7 +215,7 @@ namespace pcr
                 else
                 {
                     // no property set -> no tab order
-                    DBG_ERROR( "TabOrderDialog::FillList: invalid control encountered!" );
+                    OSL_FAIL( "TabOrderDialog::FillList: invalid control encountered!" );
                     aLB_Controls.Clear();
                     break;
                 }
@@ -230,7 +223,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "TabOrderDialog::FillList: caught an exception!" );
+            OSL_FAIL( "TabOrderDialog::FillList: caught an exception!" );
         }
 
         // select first entry
@@ -276,7 +269,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
+            OSL_FAIL( "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
         }
 
         return 0;
@@ -307,9 +300,7 @@ namespace pcr
         }
 
         // TODO: UNO action (to bracket all the single actions which are being created)
-//        pDrawModel->BegUndo(PcrRes(RID_STR_UNDO_TABORDER));
         m_xModel->setControlModels( aSortedControlModelSeq );
-//        pDrawModel->EndUndo();
 
         EndDialog( sal_True );
         return 0;
@@ -422,3 +413,5 @@ namespace pcr
 //............................................................................
 }  // namespace pcr
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

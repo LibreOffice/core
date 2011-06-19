@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,15 +55,15 @@ private:
 
     sal_Bool                mbMarkWndOpen;
 
-    DECL_LINK (ClickFileopenHdl_Impl  , void * );       // Button : Fileopen
-    DECL_LINK (ClickTargetHdl_Impl    , void * );       // Button : Target
+    DECL_LINK (ClickFileopenHdl_Impl  , void * );
+    DECL_LINK (ClickTargetHdl_Impl    , void * );
 
-    DECL_LINK (ModifiedPathHdl_Impl  , void * );        // Contens of combobox "Path" modified
-    DECL_LINK (ModifiedTargetHdl_Impl, void * );        // Contens of editfield "Target" modified
+    DECL_LINK (ModifiedPathHdl_Impl  , void * ); // Contens of combobox "Path" modified
+    DECL_LINK (ModifiedTargetHdl_Impl, void * ); // Contens of editfield "Target" modified
 
-    DECL_LINK (LostFocusPathHdl_Impl,  void * );        // Combobox "path" lost its focus
+    DECL_LINK (LostFocusPathHdl_Impl,  void * ); // Combobox "path" lost its focus
 
-    DECL_LINK (TimeoutHdl_Impl      ,  Timer * );       // Handler for timer -timeout
+    DECL_LINK (TimeoutHdl_Impl      ,  Timer * );   // Handler for timer -timeout
 
     enum EPathType { Type_Unknown, Type_Invalid,
                      Type_ExistsFile, Type_File,
@@ -91,3 +92,5 @@ public:
 
 
 #endif // _SVX_TABPAGE_DOC_HYPERLINK_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

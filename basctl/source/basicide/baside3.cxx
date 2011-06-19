@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-//svdraw.hxx
-//#define _SVDRAW_HXX ***
 #define _SDR_NOITEMS
 #define _SDR_NOTOUCH
 #define _SDR_NOTRANSFORM
 #define _SDR_NOOBJECTS
-//#define _SDR_NOVIEWS ***
 #define _SDR_NOVIEWMARKER
 #define _SDR_NODRAGMETHODS
-//#define _SDR_NOUNDO ***
 #define _SDR_NOXOUTDEV
 
 #include <ide_pch.hxx>
@@ -68,9 +65,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmlscript/xmldlg_imexp.hxx>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <svtools/ehdl.hxx>
 #include <svtools/langtab.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -82,6 +77,7 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -93,8 +89,6 @@ using namespace ::com::sun::star::ui::dialogs;
 
 #if defined(UNX)
 #define FILTERMASK_ALL "*"
-#elif defined(PM2)
-#define FILTERMASK_ALL ""
 #else
 #define FILTERMASK_ALL "*.*"
 #endif
@@ -110,7 +104,7 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
 {
     InitSettings( sal_True, sal_True, sal_True );
 
-    pEditor = new DlgEditor();
+    pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
     pEditor->SetWindow( this );
     pEditor->SetDialog( xDialogModel );
 
@@ -232,9 +226,9 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 
 void DialogWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
-            ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-            ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
+    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL           ) ||
+         ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
+         ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL      ) )
     {
         HandleScrollCommand( rCEvt, GetHScrollBar(), GetVScrollBar() );
     }
@@ -271,23 +265,12 @@ IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
     (void)pUndoAction;
 
-    // not working yet for unocontrols
-    /*
-    if (pUndoAction)
-    {
-        pUndoMgr->AddUndoAction( pUndoAction );
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
-            pBindings->Invalidate( SID_UNDO );
-    }
-    */
-
     return 0;
 }
 
 
 
-void __EXPORT DialogWindow::DoInit()
+void DialogWindow::DoInit()
 {
     GetHScrollBar()->Show();
     GetVScrollBar()->Show();
@@ -296,12 +279,12 @@ void __EXPORT DialogWindow::DoInit()
 
 
 
-void __EXPORT DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
+void DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
     pEditor->DoScroll( pCurScrollBar );
 }
 
-void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
+void DialogWindow::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
@@ -428,7 +411,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
 
 
 
-void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
+void DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
     {
@@ -680,8 +663,7 @@ void DialogWindow::UpdateBrowser()
         ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
 }
 
-static ::rtl::OUString aResourceResolverPropName =
-    ::rtl::OUString::createFromAscii( "ResourceResolver" );
+static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
 sal_Bool DialogWindow::SaveDialog()
 {
@@ -726,11 +708,11 @@ sal_Bool DialogWindow::SaveDialog()
         Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
         OSL_ASSERT( xProps.is() );
         OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-        Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+        Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
         Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
 
         Reference< XOutputStream > xOutput;
         try
@@ -788,9 +770,9 @@ sal_Bool DialogWindow::SaveDialog()
                 aURLObj.removeSegment();
                 ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 sal_Bool bReadOnly = sal_False;
-                ::rtl::OUString aComment( ::rtl::OUString::createFromAscii( "# " ) );
+                ::rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "# " ));
                 aComment += aDialogName;
-                aComment += ::rtl::OUString::createFromAscii( " strings" );
+                aComment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " strings" ));
                 Reference< task::XInteractionHandler > xDummyHandler;
 
                 // Remove old properties files in case of overwriting Dialog files
@@ -799,7 +781,7 @@ sal_Bool DialogWindow::SaveDialog()
                     Sequence< ::rtl::OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
                     ::rtl::OUString aDialogName_( aDialogName );
-                    aDialogName_ += ::rtl::OUString::createFromAscii( "_" );
+                    aDialogName_ += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_" ));
                     sal_Int32 nCount = aContentSeq.getLength();
                     const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
                     for( int i = 0 ; i < nCount ; i++ )
@@ -816,8 +798,8 @@ sal_Bool DialogWindow::SaveDialog()
                             aExtension = aCompleteName.copy( iDot + 1 );
                         }
 
-                        if( aExtension.equalsAscii( "properties" ) ||
-                            aExtension.equalsAscii( "default" ) )
+                        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) ||
+                            aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
                         {
                             if( aPureName.indexOf( aDialogName_ ) == 0 )
                             {
@@ -920,8 +902,7 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
     AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
 
@@ -946,8 +927,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
 sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
@@ -998,7 +978,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                 ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY_THROW );
 
             Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+                ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY_THROW );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )
@@ -1008,7 +988,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
             OSL_ASSERT( xProps.is() );
             OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-            ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
             String aXmlDlgName;
             Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
@@ -1042,7 +1022,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             if( bDialogAlreadyExists )
             {
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
-                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_CLASH_TEXT ) );
+                String aQueryBoxText(  IDEResId( RID_STR_DLGIMP_CLASH_TEXT  ) );
                 aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName );
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
@@ -1234,7 +1214,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                 }
             }
 
-            Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+            Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
             bool bSuccess = rDocument.insertDialog( aLibName, aNewDlgName, xISP );
             if( bSuccess )
             {
@@ -1276,12 +1256,12 @@ DlgEdView* DialogWindow::GetView() const
     return pEditor ? pEditor->GetView() : NULL;
 }
 
-sal_Bool __EXPORT DialogWindow::IsModified()
+sal_Bool DialogWindow::IsModified()
 {
     return pEditor->IsModified();
 }
 
-::svl::IUndoManager* __EXPORT DialogWindow::GetUndoManager()
+::svl::IUndoManager* DialogWindow::GetUndoManager()
 {
     return pUndoMgr;
 }
@@ -1344,7 +1324,7 @@ void DialogWindow::StoreData()
                     Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
                     OSL_ASSERT( xProps.is() );
                     OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+                    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
                     xLib->replaceByName( ::rtl::OUString( GetName() ), makeAny( xISP ) );
                 }
             }
@@ -1409,3 +1389,5 @@ void DialogWindow::InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBa
 {
     return (::com::sun::star::accessibility::XAccessible*) new AccessibleDialogWindow( this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

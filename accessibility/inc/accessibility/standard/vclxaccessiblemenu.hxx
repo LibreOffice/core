@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <accessibility/standard/vclxaccessiblemenuitem.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 
 //  ----------------------------------------------------
@@ -84,3 +83,4 @@ public:
 
 #endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

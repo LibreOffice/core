@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -42,7 +43,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
@@ -120,19 +121,19 @@ namespace oooimprovecore
 
         OUString help_url;
         Reference<XCoreController> core_c(
-            xServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
+            xServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.CoreController"))),
             UNO_QUERY);
         if(core_c.is())
             ::comphelper::ConfigurationHelper::readDirectKey(
                 xServiceFactory,
-                OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-                OUString::createFromAscii("Participation"),
-                OUString::createFromAscii("HelpUrl"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Participation")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HelpUrl")),
                 ::comphelper::ConfigurationHelper::E_READONLY) >>= help_url;
         else
-            help_url = OUString::createFromAscii("http://www.openoffice.org");
+            help_url = OUString(RTL_CONSTASCII_USTRINGPARAM("http://www.libreoffice.org"));
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             aSet.Put( SfxStringItem( SID_CURRENT_URL, help_url ) );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -160,12 +161,12 @@ namespace oooimprovecore
     { return getSupportedServiceNames_static(); }
 
     OUString SAL_CALL Core::getImplementationName_static()
-    { return OUString::createFromAscii("com.sun.star.comp.extensions.oooimprovecore.Core"); }
+    { return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.oooimprovecore.Core")); }
 
     Sequence<OUString> SAL_CALL Core::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString::createFromAscii("com.sun.star.oooimprovement.Core");
+        aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.Core"));
         return aServiceNames;
     }
 
@@ -188,3 +189,5 @@ namespace oooimprovecore
         static OAutoRegistration<Core> auto_reg;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

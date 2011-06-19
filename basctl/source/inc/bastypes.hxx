@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 
 #include <svheader.hxx>
 
-#include <iderid.hxx>
-
 #include "scriptdocument.hxx"
 
 class ModulWindow;
@@ -52,7 +51,8 @@ class SfxItemSet;
 #include <svtools/tabbar.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <vector>
 
 #define LINE_SEP_CR     0x0D
 #define LINE_SEP        0x0A
@@ -70,7 +70,6 @@ sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
 
 struct BasicStatus
 {
-//  sal_Bool    bCompiled       : 1;
     sal_Bool    bIsRunning      : 1;
     sal_Bool    bError          : 1;
     sal_Bool    bIsInReschedule : 1;
@@ -83,14 +82,13 @@ struct BasicStatus
 
 struct BreakPoint
 {
-    sal_Bool    bEnabled;
-    sal_Bool    bTemp;
-    sal_uLong   nLine;
-    sal_uLong   nStopAfter;
-    sal_uLong   nHitCount;
+    bool    bEnabled;
+    bool    bTemp;
+    size_t  nLine;
+    size_t  nStopAfter;
+    size_t  nHitCount;
 
-    BreakPoint( sal_uLong nL )  { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = sal_True; bTemp = sal_False; }
-
+    BreakPoint( size_t nL ) { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = true; bTemp = false; }
 };
 
 class BasicDockingWindow : public DockingWindow
@@ -108,11 +106,11 @@ public:
     BasicDockingWindow( Window* pParent );
 };
 
-DECLARE_LIST( BreakPL, BreakPoint* )
-class BreakPointList : public BreakPL
+class BreakPointList
 {
 private:
     void operator =(BreakPointList); // not implemented
+    ::std::vector< BreakPoint* > maBreakPoints;
 
 public:
     BreakPointList();
@@ -126,10 +124,17 @@ public:
     void transfer(BreakPointList & rList);
 
     void        InsertSorted( BreakPoint* pBrk );
-    BreakPoint* FindBreakPoint( sal_uLong nLine );
-    void        AdjustBreakPoints( sal_uLong nLine, sal_Bool bInserted );
+    BreakPoint* FindBreakPoint( size_t nLine );
+    void        AdjustBreakPoints( size_t nLine, bool bInserted );
     void        SetBreakPointsInBasic( SbModule* pModule );
     void        ResetHitCount();
+
+    size_t              size() const;
+    BreakPoint*         at( size_t i );
+    const BreakPoint*   at( size_t i ) const;
+    BreakPoint*         remove( BreakPoint* ptr );
+    void                push_back( BreakPoint* item );
+    void                clear();
 };
 
 // helper class for sorting TabBar
@@ -309,7 +314,7 @@ private:
         }
     };
 
-    typedef ::std::hash_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
+    typedef ::boost::unordered_map< LibInfoKey, LibInfoItem*, LibInfoKeyHash, ::std::equal_to< LibInfoKey > > LibInfoMap;
     LibInfoMap  m_aLibInfoMap;
 
 public:
@@ -343,3 +348,5 @@ public:
     static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const String& rModName );
 };
 #endif  // _BASTYPES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

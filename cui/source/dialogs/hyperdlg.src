@@ -131,11 +131,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
             MASKCOLOR
         };
     };
-    Image IMG_BROWSE_HC
-    {
-        ImageBitmap = Bitmap { File = "browse_hc.bmp" ; };
-        MASKCOLOR
-    };
+
     ImageButton BTN_TARGET
     {
         HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_INTERNET:BTN_TARGET";
@@ -151,11 +147,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
             MASKCOLOR
         };
     };
-    Image IMG_TARGET_HC
-    {
-        ImageBitmap = Bitmap { File = "target_hc.bmp" ; };
-        MASKCOLOR
-    };
+
     FixedLine GRP_MORE
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
@@ -241,11 +233,6 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         };
         Text [ en-US ] = "Events";
     };
-    Image IMG_SCRIPT_HC
-    {
-        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MASKCOLOR
-    };
 };
 
 /*************************************************************************
@@ -317,11 +304,6 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
 
         Text [ en-US ] = "Data Sources...";
         QuickHelpText [ en-US ] = "Data Sources..." ;
-    };
-    Image IMG_ADRESSBOOK_HC
-    {
-        ImageBitmap = Bitmap { File = "adrbook_hc.bmp" ; };
-        MASKCOLOR
     };
 
     FixedLine GRP_MORE
@@ -408,11 +390,6 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         };
         Text [ en-US ] = "Events";
     };
-    Image IMG_SCRIPT_HC
-    {
-        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MASKCOLOR
-    };
 };
 
 /*************************************************************************
@@ -456,12 +433,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         };
         Text [ en-US ] = "Open File";
     };
-    Image IMG_FILEOPEN_HC
-    {
-        ImageBitmap = Bitmap { File = "fileopen_hc.bmp" ; };
-        MASKCOLOR
-    };
-
     FixedLine GRP_TARGET
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
@@ -506,11 +477,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
             MASKCOLOR
         };
         Text [ en-US ] = "Target in Document";
-    };
-    Image IMG_BROWSE_HC
-    {
-        ImageBitmap = Bitmap { File = "target_hc.bmp" ; };
-        MASKCOLOR
     };
 
     FixedLine GRP_MORE
@@ -597,11 +563,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         };
         Text [ en-US ] = "Events";
     };
-    Image IMG_SCRIPT_HC
-    {
-        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MASKCOLOR
-    };
 };
 
 /*************************************************************************
@@ -681,11 +642,6 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
             MASKCOLOR
         };
         Text [ en-US ] = "Select Path";
-    };
-    Image IMG_CREATE_HC
-    {
-        ImageBitmap = Bitmap { File = "newdoc_hc.bmp" ; };
-        MASKCOLOR
     };
 
     FixedLine GRP_MORE
@@ -771,11 +727,6 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
             MASKCOLOR
         };
         Text [ en-US ] = "Events";
-    };
-    Image IMG_SCRIPT_HC
-    {
-        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MASKCOLOR
     };
 };
 
@@ -900,109 +851,3 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MASKCOLOR
 };
-
-Image RID_SVXBMP_HLINETTP_H
-{
-    ImageBitmap = Bitmap { File = "hlinettp_h.bmp" ; };
-    MASKCOLOR
-};
-
-Image RID_SVXBMP_HLMAILTP_H
-{
-    ImageBitmap = Bitmap { File = "hlmailtp_h.bmp" ; };
-    MASKCOLOR
-};
-
-Image RID_SVXBMP_HLDOCTP_H
-{
-    ImageBitmap = Bitmap { File = "hldoctp_h.bmp" ; };
-    MASKCOLOR
-};
-
-Image RID_SVXBMP_HLDOCNTP_H
-{
-    ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
-    MASKCOLOR
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

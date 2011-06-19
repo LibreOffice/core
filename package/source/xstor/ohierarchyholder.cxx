@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,7 +197,6 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
     }
     else
     {
-        sal_Bool bNewElement = sal_False;
         ::rtl::Reference< OHierarchyElement_Impl > aElement;
         OHierarchyElementList_Impl::iterator aIter = m_aChildren.find( aNextName );
         if ( aIter != m_aChildren.end() )
@@ -204,7 +204,6 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
 
         if ( !aElement.is() )
         {
-            bNewElement = sal_True;
             uno::Reference< embed::XStorage > xChildStorage = xOwnStor->openStorageElement( aNextName,
                                                                                             embed::ElementModes::READWRITE );
             if ( !xChildStorage.is() )
@@ -359,3 +358,4 @@ void SAL_CALL OHierarchyElement_Impl::reverted( const ::com::sun::star::lang::Ev
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

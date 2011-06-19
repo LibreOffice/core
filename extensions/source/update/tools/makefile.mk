@@ -41,28 +41,4 @@ APP1TARGET = ztool
 APP1OBJS = $(OBJ)$/ztool.obj
 APP1STDLIBS = $(TOOLSLIB)
 
-#APP1TARGET = ztool
-#APP1OBJS = $(OBJ)$/ztool.obj
-#.IF "$(GUI)" == "UNX"
-#APP1STDLIBS = $(TOOLSLIB)
-#.ELSE
-#APP1LIBS = $(LB)$/itools.lib
-#.ENDIF
-
-#APP2TARGET = urltest
-#APP2OBJS = $(OBJ)$/urltest.obj
-#.IF "$(GUI)" == "UNX"
-#APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
-#.ELSE
-#APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib icppu.lib icppuhelper.lib
-#.ENDIF
-
-# APP3TARGET = tldem
-# APP3OBJS = $(OBJ)$/tldem.obj
-# .IF "$(GUI)" == "UNX"
-# APP3STDLIBS = $(TOOLSLIB)
-# .ELSE
-# APP3STDLIBS = $(LB)$/itools.lib
-# .ENDIF
-
 .INCLUDE: target.mk

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,24 +120,18 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ,maKeyImg               ( this, XMLSEC_RES( IMG_KEY ) )
     ,maHintCorrespPrivKeyFI ( this, XMLSEC_RES( FI_CORRPRIVKEY ) )
 {
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        maKeyImg.SetImage( Image( XMLSEC_RES( IMG_KEY_HC ) ) );
-
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
          Sequence<Reference<css::security::XCertificate> >());
 
     bool bCertValid = certStatus == css::security::CertificateValidity::VALID ?  true : false;
 
-    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     if ( !bCertValid )
     {
         maCertImg.SetImage(
-            Image( XMLSEC_RES( bHC ? IMG_STATE_NOT_VALIDATED_HC : IMG_STATE_NOT_VALIDATED ) ) );
+            Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
         maHintNotTrustedFI.SetText( String( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) ) );
     }
-    else if ( bHC )
-        maCertImg.SetImage( Image( XMLSEC_RES( IMG_STATE_CERIFICATED_HC ) ) );
 
     FreeResource();
 
@@ -290,10 +285,9 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     const char*             pHexSep = " ";
     String                  aLBEntry;
     String                  aDetails;
-    // --> PB 2004-10-11 #i35107# - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
+    // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = String::CreateFromAscii( "V" );
     aLBEntry += String::CreateFromInt32( xCert->getVersion() + 1 );
-    // <--
     InsertElement( String( XMLSEC_RES( STR_VERSION ) ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
@@ -305,12 +299,6 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
     InsertElement( String( XMLSEC_RES( STR_ISSUER ) ), aLBEntry, aDetails );
-    /*
-    aSeq = xCert->getIssuerUniqueID();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_ISSUER_ID ) ), aLBEntry, aDetails, true );
-    */
 
     DateTime aDateTime;
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
@@ -329,12 +317,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;
     InsertElement( String( XMLSEC_RES( STR_SUBJECT ) ), aLBEntry, aDetails );
-    /*
-    aSeq = xCert->getSubjectUniqueID();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_SUBJECT_ID ) ), aLBEntry, aDetails, true );
-    */
+
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
     InsertElement( String( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
@@ -419,12 +402,6 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,msCertNotValidated     ( XMLSEC_RES( STR_PATH_CERT_NOT_VALIDATED ) )
 
 {
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        maCertImage = Image( XMLSEC_RES( IMG_CERT_SMALL_HC ) );
-        maCertNotValidatedImage = Image( XMLSEC_RES( IMG_CERT_NOTVALIDATED_SMALL_HC ) );
-    }
-
     FreeResource();
 
     maCertPathLB.SetNodeDefaultImages();
@@ -548,3 +525,4 @@ SvLBoxEntry* CertificateViewerCertPathTP::InsertCert(
     return pEntry;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

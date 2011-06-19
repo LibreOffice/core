@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-
-#ifdef OS2
-#define UNIX
-#endif
 
 #ifdef UNIX
 
@@ -78,7 +75,7 @@
 //https://bugzilla.mozilla.org/show_bug.cgi?id=241262
 #ifdef UNIX
 #  ifndef _UINT32
-#    if defined(__alpha) || defined(__LP64__)
+#    if defined(__alpha) || defined(__LP64__) || defined(AIX)
        typedef unsigned int uint32;
 #    else  /* __alpha */
        typedef unsigned long uint32;
@@ -86,7 +83,7 @@
 #    define _UINT32
 #  endif
 #  ifndef _INT32
-#    if defined(__alpha) || defined(__LP64__)
+#    if defined(__alpha) || defined(__LP64__) || defined(AIX)
        typedef int int32;
 #    else  /* __alpha */
        typedef long int32;
@@ -928,3 +925,5 @@ NPP_Print(NPP instance, NPPrint* printInfo)
 }
 
 }// end of extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

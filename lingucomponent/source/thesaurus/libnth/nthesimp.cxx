@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,6 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -73,7 +73,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -605,7 +607,7 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else
-            DBG_ERROR( "wrong number of arguments in sequence" );
+            OSL_FAIL( "wrong number of arguments in sequence" );
     }
 }
 
@@ -781,3 +783,5 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
 #undef CAPTYPE_INITCAP
 #undef CAPTYPE_ALLCAP
 #undef CAPTYPE_MIXED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

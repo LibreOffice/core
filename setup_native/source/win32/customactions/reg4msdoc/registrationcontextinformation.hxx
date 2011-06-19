@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // MsOfficeDocumentInformation.h: Schnittstelle f�r die Klasse MsOfficeDocumentInformation.
 //
 //////////////////////////////////////////////////////////////////////
@@ -46,6 +47,14 @@ public:
     std::wstring GetWordDocumentDefaultIconEntry() const;
     std::wstring GetWordDocumentDefaultShellCommand() const;
 
+    /** MOOX Word document information
+        The icon index is the index of the icon
+        in soffice.exe to be associated with
+        word document files
+    */
+    std::wstring GetMOOXWordDocumentDisplayName() const;
+    std::wstring GetMOOXWordDocumentFileExtension() const;
+
     /** Word template information
         The icon index is the index of the icon
         in soffice.exe to be associated with
@@ -76,6 +85,9 @@ public:
     std::wstring GetExcelSheetDefaultIconEntry() const;
     std::wstring GetExcelSheetDefaultShellCommand() const;
 
+    std::wstring GetMOOXExcelSheetDisplayName() const;
+    std::wstring GetMOOXExcelSheetFileExtension() const;
+
     /** Excel template information
         The icon index is the index of the icon
         in soffice.exe to be associated with
@@ -95,6 +107,9 @@ public:
     std::wstring GetPowerPointDocumentFileExtension() const;
     std::wstring GetPowerPointDocumentDefaultIconEntry() const;
     std::wstring GetPowerPointDocumentDefaultShellCommand() const;
+
+    std::wstring GetMOOXPowerPointDocumentDisplayName() const;
+    std::wstring GetMOOXPowerPointDocumentFileExtension() const;
 
     /** PowerPoint template information
         The icon index is the index of the icon
@@ -156,3 +171,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

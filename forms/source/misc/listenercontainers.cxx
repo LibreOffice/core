@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -61,7 +60,7 @@ namespace frm
             _rxListener->resetted( _rEvent );
             break;
         default:
-            OSL_ENSURE( sal_False, "ResetListeners::implNotify: invalid notification type!" );
+            OSL_FAIL( "ResetListeners::implNotify: invalid notification type!" );
         }
         return true;
     }
@@ -70,3 +69,4 @@ namespace frm
 } // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "pcrcommon.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -76,3 +73,4 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

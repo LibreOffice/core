@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 // include ---------------------------------------------------------------
 
 #include <sfx2/tabdlg.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
 #ifdef _SVX_OPTPATH_CXX
 #include <svtools/headbar.hxx>
@@ -44,9 +41,7 @@ class HeaderBar;
 #endif
 #include "ControlFocusHelper.hxx"
 
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #include <svtools/dialogclosedlistener.hxx>
 
 // forward ---------------------------------------------------------------
@@ -114,3 +109,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

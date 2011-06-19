@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;
 // ------------------------------------------------------------------
-class SentenceEditWindow_Impl : public MultiLineEdit/*, public SfxListener*/
+class SentenceEditWindow_Impl : public MultiLineEdit
 {
     using MultiLineEdit::SetText;
 
@@ -183,7 +184,6 @@ private:
     GroupBox        aBackgroundGB;
 
     Image           aVendorImage;
-    Image           aVendorImageHC;
 
     String          aResumeST;
     String          aIgnoreOnceST;
@@ -235,7 +235,7 @@ private:
 
     /** Retrieves the next sentence.
      */
-    bool            GetNextSentence_Impl(bool bUseSavedSentence, bool bRechek /*for rechecking the curretn sentence*/);
+    bool            GetNextSentence_Impl(bool bUseSavedSentence, bool bRechek /*for rechecking the current sentence*/);
     /** Corrects all errors that have been selected to be changed always
      */
     bool            ApplyChangeAllList_Impl(SpellPortions& rSentence, bool& bHasReplaced);
@@ -261,3 +261,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

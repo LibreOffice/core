@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString OTabOrderDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.form.ui.OTabOrderDialog" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.OTabOrderDialog"));
     }
 
     //---------------------------------------------------------------------
@@ -144,3 +145,4 @@ namespace pcr
 }   // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

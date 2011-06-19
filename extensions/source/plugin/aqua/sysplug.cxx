@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,10 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 #include <tools/debug.hxx>
 
-using namespace rtl;
 using namespace plugstringhelper;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #if OSL_DEBUG_LEVEL > 1
 void TRACE( char const * s );
@@ -485,11 +488,11 @@ long MacPluginComm::doIt()
     break;
     case eNPP_Initialize:
         TRACE( "eNPP_Initialize" );
-        OSL_ENSURE( false, "NPP_Initialize: not implemented!" );
+        OSL_FAIL( "NPP_Initialize: not implemented!" );
         break;
     case eNPP_GetJavaClass:
         TRACE( "eNPP_GetJavaClass" );
-        OSL_ENSURE( false, "NPP_GetJavaClass: not implemented!" );
+        OSL_FAIL( "NPP_GetJavaClass: not implemented!" );
         break;
     }
     return nRet;
@@ -681,7 +684,7 @@ NPError MacPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *s
 //--------------------------------------------------------------------------------------------------
 void * MacPluginComm::NPP_GetJavaClass()
 {
-    DBG_ERROR( "no java class available!" );
+    OSL_FAIL( "no java class available!" );
     return 0;
 }
 
@@ -806,3 +809,4 @@ void MacPluginComm::drawView( XPlugin_Impl* i_pImpl )
     this->NPP_HandleEvent( i_pImpl->getNPPInstance(), &aRec );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

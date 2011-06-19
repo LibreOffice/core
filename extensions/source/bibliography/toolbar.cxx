@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -36,9 +36,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <datman.hxx>
 #include <tools/debug.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
@@ -47,10 +45,8 @@
 #include "toolbar.hrc"
 #include "bibresid.hxx"
 
-#ifndef BIBTOOLS_HXX
 #include "bibtools.hxx"
-#endif
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -77,7 +73,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
 {
     if(rEvt.FeatureURL.Complete == aCommand)
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
         ::com::sun::star::uno::Any aState=rEvt.State;
@@ -87,14 +83,10 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
             pToolBar->CheckItem(nIndex, bChecked);
         }
 
-        /*
-        rtl::OUString FeatureDescriptor;
-        sal_Bool Requery;
-        ::com::sun::star::uno::Any State;*/
     }
 };
 
-rtl::OUString   BibToolBarListener::GetCommand()
+rtl::OUString   BibToolBarListener::GetCommand() const
 {
     return aCommand;
 }
@@ -112,7 +104,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         Any aState = rEvt.State;
@@ -152,7 +144,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
@@ -169,7 +161,6 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
                 sal_uInt16 nID=pToolBar->InsertFilterItem(String(pStringArray[i]));
                 if(pStringArray[i]==rEvt.FeatureDescriptor)
                 {
-//                  XubString aStr = rEvt.FeatureDescriptor;
                     pToolBar->SelectFilterItem(nID);
                 }
             }
@@ -190,7 +181,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pToolBar->EnableQuery(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
@@ -207,9 +198,7 @@ SV_IMPL_PTRARR( BibToolBarListenerArr, BibToolBarListenerPtr);
 BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
     aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
-    aImgLstHC(BibResId(RID_TOOLBAR_IMGLIST_HC  )),
     aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
-    aBigImgLstHC(BibResId( RID_TOOLBAR_BIGIMGLIST_HC )),
     aFtSource(this,WB_VCENTER),
     aLBSource(this,WB_DROPDOWN),
     aFtQuery(this,WB_VCENTER),
@@ -227,7 +216,6 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     ApplyImageList();
     SetStyle(GetStyle()|nStyle);
     SetOutStyle(TOOLBOX_STYLE_FLAT);
-    Size aSize=GetSizePixel();
     Size a2Size(GetOutputSizePixel());
     a2Size.Width()=100;
     aLBSource.SetSizePixel(a2Size);
@@ -465,7 +453,7 @@ long BibToolBar::PreNotify( NotifyEvent& rNEvt )
     long nResult=sal_True;
 
     sal_uInt16 nSwitch=rNEvt.GetType();
-    if(aEdQuery.HasFocus() && nSwitch==EVENT_KEYINPUT)// || nSwitch==EVENT_KEYUP)
+    if(aEdQuery.HasFocus() && nSwitch==EVENT_KEYINPUT)
     {
         const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();
@@ -554,9 +542,7 @@ void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
         (*pListener)->statusChanged(rEvent);
     }
 }
-/* -----------------------------07.05.2002 15:08------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -564,8 +550,6 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
             ApplyImageList();
     ToolBox::DataChanged( rDCEvt );
 }
-/* -----------------------------07.05.2002 15:09------------------------------
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
 {
@@ -617,8 +601,8 @@ void BibToolBar::RebuildToolbar()
 void BibToolBar::ApplyImageList()
 {
     ImageList& rList = ( nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ) ?
-                       ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImgLstHC : aImgLst ) :
-                       ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aBigImgLstHC : aBigImgLst );
+                       ( aImgLst ) :
+                       ( aBigImgLst );
 
     SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
     SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
@@ -645,3 +629,5 @@ void BibToolBar::AdjustToolBox()
         Invalidate();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

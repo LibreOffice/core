@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -39,6 +37,7 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 #include "svx/htmlmode.hxx"
+#include <sal/macros.h>
 
 #define _SVX_PAGE_CXX
 
@@ -56,7 +55,6 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include "svx/dlgutil.hxx"
-#include <dialmgr.hxx>
 #include <editeng/paperinf.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/module.hxx>
@@ -68,9 +66,9 @@
 
 // #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
-#include <svl/slstitm.hxx> //CHINA001
-#include <svl/aeitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svl/slstitm.hxx>
+#include <svl/aeitem.hxx>
+#include <sfx2/request.hxx>
 // configuration helper =======================================================
 
 /** Helper to get a configuration setting.
@@ -154,9 +152,7 @@ sal_uInt16 aArr[] =
 
 sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
 {
-    const sal_uInt16 nCount = sizeof(aArr) / sizeof(sal_uInt16);
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
         if ( aArr[i] == ( nUsage & 0x000f ) )
             return i;
     return SVX_PAGE_ALL;
@@ -166,9 +162,7 @@ sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
 
 sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
 {
-    const sal_uInt16 nCount = sizeof(aArr) / sizeof(sal_uInt16);
-
-    if ( nPos >= nCount )
+    if ( nPos >= SAL_N_ELEMENTS(aArr) )
         return 0;
     return aArr[nPos];
 }
@@ -564,13 +558,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( pItem )
         aPaperSize = ( (const SvxSizeItem*)pItem )->GetSize();
 
-    FASTBOOL bOrientationSupport =
+    bool bOrientationSupport =
         pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
-#ifdef OS2
-    // unter OS/2 wird bei HasSupport() immer sal_True returned
-    // aber nur als Dummy, deshalb FALSE
-    bOrientationSupport = sal_False;
-#endif
 
     if ( !bOrientationSupport &&
          aPaperSize.Width() > aPaperSize.Height() )
@@ -1160,7 +1149,7 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
+void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 {
     MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
     Orientation eOri = ORIENTATION_PORTRAIT;
@@ -1651,13 +1640,13 @@ IMPL_LINK_INLINE_END( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SetCollectionList(const List* pList)
+void SvxPageDescPage::SetCollectionList(const std::vector<String> &aList)
 {
-    sStandardRegister = *(String*)pList->GetObject(0);
-    for( sal_uInt16 i = 1; i < pList->Count(); i++   )
-    {
-        aRegisterLB.InsertEntry(*(String*)pList->GetObject(i));
-    }
+    OSL_ENSURE(!aList.empty(), "Empty string list");
+
+    sStandardRegister = aList[0];
+    for( sal_uInt16 i = 1; i < aList.size(); i++   )
+        aRegisterLB.InsertEntry(aList[i]);
 
     aRegisterCB  .Show();
     aRegisterFT  .Show();
@@ -1762,7 +1751,7 @@ bool SvxPageDescPage::IsMarginOutOfRange()
     return bRet;
 }
 
-void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxPageDescPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,sal_False);
@@ -1775,3 +1764,5 @@ void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     if (pCollectListItem)
         SetCollectionList(pCollectListItem->GetList());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #endif
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 #include <tools/stream.hxx>
 #include <vcl/timer.hxx>
 #include <tools/fsys.hxx>
@@ -55,7 +56,7 @@ _SV_IMPL_SORTAR_ALG( nm,AE )\
         if( nL ) {\
             DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
             for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
-                DBG_ERROR("Das Element der Liste wurde nicht gelöscht"); \
+                OSL_FAIL("Das Element der Liste wurde nicht gelï¿½scht"); \
             SvPtrarr::Remove( nP, nL ); \
         } \
     } \
@@ -66,9 +67,9 @@ _SV_SEEK_PTR( nm, AE )
 
 SV_IMPL_PTRARR_SORT( CommunicationLinkList, CommunicationLink* );
 
-vos::OMutex *pMPostUserEvent=NULL;      // Notwendig, da nicht threadfest
+osl::Mutex *pMPostUserEvent=NULL;       // Notwendig, da nicht threadfest
 
-CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket )
+CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket )
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
 , nConnectionClosedEventId( 0 )
 , nDataReceivedEventId( 0 )
@@ -77,7 +78,7 @@ CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pM
 {
     SetPutDataReceivedHdl(LINK( this, CommunicationLinkViaSocket, PutDataReceivedHdl ));
     if ( !pMPostUserEvent )
-        pMPostUserEvent = new vos::OMutex;
+        pMPostUserEvent = new osl::Mutex;
     // this is necassary to prevent the running thread from sending the close event
     // before the open event has been sent.
        StartCallback();
@@ -92,25 +93,25 @@ CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
     while ( nConnectionClosedEventId || nDataReceivedEventId )
         GetpApp()->Yield();
     {
-        vos::OGuard aGuard( aMConnectionClosed );
+        osl::MutexGuard aGuard( aMConnectionClosed );
         if ( nConnectionClosedEventId )
         {
             GetpApp()->RemoveUserEvent( nConnectionClosedEventId );
             nConnectionClosedEventId = 0;
-            INFO_MSG( CByteString("Event gelöscht"),
-                CByteString( "ConnectionClosedEvent aus Queue gelöscht"),
+            INFO_MSG( CByteString("Event gelï¿½scht"),
+                CByteString( "ConnectionClosedEvent aus Queue gelï¿½scht"),
                 CM_MISC, NULL );
         }
     }
     {
-        vos::OGuard aGuard( aMDataReceived );
+        osl::MutexGuard aGuard( aMDataReceived );
         if ( nDataReceivedEventId )
         {
             GetpApp()->RemoveUserEvent( nDataReceivedEventId );
             nDataReceivedEventId = 0;
             delete GetServiceData();
-            INFO_MSG( CByteString("Event gelöscht"),
-                CByteString( "DataReceivedEvent aus Queue gelöscht"),
+            INFO_MSG( CByteString("Event gelï¿½scht"),
+                CByteString( "DataReceivedEvent aus Queue gelï¿½scht"),
                 CM_MISC, NULL );
         }
     }
@@ -128,11 +129,11 @@ sal_Bool CommunicationLinkViaSocket::ShutdownCommunication()
         if ( GetStreamSocket() )    // Mal wieder nach oben verschoben, da sonst nicht vom Read runtergesprungen wird.
             GetStreamSocket()->close();
 
-        resume();   // So daß das run auch die Schleife verlassen kann
+        resume();   // So daï¿½ das run auch die Schleife verlassen kann
 
         join();
 
-        vos::OStreamSocket *pTempSocket = GetStreamSocket();
+        osl::StreamSocket* pTempSocket = GetStreamSocket();
         SetStreamSocket( NULL );
         delete pTempSocket;
 
@@ -205,23 +206,23 @@ void CommunicationLinkViaSocket::run()
 
         TimeValue sNochEins = {0, 1000000};
         while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
-            sleep( sNochEins );
+            wait( sNochEins );
         SetNewPacketAsCurrent();
         StartCallback();
         {
-            vos::OGuard aGuard( aMDataReceived );
-            vos::OGuard aGuard2( *pMPostUserEvent );
+            osl::MutexGuard aGuard( aMDataReceived );
+            osl::MutexGuard aGuard2( *pMPostUserEvent );
             mlPutDataReceived.Call(this);
         }
     }
     TimeValue sNochEins = {0, 1000000};
     while ( schedule() && bIsInsideCallback )   // solange der letzte Callback nicht beendet ist
-        sleep( sNochEins );
+        wait( sNochEins );
 
     StartCallback();
     {
-        vos::OGuard aGuard( aMConnectionClosed );
-        vos::OGuard aGuard2( *pMPostUserEvent );
+        osl::MutexGuard aGuard( aMConnectionClosed );
+        osl::MutexGuard aGuard2( *pMPostUserEvent );
         nConnectionClosedEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationLinkViaSocket, ConnectionClosed ) );
     }
 }
@@ -238,8 +239,8 @@ sal_Bool CommunicationLinkViaSocket::DoTransferDataStream( SvStream *pDataStream
 long CommunicationLinkViaSocket::ConnectionClosed( void* EMPTYARG )
 {
     {
-        vos::OGuard aGuard( aMConnectionClosed );
-        nConnectionClosedEventId = 0;   // Achtung!! alles andere muß oben gemacht werden.
+        osl::MutexGuard aGuard( aMConnectionClosed );
+        nConnectionClosedEventId = 0;   // Achtung!! alles andere muï¿½ oben gemacht werden.
     }
     ShutdownCommunication();
     return CommunicationLink::ConnectionClosed( );
@@ -249,8 +250,8 @@ long CommunicationLinkViaSocket::ConnectionClosed( void* EMPTYARG )
 long CommunicationLinkViaSocket::DataReceived( void* EMPTYARG )
 {
     {
-        vos::OGuard aGuard( aMDataReceived );
-        nDataReceivedEventId = 0;   // Achtung!! alles andere muß oben gemacht werden.
+        osl::MutexGuard aGuard( aMDataReceived );
+        nDataReceivedEventId = 0;   // Achtung!! alles andere muï¿½ oben gemacht werden.
     }
     return CommunicationLink::DataReceived( );
 }
@@ -296,8 +297,8 @@ MultiCommunicationManager::~MultiCommunicationManager()
         }
     }
 
-    // Alles weghauen, was nicht rechtzeitig auf die Bäume gekommen ist
-    // Was bei StopCommunication übrig geblieben ist, da es sich asynchron austragen wollte
+    // Alles weghauen, was nicht rechtzeitig auf die Bï¿½ume gekommen ist
+    // Was bei StopCommunication ï¿½brig geblieben ist, da es sich asynchron austragen wollte
     sal_uInt16 i = ActiveLinks->Count();
     while ( i-- )
     {
@@ -309,7 +310,7 @@ MultiCommunicationManager::~MultiCommunicationManager()
     delete ActiveLinks;
 
     /// Die Links zwischen ConnectionClosed und Destruktor.
-    /// Hier NICHT gerefcounted, da sie sich sonst im Kreis festhaten würden,
+    /// Hier NICHT gerefcounted, da sie sich sonst im Kreis festhaten wï¿½rden,
     /// da die Links sich erst in ihrem Destruktor austragen
     i = InactiveLinks->Count();
     while ( i-- )
@@ -325,13 +326,13 @@ sal_Bool MultiCommunicationManager::StopCommunication()
 {
     // Alle Verbindungen abbrechen
     // ConnectionClosed entfernt die Links aus der Liste. Je nach Implementation syncron
-    // oder asyncron. Daher Von oben nach unten Abräumen, so daß sich nichts verschiebt.
+    // oder asyncron. Daher Von oben nach unten Abrï¿½umen, so daï¿½ sich nichts verschiebt.
     sal_uInt16 i = ActiveLinks->Count();
     int nFail = 0;
     while ( i )
     {
         if ( !ActiveLinks->GetObject(i-1)->StopCommunication() )
-            nFail++;    // Hochzählen, da Verbindung sich nicht (sofort) beenden lässt.
+            nFail++;    // Hochzï¿½hlen, da Verbindung sich nicht (sofort) beenden lï¿½sst.
         i--;
     }
 
@@ -358,7 +359,7 @@ CommunicationLinkRef MultiCommunicationManager::GetCommunicationLink( sal_uInt16
 
 void MultiCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 {
-    CommunicationLinkRef rHold(pCL);    // Hält den Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);    // Hï¿½lt den Zeiger bis zum Ende des calls
     ActiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);
     rHold->AddRef();
 
@@ -367,7 +368,7 @@ void MultiCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
 
 void MultiCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 {
-    CommunicationLinkRef rHold(pCL);    // Hält denm Zeiger bis zum Ende des calls
+    CommunicationLinkRef rHold(pCL);    // Hï¿½lt denm Zeiger bis zum Ende des calls
 
     CommunicationManager::CallConnectionClosed( pCL );
 
@@ -453,7 +454,7 @@ CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( 
 , xmNewConnection( NULL )
 {
     if ( !pMPostUserEvent )
-        pMPostUserEvent = new vos::OMutex;
+        pMPostUserEvent = new osl::Mutex;
     create();
 }
 
@@ -477,20 +478,20 @@ CommunicationManagerServerAcceptThread::~CommunicationManagerServerAcceptThread(
         pAcceptorSocket = NULL;
     }
 #else
-    DEBUGPRINTF ("Destructor CommunicationManagerServerAcceptThread Übersprungen!!!! (wegen Solaris BUG)\n");
+    DEBUGPRINTF ("Destructor CommunicationManagerServerAcceptThread ï¿½bersprungen!!!! (wegen Solaris BUG)\n");
 #endif
     {
-        vos::OGuard aGuard( aMAddConnection );
+        osl::MutexGuard aGuard( aMAddConnection );
         if ( nAddConnectionEventId )
         {
             GetpApp()->RemoveUserEvent( nAddConnectionEventId );
             nAddConnectionEventId = 0;
             CommunicationLinkRef xNewConnection = GetNewConnection();
-            INFO_MSG( CByteString("Event gelöscht"),
-                CByteString( "AddConnectionEvent aus Queue gelöscht"),
+            INFO_MSG( CByteString("Event gelï¿½scht"),
+                CByteString( "AddConnectionEvent aus Queue gelï¿½scht"),
                 CM_MISC, xNewConnection );
             xNewConnection->InvalidateManager();
-            xNewConnection.Clear(); // sollte das Objekt hier löschen
+            xNewConnection.Clear(); // sollte das Objekt hier lï¿½schen
         }
     }
 }
@@ -500,11 +501,11 @@ void CommunicationManagerServerAcceptThread::run()
     if ( !nPortToListen )
         return;
 
-    pAcceptorSocket = new vos::OAcceptorSocket();
-    vos::OInetSocketAddr Addr;
+    pAcceptorSocket = new osl::AcceptorSocket();
+    osl::SocketAddr Addr;
     Addr.setPort( nPortToListen );
-    pAcceptorSocket->setReuseAddr( 1 );
-    if ( !pAcceptorSocket->bind( Addr ) )
+    pAcceptorSocket->setOption( osl_Socket_OptionReuseAddr, 1 );
+     if ( !pAcceptorSocket->bind( Addr ) )
     {
         return;
     }
@@ -514,41 +515,42 @@ void CommunicationManagerServerAcceptThread::run()
     }
 
 
-    vos::OStreamSocket *pStreamSocket = NULL;
+    osl::StreamSocket* pStreamSocket = NULL;
 
     while ( schedule() )
     {
-        pStreamSocket = new vos::OStreamSocket;
+        pStreamSocket = new osl::StreamSocket;
         switch ( pAcceptorSocket->acceptConnection( *pStreamSocket ) )
         {
-        case vos::ISocketTypes::TResult_Ok:
+        case osl_Socket_Ok:
             {
-                pStreamSocket->setTcpNoDelay( 1 );
+                pStreamSocket->setOption( osl_Socket_OptionTcpNoDelay, 1 );
 
                 TimeValue sNochEins = {0, 100};
                 while ( schedule() && xmNewConnection.Is() )    // Solange die letzte Connection nicht abgeholt wurde warten wir
-                    sleep( sNochEins );
+                    wait( sNochEins );
                 xmNewConnection = new CommunicationLinkViaSocket( pMyServer, pStreamSocket );
                 xmNewConnection->StartCallback();
                 {
-                    vos::OGuard aGuard( aMAddConnection );
-                    vos::OGuard aGuard2( *pMPostUserEvent );
+                    osl::MutexGuard aGuard( aMAddConnection );
+                    osl::MutexGuard aGuard2( *pMPostUserEvent );
                     nAddConnectionEventId = GetpApp()->PostUserEvent( LINK( this, CommunicationManagerServerAcceptThread, AddConnection ) );
                 }
             }
             break;
-        case vos::ISocketTypes::TResult_TimedOut:
+        case osl_Socket_TimedOut:
             delete pStreamSocket;
             pStreamSocket = NULL;
             break;
-        case vos::ISocketTypes::TResult_Error:
+        case osl_Socket_Error:
             delete pStreamSocket;
             pStreamSocket = NULL;
             break;
 
-        case vos::ISocketTypes::TResult_Interrupted:
-        case vos::ISocketTypes::TResult_InProgress:
-            break;  // -Wall not handled...
+        case osl_Socket_Interrupted:
+        case osl_Socket_InProgress:
+        default:
+            break;
         }
     }
 }
@@ -557,23 +559,13 @@ void CommunicationManagerServerAcceptThread::run()
 IMPL_LINK( CommunicationManagerServerAcceptThread, AddConnection, void*, EMPTYARG )
 {
     {
-        vos::OGuard aGuard( aMAddConnection );
+        osl::MutexGuard aGuard( aMAddConnection );
         nAddConnectionEventId = 0;
     }
     pMyServer->AddConnection( xmNewConnection );
     xmNewConnection.Clear();
     return 1;
 }
-
-
-#define GETSET(aVar, KeyName, Dafault)                 \
-    aVar = aConf.ReadKey(KeyName,"No Entry");          \
-    if ( aVar == "No Entry" )                          \
-    {                                                  \
-        aVar = Dafault;                                \
-        aConf.WriteKey(KeyName, aVar);                 \
-    }
-
 
 CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel )
 : CommunicationManagerClient( bUseMultiChannel )
@@ -594,3 +586,4 @@ CommunicationManagerClientViaSocket::~CommunicationManagerClientViaSocket()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

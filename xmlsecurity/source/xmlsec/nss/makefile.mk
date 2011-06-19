@@ -85,21 +85,6 @@ INCPOST += \
 $(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
-#.IF "$(OS)" == "LINUX"
-#CFLAGS +=   -fPIC -g
-#CFLAGSCXX += \
-#            -fno-rtti -Wall -Wconversion -Wpointer-arith \
-#            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-#            -Wno-long-long -pthread
-#CDEFS     += -DTRACING
-#.ELIF "$(OS)" == "NETBSD"
-#CFLAGS +=   -fPIC
-#CFLAGSCXX += \
-#            -fno-rtti -Wall -Wconversion -Wpointer-arith \
-#            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-#            -Wno-long-long
-#CDEFS     += -DTRACING
-#.ENDIF
 .ENDIF
 
 .IF "$(CRYPTO_ENGINE)" == "nss"

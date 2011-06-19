@@ -149,6 +149,7 @@
 #define ST_DASH                         208
 #define FT_LANG                         209
 #define LB_LANG                         210
+#define ST_CORRECT_ACCIDENTAL_CAPS_LOCK 211
 
 #define CB_SMARTTAGS                    220
 #define FT_SMARTTAGS                    221

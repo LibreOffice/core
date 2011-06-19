@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,10 +26,7 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
 #include <svl/intitem.hxx>
@@ -63,3 +61,5 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
 
     FreeResource();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@ SLOFILES+=\
                 $(SLO)$/scanwin.obj		
 .ENDIF
 
-.IF "$(GUI)"=="UNX" || "$(GUI)" =="OS2"
+.IF "$(GUI)"=="UNX"
 SLOFILES+=\
                 $(SLO)$/sane.obj		\
                 $(SLO)$/sanedlg.obj		\
@@ -70,19 +70,15 @@ SHL1STDLIBS=\
     $(CPPULIB)			\
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
-    $(VOSLIB)			\
     $(SALLIB)			\
     $(ONELIB)			\
     $(TOOLSLIB)			\
     $(VCLLIB)			\
     $(SVTOOLLIB)
 
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"!="FREEBSD"
-.IF "$(OS)"!="NETBSD"
+.IF "$(GUI)"=="UNX" && "$(OS)"!="FREEBSD" && \
+    "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 SHL1STDLIBS+=$(SVTOOLLIB) -ldl
-.ENDIF
-.ENDIF
 .ENDIF
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def

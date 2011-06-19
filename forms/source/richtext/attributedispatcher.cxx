@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,7 @@ namespace frm
             sMessage += "\n (URL: ";
             sMessage += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ")";
-            DBG_ERROR( sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
 #endif
 
@@ -136,3 +137,5 @@ namespace frm
 //........................................................................
 }   // namespace frm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

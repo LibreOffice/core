@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include <linkdlg.hxx>
 #include <vcl/svapp.hxx>
@@ -114,7 +112,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
     aTbLinks.Resize();  // OS: Hack fuer richtige Selektion
 
-    //JP 24.02.99: UpdateTimer fuer DDE-/Grf-Links, auf die gewarted wird
+    // UpdateTimer fuer DDE-/Grf-Links, auf die gewarted wird
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
     //IAccessibility2 Implementation 2009-----
@@ -131,7 +129,6 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     Automatic().SetClickHdl( LINK( this, SvBaseLinksDlg, AutomaticClickHdl ) );
     Manual().SetClickHdl( LINK( this, SvBaseLinksDlg, ManualClickHdl ) );
     UpdateNow().SetClickHdl( LINK( this, SvBaseLinksDlg, UpdateNowClickHdl ) );
-//  OpenSource().SetClickHdl( LINK( this, SvBaseLinksDlg, OpenSourceClickHdl ) );
     ChangeSource().SetClickHdl( LINK( this, SvBaseLinksDlg, ChangeSourceClickHdl ) );
     if(!bHtmlMode)
         BreakLink().SetClickHdl( LINK( this, SvBaseLinksDlg, BreakLinkClickHdl ) );
@@ -147,10 +144,6 @@ SvBaseLinksDlg::~SvBaseLinksDlg()
 
 /*************************************************************************
 |*    SvBaseLinksDlg::Handler()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.06.94
-|*    Letzte Aenderung  JP 30.05.95
 *************************************************************************/
 IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 {
@@ -336,18 +329,11 @@ IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
             rListBox.Select( pE );
             rListBox.MakeVisible( pE );
         }
+
+        pNewMgr->CloseCachedComps();
     }
     return 0;
 }
-
-/*
-IMPL_LINK_INLINE_START( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
-{
-    DBG_ASSERT( !this, "Open noch nicht impl." );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SvBaseLinksDlg, OpenSourceClickHdl, PushButton *, pPushButton )
-*/
 
 IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 {
@@ -488,7 +474,6 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             Automatic().Disable();
             Manual().Disable();
             UpdateNow().Disable();
-//            OpenSource().Disable();
             ChangeSource().Disable();
             BreakLink().Disable();
 
@@ -505,8 +490,6 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 {
     (void)pTimer;
-//    for( SvLBoxEntry* pBox = Links().First(); pBox;
-//          pBox = Links().Next( pBox ))
 
     Links().SetUpdateMode(sal_False);
     for( sal_uLong nPos = Links().GetEntryCount(); nPos; )
@@ -532,7 +515,6 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 
     if( _pLink && _pLink->WasLastEditOK() )
     {
-        // JP 09.01.98:
         // StarImpress/Draw tauschen die LinkObjecte selbst aus!
         // also suche den Link im Manager, wenn der nicht mehr existiert,
         // dann setze fuelle die Liste komplett neu. Ansonsten braucht
@@ -717,3 +699,4 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

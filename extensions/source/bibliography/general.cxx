@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,6 @@
 #include "bibtools.hxx"
 #include "bibliography.hrc"
 #include <tools/debug.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/mnemonic.hxx>
@@ -93,9 +93,7 @@ OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
         }
     return sRet;
 }
-/* -----------------------------04.01.00 10:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 class BibPosListener    :public cppu::WeakImplHelper1 <sdbc::XRowSetListener>
 {
     BibGeneralPage*     pParentPage;
@@ -111,16 +109,12 @@ public:
     virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException );
 
 };
-/* -----------------------------04.01.00 10:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 BibPosListener::BibPosListener(BibGeneralPage* pParent) :
     pParentPage(pParent)
 {
 }
-/* -----------------------------04.01.00 10:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno::RuntimeException )
 {
     try
@@ -190,19 +184,14 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibPosListener::positioned: something went wrong !");
+        OSL_FAIL("BibPosListener::positioned: something went wrong !");
     }
 }
-/* -----------------------------04.01.00 11:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::RuntimeException )
 {
 }
 
-/* -----------------16.11.99 13:06-------------------
-
- --------------------------------------------------*/
 BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent,BibResId(RID_TP_GENERAL)),
     aControlParentWin(this, WB_DIALOGCONTROL),
@@ -432,11 +421,9 @@ BibGeneralPage::~BibGeneralPage()
             xRowSet->removeRowSetListener(xPosListener);
     }
 }
- /* -----------------------------14.04.00 13:11--------------------------------
 
-  ---------------------------------------------------------------------------*/
- void BibGeneralPage::RemoveListeners()
- {
+void BibGeneralPage::RemoveListeners()
+{
     for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
     {
         if(aControls[i].is())
@@ -446,10 +433,8 @@ BibGeneralPage::~BibGeneralPage()
             aControls[i] = 0;
         }
     }
- }
-/* -----------------------------21.01.00 17:05--------------------------------
+}
 
- ---------------------------------------------------------------------------*/
 void BibGeneralPage::CommitActiveControl()
 {
     uno::Reference< form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
@@ -574,7 +559,6 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     xCtrWin->setVisible( sal_True );
                     xControl->setDesignMode( sal_True );
                         // initially switch on the desing mode - switch it off _after_ loading the form
-                        // 17.10.2001 - 93107 - frank.schoenheit@sun.com
 
                     xCtrWin->setPosSize(rPos.X(), rPos.Y(), rSize.Width(),
                         rSize.Height(), awt::PosSize::POSSIZE);
@@ -585,7 +569,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibGeneralPage::AddXControl: something went wrong !");
+        OSL_FAIL("BibGeneralPage::AddXControl: something went wrong !");
     }
     return xCtrModel;
 }
@@ -865,7 +849,7 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
                     if( pWindow->HasChildPathFocus() )
                     {   // save focused control
                         DBG_ASSERT( nFocused == 0xFFFF, "+BibGeneralPage::HandleShortCutKey(): more than one with focus?!" );
-                        DBG_ASSERT( aMatchList.size() > 0, "+BibGeneralPage::HandleShortCutKey(): push_back and no content?!" );
+                        DBG_ASSERT( !aMatchList.empty(), "+BibGeneralPage::HandleShortCutKey(): push_back and no content?!" );
                         nFocused = aMatchList.size() - 1;
                     }
                 }
@@ -875,7 +859,7 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 
     if( bHandled )
     {
-        DBG_ASSERT( aMatchList.size() > 0, "*BibGeneralPage::HandleShortCutKey(): be prepared to crash..." );
+        DBG_ASSERT( !aMatchList.empty(), "*BibGeneralPage::HandleShortCutKey(): be prepared to crash..." );
 
         if( nFocused >= ( aMatchList.size() - 1 ) )
             // >=... includes 0xFFFF
@@ -890,3 +874,5 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 
     return bHandled;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

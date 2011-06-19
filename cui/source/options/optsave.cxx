@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <svl/eitem.hxx>
@@ -40,14 +38,10 @@
 #include "optsave.hxx"
 #include <dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceasvector.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -57,7 +51,6 @@
 #include <sfx2/docfilt.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/optionsdlg.hxx>
 
@@ -72,68 +65,12 @@ using namespace comphelper;
 using rtl::OUString;
 
 #define C2U(cChar)                  OUString::createFromAscii(cChar)
-#define C2S(cChar)                  String( RTL_CONSTASCII_STRINGPARAM(cChar) )
+#define C2S(cChar)                  String( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 #define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
 #define WININDEX_AUTOSAVE           ((sal_uInt16)6)
 #define WININDEX_SAVEURL_RELFSYS    ((sal_uInt16)9)
 
-// ----------------------------------------------------------------------
-#ifdef FILTER_WARNING_ENABLED
-class SvxAlienFilterWarningConfig_Impl : public utl::ConfigItem
-{
-    sal_Bool bWarning;
-    com::sun::star::uno::Sequence< OUString > aPropNames;
-
-    public:
-        SvxAlienFilterWarningConfig_Impl();
-        ~SvxAlienFilterWarningConfig_Impl();
-
-    virtual void            Commit();
-
-    void                    ResetWarning()
-                            {
-                                if(bWarning)
-                                {
-                                    bWarning = sal_False;
-                                    ConfigItem::SetModified();
-                                }
-
-                            }
-    sal_Bool                IsWarning()const{return bWarning;}
-};
-// ----------------------------------------------------------------------
-SvxAlienFilterWarningConfig_Impl::SvxAlienFilterWarningConfig_Impl() :
-    ConfigItem(C2U("TypeDetection.Misc/Defaults"),
-        CONFIG_MODE_IMMEDIATE_UPDATE),
-    aPropNames(1),
-    bWarning(sal_True)
-{
-    aPropNames.getArray()[0] = C2U("ShowAlienFilterWarning");
-    Sequence<Any> aValues = GetProperties(aPropNames);
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aPropNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aPropNames.getLength() &&
-        pValues[0].hasValue() &&
-            pValues[0].getValueType() == ::getBooleanCppuType())
-        bWarning = *(sal_Bool*)pValues[0].getValue();
-}
-// ----------------------------------------------------------------------
-SvxAlienFilterWarningConfig_Impl::~SvxAlienFilterWarningConfig_Impl()
-{
-    if(IsModified())
-        Commit();
-}
-// ----------------------------------------------------------------------
-void SvxAlienFilterWarningConfig_Impl::Commit()
-{
-    Sequence<Any> aValues(aPropNames.getLength());
-    Any* pValues = aValues.getArray();
-    pValues[0].setValue(&bWarning, ::getBooleanCppuType());
-    PutProperties(aPropNames, aValues);
-}
-#endif // FILTER_WARNING_ENABLED
-// ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 
 struct SvxSaveTabPage_Impl
@@ -195,9 +132,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     pImpl               ( new SvxSaveTabPage_Impl )
 
 {
-    sal_Bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    aODFWarningFI.SetImage(
-        Image( CUI_RES( bHighContrast ? IMG_ODF_WARNING_HC : IMG_ODF_WARNING ) ) );
+    aODFWarningFI.SetImage( Image( CUI_RES( IMG_ODF_WARNING )));
 
     FreeResource();
 
@@ -293,26 +228,6 @@ SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
-bool SfxSaveTabPage::AcceptFilter( sal_uInt16 nPos )
-{
-    const OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
-    sal_Bool bAlien = sal_False, bODF = sal_False;
-    OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
-    OUString sUIName;
-    for(int nFilter = 0; nFilter < pImpl->aFilterArr[nPos].getLength(); nFilter++)
-    {
-        if( pImpl->aDefaultArr[nPos] == pFilters[nFilter] )
-        {
-            bAlien = pImpl->aAlienArr[nPos][nFilter];
-            bODF = pImpl->aODFArr[nPos][nFilter];
-            sUIName = pUIFilters[nFilter];;
-            break;
-        }
-    }
-    bool bSet = true;
-    return bSet;
-}
 // -----------------------------------------------------------------------
 void SfxSaveTabPage::DetectHiddenControls()
 {
@@ -430,38 +345,31 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
     SvtModuleOptions aModuleOpt;
     if(pImpl->aDefaultArr[APP_MATH].getLength() &&
-            pImpl->aDefaultArr[APP_MATH] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_MATH) &&
-            AcceptFilter( APP_MATH ))
+            pImpl->aDefaultArr[APP_MATH] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_MATH))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_MATH, pImpl->aDefaultArr[APP_MATH]);
 
     if( pImpl->aDefaultArr[APP_DRAW].getLength() &&
-            pImpl->aDefaultArr[APP_DRAW] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_DRAW) &&
-            AcceptFilter( APP_DRAW ))
+            pImpl->aDefaultArr[APP_DRAW] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_DRAW))
             aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_DRAW, pImpl->aDefaultArr[APP_DRAW]);
 
     if(pImpl->aDefaultArr[APP_IMPRESS].getLength() &&
-            pImpl->aDefaultArr[APP_IMPRESS] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS)&&
-            AcceptFilter( APP_IMPRESS ))
+            pImpl->aDefaultArr[APP_IMPRESS] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS, pImpl->aDefaultArr[APP_IMPRESS]);
 
     if(pImpl->aDefaultArr[APP_CALC].getLength() &&
-            pImpl->aDefaultArr[APP_CALC] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_CALC)&&
-            AcceptFilter( APP_CALC ))
+            pImpl->aDefaultArr[APP_CALC] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_CALC))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_CALC, pImpl->aDefaultArr[APP_CALC]);
 
     if(pImpl->aDefaultArr[APP_WRITER].getLength() &&
-            pImpl->aDefaultArr[APP_WRITER] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITER)&&
-            AcceptFilter( APP_WRITER))
+            pImpl->aDefaultArr[APP_WRITER] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITER))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITER, pImpl->aDefaultArr[APP_WRITER]);
 
     if(pImpl->aDefaultArr[APP_WRITER_WEB].getLength() &&
-            pImpl->aDefaultArr[APP_WRITER_WEB] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB)&&
-            AcceptFilter( APP_WRITER_WEB ))
+            pImpl->aDefaultArr[APP_WRITER_WEB] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB, pImpl->aDefaultArr[APP_WRITER_WEB]);
 
     if(pImpl->aDefaultArr[APP_WRITER_GLOBAL].getLength() &&
-            pImpl->aDefaultArr[APP_WRITER_GLOBAL] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL)&&
-            AcceptFilter( APP_WRITER_GLOBAL ))
+            pImpl->aDefaultArr[APP_WRITER_GLOBAL] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL, pImpl->aDefaultArr[APP_WRITER_GLOBAL]);
 
     return bModified;
@@ -542,7 +450,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                         case  APP_IMPRESS       : sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
                         case  APP_DRAW          : sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
                         case  APP_MATH          : sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
-                        default: DBG_ERROR("illegal user data");
+                        default: OSL_FAIL("illegal user data");
                     }
                     String sTmp(sCommand);
                     sTmp.SearchAndReplaceAscii("%1", sReplace);
@@ -554,10 +462,10 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
-                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString::createFromAscii("Name"),OUString());
+                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),OUString());
                         if (sFilter.getLength())
                         {
-                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString::createFromAscii("Flags"),sal_Int32());
+                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),sal_Int32());
                             lList.push_back(sFilter);
                             lAlienList.push_back(0 != (nFlags & SFX_FILTER_ALIEN));
                             lODFList.push_back( isODFFormat( sFilter ) );
@@ -574,7 +482,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         catch(Exception& e)
         {
             (void) e;
-            DBG_ERROR(
+            OSL_FAIL(
                 rtl::OUStringToOString(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
@@ -588,7 +496,6 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     }
 
     aDocInfoCB.Check(aSaveOpt.IsDocInfoSave());
-//    aDocInfoCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE));
 
     aBackupCB.Check(aSaveOpt.IsBackup());
     sal_Bool bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
@@ -598,22 +505,16 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aAutoSaveCB.Check(aSaveOpt.IsAutoSave());
     aWarnAlienFormatCB.Check(aSaveOpt.IsWarnAlienFormat());
     aWarnAlienFormatCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
-//    aAutoSaveCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
 
     // the pretty printing
     aSizeOptimizationCB.Check( !aSaveOpt.IsPrettyPrinting());
-//    aSizeOptimizationCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING ));
-
 
     aAutoSaveEdit.SetValue( aSaveOpt.GetAutoSaveTime() );
-//    aAutoSaveEdit.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVETIME));
 
     // relativ speichern
     aRelativeFsysCB.Check( aSaveOpt.IsSaveRelFSys() );
-//    aRelativeFsysCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS));
 
     aRelativeInetCB.Check( aSaveOpt.IsSaveRelINet() );
-//    aRelativeInetCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELINET));
 
     void* pDefaultVersion = (void*)long( aSaveOpt.GetODFDefaultVersion() );
     aODFVersionLB.SelectEntryPos( aODFVersionLB.GetEntryPos( pDefaultVersion ) );
@@ -627,7 +528,6 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aSizeOptimizationCB.SaveValue();
     aAutoSaveCB.SaveValue();
     aAutoSaveEdit.SaveValue();
-//  aAutoSavePromptBtn.SaveValue();
 
     aRelativeFsysCB.SaveValue();
     aRelativeInetCB.SaveValue();
@@ -644,39 +544,26 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
         {
             aAutoSaveEdit.Enable();
             aMinuteFT.Enable();
-//          aAutoSavePromptBtn.Enable();
-            aAutoSaveEdit.GrabFocus();
         }
         else
         {
             aAutoSaveEdit.Disable();
             aMinuteFT.Disable();
-//          aAutoSavePromptBtn.Disable();
         }
     }
     return 0;
 }
-/* -----------------------------05.04.01 13:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
-    sal_Int32 nFlags;
     const PropertyValue* pProperties = rProperties.getConstArray();
     for(int nProp = 0; nProp < rProperties.getLength(); nProp++)
     {
         if(!pProperties[nProp].Name.compareToAscii("UIName"))
         {
             pProperties[nProp].Value >>= sRet;
-//!            break;
-        }
-        else if(!pProperties[nProp].Name.compareToAscii("Flags"))
-        {
-            if ( pProperties[nProp].Value >>= nFlags )
-            {
-                nFlags &= 0x100;
-            }
+            break;
         }
         else if(!pProperties[nProp].Name.compareToAscii("Name"))
         {
@@ -685,9 +572,7 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
     }
     return sRet;
 }
-/* -----------------------------05.04.01 13:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
     sal_uInt16 nCurPos = aDocTypeLB.GetSelectEntryPos();
@@ -777,3 +662,4 @@ IMPL_LINK( SfxSaveTabPage, ODFVersionHdl_Impl, ListBox *, EMPTYARG )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

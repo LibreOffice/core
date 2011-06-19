@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/genlink.hxx>
 #include <sfx2/dispatch.hxx>
@@ -68,3 +68,4 @@
 #include <editeng/sizeitem.hxx>
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

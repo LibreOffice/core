@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_forms.hxx"
 #include "rtattributehandler.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
@@ -113,7 +112,7 @@ namespace frm
     //--------------------------------------------------------------------
     AttributeCheckState AttributeHandler::implGetCheckState( const SfxPoolItem& /*_rItem*/ ) const
     {
-        OSL_ENSURE( sal_False, "AttributeHandler::implGetCheckState: not to be called!" );
+        OSL_FAIL( "AttributeHandler::implGetCheckState: not to be called!" );
         return eIndetermined;
     }
 
@@ -232,7 +231,7 @@ namespace frm
             case SID_ATTR_PARA_ADJUST_RIGHT : m_eAdjust = SVX_ADJUST_RIGHT;   break;
             case SID_ATTR_PARA_ADJUST_BLOCK : m_eAdjust = SVX_ADJUST_BLOCK;   break;
             default:
-                OSL_ENSURE( sal_False, "ParaAlignmentHandler::ParaAlignmentHandler: invalid slot!" );
+                OSL_FAIL( "ParaAlignmentHandler::ParaAlignmentHandler: invalid slot!" );
                 break;
         }
     }
@@ -267,7 +266,7 @@ namespace frm
             case SID_ATTR_PARA_LINESPACE_15: m_nLineSpace = 150; break;
             case SID_ATTR_PARA_LINESPACE_20: m_nLineSpace = 200; break;
             default:
-                OSL_ENSURE( sal_False, "LineSpacingHandler::LineSpacingHandler: invalid slot!" );
+                OSL_FAIL( "LineSpacingHandler::LineSpacingHandler: invalid slot!" );
                 break;
         }
     }
@@ -309,7 +308,7 @@ namespace frm
             case SID_SET_SUPER_SCRIPT   : m_eEscapement = SVX_ESCAPEMENT_SUPERSCRIPT; break;
             case SID_SET_SUB_SCRIPT     : m_eEscapement = SVX_ESCAPEMENT_SUBSCRIPT;   break;
             default:
-                OSL_ENSURE( sal_False, "EscapementHandler::EscapementHandler: invalid slot!" );
+                OSL_FAIL( "EscapementHandler::EscapementHandler: invalid slot!" );
                 break;
         }
     }
@@ -373,7 +372,7 @@ namespace frm
             DELETEZ( pCorrectWich );
         }
         else
-            OSL_ENSURE( sal_False, "SlotHandler::executeAttribute: need attributes to do something!" );
+            OSL_FAIL( "SlotHandler::executeAttribute: need attributes to do something!" );
     }
 
     //====================================================================
@@ -462,7 +461,7 @@ namespace frm
             case SID_ATTR_PARA_LEFT_TO_RIGHT: m_eParagraphDirection = FRMDIR_HORI_LEFT_TOP; m_eDefaultAdjustment = SVX_ADJUST_LEFT; break;
             case SID_ATTR_PARA_RIGHT_TO_LEFT: m_eParagraphDirection = FRMDIR_HORI_RIGHT_TOP; m_eDefaultAdjustment = SVX_ADJUST_RIGHT; break;
             default:
-                OSL_ENSURE( sal_False, "ParagraphDirectionHandler::ParagraphDirectionHandler: invalid attribute id!" );
+                OSL_FAIL( "ParagraphDirectionHandler::ParagraphDirectionHandler: invalid attribute id!" );
         }
 
         if ( SVX_ADJUST_RIGHT == m_eDefaultAdjustment )
@@ -530,3 +529,5 @@ namespace frm
 //........................................................................
 }   // namespace frm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

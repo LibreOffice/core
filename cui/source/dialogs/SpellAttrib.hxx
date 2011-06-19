@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <tools/color.hxx>
-//namespace com{ namespace sun{ namespace star{ namespace linguistic2{
-//    class XSpellAlternatives;
-//}}}}
 
 #define TEXTATTR_SPELL_ERROR            (TEXTATTR_USER_START + 1)
 #define TEXTATTR_SPELL_LANGUAGE         (TEXTATTR_USER_START + 2)
@@ -96,21 +94,18 @@ struct SpellErrorDescription
                 sRuleId == rDesc.sRuleId;
     }
 };
-/* -----------------10.09.2003 14:23-----------------
 
- --------------------------------------------------*/
+//-------------------------------------------------
 class SpellErrorAttrib : public TextAttrib
 {
 public:
 
 private:
-    //com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> m_xAlternatives;
     SpellErrorDescription        m_aSpellErrorDescription;
 
                             //not accessible
                             SpellErrorAttrib();
 public:
-//                            SpellErrorAttrib(com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> xAlternatives);
                             SpellErrorAttrib( const SpellErrorDescription& );
                             SpellErrorAttrib( const SpellErrorAttrib& rAttr );
                             ~SpellErrorAttrib();
@@ -122,9 +117,8 @@ public:
     virtual TextAttrib*     Clone() const;
     virtual int             operator==( const TextAttrib& rAttr ) const;
 };
-/* -----------------10.09.2003 14:23-----------------
 
- --------------------------------------------------*/
+//-------------------------------------------------
 class SpellLanguageAttrib : public TextAttrib
 {
     LanguageType m_eLanguage;
@@ -146,9 +140,8 @@ public:
     virtual TextAttrib*     Clone() const;
     virtual int             operator==( const TextAttrib& rAttr ) const;
 };
-/* -----------------31.10.2003 16:01-----------------
 
- --------------------------------------------------*/
+//-------------------------------------------------
 class SpellBackgroundAttrib : public TextAttrib
 {
     Color   m_aBackgroundColor;
@@ -171,3 +164,5 @@ public:
 };
 }//namespace svx
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

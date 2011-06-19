@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ namespace frm
     {
         if ( !_rxInterceptor.is() )
         {
-            DBG_ERROR( "ControlFeatureInterception::registerDispatchProviderInterceptor: invalid interceptor!" );
+            OSL_FAIL( "ControlFeatureInterception::registerDispatchProviderInterceptor: invalid interceptor!" );
             return;
         }
 
@@ -81,7 +82,7 @@ namespace frm
     {
         if ( !_rxInterceptor.is() )
         {
-            DBG_ERROR( "ControlFeatureInterception::releaseDispatchProviderInterceptor: invalid interceptor!" );
+            OSL_FAIL( "ControlFeatureInterception::releaseDispatchProviderInterceptor: invalid interceptor!" );
             return;
         }
 
@@ -168,3 +169,4 @@ namespace frm
 } // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

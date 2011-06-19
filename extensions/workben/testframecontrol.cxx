@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-//#include <vos/mutex.hxx>
-#include <vos/dynload.hxx>
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 
@@ -45,7 +43,6 @@
 
 #include <svtools/unoiface.hxx>
 
-using namespace vos;
 using namespace usr;
 
 //==================================================================================================
@@ -318,3 +315,5 @@ void FrameControlApplication::ShowStatusText( const XubString& rStatus )
 {
     Application::GetAppWindow()->SetText( rStatus );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

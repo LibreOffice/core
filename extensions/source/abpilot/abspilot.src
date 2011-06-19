@@ -362,6 +362,15 @@ QueryBox RID_QRY_NOTABLES
 };
 
 //........................................................................
+QueryBox RID_QRY_NO_EVO_GW
+{
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_NO;
+
+    Message [ en-US ] = "You don't seem to have any GroupWise account configured in Evolution.\nDo you want to set it up as an address data source, anyway?";
+};
+
+//........................................................................
 String RID_STR_DEFAULT_NAME
 {
     Text [ en-US ] = "Addresses";

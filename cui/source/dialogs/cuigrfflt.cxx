@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -40,280 +38,6 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc> // RID_SVX_GRFFILTER_DLG_...
 
-// --------------------
-// - SvxGraphicFilter -
-// --------------------
-/*
-sal_uLong SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
-{
-    const Graphic&  rGraphic = rFilterObject.GetGraphic();
-    sal_uLong           nRet;
-
-    if( rGraphic.GetType() == GRAPHIC_BITMAP )
-    {
-        SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
-        SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
-        Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
-        Graphic         aGraphic;
-
-        switch( rReq.GetSlot() )
-        {
-            case( SID_GRFFILTER_INVERT ):
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( sal_True );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Invert() )
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Invert() )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( sal_False );
-            }
-            break;
-
-            case( SID_GRFFILTER_SMOOTH ):
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( sal_True );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Filter( BMP_FILTER_SMOOTH ) )
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Filter( BMP_FILTER_SMOOTH ) )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( sal_False );
-            }
-            break;
-
-            case( SID_GRFFILTER_SHARPEN ):
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( sal_True );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Filter( BMP_FILTER_SHARPEN ) )
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Filter( BMP_FILTER_SHARPEN ) )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( sal_False );
-            }
-            break;
-
-            case( SID_GRFFILTER_REMOVENOISE ):
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( sal_True );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Filter( BMP_FILTER_REMOVENOISE ) )
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Filter( BMP_FILTER_REMOVENOISE ) )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( sal_False );
-            }
-            break;
-
-            case( SID_GRFFILTER_SOBEL ):
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( sal_True );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Filter( BMP_FILTER_SOBEL_GREY ) )
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Filter( BMP_FILTER_SOBEL_GREY ) )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( sal_False );
-            }
-            break;
-
-            case( SID_GRFFILTER_MOSAIC ):
-            {
-                GraphicFilterMosaic aDlg( pWindow, rGraphic, 4, 4, sal_False );
-
-                if( aDlg.Execute() == RET_OK )
-                    aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case( SID_GRFFILTER_EMBOSS  ):
-            {
-                GraphicFilterEmboss aDlg( pWindow, rGraphic, RP_MM );
-
-                if( aDlg.Execute() == RET_OK )
-                    aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case( SID_GRFFILTER_POSTER  ):
-            {
-                GraphicFilterPoster aDlg( pWindow, rGraphic, 16 );
-
-                if( aDlg.Execute() == RET_OK )
-                    aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case( SID_GRFFILTER_POPART  ):
-            {
-                if( pShell )
-                    pShell->SetWaitCursor( sal_True );
-
-                if( rGraphic.IsAnimated() )
-                {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Filter( BMP_FILTER_POPART ) )
-                        aGraphic = aAnimation;
-                }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Filter( BMP_FILTER_POPART ) )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( sal_False );
-            }
-            break;
-
-            case( SID_GRFFILTER_SEPIA ):
-            {
-                GraphicFilterSepia aDlg( pWindow, rGraphic, 10 );
-
-                if( aDlg.Execute() == RET_OK )
-                    aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            case( SID_GRFFILTER_SOLARIZE ):
-            {
-                GraphicFilterSolarize aDlg( pWindow, rGraphic, 128, sal_False );
-
-                if( aDlg.Execute() == RET_OK )
-                    aGraphic = aDlg.GetFilteredGraphic( rGraphic, 1.0, 1.0 );
-            }
-            break;
-
-            default:
-            {
-                DBG_ERROR( "SvxGraphicFilter: selected filter slot not yet implemented" );
-                nRet = SVX_GRAPHICFILTER_UNSUPPORTED_SLOT;
-            }
-            break;
-        }
-
-        if( aGraphic.GetType() != GRAPHIC_NONE )
-        {
-            rFilterObject.SetGraphic( aGraphic );
-            nRet = SVX_GRAPHICFILTER_ERRCODE_NONE;
-        }
-    }
-    else
-        nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
-
-    return nRet;
-}
-
-// -----------------------------------------------------------------------------
-
-void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )
-{
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER ) )
-        rSet.DisableItem( SID_GRFFILTER );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_INVERT ) )
-        rSet.DisableItem( SID_GRFFILTER_INVERT );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SMOOTH ) )
-        rSet.DisableItem( SID_GRFFILTER_SMOOTH );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SHARPEN ) )
-        rSet.DisableItem( SID_GRFFILTER_SHARPEN );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_REMOVENOISE ) )
-        rSet.DisableItem( SID_GRFFILTER_REMOVENOISE );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SOBEL ) )
-        rSet.DisableItem( SID_GRFFILTER_SOBEL );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_MOSAIC ) )
-        rSet.DisableItem( SID_GRFFILTER_MOSAIC );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_EMBOSS ) )
-        rSet.DisableItem( SID_GRFFILTER_EMBOSS );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_POSTER ) )
-        rSet.DisableItem( SID_GRFFILTER_POSTER );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_POPART ) )
-        rSet.DisableItem( SID_GRFFILTER_POPART );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SEPIA ) )
-        rSet.DisableItem( SID_GRFFILTER_SEPIA );
-
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SOLARIZE ) )
-        rSet.DisableItem( SID_GRFFILTER_SOLARIZE );
-};
-*/
 // --------------------------------------
 // - GraphicFilterDialog::PreviewWindow -
 // --------------------------------------
@@ -729,7 +453,7 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
 
     switch( maCtlLight.GetActualRP() )
     {
-        default:       DBG_ERROR("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
+        default:       OSL_FAIL("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
         case( RP_LT ): nAzim = 4500,    nElev = 4500; break;
         case( RP_MT ): nAzim = 9000,    nElev = 4500; break;
         case( RP_RT ): nAzim = 13500,   nElev = 4500; break;
@@ -760,3 +484,5 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
 
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

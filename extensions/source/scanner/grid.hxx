@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _EXTENSIONS_SCANNER_GRID_HXX
 
 #include <vcl/window.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 
@@ -147,3 +146,5 @@ public:
 };
 
 #endif // _EXTENSIONS_SCANNER_GRID_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_MSIHELPER_HXX
 #define INCLUDED_MSIHELPER_HXX
 
@@ -182,3 +183,5 @@ bool IsModuleSelectedForDeinstallation(MSIHANDLE handle, LPCTSTR name);
 bool IsCompleteDeinstallation(MSIHANDLE handle);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

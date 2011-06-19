@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -121,7 +119,7 @@ struct Handle2CfgNameMapping_Impl
     const char* m_pCfgName;
 };
 
-static Handle2CfgNameMapping_Impl __READONLY_DATA Hdl2CfgMap_Impl[] =
+static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
 {
     { SvtPathOptions::PATH_AUTOCORRECT, "AutoCorrect" },
     { SvtPathOptions::PATH_AUTOTEXT,    "AutoText" },
@@ -352,8 +350,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
                 SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
                 if ( bReadOnly )
                 {
-                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage, BMP_COLOR_NORMAL );
-                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImageHC, BMP_COLOR_HIGHCONTRAST );
+                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage );
                 }
                 PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
                 pPathImpl->sUserPath = sUser;
@@ -404,11 +401,6 @@ void SvxPathTabPage::FillUserData()
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG )
-
-/*  [Beschreibung]
-
-*/
-
 {
     sal_uInt16 nSelCount = 0;
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
@@ -506,7 +498,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
 
     // old path is an URL?
     INetURLObject aObj( sWritable );
-    FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
+    bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
     rtl::OUString aPathStr( _rFolder );
     INetURLObject aNewObj( aPathStr );
     aNewObj.removeFinalSlash();
@@ -514,7 +506,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     // then the new path also an URL else system path
     String sNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
-    FASTBOOL bChanged =
+    bool bChanged =
 #ifdef UNX
 // Unix is case sensitive
         ( sNewPathStr != sWritable );
@@ -807,7 +799,7 @@ void SvxPathTabPage::GetPathList(
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "SvxPathTabPage::GetPathList(): caught an exception!" );
+        OSL_FAIL( "SvxPathTabPage::GetPathList(): caught an exception!" );
     }
 }
 
@@ -852,7 +844,8 @@ void SvxPathTabPage::SetPathList(
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "SvxPathTabPage::SetPathList(): caught an exception!" );
+        OSL_FAIL( "SvxPathTabPage::SetPathList(): caught an exception!" );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

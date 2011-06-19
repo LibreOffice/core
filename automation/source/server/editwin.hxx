@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 
 #if OSL_DEBUG_LEVEL > 1
 
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
-#endif
 
 class ImpWorkWindow;
 
@@ -72,3 +69,4 @@ public:
 #endif
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

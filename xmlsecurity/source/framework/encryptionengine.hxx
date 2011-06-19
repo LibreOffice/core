@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,9 +54,6 @@ class EncryptionEngine : public cppu::ImplInheritanceHelper1
  *   FUNCTION
  *  Maintains common members and methods related with encryption.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XBlockerMonitor
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -101,3 +99,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

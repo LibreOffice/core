@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,25 +26,22 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>
 
 #include "hlinettp.hxx"
 #include "hyperdlg.hrc"
-#include "hlmarkwn_def.hxx" //ADD CHINA001
+#include "hlmarkwn_def.hxx"
 
 #define STD_DOC_SUBPATH     "internal"
 #define STD_DOC_NAME        "url_transfer.htm"
 
-sal_Char __READONLY_DATA sAnonymous[]    = "anonymous";
-sal_Char __READONLY_DATA sHTTPScheme[]   = INET_HTTP_SCHEME;
-sal_Char __READONLY_DATA sHTTPSScheme[]  = INET_HTTPS_SCHEME;
-sal_Char __READONLY_DATA sFTPScheme[]    = INET_FTP_SCHEME;
-sal_Char __READONLY_DATA sTelnetScheme[] = INET_TELNET_SCHEME;
+sal_Char const sAnonymous[]    = "anonymous";
+sal_Char const sHTTPScheme[]   = INET_HTTP_SCHEME;
+sal_Char const sHTTPSScheme[]  = INET_HTTPS_SCHEME;
+sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
+sal_Char const sTelnetScheme[] = INET_TELNET_SCHEME;
 
 /*************************************************************************
 |*
@@ -70,10 +68,8 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
     mbMarkWndOpen           ( sal_False )
 {
-    // Set HC bitmaps and display display of bitmap names.
-    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    // Disable display of bitmap names.
     maBtBrowse.EnableTextDisplay (sal_False);
-    maBtTarget.SetModeImage( Image( CUI_RES( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtTarget.EnableTextDisplay (sal_False);
 
     InitStdControls();
@@ -549,3 +545,5 @@ void SvxHyperlinkInternetTp::SetOnlineMode( sal_Bool /*bEnable*/ )
     else
         maBtTarget.Enable( sal_True );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

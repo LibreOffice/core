@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,10 +83,7 @@ class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 private:
     sal_Bool   mbAccessAddress;
 
-//  String GetAllEmailNamesFromDragItem( sal_uInt16 nItem );
-
 protected:
-
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
@@ -206,3 +204,4 @@ protected:
 
 #endif // _SVX_TABBASE_HYPERLINK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

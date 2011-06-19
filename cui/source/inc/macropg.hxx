@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,15 +36,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <svl/macitem.hxx>
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <rtl/ustring.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
-typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
+typedef ::boost::unordered_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
 
 struct EventDisplayName
 {
@@ -135,10 +134,6 @@ public:
     virtual             ~SvxMacroAssignSingleTabDialog();
 
     void                SetTabPage( SfxTabPage* pTabPage );
-    // SfxTabPage*          GetTabPage() const { return pPage; }
-
-    // OKButton*            GetOKButton() const { return pOKBtn; }
-    // CancelButton*        GetCancelButton() const { return pCancelBtn; }
 
 private:
     SfxViewFrame*       pFrame;
@@ -173,3 +168,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

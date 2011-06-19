@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,10 +52,6 @@ class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper3
  *  Used as a wrapper class to transfer a libxml2 node structure
  *  between different UNO components.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XXMLElementWrapper, XUnoTunnel
- *          XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -106,3 +103,4 @@ SAL_CALL XMLElementWrapper_XmlSecImpl_createInstance(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

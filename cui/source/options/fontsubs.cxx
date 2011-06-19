@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <tools/shl.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/svapp.hxx>
@@ -136,7 +135,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     sHeader += sHeader3;
     sHeader += sTabSpace;
     sHeader += sHeader4;
-//   sHeader += sTabSpace;
     aCheckLB.InsertHeaderEntry(sHeader);
 
     HeaderBar* pBar = aCheckLB.GetTheHeaderBar();
@@ -376,9 +374,8 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 
     return 0;
 }
-/* -----------------------------29.08.2002 11:47------------------------------
 
- ---------------------------------------------------------------------------*/
+//--------------------------------------------------------------------------
 IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
 {
     String sFontName = aFontNameLB.GetSelectEntry();
@@ -396,9 +393,6 @@ IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
     aFontNameLB.SelectEntry(sFontName);
     return 0;
 }
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 void SvxFontSubstTabPage::CheckEnable()
 {
@@ -413,14 +407,6 @@ void SvxFontSubstTabPage::CheckEnable()
         String sEntry = aFont1CB.GetText();
         sEntry += '\t';
         sEntry += aFont2CB.GetText();
-
-/*      if (!aFont1CB.GetText().Len() || !aFont2CB.GetText().Len() ||
-            aFont1CB.GetText() == aFont2CB.GetText() ||
-            aCheckLB.GetEntryPos(sEntry) != 0xffffffff ||
-            (pEntry != 0 && aCheckLB.NextSelected(pEntry) != 0))
-            bApply = sal_False;
-        else
-            bApply = sal_True;*/
 
         // Wegen OS/2-Optimierungsfehler (Bug #56267) etwas umstaendlicher:
         if (!aFont1CB.GetText().Len() || !aFont2CB.GetText().Len())
@@ -467,10 +453,6 @@ void SvxFontSubstTabPage::CheckEnable()
     aFont2CB.Enable(bEnableAll);
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 void SvxFontSubstCheckListBox::SetTabs()
 {
     SvxSimpleTable::SetTabs();
@@ -484,9 +466,7 @@ void SvxFontSubstCheckListBox::SetTabs()
     pTab->nFlags &= ~nAdjust;
     pTab->nFlags |= SV_LBOXTAB_PUSHABLE|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_FORCE;
 }
-/* -----------------------------22.05.2002 11:06------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
 {
     if(!rKEvt.GetKeyCode().GetModifier() &&
@@ -514,10 +494,6 @@ void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
         SvxSimpleTable::KeyInput(rKEvt);
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
 {
     if ( nPos < GetEntryCount() )
@@ -527,10 +503,6 @@ void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sa
             bChecked ? SvButtonState( SV_BUTTON_CHECKED ) :
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 void SvxFontSubstCheckListBox::CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked)
 {
@@ -542,27 +514,15 @@ void SvxFontSubstCheckListBox::CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, 
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 sal_Bool SvxFontSubstCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
 {
     return GetCheckButtonState( GetEntry(nPos), nCol ) == SV_BUTTON_CHECKED;
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 sal_Bool SvxFontSubstCheckListBox::IsChecked(SvLBoxEntry* pEntry, sal_uInt16 nCol)
 {
     return GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED;
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 void SvxFontSubstCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
@@ -589,10 +549,6 @@ void SvxFontSubstCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uIn
     }
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
@@ -609,3 +565,4 @@ SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

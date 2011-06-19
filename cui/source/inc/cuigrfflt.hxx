@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>
@@ -41,30 +40,7 @@
 #include <svx/graphctl.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>
-/*
-// ---------------
-// - Error codes -
-// ---------------
 
-#define SVX_GRAPHICFILTER_ERRCODE_NONE              0x00000000
-#define SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE   0x00000001
-#define SVX_GRAPHICFILTER_UNSUPPORTED_SLOT          0x00000002
-
-// --------------------
-// - SvxGraphicFilter -
-// --------------------
-
-class SfxRequest;
-class SfxItemSet;
-
-class SvxGraphicFilter
-{
-public:
-
-    static sal_uLong    ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
-    static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
-};
-*/
 // -----------------------
 // - GraphicFilterDialog -
 // -----------------------
@@ -251,3 +227,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

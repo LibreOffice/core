@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,11 +26,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
+
 #include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
@@ -80,10 +79,6 @@ static ::com::sun::star::uno::Reference<
     return xMSF;
 }
 
-/*-----------------14.10.96 15.47-------------------
-
---------------------------------------------------*/
-
 OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     SfxTabDialog(pParent, CUI_RES( RID_OFA_AUTOCORR_DLG ), _pSet),
     aLanguageFT(    this, CUI_RES(FT_LANG         )),
@@ -122,7 +117,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     else
     {
         // remove smart tag tab page if no extensions are installed
-        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
         if ( !pOpt || !pOpt->pSmartTagMgr || 0 == pOpt->pSmartTagMgr->NumberOfRecognizers() )
             RemoveTabPage(RID_OFAPAGE_SMARTTAG_OPTIONS);
@@ -167,9 +162,6 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     if ( bOpenSmartTagOptions )
         SetCurPageId( RID_OFAPAGE_SMARTTAG_OPTIONS );
 }
-/*-----------------16.10.96 14.06-------------------
-
---------------------------------------------------*/
 
 sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
                     CollatorWrapper& rCmpClass )
@@ -190,9 +182,6 @@ sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
     return sal_False;
 }
 
-/* -----------------23.11.98 10:46-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
 {
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
@@ -209,9 +198,6 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
     }
     return 0;
 }
-/*-----------------14.10.96 15.57-------------------
-
---------------------------------------------------*/
 
 OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
@@ -224,40 +210,27 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
     sBoldUnderline      (CUI_RES(ST_BOLD_UNDER        )),
     sURL                (CUI_RES(ST_DETECT_URL        )),
     sNoDblSpaces        (CUI_RES(STR_NO_DBL_SPACES    )),
-    sDash               (CUI_RES(ST_DASH                ))
+    sDash               (CUI_RES(ST_DASH              )),
+    sAccidentalCaps     (CUI_RES(ST_CORRECT_ACCIDENTAL_CAPS_LOCK))
 {
     FreeResource();
 
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOCORR_CLB);
 }
 
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
-
 OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
 {
 }
-
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
 
 SfxTabPage* OfaAutocorrOptionsPage::Create( Window* pParent,
                                 const SfxItemSet& rSet)
 {
     return new OfaAutocorrOptionsPage(pParent, rSet);
 }
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
 
 sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     long nFlags = pAutoCorrect->GetFlags();
 
     sal_uInt16 nPos = 0;
@@ -268,33 +241,26 @@ sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,      aCheckLB.IsChecked(nPos++));
 
     sal_Bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
     {
-        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-        pCfg->SetModified();
-        pCfg->Commit();
+        SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+        rCfg.SetModified();
+        rCfg.Commit();
     }
     return bReturn;
 }
 
-/* -----------------23.11.98 16:15-------------------
- *
- * --------------------------------------------------*/
 void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
 {
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
 }
 
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
-
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
 
     aCheckLB.SetUpdateMode(sal_False);
@@ -307,6 +273,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.InsertEntry(sURL);
     aCheckLB.InsertEntry(sDash);
     aCheckLB.InsertEntry(sNoDblSpaces);
+    aCheckLB.InsertEntry(sAccidentalCaps);
 
     sal_uInt16 nPos = 0;
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
@@ -316,6 +283,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CorrectCapsLock) );
 
     aCheckLB.SetUpdateMode(sal_True);
 }
@@ -385,7 +353,7 @@ public:
 /*********************************************************************/
 
 
-void __EXPORT OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
+void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
     SvLBoxEntry* pEntry )
 {
     rDev.DrawText( rPos, GetText() );
@@ -446,6 +414,7 @@ enum OfaAutoFmtOptions
     DEL_SPACES_AT_STT_END,
     DEL_SPACES_BETWEEN_LINES,
     IGNORE_DBLSPACE,
+    CORRECT_CAPS_LOCK,
     APPLY_NUMBERING,
     INSERT_BORDER,
     CREATE_TABLE,
@@ -473,6 +442,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     sBullet             (CUI_RES(   ST_BULLET       )),
     sBoldUnder          (CUI_RES(   ST_BOLD_UNDER   )),
     sNoDblSpaces        (CUI_RES(   STR_NO_DBL_SPACES)),
+    sCorrectCapsLock    (CUI_RES(   ST_CORRECT_ACCIDENTAL_CAPS_LOCK)),
     sDetectURL          (CUI_RES(   ST_DETECT_URL   )),
     sDash               (CUI_RES(   ST_DASH         )),
     sRightMargin        (CUI_RES(   ST_RIGHT_MARGIN )),
@@ -550,7 +520,7 @@ SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 /*********************************************************************/
 
 
-__EXPORT OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
+OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
     delete (ImpUserData*) aCheckLB.GetUserData( REPLACE_BULLETS );
     delete (ImpUserData*) aCheckLB.GetUserData( APPLY_NUMBERING );
@@ -562,7 +532,7 @@ __EXPORT OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 /*                                                                   */
 /*********************************************************************/
 
-SfxTabPage* __EXPORT OfaSwAutoFmtOptionsPage::Create( Window* pParent,
+SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new OfaSwAutoFmtOptionsPage(pParent, rAttrSet);
@@ -575,7 +545,7 @@ SfxTabPage* __EXPORT OfaSwAutoFmtOptionsPage::Create( Window* pParent,
 sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 {
     sal_Bool bModified = sal_False;
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     long nFlags = pAutoCorrect->GetFlags();
 
@@ -605,6 +575,9 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 
     pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,
                         aCheckLB.IsChecked(IGNORE_DBLSPACE, CBCOL_SECOND));
+
+    pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,
+                        aCheckLB.IsChecked(CORRECT_CAPS_LOCK, CBCOL_SECOND));
 
     bCheck = aCheckLB.IsChecked(DETECT_URL, CBCOL_FIRST);
     bModified |= pOpt->bSetINetAttr != bCheck;
@@ -677,17 +650,14 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 
     if(bModified || nFlags != pAutoCorrect->GetFlags())
     {
-        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-        pCfg->SetModified();
-        pCfg->Commit();
+        SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+        rCfg.SetModified();
+        rCfg.Commit();
     }
 
     return sal_True;
 }
 
-/* -----------------23.11.98 16:15-------------------
- *
- * --------------------------------------------------*/
 void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
 {
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
@@ -700,7 +670,7 @@ void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
 
 void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     const long nFlags = pAutoCorrect->GetFlags();
 
@@ -719,6 +689,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceBetweenLines, CBCOL_BOTH  ));
 
     aCheckLB.GetModel()->Insert(CreateEntry(sNoDblSpaces,       CBCOL_SECOND));
+    aCheckLB.GetModel()->Insert(CreateEntry(sCorrectCapsLock,   CBCOL_SECOND));
     aCheckLB.GetModel()->Insert(CreateEntry(sNum,               CBCOL_SECOND));
     aCheckLB.GetModel()->Insert(CreateEntry(sBorder,            CBCOL_SECOND));
     aCheckLB.GetModel()->Insert(CreateEntry(sTable,             CBCOL_SECOND));
@@ -737,6 +708,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_SECOND,   0 != (nFlags & ChgWeightUnderl) );
     aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IgnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( CORRECT_CAPS_LOCK,  CBCOL_SECOND,   0 != (nFlags & CorrectCapsLock) );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_FIRST,    pOpt->bSetINetAttr );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_SECOND,   0 != (nFlags & SetINetAttr) );
     aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_FIRST,    pOpt->bChgToEnEmDash );
@@ -926,9 +898,7 @@ void OfaACorrCheckListBox::HBarClick()
 {
     // Sortierung durch diese Ueberladung abgeklemmt
 }
-/* -----------------------------22.05.2002 11:06------------------------------
 
- ---------------------------------------------------------------------------*/
 void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
 {
     if(!rKEvt.GetKeyCode().GetModifier() &&
@@ -955,9 +925,7 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
     else
         SvxSimpleTable::KeyInput(rKEvt);
 }
-/* -----------------19.11.98 15:57-------------------
- *
- * --------------------------------------------------*/
+
 struct DoubleString
 {
     String  sShort;
@@ -968,9 +936,6 @@ typedef DoubleString* DoubleStringPtr;
 SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4, 4)
 SV_IMPL_PTRARR(DoubleStringArray, DoubleStringPtr);
 
-/* -----------------19.11.98 16:07-------------------
- *
- * --------------------------------------------------*/
 void lcl_ClearTable(DoubleStringTable& rTable)
 {
     DoubleStringArrayPtr pArray = rTable.Last();
@@ -982,10 +947,6 @@ void lcl_ClearTable(DoubleStringTable& rTable)
     }
     rTable.Clear();
 }
-
-/*-----------------14.10.96 15.57-------------------
-
---------------------------------------------------*/
 
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
@@ -1013,10 +974,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( GetProcessFact() );
-    pCompareCaseClass = new CollatorWrapper( GetProcessFact() );
-    pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
-                            CollatorOptions::CollatorOptions_IGNORE_CASE );
-    pCompareCaseClass->loadDefaultCollator( aLcl, 0 );
+    pCompareClass->loadDefaultCollator( aLcl, 0 );
     pCharClass = new CharClass( aLcl );
 
     static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
@@ -1036,51 +994,35 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     aShortED.SetMaxTextLen(30);
 }
 
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
-
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
     delete pFormatText;
     lcl_ClearTable(aDoubleStringTable);
     delete pCompareClass;
-    delete pCompareCaseClass;
     delete pCharClass;
 }
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* OfaAutocorrReplacePage::Create( Window* pParent,
                                 const SfxItemSet& rSet)
 {
     return new OfaAutocorrReplacePage(pParent, rSet);
 }
-/* -----------------20.11.98 13:26-------------------
- *
- * --------------------------------------------------*/
+
 void    OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_True);
 }
-/* -----------------20.11.98 13:26-------------------
- *
- * --------------------------------------------------*/
+
 int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 {
     return LEAVE_PAGE;
 }
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
 
 sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     DoubleStringArrayPtr pDoubleStringArray = aDoubleStringTable.Last();
     while(pDoubleStringArray)
     {
@@ -1111,7 +1053,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                         nLastPos = nPos - 1;
                         bFound = sal_True;
                         if( !(pWordPtr->IsTextOnly() == (0 == pDouble->pUserData)
-                            && 0 == pCompareCaseClass->compareString(
+                            && 0 == pCompareClass->compareString(
                                 pWordPtr->GetLong(), pDouble->sLong ) ) )
                         {
                             pAutoCorrect->PutText(sEntry, pDouble->sLong, eCurLang);
@@ -1174,7 +1116,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                 bFound = sal_True;
                 String sLong = aReplaceTLB.GetEntryText(pEntry, 1);
                 if( !(pWordPtr->IsTextOnly() == (0 == pEntry->GetUserData())
-                    && 0 == pCompareCaseClass->compareString(
+                    && 0 == pCompareClass->compareString(
                         pWordPtr->GetLong(), sLong )))
                 {
                     pAutoCorrect->PutText(sEntry, sLong, eLang);
@@ -1210,9 +1152,6 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     return sal_False;
 }
 
-/* -----------------19.11.98 13:16-------------------
- *
- * --------------------------------------------------*/
 void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage)
@@ -1282,7 +1221,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     }
     else
     {
-        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
 
         for(sal_uInt16 i = 0; i < pWordList->Count(); i++)
@@ -1322,9 +1261,6 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     else
         aTextOnlyCB.Enable( sal_False );
 }
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
 
 void OfaAutocorrReplacePage::Reset( const SfxItemSet& )
 {
@@ -1332,9 +1268,6 @@ void OfaAutocorrReplacePage::Reset( const SfxItemSet& )
     aShortED.GrabFocus();
 }
 
-/* -----------------23.11.98 10:33-------------------
- *
- * --------------------------------------------------*/
 void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
 {
     //save old settings an refill
@@ -1343,23 +1276,15 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         RefillReplaceBox(sal_False, eLang, eSet);
         eLastDialogLanguage = eSet;
         delete pCompareClass;
-        delete pCompareCaseClass;
         delete pCharClass;
 
         ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
         pCompareClass = new CollatorWrapper( GetProcessFact() );
-        pCompareCaseClass = new CollatorWrapper( GetProcessFact() );
-        pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
-                                CollatorOptions::CollatorOptions_IGNORE_CASE );
-        pCompareCaseClass->loadDefaultCollator( aLcl, 0 );
+        pCompareClass->loadDefaultCollator( aLcl, 0 );
         pCharClass = new CharClass( aLcl );
         ModifyHdl(&aShortED);
     }
 }
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
 
 IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
 {
@@ -1390,11 +1315,6 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     aDeleteReplacePB.Enable();
     return 0;
 };
-
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
 
 IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 {
@@ -1462,9 +1382,6 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     return 1;
 }
 
-/*-----------------17.10.96 07.49-------------------
-
---------------------------------------------------*/
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 {
     SvLBoxEntry* pFirstSel = aReplaceTLB.FirstSelected();
@@ -1550,10 +1467,6 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-/* -----------------20.11.98 13:48-------------------
- *
- * --------------------------------------------------*/
-
 struct StringsArrays
 {
 
@@ -1564,9 +1477,7 @@ struct StringsArrays
         aAbbrevStrings(5,5), aDoubleCapsStrings(5,5) {}
 };
 typedef StringsArrays* StringsArraysPtr;
-/* -----------------19.11.98 16:07-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool lcl_FindInArray(SvStringsDtor& rStrings, const String& rString)
 {
     for(sal_uInt16 i = 0; i < rStrings.Count(); i++)
@@ -1585,10 +1496,6 @@ void lcl_ClearTable(StringsTable& rTable)
     }
     rTable.Clear();
 }
-
-/*-----------------14.10.96 15.57-------------------
-
---------------------------------------------------*/
 
 OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
                                                 const SfxItemSet& rSet ) :
@@ -1638,48 +1545,33 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
     aDelDoublePB.SetAccessibleRelationMemberOf(&aDoubleCapsFL);
 }
 
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 {
     lcl_ClearTable(aStringsTable);
     delete pCompareClass;
 }
 
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
 SfxTabPage* OfaAutocorrExceptPage::Create( Window* pParent,
                                 const SfxItemSet& rSet)
 {
     return new OfaAutocorrExceptPage(pParent, rSet);
 }
-/* -----------------20.11.98 13:26-------------------
- *
- * --------------------------------------------------*/
+
 void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_True);
 }
-/* -----------------20.11.98 13:26-------------------
- *
- * --------------------------------------------------*/
+
 int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
 {
     return LEAVE_PAGE;
 }
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
 
 sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     StringsArraysPtr pArrays = aStringsTable.Last();
     while(pArrays)
     {
@@ -1785,9 +1677,6 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
     return sal_False;
 }
 
-/* -----------------23.11.98 10:33-------------------
- *
- * --------------------------------------------------*/
 void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
 {
     if(eLang != eSet)
@@ -1804,9 +1693,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         ModifyHdl(&aDoubleCapsED);
     }
 }
-/* -----------------20.11.98 14:06-------------------
- *
- * --------------------------------------------------*/
+
 void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage)
@@ -1865,7 +1752,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
     }
     else
     {
-        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         const SvStringsISortDtor* pCplList = pAutoCorrect->GetCplSttExceptList(eLang);
         const SvStringsISortDtor* pWrdList = pAutoCorrect->GetWrdSttExceptList(eLang);
         sal_uInt16 i;
@@ -1880,24 +1767,15 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
     }
 }
 
-/*-----------------14.10.96 15.58-------------------
-
---------------------------------------------------*/
-
 void OfaAutocorrExceptPage::Reset( const SfxItemSet& )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     RefillReplaceBoxes(sal_True, eLang, eLang);
     aAutoAbbrevCB.  Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordCplSttLst ));
     aAutoCapsCB.    Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordWrdSttLst ));
     aAutoAbbrevCB.SaveValue();
     aAutoCapsCB.SaveValue();
 }
-
-/*-----------------16.10.96 12.27-------------------
-
---------------------------------------------------*/
-
 
 IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
 {
@@ -1926,10 +1804,6 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
     return 0;
 }
 
-/*-----------------16.10.96 12.57-------------------
-
---------------------------------------------------*/
-
 IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
 {
     if(pBox == &aAbbrevLB)
@@ -1946,10 +1820,6 @@ IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
     }
     return 0;
 }
-
-/*-----------------16.10.96 13.02-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
 {
@@ -1975,10 +1845,6 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-/*-----------------16.10.96 15.03-------------------
-
---------------------------------------------------*/
-
 void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -1993,10 +1859,6 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
     else if(bSpaces || aKeyCode.GetCode() != KEY_SPACE)
         Edit::KeyInput(rKEvt);
 }
-
-/*-----------------03.07.97 13:17-------------------
-
---------------------------------------------------*/
 
 enum OfaQuoteOptions
 {
@@ -2126,27 +1988,21 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aSglStandardPB.SetAccessibleRelationMemberOf(&aSingleFL);
     aDblStandardPB.SetAccessibleRelationMemberOf(&aDoubleFL);
 }
-/*-----------------03.07.97 13:17-------------------
 
---------------------------------------------------*/
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
     delete( pCheckButtonData );
 }
-/*-----------------03.07.97 13:17-------------------
 
---------------------------------------------------*/
 SfxTabPage* OfaQuoteTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new OfaQuoteTabPage(pParent, rAttrSet);
 }
-/*-----------------03.07.97 13:18-------------------
 
---------------------------------------------------*/
 sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
     long nFlags = pAutoCorrect->GetFlags();
 
@@ -2205,25 +2061,21 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 
     if( bModified || bReturn )
     {
-        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-        pCfg->SetModified();
-        pCfg->Commit();
+        SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+        rCfg.SetModified();
+        rCfg.Commit();
     }
     return bReturn;
 }
-/* -----------------23.11.98 16:15-------------------
- *
- * --------------------------------------------------*/
+
 void OfaQuoteTabPage::ActivatePage( const SfxItemSet& )
 {
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
 }
-/*-----------------03.07.97 13:18-------------------
 
---------------------------------------------------*/
 void OfaQuoteTabPage::Reset( const SfxItemSet& )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
 
     // Initialize the Sw options
@@ -2278,10 +2130,6 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
     aDblEndExFT   .SetText(ChangeStringExt_Impl(cEndQuote));
 }
 
-
-/*-----------------15.10.96 16.42-------------------
-
---------------------------------------------------*/
 #define SGL_START       0
 #define DBL_START       1
 #define SGL_END         2
@@ -2303,33 +2151,32 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? sStartQuoteDlg  :  sEndQuoteDlg );
     sal_UCS4 cDlg;
-    //The two lines below are added by BerryJia for Bug95846 Time:2002-8-13 15:50
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguage();
     switch( nMode )
     {
         case SGL_START:
             cDlg = cSglStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'',sal_True,eLang);   //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\'', sal_True, eLang);
         break;
         case SGL_END:
             cDlg = cSglEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\'',sal_False,eLang);  //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\'', sal_False, eLang);
         break;
         case DBL_START:
             cDlg = cStartQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"',sal_True,eLang);   //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\"', sal_True, eLang);
         break;
         case DBL_END:
             cDlg = cEndQuote;
             if(cDlg == 0)
-                cDlg = pAutoCorrect->GetQuote('\"',sal_False,eLang);  //add by BerryJia for Bug95846 Time:2002-8-13 15:50
+                cDlg = pAutoCorrect->GetQuote('\"', sal_False, eLang);
         break;
         default:
-            DBG_ERROR("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
+            OSL_FAIL("svx::OfaQuoteTabPage::QuoteHdl(), how to initialize cDlg?" );
             cDlg = 0;
             break;
 
@@ -2364,9 +2211,6 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     return 0;
 }
 
-/*-----------------27.06.97 09.55-------------------
-
---------------------------------------------------*/
 IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
 {
     if(pBtn == &aDblStandardPB)
@@ -2473,7 +2317,7 @@ SfxTabPage* OfaAutoCompleteTabPage::Create( Window* pParent,
 sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bModified = sal_False, bCheck;
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     sal_uInt16 nVal;
 
@@ -2516,16 +2360,16 @@ sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
     }
     if( bModified )
     {
-        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-        pCfg->SetModified();
-        pCfg->Commit();
+        SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+        rCfg.SetModified();
+        rCfg.Commit();
     }
     return sal_True;
 }
 
 void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
     aCBActiv.Check( 0 != pOpt->bAutoCompleteWords );
@@ -2753,9 +2597,9 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
                 aSmartTagCaption = aSmartTagType;
 
             const rtl::OUString aLBEntry = aSmartTagCaption +
-                                           OUString::createFromAscii(" (") +
+                                           OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
                                            aName +
-                                           OUString::createFromAscii(")");
+                                           OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
 
             SvLBoxEntry* pEntry = m_aSmartTagTypesLB.SvTreeListBox::InsertEntry( aLBEntry );
             if ( pEntry )
@@ -2830,7 +2674,7 @@ IMPL_LINK(OfaSmartTagOptionsTabPage, SelectHdl, SvxCheckListBox*, EMPTYARG)
 */
 sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     SmartTagMgr* pSmartTagMgr = pOpt->pSmartTagMgr;
 
@@ -2873,7 +2717,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 */
 void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet&  )
 {
-    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     const SmartTagMgr* pSmartTagMgr = pOpt->pSmartTagMgr;
 
@@ -2892,3 +2736,4 @@ void OfaSmartTagOptionsTabPage::ActivatePage( const SfxItemSet& )
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( sal_False );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

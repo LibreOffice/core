@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,9 @@
 
 #include <map>
 #include <accessibility/standard/vclxaccessibleedit.hxx>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_STANDARD_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 
 typedef ::cppu::ImplHelper2<
@@ -182,3 +179,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

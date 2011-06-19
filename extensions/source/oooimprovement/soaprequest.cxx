@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -115,7 +116,7 @@ namespace
     static void writeFile(const Reference<XMultiServiceFactory>& sf, const Reference<XOutputStream>& target, const OUString& fileurl)
     {
         Reference<XSimpleFileAccess> file_access(
-            sf->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
+            sf->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
             UNO_QUERY);
         Reference<XInputStream> file = file_access->openFileRead(fileurl);
         const sal_Int32 bufsize = 3;
@@ -198,3 +199,5 @@ namespace oooimprovement
         writeString(target, SOAP_END);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

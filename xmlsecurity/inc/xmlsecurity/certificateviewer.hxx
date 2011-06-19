@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,7 @@ public:
 class CertificateViewerDetailsTP : public CertificateViewerTP
 {
 private:
-    SvxSimpleTable      maElementsLB;   // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxSimpleTable      maElementsLB;   // #i48648 now SvHeaderTabListBox
     MultiLineEdit       maElementML;
     Font                maStdFont;
     Font                maFixedWidthFont;
@@ -163,3 +164,4 @@ public:
 
 #endif // _XMLSECURITY_CERTIFICATEVIEWER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

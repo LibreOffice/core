@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,10 @@
 #include <tools/time.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/wrkwin.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include "statemnt.hxx"
 
-#ifndef _RETSRTM_HXX
 #include "retstrm.hxx"
-#endif
 #include "rcontrol.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -84,13 +81,13 @@ rtl::OString StatementList::aWindowWaitOldHelpId = rtl::OString();
 rtl::OString StatementList::aWindowWaitOldUniqueId = rtl::OString();
 sal_uInt16 StatementList::nUseBindings = 0;
 
-sal_uInt16 StatementList::aSubMenuId1 = 0;  // Untermenüs bei PopupMenus
+sal_uInt16 StatementList::aSubMenuId1 = 0;  // Untermenï¿½s bei PopupMenus
 sal_uInt16 StatementList::aSubMenuId2 = 0;  // erstmal 2-Stufig
 sal_uInt16 StatementList::aSubMenuId3 = 0;  // and now even 3 levels #i31512#
 SystemWindow *StatementList::pMenuWindow = NULL;
 TTProperties *StatementList::pTTProperties = NULL;
 
-sal_uInt16 StatementList::nMinTypeKeysDelay = 0;    // Verzögerung der einzelnen Anschläge für TypeKeys
+sal_uInt16 StatementList::nMinTypeKeysDelay = 0;    // Verzï¿½gerung der einzelnen Anschlï¿½ge fï¿½r TypeKeys
 sal_uInt16 StatementList::nMaxTypeKeysDelay = 0;
 sal_Bool StatementList::bDoTypeKeysDelay = sal_False;
 
@@ -133,18 +130,12 @@ TTSettings* GetTTSettings()
 // FIXME: HELPID
 #define IS_WINP_CLOSING(pWin) (pWin->GetHelpId().equals( "TT_Win_is_closing_HID" ) && pWin->GetUniqueId().equals( "TT_Win_is_closing_UID" ))
 
-/*
-UniString GEN_RES_STR0( sal_uLong nResId ) { return ResString( nResId ); }
-UniString GEN_RES_STR1( sal_uLong nResId, const UniString &Text1 ) { return GEN_RES_STR0( nResId ).Append( ArgString( 1, Text1 ) ); }
-UniString GEN_RES_STR2( sal_uLong nResId, const UniString &Text1, const UniString &Text2 ) { return GEN_RES_STR1( nResId, Text1 ).Append( ArgString( 2, Text2 ) ); }
-UniString GEN_RES_STR3( sal_uLong nResId, const UniString &Text1, const UniString &Text2, const UniString &Text3 ) { return GEN_RES_STR2( nResId, Text1, Text2 ).Append( ArgString( 3, Text3 ) );}
-*/
 StatementList::StatementList()
 : nRetryCount(MAX_RETRIES)
 , bStatementInQue(sal_False)
 {
     if (!pRet)
-        pRet = new RetStream;       // so Spät wie möglich, aber dennoch Zentral und auf jeden Fall rechtzeitig, da pRet private ist.
+        pRet = new RetStream;       // so Spï¿½t wie mï¿½glich, aber dennoch Zentral und auf jeden Fall rechtzeitig, da pRet private ist.
 }
 
 void StatementList::InitProfile()
@@ -176,7 +167,7 @@ void StatementList::SendProfile( String aText )
 
             if ( pProfiler->IsPartitioning() )
                                 // FIXME: HELPID
-                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() sal_uLong != comm_ULONG on 64bit
+                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, static_cast<comm_UINT32>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() sal_uLong != comm_UINT32 on 64bit
         }
 
         if ( pProfiler->IsAutoProfiling() )
@@ -192,7 +183,7 @@ void StatementList::SendProfile( String aText )
 
 void StatementList::QueStatement(StatementList *pAfterThis)
 {
-    DBG_ASSERT(!bStatementInQue,"QueStatement für bereits eingetragenes Statement -> Abgebrochen");
+    DBG_ASSERT(!bStatementInQue,"QueStatement fï¿½r bereits eingetragenes Statement -> Abgebrochen");
     if ( bStatementInQue )
         return;
 
@@ -210,7 +201,7 @@ void StatementList::QueStatement(StatementList *pAfterThis)
             pFirst = this;
         }
     }
-    else    // am Ende einfügen
+    else    // am Ende einfï¿½gen
     {
         pNext = NULL;
         if( !pFirst )
@@ -306,8 +297,6 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, sal_Bool Ma
                 while ( pPParent->GET_REAL_PARENT() )
                     pPParent = pPParent->GET_REAL_PARENT();
 
-//              if ( !IsFirstDocFrame( pPParent ) )
-//              {
                     // get overlap window. Will be dialog else document itself
                     pBase = pBase->GetWindow( WINDOW_OVERLAP );
 
@@ -326,15 +315,10 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, sal_Bool Ma
 
                     if ( pControl )
                         return pControl;
-//              }
             }
         }
 
         pBase = Application::GetFirstTopLevelWindow();
-
-        // Skip FirstDocFrame
-//      if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
-//          pBase = Application::GetNextTopLevelWindow( pBase );
 
         while ( pBase )
         {
@@ -343,9 +327,6 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, sal_Bool Ma
                 return pControl;
 
             pBase = Application::GetNextTopLevelWindow( pBase );
-            // Skip FirstDocFrame
-//          if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
-//              pBase = Application::GetNextTopLevelWindow( pBase );
         }
         return NULL;
     }
@@ -355,9 +336,6 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, sal_Bool Ma
     pResult = SearchClientWin( pBase, aSearch, MaybeBase );
     if ( pResult )
         return pResult;
-
-//    if ( pBase->GetType() != WINDOW_BORDERWINDOW )
-//      return NULL;
 
     if ( !aSearch.HasSearchFlag( SEARCH_NOOVERLAP ) )
     {
@@ -558,8 +536,6 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
             return pBaseMenu;
 
         sal_uInt16 i;
-//        while ( pBaseMenu )
-//        {
             i = 0;
             while ( i < pBaseMenu->GetItemCount() )
             {
@@ -577,7 +553,6 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
                 else
                     i++;
             }
-//        }
     }
     else
     {
@@ -623,7 +598,6 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
 
 sal_Bool SearchActive::IsWinOK( Window *pWin )
 {
-//  return pWin->IsVisible() && ( (nRT == WINDOW_ANYTYPE && IsDialog(pWin) ) || pWin->GetType() == nRT )  && (nRT == WINDOW_FILEDIALOG || nRT == WINDOW_PATHDIALOG || nRT == WINDOW_PRINTDIALOG || nRT == WINDOW_PRINTERSETUPDIALOG || nRT == WINDOW_COLORDIALOG || ((SystemWindow*)pWin)->IsActive());
     // only matches ResID due to problems with UNIX Window Managers
     return pWin->IsVisible() && ( (nRT == WINDOW_ANYTYPE && IsDialog(pWin) ) || pWin->GetType() == nRT );
 }
@@ -1152,10 +1126,6 @@ void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt, sal_Bool bForceDirect )
     }
     else
     {
-    //  DragManager* pDragManager = DragManager::GetDragManager();
-    //  if ( pDragManager )
-    //      pDragManager->MouseMove( aMEvnt, pWin );
-    //  else
             if ( pWin->IsTracking() )
         {
             TrackingEvent   aTEvt( aMEvnt );
@@ -1196,13 +1166,9 @@ void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, sal_Bool bForceDirect 
     }
     else
     {
-    //      DragManager* pDragManager = DragManager::GetDragManager();
-    //  if ( pDragManager )
-    //      pDragManager->ButtonUp( aMEvnt, pWin );
-    //  else
             if ( pWin->IsTracking() )
         {
-            // siehe #64693 die Position ist für Toolboxen relevant
+            // siehe #64693 die Position ist fï¿½r Toolboxen relevant
             // #60020 Jetzt hoffentlich kein GPF mehr
             // Zuerst Tracking beenden ohne Event
             pWin->EndTracking( ENDTRACK_DONTCALLHDL );
@@ -1226,3 +1192,4 @@ void ImplCommand( Window* pWin, CommandEvent &aCmdEvnt )
     CALL_EVENT_WITH_NOTIFY( EVENT_COMMAND, aCmdEvnt, pWin, Command )
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

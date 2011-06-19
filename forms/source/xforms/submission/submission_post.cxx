@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,10 +45,11 @@ using namespace CSS::uno;
 using namespace CSS::ucb;
 using namespace CSS::task;
 using namespace CSS::io;
-using namespace rtl;
 using namespace osl;
 using namespace ucbhelper;
 using namespace std;
+
+using ::rtl::OUString;
 
 
 CSubmissionPost::CSubmissionPost(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
@@ -65,41 +67,29 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
 
         // use post command
-
-        OUString aCommandName = OUString::createFromAscii("post");
+        OUString aCommandName(RTL_CONSTASCII_USTRINGPARAM("post"));
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
-        //CSS::uno::Reference< XInterface > aSink( m_aFactory->createInstance(
-        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         CSS::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
-        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         aPostArgument.Sink = aSink;
-        aPostArgument.MediaType = OUString::createFromAscii("application/xml");
+        aPostArgument.MediaType = OUString(RTL_CONSTASCII_USTRINGPARAM("application/xml"));
         aPostArgument.Referer = OUString();
         Any aCommandArgument;
         aCommandArgument <<= aPostArgument;
         aContent.executeCommand( aCommandName, aCommandArgument);
 
-        // wait for command to finish
-        // pProgressHelper->m_cFinished.wait();
-
-        // CSS::uno::Reference< XOutputStream > xOut(aSink, UNO_QUERY_THROW);
-        // xOut->closeOutput();
-
         try {
-            // m_aResultStream = CSS::uno::Reference< XInputStream >(aSink, UNO_QUERY_THROW);
             m_aResultStream = aSink->getInputStream();
         } catch (Exception&) {
-            OSL_ENSURE(sal_False, "Cannot open reply stream from content");
+            OSL_FAIL("Cannot open reply stream from content");
         }
     } catch (Exception&)
     {
-        // XXX
-        OSL_ENSURE(sal_False, "Exception during UCB operatration.");
+        OSL_FAIL("Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
-
 
     return SUCCESS;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

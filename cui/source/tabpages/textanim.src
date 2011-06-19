@@ -237,7 +237,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Spin = TRUE ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Pixel" ;
+        CustomUnitText [ en-US ] = " Pixel" ;
         Minimum = 1 ;
         First = 1 ;
         Maximum = 10000 ;

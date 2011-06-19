@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,25 +36,17 @@
 #include "nss.h"
 #include "secder.h"
 
-//MM : added by MM
 #include "hasht.h"
 #include "secoid.h"
 #include "pk11func.h"
-//MM : end
-
-
 
 #include <sal/config.h>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include "x509certificate_nssimpl.hxx"
 
-#ifndef _CERTIFICATEEXTENSION_NSSIMPL_HXX_
 #include "certificateextension_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SANEXTENSION_NSSIMPL_HXX_
 #include "sanextension_nssimpl.hxx"
-#endif
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
@@ -332,17 +325,14 @@ sal_Int64 SAL_CALL X509Certificate_NssImpl :: getSomething( const Sequence< sal_
 }
 
 /* XUnoTunnel extension */
+
+namespace
+{
+    class theX509Certificate_NssImplUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theX509Certificate_NssImplUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
-    static Sequence< sal_Int8 >* pSeq = 0 ;
-    if( !pSeq ) {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if( !pSeq ) {
-            static Sequence< sal_Int8> aSeq( 16 ) ;
-            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
-            pSeq = &aSeq ;
-        }
-    }
-    return *pSeq ;
+    return theX509Certificate_NssImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
@@ -355,7 +345,6 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
         return NULL ;
 }
 
-// MM : added by MM
 ::rtl::OUString getAlgorithmDescription(SECAlgorithmID *aid)
 {
     SECOidTag tag;
@@ -371,23 +360,15 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
     if( pCert != NULL )
     {
         unsigned char fingerprint[20];
-        //char *fpStr = NULL;
-        SECItem fpItem;
         int length = ((id == SEC_OID_MD5)?MD5_LENGTH:SHA1_LENGTH);
 
         memset(fingerprint, 0, sizeof fingerprint);
         PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
-        fpItem.data = fingerprint;
-        fpItem.len = length;
-        //fpStr = CERT_Hexify(&fpItem, 1);
 
         Sequence< sal_Int8 > thumbprint( length ) ;
         for( int i = 0 ; i < length ; i ++ )
-        {
             thumbprint[i] = fingerprint[i];
-        }
 
-        //PORT_Free(fpStr);
         return thumbprint;
     }
     else
@@ -490,5 +471,4 @@ sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
     return usage;
 }
 
-// MM : end
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

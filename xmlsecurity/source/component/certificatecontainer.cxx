@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ CertificateContainer::searchMap( const ::rtl::OUString & url, const ::rtl::OUStr
         ret = (sal_Bool) (*p).second.equals(certificate_name);
         if( ret )
                     break;
-        p++;
+        ++p;
     }
 
     return ret;
@@ -134,7 +135,7 @@ CertificateContainer::impl_getStaticSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< ::rtl::OUString > aRet(1);
-    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.security.CertificateContainer");
+    *aRet.getArray() = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.security.CertificateContainer"));
     return aRet;
 }
 
@@ -144,7 +145,7 @@ CertificateContainer::impl_getStaticSupportedServiceNames(  )
 CertificateContainer::impl_getStaticImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.security.CertificateContainer");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.security.CertificateContainer"));
 }
 
 //-------------------------------------------------------------------------
@@ -169,3 +170,4 @@ CertificateContainer::impl_createFactory( const Reference< XMultiServiceFactory 
     return xReturn;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

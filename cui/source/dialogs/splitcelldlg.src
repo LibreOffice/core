@@ -106,14 +106,6 @@ ModalDialog RID_SVX_SPLITCELLDLG
         Size = MAP_APPFONT ( 91 , 12 ) ;
         Text [ en-US ] = "~Into equal proportions";
     };
-    Image BMP_SPLIT_VERT
-        {
-            ImageBitmap = Bitmap { File = "zetlver2_h.bmp" ; };
-        };
-    Image BMP_SPLIT_HORZ
-        {
-            ImageBitmap = Bitmap { File = "zetlhor2_h.bmp" ; };
-        };
     ImageRadioButton RB_VERT
     {
         HelpID = "cui:ImageRadioButton:RID_SVX_SPLITCELLDLG:RB_VERT";
@@ -133,5 +125,3 @@ ModalDialog RID_SVX_SPLITCELLDLG
         Text [ en-US ] = "Direction" ;
     };
 };
-
-

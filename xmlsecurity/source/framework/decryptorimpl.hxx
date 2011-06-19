@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,10 +53,6 @@ class DecryptorImpl : public cppu::ImplInheritanceHelper3
  *   FUNCTION
  *  Collects all resources for decrypting an encryption, then decrypts the
  *  encryption by invoking a xmlsec-based encryption bridge component.
- *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XDecryptionResultBroadcaster,
- *                  XInitialization, XServiceInfo
  *
  *   AUTHOR
  *  Michael Mi
@@ -134,3 +131,4 @@ SAL_CALL DecryptorImpl_createInstance(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

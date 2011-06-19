@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ TYPEINIT1( DlgEdPage, SdrPage );
 
 //----------------------------------------------------------------------------
 
-DlgEdPage::DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage )
+DlgEdPage::DlgEdPage( DlgEdModel& rModel, bool bMasterPage )
     :SdrPage( rModel, bMasterPage )
 {
 }
@@ -84,3 +85,5 @@ SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum
 }
 
 //----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

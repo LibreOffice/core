@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,8 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <unotools/pathoptions.hxx>
-#include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>
@@ -64,9 +61,9 @@
 #include <dialmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/controldims.hrc>
-#include <svx/flagsdef.hxx> //CHINA001
-#include <svl/intitem.hxx> //CHINA001
-#include <sfx2/request.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
+#include <svl/intitem.hxx>
+#include <sfx2/request.hxx>
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
@@ -112,9 +109,7 @@ struct SvxBackgroundPage_Impl
     SvxBackgroundPage_Impl() :
         pLoadTimer(NULL), bIsImportDlgInExecute(sal_False) {}
 };
-/* -----------------------------15.08.2002 12:21------------------------------
 
- ---------------------------------------------------------------------------*/
 inline sal_uInt8 lcl_PercentToTransparency(long nPercent)
 {
     //0xff must not be returned!
@@ -131,10 +126,6 @@ void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
     rBrush.PutValue(aTransparency, MID_GRAPHIC_TRANSPARENCY);
 }
 //-------------------------------------------------------------------------
-
-/*  [Beschreibung]
-
-*/
 
 sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 {
@@ -195,10 +186,6 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
     sal_Bool bIsBmpPreview
 ) :
 
-/*  [Beschreibung]
-
-*/
-
     Window( pParent, rResId ),
 
     bIsBmp   ( bIsBmpPreview ),
@@ -214,11 +201,6 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
 //-----------------------------------------------------------------------
 
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
-
-/*  [Beschreibung]
-
-*/
-
 {
     delete pBitmap;
 }
@@ -240,10 +222,6 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 //-----------------------------------------------------------------------
 
 void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
-/*  [Beschreibung]
-
-*/
-
 {
     if ( bIsBmp && (pNewBitmap || pBitmap) )
     {
@@ -317,9 +295,7 @@ void BackgroundPreviewImpl::Paint( const Rectangle& )
         }
     }
 }
-/* -----------------------------27.02.2002 11:07------------------------------
 
- ---------------------------------------------------------------------------*/
 void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -336,10 +312,6 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
                                             const SfxItemSet& rCoreSet ) :
-
-/*  [Beschreibung]
-
-*/
 
     SvxTabPage( pParent, CUI_RES( RID_SVXPAGE_BACKGROUND ), rCoreSet ),
 
@@ -414,11 +386,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
 //------------------------------------------------------------------------
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
-
-/*  [Beschreibung]
-
-*/
-
 {
     delete pPreviewWin1;
     delete pPreviewWin2;
@@ -472,11 +439,6 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
 //------------------------------------------------------------------------
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
-
-/*  [Beschreibung]
-
-*/
-
 {
 // os: So ein Unsinn! Irgendwo laesst sich so ein Item immer finden,
 //      es muss aber im rSet vorhanden sein!
@@ -636,8 +598,8 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             }
 
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
-            SfxItemState eState = rSet.GetItemState( nWhich, sal_True );
-            eState = rSet.GetItemState( nWhich, sal_False );
+            rSet.GetItemState( nWhich, sal_True );
+            rSet.GetItemState( nWhich, sal_False );
             if ( rSet.GetItemState( nWhich, sal_True ) > SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
@@ -746,11 +708,6 @@ void SvxBackgroundTabPage::FillUserData()
 //------------------------------------------------------------------------
 
 sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
-
-/*  [Beschreibung]
-
-*/
-
 {
     if ( pPageImpl->pLoadTimer && pPageImpl->pLoadTimer->IsActive() )
     {
@@ -1099,11 +1056,6 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
-
-/*  [Beschreibung]
-
-*/
-
 {
     // muss implementiert werden, damit Position-Control funktioniert
 }
@@ -1111,11 +1063,6 @@ void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::ShowSelector()
-
-/*  [Beschreibung]
-
-*/
-
 {
     if( bAllowShowSelector)
     {
@@ -1150,11 +1097,6 @@ void SvxBackgroundTabPage::ShowSelector()
 
 
 void SvxBackgroundTabPage::RaiseLoadError_Impl()
-
-/*  [Beschreibung]
-
-*/
-
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
                               String(),
@@ -1170,11 +1112,6 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 //------------------------------------------------------------------------
 
 sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
-
-/*  [Beschreibung]
-
-*/
-
 {
     sal_Bool bResult = ( aBgdGraphicPath.Len() > 0 ) &&
                    ( GRFILTER_OK == GraphicFilter::LoadGraphic( aBgdGraphicPath,
@@ -1198,14 +1135,14 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
     const Size aSize15x15 = Size( 15, 15 );
-    FASTBOOL bOwn = sal_False;
+    bool bOwn = false;
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
     if ( !pColorTable )
     {
-        bOwn = sal_True;
+        bOwn = true;
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
     }
 
@@ -1226,13 +1163,13 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
             aBackgroundColorSet.InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
         }
 
-        while ( i < 80 )
+        while ( i < 104 )
         {
             aBackgroundColorSet.InsertItem( i + 1, aColWhite, aStrWhite );
             i++;
         }
 
-        if ( nCount > 80 )
+        if ( nCount > 104 )
         {
             aBackgroundColorSet.SetStyle( nBits | WB_VSCROLL );
         }
@@ -1241,8 +1178,8 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     if ( bOwn )
         delete pColorTable;
 
-    aBackgroundColorSet.SetColCount( 10 );
-    aBackgroundColorSet.SetLineCount( 10 );
+    aBackgroundColorSet.SetColCount( 8 );
+    aBackgroundColorSet.SetLineCount( 13 );
     aBackgroundColorSet.CalcWindowSizePixel( aSize15x15 );
 
 }
@@ -1438,11 +1375,6 @@ IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMPTYARG )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
-
-/*  [Beschreibung]
-
-*/
-
 {
     if ( 0 == aLbSelect.GetSelectEntryPos() )
     {
@@ -1460,11 +1392,6 @@ IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
-
-/*  [Beschreibung]
-
-*/
-
 {
     if ( &aBtnLink == pBox )
     {
@@ -1509,11 +1436,6 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
-
-/*  [Beschreibung]
-
-*/
-
 {
     if ( pBtn == &aBtnPosition )
     {
@@ -1636,11 +1558,6 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::ShowTblControl()
-
-/*  [Beschreibung]
-
-*/
-
 {
     aTblLBox            .SetSelectHdl( HDL(TblDestinationHdl_Impl) );
     aTblLBox            .SelectEntryPos(0);
@@ -1664,11 +1581,6 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
 //-----------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
-
-/*  [Beschreibung]
-
-*/
-
 {
     sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
@@ -1810,11 +1722,6 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                                               const String& rUserData )
-
-/*  [Beschreibung]
-
-*/
-
 {
     SvxGraphicPosition  ePos = rBgdAttr.GetGraphicPos();
     const Color& rColor = rBgdAttr.GetColor();
@@ -1943,9 +1850,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         SetGraphicPosition_Impl( ePos );
     }
 }
-/* -----------------------------09.08.2002 14:04------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxBackgroundTabPage::EnableTransparency(sal_Bool bColor, sal_Bool bGraphic)
 {
     bColTransparency  = bColor;
@@ -1968,7 +1873,7 @@ void SvxBackgroundTabPage::EnableTransparency(sal_Bool bColor, sal_Bool bGraphic
     }
 }
 
-void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)
@@ -1984,3 +1889,5 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
             EnableTransparency(sal_True, sal_True);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,8 +28,6 @@ PRJ=..$/..$/..
 
 PRJNAME=extensions
 TARGET=plaqua
-#ENABLE_EXCEPTIONS=TRUE
-#TARGETTYPE=CUI
 
 .INCLUDE :  ..$/util$/makefile.pmk
 
@@ -57,16 +55,6 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 SLOFILES=\
     $(SLO)$/macmgr.obj      \
     $(SLO)$/sysplug.obj
-
-#APP1TARGET=pluginapp.bin
-#APP1OBJS=$(OBJFILES)
-#APP1STDLIBS=\
-#	$(TOOLSLIB) 				\
-#	$(VOSLIB)					\
-#	$(SALLIB)
-
-#APP1DEF=	$(MISC)$/$(TARGET).def
-
 
 # --- Targets ------------------------------------------------------
 

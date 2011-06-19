@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -79,7 +80,7 @@ namespace
         {
             Config config(sf);
             Reference<XSimpleFileAccess> file_access(
-                sf->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
+                sf->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
                 UNO_QUERY_THROW);
             SoapSender sender(sf, config.getSoapUrl());
             OUString soap_id = config.getSoapId();
@@ -183,7 +184,7 @@ namespace oooimprovement
     OnLogRotateJob::OnLogRotateJob(const Reference<XComponentContext>& context)
         : m_ServiceFactory(Reference<XMultiServiceFactory>(
             context->getServiceManager()->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.lang.XMultiServiceFactory"), context),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.XMultiServiceFactory")), context),
             UNO_QUERY))
     { }
 
@@ -200,7 +201,7 @@ namespace oooimprovement
         throw(RuntimeException)
     {
         Reference<XDesktop> xDesktop(
-            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")),
+            m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
             UNO_QUERY);
         if(xDesktop.is())
             xDesktop->addTerminateListener(Reference<XTerminateListener>(new OnLogRotateThreadWatcher(m_ServiceFactory)));
@@ -223,12 +224,12 @@ namespace oooimprovement
     { return getSupportedServiceNames_static(); }
 
     OUString SAL_CALL OnLogRotateJob::getImplementationName_static()
-    { return OUString::createFromAscii("com.sun.star.comp.extensions.oooimprovement.OnLogRotateJob"); }
+    { return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.oooimprovement.OnLogRotateJob")); }
 
     Sequence<OUString> SAL_CALL OnLogRotateJob::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.AsyncJob");
+        aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.AsyncJob"));
         return aServiceNames;
     }
 
@@ -238,3 +239,5 @@ namespace oooimprovement
     Reference<XInterface> OnLogRotateJob::Create(const Reference<XMultiServiceFactory>& sf)
     { return *(new OnLogRotateJob(sf)); }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

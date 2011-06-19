@@ -1,2 +1,2 @@
-wz      wizards     :    L10N:l10n rsc javaunohelper unoil LIBXSLT:libxslt NULL
+wz      wizards     :    TRANSLATIONS:translations rsc javaunohelper unoil LIBXSLT:libxslt NULL
 wz      wizards\prj                                             nmake           -       all     wz_prj NULL

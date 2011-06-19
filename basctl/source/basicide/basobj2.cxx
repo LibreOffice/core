@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -172,7 +173,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
-        OSL_ENSURE( false, "BasicIDE::RenameModule: old module name is invalid!" );
+        OSL_FAIL( "BasicIDE::RenameModule: old module name is invalid!" );
         return false;
     }
 
@@ -453,3 +454,5 @@ sal_Bool HasMethod( const ScriptDocument& rDocument, const String& rLibName, con
 }
 } //namespace BasicIDE
 //----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

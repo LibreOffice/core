@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #define _MANIFEST_READER_HXX
 
 #include <cppuhelper/implbase2.hxx>
-#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; class XSingleServiceFactory; }
@@ -71,3 +68,5 @@ public:
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

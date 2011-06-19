@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,17 +36,10 @@
 ////////////////////////////////////////////////////////////////////////////
 
 
-#include <tools/prewin.h>
-#include "winreg.h"
-#include <tools/postwin.h>
-// as we define it ourselves further down the line we remove it here
-#ifdef IS_ERROR
-//    #undef IS_ERROR
-#endif
-
-//#include <tchar.h>
 #include "registry_win.hxx"
 #include <osl/thread.h>
+#include <sal/macros.h>
+#include <windows.h>
 
 
 String ReadRegistry( String aKey, String aValueName )
@@ -70,8 +64,8 @@ String ReadRegistry( String aKey, String aValueName )
                 &hRegKey ) == ERROR_SUCCESS )
     {
         LONG lRet;
-        sal_Unicode PathW[_MAX_PATH];
-        DWORD lSize = sizeof(PathW) / sizeof( sal_Unicode );
+        sal_Unicode PathW[_MAX_PATH ];
+        DWORD lSize = SAL_N_ELEMENTS(PathW);
         DWORD Type = REG_SZ;
 
         lRet = RegQueryValueExW(hRegKey, reinterpret_cast<LPCWSTR>(aValueName.GetBuffer()), NULL, &Type, (LPBYTE)PathW, &lSize);
@@ -87,3 +81,4 @@ String ReadRegistry( String aKey, String aValueName )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

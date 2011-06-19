@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sal/config.h>
+#include <sal/macros.h>
 
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #include <stdarg.h>
@@ -158,7 +160,6 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                  pAction );
     }
 #endif
-//  if( nInfo & ( SANE_INFO_RELOAD_OPTIONS | SANE_INFO_RELOAD_PARAMS ) )
     if( nInfo &  SANE_INFO_RELOAD_OPTIONS )
         ReloadOptions();
     return nStatus;
@@ -186,17 +187,17 @@ Sane::~Sane()
 
 void Sane::Init()
 {
-    ::rtl::OUString sSaneLibName( ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ) );
+    ::rtl::OUString sSaneLibName( RTL_CONSTASCII_USTRINGPARAM( "libsane" SAL_DLLEXTENSION ) );
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
-        sSaneLibName = ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ".1" );
+        sSaneLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "libsane" SAL_DLLEXTENSION ".1" ));
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
     {
-        ::rtl::OUString sSaneLibSystemPath( ::rtl::OUString::createFromAscii( "/usr/local/lib/libsane" SAL_DLLEXTENSION ) );
+        ::rtl::OUString sSaneLibSystemPath( RTL_CONSTASCII_USTRINGPARAM( "/usr/local/lib/libsane" SAL_DLLEXTENSION ) );
         osl_getFileURLFromSystemPath( sSaneLibSystemPath.pData, &sSaneLibName.pData );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
@@ -988,7 +989,7 @@ String Sane::GetOptionUnitName( int n )
     String aText;
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = (size_t)nUnit;
-    if( nUnitAsSize > sizeof( ppUnits )/sizeof( ppUnits[0] ) )
+    if( nUnitAsSize > SAL_N_ELEMENTS( ppUnits ) )
         aText = String::CreateFromAscii( "[unknown units]" );
     else
         aText = String( ppUnits[ nUnit ], gsl_getSystemTextEncoding() );
@@ -1002,3 +1003,5 @@ sal_Bool Sane::ActivateButtonOption( int n )
         return sal_False;
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

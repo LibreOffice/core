@@ -53,7 +53,7 @@ public class OOoViewer extends Applet {
                 System.setProperty("sun.awt.xembedserver", "true");
 
                 File f = new File(s);
-                URL url = f.toURL();
+                URL url = f.toURI().toURL();
                 String officeURL = url.toString();
                 URL[] arURL = new URL[] {
                     new URL(officeURL + "/program/classes/officebean.jar"),
@@ -65,7 +65,7 @@ public class OOoViewer extends Applet {
                 };
                 m_loader = new CustomURLClassLoader(arURL);
                 File fileProg = new File(s + "/program");
-                m_loader.addResourcePath(fileProg.toURL());
+                m_loader.addResourcePath(fileProg.toURI().toURL());
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 
-#ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATINENTRY_HPP_
 #include <com/sun/star/deployment/UpdateInformationEntry.hpp>
-#endif
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 
 
@@ -285,7 +284,7 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;
@@ -311,7 +310,7 @@ bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rx
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;
@@ -333,3 +332,5 @@ bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rx
 
     return bPendingUpdateFound;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

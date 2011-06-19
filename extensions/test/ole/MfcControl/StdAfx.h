@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #if !defined(AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_)
 #define AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_
 
@@ -28,3 +29,5 @@
 
 #include <comdef.h>
 #endif // !defined(AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

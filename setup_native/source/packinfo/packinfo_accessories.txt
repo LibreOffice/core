@@ -1,0 +1,73 @@
+# Format:
+
+# Start
+# scpModule
+# shellscript file (optional)
+# solarispackagename
+# solarisrequires (optional)
+# solarisprovides (optional)
+# packagename
+# linuxreplaces (optional)
+# requires (optional)
+# provides (optional)
+# copyright
+# vendor
+# description
+# destpath
+# End
+
+# Package definitions for OxygenOffice Professional
+# 1/3 Gallery
+
+Start
+module = "gid_Module_Optional_Accessories_Gallery"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-extra-gallery"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core02,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core03,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core05,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core06,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core07"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-extra-gallery"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+copyright = "1999-2008 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Extra gallery for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+End
+
+# 2/3 Fonts
+
+Start
+module = "gid_Module_Optional_Accessories_Fonts"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-extra-fonts"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core02,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core03,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core05,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core06,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core07"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-extra-fonts"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+copyright = "1999-2008 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Extra fonts for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+End
+
+# 3/3 Templates - Common
+
+Start
+module = "gid_Module_Optional_Accessories_Tem_Common"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-extra-templates-common"
+solarisrequires = %BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core02,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core03,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core05,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core06,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core07"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-extra-templates-common"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+copyright = "1999-2008 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Extra Common Templates for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+End
+
+
+# END OF Package definitions for OxygenOffice Professional
+

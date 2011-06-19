@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -379,7 +380,7 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
         case HELP_BUTTON:
             break;
         default:
-            OSL_ENSURE( false, "UpdateHandler::actionPerformed: unknown command!" );
+            OSL_FAIL( "UpdateHandler::actionPerformed: unknown command!" );
     }
 }
 
@@ -649,7 +650,7 @@ rtl::OUString UpdateHandler::loadString( const uno::Reference< resource::XResour
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "UpdateHandler::loadString: caught an exception!" );
+        OSL_FAIL( "UpdateHandler::loadString: caught an exception!" );
         sString = UNISTRING("Missing ") + sKey;
     }
 
@@ -685,7 +686,7 @@ void UpdateHandler::loadStrings()
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "UpdateHandler::loadStrings: could not create the resource loader!" );
+        OSL_FAIL( "UpdateHandler::loadStrings: could not create the resource loader!" );
     }
 
     if ( !xLoader.is() ) return;
@@ -698,7 +699,7 @@ void UpdateHandler::loadStrings()
     }
     catch( const resource::MissingResourceException& )
     {
-        OSL_ENSURE( false, "UpdateHandler::loadStrings: missing the resource bundle!" );
+        OSL_FAIL( "UpdateHandler::loadStrings: missing the resource bundle!" );
     }
 
     if ( !xBundle.is() ) return;
@@ -791,7 +792,7 @@ void UpdateHandler::setControlProperty( const rtl::OUString &rCtrlName,
     }
     catch( const beans::UnknownPropertyException& )
     {
-        OSL_ENSURE( false, "UpdateHandler::setControlProperty: caught an exception!" );
+        OSL_FAIL( "UpdateHandler::setControlProperty: caught an exception!" );
     }
 }
 
@@ -802,7 +803,7 @@ void UpdateHandler::showControl( const rtl::OUString &rCtrlName, bool bShow )
 
     if ( !xContainer.is() )
     {
-        OSL_ENSURE( false, "UpdateHandler::showControl: could not get control container!" );
+        OSL_FAIL( "UpdateHandler::showControl: could not get control container!" );
         return;
     }
 
@@ -818,7 +819,7 @@ void UpdateHandler::focusControl( DialogControls eID )
 
     if ( !xContainer.is() )
     {
-        OSL_ENSURE( false, "UpdateHandler::focusControl: could not get control container!" );
+        OSL_FAIL( "UpdateHandler::focusControl: could not get control container!" );
         return;
     }
 
@@ -1418,3 +1419,5 @@ void UpdateHandler::createDialog()
     mxUpdDlg.set( xControl, uno::UNO_QUERY_THROW );
     mnLastCtrlState = -1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

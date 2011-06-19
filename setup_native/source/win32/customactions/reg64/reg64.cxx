@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,11 +26,6 @@
  *
 ************************************************************************/
 
-/*
-
-*/
-
-
 #define UNICODE
 
 #ifdef _MSC_VER
@@ -43,16 +39,14 @@
 #endif
 
 #include <malloc.h>
-//#include <string>
-//#include <map>
 #include <strsafe.h>
 
-// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExW if WINVER < 0x0502.
+// MinGW doesn't know anything about RegDeleteKeyExW if WINVER < 0x0502.
 extern "C" {
 WINADVAPI LONG WINAPI RegDeleteKeyExW(HKEY,LPCWSTR,REGSAM,DWORD);
 }
 
-// 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
+// to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
 // in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
 // Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
 // extensions\source\activex\main\so_activex.cpp
@@ -213,7 +207,6 @@ bool IsInstallForAllUsers( MSIHANDLE hMSI )
 wchar_t* GetBasisInstallLocation( MSIHANDLE hMSI )
 {
     OutputDebugStringFormat(L"GetBasisInstallLocation - START\n" );
-    bool bResult = FALSE;
     wchar_t* pVal = NULL;
     GetMsiProp( hMSI, L"INSTALLLOCATION", &pVal);
 
@@ -259,13 +252,6 @@ bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
 
     return (ERROR_SUCCESS == rc);
 }
-
-
-
-
-//---------------------------------------
-//
-//---------------------------------------
 
 bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, const wchar_t* Value)
 {
@@ -475,3 +461,5 @@ extern "C" UINT __stdcall DeinstallReg64(MSIHANDLE hMSI)
     Reg64(hMSI, REMOVE);
     return ERROR_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

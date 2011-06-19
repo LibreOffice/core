@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,15 +35,9 @@
 #include <xmloff/attrlist.hxx>
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 
-//#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-/*
- * Deleted by AF
-#include <memory.h>
- */
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -127,9 +122,6 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -225,9 +217,6 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -330,9 +319,6 @@ void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -380,9 +366,6 @@ void XMLDocumentWrapper_XmlSecImpl::sendNode(
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -433,9 +416,6 @@ rtl::OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode)
  *   RESULT
  *  name - the node's qualified name
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -474,9 +454,6 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< c
  *
  *   RESULT
  *  node - the node wrapped in the XXMLElementWrapper interface
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -545,9 +522,6 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
  *   NOTES
  *  The node in the m_aReservedNodes list must be in the tree order, otherwise
  *  the result is unpredictable.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -626,9 +600,6 @@ void XMLDocumentWrapper_XmlSecImpl::getNextReservedNode()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -662,9 +633,6 @@ void XMLDocumentWrapper_XmlSecImpl::removeNode(const xmlNodePtr pNode) const
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -708,9 +676,6 @@ void XMLDocumentWrapper_XmlSecImpl::buildIDAttr(xmlNodePtr pNode) const
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  14.06.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -746,9 +711,6 @@ void XMLDocumentWrapper_XmlSecImpl::rebuildIDLink(xmlNodePtr pNode) const
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  14.06.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -1151,3 +1113,4 @@ cssu::Sequence< rtl::OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSuppo
     return XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,33 +31,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-/*
-#ifdef _BASIDE_POPUPWINDOWTBX
-
-// class PopupWindowTbx --------------------------------------------------
-
-class PopupWindowTbx : public SfxPopupWindow
-{
-private:
-    SfxToolBoxManager   aTbx;
-    Link                aSelectLink;
-
-    DECL_LINK( SelectHdl, void* );
-
-public:
-    PopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
-                    ResId aRIdWin, ResId aRIdTbx, SfxBindings& rBind );
-    ~PopupWindowTbx();
-
-    void                    StartSelection()
-                                { aTbx.GetToolBox().StartSelection(); }
-    void                    Update();
-
-    virtual SfxPopupWindow* Clone() const;
-    virtual void            PopupModeEnd();
-};
-#endif
-*/
 //-------------------
 // class TbxControls
 //-------------------
@@ -91,3 +65,4 @@ public:
 
 #endif // _BASIDE_TBXCTL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

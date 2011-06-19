@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,16 @@
 #define _INFLATER_HXX_
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include "packagedllapi.hxx"
 
-extern "C"
+struct z_stream_s;
+
+namespace ZipUtils {
+
+class DLLPUBLIC_PACKAGE Inflater
 {
     typedef struct z_stream_s z_stream;
-}
-class Inflater
-{
+
 protected:
     sal_Bool                bFinish, bFinished, bSetParams, bNeedDict;
     sal_Int32               nOffset, nLength, nLastInflateError;
@@ -54,4 +58,8 @@ public:
     sal_Int32 getLastInflateError() { return nLastInflateError; }
 };
 
+}
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,10 @@
 #include "retstrm.hxx"
 #include <basic/svtmsg.hrc>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <comphelper/processfactory.hxx>
@@ -51,7 +49,8 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 class SVInputStream : public cppu::WeakImplHelper1< XInputStream >
 {
@@ -179,7 +178,7 @@ ElementNode::ElementNode( const String& aName, Reference < XAttributeList > xAtt
             xAttributeList = Reference < XAttributeList > ( xAttributeCloner->createClone() , UNO_QUERY );
         else
         {
-            DBG_ERROR("Unable to clone AttributeList");
+            OSL_FAIL("Unable to clone AttributeList");
         }
     }
 };
@@ -497,7 +496,7 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetNodeType:
             {
-                   pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pSAXParser->GetCurrentNode()->GetNodeType() );
+                   pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pSAXParser->GetCurrentNode()->GetNodeType() );
             }
             break;
         case RC_SAXGetAttributeCount:
@@ -515,17 +514,17 @@ void StatementCommand::HandleSAXParser()
                             pRet->GenReturn ( RET_Value, nMethodId, pElementNode->GetNodeName() );
                             break;
                         case RC_SAXGetChildCount:
-                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pElementNode->GetChildCount() );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pElementNode->GetChildCount() );
                             break;
                         case RC_SAXGetAttributeCount:
                             if ( xAttributeList.is() )
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)xAttributeList->getLength() );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)xAttributeList->getLength() );
                             else
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)0 );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)0 );
                             break;
                         case RC_SAXGetAttributeName:
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_UINT16_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getNameByIndex( nNr1-1 ) );
                                     pRet->GenReturn ( RET_Value, nMethodId, aRet );
@@ -537,7 +536,7 @@ void StatementCommand::HandleSAXParser()
                         case RC_SAXGetAttributeValue:
                             // Number or String
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_UINT16_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getValueByIndex( nNr1-1 ) );
                                     pRet->GenReturn ( RET_Value, nMethodId, aRet );
@@ -579,7 +578,7 @@ void StatementCommand::HandleSAXParser()
             {
                 sal_Bool bCheckOnly = nMethodId == RC_SAXHasElement;
 
-                if( (nParams & PARAM_USHORT_1) && !(nParams & PARAM_STR_1) )
+                if( (nParams & PARAM_UINT16_1) && !(nParams & PARAM_STR_1) )
                 {
                     if ( nNr1 == 0 )
                     {
@@ -623,11 +622,11 @@ void StatementCommand::HandleSAXParser()
                     }
                     else if ( pElementNode )
                     {
-                        sal_uInt16 nNthOccurance;
-                        if( (nParams & PARAM_USHORT_1) )
-                            nNthOccurance = nNr1;
+                        sal_uInt16 nNthOccurrence;
+                        if( (nParams & PARAM_UINT16_1) )
+                            nNthOccurrence = nNr1;
                         else
-                            nNthOccurance = 1;
+                            nNthOccurrence = 1;
 
                         sal_uInt16 i;
                         NodeRef xNew;
@@ -639,10 +638,10 @@ void StatementCommand::HandleSAXParser()
                                 ElementNode* pNewElement = (ElementNode*)(&xNew);
                                 if ( aString1.Equals( pNewElement->GetNodeName() ) )
                                 {
-                                    if ( nNthOccurance > 1 )
+                                    if ( nNthOccurrence > 1 )
                                     {
                                         xNew.Clear();
-                                        nNthOccurance--;
+                                        nNthOccurrence--;
                                     }
                                 }
                                 else
@@ -693,3 +692,4 @@ void StatementCommand::HandleSAXParser()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

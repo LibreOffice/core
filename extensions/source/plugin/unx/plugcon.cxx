@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <plugin/unx/plugcon.hxx>
 
 #include <cstdarg>
@@ -172,7 +180,7 @@ MediatorMessage* PluginConnector::WaitForAnswer( sal_uLong nMessageID )
     while( m_pListener )
     {
         {
-            vos::OGuard aGuard( m_aQueueMutex );
+            osl::MutexGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
@@ -280,3 +288,5 @@ const char* GetCommandName( CommandAtoms eCommand )
     }
     return NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

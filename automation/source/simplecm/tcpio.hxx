@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,34 +29,36 @@
 #ifndef TCPIO_HXX
 #define TCPIO_HXX
 
-#include <vos/socket.hxx>
-#include <vos/mutex.hxx>
+#include <osl/socket.hxx>
+#include <osl/mutex.hxx>
 
 #include "communiio.hxx"
 
 class TCPIO : public ITransmiter, public IReceiver
 {
 private:
-    vos::OStreamSocket *pStreamSocket;
-    vos::OMutex aMSocketReadAccess;
-    vos::OMutex aMSocketWriteAccess;
+    osl::StreamSocket* pStreamSocket;
+    osl::Mutex aMSocketReadAccess;
+    osl::Mutex aMSocketWriteAccess;
 
 public:
 
     ///
-    TCPIO( vos::OStreamSocket *pSocket ):pStreamSocket( pSocket ){}
+    TCPIO( osl::StreamSocket* pSocket ):pStreamSocket( pSocket ){}
     virtual ~TCPIO(){}
 
 
     /// implement ITransmiter
-    virtual comm_USHORT TransferBytes( const void* pBuffer, comm_UINT32 nLen );
+    virtual comm_UINT16 TransferBytes( const void* pBuffer, comm_UINT32 nLen );
 
     /// implement IReceiver
-    virtual comm_USHORT ReceiveBytes( void* pBuffer, comm_UINT32 nLen );
+    virtual comm_UINT16 ReceiveBytes( void* pBuffer, comm_UINT32 nLen );
 
     // helper
-    void SetStreamSocket( vos::OStreamSocket *pSocket );
+    void SetStreamSocket( osl::StreamSocket* pSocket );
 
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

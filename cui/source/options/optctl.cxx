@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include "optctl.hxx"
 #include <dialmgr.hxx>
 #include "optctl.hrc"
@@ -168,3 +167,4 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& )
     m_aTypeReplaceCB.Enable( bIsSequenceChecking );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

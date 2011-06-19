@@ -1,0 +1,74 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Christian Lippka <cl@lippka.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Major Contributor(s):
+ *
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#ifndef _CUI_COLORPICKER_HRC_
+#define _CUI_COLORPICKER_HRC_
+
+#include <cuires.hrc>
+
+
+#define FT_BOTTOMLINE   1
+#define BTN_OK          2
+#define BTN_CANCEL      3
+#define BTN_HELP        4
+
+#define CT_COLORFIELD   5
+#define CT_COLORSLIDER  6
+#define CT_PREVIEW      7
+#define CT_PREVIOUS     8
+
+#define FL_RGB          9
+#define CT_RED          10
+#define CT_GREEN        11
+#define CT_BLUE         12
+#define CT_HEX          13
+
+#define FL_HSB          14
+#define CT_HUE          15
+#define CT_SATURATION   16
+#define CT_BRIGHTNESS   17
+
+#define FL_CMYK         18
+#define CT_CYAN         19
+#define CT_MAGENTA      20
+#define CT_YELLOW       21
+#define CT_KEY          22
+
+#define PB_PICKER       23
+
+#define CT_LEFT_SLIDER  24
+#define CT_RIGHT_SLIDER 25
+
+#define CT_SLIDERIMG    26
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

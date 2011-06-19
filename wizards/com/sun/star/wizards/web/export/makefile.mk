@@ -34,7 +34,6 @@ PACKAGE = com$/sun$/star$/wizards$/web$/export
 
 .INCLUDE : settings.mk
 
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar java_uno_accessbridge commonwizards.jar 
 
 .IF "$(SYSTEM_SAXON)" == "YES"
@@ -42,9 +41,6 @@ EXTRAJARFILES = $(SAXON_JAR)
 .ELSE
 JARFILES += saxon9.jar
 .ENDIF
-
-#JARCLASSDIRS	= com$/sun$/star$/wizards$/web
-#JARTARGET		= $(TARGET).jar
 
 # --- Files --------------------------------------------------------
 

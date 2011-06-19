@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,8 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#ifndef _CPPUHELPER_COMPBASE6_HXX
 #include <cppuhelper/compbase6.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX
 #include <comphelper/broadcasthelper.hxx>
-#endif
 #include <comphelper/accessibletexthelper.hxx>
 
 // forward ---------------------------------------------------------------
@@ -198,3 +195,4 @@ public:
 
 #endif // ACCESSIBILITY_STANDARD_ACCESSIBLELISTBOXENTRY_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "selectlabeldialog.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_FORMRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "formbrowsertools.hxx"
 #include "formstrings.hxx"
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -311,3 +310,4 @@ namespace pcr
 }   // namespace pcr
 //............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

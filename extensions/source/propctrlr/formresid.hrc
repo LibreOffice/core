@@ -149,6 +149,7 @@
 #define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
 #define RID_STR_ENABLE_VISIBLE              ( RID_FORMBROWSER_START + 122 )
 #define RID_STR_WHEEL_BEHAVIOR              ( RID_FORMBROWSER_START + 123 )
+#define RID_STR_GROUP_NAME                  ( RID_FORMBROWSER_START + 124 )
     // FREE
     // FREE
     // FREE
@@ -188,7 +189,7 @@
 #define RID_STR_EVT_POSITIONING             ( RID_FORMBROWSER_START + 160 )
 #define RID_STR_EVT_POSITIONED              ( RID_FORMBROWSER_START + 161 )
 #define RID_STR_EVT_APPROVEPARAMETER        ( RID_FORMBROWSER_START + 162 )
-#define RID_STR_EVT_ERROROCCURED            ( RID_FORMBROWSER_START + 163 )
+#define RID_STR_EVT_ERROROCCURRED           ( RID_FORMBROWSER_START + 163 )
 #define RID_STR_EVENTS                      ( RID_FORMBROWSER_START + 164 )
 #define RID_STR_ESCAPE_PROCESSING           ( RID_FORMBROWSER_START + 165 )
     // FREE
@@ -307,7 +308,6 @@
 // - ImageLists
 
 #define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )
-#define RID_IL_FORMEXPLORER_HC              ( RID_PROPCONTROLLER_START +  1 )
 
 // -----------------------------------------------------------------------
 // - untyped resources
@@ -363,7 +363,6 @@
 #define RID_SVXIMG_EDIT                             10599
 #define RID_SVXIMG_LISTBOX                          10600
 #define RID_SVXIMG_COMBOBOX                         10601
-#define RID_SVXIMG_URLBUTTON                        10602
 #define RID_SVXIMG_GRID                             10603
 #define RID_SVXIMG_IMAGEBUTTON                      10604
 #define RID_SVXIMG_FILECONTROL                      10605

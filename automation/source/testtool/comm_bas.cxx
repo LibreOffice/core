@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,14 +33,10 @@
 #include <tools/errcode.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbx.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <automation/communi.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 // Der CommunicationManager hat folgende Elemente:
 // 1) Properties:
@@ -148,7 +145,6 @@ CommunicationWrapper::CommunicationWrapper( const String& rClass ) : SbxObject( 
 , m_bCatchOpen( sal_False )
 , m_pNewLink( NULL )
 {
-//  SetName( CUniString("Manager") );
     m_pMethods = &aManagerMethods[0];
     m_pManager = new CommunicationManagerClientViaSocket;
     m_pManager->SetConnectionOpenedHdl( LINK( this, CommunicationWrapper, Open ) );
@@ -440,3 +436,4 @@ SbxObject* CommunicationFactory::CreateObject( const String& rClass )
     return NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

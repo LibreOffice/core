@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 
 #include <vcl/sound.hxx>
 
-// #define ITEMID_SEARCH SID_SEARCH_ITEM
 #define _SVX_NOIDERESIDS
 #include <brkdlg.hxx>
 #include <brkdlg.hrc>
@@ -45,7 +45,7 @@
 // FIXME  Why does BreakPointDialog allow only sal_uInt16 for break-point line
 // numbers, whereas BreakPoint supports sal_uLong?
 
-bool lcl_ParseText( String aText, sal_uInt16& rLineNr )
+bool lcl_ParseText( String aText, size_t& rLineNr )
 {
     // aText should look like "# n" where
     // n > 0 && n < std::numeric_limits< sal_uInt16 >::max().
@@ -60,9 +60,9 @@ bool lcl_ParseText( String aText, sal_uInt16& rLineNr )
         aText.Erase(0, 1);
     // XXX Assumes that sal_uInt16 is contained within sal_Int32:
     sal_Int32 n = aText.ToInt32();
-    if (n <= 0 || n > std::numeric_limits< sal_uInt16 >::max())
+    if ( n <= 0 )
         return false;
-    rLineNr = static_cast< sal_uInt16 >(n);
+    rLineNr = static_cast< size_t >(n);
     return true;
 }
 
@@ -83,21 +83,18 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     FreeResource();
 
     aComboBox.SetUpdateMode( sal_False );
-    BreakPoint* pBrk = m_aModifiedBreakPointList.First();
-    BreakPoint* pFirstBrk = pBrk;
-    while ( pBrk )
+    for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
         String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
         aEntryStr += String::CreateFromInt32( pBrk->nLine );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
-        pBrk = m_aModifiedBreakPointList.Next();
     }
     aComboBox.SetUpdateMode( sal_True );
 
     aOKButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aNewButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aDelButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
-//  aShowButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
 
     aCheckBox.SetClickHdl( LINK( this, BreakPointDialog, CheckBoxHdl ) );
     aComboBox.SetSelectHdl( LINK( this, BreakPointDialog, ComboBoxHighlightHdl ) );
@@ -111,7 +108,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     aNumericField.SetModifyHdl( LINK( this, BreakPointDialog, EditModifyHdl ) );
 
     aComboBox.SetText( aComboBox.GetEntry( 0 ) );
-    UpdateFields( pFirstBrk );
+    UpdateFields( m_aModifiedBreakPointList.at( 0 ) );
 
     CheckButtons();
 }
@@ -129,7 +126,7 @@ void BreakPointDialog::CheckButtons()
     // "New" button is enabled if the combo box edit contains a valid line
     // number that is not already present in the combo box list; otherwise
     // "OK" and "Delete" buttons are enabled:
-    sal_uInt16 nLine;
+    size_t nLine;
     if (lcl_ParseText(aComboBox.GetText(), nLine)
         && m_aModifiedBreakPointList.FindBreakPoint(nLine) == 0)
     {
@@ -164,7 +161,7 @@ IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox *, pBox )
     aDelButton.Enable();
 
     sal_uInt16 nEntry = pBox->GetEntryPos( pBox->GetText() );
-    BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
+    BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
     DBG_ASSERT( pBrk, "Kein passender Breakpoint zur Liste ?" );
     UpdateFields( pBrk );
 
@@ -199,13 +196,13 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     {
         // Checkbox beruecksichtigen!
         String aText( aComboBox.GetText() );
-        sal_uInt16 nLine;
-        sal_Bool bValid = lcl_ParseText( aText, nLine );
+        size_t nLine;
+        bool bValid = lcl_ParseText( aText, nLine );
         if ( bValid )
         {
             BreakPoint* pBrk = new BreakPoint( nLine );
             pBrk->bEnabled = aCheckBox.IsChecked();
-            pBrk->nStopAfter = (sal_uLong) aNumericField.GetValue();
+            pBrk->nStopAfter = (size_t) aNumericField.GetValue();
             m_aModifiedBreakPointList.InsertSorted( pBrk );
             String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
@@ -228,11 +225,11 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     }
     else if ( pButton == &aDelButton )
     {
-        sal_uInt16 nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
-        BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
+        size_t nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
+        BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
         if ( pBrk )
         {
-            delete m_aModifiedBreakPointList.Remove( pBrk );
+            delete m_aModifiedBreakPointList.remove( pBrk );
             aComboBox.RemoveEntry( nEntry );
             if ( nEntry && !( nEntry < aComboBox.GetEntryCount() ) )
                 nEntry--;
@@ -248,10 +245,6 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
         }
         CheckButtons();
     }
-//  else if ( pButton == &aShowButton )
-//  {
-//      ;
-//  }
 
     return 0;
 }
@@ -271,10 +264,11 @@ void BreakPointDialog::UpdateFields( BreakPoint* pBrk )
 
 BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
 {
-    sal_uInt16 nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
-    BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
+    size_t nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
+    BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
     return pBrk;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

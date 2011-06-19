@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,14 +43,13 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 
-// #include <comphelper/processfactory.hxx>
-
 #include <rtl/ustrbuf.hxx>
 
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h>
 #include <osl/module.hxx>
 #include <osl/file.hxx>
+#include <sal/macros.h>
 
 #ifdef WNT
 #ifdef _MSC_VER
@@ -578,7 +578,7 @@ UpdateCheckThread::run()
                 // Increase next by 15, 60, .. minutes
                 static const sal_Int32 nRetryInterval[] = { 900, 3600, 14400, 86400 };
 
-                if( n < sizeof(nRetryInterval) / sizeof(sal_Int32) )
+                if( n < SAL_N_ELEMENTS(nRetryInterval) )
                     ++n;
 
                 tv.Seconds = nRetryInterval[n-1];
@@ -690,7 +690,7 @@ DownloadThread::run()
                 // Increase next by 1, 5, 15, 60, .. minutes
                 static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600 };
 
-                if( n < sizeof(nRetryInterval) / sizeof(sal_Int16) )
+                if( n < SAL_N_ELEMENTS(nRetryInterval) )
                     ++n;
 
                 tv.Seconds = nRetryInterval[n-1];
@@ -816,7 +816,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
             osl::DirectoryItem aDirectoryItem;
             if( osl::DirectoryItem::E_None == osl::DirectoryItem::get(aLocalFileName, aDirectoryItem) )
             {
-                osl::FileStatus aFileStatus(FileStatusMask_FileSize);
+                osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileSize);
                 if( osl::DirectoryItem::E_None == aDirectoryItem.getFileStatus(aFileStatus) )
                 {
                     sal_Int64 nDownloadSize = aModel.getDownloadSize();
@@ -1544,7 +1544,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
         return true;
 
     osl::File aFile( aFilePath );
-    rc = aFile.open( OpenFlag_Write | OpenFlag_Create );
+    rc = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     if ( rc != osl::FileBase::E_None ) return false;
 
@@ -1688,3 +1688,5 @@ UpdateCheck::release() SAL_THROW(())
 {
     return ReferenceObject::release();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

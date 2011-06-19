@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ namespace pcr
             const rtl::OString& _sUniqueBrowseId );
     };
 
-    typedef ::std::hash_map< ::rtl::OUString, EventDescription, ::rtl::OUStringHash >   EventMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, EventDescription, ::rtl::OUStringHash >   EventMap;
 
     //====================================================================
     //= EventHandler
@@ -263,3 +264,4 @@ namespace pcr
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

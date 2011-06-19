@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-/* -----------------------------25.03.2002 10:40------------------------------
-
- ---------------------------------------------------------------------------*/
 namespace svtools {class EditableColorConfig;class EditableExtendedColorConfig;}
 class ColorConfigCtrl_Impl;
-class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class AbstractSvxNameDialog;
 class SvxColorOptionsTabPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
@@ -79,3 +77,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

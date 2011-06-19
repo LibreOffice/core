@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,16 +44,10 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #define OBJTYPE_BASICMANAGER    1L
-//#define OBJTYPE_LIB               2L
-//#define OBJTYPE_MODULE            3L
 #define OBJTYPE_METHOD          2L
-//#define OBJTYPE_METHODINOBJ       5L
-//#define OBJTYPE_OBJECT            6L
-//#define OBJTYPE_SUBOBJ            7L
-//#define OBJTYPE_PROPERTY      8L
 #define OBJTYPE_SCRIPTCONTAINER     3L
 #define OBJTYPE_SFROOT      4L
 
@@ -66,7 +61,7 @@
 #define INPUTMODE_NEWMACRO      2
 #define INPUTMODE_RENAME        3
 
-typedef ::std::hash_map < ::rtl::OUString, ::rtl::OUString ,
+typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::OUString ,
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > Selection_hash;
 
 class SFEntry;
@@ -77,13 +72,9 @@ class SFTreeListBox : public SvTreeListBox
 private:
     sal_uInt16          nMode;
     Image m_hdImage;
-    Image m_hdImage_hc;
     Image m_libImage;
-    Image m_libImage_hc;
     Image m_macImage;
-    Image m_macImage_hc;
     Image m_docImage;
-    Image m_docImage_hc;
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
 
@@ -194,6 +185,7 @@ protected:
     sal_Bool                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
     void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
+
     void        createEntry( SvLBoxEntry* pEntry );
     void        renameEntry( SvLBoxEntry* pEntry );
     void        deleteEntry( SvLBoxEntry* pEntry );
@@ -203,7 +195,6 @@ protected:
     String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
-    //String                GetInfo( SbxVariable* pVar );
 
 public:
                     // prob need another arg in the ctor
@@ -213,7 +204,6 @@ public:
 
     virtual short   Execute();
 
-    //DECL_LINK( ActivatePageHdl, TabControl * );
 };
 
 class SvxScriptErrorDialog : public VclAbstractDialog
@@ -235,3 +225,5 @@ public:
 };
 
 #endif // _SCRIPTDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <tools/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 
 #include "profiler.hxx"
@@ -253,7 +252,7 @@ String TTProfiler::Dec( sal_uLong nNr )
     return aRet;
 }
 
-String TTProfiler::Pad( const String aS, xub_StrLen nLen )
+String TTProfiler::Pad( const String &aS, xub_StrLen nLen )
 {
     if ( nLen > aS.Len() )
         return UniString().Fill( nLen - aS.Len() ).Append( aS );
@@ -262,3 +261,4 @@ String TTProfiler::Pad( const String aS, xub_StrLen nLen )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

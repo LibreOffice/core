@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ BasicDocShell::BasicDocShell()
     SetBaseModel( new SIDEModel(this) );
 }
 
-__EXPORT BasicDocShell::~BasicDocShell()
+BasicDocShell::~BasicDocShell()
 {
     delete pPrinter;
 }
@@ -97,3 +98,4 @@ void BasicDocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, Str
 void BasicDocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16 )
 {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

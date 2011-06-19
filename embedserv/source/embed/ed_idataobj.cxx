@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 //#define UINT32 USE_WIN_UINT32
 //#define INT32 USE_WIN_INT32
 
-//#include <tools/presys.h>
 #include "embeddoc.hxx"
-//#include <tools/postsys.h>
 
 //#undef UINT64
 //#undef INT64
@@ -324,3 +323,5 @@ STDMETHODIMP EmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

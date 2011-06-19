@@ -23,14 +23,14 @@ Certificate:
                     55:9b:90:91:f4:ce:56:04:d5
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
-            X509v3 Key Usage: 
+            X509v3 Key Usage:
                 Digital Signature, Non Repudiation, Key Encipherment
-            X509v3 Subject Key Identifier: 
+            X509v3 Subject Key Identifier:
                 91:47:AC:29:95:5D:EF:72:14:8F:82:45:07:E2:94:49:75:C6:7D:73
-            X509v3 Authority Key Identifier: 
+            X509v3 Authority Key Identifier:
                 keyid:E8:6A:BB:C2:90:EA:6C:70:22:3E:F6:F6:48:1B:03:E6:BE:B7:A6:55
 
-            X509v3 Subject Alternative Name: 
+            X509v3 Subject Alternative Name:
                 DNS:alt.openoffice.org, IP Address:192.168.7.1, IP Address:13:0:0:0:0:0:0:17, email:my@other.address, Registered ID:1.2.3.4, othername:<unsupported>, DirName:/C=DE/O=OpenOffice.org/OU=Development/CN=User 32 Root 11, URI:http://my.url.here/
     Signature Algorithm: sha1WithRSAEncryption
         6e:80:e6:1e:86:3d:d2:65:a6:17:fa:80:2d:2e:dc:85:32:05:

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,18 +121,17 @@ OGroupComp::OGroupComp(const OGroupComp& _rSource)
 
 //------------------------------------------------------------------
 OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
-    :m_xComponent( rxSet )
-    ,m_xControlModel(rxSet,UNO_QUERY)
-    ,m_nPos( nInsertPos )
-    ,m_nTabIndex(0)
+    : m_aName( OGroupManager::GetGroupName( rxSet ) )
+    , m_xComponent( rxSet )
+    , m_xControlModel(rxSet,UNO_QUERY)
+    , m_nPos( nInsertPos )
+    , m_nTabIndex(0)
 {
     if (m_xComponent.is())
     {
         if (hasProperty( PROPERTY_TABINDEX, m_xComponent ) )
             // Indices kleiner 0 werden wie 0 behandelt
             m_nTabIndex = Max(getINT16(m_xComponent->getPropertyValue( PROPERTY_TABINDEX )) , sal_Int16(0));
-
-        m_xComponent->getPropertyValue( PROPERTY_NAME ) >>= m_aName;
     }
 }
 
@@ -226,12 +226,12 @@ void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
         }
         else
         {
-            DBG_ERROR( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+            OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
         }
     }
     else
     {
-        DBG_ERROR( "OGroup::RemoveComponent: Component nicht in Gruppe" );
+        OSL_FAIL( "OGroup::RemoveComponent: Component nicht in Gruppe" );
     }
 }
 
@@ -269,7 +269,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 DBG_NAME(OGroupManager);
 //------------------------------------------------------------------
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
-    :m_pCompGroup( new OGroup( ::rtl::OUString::createFromAscii( "AllComponentGroup" ) ) )
+    :m_pCompGroup( new OGroup( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllComponentGroup") ) ) )
     ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OGroupManager,NULL);
@@ -318,7 +318,8 @@ void OGroupManager::removeFromGroupMap(const ::rtl::OUString& _sGroupName,const 
         aFind->second.RemoveComponent( _xSet );
 
         // Wenn Anzahl der Gruppenelemente == 1 ist, Gruppe deaktivieren
-        if ( aFind->second.Count() == 1 )
+        sal_Int32 nCount = aFind->second.Count();
+        if ( nCount == 1 || nCount == 0 )
         {
             OActiveGroups::iterator aActiveFind = ::std::find(
                 m_aActiveGroupMap.begin(),
@@ -329,7 +330,7 @@ void OGroupManager::removeFromGroupMap(const ::rtl::OUString& _sGroupName,const 
             {
                 // the group is active. Deactivate it if the remaining component
                 // is *no* radio button
-                if ( !isRadioButton( aFind->second.GetObject( 0 ) ) )
+                if ( nCount == 0 || !isRadioButton( aFind->second.GetObject( 0 ) ) )
                     m_aActiveGroupMap.erase( aActiveFind );
             }
         }
@@ -338,6 +339,8 @@ void OGroupManager::removeFromGroupMap(const ::rtl::OUString& _sGroupName,const 
 
     // Bei Component als PropertyChangeListener abmelden
     _xSet->removePropertyChangeListener( PROPERTY_NAME, this );
+    if (hasProperty(PROPERTY_GROUP_NAME, _xSet))
+        _xSet->removePropertyChangeListener( PROPERTY_GROUP_NAME, this );
     if (hasProperty(PROPERTY_TABINDEX, _xSet))
         _xSet->removePropertyChangeListener( PROPERTY_TABINDEX, this );
 }
@@ -348,10 +351,23 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
 
     // Component aus Gruppe entfernen
     ::rtl::OUString     sGroupName;
-    if (evt.PropertyName == PROPERTY_NAME)
+    if (hasProperty( PROPERTY_GROUP_NAME, xSet ))
+        xSet->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
+    if (evt.PropertyName == PROPERTY_NAME) {
+        if (sGroupName.getLength() > 0)
+            return; // group hasn't changed; ignore this name change.
+        // no GroupName; use Name as GroupNme
         evt.OldValue >>= sGroupName;
+    }
+    else if (evt.PropertyName == PROPERTY_GROUP_NAME) {
+        evt.OldValue >>= sGroupName;
+        if (sGroupName.getLength() == 0) {
+            // No prior GroupName; fallback to Nme
+            xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
+        }
+    }
     else
-        xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
+        sGroupName = GetGroupName( xSet );
 
     removeFromGroupMap(sGroupName,xSet);
 
@@ -434,8 +450,7 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
     m_pCompGroup->InsertComponent( xSet );
 
     // Component in Gruppe aufnehmen
-    ::rtl::OUString sGroupName;
-    xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
+    ::rtl::OUString sGroupName( GetGroupName( xSet ) );
 
     OGroupArr::iterator aFind = m_aGroupArr.find(sGroupName);
 
@@ -473,6 +488,8 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
 
     // Bei Component als PropertyChangeListener anmelden
     xSet->addPropertyChangeListener( PROPERTY_NAME, this );
+    if (hasProperty(PROPERTY_GROUP_NAME, xSet))
+        xSet->addPropertyChangeListener( PROPERTY_GROUP_NAME, this );
 
     // Tabindex muss nicht jeder unterstuetzen
     if (hasProperty(PROPERTY_TABINDEX, xSet))
@@ -489,13 +506,28 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
         return;
 
     // Component aus Gruppe entfernen
-    ::rtl::OUString     sGroupName;
-    xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
+    ::rtl::OUString     sGroupName( GetGroupName( xSet ) );
 
     removeFromGroupMap(sGroupName,xSet);
+}
+
+::rtl::OUString OGroupManager::GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent )
+{
+    if (!xComponent.is())
+        return ::rtl::OUString();
+    ::rtl::OUString sGroupName;
+    if (hasProperty( PROPERTY_GROUP_NAME, xComponent )) {
+        xComponent->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
+        if (sGroupName.getLength() == 0)
+            xComponent->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
+    }
+    else
+        xComponent->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
+    return sGroupName;
 }
 
 //.........................................................................
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

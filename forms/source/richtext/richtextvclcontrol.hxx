@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include "rtattributes.hxx"
@@ -141,3 +140,4 @@ namespace frm
 
 #endif // FORMS_SOURCE_RICHTEXT_RICHTEXTVCLCONTROL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

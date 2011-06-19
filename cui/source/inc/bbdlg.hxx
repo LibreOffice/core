@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,10 @@ protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
 
 private:
-    sal_Bool    bEnableBackgroundSelector; // fuer Border/Background-Dlg
+    sal_Bool    bEnableBackgroundSelector; // for Border/Background
 };
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

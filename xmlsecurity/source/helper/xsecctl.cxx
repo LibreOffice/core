@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -296,9 +297,6 @@ int XSecController::findSignatureInfor( sal_Int32 nSecurityId) const
  *  index - the index of the signature, or -1 when no such signature
  *          existing
  *
- *   HISTORY
- *  08.05.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -339,17 +337,14 @@ void XSecController::createXSecComponent( )
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    rtl::OUString sSAXEventKeeper(rtl::OUString::createFromAscii( SAXEVENTKEEPER_COMPONENT ));
-    rtl::OUString sXMLSignature(rtl::OUString::createFromAscii( XMLSIGNATURE_COMPONENT ));
-    rtl::OUString sXMLDocument(rtl::OUString::createFromAscii( XMLDOCUMENTWRAPPER_COMPONENT ));
+    rtl::OUString sSAXEventKeeper(RTL_CONSTASCII_USTRINGPARAM( SAXEVENTKEEPER_COMPONENT ));
+    rtl::OUString sXMLSignature(RTL_CONSTASCII_USTRINGPARAM( XMLSIGNATURE_COMPONENT ));
+    rtl::OUString sXMLDocument(RTL_CONSTASCII_USTRINGPARAM( XMLDOCUMENTWRAPPER_COMPONENT ));
 
     /*
      * marks all security components are not available.
@@ -448,9 +443,6 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
  *  events except that startElement event, then adds a new
  *  ElementCollector, then receives that startElement event.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -548,9 +540,6 @@ void XSecController::chainOff()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -616,9 +605,6 @@ void XSecController::checkChainingStatus()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -654,9 +640,6 @@ void XSecController::initializeSAXChain()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -697,9 +680,6 @@ cssu::Reference< com::sun::star::io::XInputStream >
  *   RESULT
  *  xInputStream - the XInputStream interface
  *
- *   HISTORY
- *  15.04.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -713,57 +693,6 @@ cssu::Reference< com::sun::star::io::XInputStream >
 
     return xObjectInputStream;
 }
-
-#if 0
-sal_Int32 XSecController::getFastPropertyIndex(sal_Int32 nHandle) const
-/****** XSecController/getFastPropertyIndex ***********************************
- *
- *   NAME
- *  getFastPropertyIndex -- gets the index of a particular fast property
- *
- *   SYNOPSIS
- *  nIndex = getFastPropertyIndex( nHandle );
- *
- *   FUNCTION
- *  See NAME.
- *
- *   INPUTS
- *  nHandle - the key for the fast property
- *
- *   RESULT
- *  nIndex - the index of the fast property, or -1
- *           if the key is not found.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    std::vector< sal_Int32 >::const_iterator ii = m_vFastPropertyIndexs.begin();
-    sal_Int32 nIndex = 0;
-
-    bool bFound = false;
-
-    for( ; ii != m_vFastPropertyIndexs.end(); ++ii,++nIndex )
-    {
-        if ( nHandle == (*ii))
-        {
-            bFound = true;
-            break;
-        }
-    }
-
-    if (!bFound)
-    {
-        nIndex = -1;
-    }
-
-    return nIndex;
-}
-#endif
 
 /*
  * public methods
@@ -798,9 +727,6 @@ void XSecController::startMission(
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -845,9 +771,6 @@ void XSecController::setSAXChainConnector(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -886,9 +809,6 @@ void XSecController::setSAXChainConnector(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -919,9 +839,6 @@ void XSecController::clearSAXChainConnector()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -964,9 +881,6 @@ void XSecController::endMission()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -1026,9 +940,6 @@ const char* XSecController::getErrorMessage()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  22.04.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -1057,9 +968,6 @@ void XSecController::exportSignature(
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  26.05.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -1090,11 +998,6 @@ void XSecController::exportSignature(
             rtl::OUString tag_SignatureProperties(RTL_CONSTASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTIES));
                 rtl::OUString tag_SignatureProperty(RTL_CONSTASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY));
                     rtl::OUString tag_Date(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE));
-#if 0
-                    rtl::OUString tag_Timestamp(RTL_CONSTASCII_USTRINGPARAM(TAG_TIMESTAMP));
-                        rtl::OUString tag_Date(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE));
-                        rtl::OUString tag_Time(RTL_CONSTASCII_USTRINGPARAM(TAG_TIME));
-#endif
 
     const SignatureReferenceInformations& vReferenceInfors = signatureInfo.vSignatureReferenceInfors;
     SvXMLAttributeList *pAttributeList;
@@ -1364,46 +1267,6 @@ SignatureInformations XSecController::getSignatureInformations() const
 /*
  * XFastPropertySet
  */
-/*
-void SAL_CALL XSecController::setFastPropertyValue(
-    sal_Int32 nHandle,
-    const cssu::Any& aValue )
-    throw ( cssb::UnknownPropertyException,
-        cssb::PropertyVetoException,
-        cssl::IllegalArgumentException,
-        cssl::WrappedTargetException,
-        cssu::RuntimeException)
-{
-    sal_Int32 nIndex = getFastPropertyIndex(nHandle);
-    if (nIndex == -1)
-    {
-        m_vFastPropertyIndexs.push_back( nHandle );
-        m_vFastPropertyValues.push_back( aValue );
-    }
-    else
-    {
-        m_vFastPropertyValues[nIndex] = aValue;
-    }
-}
-
-cssu::Any SAL_CALL XSecController::getFastPropertyValue(
-    sal_Int32 nHandle )
-    throw (
-        cssb::UnknownPropertyException,
-        cssl::WrappedTargetException,
-        cssu::RuntimeException)
-{
-    cssu::Any aValue;
-
-    sal_Int32 nIndex = getFastPropertyIndex(nHandle);
-    if (nIndex != -1)
-    {
-        aValue = m_vFastPropertyValues[nIndex];
-    }
-
-    return aValue;
-}
-*/
 
 /*
  * XSAXEventKeeperStatusChangeListener
@@ -1412,13 +1275,6 @@ cssu::Any SAL_CALL XSecController::getFastPropertyValue(
 void SAL_CALL XSecController::blockingStatusChanged( sal_Bool isBlocking )
     throw (cssu::RuntimeException)
 {
-    /*
-    showMessageBox( rtl::OUString::createFromAscii((isBlocking?
-                        "Blocking Status => TRUE":
-                        "Blocking Status => FALSE")),
-            rtl::OUString::createFromAscii("SAXEventKeeper Status"));
-    */
-
     this->m_bIsBlocking = isBlocking;
     checkChainingStatus();
 }
@@ -1427,13 +1283,6 @@ void SAL_CALL XSecController::collectionStatusChanged(
     sal_Bool isInsideCollectedElement )
     throw (cssu::RuntimeException)
 {
-    /*
-    showMessageBox( rtl::OUString::createFromAscii((isInsideCollectedElement?
-                        "Collection Status => TRUE":
-                        "Collection Status => FALSE")),
-            rtl::OUString::createFromAscii("SAXEventKeeper Status"));
-    */
-
     this->m_bIsCollectingElement = isInsideCollectedElement;
     checkChainingStatus();
 }
@@ -1441,12 +1290,7 @@ void SAL_CALL XSecController::collectionStatusChanged(
 void SAL_CALL XSecController::bufferStatusChanged( sal_Bool /*isBufferEmpty*/)
     throw (cssu::RuntimeException)
 {
-    /*
-    showMessageBox( rtl::OUString::createFromAscii((isBufferEmpty?
-                        "Buffer Empty => TRUE":
-                        "Buffer Empty => FALSE")),
-            rtl::OUString::createFromAscii("SAXEventKeeper Status"));
-    */
+
 }
 
 /*
@@ -1460,16 +1304,6 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::
 
     SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
 
-    /*
-    if (nResult == cssxc::sax::SignatureCreationResult_CREATIONSUCCEED)
-    {
-        signatureInfor.nStatus = STATUS_CREATION_SUCCEED;
-    }
-    else
-    {
-        signatureInfor.nStatus = STATUS_CREATION_FAIL;
-    }
-    */
     signatureInfor.nStatus = nResult;
 }
 
@@ -1484,15 +1318,7 @@ void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun:
 
     SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
 
-    /*
-    if (nResult == cssxc::sax::SignatureVerifyResult_VERIFYSUCCEED)
-    {
-        signatureInfor.nStatus = STATUS_VERIFY_SUCCEED;
-    }
-    else
-    {
-        signatureInfor.nStatus = STATUS_VERIFY_FAIL;
-    }
-    */
     signatureInfor.nStatus = nResult;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

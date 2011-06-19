@@ -32,7 +32,7 @@ public class HelpWindow
         File aFile = new File (sFilename);
         try
         {
-            loadURL (aFile.toURL());
+            loadURL (aFile.toURI().toURL());
         }
         catch (MalformedURLException e)
         {

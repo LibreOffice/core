@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,6 @@ protected:
     virtual sal_Bool            Close();
     virtual void            Move();
 
-//    virtual long          PreNotify( NotifyEvent& rNEvt );
 public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
     ~SvxHpLinkDlg ();
@@ -112,3 +112,5 @@ public:
 
 
 #endif // _CUI_TAB_HYPERLINK_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

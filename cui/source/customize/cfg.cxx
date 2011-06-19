@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,27 +26,14 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <stdlib.h>
 #include <time.h>
 
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/scrbar.hxx>
-
-//added for issue73355
-//#ifndef _SV_SVDATA_HXX
-//#include <vcl/svdata.hxx>
-//#endif
-//issue73355 ends
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -64,7 +52,6 @@
 #include <toolkit/unohlp.hxx>
 
 #include <algorithm>
-//add
 #include <cuires.hrc>
 #include "cfg.hrc"
 #include "helpid.hrc"
@@ -76,9 +63,7 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _UNOTOOLS_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
@@ -91,9 +76,7 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-#ifndef _COM_SUN_STAR_UI_UIElementType_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
-#endif
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -125,9 +108,9 @@ static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
 static const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
 static const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
 
-static const char __FAR_DATA pSeparatorStr[] =
+static const char pSeparatorStr[] =
     "----------------------------------";
-static const char __FAR_DATA pMenuSeparatorStr[]    = " | ";
+static const char pMenuSeparatorStr[]   = " | ";
 
 #ifdef _MSC_VER
 #pragma warning (disable:4355)
@@ -156,14 +139,14 @@ void printPropertySet(
 
     OSL_TRACE("printPropertySet: %d properties", aPropDetails.getLength());
 
-    for ( sal_Int32 i = 0; i < aPropDetails.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aPropDetails.getLength(); ++i )
     {
         OUString tmp;
         sal_Int32 ival;
 
         uno::Any a = xPropSet->getPropertyValue( aPropDetails[i].Name );
 
-        if ( ( a >>= tmp ) /* && tmp.getLength() != 0 */ )
+        if ( a >>= tmp )
         {
             OSL_TRACE("%s: Got property: %s = %s",
                 PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(tmp));
@@ -185,7 +168,7 @@ void printProperties(
     const OUString& prefix,
     const uno::Sequence< beans::PropertyValue >& aProp )
 {
-    for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
     {
         OUString tmp;
 
@@ -200,7 +183,7 @@ void printEntries(SvxEntries* entries)
 {
     SvxEntries::const_iterator iter = entries->begin();
 
-    for ( ; iter != entries->end(); iter++ )
+    for ( ; iter != entries->end(); ++iter )
     {
         SvxConfigEntry* entry = *iter;
 
@@ -229,7 +212,7 @@ OUString replaceSaveInName(
     const OUString& rSaveInName )
 {
     OUString name;
-    OUString placeholder = OUString::createFromAscii( "%SAVE IN SELECTION%" );
+    OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%SAVE IN SELECTION%" ));
 
     sal_Int32 pos = rMessage.indexOf( placeholder );
 
@@ -237,10 +220,6 @@ OUString replaceSaveInName(
     {
         name = rMessage.replaceAt(
             pos, placeholder.getLength(), rSaveInName );
-    }
-    else
-    {
-        // don't change the message
     }
 
     return name;
@@ -273,10 +252,10 @@ generateCustomName(
 {
     // find and replace the %n placeholder in the prefix string
     OUString name;
-    OUString placeholder = OUString::createFromAscii( "%n" );
+    OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%n" ));
 
     sal_Int32 pos = prefix.indexOf(
-        OUString::createFromAscii( "%n" ) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "%n" )) );
 
     if ( pos != -1 )
     {
@@ -301,7 +280,7 @@ generateCustomName(
         {
             break;
         }
-        iter++;
+        ++iter;
     }
 
     if ( iter != entries->end() )
@@ -323,8 +302,8 @@ OUString
 generateCustomURL(
     SvxEntries* entries )
 {
-    OUString url = OUString::createFromAscii( ITEM_TOOLBAR_URL );
-    url += OUString::createFromAscii( CUSTOM_TOOLBAR_STR );
+    OUString url = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+    url += OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_TOOLBAR_STR ));
 
     // use a random number to minimize possible clash with existing custom toolbars
     url += OUString::valueOf( sal_Int64( generateRandomValue() ), 16 );
@@ -341,7 +320,7 @@ generateCustomURL(
         {
             break;
         }
-        iter++;
+        ++iter;
     }
 
     if ( iter != entries->end() )
@@ -358,7 +337,7 @@ generateCustomMenuURL(
     SvxEntries* entries,
     sal_Int32 suffix = 1 )
 {
-    OUString url = OUString::createFromAscii( CUSTOM_MENU_STR );
+    OUString url(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_MENU_STR ));
     url += OUString::valueOf( suffix );
 
     // now check is there is an already existing entry with this url
@@ -373,7 +352,7 @@ generateCustomMenuURL(
         {
             break;
         }
-        iter++;
+        ++iter;
     }
 
     if ( iter != entries->end() )
@@ -399,13 +378,6 @@ void InitImageType()
     {
         theImageType |= css::ui::ImageType::SIZE_LARGE;
     }
-
-    Window* topwin = Application::GetActiveTopWindow();
-    if ( topwin != NULL &&
-         topwin->GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        theImageType |= css::ui::ImageType::COLOR_HIGHCONTRAST;
-    }
 }
 
 sal_Int16 GetImageType()
@@ -424,7 +396,7 @@ void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
             pEntries->erase( iter );
             break;
         }
-        iter++;
+        ++iter;
     }
 }
 
@@ -433,8 +405,8 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
     OSL_TRACE("SupportsDocumentConfig: %s", PRTSTR(aModuleId));
 
-    if  (  aModuleId.equalsAscii( "com.sun.star.script.BasicIDE" )
-        || aModuleId.equalsAscii( "com.sun.star.frame.Bibliography" )
+    if  (  aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.script.BasicIDE" ) )
+        || aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.frame.Bibliography" ) )
         )
     {
         return sal_False;
@@ -444,31 +416,31 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 
 OUString GetModuleName( const OUString& aModuleId )
 {
-    if ( aModuleId.equalsAscii( "com.sun.star.text.TextDocument" ) ||
-         aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) )
-        return OUString::createFromAscii("Writer");
-    else if ( aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) )
-        return OUString::createFromAscii("Writer/Web");
-    else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
-        return OUString::createFromAscii("Draw");
-    else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
-        return OUString::createFromAscii("Impress");
-    else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
-        return OUString::createFromAscii("Calc");
-    else if ( aModuleId.equalsAscii( "com.sun.star.script.BasicIDE" ) )
-        return OUString::createFromAscii("Basic");
-    else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
-        return OUString::createFromAscii("Math");
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) )
-        return OUString::createFromAscii("Relation Design");
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) )
-        return OUString::createFromAscii("Query Design");
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) )
-        return OUString::createFromAscii("Table Design");
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
-        return OUString::createFromAscii("Data Source Browser" );
-    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) )
-        return OUString::createFromAscii("Database" );
+    if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
+         aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Web"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Draw"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Impress"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Calc"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.script.BasicIDE" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Basic"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.formula.FormulaProperties" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Math"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.RelationDesign" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Relation Design"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.QueryDesign" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Query Design"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.TableDesign" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Table Design"));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.DataSourceBrowser" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Data Source Browser" ));
+    else if ( aModuleId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.DatabaseDocument" ) ) )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Database" ));
 
     return ::rtl::OUString();
 }
@@ -490,9 +462,9 @@ OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::
                 if ( a >>= aSeq )
                 {
                     OUString aUIName;
-                    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                    for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
                     {
-                        if ( aSeq[i].Name.equalsAscii( "ooSetupFactoryUIName" ))
+                        if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ooSetupFactoryUIName" ) ))
                         {
                             aSeq[i].Value >>= aModuleUIName;
                             break;
@@ -529,7 +501,7 @@ bool GetMenuItemData(
         uno::Sequence< beans::PropertyValue > aProp;
         if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
         {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
             {
                 if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
                 {
@@ -574,7 +546,7 @@ bool GetToolbarItemData(
         uno::Sequence< beans::PropertyValue > aProp;
         if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
         {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
             {
                 if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
                 {
@@ -651,7 +623,7 @@ ConvertSvxConfigEntry(
             uno::Sequence< beans::PropertyValue > tmpPropSeq;
             if ( a >>= tmpPropSeq )
             {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
                 {
                     if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
                     {
@@ -732,7 +704,7 @@ ConvertToolbarEntry(
             uno::Sequence< beans::PropertyValue > tmpPropSeq;
             if ( a >>= tmpPropSeq )
             {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); ++i )
                 {
                     if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
                     {
@@ -796,9 +768,9 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
-    static ::rtl::OUString SERVICENAME_DESKTOP       = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"             );
-    static ::rtl::OUString MODULEID_STARTMODULE      = ::rtl::OUString::createFromAscii("com.sun.star.frame.StartModule"         );
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.ModuleManager") );
+    static ::rtl::OUString SERVICENAME_DESKTOP       (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.Desktop"           ) );
+    static ::rtl::OUString MODULEID_STARTMODULE      (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.StartModule"       ) );
 
     try
     {
@@ -851,7 +823,7 @@ SvxConfigDialog::SvxConfigDialog(
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
 
-        if (text.indexOf(OUString::createFromAscii(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
         {
             SetCurPageId( RID_SVXPAGE_TOOLBARS );
         }
@@ -924,7 +896,7 @@ SaveInData::SaveInData(
         ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
 
     xProps->getPropertyValue(
-        OUString::createFromAscii( "DefaultContext" ))
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )))
             >>= m_xComponentContext;
 
     m_aSeparatorSeq.realloc( 1 );
@@ -986,7 +958,7 @@ uno::Reference< graphic::XGraphic > GetGraphic(
 
     if ( xImageManager.is() )
     {
-        // TODO handle large and high contrast graphics
+        // TODO handle large graphics
         uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
 
         uno::Sequence< OUString > aImageCmdSeq( 1 );
@@ -1158,7 +1130,7 @@ bool MenuSaveInData::LoadSubMenus(
     if ( !xMenuSettings.is() )
         return true;
 
-    for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); nIndex++ )
+    for ( sal_Int32 nIndex = 0; nIndex < xMenuSettings->getCount(); ++nIndex )
     {
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
@@ -1192,7 +1164,7 @@ bool MenuSaveInData::LoadSubMenus(
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
-                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
                             if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
                             {
@@ -1312,7 +1284,7 @@ void MenuSaveInData::Apply(
     SvxEntries::const_iterator iter = GetEntries()->begin();
     SvxEntries::const_iterator end = GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntryData = *iter;
 
@@ -1341,7 +1313,7 @@ void MenuSaveInData::ApplyMenu(
     SvxEntries::const_iterator iter = pMenuData->GetEntries()->begin();
     SvxEntries::const_iterator end = pMenuData->GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntry = *iter;
 
@@ -1443,7 +1415,7 @@ public:
         while ( n <= nHalfSize )
         {
             rOutDev.DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
-            n++;
+            ++n;
         }
 
         rOutDev.SetFillColor( aOldFillColor );
@@ -1710,7 +1682,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
-        OUString aSearchString = OUString::createFromAscii( "%MODULENAME" );
+        OUString aSearchString(RTL_CONSTASCII_USTRINGPARAM( "%MODULENAME" ));
         sal_Int32 index = title.indexOf( aSearchString );
 
         if ( index != -1 )
@@ -1748,7 +1720,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             OUString label;
             utl::ConfigManager::GetDirectConfigProperty(
                 utl::ConfigManager::PRODUCTNAME ) >>= label;
-            label += OUString::createFromAscii( " " );
+            label += OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
             label += aModuleName;
 
             nPos = aSaveInListBox.InsertEntry( label );
@@ -1851,7 +1823,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                 DBG_UNHANDLED_EXCEPTION();
             }
 
-            for ( sal_Int32 i = 0; i < aFrameList.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < aFrameList.getLength(); ++i )
             {
                 SaveInData* pData = NULL;
                 uno::Reference < frame::XFrame > xf = aFrameList[i];
@@ -1984,7 +1956,7 @@ sal_Bool SvxConfigPage::FillItemSet( SfxItemSet& )
 {
     bool result = sal_False;
 
-    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         SaveInData* pData =
             (SaveInData*) aSaveInListBox.GetEntryData( i );
@@ -2044,7 +2016,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
         SvxEntries::const_iterator iter = GetSaveInData()->GetEntries()->begin();
         SvxEntries::const_iterator end = GetSaveInData()->GetEntries()->end();
 
-        for ( ; iter != end; iter++ )
+        for ( ; iter != end; ++iter )
         {
             SvxConfigEntry* pEntryData = *iter;
             sal_uInt16 nPos = aTopLevelListBox.InsertEntry( stripHotKey( pEntryData->GetName() ) );
@@ -2078,7 +2050,7 @@ void SvxConfigPage::AddSubMenusToUI(
     SvxEntries::const_iterator iter = pParentData->GetEntries()->begin();
     SvxEntries::const_iterator end = pParentData->GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntryData = *iter;
 
@@ -2102,7 +2074,7 @@ SvxEntries* SvxConfigPage::FindParentForChild(
     SvxEntries::const_iterator iter = pRootEntries->begin();
     SvxEntries::const_iterator end = pRootEntries->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntryData = *iter;
 
@@ -2160,7 +2132,7 @@ SvLBoxEntry* SvxConfigPage::AddFunction(
                 return NULL;
             }
 
-            iter++;
+            ++iter;
         }
     }
 
@@ -2201,12 +2173,12 @@ SvLBoxEntry* SvxConfigPage::InsertEntry(
         sal_uInt16 nPos = 0;
         while (*iter != pEntryData && ++iter != end)
         {
-            nPos++;
+            ++nPos;
         }
 
         // Now step past it to the entry after the currently selected one
-        iter++;
-        nPos++;
+        ++iter;
+        ++nPos;
 
         // Now add the new entry to the UI and to the parent's list
         if ( iter != end )
@@ -2431,7 +2403,7 @@ void SvxMenuConfigPage::Init()
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
 {
-    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         MenuSaveInData* pData =
             (MenuSaveInData*) aSaveInListBox.GetEntryData( i );
@@ -2587,7 +2559,7 @@ IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
         SvxEntries* pEntries = pMenuData->GetEntries();
         SvxEntries::const_iterator iter = pEntries->begin();
 
-        for ( ; iter != pEntries->end(); iter++ )
+        for ( ; iter != pEntries->end(); ++iter )
         {
             SvxConfigEntry* pEntry = *iter;
             InsertEntryIntoUI( pEntry );
@@ -2630,7 +2602,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
                 GetSaveInData()->SetModified( sal_True );
             }
 
-            // #i68101# Moemory leak (!)
+            // #i68101# Memory leak (!)
             delete pNameDialog;
 
             break;
@@ -2860,7 +2832,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
             {
                 aMenuListBox.Select( pLBEntry );
             }
-            iter++;
+            ++iter;
         }
     }
 
@@ -3085,7 +3057,7 @@ SvxConfigEntry::~SvxConfigEntry()
     {
         SvxEntries::const_iterator iter = pEntries->begin();
 
-        for ( ; iter != pEntries->end(); iter++ )
+        for ( ; iter != pEntries->end(); ++iter )
         {
             delete *iter;
         }
@@ -3184,8 +3156,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
-    m_aURLToSelect = OUString::createFromAscii( ITEM_TOOLBAR_URL );
-    m_aURLToSelect += OUString::createFromAscii( "standardbar" );
+    m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+    m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
 
     const SfxPoolItem* pItem =
         rSet.GetItem( rSet.GetPool()->GetWhich( SID_CONFIG ) );
@@ -3193,7 +3165,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     if ( pItem )
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
-        if (text.indexOf(OUString::createFromAscii(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
         {
             m_aURLToSelect = text.copy( 0 );
         }
@@ -3217,7 +3189,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
 SvxToolbarConfigPage::~SvxToolbarConfigPage()
 {
-    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         ToolbarSaveInData* pData =
             (ToolbarSaveInData*) aSaveInListBox.GetEntryData( i );
@@ -3470,7 +3442,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             sal_uInt16 nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( sal_uInt16 i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( sal_uInt16 i = 0; i < aContentsListBox->GetEntryCount(); ++i )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3567,7 +3539,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             sal_uInt16 nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( sal_uInt16 i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( sal_uInt16 i = 0; i < aContentsListBox->GetEntryCount(); ++i )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3650,7 +3622,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             sal_uInt16 nSelectionPos = 0;
 
             // find position of entry within the list
-            for ( sal_uInt16 i = 0; i < aContentsListBox->GetEntryCount(); i++ )
+            for ( sal_uInt16 i = 0; i < aContentsListBox->GetEntryCount(); ++i )
             {
                 if ( aContentsListBox->GetEntry( 0, i ) == pActEntry )
                 {
@@ -3722,7 +3694,7 @@ void SvxToolbarConfigPage::Init()
     sal_uInt16 nPos = 0;
     if ( m_aURLToSelect.getLength() != 0 )
     {
-        for ( sal_uInt16 i = 0 ; i < aTopLevelListBox.GetEntryCount(); i++ )
+        for ( sal_uInt16 i = 0 ; i < aTopLevelListBox.GetEntryCount(); ++i )
         {
             SvxConfigEntry* pData =
                 (SvxConfigEntry*) aTopLevelListBox.GetEntryData( i );
@@ -3735,8 +3707,8 @@ void SvxToolbarConfigPage::Init()
         }
 
         // in future select the default toolbar: Standard
-        m_aURLToSelect = OUString::createFromAscii( ITEM_TOOLBAR_URL );
-        m_aURLToSelect += OUString::createFromAscii( "standardbar" );
+        m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+        m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
     }
 
     aTopLevelListBox.SelectEntryPos(nPos, sal_True);
@@ -3841,7 +3813,7 @@ void ToolbarSaveInData::SetSystemStyle(
     const OUString& rResourceURL,
     sal_Int32 nStyle )
 {
-    if ( rResourceURL.indexOf( OUString::createFromAscii( "private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3853,7 +3825,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
                     if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE) )
                     {
@@ -3880,7 +3852,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 {
     sal_Int32 result = 0;
 
-    if ( rResourceURL.indexOf( OUString::createFromAscii( "private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3891,7 +3863,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
                     if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE) )
                     {
@@ -3914,7 +3886,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 {
     OUString result;
 
-    if ( rResourceURL.indexOf( OUString::createFromAscii( "private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3925,7 +3897,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
                     if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_UINAME) )
                     {
@@ -3940,7 +3912,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
         }
     }
 
-    if ( rResourceURL.indexOf( OUString::createFromAscii( ".uno" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( ".uno" )) ) == 0 &&
          m_xCommandToLabelMap.is() &&
          m_xCommandToLabelMap->hasByName( rResourceURL ) )
     {
@@ -3952,7 +3924,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
             uno::Sequence< beans::PropertyValue > aPropSeq;
             if ( a >>= aPropSeq )
             {
-                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                 {
                     if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
                     {
@@ -3977,7 +3949,7 @@ bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
 
 SvxEntries* ToolbarSaveInData::GetEntries()
 {
-    typedef ::std::hash_map< ::rtl::OUString,
+    typedef ::boost::unordered_map< ::rtl::OUString,
                              bool,
                              ::rtl::OUStringHash,
                              ::std::equal_to< ::rtl::OUString > > ToolbarInfo;
@@ -3994,7 +3966,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             GetConfigManager()->getUIElementsInfo(
                 css::ui::UIElementType::TOOLBAR );
 
-        for ( sal_Int32 i = 0; i < info.getLength(); i++ )
+        for ( sal_Int32 i = 0; i < info.getLength(); ++i )
         {
             uno::Sequence< beans::PropertyValue > props = info[ i ];
 
@@ -4002,7 +3974,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             OUString systemname;
             OUString uiname;
 
-            for ( sal_Int32 j = 0; j < props.getLength(); j++ )
+            for ( sal_Int32 j = 0; j < props.getLength(); ++j )
             {
                 if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
                 {
@@ -4038,10 +4010,10 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 pEntry->SetStyle( GetSystemStyle( url ) );
 
 
-                // insert into hash_map to filter duplicates from the parent
+                // insert into boost::unordered_map to filter duplicates from the parent
                 aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
 
-                OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
                 if ( systemname.indexOf( custom ) == 0 )
                 {
                     pEntry->SetUserDefined( sal_True );
@@ -4071,7 +4043,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 xParentCfgMgr->getUIElementsInfo(
                     css::ui::UIElementType::TOOLBAR );
 
-            for ( sal_Int32 i = 0; i < info_.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < info_.getLength(); ++i )
             {
                 uno::Sequence< beans::PropertyValue > props = info_[ i ];
 
@@ -4079,7 +4051,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 OUString systemname;
                 OUString uiname;
 
-                for ( sal_Int32 j = 0; j < props.getLength(); j++ )
+                for ( sal_Int32 j = 0; j < props.getLength(); ++j )
                 {
                     if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
                     {
@@ -4093,7 +4065,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 }
 
                 // custom toolbars of the parent are not visible in the document layer
-                OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
                 if ( systemname.indexOf( custom ) == 0 )
                     continue;
 
@@ -4183,7 +4155,7 @@ ToolbarSaveInData::HasURL( const OUString& rURL )
                 return sal_True;
         }
 
-        iter++;
+        ++iter;
     }
     return sal_False;
 }
@@ -4204,7 +4176,7 @@ void ToolbarSaveInData::Reset()
     SvxEntries::const_iterator end = GetEntries()->end();
 
     // reset each toolbar by calling removeSettings for it's toolbar URL
-    for ( ; toolbars != end; toolbars++ )
+    for ( ; toolbars != end; ++toolbars )
     {
         SvxConfigEntry* pToolbar = *toolbars;
 
@@ -4215,7 +4187,7 @@ void ToolbarSaveInData::Reset()
         }
         catch ( uno::Exception& )
         {
-            // error occured removing the settings
+            // error occurred removing the settings
             // TODO - add error dialog in future?
         }
     }
@@ -4254,7 +4226,7 @@ void ToolbarSaveInData::ApplyToolbar(
     SvxEntries::const_iterator iter = pToolbarData->GetEntries()->begin();
     SvxEntries::const_iterator end = pToolbarData->GetEntries()->end();
 
-    for ( ; iter != end; iter++ )
+    for ( ; iter != end; ++iter )
     {
         SvxConfigEntry* pEntry = *iter;
 
@@ -4312,7 +4284,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     if ( pToolbar->IsUserDefined() )
     {
         xProps->setPropertyValue(
-            OUString::createFromAscii( ITEM_DESCRIPTOR_UINAME ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
             uno::makeAny( OUString( pToolbar->GetName() ) ) );
     }
 
@@ -4360,7 +4332,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
         xPropertySet( xSettings, uno::UNO_QUERY );
 
     xPropertySet->setPropertyValue(
-        OUString::createFromAscii( ITEM_DESCRIPTOR_UINAME ),
+        OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
             uno::makeAny( pToolbar->GetName() ) );
 
     try
@@ -4408,7 +4380,7 @@ void ToolbarSaveInData::RemoveToolbar( SvxConfigEntry* pToolbar )
     }
     catch ( uno::Exception& )
     {
-        // error occured removing the settings
+        // error occurred removing the settings
     }
 }
 
@@ -4454,7 +4426,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
         // in the toolbar
         SvxEntries::const_iterator iter = pToolbar->GetEntries()->begin();
         uno::Sequence< OUString > aURLSeq( 1 );
-        for ( ; iter != pToolbar->GetEntries()->end(); iter++ )
+        for ( ; iter != pToolbar->GetEntries()->end(); ++iter )
         {
             SvxConfigEntry* pEntry = *iter;
             aURLSeq[ 0 ] = pEntry->GetCommand();
@@ -4483,7 +4455,7 @@ bool ToolbarSaveInData::LoadToolbar(
 {
     SvxEntries*         pEntries            = pParentData->GetEntries();
 
-    for ( sal_Int32 nIndex = 0; nIndex < xToolbarSettings->getCount(); nIndex++ )
+    for ( sal_Int32 nIndex = 0; nIndex < xToolbarSettings->getCount(); ++nIndex )
     {
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
@@ -4519,7 +4491,7 @@ bool ToolbarSaveInData::LoadToolbar(
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
-                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
                             if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
                             {
@@ -4678,7 +4650,7 @@ IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
     SvxEntries* pEntries = pToolbar->GetEntries();
     SvxEntries::const_iterator iter = pEntries->begin();
 
-    for ( ; iter != pEntries->end(); iter++ )
+    for ( ; iter != pEntries->end(); ++iter )
     {
         SvxConfigEntry* pEntry = *iter;
 
@@ -4717,7 +4689,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     SvxNewToolbarDialog* pNameDialog = new SvxNewToolbarDialog( 0, aNewName );
 
     sal_uInt16 nInsertPos;
-    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); i++ )
+    for ( sal_uInt16 i = 0 ; i < aSaveInListBox.GetEntryCount(); ++i )
     {
         SaveInData* pData =
             (SaveInData*) aSaveInListBox.GetEntryData( i );
@@ -4844,8 +4816,6 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(
     m_pButtonData = new SvLBoxButtonData( this );
     BuildCheckBoxButtonImages( m_pButtonData );
     EnableCheckButton( m_pButtonData );
-
-    m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // --------------------------------------------------------
@@ -4920,9 +4890,6 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
     if (( rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
         ( rDCEvt.GetFlags() & SETTINGS_STYLE ))
     {
-        // We have to reset all images because we change to/from high contrast mode
-        m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         BuildCheckBoxButtonImages( m_pButtonData );
         Invalidate();
     }
@@ -5083,7 +5050,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 {
     FreeResource();
 
-    typedef ::std::hash_map< ::rtl::OUString,
+    typedef ::boost::unordered_map< ::rtl::OUString,
                              bool,
                              ::rtl::OUStringHash,
                              ::std::equal_to< ::rtl::OUString > > ImageInfo;
@@ -5105,8 +5072,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     {
         m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
             xServiceManager->createInstance(
-                ::rtl::OUString::createFromAscii(
-                    "com.sun.star.graphic.GraphicProvider" ) ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider" ) ) ),
             uno::UNO_QUERY );
     }
 
@@ -5116,7 +5082,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     }
 
     uno::Reference< beans::XPropertySet > xPropSet(
-        xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ),
+        xServiceManager->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ) ) ),
         uno::UNO_QUERY );
 
     uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" ) ) );
@@ -5144,7 +5110,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
         xServiceManager->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.embed.FileSystemStorageFactory" )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" ) ) ),
         uno::UNO_QUERY );
 
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -5167,7 +5133,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     m_xImportedImageManager = uno::Reference< com::sun::star::ui::XImageManager >(
         xServiceManager->createInstanceWithArguments(
-        ::rtl::OUString::createFromAscii( "com.sun.star.ui.ImageManager" ), aProp ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ImageManager" ) ), aProp ),
         uno::UNO_QUERY );
 
     ImageInfo mImageInfo;
@@ -5175,7 +5141,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     if ( m_xImportedImageManager.is() )
     {
         names = m_xImportedImageManager->getAllImageNames( GetImageType() );
-        for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+        for ( sal_Int32 n = 0; n < names.getLength(); ++n )
             mImageInfo.insert( ImageInfo::value_type( names[n], false ));
     }
     sal_uInt16 nId = 1;
@@ -5205,12 +5171,12 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     if ( m_xParentImageManager.is() )
     {
         names = m_xParentImageManager->getAllImageNames( GetImageType() );
-        for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+        for ( sal_Int32 n = 0; n < names.getLength(); ++n )
             aImageInfo.insert( ImageInfo::value_type( names[n], false ));
     }
 
     names = m_xImageManager->getAllImageNames( GetImageType() );
-    for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+    for ( sal_Int32 n = 0; n < names.getLength(); ++n )
     {
         ImageInfo::iterator pIter = aImageInfo.find( names[n] );
         if ( pIter != aImageInfo.end() )
@@ -5270,7 +5236,7 @@ SvxIconSelectorDialog::~SvxIconSelectorDialog()
 {
     sal_uInt16 nCount = aTbSymbol.GetItemCount();
 
-    for (sal_uInt16 n = 0; n < nCount; n++ )
+    for (sal_uInt16 n = 0; n < nCount; ++n )
     {
         sal_uInt16 nId = aTbSymbol.GetItemId(n);
 
@@ -5289,7 +5255,7 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
     uno::Reference< graphic::XGraphic > result;
 
     sal_uInt16 nId;
-    for ( sal_uInt16 n = 0; n < aTbSymbol.GetItemCount(); n++ )
+    for ( sal_uInt16 n = 0; n < aTbSymbol.GetItemCount(); ++n )
     {
         nId = aTbSymbol.GetItemId( n );
         if ( aTbSymbol.IsItemChecked( nId ) )
@@ -5309,7 +5275,7 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
 
     sal_uInt16 nCount = aTbSymbol.GetItemCount();
 
-    for (sal_uInt16 n = 0; n < nCount; n++ )
+    for (sal_uInt16 n = 0; n < nCount; ++n )
     {
         sal_uInt16 nId = aTbSymbol.GetItemId( n );
 
@@ -5376,7 +5342,7 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
     {
         sal_uInt16 nCount = aTbSymbol.GetItemCount();
 
-        for (sal_uInt16 n = 0; n < nCount; n++ )
+        for (sal_uInt16 n = 0; n < nCount; ++n )
         {
             sal_uInt16 nId = aTbSymbol.GetItemId( n );
 
@@ -5410,7 +5376,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     uno::Reference< graphic::XGraphic > xGraphic;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
     aMediaProps[0].Value <<= aURL;
 
     com::sun::star::awt::Size aSize;
@@ -5422,7 +5388,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
         uno::Reference< beans::XPropertySet > props =
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
         uno::Any a = props->getPropertyValue(
-            OUString::createFromAscii("SizePixel") );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel")) );
         a >>= aSize;
         if (0 == aSize.Width || 0 == aSize.Height)
             return sal_False;
@@ -5436,7 +5402,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     bool   bResult( false );
     sal_uInt16 nCount = aTbSymbol.GetItemCount();
-    for (sal_uInt16 n = 0; n < nCount; n++ )
+    for (sal_uInt16 n = 0; n < nCount; ++n )
     {
         sal_uInt16 nId = aTbSymbol.GetItemId( n );
 
@@ -5452,7 +5418,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
                     BitmapEx aBitmap = aImage.GetBitmapEx();
-                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
                 aTbSymbol.InsertItem( nId,aImage, aURL, 0, 0 ); //modify
@@ -5489,7 +5455,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     uno::Sequence< OUString > URLs(1);
     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
     uno::Reference< css::ui::XUIConfigurationPersistence >
         xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
@@ -5518,9 +5484,9 @@ void SvxIconSelectorDialog::ImportGraphics(
     {
         ::rtl::OUString aSourcePath( rPaths[0] );
         if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
-            aSourcePath = rPaths[0] + ::rtl::OUString::createFromAscii( "/" );
+            aSourcePath = rPaths[0] + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
 
-        for ( sal_Int32 i = 1; i < rPaths.getLength(); i++ )
+        for ( sal_Int32 i = 1; i < rPaths.getLength(); ++i )
         {
             ::rtl::OUString aPath = aSourcePath + rPaths[i];
             if ( m_xImportedImageManager->hasImage( GetImageType(), aPath ) )
@@ -5534,7 +5500,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                 }
                 else if ( ret == 5 )
                 {
-                    for ( sal_Int32 k = i; k < rPaths.getLength(); k++ )
+                    for ( sal_Int32 k = i; k < rPaths.getLength(); ++k )
                     {
                         aPath = aSourcePath + rPaths[k];
                         bool bHasReplaced = ReplaceGraphicItem( aPath );
@@ -5545,7 +5511,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                             if ( result == sal_False )
                             {
                                 rejected[ rejectedCount ] = rPaths[i];
-                                rejectedCount++;
+                                ++rejectedCount;
                             }
                         }
                     }
@@ -5558,7 +5524,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                 if ( result == sal_False )
                 {
                     rejected[ rejectedCount ] = rPaths[i];
-                    rejectedCount++;
+                    ++rejectedCount;
                 }
             }
         }
@@ -5566,12 +5532,12 @@ void SvxIconSelectorDialog::ImportGraphics(
 
     if ( rejectedCount != 0 )
     {
-        OUString message =OUString::createFromAscii("");
-        OUString newLine = OUString::createFromAscii("\n");
-        rtl::OUString fPath = OUString::createFromAscii("");
+        OUString message;
+        OUString newLine(RTL_CONSTASCII_USTRINGPARAM("\n"));
+        OUString fPath;
         if (rejectedCount > 1)
-              fPath = rPaths[0].copy(8) + ::rtl::OUString::createFromAscii( "/" );
-        for ( sal_Int32 i = 0; i < rejectedCount; i++ )
+              fPath = rPaths[0].copy(8) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        for ( sal_Int32 i = 0; i < rejectedCount; ++i )
         {
             message += fPath + rejected[i];
             message += newLine;
@@ -5590,7 +5556,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;
@@ -5602,7 +5568,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
 
         uno::Any a = props->getPropertyValue(
-            OUString::createFromAscii("SizePixel") );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel")) );
 
             xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
@@ -5616,7 +5582,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
                     BitmapEx aBitmap = aImage.GetBitmapEx();
-                    BitmapEx aBitmapex = AutoScaleBitmap(aBitmap, m_nExpectedSize);
+                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
                 if ( bOK && !!aImage )
@@ -5693,7 +5659,7 @@ rtl::OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMess
 {
     rtl::OUString name;
     rtl::OUString message = String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) );
-    rtl::OUString placeholder = OUString::createFromAscii( "%ICONNAME" );
+    rtl::OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%ICONNAME" ));
     sal_Int32 pos = message.indexOf( placeholder );
     if ( pos != -1 )
     {
@@ -5733,8 +5699,6 @@ SvxIconChangeDialog::SvxIconChangeDialog(
 BitmapEx SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize)
 {
     Point aEmptyPoint(0,0);
-    sal_Int32 imgNewWidth = 0;
-    sal_Int32 imgNewHeight = 0;
     double imgposX = 0;
     double imgposY = 0;
     BitmapEx  aRet = aBitmap;
@@ -5744,6 +5708,9 @@ BitmapEx SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx & aBitmap, const long a
     Size aScaledSize;
     if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
     {
+        sal_Int32 imgNewWidth = 0;
+        sal_Int32 imgNewHeight = 0;
+
         if (imgOldWidth >= imgOldHeight)
         {
             imgNewWidth = aStandardSize;
@@ -5768,7 +5735,6 @@ BitmapEx SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx & aBitmap, const long a
         imgposY = (aStandardSize - imgOldHeight) / 2 + 0.5;
     }
 
-    Size aBmpSize = aRet.GetSizePixel();
     Size aStdSize( aStandardSize, aStandardSize );
     Rectangle aRect(aEmptyPoint, aStdSize );
 
@@ -5785,3 +5751,5 @@ BitmapEx SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx & aBitmap, const long a
 
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

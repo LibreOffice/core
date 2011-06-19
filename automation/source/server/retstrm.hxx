@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,30 +41,28 @@ public:
     ~RetStream();
 
     using CmdBaseStream::GenError;
-//  new
     void GenError( rtl::OString aUId, String aString );
 
     using CmdBaseStream::GenReturn;
-    void GenReturn( comm_USHORT nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
+    void GenReturn( comm_UINT16 nRet, comm_UINT32 nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_UINT32 nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
 
 // MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );} // also used outside MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
-    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_UINT16 nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );} // also used outside MacroRecorder
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_UINT16 nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
+    void GenReturn( comm_UINT16 nRet, rtl::OString aUId, comm_UINT16 nMethod, comm_UINT32 nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
 
-//  new
     void GenReturn( sal_uInt16 nRet, rtl::OString aUId, String aString );
-    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_ULONG nNr, String aString, sal_Bool bBool );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT32 nNr, String aString, sal_Bool bBool );
 
 // needed for RemoteCommand and Profiling
     void GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, SbxValue &aValue );
     void GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, String aString );
 
 // MacroRecorder
-    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString );
-    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, sal_Bool bBool );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString, sal_Bool bBool );
 
     void Reset();
     SvStream* GetStream();
@@ -71,10 +70,9 @@ public:
 
 
     using CmdBaseStream::Write;
-    void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
-    void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
+    void Write( comm_UINT16 nNr ){CmdBaseStream::Write( nNr );}
+    void Write( comm_UINT32 nNr ){CmdBaseStream::Write( nNr );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
-//  new
     void Write( SbxValue &aValue );
 
 // Complex Datatypes to be handled system dependent
@@ -85,3 +83,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

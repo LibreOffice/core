@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,16 +34,18 @@
 SvCommStream::SvCommStream( SvStream* pIO ) { pStream = pIO; }
 SvCommStream::~SvCommStream() {}
 
-ICommStream& SvCommStream::operator>>( comm_USHORT& rUShort ) { *pStream >> rUShort; return *this; }
-ICommStream& SvCommStream::operator>>( comm_ULONG& rULong ) { *pStream >> rULong; return *this; }
+ICommStream& SvCommStream::operator>>( comm_UINT16& rUShort ) { *pStream >> rUShort; return *this; }
+ICommStream& SvCommStream::operator>>( comm_UINT32& rULong ) { *pStream >> rULong; return *this; }
 ICommStream& SvCommStream::operator>>( comm_BOOL& rChar ) { *pStream >> rChar; return *this; }
 
-ICommStream& SvCommStream::operator<<( comm_USHORT nUShort ) { *pStream << nUShort; return *this; }
-ICommStream& SvCommStream::operator<<( comm_ULONG nULong ) { *pStream << nULong; return *this; }
+ICommStream& SvCommStream::operator<<( comm_UINT16 nUShort ) { *pStream << nUShort; return *this; }
+ICommStream& SvCommStream::operator<<( comm_UINT32 nULong ) { *pStream << nULong; return *this; }
 ICommStream& SvCommStream::operator<<( comm_BOOL nChar ) { *pStream << nChar; return *this; }
 
-comm_ULONG SvCommStream::Read( void* pData, comm_ULONG nSize ) { return pStream->Read( pData, nSize ); }
-comm_ULONG SvCommStream::Write( const void* pData, comm_ULONG nSize ) { return pStream->Write( pData, nSize ); }
+comm_UINT32 SvCommStream::Read( void* pData, comm_UINT32 nSize ) { return pStream->Read( pData, nSize ); }
+comm_UINT32 SvCommStream::Write( const void* pData, comm_UINT32 nSize ) { return pStream->Write( pData, nSize ); }
 
 comm_BOOL SvCommStream::IsEof() const { return pStream->IsEof(); }
-comm_ULONG SvCommStream::SeekRel( long nPos ) { return pStream->SeekRel( nPos ); }
+comm_UINT32 SvCommStream::SeekRel( long nPos ) { return pStream->SeekRel( nPos ); }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

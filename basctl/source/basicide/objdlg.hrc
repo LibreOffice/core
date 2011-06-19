@@ -31,7 +31,6 @@
 
 #define RID_BASICIDE_OBJCAT     ( RID_BASICIDE_START + 70 )
 #define RID_FT_MACRODESCR   8
-#define RID_IMGLST_TB_HC 9
 #define RID_TLB_MACROS     10
 #define RID_TB_TOOLBOX     11
 

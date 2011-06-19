@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include "com/sun/star/resource/XStringResourcePersistence.hpp"
 #include "com/sun/star/script/XLibraryContainer.hpp"
 #include "com/sun/star/script/XLibraryContainerPassword.hpp"
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include "com/sun/star/script/XLibraryContainer2.hpp"
-#endif
 #include "com/sun/star/task/XStatusIndicator.hpp"
 #include "com/sun/star/task/XStatusIndicatorFactory.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
@@ -107,13 +106,11 @@
 #include "sfx2/request.hxx"
 #include "sfx2/childwin.hxx"
 #include "sfx2/viewfrm.hxx"
-#include "sfx2/dispatch.hxx"
 #include "sfx2/objsh.hxx"
 #include "sfx2/genlink.hxx"
 #include "sfx2/dispatch.hxx"
 #include "sfx2/minfitem.hxx"
 #include "sfx2/dinfdlg.hxx"
-#include "sfx2/docfac.hxx"
 #include "sfx2/progress.hxx"
 #include "sfx2/docfile.hxx"
 #include "sfx2/docfac.hxx"
@@ -209,3 +206,4 @@
 #include "unotools/accessiblerelationsethelper.hxx"
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

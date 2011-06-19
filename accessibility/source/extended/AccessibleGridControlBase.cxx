@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_accessibility.hxx"
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
 #include <svtools/accessibletable.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 //
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -163,7 +164,7 @@ Reference< XAccessibleStateSet > SAL_CALL
 AccessibleGridControlBase::getAccessibleStateSet()
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     // don't check whether alive -> StateSet may contain DEFUNC
     return implCreateStateSetHelper();
@@ -219,7 +220,7 @@ awt::Size SAL_CALL AccessibleGridControlBase::getSize()
 sal_Bool SAL_CALL AccessibleGridControlBase::isShowing()
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     return implIsShowing();
@@ -279,13 +280,15 @@ void SAL_CALL AccessibleGridControlBase::removeEventListener(
 
 // XTypeProvider --------------------------------------------------------------
 
+namespace
+{
+    class theAccessibleGridControlBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlBaseImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlBase::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleGridControlBaseImplementationId::get().getSeq();
 }
 
 // XServiceInfo ---------------------------------------------------------------
@@ -363,7 +366,7 @@ void AccessibleGridControlBase::ensureIsAlive() const
 Rectangle AccessibleGridControlBase::getBoundingBox()
     throw ( lang::DisposedException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBox();
@@ -377,7 +380,7 @@ Rectangle AccessibleGridControlBase::getBoundingBox()
 Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBoxOnScreen();
@@ -408,17 +411,7 @@ void AccessibleGridControlBase::commitEvent(
 
     AccessibleEventNotifier::addEvent( getClientId( ), aEvent );
 }
-// -----------------------------------------------------------------------------
 
-void AccessibleGridControlBase::implCreateUuid( Sequence< sal_Int8 >& rId )
-{
-    if( !rId.hasElements() )
-    {
-        rId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( rId.getArray() ), 0, sal_True );
-    }
-}
-// -----------------------------------------------------------------------------
 sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     throw ( uno::RuntimeException )
 {
@@ -461,7 +454,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint
 //// -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -486,7 +479,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     sal_Int32 nColor = 0;
@@ -533,3 +526,4 @@ GridControlAccessibleElement::~GridControlAccessibleElement( )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

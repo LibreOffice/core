@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,22 +42,6 @@
 // forward ---------------------------------------------------------------
 
 class TabWin_Impl;
-
-// define ----------------------------------------------------------------
-
-// Bitfelder f"ur DisableControls()
-//CHINA001 #define TABTYPE_LEFT     0x0001
-//CHINA001 #define TABTYPE_RIGHT        0x0002
-//CHINA001 #define TABTYPE_CENTER       0x0004
-//CHINA001 #define TABTYPE_DEZIMAL      0x0008
-//CHINA001 #define TABTYPE_ALL          0x000F
-//CHINA001
-//CHINA001 #define TABFILL_NONE     0x0010
-//CHINA001 #define TABFILL_POINT        0x0020
-//CHINA001 #define TABFILL_DASHLINE     0x0040
-//CHINA001 #define TABFILL_SOLIDLINE    0x0080
-//CHINA001 #define TABFILL_SPECIAL      0x0100
-//CHINA001 #define TABFILL_ALL          0x01F0
 
 // class SvxTabulatorTabPage ---------------------------------------------
 /*
@@ -150,9 +135,10 @@ private:
     DECL_LINK( GetFillCharHdl_Impl, Edit* );
     DECL_LINK( GetDezCharHdl_Impl, Edit* );
 #endif
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void            PageCreated(SfxAllItemSet aSet);
 };
 
 #endif // #ifndef _SVX_TABSTPGE_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

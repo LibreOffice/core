@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,7 @@
 #include <tools/link.hxx>
 #include <svl/svarray.hxx>
 
-#include <vos/thread.hxx>
-
-#ifndef _STRING_LIST
-DECLARE_LIST( StringList, String * )
-#define _STRING_LIST
-#endif
+#include <osl/thread.hxx>
 #include <basic/process.hxx>
 
 class Process;
@@ -65,3 +61,4 @@ String GetHostConfig();
 sal_uLong GetTTPortConfig();
 sal_uLong GetUnoPortConfig();
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,8 @@
 #include <comphelper/property.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
+#include <sal/macros.h>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_FormOperations()
@@ -412,7 +414,7 @@ namespace frm
 
                 ::rtl::OUString sValue = ::rtl::OUString::valueOf( sal_Int32( nCount ) );
                 if ( !bFinalCount )
-                    sValue += ::rtl::OUString::createFromAscii( " *" );
+                    sValue += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" *") );
 
                 aState.State <<= sValue;
                 aState.Enabled = sal_True;
@@ -420,13 +422,13 @@ namespace frm
             break;
 
             default:
-                OSL_ENSURE( sal_False, "FormOperations::getState: unknown feature id!" );
+                OSL_FAIL( "FormOperations::getState: unknown feature id!" );
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormOperations::getState: caught an exception!" );
+            OSL_FAIL( "FormOperations::getState: caught an exception!" );
         }
 
         return aState;
@@ -469,7 +471,7 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
 
         if ( ( _nFeature != FormFeature::DeleteRecord ) && ( _nFeature != FormFeature::UndoRecordChanges ) )
@@ -546,7 +548,7 @@ namespace frm
                     m_xLoadableForm->reload();
 
                     // refresh all controls in the form (and sub forms) which can be refreshed
-                    // #i90914# / 2008-07-02 / frank.schoenheit@sun.com
+                    // #i90914#
                     ::comphelper::IndexAccessIterator aIter( m_xLoadableForm );
                     Reference< XInterface > xElement( aIter.Next() );
                     while ( xElement.is() )
@@ -648,7 +650,6 @@ namespace frm
 
             case FormFeature::MoveToInsertRow:
                 // move to the last row before moving to the insert row
-                // 21.01.2002 - 96480 - fs@openoffice.org
                 m_xCursor->last();
                 m_xUpdateCursor->moveToInsertRow();
                 break;
@@ -742,7 +743,7 @@ namespace frm
             return;
         }
 
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
 
         // at the moment we have only one feature which supports execution parameters
@@ -982,7 +983,7 @@ namespace frm
             }
             catch( Exception& )
             {
-                OSL_ENSURE( sal_False, "FormOperations::propertyChange: caught an exception while updating the parser!" );
+                OSL_FAIL( "FormOperations::propertyChange: caught an exception while updating the parser!" );
             }
             impl_invalidateAllSupportedFeatures_nothrow( aGuard );
         }
@@ -1123,7 +1124,7 @@ namespace frm
                 FormFeature::SaveRecordChanges,
                 FormFeature::UndoRecordChanges
             };
-            size_t nFeatureCount = sizeof( pModifyDependentFeatures ) / sizeof( pModifyDependentFeatures[ 0 ] );
+            size_t nFeatureCount = SAL_N_ELEMENTS( pModifyDependentFeatures );
             s_aModifyDependentFeatures = Sequence< sal_Int16 >( pModifyDependentFeatures, nFeatureCount );
         }
 
@@ -1180,7 +1181,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormOperations::impl_ensureInitializedParser_nothrow: caught an exception!" );
+            OSL_FAIL( "FormOperations::impl_ensureInitializedParser_nothrow: caught an exception!" );
         }
 
         m_bInitializedParser = true;
@@ -1209,7 +1210,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormOperations::impl_disposeParser_nothrow: caught an exception!" );
+            OSL_FAIL( "FormOperations::impl_disposeParser_nothrow: caught an exception!" );
         }
     }
 
@@ -1517,7 +1518,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoSort_throw: caught an exception while setting the parser properties!" );
+                OSL_FAIL( "FormOperations::impl_executeAutoSort_throw: caught an exception while setting the parser properties!" );
             }
 
 
@@ -1531,7 +1532,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoSort_throw: could not reset the form to it's original state!" );
+                    OSL_FAIL( "FormOperations::impl_executeAutoSort_throw: could not reset the form to it's original state!" );
                 }
 
             }
@@ -1590,7 +1591,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoFilter_throw: caught an exception while setting the parser properties!" );
+                OSL_FAIL( "FormOperations::impl_executeAutoFilter_throw: caught an exception while setting the parser properties!" );
             }
 
 
@@ -1605,7 +1606,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoFilter_throw: could not reset the form to it's original state!" );
+                    OSL_FAIL( "FormOperations::impl_executeAutoFilter_throw: could not reset the form to it's original state!" );
                 }
 
             }
@@ -1737,3 +1738,5 @@ namespace frm
 //........................................................................
 } // namespace frm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

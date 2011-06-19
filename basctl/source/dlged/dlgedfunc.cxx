@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -302,7 +303,7 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                         if ( pView->IsDragObj() )
                         {
-                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                            bool bWasNoSnap = rDragStat.IsNoSnap();
                             sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off
@@ -579,27 +580,8 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         if (pView->IsAction() )
         {
             pView->EndAction();
-            //if( bMarkAction )
-                //pParent->UnmarkDialog();
         }
     }
-
-//  sal_uInt16 nClicks = rMEvt.GetClicks();
-//  if (nClicks == 2)
-//  {
-//      if ( pView->AreObjectsMarked() )
-//      {
-//          const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-//
-//          if (rMarkList.GetMarkCount() == 1)
-//          {
-//              SdrMark* pMark = rMarkList.GetMark(0);
-//              SdrObject* pObj = pMark->GetMarkedSdrObj();
-//
-//              // edit objects here
-//          }
-//      }
-//  }
 
     bMarkAction = sal_False;
 
@@ -635,3 +617,5 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 }
 
 //----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

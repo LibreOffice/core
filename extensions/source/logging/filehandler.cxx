@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -190,7 +191,7 @@ namespace logging
             // check whether the log file already exists
             ::osl::DirectoryItem aFileItem;
             ::osl::DirectoryItem::get( m_sFileURL, aFileItem );
-            ::osl::FileStatus aStatus( FileStatusMask_Validate );
+            ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
             if ( ::osl::FileBase::E_None == aFileItem.getFileStatus( aStatus ) )
                 ::osl::File::remove( m_sFileURL );
 
@@ -207,7 +208,7 @@ namespace logging
                 sMessage.append( ::rtl::OString( m_sFileURL.getStr(), m_sFileURL.getLength(), osl_getThreadTextEncoding() ) );
                 sMessage.append( "\nerror code: " );
                 sMessage.append( (sal_Int32)res );
-                OSL_ENSURE( false, sMessage.makeStringAndClear() );
+                OSL_FAIL( sMessage.makeStringAndClear() );
             }
         #endif
             if ( m_eFileValidity == eValid )
@@ -439,3 +440,5 @@ namespace logging
 //........................................................................
 } // namespace logging
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

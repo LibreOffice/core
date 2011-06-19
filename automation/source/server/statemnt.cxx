@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,39 +36,19 @@
 #include <comphelper/uieventslogger.hxx>
 
 #include <tools/wintypes.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/menubtn.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svtools/brwbox.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _DOCKWIN_HXX //autogen
 #include <vcl/dockwin.hxx>
-#endif
-#ifndef _FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/menu.hxx>
@@ -93,12 +74,9 @@
 #include <tools/fsys.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ttprops.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/dispdefs.hxx>
 #include <basic/sbuno.hxx>
-#include <vos/socket.hxx>
 #include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
@@ -107,13 +85,12 @@
 #include "statemnt.hxx"
 #include "scmdstrm.hxx"
 
-#ifndef _RETSRTM_HXX
 #include "retstrm.hxx"
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
-#include "editwin.hxx"
+#  include "editwin.hxx"
 #endif
+
 #include "rcontrol.hxx"
 #include <automation/communi.hxx>
 #include "testtool.hxx"
@@ -130,10 +107,8 @@
 
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
-//using namespace com::sun::star::util; geht wegen Color nicht
 using namespace com::sun::star::beans;
 using namespace svt;
-//using namespace svt::table;
 
 
 #ifndef SBX_VALUE_DECL_DEFINED
@@ -152,9 +127,6 @@ Dir *StatementCommand::pDir = NULL;
 pfunc_osl_printDebugMessage StatementCommand::pOriginal_osl_DebugMessageFunc = NULL;
 
 
-#define RESET_APPLICATION_TO_BACKING_WINDOW
-
-
 #define SET_WINP_CLOSING(pWin) \
     pWindowWaitPointer = pWin; \
     aWindowWaitUId = pControl->GetUniqueOrHelpId(); \
@@ -163,7 +135,6 @@ pfunc_osl_printDebugMessage StatementCommand::pOriginal_osl_DebugMessageFunc = N
     pWin->SetHelpId( rtl::OString("TT_Win_is_closing_HID") ); \
     pWin->SetUniqueId( rtl::OString("TT_Win_is_closing_UID") );
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 StatementFlow::StatementFlow( StatementList *pAfterThis, sal_uInt16 nArtP )
 : nArt(nArtP)
@@ -190,17 +161,17 @@ StatementFlow::StatementFlow( sal_uLong nServiceId, SCmdStream *pCmdIn, ImplRemo
     pCmdIn->Read( nArt );
     pCmdIn->Read( nParams );
 
-    if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nSNr1 );
-    if( nParams & PARAM_ULONG_1 )   pCmdIn->Read( nLNr1 );
-    if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
-    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 ); // sollte nie auftreten!!
+    if( nParams & PARAM_UINT16_1 ) pCmdIn->Read( nSNr1 );
+    if( nParams & PARAM_UINT32_1 )  pCmdIn->Read( nLNr1 );
+    if( nParams & PARAM_STR_1 )    pCmdIn->Read( aString1 );
+    if( nParams & PARAM_BOOL_1 )   pCmdIn->Read( bBool1 );// Should NEVER happen
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading FlowControl: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nArt ) );
     m_pDbgWin->AddText( " Params:" );
-    if( nParams & PARAM_USHORT_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nSNr1 ) );}
-    if( nParams & PARAM_ULONG_1 )   {m_pDbgWin->AddText( " l1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
+    if( nParams & PARAM_UINT16_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nSNr1 ) );}
+    if( nParams & PARAM_UINT32_1 )   {m_pDbgWin->AddText( " l1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
     if( nParams & PARAM_STR_1 )     {m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
     if( nParams & PARAM_BOOL_1 )    {m_pDbgWin->AddText( " b2:" );m_pDbgWin->AddText( bBool1 ? "TRUE" : "FALSE" );}
     m_pDbgWin->AddText( "\n" );
@@ -214,19 +185,19 @@ void StatementFlow::SendViaSocket()
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "SendViaSocket called recursively. Aborted!!!\n" );
 #endif
-        DBG_ERROR("SendViaSocket called recursively. Aborted!!!");
+        OSL_FAIL("SendViaSocket called recursively. Aborted!!!");
         return;
     }
     bSending = sal_True;
     if ( pCommLink )
     {
-        if ( !pCommLink->TransferDataStream( pRet->GetStream() ) )  // tritt ein Fehler auf, so wird sofort gelöscht ...
+        if ( !pCommLink->TransferDataStream( pRet->GetStream() ) )  // tritt ein Fehler auf, so wird sofort gelï¿½scht ...
             pCommLink = NULL;
     }
     else
     {
         // Macht nix. Wenn das Basic nicht mehr da ist, ist sowiso alles egal
-        DBG_ERROR("Cannot send results to TestTool");
+        OSL_FAIL("Cannot send results to TestTool");
     }
 
     pRet->Reset();
@@ -289,9 +260,8 @@ sal_Bool StatementFlow::Execute()
         #endif
 
         break;
-//  case RET_:
     default:
-        DBG_ERROR( "Unknown Flowcontrol" );
+        OSL_FAIL( "Unknown Flowcontrol" );
         break;
     }
 
@@ -299,7 +269,6 @@ sal_Bool StatementFlow::Execute()
     return sal_True;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // neue Hilfsfunktion, die stetig erweitert werden muss
 static short ImpGetRType( Window *pWin )
@@ -349,19 +318,10 @@ static short ImpGetRType( Window *pWin )
         case WINDOW_WARNINGBOX:         nRT = C_WarningBox;     break;
         case WINDOW_ERRORBOX:           nRT = C_ErrorBox;       break;
         case WINDOW_QUERYBOX:           nRT = C_QueryBox;       break;
-#if 0 //ifndef VCL
-        case WINDOW_FILEDIALOG:         nRT = C_FileDlg;        break;
-        case WINDOW_PATHDIALOG:         nRT = C_PathDlg;        break;
-        case WINDOW_PRINTDIALOG:        nRT = C_PrintDlg;       break;
-        case WINDOW_PRINTERSETUPDIALOG: nRT = C_PrinterSetupDlg;break;
-        case WINDOW_COLORDIALOG:        nRT = C_ColorDlg;       break;
-#endif
         case WINDOW_TABDIALOG:          nRT = C_TabDlg;         break;
-//      case WINDOW_TABDIALOG:          nRT = C_SingleTabDlg;   break;
 
         case WINDOW_PATTERNBOX:         nRT = C_PatternBox;     break;
         case WINDOW_TOOLBOX:            nRT = C_ToolBox;        break;
-// Gibts nicht       case WINDOW_VALUESET:          nRT = C_ValueSet;       break;
         case WINDOW_CONTROL:            nRT = C_Control;        break;
         case WINDOW_OKBUTTON:           nRT = C_OkButton;       break;
         case WINDOW_CANCELBUTTON:       nRT = C_CancelButton;   break;
@@ -373,7 +333,6 @@ static short ImpGetRType( Window *pWin )
     return nRT;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 StatementSlot::StatementSlot( SCmdStream *pCmdIn )
 : pItemArr(NULL)
@@ -390,7 +349,7 @@ StatementSlot::StatementSlot( SCmdStream *pCmdIn )
     {
         switch ( pCmdIn->GetNextType() )
         {
-            case BinUSHORT: // use old calling method
+            case BinUINT16: // use old calling method
                 {
                     nAnzahl++;
                     pItemArr = new SfxPoolItem*[nAnzahl];
@@ -470,13 +429,13 @@ void StatementSlot::AddReferer()
     nAnzahl++;
     aArgs.realloc(nAnzahl);
     pArg = aArgs.getArray();
-    pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("Referer");
-    pArg[nAnzahl-1].Value <<= ::rtl::OUString::createFromAscii("private:user");
+    pArg[nAnzahl-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
+    pArg[nAnzahl-1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ));
 
     nAnzahl++;
     aArgs.realloc(nAnzahl);
     pArg = aArgs.getArray();
-    pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("SynchronMode");
+    pArg[nAnzahl-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SynchronMode" ));
     pArg[nAnzahl-1].Value <<= sal_Bool( sal_True );
 }
 
@@ -494,16 +453,6 @@ public:
     sal_Bool bDisposed;
     sal_Bool bEnabled;
 };
-/*
-struct FeatureStateEvent : public ::com::sun::star::lang::EventObject
-    ::com::sun::star::util::URL FeatureURL;
-    ::rtl::OUString FeatureDescriptor;
-    sal_Bool IsEnabled;
-    sal_Bool Requery;
-    ::com::sun::star::uno::Any State;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > Source;
-*/
 
 SlotStatusListener::SlotStatusListener()
 : bDisposed( sal_False )
@@ -513,11 +462,7 @@ SlotStatusListener::SlotStatusListener()
 // XStatusListener
 void SAL_CALL SlotStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-//    DBG_ERROR1("FeatureURL: %s", ByteString( String( Event.FeatureURL.Complete ), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-//    DBG_ERROR1("FeatureDescriptor: %s", ByteString( String( Event.FeatureDescriptor ), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
     bEnabled = Event.IsEnabled;
-//    DBG_ASSERT( Event.IsEnabled, "Not enabled" );
-//    DBG_ASSERT( !Event.Requery, "Requery" );
 }
 
 // XEventListener
@@ -696,9 +641,9 @@ sal_Bool StatementSlot::Execute()
 
 
 /*  Neues Verfahren ab 334!
-    Neue Methode zum einstellen, daß Modale Dialoge immer Asynchron aufgerufen werden
+    Neue Methode zum einstellen, daï¿½ Modale Dialoge immer Asynchron aufgerufen werden
     und echter Returnwert, ob Slot geklappt hat
-    und Testen ob Slot überhaupt durch UI aufgerufen werden kann        */
+    und Testen ob Slot ï¿½berhaupt durch UI aufgerufen werden kann        */
 
 
     SendProfile( SlotString( nFunctionId ) );
@@ -706,7 +651,6 @@ sal_Bool StatementSlot::Execute()
     return sal_True;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 StatementUnoSlot::StatementUnoSlot(SCmdStream *pIn)
 {
@@ -722,7 +666,6 @@ StatementUnoSlot::StatementUnoSlot(SCmdStream *pIn)
 
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 StatementCommand::StatementCommand( StatementList *pAfterThis, sal_uInt16 MethodId, sal_uInt16 Params, sal_uInt16 Nr1 )
 : nMethodId( MethodId )
@@ -731,12 +674,13 @@ StatementCommand::StatementCommand( StatementList *pAfterThis, sal_uInt16 Method
 , nNr2(0)
 , nNr3(0)
 , nNr4(0)
-, nLNr1(0)
 , aString1()
 , aString2()
 , bBool1(sal_False)
 , bBool2(sal_False)
 {
+    nLNr1_and_Pointer.pWindow = 0;
+
     QueStatement( pAfterThis );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -744,11 +688,11 @@ StatementCommand::StatementCommand( StatementList *pAfterThis, sal_uInt16 Method
     m_pDbgWin->AddText( " Methode: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nMethodId ) );
     m_pDbgWin->AddText( " Params:" );
-    if( nParams & PARAM_USHORT_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
-    if( nParams & PARAM_USHORT_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
-    if( nParams & PARAM_USHORT_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
-    if( nParams & PARAM_USHORT_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
-    if( nParams & PARAM_ULONG_1 )   {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
+    if( nParams & PARAM_UINT16_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
+    if( nParams & PARAM_UINT16_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
+    if( nParams & PARAM_UINT16_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
+    if( nParams & PARAM_UINT16_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
+    if( nParams & PARAM_UINT32_1 )  {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
     if( nParams & PARAM_STR_1 )     {m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
     if( nParams & PARAM_STR_2 )     {m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
     if( nParams & PARAM_BOOL_1 )    {m_pDbgWin->AddText( " b1:" );m_pDbgWin->AddText( bBool1 ? "TRUE" : "FALSE" );}
@@ -765,21 +709,22 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
 , nNr2(0)
 , nNr3(0)
 , nNr4(0)
-, nLNr1(0)
 , aString1()
 , aString2()
 , bBool1(sal_False)
 , bBool2(sal_False)
 {
+    nLNr1_and_Pointer.pWindow = 0;
+
     QueStatement( NULL );
     pCmdIn->Read( nMethodId );
     pCmdIn->Read( nParams );
 
-    if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nNr1 );
-    if( nParams & PARAM_USHORT_2 )  pCmdIn->Read( nNr2 );
-    if( nParams & PARAM_USHORT_3 )  pCmdIn->Read( nNr3 );
-    if( nParams & PARAM_USHORT_4 )  pCmdIn->Read( nNr4 );
-    if( nParams & PARAM_ULONG_1 )   pCmdIn->Read( nLNr1 );
+    if( nParams & PARAM_UINT16_1 )  pCmdIn->Read( nNr1 );
+    if( nParams & PARAM_UINT16_2 )  pCmdIn->Read( nNr2 );
+    if( nParams & PARAM_UINT16_3 )  pCmdIn->Read( nNr3 );
+    if( nParams & PARAM_UINT16_4 )  pCmdIn->Read( nNr4 );
+    if( nParams & PARAM_UINT32_1 )  pCmdIn->Read( nLNr1_and_Pointer.nLNr1 );
     if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
     if( nParams & PARAM_STR_2 )     pCmdIn->Read( aString2 );
     if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
@@ -790,11 +735,11 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
     m_pDbgWin->AddText( " Methode: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nMethodId ) );
     m_pDbgWin->AddText( " Params:" );
-    if( nParams & PARAM_USHORT_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
-    if( nParams & PARAM_USHORT_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
-    if( nParams & PARAM_USHORT_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
-    if( nParams & PARAM_USHORT_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
-    if( nParams & PARAM_ULONG_1 )   {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
+    if( nParams & PARAM_UINT16_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
+    if( nParams & PARAM_UINT16_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
+    if( nParams & PARAM_UINT16_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
+    if( nParams & PARAM_UINT16_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
+    if( nParams & PARAM_UINT32_1 )  {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
     if( nParams & PARAM_STR_1 )     {m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
     if( nParams & PARAM_STR_2 )     {m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
     if( nParams & PARAM_BOOL_1 )    {m_pDbgWin->AddText( " b1:" );m_pDbgWin->AddText( bBool1 ? "TRUE" : "FALSE" );}
@@ -808,7 +753,7 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
         m_pDbgWin->AddText( "*Deleting all Commands:\n" );
         #endif
         bReadingCommands = sal_False;
-        while ( StatementList::pFirst != this ) // Alles Löschen außer mich selbst
+        while ( StatementList::pFirst != this ) // Alles Lï¿½schen auï¿½er mich selbst
         {
             StatementList *pDeQue = StatementList::pFirst;
             pDeQue->Advance();
@@ -829,7 +774,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
         return;
 
     if ( bFirst )
-        pRet->GenReturn ( RET_WinInfo, rtl::OString(), (comm_ULONG)nConf | DH_MODE_DATA_VALID, UniString(), sal_True );
+        pRet->GenReturn ( RET_WinInfo, rtl::OString(), (comm_UINT32)nConf | DH_MODE_DATA_VALID, UniString(), sal_True );
 
     if ( bFirst )
     {
@@ -838,7 +783,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
             pBase = pBase->GetParent();
     }
 
-    {   // Klammerung, so daß der String nicht während der Rekursion bestehen bleibt
+    {   // Klammerung, so daï¿½ der String nicht wï¿½hrend der Rekursion bestehen bleibt
         String aName;
         sal_Bool bSkip = sal_False;
 
@@ -939,7 +884,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
             }
 
             rtl::OString aId = pBase->GetUniqueOrHelpId();
-            pRet->GenReturn ( RET_WinInfo, aId, (comm_ULONG)pBase->GetType(),
+            pRet->GenReturn ( RET_WinInfo, aId, (comm_UINT32)pBase->GetType(),
                 TypeString(pBase->GetType()).Append(aTypeSuffix).AppendAscii(": ").Append(aName), sal_False );
 
 
@@ -950,8 +895,6 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                 for ( i = 0; i < pTB->GetItemCount() ; i++ )
                 {
                     aName = String();
-//                  if ( aName.Len() == 0 )
-//                      aName = pTB->GetQuickHelpText();
                     if ( aName.Len() == 0 )
                         aName = pTB->GetHelpText( pTB->GetItemId( i ) );
                     if ( aName.Len() == 0 )
@@ -962,10 +905,10 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                     if ( pTB->GetItemType( i ) == TOOLBOXITEM_BUTTON && ( !pItemWin || !pItemWin->IsVisible() ) )
                     {
                         if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_ULONG)WINDOW_BUTTON,
+                            pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_UINT32)WINDOW_BUTTON,
                                 TypeString(WINDOW_BUTTON).AppendAscii(": ").Append(aName), sal_False );
                         if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_ULONG)WINDOW_BUTTON,
+                            pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_UINT32)WINDOW_BUTTON,
                                 TypeString(WINDOW_BUTTON).AppendAscii(": ").Append(aName), sal_False );
                     }
                     else
@@ -973,10 +916,10 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                         if ( pItemWin )
                         {
                             if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_ULONG)pItemWin->GetType(),
+                                pRet->GenReturn ( RET_WinInfo, Str2Id(pTB->GetItemCommand(pTB->GetItemId( i ))), (comm_UINT32)pItemWin->GetType(),
                                     TypeString(pItemWin->GetType()).AppendAscii(": ").Append(aName), sal_False );
                             if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_ULONG)pItemWin->GetType(),
+                                pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_UINT32)pItemWin->GetType(),
                                     TypeString(pItemWin->GetType()).AppendAscii(": ").Append(aName), sal_False );
                             sal_uInt16 ii;
                             for( ii = 0 ; ii < pItemWin->GetChildCount(); ii++ )
@@ -1005,13 +948,13 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                                     aToolBoxItemType.AssignAscii("TOOLBOXITEM_BREAK");
                                     break;
                                 default:
-                                    DBG_ERROR1( "Unknown TOOLBOXITEM %i", pTB->GetItemType( i ) );
+                                    OSL_TRACE( "Unknown TOOLBOXITEM %i", pTB->GetItemType( i ) );
                                 }
                                 if ( pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                    pRet->GenReturn ( RET_WinInfo, Str2Id( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_ULONG)WINDOW_BASE,
+                                    pRet->GenReturn ( RET_WinInfo, Str2Id( pTB->GetItemCommand(pTB->GetItemId( i )) ), (comm_UINT32)WINDOW_BASE,
                                         aToolBoxItemType.AppendAscii(": ").Append(aName), sal_False );
                                 if ( !pTB->GetItemCommand(pTB->GetItemId( i )).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                                    pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_ULONG)WINDOW_BASE,
+                                    pRet->GenReturn ( RET_WinInfo, pTB->GetHelpId(pTB->GetItemId( i )), (comm_UINT32)WINDOW_BASE,
                                         aToolBoxItemType.AppendAscii(": ").Append(aName), sal_False );
                             }
                         }
@@ -1062,7 +1005,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                             break;
                     }
 
-                    pRet->GenReturn ( RET_WinInfo, aID, (comm_ULONG)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),   // So daß der Text angezeigt wird!
+                    pRet->GenReturn ( RET_WinInfo, aID, (comm_UINT32)pBD->GetPushButton( pBD->GetButtonId(i) )->GetType(),  // So daï¿½ der Text angezeigt wird!
                         TypeString(pBD->GetPushButton( pBD->GetButtonId(i) )->GetType()).AppendAscii(": ").Append(aName)
                         .AppendAscii(" ButtonId = ").AppendAscii( aID.GetBuffer() ), sal_False );
                 }
@@ -1108,13 +1051,13 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                             aMenuItemType.AssignAscii("MENUITEM_DONTKNOW");
                             break;
                         default:
-                            DBG_ERROR1( "Unknown MENUITEM %i", pMenu->GetItemType( i ) );
+                            OSL_TRACE( "Unknown MENUITEM %i", pMenu->GetItemType( i ) );
                         }
                         if ( pMenu->GetItemCommand(nID).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, Str2Id( pMenu->GetItemCommand(nID) ), (comm_ULONG)0,
+                            pRet->GenReturn ( RET_WinInfo, Str2Id( pMenu->GetItemCommand(nID) ), (comm_UINT32)0,
                                 aMenuItemType.AppendAscii(": ").Append(aName), sal_False );
                         if ( !pMenu->GetItemCommand(nID).Len() || ( nConf & DH_MODE_ALLWIN ) )
-                            pRet->GenReturn ( RET_WinInfo, rtl::OString::valueOf( (sal_Int32)nID ), (comm_ULONG)0,
+                            pRet->GenReturn ( RET_WinInfo, rtl::OString::valueOf( (sal_Int32)nID ), (comm_UINT32)0,
                                 aMenuItemType.AppendAscii(": ").Append(aName), sal_False );
                     }
                 }
@@ -1164,8 +1107,7 @@ void SysWinContainer::Resize()
 {
     Size aSize( GetOutputSizePixel() );
     Resizing( aSize );
-//  aSize = pClientWin->GetSizePixel();
-//  aSize = pClientWin->CalcWindowSizePixel();
+
     if ( aSize != GetSizePixel() )
     {
         SetOutputSizePixel( aSize );
@@ -1246,7 +1188,6 @@ public:
     void ConfigSent() { bConfigChanged = sal_False; }
 
     sal_Bool IsSendData() { return GetItemState( TT_SEND_DATA ) == STATE_CHECK; }
-//  sal_Bool IsAllWin() { return GetItemState( TT_ALLWIN ) == STATE_CHECK; }
 
     sal_Bool IsDraging() { return bIsDraging; }
 
@@ -1310,8 +1251,6 @@ void DisplayHidWin::EnableButtons( sal_uLong nConf )
 
 void DisplayHidWin::Tracking( const TrackingEvent& rTEvt )
 {
-//  if ( nLastItemID == TT_SHOW && GetItemState( TT_SHOW ) == STATE_NOCHECK && ( rTEvt.IsTrackingEnded() || rTEvt.IsTrackingCanceled() ) )
-//      SetDraging( sal_False );
     if ( nLastItemID == TT_SHOW && GetItemState( TT_SHOW ) == STATE_NOCHECK )
         EndTracking( ENDTRACK_CANCEL );
     ToolBox::Tracking( rTEvt);
@@ -1428,21 +1367,21 @@ sal_Bool StatementCommand::DisplayHID()
         bBool2 = sal_True;              // Wir sind initialisiert.
         GetTTSettings()->pDisplayInstance = this;   // Und haben die Macht (Alle anderen beenden sich)
 
-        if ( !(nParams & PARAM_ULONG_1) )
+        if ( !(nParams & PARAM_UINT32_1) )
         {
-            if( GetTTSettings()->pDisplayHidWin )   // Nichts verändern
-                nLNr1 = GetTTSettings()->pDisplayHidWin->GetConfig();
+            if( GetTTSettings()->pDisplayHidWin )   // Nichts verï¿½ndern
+                nLNr1_and_Pointer.nLNr1 = GetTTSettings()->pDisplayHidWin->GetConfig();
             else    // Beim ersten Aufruf wollen wir alles richtig einstellen
-                nLNr1 = DH_MODE_KURZNAME | DH_MODE_LANGNAME;
+                nLNr1_and_Pointer.nLNr1 = DH_MODE_KURZNAME | DH_MODE_LANGNAME;
 
             if( ((nParams & PARAM_BOOL_1) && bBool1) )
-                nLNr1 |= DH_MODE_SEND_DATA;
+                nLNr1_and_Pointer.nLNr1 |= DH_MODE_SEND_DATA;
             else
-                nLNr1 &= ( ~DH_MODE_SEND_DATA );
+                nLNr1_and_Pointer.nLNr1 &= ( ~DH_MODE_SEND_DATA );
         }
 
         if ( GetTTSettings()->pDisplayHidWin )
-            GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1 );
+            GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1_and_Pointer.nLNr1 );
     }
 
     if ( GetTTSettings()->pDisplayInstance && GetTTSettings()->pDisplayInstance != this )
@@ -1457,8 +1396,8 @@ sal_Bool StatementCommand::DisplayHID()
         GetTTSettings()->aOriginalCaption = GetTTSettings()->pDisplayHidWin->GetText();
         GetTTSettings()->pDisplayHidWin->Show();
         if ( bBool1 )
-            nLNr1 |= DH_MODE_SEND_DATA;
-        GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1 );
+            nLNr1_and_Pointer.nLNr1 |= DH_MODE_SEND_DATA;
+        GetTTSettings()->pDisplayHidWin->SetConfig( nLNr1_and_Pointer.nLNr1 );
 
         GetTTSettings()->Old = NULL;
         GetTTSettings()->Act = NULL;
@@ -1511,7 +1450,6 @@ sal_Bool StatementCommand::DisplayHID()
 
 
             GetTTSettings()->Old = GetTTSettings()->Act;
-//          GetTTSettings()->Act = GetMouseWin();
             GetTTSettings()->Act = GetTTSettings()->pDisplayHidWin->LastMouseMoveWin();
 
             if ( !StatementList::WinPtrValid ( GetTTSettings()->Old ) )
@@ -1543,7 +1481,6 @@ sal_Bool StatementCommand::DisplayHID()
             }
             else if ( GetTTSettings()->Act )
             {
-//              SET_WIN(GetTTSettings()->Act);
                 // allow setting a HelpID manually (just enter the ID in the displayHID Window and terminate it by |
                 if ( GetTTSettings()->pDisplayHidWin->IsDisplayTextModified() && GetTTSettings()->pDisplayHidWin->GetDisplayText().GetTokenCount( '|' ) > 1 )
                 {
@@ -1551,20 +1488,16 @@ sal_Bool StatementCommand::DisplayHID()
                     GetTTSettings()->pDisplayHidWin->ClearDisplayTextModified();
                 }
             }
-/*          if ( Application::GetLastInputInterval() > 5000 )   // 5 Sekunden lang nix geschehen
-            {
-                GetTTSettings()->pDisplayHidWin->ToTop( TOTOP_NOGRABFOCUS );
-            }
-*/
-            if ( GetTTSettings()->pDisplayHidWin->IsSendData() /*&& bBool2*/ && GetTTSettings()->Act )
+
+            if ( GetTTSettings()->pDisplayHidWin->IsSendData() && GetTTSettings()->Act )
             {
                 if ( !StatementFlow::bSending )
-                {   // Normalerweise syncronisierung über Protokoll. Hier ist das aber asyncron!!!
+                {   // Normalerweise syncronisierung ï¿½ber Protokoll. Hier ist das aber asyncron!!!
                     WriteControlData( GetTTSettings()->Act, GetTTSettings()->pDisplayHidWin->GetConfig() );
                     new StatementFlow( this, F_EndCommandBlock );   // Kommando zum Senden erzeugen und in que eintragen
                 }
             }
-        }   //if ( GetTTSettings()->pDisplayHidWin->IsDraging() )
+        }
         else
         {
             if ( GetTTSettings()->Act )
@@ -1575,17 +1508,11 @@ sal_Bool StatementCommand::DisplayHID()
         }
 
         if ( pFirst == this )   // Sollte immer so sein, aber besser isses
-            if ( pNext )        // Befehle warten auf Ausführung
+            if ( pNext )        // Befehle warten auf Ausfï¿½hrung
             {                   // An Ende neu einsortieren
                 Advance();
                 QueStatement( NULL );
             }
-//          {                   // Ersten und 2. austauschen.
-//              pFirst = pNext;
-//              pNext = pNext->pNext;
-//              pFirst->pNext = this;
-//          }
-
     }
     else
     {
@@ -1608,9 +1535,6 @@ private:
     DECL_LINK( ShowInplace, Timer* );
 
     Timer InplaceTimer;
-
-//  virtual void MouseButtonUp( const MouseEvent& rMEvt );
-//  virtual void MouseMove( const MouseEvent& rMEvt );
 
     PushButton PushButtonTT_PB_NEXT;
     GroupBox GroupBoxTT_GB_TRANSLATION;
@@ -1737,7 +1661,6 @@ IMPL_LINK( TranslateWin, DoSelect, PushButton*, EMPTYARG )
 {
     if ( bSelecting )
     {
-//      ReleaseMouse();
         bSelecting = sal_False;
     }
     else
@@ -1745,7 +1668,6 @@ IMPL_LINK( TranslateWin, DoSelect, PushButton*, EMPTYARG )
         if ( TestChangedDataSaved() )
         {
             PushButtonTT_PB_RESTORE.Disable();
-//          CaptureMouse();
             bSelecting = sal_True;
         }
     }
@@ -1763,7 +1685,7 @@ IMPL_LINK( TranslateWin, DoRestore, PushButton*, EMPTYARG )
     sTT_E_NEW.SearchAndReplaceAll( CUniString("\\t"), CUniString("\t") );
 
     if ( StatementList::WinPtrValid( pTranslateWin ) && pTranslateWin->GetText().CompareTo( sTT_E_NEW ) == COMPARE_EQUAL )
-    {   // Im ersten schritt nur in der UI zurück
+    {   // Im ersten schritt nur in der UI zurï¿½ck
         pTranslateWin->SetText( sTT_E_OLD );
     }
     else
@@ -1852,14 +1774,8 @@ long TranslateWin::VCLEventHook( NotifyEvent& rEvt )
             }
             else if ( Act )
             {
-    //          SET_WIN(Act);
             }
-    /*      if ( Application::GetLastInputInterval() > 5000 )   // 5 Sekunden lang nix geschehen
-            {
-                ToTop();
-            }
-    */
-        }   //if ( bSelecting )
+        }
         else
         {
             if ( Act )
@@ -1893,7 +1809,6 @@ long TranslateWin::VCLEventHook( NotifyEvent& rEvt )
                 EditTT_E_COMMENT.Enable();
                 PushButtonTT_PB_ACCEPT.Enable();
             }
-    //      ReleaseMouse();
             bSelecting = sal_False;
         }
     }
@@ -2083,7 +1998,7 @@ void TranslateWin::EnableTranslation()
 void StatementCommand::Translate()
 {
     // Es wurde eine initale UniqueId mitgegeben. Dann nur die dopelten Shortcuts liefern
-    if( (nParams & PARAM_STR_1) && nLNr1 )
+    if( (nParams & PARAM_STR_1) && nLNr1_and_Pointer.nLNr1 )
     {
         String aDouble;
         Window *pWin = SearchTree( Str2Id( aString1 ) ,sal_False );
@@ -2109,7 +2024,6 @@ void StatementCommand::Translate()
         GetTTSettings()->bToTop = sal_False;
     }
 
-//  GetTTSettings()->pTranslateWin->GetWindow( WINDOW_OVERLAP )->Enable( sal_True, sal_True );
     GetTTSettings()->pTranslateWin->GetWindow( WINDOW_OVERLAP )->EnableInput( sal_True, sal_True );
 
     if ( GetTTSettings()->pTranslateWin->IsTranslationAvailable() )
@@ -2124,7 +2038,7 @@ void StatementCommand::Translate()
             if ( pTranslationWindow->GetType() == WINDOW_BORDERWINDOW && pTranslationWindow->GetWindow( WINDOW_CLIENT ) )
             {
                 Window* pNew = pTranslationWindow->GetWindow( WINDOW_CLIENT );
-                // Bei Dockingwindoes das kanze Geraffel von Docking Floating überspringen
+                // Bei Dockingwindoes das kanze Geraffel von Docking Floating ï¿½berspringen
                 while ( IsDialog( pNew ) && !pNew->GetUniqueOrHelpId().getLength() && pNew->GetChildCount() == 1 )
                     pNew = pNew->GetChild( 0 );
                 pTranslationWindow = pNew;
@@ -2204,8 +2118,8 @@ void StatementCommand::Translate()
 }
 
 Window* StatementCommand::GetNextOverlap( Window* pBase )
-{   // Findet irgendwelche Overlap-Fenster, die schließbar aussehen
-    // Eventuell muß noch die Auswahl verfeinert werden.
+{   // Findet irgendwelche Overlap-Fenster, die schlieï¿½bar aussehen
+    // Eventuell muï¿½ noch die Auswahl verfeinert werden.
 
     if ( pBase->GetType() != WINDOW_BORDERWINDOW )
         pBase = pBase->GetWindow( WINDOW_OVERLAP );
@@ -2238,7 +2152,7 @@ Window* StatementCommand::GetNextOverlap( Window* pBase )
 
 Window* StatementCommand::GetNextRecoverWin()
 {
-    // über die TopLevelWindows der App iterieren
+    // ï¿½ber die TopLevelWindows der App iterieren
     Window* pBase = Application::GetFirstTopLevelWindow();
     Window *pControl = NULL;
     Window* pMyFirstDocFrame = NULL;
@@ -2254,14 +2168,13 @@ Window* StatementCommand::GetNextRecoverWin()
             {
                 Window* pTB = pControl->GetChild( 0 );
                 if ( pControl->GetChildCount() == 1 && pTB->GetType() == WINDOW_TOOLBOX )
-//                  return pTB;
                     ;   // do not act on floating toolboxes #i38796
                 else
                     return pControl;
             }
 
             // dann das Fenster selbst Schliessen
-               // erstes DocWin überspringen
+               // erstes DocWin ï¿½berspringen
             // Assumption that Doc Windows are Borderwindows and ButtonDialog and such are not
             if ( pBase->IsVisible() && !IsFirstDocFrame( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
                 return pBase;
@@ -2272,11 +2185,9 @@ Window* StatementCommand::GetNextRecoverWin()
 
         pBase = Application::GetNextTopLevelWindow( pBase );
     }
-#ifdef RESET_APPLICATION_TO_BACKING_WINDOW
     // close the FirstDocFrame last, It will not be closed, but the Document inside will be closed.
     if ( IsDocWin( pMyFirstDocFrame ) )
         return pMyFirstDocFrame;
-#endif // def RESET_APPLICATION_TO_BACKING_WINDOW
 
     return NULL;
 }
@@ -2335,10 +2246,10 @@ sal_Bool StatementCommand::Execute()
         case RC_AppDelay:
             if ( !bBool1 )
             {
-                nLNr1 = Time().GetTime() + nNr1/10;
+                nLNr1_and_Pointer.nLNr1 = Time().GetTime() + nNr1/10;
                 bBool1 = sal_True;
             }
-            if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+            if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )    // Aktuelle Zeit kleiner Endzeit
                 return sal_False;
             break;
         case RC_DisplayHid:
@@ -2352,10 +2263,10 @@ sal_Bool StatementCommand::Execute()
                     nRetryCount = 150;      // das sollte reichen.
                     bBool1 = sal_True;          // Nur beim ersten mal!
                     nNr1 = 1;               // Welcher Button ist dran?
-                    nLNr1 = 0;              // Speichern des AppWin
+                    nLNr1_and_Pointer.pWindow = 0;              // Speichern des AppWin
                     aString1 = UniString(); // Liste der geschlossenen Fenster
 
-                    // So daß nacher auch wieder alles auf Default steht
+                    // So daï¿½ nacher auch wieder alles auf Default steht
                     nUseBindings = 0;
                     bCatchGPF = sal_True;
                     bUsePostEvents = sal_True;
@@ -2386,7 +2297,7 @@ sal_Bool StatementCommand::Execute()
                         short nRT = ImpGetRType( pControl );
 
                         if ( nRT == C_TabControl && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                        {   // Bei Tabcontrol den zugehörigen Tabdialog nehmen
+                        {   // Bei Tabcontrol den zugehï¿½rigen Tabdialog nehmen
                             pControl = pControl->GET_REAL_PARENT();
                             nRT = ImpGetRType( pControl );
                         }
@@ -2441,7 +2352,7 @@ sal_Bool StatementCommand::Execute()
                                             }
                                             nNr1++;
                                             break;
-                                        case 2:     // BUG 48239
+                                        case 2:
                                         case 1:
                                             if ( pBD->GetPushButton( BUTTONID_NO ) )
                                             {
@@ -2466,7 +2377,7 @@ sal_Bool StatementCommand::Execute()
                                     break;
                                 }
                             default:
-                                DBG_ERROR( "Unknown Windowtype" );
+                                OSL_FAIL( "Unknown Windowtype" );
                                 REPORT_WIN_CLOSEDc(pControl, "Unknown Windowtype");
                                 ReportError( GEN_RES_STR0( S_RESETAPPLICATION_FAILED_UNKNOWN ), pControl->GetType() );
                                 #if OSL_DEBUG_LEVEL > 1
@@ -2486,10 +2397,10 @@ sal_Bool StatementCommand::Execute()
                                 SET_WINP_CLOSING(pControl);
                                 ((DockingWindow*)pControl)->Close();
 
-                                // Eigentlich nur bei TaskWindows! Hoffen wir mal, daß keine anderen DockingWindows dazwischen hauen.
-                                if ( (Window*)nLNr1 != pControl )
-                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
-                                nLNr1 = (sal_uLong)pControl;
+                                // Eigentlich nur bei TaskWindows! Hoffen wir mal, daï¿½ keine anderen DockingWindows dazwischen hauen.
+                                if ( nLNr1_and_Pointer.pWindow != pControl )
+                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schlieï¿½en
+                                nLNr1_and_Pointer.pWindow = pControl;
 
                                 return sal_False;
                             }
@@ -2500,48 +2411,43 @@ sal_Bool StatementCommand::Execute()
                                     ||  (pControl->GetType() == WINDOW_WORKWINDOW)
                                     ||  (pControl->GetType() == WINDOW_BORDERWINDOW) ) )
                         {
-    //                      if ( pControl->GetStyle() & WB_CLOSEABLE )
+                            // Special handling for last Document; do not close the Frame, only the Document
+                            if ( GetDocWinCount() == 1 && IsDocFrame( pControl ) )
                             {
-#ifdef RESET_APPLICATION_TO_BACKING_WINDOW
-                                // Special handling for last Document; do not close the Frame, only the Document
-                                if ( GetDocWinCount() == 1 && IsDocFrame( pControl ) )
+                                if ( IsDocWin( pControl ) )
                                 {
-                                    if ( IsDocWin( pControl ) )
+                                    if ( GetDocFrameMenuBar( pControl ) )
                                     {
-                                        if ( GetDocFrameMenuBar( pControl ) )
+                                        MenuBar* pMenu = GetDocFrameMenuBar( pControl );
+                                        if ( pMenu->HasCloser() )
                                         {
-                                            MenuBar* pMenu = GetDocFrameMenuBar( pControl );
-                                            if ( pMenu->HasCloser() )
-                                            {
-                                                REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
-                                                SET_WINP_CLOSING(pControl);
+                                            REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
+                                            SET_WINP_CLOSING(pControl);
 
-                                                pMenu->GetCloserHdl().Call( pMenu );
+                                            pMenu->GetCloserHdl().Call( pMenu );
 
-                                                // nur bei TaskWindows!
-                                                if ( (Window*)nLNr1 != pControl )
-                                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
-                                                nLNr1 = (sal_uLong)pControl;
+                                            // nur bei TaskWindows!
+                                            if ( nLNr1_and_Pointer.pWindow != pControl )
+                                                nNr1 = 1;       // Zum durchprobieren der Buttons beim Schlieï¿½en
+                                            nLNr1_and_Pointer.pWindow = pControl;
 
-                                                return sal_False;
-                                            }
+                                            return sal_False;
                                         }
                                     }
                                 }
-                                else
-#endif // def RESET_APPLICATION_TO_BACKING_WINDOW
-                                {
-                                    REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
-                                    SET_WINP_CLOSING(pControl);
-                                    ((SystemWindow*)pControl)->Close();
+                            }
+                            else
+                            {
+                                REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
+                                SET_WINP_CLOSING(pControl);
+                                ((SystemWindow*)pControl)->Close();
 
-                                    // Eigentlich nur bei TaskWindows!
-                                    if ( (Window*)nLNr1 != pControl )
-                                        nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
-                                    nLNr1 = (sal_uLong)pControl;
+                                // Eigentlich nur bei TaskWindows!
+                                if ( nLNr1_and_Pointer.pWindow != pControl )
+                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schlieï¿½en
+                                nLNr1_and_Pointer.pWindow = pControl;
 
-                                    return sal_False;
-                                }
+                                return sal_False;
                             }
                         }
                     }
@@ -2550,10 +2456,10 @@ sal_Bool StatementCommand::Execute()
                 // E.g.: Floating toolbars on a Task which was hidden by another Task before
                 if ( !bBool2 )
                 {
-                    nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
+                    nLNr1_and_Pointer.nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
                     bBool2 = sal_True;
                 }
-                if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )    // Aktuelle Zeit kleiner Endzeit
                     return sal_False;
                 else
                     pRet->GenReturn ( RET_Value, nMethodId, aString1);
@@ -2561,21 +2467,21 @@ sal_Bool StatementCommand::Execute()
             break;
         case RC_WaitSlot:
             {
-                if ( ! (nParams & PARAM_USHORT_1) )
+                if ( ! (nParams & PARAM_UINT16_1) )
                     nNr1 = 1000;    // defaults to 1000 = 1 Sec.
                 if ( !bBool1 )
                 {
-                    nLNr1 = Time().GetTime() + nNr1/10;
+                    nLNr1_and_Pointer.nLNr1 = Time().GetTime() + nNr1/10;
                     bBool1 = sal_True;
                 }
 
                 if ( !bIsSlotInExecute )
-                    pRet->GenReturn ( RET_Value, nMethodId, comm_USHORT(CONST_WSFinished) );
+                    pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSFinished) );
                 else
                 {
-                    if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                    if ( Time().GetTime() < sal_Int32(nLNr1_and_Pointer.nLNr1) )    // Aktuelle Zeit kleiner Endzeit
                         return sal_False;
-                    pRet->GenReturn ( RET_Value, nMethodId, comm_USHORT(CONST_WSTimeout) );
+                    pRet->GenReturn ( RET_Value, nMethodId, comm_UINT16(CONST_WSTimeout) );
                 }
             }
             break;
@@ -2592,11 +2498,11 @@ sal_Bool StatementCommand::Execute()
         case RC_ResetApplication:
         case RC_WaitSlot:
 
-        case RC_AppAbort:       // Sofortiges Löschen aller Befehle
+        case RC_AppAbort:       // Sofortiges Lï¿½schen aller Befehle
             break;
         case RC_Assert:
             {
-                ByteString aAssertion( "Diese Assertion wurde vom Testtool per Befehl ausgelöst" );
+                ByteString aAssertion( "Diese Assertion wurde vom Testtool per Befehl ausgelï¿½st" );
                 aAssertion = ByteString( String( aAssertion, RTL_TEXTENCODING_MS_1252 ), RTL_TEXTENCODING_UTF8 );
                 DBG_ASSERT( !aString1.Len(), ByteString( aString1, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                 DBG_ASSERT(  aString1.Len(), aAssertion.GetBuffer() );
@@ -2625,8 +2531,6 @@ sal_Bool StatementCommand::Execute()
         {
             sal_Bool bWait = sal_False;
             ReportError( GEN_RES_STR0( S_NO_ACTIVE_WINDOW ) );
-//          if ( Application::GetAppWindow() )
-//              bWait = Application::GetAppWindow()->IsWait();
             pRet->GenReturn ( RET_Value, nMethodId, bWait );
             break;
         }
@@ -2679,10 +2583,10 @@ sal_Bool StatementCommand::Execute()
         case RC_Profile:
             //  Bei folgenden Parametern passiert folgendes:
             //  ein boolean=false                   Alles Profiling stoppen (Ergebnisse liefern)
-            //  ein boolean=true, 1-4 ints          Einteilung der Zeiten in Kästchen
+            //  ein boolean=true, 1-4 ints          Einteilung der Zeiten in Kï¿½stchen
             //  kein! boolean keine ints            loggen jeden Befehls
             //  kein! boolean 1 int                 loggen alle int Millisekunden
-            //  ein String                          wird in das Logfile übernommen(sonst passiert nichts)
+            //  ein String                          wird in das Logfile ï¿½bernommen(sonst passiert nichts)
             if( !(nParams & PARAM_BOOL_1) || bBool1 )
             {
                 if ( !pProfiler )
@@ -2691,7 +2595,7 @@ sal_Bool StatementCommand::Execute()
                     InitProfile();
                 }
 
-                if( !(nParams & PARAM_BOOL_1) && (nParams & PARAM_USHORT_1) )
+                if( !(nParams & PARAM_BOOL_1) && (nParams & PARAM_UINT16_1) )
                 {   // Autoprofiling: Profile nNr
                     if ( pProfiler->IsProfilingPerCommand() )
                     {
@@ -2699,27 +2603,27 @@ sal_Bool StatementCommand::Execute()
                     }
                     pProfiler->StartAutoProfiling( nNr1 );
 
-                    // Der Header ist abhängig vom Modus
+                    // Der Header ist abhï¿½ngig vom Modus
                     pRet->GenReturn( RET_ProfileInfo, 0, pProfiler->GetProfileHeader() );
                 }
-                else if ( nParams & PARAM_USHORT_1 )
+                else if ( nParams & PARAM_UINT16_1 )
                 {   // Partitioning initialisieren: Profile true [,nNr][,nNr][,nNr][,nNr]
-                    comm_ULONG nAnzahl=0;
-                    if ( nParams & PARAM_USHORT_1 ) { nAnzahl++; };
-                    if ( nParams & PARAM_USHORT_2 ) { nAnzahl++; };
-                    if ( nParams & PARAM_USHORT_3 ) { nAnzahl++; };
-                    if ( nParams & PARAM_USHORT_4 ) { nAnzahl++; };
+                    comm_UINT32 nAnzahl=0;
+                    if ( nParams & PARAM_UINT16_1 ) { nAnzahl++; };
+                    if ( nParams & PARAM_UINT16_2 ) { nAnzahl++; };
+                    if ( nParams & PARAM_UINT16_3 ) { nAnzahl++; };
+                    if ( nParams & PARAM_UINT16_4 ) { nAnzahl++; };
 
-                    // Hier werden die Parameter ans Testtool zurück übertragen.
-                    // Das ist zwar etwas eigenartig, aber ansonsten müsste man im Testtool
+                    // Hier werden die Parameter ans Testtool zurï¿½ck ï¿½bertragen.
+                    // Das ist zwar etwas eigenartig, aber ansonsten mï¿½sste man im Testtool
                     // die einfache Struktur der Remotebefehle aufbrechen.
                     pRet->GenReturn( RET_ProfileInfo, S_ProfileReset, nAnzahl );
 
                     // Und die einzelnen Grenzen
-                    if ( nParams & PARAM_USHORT_1 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder1, (comm_ULONG)nNr1 ); };
-                    if ( nParams & PARAM_USHORT_2 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder2, (comm_ULONG)nNr2 ); };
-                    if ( nParams & PARAM_USHORT_3 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder3, (comm_ULONG)nNr3 ); };
-                    if ( nParams & PARAM_USHORT_4 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder4, (comm_ULONG)nNr4 ); };
+                    if ( nParams & PARAM_UINT16_1 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder1, (comm_UINT32)nNr1 ); };
+                    if ( nParams & PARAM_UINT16_2 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder2, (comm_UINT32)nNr2 ); };
+                    if ( nParams & PARAM_UINT16_3 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder3, (comm_UINT32)nNr3 ); };
+                    if ( nParams & PARAM_UINT16_4 ) { pRet->GenReturn( RET_ProfileInfo, S_ProfileBorder4, (comm_UINT32)nNr4 ); };
 
                     pProfiler->StartPartitioning();
                 }
@@ -2737,7 +2641,7 @@ sal_Bool StatementCommand::Execute()
                     }
                     pProfiler->StartProfilingPerCommand();
 
-                    // Der Header ist abhängig vom Modus
+                    // Der Header ist abhï¿½ngig vom Modus
                     pRet->GenReturn( RET_ProfileInfo, 0, pProfiler->GetProfileHeader() );
                 }
             }
@@ -2755,7 +2659,7 @@ sal_Bool StatementCommand::Execute()
 
                     if ( pProfiler->IsPartitioning() )
                     {
-                        pRet->GenReturn( RET_ProfileInfo, S_ProfileDump, (comm_ULONG)0 );
+                        pRet->GenReturn( RET_ProfileInfo, S_ProfileDump, (comm_UINT32)0 );
                         pProfiler->StopPartitioning();
                     }
 
@@ -2853,13 +2757,13 @@ sal_Bool StatementCommand::Execute()
                 {
                     case RC_MenuGetItemCount:
                         {
-                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)nItemCount );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)nItemCount );
                         }
                         break;
                     case RC_MenuGetItemId:
                         {
                             if ( ValueOK( rtl::OString(), RcString( nMethodId ),nNr1,nItemCount) )
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pMenu->GetItemId(nPhysicalIndex-1) );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pMenu->GetItemId(nPhysicalIndex-1) );
                         }
                         break;
                     case RC_MenuGetItemPos:
@@ -2881,7 +2785,7 @@ sal_Bool StatementCommand::Execute()
                                     }
                                 }
                             }
-                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)(nLogicalPos+1) );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)(nLogicalPos+1) );
                         }
                         break;
                     case RC_MenuIsSeperator:
@@ -2998,8 +2902,6 @@ sal_Bool StatementCommand::Execute()
                             nErrorcode = aDir.GetError();
                             if ( !nErrorcode && !aDir.MakeDir() )
                                 nErrorcode = FSYS_ERR_UNKNOWN;
-//  Workaround für Bug 60693
-//                              nErrorcode = aDir.GetError();
                         }
                         break;
                     case RC_FileCopy:
@@ -3040,7 +2942,7 @@ sal_Bool StatementCommand::Execute()
                                 else
                                 {
                                     sal_uInt16 nFlags = 0;
-                                    if ( (nParams & PARAM_USHORT_1) )
+                                    if ( (nParams & PARAM_UINT16_1) )
                                         nDirFlags = nFlags = nNr1;
                                     else
                                         nDirFlags = nFlags = Sb_ATTR_HIDDEN | Sb_ATTR_SYSTEM | Sb_ATTR_DIRECTORY;
@@ -3076,7 +2978,7 @@ sal_Bool StatementCommand::Execute()
                                         break;
                                     }
                                     DirEntry aNextEntry=(*(pDir))[nDirPos++];
-                                    aPath = aNextEntry.GetName(); //Full();
+                                    aPath = aNextEntry.GetName();
                                     break;
                                 }
                             }
@@ -3085,60 +2987,6 @@ sal_Bool StatementCommand::Execute()
                                 pRet->GenReturn ( RET_Value, nMethodId, aPath );
                             }
 
-
-
-/* keep old Implementation for now
-                            // neues Verzeichnis einlesen
-                            if ( (nParams & PARAM_STR_1) )
-                            {
-                                if ( pDir )
-                                {
-                                    delete pDir;
-                                    pDir = NULL;
-                                }
-                                DirEntryKind aDirEntryKind = FSYS_KIND_FILE | FSYS_KIND_DIR;
-                                if ( (nParams & PARAM_USHORT_1) && nNr1 )
-                                {
-                                    if ( nNr1 & 16 )
-                                        aDirEntryKind = FSYS_KIND_DIR;
-                                    else
-                                        ReportError( GEN_RES_STR0( S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES ) );
-                                }
-
-                                DirEntry aEntry( aString1 );
-                                nErrorcode = aEntry.GetError();
-                                if ( !nErrorcode )
-                                {
-                                    nDirPos = 0;
-                                    FileStat aFS( aEntry );
-                                    if ( !aFS.IsKind( FSYS_KIND_WILD ) && !aFS.IsKind( FSYS_KIND_DIR ) && aEntry.Exists() )
-                                    {   // Sonderbehandlung für genau einen Eintrag
-                                        if ( !aFS.IsKind( FSYS_KIND_DIR ) && ( aDirEntryKind == FSYS_KIND_DIR ) )
-                                            pRet->GenReturn ( RET_Value, nMethodId, String() );
-                                        else
-                                            pRet->GenReturn ( RET_Value, nMethodId, (String)(aEntry.GetName()) );
-
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        pDir = new Dir( aEntry, aDirEntryKind );
-                                        nErrorcode = pDir->GetError();
-                                    }
-                                }
-                            }
-
-                            if ( !pDir )
-                                pDir = new Dir;
-
-                            if ( !nErrorcode && ValueOK( nMethodId, GEN_RES_STR0( S_NO_MORE_FILES ), nDirPos+1, pDir->Count()+1 ) )
-                            {
-                                if ( nDirPos == pDir->Count() )
-                                    pRet->GenReturn ( RET_Value, nMethodId, String() );
-                                else
-                                    pRet->GenReturn ( RET_Value, nMethodId, (String)((*pDir)[ nDirPos ].GetName()) );
-                                nDirPos++;
-                            }*/
                         }
                         break;
                     case RC_FileLen:
@@ -3148,7 +2996,7 @@ sal_Bool StatementCommand::Execute()
                             if ( FSYS_ERR_OK == nErrorcode )
                             {
                                 FileStat aFS( aFile );
-                                pRet->GenReturn ( RET_Value, nMethodId, static_cast<comm_ULONG>(aFS.GetSize()) ); //GetSize() sal_uLong != comm_ULONG on 64bit
+                                pRet->GenReturn ( RET_Value, nMethodId, static_cast<comm_UINT32>(aFS.GetSize()) ); //GetSize() sal_uLong != comm_UINT32 on 64bit
                                 nErrorcode = aFS.GetError();
                             }
                         }
@@ -3263,10 +3111,10 @@ sal_Bool StatementCommand::Execute()
                 {
                     bDoTypeKeysDelay = bBool1;
                 }
-                else if( nParams & PARAM_USHORT_1 )
+                else if( nParams & PARAM_UINT16_1 )
                 {
                     nMinTypeKeysDelay = nNr1;
-                    if( nParams & PARAM_USHORT_2 )
+                    if( nParams & PARAM_UINT16_2 )
                         nMaxTypeKeysDelay = nNr2;
                     else
                         nMaxTypeKeysDelay = nMinTypeKeysDelay;
@@ -3278,20 +3126,15 @@ sal_Bool StatementCommand::Execute()
         case RC_GetMouseStyle:
             {
                 Pointer aPointer;
-//              if ( DragManager::GetDragManager() )
-//                  aPointer = DragManager::GetDragManager()->GetDragPointer();
-//              else
+                Window *pActualWin = GetMouseWin();
+                if ( pActualWin )
+                    aPointer = pActualWin->GetPointer();
+                else
                 {
-                    Window *pActualWin = GetMouseWin();
-                    if ( pActualWin )
-                        aPointer = pActualWin->GetPointer();
-                    else
-                    {
-                        ReportError( GEN_RES_STR1( S_POINTER_OUTSIDE_APPWIN, RcString( nMethodId ) ) );
-                        aPointer = Pointer( POINTER_NULL );
-                    }
+                    ReportError( GEN_RES_STR1( S_POINTER_OUTSIDE_APPWIN, RcString( nMethodId ) ) );
+                    aPointer = Pointer( POINTER_NULL );
                 }
-                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)aPointer.GetStyle() );
+                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)aPointer.GetStyle() );
             }
             break;
         case RC_UnpackStorage:
@@ -3330,7 +3173,7 @@ sal_Bool StatementCommand::Execute()
         case RC_CloseSysDialog:
         case RC_ExistsSysDialog:
             {
-                if( (nParams & PARAM_USHORT_1) )
+                if( (nParams & PARAM_UINT16_1) )
                 {
                     Reference < ::com::sun::star::util::XCancellable > xPicker;
                     switch( nNr1 )
@@ -3401,12 +3244,12 @@ sal_Bool StatementCommand::Execute()
             break;
         case RC_GetDocumentCount :
             {
-                pRet->GenReturn ( RET_Value, nMethodId, (comm_USHORT)GetDocWinCount() );
+                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT16)GetDocWinCount() );
             }
             break;
         case RC_ActivateDocument :
             {
-                if( nParams & PARAM_USHORT_1 )
+                if( nParams & PARAM_UINT16_1 )
                 {
                     if ( ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, GetDocWinCount() ) )
                     {
@@ -3424,7 +3267,7 @@ sal_Bool StatementCommand::Execute()
             break;
         case RC_GetSystemLanguage :
             {
-                pRet->GenReturn ( RET_Value, nMethodId, (comm_USHORT)Application::GetSettings().GetLanguage() );
+                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT16)Application::GetSettings().GetLanguage() );
             }
             break;
         case RC_CatchGPF :
@@ -3468,9 +3311,9 @@ sal_Bool StatementCommand::UnpackStorage( SotStorageRef xStorage, DirEntry &aBas
     SvStorageInfoList aList;
     xStorage->FillInfoList( &aList );
 
-    for( sal_uInt16 i = 0; i < aList.Count(); i++ )
+    for( size_t i = 0; i < aList.size(); i++ )
     {
-        SvStorageInfo& rInfo = aList.GetObject( i );
+        SvStorageInfo& rInfo = aList[ i ];
         String aName = rInfo.GetName();
         DirEntry aPath ( aBaseDir );
         aPath += DirEntry( aName );
@@ -3507,8 +3350,6 @@ sal_Bool StatementCommand::UnpackStorage( SotStorageRef xStorage, DirEntry &aBas
 }
 
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 StatementControl::StatementControl( SCmdStream *pCmdIn, sal_uInt16 nControlIdType )
 : StatementList()
 , nNr1( 0 )
@@ -3525,7 +3366,7 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, sal_uInt16 nControlIdTyp
     //HELPID BACKWARD (SIControl is no longer needed)
     if ( nControlIdType == SIControl )
     {
-        comm_ULONG nId;
+        comm_UINT32 nId;
         pCmdIn->Read( nId );
         aUId = rtl::OString( nId );
         if ( nId == 0 )
@@ -3541,17 +3382,17 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, sal_uInt16 nControlIdTyp
     }
     else
     {
-        DBG_ERROR( "Wrong ControlType" );
+        OSL_FAIL( "Wrong ControlType" );
     }
 
     pCmdIn->Read( nMethodId );
     pCmdIn->Read( nParams );
 
-    if( nParams & PARAM_USHORT_1 )  pCmdIn->Read( nNr1 );
-    if( nParams & PARAM_USHORT_2 )  pCmdIn->Read( nNr2 );
-    if( nParams & PARAM_USHORT_3 )  pCmdIn->Read( nNr3 );
-    if( nParams & PARAM_USHORT_4 )  pCmdIn->Read( nNr4 );
-    if( nParams & PARAM_ULONG_1 )   pCmdIn->Read( nLNr1 );
+    if( nParams & PARAM_UINT16_1 )  pCmdIn->Read( nNr1 );
+    if( nParams & PARAM_UINT16_2 )  pCmdIn->Read( nNr2 );
+    if( nParams & PARAM_UINT16_3 )  pCmdIn->Read( nNr3 );
+    if( nParams & PARAM_UINT16_4 )  pCmdIn->Read( nNr4 );
+    if( nParams & PARAM_UINT32_1 )  pCmdIn->Read( nLNr1 );
     if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
     if( nParams & PARAM_STR_2 )     pCmdIn->Read( aString2 );
     if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
@@ -3563,15 +3404,13 @@ StatementControl::StatementControl( SCmdStream *pCmdIn, sal_uInt16 nControlIdTyp
     m_pDbgWin->AddText( " Methode: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nMethodId ) );
     m_pDbgWin->AddText( " Params:" );
-    if( nParams & PARAM_USHORT_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
-    if( nParams & PARAM_USHORT_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
-    if( nParams & PARAM_USHORT_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
-    if( nParams & PARAM_USHORT_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
-    if( nParams & PARAM_ULONG_1 )   {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
+    if( nParams & PARAM_UINT16_1 )  {m_pDbgWin->AddText( " n1:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr1 ) );}
+    if( nParams & PARAM_UINT16_2 )  {m_pDbgWin->AddText( " n2:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr2 ) );}
+    if( nParams & PARAM_UINT16_3 )  {m_pDbgWin->AddText( " n3:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr3 ) );}
+    if( nParams & PARAM_UINT16_4 )  {m_pDbgWin->AddText( " n4:" );m_pDbgWin->AddText( String::CreateFromInt32( nNr4 ) );}
+    if( nParams & PARAM_UINT32_1 )  {m_pDbgWin->AddText( " nl1:" );m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );}
     if( nParams & PARAM_STR_1 )     {m_pDbgWin->AddText( " s1:" );m_pDbgWin->AddText( aString1 );}
     if( nParams & PARAM_STR_2 )     {m_pDbgWin->AddText( " s2:" );m_pDbgWin->AddText( aString2 );}
-/*    if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
-    if( nParams & PARAM_BOOL_2 )    pCmdIn->Read( bBool2 );*/
     m_pDbgWin->AddText( "\n" );
 #endif
 }
@@ -3610,10 +3449,8 @@ sal_Bool IsDialog(Window *pWin)
 
 
             return sal_True;
-//          break;
         default:
             return sal_False;
-//          break;
     }
 }
 
@@ -3776,7 +3613,7 @@ void StatementControl::AnimateMouse( Window *pControl, Point aWohin )
     aDiff /= nSteps;
 
     StatementList::bExecuting = sal_True;       // Bah ist das ein ekliger Hack
-                                                // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
+                                                // Das verhindert, daï¿½ schon der nï¿½chste Befehl ausgefï¿½hrt wird.
 
     for ( ; nSteps ; nSteps-- )
     {
@@ -3803,7 +3640,7 @@ sal_Bool StatementControl::MaybeDoTypeKeysDelay( Window *pTestWindow )
         aTimer.SetTimeout( nTimeWait );
         aTimer.Start();
         StatementList::bExecuting = sal_True;       // Bah ist das ein ekliger Hack
-                                                    // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
+                                                    // Das verhindert, daï¿½ schon der nï¿½chste Befehl ausgefï¿½hrt wird.
         while ( aTimer.IsActive() )
         {
             SafeReschedule( sal_True );
@@ -3832,11 +3669,11 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             break;
         case M_GetPosX:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3844,18 +3681,18 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             {
                 Point aPos = pControl->GetPosPixel();
                 aPos = pControl->GET_REAL_PARENT()->OutputToScreenPixel( aPos );
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)aPos.X() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)aPos.X() );
             }
             else
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetPosPixel().X() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetPosPixel().X() );
             break;
         case M_GetPosY:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3863,43 +3700,43 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             {
                 Point aPos = pControl->GetPosPixel();
                 aPos = pControl->GET_REAL_PARENT()->OutputToScreenPixel( aPos );
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)aPos.Y() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)aPos.Y() );
             }
             else
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetPosPixel().Y() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetPosPixel().Y() );
             break;
         case M_GetSizeX:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
-            pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetSizePixel().Width() );
+            pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetSizePixel().Width() );
             break;
         case M_GetSizeY:
             if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r FloatingWindows
             if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r TabDialoge
             if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r Border
             if ( (nParams & PARAM_BOOL_1) && bBool1 )
                 pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
-            pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetSizePixel().Height() );
+            pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetSizePixel().Height() );
             break;
         case M_SnapShot:
             {
                 if ( pControl->GetType() == WINDOW_DOCKINGWINDOW && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
-                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für FloatingWindows
+                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r FloatingWindows
                 if ( pControl->GetType() == WINDOW_TABCONTROL && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
-                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für TabDialoge
+                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r TabDialoge
                 if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_BORDERWINDOW )
-                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung für Border
+                    pControl = pControl->GET_REAL_PARENT();     // Sonderbehandlung fï¿½r Border
                 if ( (nParams & PARAM_BOOL_1) && bBool1 )
                     pControl = pControl->GetWindow( WINDOW_OVERLAP );
 
@@ -3907,12 +3744,12 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
                 if ( pControl->GetType() == WINDOW_WORKWINDOW )
                 {
                     Point aStart = pControl->GetPosPixel();
-                    if ( !(nParams & PARAM_USHORT_4) )
+                    if ( !(nParams & PARAM_UINT16_4) )
                     {
-                        nParams |= PARAM_USHORT_1;
-                        nParams |= PARAM_USHORT_2;
-                        nParams |= PARAM_USHORT_3;
-                        nParams |= PARAM_USHORT_4;
+                        nParams |= PARAM_UINT16_1;
+                        nParams |= PARAM_UINT16_2;
+                        nParams |= PARAM_UINT16_3;
+                        nParams |= PARAM_UINT16_4;
                         nNr1 = (sal_uInt16)-aStart.X();
                         nNr2 = (sal_uInt16)-aStart.Y();
                         nNr3 = (sal_uInt16)pControl->GetSizePixel().Width() + 2*(sal_uInt16)aStart.X();
@@ -3923,7 +3760,7 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
                     nNr3 = std::min((sal_uInt16)(pControl->GetSizePixel().Width() + 2*(sal_uInt16)aStart.X()),nNr3);
                     nNr4 = std::min((sal_uInt16)(pControl->GetSizePixel().Height() + 2*(sal_uInt16)aStart.Y()),nNr4);
                 }
-                if( nParams & PARAM_USHORT_4 )
+                if( nParams & PARAM_UINT16_4 )
                 {   // Zuschneiden
                     Point aPt(-nNr1,-nNr2);
                     Size aSz(nNr3,nNr4);
@@ -3949,7 +3786,7 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
             break;
         case M_GetFixedText:
             {
-                if( ( nParams & PARAM_USHORT_1 ) == 0 )
+                if( ( nParams & PARAM_UINT16_1 ) == 0 )
                     nNr1 = 1;
 
                 FixedText* pFixedText = (FixedText*)GetWinByRT( pControl, WINDOW_FIXEDTEXT, sal_True, nNr1-1 );
@@ -3970,9 +3807,9 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
 
 sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
 {
-    switch( nMethodId )     // Diese können an jedem Window ausgeführt werden
+    switch( nMethodId )     // Diese kï¿½nnen an jedem Window ausgefï¿½hrt werden
     {
-        case M_Exists:          // Oben schon Behandelt. Unterdrückt hier nur Fehler
+        case M_Exists:          // Oben schon Behandelt. Unterdrï¿½ckt hier nur Fehler
         case M_NotExists:
         case M_IsEnabled:
         case M_IsVisible:
@@ -3988,12 +3825,12 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
             break;
         case M_GetRT:
             {
-                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pControl->GetType() );
+                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pControl->GetType() );
             }
             break;
         case M_TypeKeys:
             {
-                if( !(nParams & PARAM_USHORT_1) )   // Anzahl wiederholungen
+                if( !(nParams & PARAM_UINT16_1) )   // Anzahl wiederholungen
                     nNr1 = 1;
                 if( !(nParams & PARAM_BOOL_1) )     // Follow Focus
                     bBool1 = sal_False;     // so bleibt das bisherige Verhalten
@@ -4119,7 +3956,7 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
 
 #define CalcMouseButton\
     sal_uInt16 nButton = MOUSE_LEFT;\
-    if ( (nParams & PARAM_USHORT_3) )\
+    if ( (nParams & PARAM_UINT16_3) )\
     {\
         switch ( nNr3 )\
         {\
@@ -4135,11 +3972,9 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                 Size aS = pControl->GetOutputSizePixel();
                 Point aPos = Point(aS.Width() * nNr1 / 100,aS.Height() * nNr2 / 100);
                 Window *pActualWin = pControl->FindWindow( aPos );
-//                  AnimateMouse( pControl, aPos );
 
                 if ( pActualWin )
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 else
                     pActualWin = pControl;
 
@@ -4158,12 +3993,10 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
 
                 if ( pActualWin )
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 else
                     pActualWin = pControl;
 
                 AnimateMouse( pActualWin, aPos );
-//                  pActualWin->GrabFocus();
                 MouseEvent aMEvt( aPos, 1, MOUSE_SIMPLECLICK|MOUSE_SELECT, nButton );
                 ImplMouseButtonUp( pActualWin, aMEvt );
             }
@@ -4178,13 +4011,11 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                 if ( pActualWin )
                 {
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 }
                 else
                     pActualWin = pControl;
 
                 AnimateMouse( pActualWin, aPos );
-//                  pActualWin->GrabFocus();
                 MouseEvent aMEvt( aPos, 0, MOUSE_SIMPLEMOVE|MOUSE_DRAGMOVE, nButton );
                 ImplMouseMove( pActualWin, aMEvt );
             }
@@ -4199,7 +4030,6 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                 if ( pActualWin )
                 {
                     aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-//                  aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                 }
                 else
                     pActualWin = pControl;
@@ -4222,7 +4052,7 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
 
                 Edit *pMyEd = new Edit(pDlg,WB_CENTER | WB_BORDER );
                 pMyEd->SetSizePixel(Size(100,30));
-                pDlg->SetText(UniString("Schließen", RTL_TEXTENCODING_ISO_8859_1));
+                pDlg->SetText(UniString("Schlieï¿½en", RTL_TEXTENCODING_ISO_8859_1));
                 pDlg->Show();
                 pMyEd->Show();
                 sal_uLong nTime = Time().GetTime();
@@ -4256,10 +4086,6 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                 if ( (pControl->GetType() == WINDOW_TOOLBOX) && pTB->IsMenuEnabled() )
                 {
                     pTB->ExecuteCustomMenu();
-/*                    Rectangle aRect = pTB->GetMenubuttonRect();
-                    AnimateMouse( pControl, aRect.Center() );
-                    MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                    ImplMouseButtonDown( pTB, aMEvnt );*/
                 }
                 else
                 {
@@ -4272,7 +4098,6 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                         if ( pActualWin )
                         {
                             aPos = pActualWin->AbsoluteScreenToOutputPixel( pControl->OutputToAbsoluteScreenPixel ( aPos ) );
-    //                      aPos = pActualWin->ScreenToOutputPixel( pControl->OutputToScreenPixel ( aPos ) );
                             pControl = pActualWin;
                         }
                     }
@@ -4304,7 +4129,7 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
         case M_IsPin:
             {
                 WindowAlign aWindowAlign = WINDOWALIGN_LEFT;
-                if ( (nParams & PARAM_USHORT_1) )
+                if ( (nParams & PARAM_UINT16_1) )
                 {
                     switch ( nNr1 )
                     {
@@ -4338,12 +4163,8 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                     break;
                 }
 
-                pControl = pTemp;   // So daß wir unten ohne Fehler durchkommen
+                pControl = pTemp;   // So daï¿½ wir unten ohne Fehler durchkommen
                 SplitWindow *pSW = (SplitWindow*) pTemp;
-
-//  Rectangle           GetAutoHideRect() const;
-//  Rectangle           GetFadeInRect() const;
-//  Rectangle           GetFadeOutRect() const;
 
                 switch( nMethodId )
                 {
@@ -4365,7 +4186,6 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                             ImplMouseButtonDown( pControl, aMEvnt, FORCE_DIRECT_CALL );
                             ImplMouseButtonUp  ( pControl, aMEvnt, FORCE_DIRECT_CALL );
                         }
-//                              pSW->AutoHide();
                         break;
                     case M_IsFadeIn:
                         pRet->GenReturn ( RET_Value, aUId, pSW->IsFadeOutButtonVisible() );
@@ -4401,7 +4221,7 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                 {
                     case M_StatusGetText:
                         {
-                            if ( (nParams & PARAM_USHORT_1) )
+                            if ( (nParams & PARAM_UINT16_1) )
                             {
                                 if ( pStatus->AreItemsVisible() )
                                     pRet->GenReturn ( RET_Value, aUId, String(pStatus->GetItemText(nNr1)));
@@ -4433,13 +4253,13 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
                         break;
                     case M_StatusGetItemCount:
                         if ( pStatus->AreItemsVisible() )
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pStatus->GetItemCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pStatus->GetItemCount()));
                         else
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                         break;
                     case M_StatusGetItemId:
                         if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pStatus->GetItemCount()) )
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pStatus->GetItemId(nNr1-1)));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pStatus->GetItemId(nNr1-1)));
                         break;
                 }
             }
@@ -4447,13 +4267,13 @@ sal_Bool StatementControl::HandleCommonMethods( Window *pControl )
         case M_HasScrollBar:
         case M_IsScrollBarEnabled:
             {
-                if ( (nParams | PARAM_USHORT_1) != PARAM_USHORT_1 )     // so there are other params
+                if ( (nParams | PARAM_UINT16_1) != PARAM_UINT16_1 )     // so there are other params
                 {
                     ReportError( aUId, GEN_RES_STR0( S_INVALID_PARAMETERS ) );
                     break;
                 }
 
-                if( !(nParams & PARAM_USHORT_1) )
+                if( !(nParams & PARAM_UINT16_1) )
                     nNr1 = CONST_ALIGN_RIGHT;       // default is right Scrollbar(vertical)
 
                 if ( (nNr1 != CONST_ALIGN_RIGHT) && (nNr1 != CONST_ALIGN_BOTTOM) )
@@ -4536,7 +4356,7 @@ sal_Bool StatementControl::Execute()
     else
     {
         sal_Bool bSearchButtonOnToolbox = (nParams == PARAM_NONE) && ((M_Click == nMethodId) || (M_TearOff == nMethodId) || (M_IsEnabled == nMethodId) || (M_OpenMenu == nMethodId));
-        bSearchButtonOnToolbox |= (nParams == PARAM_USHORT_1) && (M_GetState == nMethodId);
+        bSearchButtonOnToolbox |= (nParams == PARAM_UINT16_1) && (M_GetState == nMethodId);
         if ( nMethodId == M_TypeKeys || nMethodId == M_MouseDown
             || nMethodId == M_MouseUp || nMethodId ==  M_MouseMove
             || nMethodId == M_SnapShot )
@@ -4581,17 +4401,17 @@ sal_Bool StatementControl::Execute()
             {
                 bBool2 = sal_True;
                 nNr2 = aSeconds;
-                if( !(nParams & PARAM_USHORT_1) )
-                    nNr1 = 0;       // defaultmäßig sofort zurück
+                if( !(nParams & PARAM_UINT16_1) )
+                    nNr1 = 0;       // defaultmï¿½ï¿½ig sofort zurï¿½ck
             }
             if ( aSeconds < nNr2 )          // Falls die Stunde umgesprungen ist
                 aSeconds += 60*60;
 
-            if ( /* !IsAccessable(pControl)#87019# */ !pControl || !pControl->IsVisible() )
+            if ( !pControl || !pControl->IsVisible() )
                 pControl = NULL;
             if ( ((nMethodId == M_Exists) && pControl) ||
                  ((nMethodId == M_NotExists) && !pControl) )
-            {   // Wenn Bedingung erfüllt
+            {   // Wenn Bedingung erfï¿½llt
                 pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)sal_True );
             }
             else
@@ -4603,7 +4423,6 @@ sal_Bool StatementControl::Execute()
             Advance();
             delete this;
             return sal_True;
-//          break;
     }
 
 
@@ -4621,8 +4440,6 @@ sal_Bool StatementControl::Execute()
 
     if (   nRT == C_Window &&       // Search for WorkWindow to satisfy these commands
          ( nMethodId == M_Close
-//      || nMethodId == M_Size
-//      || nMethodId == M_Move
         || nMethodId == M_IsMax
         || nMethodId == M_IsMin
         || nMethodId == M_IsRestore
@@ -4661,11 +4478,10 @@ sal_Bool StatementControl::Execute()
         // TODO: handle GetFocus for all Methods and Windows like this (remove part below)
         //       See for impact of changed focus for HandleVisibleControls() (taking Snapshots might be different, possible exclude those methods)
         if (( (nRT == C_TreeListBox) && !bBool2 )
-            && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
+            && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewï¿½nscht
             && nMethodId != M_MouseDown
             && nMethodId != M_MouseUp
-            && nMethodId != M_MouseMove
-            /*&& nMethodId != M_MouseDoubleClick*/ )
+            && nMethodId != M_MouseMove )
         {
             if ( !pControl->HasFocus() )
             {
@@ -4703,22 +4519,12 @@ sal_Bool StatementControl::Execute()
               || nRT == C_TreeListBox
              )
             || nMethodId == M_OpenContextMenu )
-            && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewünscht
+            && nMethodId != M_TypeKeys          // TypeKeys macht das selbst, falls eigenes Focushandling gewï¿½nscht
             && nMethodId != M_MouseDown
             && nMethodId != M_MouseUp
-            && nMethodId != M_MouseMove
-            /*&& nMethodId != M_MouseDoubleClick*/ )
+            && nMethodId != M_MouseMove )
             pControl->GrabFocus();
 
-/*  leads to problems because settext sets the text whereas typekeys adds to the text.
-        if ( bDoTypeKeysDelay && nMethodId == M_SetText && ( nParams & PARAM_STR_1 ) )
-        {   // Hier wird das Statement auf ein TypeKeys umgebogen
-            nMethodId = M_TypeKeys;
-            nParams = PARAM_BOOL_1 | PARAM_STR_1;
-            bBool1 = sal_True;
-            pControl->GrabFocus();
-        }
-*/
         if ( !HandleCommonMethods( pControl ) )
         {
             switch( nRT )
@@ -4727,16 +4533,16 @@ sal_Bool StatementControl::Execute()
                     switch( nMethodId )
                     {
                         case M_GetPageId:
-                            if ( (nParams & PARAM_USHORT_1) )
+                            if ( (nParams & PARAM_UINT16_1) )
                             {
                                 if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((TabControl*)pControl)->GetPageCount() ) )
-                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)((TabControl*)pControl)->GetPageId(nNr1-1));
+                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)((TabControl*)pControl)->GetPageId(nNr1-1));
                             }
                             else
-                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)((TabControl*)pControl)->GetCurPageId());
+                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)((TabControl*)pControl)->GetCurPageId());
                             break;
                         case M_GetPageCount:
-                            pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)((TabControl*)pControl)->GetPageCount());
+                            pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)((TabControl*)pControl)->GetPageCount());
                             break;
                         case M_SetPageId:
                             if (((TabControl*)pControl)->GetCurPageId())
@@ -4763,10 +4569,9 @@ sal_Bool StatementControl::Execute()
                                 sal_uInt16 i,anz;
                                 rtl::OString aID;
                                 rtl::OString aWantedID;
-                                //HELPID BACKWARD (No numbers please (remove PARAM_ULONG_1 part)
-                                if ( (nParams & PARAM_ULONG_1) )
+                                //HELPID BACKWARD (No numbers please (remove PARAM_UINT32_1 part)
+                                if ( (nParams & PARAM_UINT32_1) )
                                 {
-                                    //aWantedID = rtl::OString( nLNr1 );
                                     ReportError( aUId, GEN_RES_STR1c( S_INTERNAL_ERROR, "using numeric HelpID from old Testtool" ) );
                                 }
                                 else if ( (nParams & PARAM_STR_1) )
@@ -4780,10 +4585,6 @@ sal_Bool StatementControl::Execute()
                                 for ( anz=0 ; anz < pTControl->GetPageCount() && !aID.equals( aWantedID ) ; anz++ )
                                 {
                                     pTControl->SelectTabPage( pTControl->GetPageId(i) );
-                                    /*if (pTControl->GetCurPageId())
-                                        pTControl->DeactivatePage();
-                                    pTControl->SetCurPageId( pTControl->GetPageId(i) );
-                                    pTControl->ActivatePage();*/
                                     aID = pTControl->GetTabPage(pTControl->GetCurPageId())->GetUniqueOrHelpId();
                                     i++;
                                     if ( i >= pTControl->GetPageCount() )
@@ -4794,10 +4595,6 @@ sal_Bool StatementControl::Execute()
                                 if ( !aID.equals( aWantedID ) )
                                 {
                                     pTControl->SelectTabPage( nActive );
-                                    /*if (pTControl->GetCurPageId())
-                                        pTControl->DeactivatePage();
-                                    pTControl->SetCurPageId( nActive );
-                                    pTControl->ActivatePage();*/
                                     ReportError( aWantedID, GEN_RES_STR1( S_TABPAGE_NOT_FOUND, MethodString( nMethodId ) ) );
                                 }
                             }
@@ -4840,7 +4637,7 @@ sal_Bool StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, aUId, comm_BOOL( ((TriStateBox*)pControl)->GetState() == STATE_DONTKNOW) );
                             break;
                         case M_GetState :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((TriStateBox*)pControl)->GetState()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((TriStateBox*)pControl)->GetState()));
                             break;
                         case M_Check :
                             ((TriStateBox*)pControl)->SetState( STATE_CHECK );
@@ -4928,28 +4725,28 @@ sal_Bool StatementControl::Execute()
                             AnimateMouse( pControl, MitteOben);
                             break;
                         case M_GetSelCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ListBox*)pControl)->GetSelectEntryCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ListBox*)pControl)->GetSelectEntryCount()));
                             break;
                         case M_GetSelIndex :
-                            if ( ! (nParams & PARAM_USHORT_1) )
+                            if ( ! (nParams & PARAM_UINT16_1) )
                             {
                                 if ( ((ListBox*)pControl)->GetSelectEntryCount() == 0 )
                                 {
-                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                                     break;
                                 }
                                 nNr1 = 1;
                             }
                             ValueOK(aUId, MethodString( nMethodId ),nNr1,((ListBox*)pControl)->GetSelectEntryCount());
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ListBox*)pControl)->GetSelectEntryPos(nNr1-1)) +1);
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ListBox*)pControl)->GetSelectEntryPos(nNr1-1)) +1);
                             break;
                         case M_GetSelText :
-                            if ( ! (nParams & PARAM_USHORT_1) )
+                            if ( ! (nParams & PARAM_UINT16_1) )
                                 nNr1 = 1;
                             pRet->GenReturn ( RET_Value, aUId, ((ListBox*)pControl)->GetSelectEntry(nNr1-1));
                             break;
                         case M_GetItemCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ListBox*)pControl)->GetEntryCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ListBox*)pControl)->GetEntryCount()));
                             break;
                         case M_GetItemText :
                             pRet->GenReturn ( RET_Value, aUId, ((ListBox*)pControl)->GetEntry(nNr1-1));
@@ -5039,11 +4836,11 @@ sal_Bool StatementControl::Execute()
                                     nPos = 0;
                                 else
                                     nPos++;
-                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG) nPos);
+                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32) nPos);
                             }
                             break;
                         case M_GetItemCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((ComboBox*)pControl)->GetEntryCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((ComboBox*)pControl)->GetEntryCount()));
                             break;
                         case M_GetItemText :
                             pRet->GenReturn ( RET_Value, aUId, ((ComboBox*)pControl)->GetEntry(nNr1-1));
@@ -5052,7 +4849,7 @@ sal_Bool StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, aUId, (comm_BOOL) !((ComboBox*)pControl)->IsReadOnly() );
                             break;
                         case M_Select :
-                            if( nParams & PARAM_USHORT_1 )
+                            if( nParams & PARAM_UINT16_1 )
                             {
                                 if ( !ValueOK(aUId, MethodString( nMethodId ),nNr1,((ComboBox*)pControl)->GetEntryCount()) )
                                     break;
@@ -5159,7 +4956,7 @@ sal_Bool StatementControl::Execute()
                             break;
                         case M_More :
                             {
-                                if ( !(nParams & PARAM_USHORT_1) )
+                                if ( !(nParams & PARAM_UINT16_1) )
                                     nNr1 = 1;
                                 for (int i = 1; i<= nNr1; i++)
                                 {
@@ -5171,7 +4968,7 @@ sal_Bool StatementControl::Execute()
                             break;
                         case M_Less :
                             {
-                                if ( !(nParams & PARAM_USHORT_1) )
+                                if ( !(nParams & PARAM_UINT16_1) )
                                     nNr1 = 1;
                                 for (int i = 1; i<= nNr1; i++)
                                 {
@@ -5243,8 +5040,8 @@ sal_Bool StatementControl::Execute()
                         ToolBox *pTB = ((ToolBox*)pControl);
                         if ( !aUId.equals( pTB->GetUniqueOrHelpId() ) ) // So we found a Button on the ToolBox
                         {
-                            if ( (nParams == PARAM_NONE) || (nParams == PARAM_USHORT_1) )
-                            {           // Wir fälschen einen Parameter
+                            if ( (nParams == PARAM_NONE) || (nParams == PARAM_UINT16_1) )
+                            {           // Wir fï¿½lschen einen Parameter
                                 nParams |= PARAM_STR_1;
                                 aString1 = Id2Str( aUId );
                             }
@@ -5321,16 +5118,13 @@ sal_Bool StatementControl::Execute()
                                         if ( aRect.IsEmpty() )
                                         {
                                             pTB->ExecuteCustomMenu();
-/*                                          aRect = pTB->GetMenubuttonRect();
-                                            MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                                            ImplMouseButtonDown( pTB, aMEvnt );*/
 
                                             aSubMenuId1 = 0;
                                             aSubMenuId2 = 0;
                                             aSubMenuId3 = 0;
                                             pMenuWindow = NULL;
 
-                                            new StatementCommand( this, RC_MenuSelect, PARAM_USHORT_1, pTB->GetItemId(nItemPos) + TOOLBOX_MENUITEM_START );
+                                            new StatementCommand( this, RC_MenuSelect, PARAM_UINT16_1, pTB->GetItemId(nItemPos) + TOOLBOX_MENUITEM_START );
                                         }
                                         else
                                         {
@@ -5356,7 +5150,7 @@ sal_Bool StatementControl::Execute()
                                         Window *pWin = NULL;
                                         // Wait for the window to open.
                                         StatementList::bExecuting = sal_True;       // Bah ist das ein ekliger Hack
-                                        {                                           // Das verhindert, daß schon der nächste Befehl ausgeführt wird.
+                                        {                                           // Das verhindert, daï¿½ schon der nï¿½chste Befehl ausgefï¿½hrt wird.
                                             Time aDelay;
                                             while ( !pWin && ( (pWin = GetPopupFloatingWin()) == NULL ) && ( Time() - aDelay ).GetSec() < 15 )
                                                 SafeReschedule();
@@ -5418,17 +5212,17 @@ sal_Bool StatementControl::Execute()
                                                 pRet->GenReturn ( RET_Value, aUId, Id2Str( pTB->GetHelpId(pTB->GetItemId(nItemPos)) ) );
                                                 break;
                                             case 1:
-                                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemType(nItemPos));
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemType(nItemPos));
                                                 break;
                                             case 2:
-                                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemState(pTB->GetItemId(nItemPos)));
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemState(pTB->GetItemId(nItemPos)));
                                                 break;
                                             case 3:
-                                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemId(nItemPos));
+                                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemId(nItemPos));
                                                 break;
                                             default:
                                                 ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                                                 break;
                                             }
                                     }
@@ -5441,7 +5235,7 @@ sal_Bool StatementControl::Execute()
                                 pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetText());
                                 break;
                             case M_GetItemCount :
-                                pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTB->GetItemCount());
+                                pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTB->GetItemCount());
                                 break;
                             case M_SetNextToolBox :
                                 if ( (nParams & PARAM_STR_1) )
@@ -5491,7 +5285,7 @@ sal_Bool StatementControl::Execute()
                             {                          // should get removed some time
                                 SvTreeListBox *pTree = (SvTreeListBox*)pControl;
                                 SvLBoxEntry *pThisEntry = pTree->GetCurEntry();
-                                if ( ! (nParams & PARAM_USHORT_1) )
+                                if ( ! (nParams & PARAM_UINT16_1) )
                                     nNr1 = 1;
                                 if ( pThisEntry )
                                 {
@@ -5519,19 +5313,19 @@ sal_Bool StatementControl::Execute()
                             }
                             break;
                         case M_GetSelCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((SvLBox*)pControl)->GetSelectionCount()));
                             break;
                         case M_GetItemCount :
-                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
+                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32(((SvLBox*)pControl)->GetVisibleCount()) );
                             break;
                         case M_GetSelIndex :
-                            if ( ! (nParams & PARAM_USHORT_1) )
+                            if ( ! (nParams & PARAM_UINT16_1) )
                                 nNr1 = 1;
                             if ( ValueOK(aUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
                             {
                                 nNr1--;
                                 GET_NTH_ENTRY_LBOX( FirstSelected, NextSelected, nNr1);
-                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
+                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
                             }
                             break;
                         case M_Select :
@@ -5539,16 +5333,7 @@ sal_Bool StatementControl::Execute()
                                 bBool1 = sal_True;
                             if( nParams & PARAM_STR_1 )
                             {
-/*                                  ListBox *pLB = ((ListBox*)pControl);
-                                if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
-                                    ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
-                                else
-                                {
-                                    pLB->SelectEntry( aString1, bBool1 );
-                                    if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
-                                        ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
-                                }
-*/                                  ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+                                ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
                             }
                             else
                             {
@@ -5560,9 +5345,9 @@ sal_Bool StatementControl::Execute()
                             }
                             break;
                         case M_GetSelText :
-                            if ( ! (nParams & PARAM_USHORT_1) )
+                            if ( ! (nParams & PARAM_UINT16_1) )
                                 nNr1 = 1;
-                            if ( ! (nParams & PARAM_USHORT_2) )
+                            if ( ! (nParams & PARAM_UINT16_2) )
                                 nNr2 = 1;
                             if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
                             {
@@ -5571,7 +5356,7 @@ sal_Bool StatementControl::Execute()
                                 if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
                                 {
                                     SvLBoxString* pItem = NULL;
-                                    if ( ! (nParams & PARAM_USHORT_2) )
+                                    if ( ! (nParams & PARAM_UINT16_2) )
                                         pItem = (SvLBoxString*)pThisEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING );
                                     else
                                     {
@@ -5591,12 +5376,12 @@ sal_Bool StatementControl::Execute()
                             if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
                             {
                                 SvLBoxEntry *pThisEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                if ( ! (nParams & PARAM_USHORT_2) )
+                                if ( ! (nParams & PARAM_UINT16_2) )
                                     nNr2 = 1;
                                 if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
                                 {
                                     SvLBoxString* pItem = NULL;
-                                    if ( ! (nParams & PARAM_USHORT_2) )
+                                    if ( ! (nParams & PARAM_UINT16_2) )
                                         pItem = (SvLBoxString*)pThisEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING );
                                     else
                                     {
@@ -5622,7 +5407,7 @@ sal_Bool StatementControl::Execute()
                                 SvTreeListBox *pTree = (SvTreeListBox*)pControl;
                                 SvLBoxEntry *pThisEntry = NULL;
 
-                                if ( ! (nParams & PARAM_USHORT_1) )
+                                if ( ! (nParams & PARAM_UINT16_1) )
                                 {
                                     pThisEntry = pTree->GetCurEntry();
                                     if ( !pThisEntry )
@@ -5636,7 +5421,7 @@ sal_Bool StatementControl::Execute()
                                     }
                                 }
 
-                                if ( ! (nParams & PARAM_USHORT_2) )
+                                if ( ! (nParams & PARAM_UINT16_2) )
                                     nNr2 = 1;
 
                                 if ( pThisEntry )
@@ -5644,7 +5429,7 @@ sal_Bool StatementControl::Execute()
                                     if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
                                     {
                                         SvLBoxButton* pItem = NULL;
-                                        if ( ! (nParams & PARAM_USHORT_2) )
+                                        if ( ! (nParams & PARAM_UINT16_2) )
                                             pItem = (SvLBoxButton*)pThisEntry->GetFirstItem( SV_ITEM_ID_LBOXBUTTON );
                                         else
                                         {
@@ -5664,7 +5449,7 @@ sal_Bool StatementControl::Execute()
                                                     pRet->GenReturn ( RET_Value, aUId, comm_BOOL( pItem->IsStateTristate() ) );
                                                     break;
                                                 case M_GetState :
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
                                                     break;
                                                 case M_Check :
                                                     if ( !pItem->IsStateChecked() )
@@ -5706,7 +5491,7 @@ sal_Bool StatementControl::Execute()
                                 SvTreeListBox *pTree = (SvTreeListBox*)pControl;
                                 SvLBoxEntry *pThisEntry = NULL;
 
-                                if ( ! (nParams & PARAM_USHORT_1) )
+                                if ( ! (nParams & PARAM_UINT16_1) )
                                 {
                                     pThisEntry = pTree->GetCurEntry();
                                     if ( !pThisEntry )
@@ -5722,12 +5507,12 @@ sal_Bool StatementControl::Execute()
 
                                 if ( pThisEntry )
                                 {
-                                    if ( ! (nParams & PARAM_USHORT_2) )
+                                    if ( ! (nParams & PARAM_UINT16_2) )
                                         nNr2 = 1;
                                     if ( ValueOK( aUId, MethodString( nMethodId ),nNr2,pThisEntry->ItemCount() ) )
                                     {
                                         SvLBoxItem *pMyItem = pThisEntry->GetItem( nNr2-1 );
-                                        comm_USHORT nType;
+                                        comm_UINT16 nType;
                                         switch ( pMyItem->IsA() )
                                         {
                                             case SV_ITEM_ID_LBOXSTRING: nType = CONST_ItemTypeText ; break;
@@ -5775,64 +5560,6 @@ sal_Bool StatementControl::Execute()
                                         EditBrowseBox* pEBBox = dynamic_cast< EditBrowseBox* >(pControl);
                                         switch( nMethodId )
                                         {
-
-
-    /*
-
-
-    sal_Bool            MakeFieldVisible( long nRow, sal_uInt16 nColId, sal_Bool bComplete = sal_False );
-    // access to dynamic values of cursor row
-    String          GetColumnTitle( sal_uInt16 nColumnId ) const;
-    sal_uInt16          GetColumnId( sal_uInt16 nPos ) const;
-    sal_uInt16          GetColumnPos( sal_uInt16 nColumnId ) const;
-    // access and movement of cursor
-    long            GetCurRow() const { return nCurRow; }
-    sal_uInt16          GetCurColumnId() const { return nCurColId; }
-    sal_Bool            GoToRow( long nRow );
-    sal_Bool            GoToRowAndDoNotModifySelection( long nRow );
-    sal_Bool            GoToColumnId( sal_uInt16 nColId );
-    sal_Bool            GoToRowColumnId( long nRow, sal_uInt16 nColId );
-    // selections
-    void            SetNoSelection();
-    void            SelectAll();
-    void            SelectRow( long nRow, sal_Bool bSelect = sal_True, sal_Bool bExpand = sal_True );
-    void            SelectColumnPos( sal_uInt16 nCol, sal_Bool bSelect = sal_True )
-                        { SelectColumnPos( nCol, bSelect, sal_True); }
-    void            SelectColumnId( sal_uInt16 nColId, sal_Bool bSelect = sal_True )
-                        { SelectColumnPos( GetColumnPos(nColId), bSelect, sal_True); }
-    long            GetSelectRowCount() const;
-    sal_uInt16          GetSelectColumnCount() const;
-    sal_Bool            IsRowSelected( long nRow ) const;
-    sal_Bool            IsColumnSelected( sal_uInt16 nColumnId ) const;
-    long            FirstSelectedRow( sal_Bool bInverse = sal_False );
-    long            LastSelectedRow( sal_Bool bInverse = sal_False );
-    long            PrevSelectedRow();
-    long            NextSelectedRow();
-    const MultiSelection* GetSelection() const
-                    { return bMultiSelection ? uRow.pSel : 0; }
-    void            SetSelection( const MultiSelection &rSelection );
-
-    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
-    sal_uInt16 GetColumnCount() const { return ColCount(); }
-protected:
-    virtual long    GetRowCount() const;
-
-
-    EditBrowseBox
-
-            sal_Bool IsEditing() const {return aController.Is();}
-            void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}
-            void InvalidateHandleColumn();
-
-            CellControllerRef Controller() const { return aController; }
-            sal_Int32   GetBrowserFlags() const { return m_nBrowserFlags; }
-
-            virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
-            virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
-
-
-
-    */
                                             case M_GetSelText :
                                                 {
                                                     pRet->GenReturn ( RET_Value, aUId, pEBBox->GetCellText( pEBBox->GetCurrRow(), pEBBox->GetColumnId( pEBBox->GetCurrColumn() )));
@@ -5841,7 +5568,7 @@ protected:
                                             case M_GetColumnCount :
                                                 {
                                                     sal_uInt16 nColCount = pEBBox->GetColumnCount();
-                                                    comm_USHORT nUnfrozenColCount = 0;
+                                                    comm_UINT16 nUnfrozenColCount = 0;
                                                     sal_uInt16 i;
                                                     for ( i=0 ; i < nColCount ; i++ )
                                                     {
@@ -5853,7 +5580,7 @@ protected:
                                                 break;
                                             case M_GetRowCount :
                                                 {
-                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pEBBox->GetRowCount() );
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pEBBox->GetRowCount() );
                                                 }
                                                 break;
                                             case M_IsEditing :
@@ -5868,7 +5595,7 @@ protected:
                                                     if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pEBBox->GetRowCount() ) )
                                                     {
                                                         sal_uInt16 nColCount = pEBBox->GetColumnCount();
-                                                        comm_USHORT nUnfrozenColCount = 0;
+                                                        comm_UINT16 nUnfrozenColCount = 0;
                                                         sal_uInt16 i;
                                                         for ( i=0 ; i < nColCount ; i++ )
                                                         {
@@ -5881,69 +5608,6 @@ protected:
                                                 }
                                                 break;
 
-
-
-                                                /*
-                                            case M_GetSelCount :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetSelectionCount()));
-                                                break;
-                                            case M_GetSelIndex :
-                                                if ( ! (nParams & PARAM_USHORT_1) )
-                                                    nNr1 = 1;
-                                                if ( ValueOK(aUId, CUniString("GetSelIndex"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                                {
-                                                    nNr1--;
-                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( ((SvTreeListBox*)pControl)->GetVisiblePos( pThisEntry )) +1 );
-                                                }
-                                                break;
-                                            case M_GetSelText :
-                                                if ( ! (nParams & PARAM_USHORT_1) )
-                                                    nNr1 = 1;
-                                                if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                                {
-                                                    nNr1--;
-                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                    GetFirstValidTextItem( pThisEntry );
-                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                                                }
-                                                break;
-                                            case M_GetItemCount :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(((SvLBox*)pControl)->GetVisibleCount()) );
-                                                break;
-                                            case M_GetItemText :
-                                                if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
-                                                {
-                                                    SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                                    GetFirstValidTextItem( pEntry );
-                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                                                }
-                                                break;
-                                            case M_Select :
-                                                if ( ! (nParams & PARAM_BOOL_1) )
-                                                    bBool1 = sal_True;
-                                                if( nParams & PARAM_STR_1 )
-                                                {
-                / *                                 ListBox *pLB = ((ListBox*)pControl);
-                                                    if ( pLB->GetEntryPos( aString1 ) == LISTBOX_ENTRY_NOTFOUND )
-                                                        ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
-                                                    else
-                                                    {
-                                                        pLB->SelectEntry( aString1, bBool1 );
-                                                        if ( pLB->IsEntrySelected( aString1 ) ? !bBool1 : bBool1 )  // XOR rein mit BOOL
-                                                            ReportError( aUId, GEN_RES_STR2( S_METHOD_FAILED, MethodString( nMethodId ), aString1 ) );
-                                                    }
-                * /                                 ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
-                                                }
-                                                else
-                                                {
-                                                    if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
-                                                    {
-                                                        SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
-                                                        ((SvTreeListBox*)pControl)->Select ( pEntry, bBool1 );
-                                                    }
-                                                }
-                                                break;*/
                                             default:
                                                 ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "EditBrowseBox" ) );
                                                 break;
@@ -5956,7 +5620,7 @@ protected:
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pVS->GetItemCount()));
+                                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pVS->GetItemCount()));
                                             break;
                                         case M_GetItemText:
                                             if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
@@ -5968,9 +5632,9 @@ protected:
                                             break;
                                         case M_GetSelIndex :
                                             if ( pVS->IsNoSelection() )
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(0));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32(0));
                                             else
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pVS->GetItemPos( pVS->GetSelectItemId() ) +1));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pVS->GetItemPos( pVS->GetSelectItemId() ) +1));
                                             break;
                                         case M_GetSelText :
                                             if ( pVS->IsNoSelection() )
@@ -5993,7 +5657,7 @@ protected:
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pRM->GetItemCount()));
+                                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pRM->GetItemCount()));
                                             break;
                                         case M_GetItemText:
                                             if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pRM->GetItemCount() ))
@@ -6009,7 +5673,7 @@ protected:
                                             }
                                             break;
                                         case M_GetSelIndex :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pRM->GetItemIndex( pRM->GetCurrentRoadmapItemID() ) +1));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pRM->GetItemIndex( pRM->GetCurrentRoadmapItemID() ) +1));
                                             break;
                                         case M_GetSelText :
                                                 pRet->GenReturn ( RET_Value, aUId, pRM->GetRoadmapItemLabel( pRM->GetCurrentRoadmapItemID() ) );
@@ -6030,7 +5694,7 @@ protected:
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
-                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getItemCount()));
+                                            pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pELB->getItemCount()));
                                             break;
                                         case M_GetItemText:
                                             if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pELB->getItemCount() ))
@@ -6056,7 +5720,7 @@ protected:
                                                 }
                                             break;
                                         case M_Select:
-                                            if ( (nParams & PARAM_USHORT_1) )
+                                            if ( (nParams & PARAM_UINT16_1) )
                                             {
                                                 if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pELB->getItemCount() ))
                                                 {
@@ -6080,20 +5744,16 @@ protected:
                                             break;
                                         case M_GetSelCount :
                                             if ( pELB->getSelIndex() == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 0 ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( 0 ));
                                             else
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 1 ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( 1 ));
                                             break;
                                         case M_GetSelIndex :
                                             if ( pELB->getSelIndex() == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
-                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 0 ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32( 0 ));
                                             else
-                                                   pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getSelIndex() +1));
+                                                   pRet->GenReturn ( RET_Value, aUId, comm_UINT32( pELB->getSelIndex() +1));
                                             break;
-/*                                      xxxcase M_SetNoSelection :
-                                            ((ListBox*)pControl)->SetNoSelection();
-                                            ((ListBox*)pControl)->Select();
-                                            break; */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
                                             break;
@@ -6126,22 +5786,11 @@ protected:
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
                                                         Any aCell;
                                                         pModel->getCellContent( nNr1-1, nNr2-1, aCell );
-                                                        /* doesn't work ATM since it gets casted to SbxDATE in VCLTestTool unfortunately
-                                                        SbxVariableRef xRes = new SbxVariable( SbxVARIANT );
-                                                        unoToSbxValue( xRes, aCell );
-                                                        pRet->GenReturn ( RET_Value, aUId, *xRes );*/
 
                                                         Type aType = aCell.getValueType();
                                                         TypeClass eTypeClass = aType.getTypeClass();
                                                         switch( eTypeClass )
                                                         {
-                                                            /*case TypeClass_ENUM:
-                                                                {
-                                                                    sal_Int32 nEnum = 0;
-                                                                    enum2int( nEnum, aValue );
-                                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)nEnum );
-                                                                }
-                                                                break;*/
                                                             case TypeClass_BOOLEAN:
                                                                 pRet->GenReturn ( RET_Value, aUId, *(sal_Bool*)aCell.getValue() );
                                                                 break;
@@ -6158,9 +5807,6 @@ protected:
                                                                     pRet->GenReturn ( RET_Value, aUId, aContent );
                                                                 }
                                                                 break;
-                                                            //case TypeClass_FLOAT:         break;
-                                                            //case TypeClass_DOUBLE:        break;
-                                                            //case TypeClass_OCTET:         break;
                                                             case TypeClass_BYTE:
                                                             case TypeClass_SHORT:
                                                             case TypeClass_LONG:
@@ -6168,21 +5814,20 @@ protected:
                                                             case TypeClass_UNSIGNED_LONG:
                                                             case TypeClass_UNSIGNED_HYPER:
                                                                 {
-                                                                    comm_ULONG val = 0;
+                                                                    comm_UINT32 val = 0;
                                                                     aCell >>= val;
                                                                     pRet->GenReturn ( RET_Value, aUId, val );
                                                                 }
                                                                 break;
-                                                            //case TypeClass_UNSIGNED_OCTET:break;
                                                             case TypeClass_UNSIGNED_SHORT:
                                                                 {
-                                                                    comm_USHORT val = 0;
+                                                                    comm_UINT16 val = 0;
                                                                     aCell >>= val;
                                                                     pRet->GenReturn ( RET_Value, aUId, val );
                                                                 }
                                                                 break;
                                                             default:
-                                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT(0) );
+                                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT16(0) );
                                                                 break;
                                                         }
                                                     }
@@ -6190,12 +5835,12 @@ protected:
                                                 break;
                                             case M_GetColumnCount :
                                                 {
-                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTC->GetColumnCount() );
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTC->GetColumnCount() );
                                                 }
                                                 break;
                                             case M_GetRowCount :
                                                 {
-                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)pTC->GetRowCount() );
+                                                    pRet->GenReturn ( RET_Value, aUId, (comm_UINT32)pTC->GetRowCount() );
                                                 }
                                                 break;
                                             case M_Select :
@@ -6205,7 +5850,6 @@ protected:
                                                         if ( pTC->GoToRow( ::svt::table::RowPos( nNr1-1 ) ) )
                                                         {
                                                             Size aSize( pTC->GetSizePixel() );
-//                                                            DirectLog( S_QAError, UniString::CreateFromInt32( aSize.Width() ).Append( UniString::CreateFromInt32( aSize.Height() ) ) );
                                                             Point aPos( aSize.Width() / 2, aSize.Height() / 2 );
                                                             long nStep = aSize.Height() / 4;
                                                             ::svt::table::RowPos nLastPos;
@@ -6234,26 +5878,14 @@ protected:
                                                 }
                                                 break;
                                             case M_GetSelCount :
-                                                pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowCount() ));
+                                                pRet->GenReturn ( RET_Value, aUId, comm_UINT16( pTC->GetSelectedRowCount() ));
                                                 break;
                                             case M_GetSelIndex :
-                                                if ( ! (nParams & PARAM_USHORT_1) )
+                                                if ( ! (nParams & PARAM_UINT16_1) )
                                                     nNr1 = 1;
                                                 if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRowCount() ) )
-                                                    pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRowIndex( nNr1-1 ) +1 ) );
+                                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT16( pTC->GetSelectedRowIndex( nNr1-1 ) +1 ) );
                                                 break;
-/*                                          case M_GetSelText :
-                                                if ( ! (nParams & PARAM_USHORT_1) )
-                                                    nNr1 = 1;
-                                                if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                                {
-                                                    nNr1--;
-                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                    GetFirstValidTextItem( pThisEntry );
-                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                                                }
-                                                break;
-                                                */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TableControl" ) );
                                             break;
@@ -6306,7 +5938,6 @@ protected:
                             pRet->GenReturn ( RET_Value, aUId, (comm_BOOL) !((DockingWindow*)pControl)->IsFloatingMode());
                             break;
                         case M_Close:
-                                //aWindowWaitUId = aUId;
                             DBG_ASSERT( aUId.equals( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
                             SET_WINP_CLOSING(pControl);
                             ((DockingWindow*)pControl)->Close();
@@ -6325,7 +5956,7 @@ protected:
                                         pFloat = pControl->GET_REAL_PARENT();
                                     else
                                     {
-                                        DBG_ERROR("FloatingMode set but Parent is no FloatingWindow");
+                                        OSL_FAIL("FloatingMode set but Parent is no FloatingWindow");
                                     }
                                 }
                                 if ( pFloat && pFloat->GetType() == WINDOW_FLOATINGWINDOW )
@@ -6470,7 +6101,6 @@ protected:
                         case M_Size:
                         case M_Move:
                             goto FloatWin;
-//                          break;
                         case M_IsMax :
                             pRet->GenReturn ( RET_Value, aUId, ((WorkWindow*)pControl)->IsMaximized() );
                             break;
@@ -6639,7 +6269,7 @@ protected:
                                 pRet->GenReturn ( RET_Value, aUId, pControl->GetText());
                                 break;
                             case M_Click:
-                                if ( nParams & PARAM_USHORT_1 )
+                                if ( nParams & PARAM_UINT16_1 )
                                 {
                                     if ( pBD->GetPushButton( nNr1 ) )
                                     {
@@ -6656,11 +6286,11 @@ protected:
                                     ReportError( aUId, GEN_RES_STR1( S_BUTTONID_REQUIRED, MethodString( nMethodId ) ) );
                                 break;
                             case M_GetButtonCount :
-                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pBD->GetButtonCount()));
+                                pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pBD->GetButtonCount()));
                                 break;
                             case M_GetButtonId :
                                 if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,pBD->GetButtonCount()) )
-                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG(pBD->GetButtonId(nNr1-1)));
+                                    pRet->GenReturn ( RET_Value, aUId, comm_UINT32(pBD->GetButtonId(nNr1-1)));
                                 break;
                             default:
                                 ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "MessageBox" ) );
@@ -6669,7 +6299,7 @@ protected:
                         break;
                     }
                 default:
-                    DBG_ERROR( "Unknown Objekttype from UId or Method not suported" );
+                    OSL_FAIL( "Unknown Objekttype from UId or Method not suported" );
                     ReportError( aUId, GEN_RES_STR2( S_UNKNOWN_TYPE, UniString::CreateFromInt32( nRT ), MethodString(nMethodId) ) );
 #if OSL_DEBUG_LEVEL > 1
                     m_pDbgWin->AddText( " Unknown Objekttype from UId or Method not suported" );
@@ -6703,8 +6333,6 @@ protected:
         }
     }
     return bStatementDone;
-
-#define FINISH_NEXT
-#define FINISH_SAME
-
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

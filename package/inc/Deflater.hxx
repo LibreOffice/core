@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,16 @@
 #define _DEFLATER_HXX_
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include "packagedllapi.hxx"
 
-extern "C"
+struct z_stream_s;
+
+namespace ZipUtils {
+
+class DLLPUBLIC_PACKAGE Deflater
 {
     typedef struct z_stream_s z_stream;
-}
 
-class Deflater
-{
 protected:
     com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;
     sal_Bool                bFinish;
@@ -63,4 +66,8 @@ public:
     void SAL_CALL end(  );
 };
 
+}
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

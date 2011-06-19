@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_forms.hxx"
 #include "richtextcontrol.hxx"
 #include "frm_module.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 
 #include "richtextmodel.hxx"
@@ -225,7 +224,7 @@ namespace frm
             return;
         }
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if (!getPeer().is())
         {
@@ -376,7 +375,7 @@ namespace frm
     void ORichTextPeer::dispose( ) throw(RuntimeException)
     {
         {
-            ::vos::OGuard aGuard( GetMutex() );
+            SolarMutexGuard aGuard;
             RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
 
             if ( pRichTextControl )
@@ -401,7 +400,7 @@ namespace frm
     //--------------------------------------------------------------------
     void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
         if ( !pControl )
@@ -634,7 +633,7 @@ namespace frm
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *parametrized* dispatcher for " );
                     sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    DBG_TRACE( sTrace.getStr() );
+                    OSL_TRACE( "%s", sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OParametrizedAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
@@ -643,7 +642,7 @@ namespace frm
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *normal* dispatcher for " );
                     sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    DBG_TRACE( sTrace.getStr() );
+                    OSL_TRACE( "%s", sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
                 }
@@ -653,7 +652,7 @@ namespace frm
             {
                 ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: not creating dispatcher (unsupported slot) for " );
                 sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-                DBG_TRACE( sTrace.getStr() );
+                OSL_TRACE( "%s", sTrace.getStr() );
             }
         #endif
         }
@@ -684,11 +683,11 @@ namespace frm
 
             // some hard-coded slots, which do not have a UNO name at SFX level, but which
             // we nevertheless need to transport via UNO mechanisms, so we need a name
-            if ( _rUnoSlotName.equalsAscii( "AllowHangingPunctuation" ) )
+            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AllowHangingPunctuation" ) ) )
                 return SID_ATTR_PARA_HANGPUNCTUATION;
-            if ( _rUnoSlotName.equalsAscii( "ApplyForbiddenCharacterRules" ) )
+            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ApplyForbiddenCharacterRules" ) ) )
                 return SID_ATTR_PARA_FORBIDDEN_RULES;
-            if ( _rUnoSlotName.equalsAscii( "UseScriptSpacing" ) )
+            if ( _rUnoSlotName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseScriptSpacing" ) ) )
                 return SID_ATTR_PARA_SCRIPTSPACE;
 
             OSL_ENSURE( pSlot, "lcl_getSlotFromUnoName: unknown UNO slot name!" );
@@ -702,7 +701,7 @@ namespace frm
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
         {
-            OSL_ENSURE( sal_False, "ORichTextPeer::queryDispatch: already disposed?" );
+            OSL_FAIL( "ORichTextPeer::queryDispatch: already disposed?" );
             return xReturn;
         }
 
@@ -764,3 +763,4 @@ namespace frm
 }   // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

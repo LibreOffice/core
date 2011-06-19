@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,17 +32,15 @@
 #pragma warning (disable:4548)
 
 #include <tools/presys.h>
-//#include "stdafx.h"
 #define STRICT
-#define _WIN32_WINNT 0x0400
+#define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
-#if OSL_DEBUG_LEVEL > 0
-//#define _ATL_DEBUG_INTERFACES
+#if OSL_DEBUG_LEVEL > 1
+#define _ATL_DEBUG_INTERFACES
 #endif
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
-#include <tools/postsys.h>
 
 #pragma warning (pop)
 #pragma warning (disable:4505)
@@ -98,4 +97,9 @@ public:
     CComBSTR m_sName;
 };
 
+// This here so that WIN_ULONG is used also in the magic macros above
+#include <tools/postsys.h>
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

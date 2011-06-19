@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,14 +56,9 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 
-//#ifndef _SFX_HELP_HXX //autogen
-//#include <sfx2/sfxhelp.hxx>
-//#endif
 #include <unotools/sourceviewconfig.hxx>
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <comphelper/processfactory.hxx>
 
 
@@ -70,12 +66,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-long nVirtToolBoxHeight;    // wird im WatchWindow init., im Stackwindow verw.
+long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
 
 #define SCROLL_LINE     12
 #define SCROLL_PAGE     60
-
 #define DWBORDER        3
 
 static const char cSuffixes[] = "%&!#@$";
@@ -83,9 +78,12 @@ static const char cSuffixes[] = "%&!#@$";
 MapUnit eEditMapUnit = MAP_100TH_MM;
 
 
-// #108672 Helper functions to get/set text in TextEngine
-// using the stream interface (get/setText() only supports
-// tools Strings limited to 64K).
+/**
+ * Helper functions to get/set text in TextEngine using
+ * the stream interface.
+ *
+ * get/setText() only supports tools Strings limited to 64K).
+ */
 ::rtl::OUString getTextEngineText( ExtTextEngine* pEngine )
 {
     SvMemoryStream aMemStream;
@@ -111,20 +109,19 @@ void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr )
 
 void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
 {
-    // The result of using explicit colors here appears to be harmless when
-    // switching to high contrast mode:
-    if ( !pWin->IsFloatingMode() )
-    {
-        Size aSz = pWin->GetOutputSizePixel();
-        const Color aOldLineColor( pWin->GetLineColor() );
-        pWin->SetLineColor( Color( COL_WHITE ) );
-        // oben eine weisse..
-        pWin->DrawLine( Point( 0, 0 ), Point( aSz.Width(), 0 ) );
-        // unten eine schwarze...
-        pWin->SetLineColor( Color( COL_BLACK ) );
-        pWin->DrawLine( Point( 0, aSz.Height() - 1 ), Point( aSz.Width(), aSz.Height() - 1 ) );
-        pWin->SetLineColor( aOldLineColor );
-    }
+    if ( pWin->IsFloatingMode() )
+        return;
+
+    Size aSz = pWin->GetOutputSizePixel();
+    const Color aOldLineColor( pWin->GetLineColor() );
+    pWin->SetLineColor( Color( COL_WHITE ) );
+    // White line on top
+    pWin->DrawLine( Point( 0, 0 ), Point( aSz.Width(), 0 ) );
+    // Black line at bottom
+    pWin->SetLineColor( Color( COL_BLACK ) );
+    pWin->DrawLine( Point( 0, aSz.Height() - 1 ),
+                    Point( aSz.Width(), aSz.Height() - 1 ) );
+    pWin->SetLineColor( aOldLineColor );
 }
 
 void lcl_SeparateNameAndIndex( const String& rVName, String& rVar, String& rIndex )
@@ -182,7 +179,7 @@ EditorWindow::EditorWindow( Window* pParent ) :
 
 
 
-__EXPORT EditorWindow::~EditorWindow()
+EditorWindow::~EditorWindow()
 {
     pSourceViewConfig->RemoveListener(this);
     delete pSourceViewConfig;
@@ -193,7 +190,6 @@ __EXPORT EditorWindow::~EditorWindow()
     {
         EndListening( *pEditEngine );
         pEditEngine->RemoveView( pEditView );
-//      pEditEngine->SetViewWin( 0 );
         delete pEditView;
         delete pEditEngine;
     }
@@ -233,12 +229,12 @@ String EditorWindow::GetWordAtCursor()
                 nEnd = nLength;
             }
 
-            // Nicht den Selektierten Bereich, sondern an der CursorPosition,
-            // falls Teil eines Worts markiert.
+            // Not the selected range, but at the CursorPosition,
+            // if a word is partially selected.
             if ( !aWord.Len() )
                 aWord = pTextEngine->GetWord( rSelEnd );
 
-            // Kann leer sein, wenn komplettes Word markiert, da Cursor dahinter.
+            // Can be empty when full word selected, as Cursor behing it
             if ( !aWord.Len() && pEditView->HasSelection() )
                 aWord = pTextEngine->GetWord( rSelStart );
         }
@@ -247,11 +243,11 @@ String EditorWindow::GetWordAtCursor()
     return aWord;
 }
 
-void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
+void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     sal_Bool bDone = sal_False;
 
-    // Sollte eigentlich mal aktiviert werden...
+    // Should have been activated at some point
     if ( pEditEngine )
     {
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
@@ -317,13 +313,13 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 }
 
 
-void __EXPORT EditorWindow::Resize()
+void EditorWindow::Resize()
 {
-    // ScrollBars, etc. passiert in Adjust...
+    // ScrollBars, etc. happens in Adjust...
     if ( pEditView )
     {
         long nVisY = pEditView->GetStartDocPos().Y();
-//      pEditView->SetOutputArea( Rectangle( Point( 0, 0 ), GetOutputSize() ) );
+
         pEditView->ShowCursor();
         Size aOutSz( GetOutputSizePixel() );
         long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
@@ -344,16 +340,14 @@ void __EXPORT EditorWindow::Resize()
 }
 
 
-
-void __EXPORT EditorWindow::MouseMove( const MouseEvent &rEvt )
+void EditorWindow::MouseMove( const MouseEvent &rEvt )
 {
     if ( pEditView )
         pEditView->MouseMove( rEvt );
 }
 
 
-
-void __EXPORT EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
+void EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
 {
     if ( pEditView )
     {
@@ -364,7 +358,7 @@ void __EXPORT EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
     }
 }
 
-void __EXPORT EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
+void EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
 {
     GrabFocus();
     if ( pEditView )
@@ -373,7 +367,7 @@ void __EXPORT EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
     }
 }
 
-void __EXPORT EditorWindow::Command( const CommandEvent& rCEvt )
+void EditorWindow::Command( const CommandEvent& rCEvt )
 {
     if ( pEditView )
     {
@@ -392,10 +386,8 @@ sal_Bool EditorWindow::ImpCanModify()
     sal_Bool bCanModify = sal_True;
     if ( StarBASIC::IsRunning() )
     {
-        // Wenn im Trace-Mode, entweder Trace abbrechen oder
-        // Eingabe verweigern
-        // Im Notify bei Basic::Stoped die Markierungen in den Modulen
-        // entfernen!
+        // If in Trace-mode, abort the trace or refuse input
+        // Remove markers in the modules in Notify at Basic::Stoped
         if ( QueryBox( 0, WB_OK_CANCEL, String( IDEResId( RID_STR_WILLSTOPPRG ) ) ).Execute() == RET_OK )
         {
             pModulWindow->GetBasicStatus().bIsRunning = sal_False;
@@ -407,9 +399,9 @@ sal_Bool EditorWindow::ImpCanModify()
     return bCanModify;
 }
 
-void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
+void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    if ( !pEditView )   // Passiert unter W95 bei letzte Version, Ctrl-Tab
+    if ( !pEditView )   // Happens in Win95
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -419,13 +411,13 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
     long nLinSz = pModulWindow->GetHScrollBar()->GetLineSize(); (void)nLinSz;
     long nThumb = pModulWindow->GetHScrollBar()->GetThumbPos(); (void)nThumb;
 #endif
-    sal_Bool bDone = sal_False;
     sal_Bool bWasModified = pEditEngine->IsModified();
-    if ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify() )
+    // see if there is an accelerator to be processed first
+    sal_Bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
+
+    if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
-        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_A) && rKEvt.GetKeyCode().IsMod1() )
-            pEditView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
-        else if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
+        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
             bDone = sal_True; // CTRL-Y schlucken, damit kein Vorlagenkatalog
         else
         {
@@ -450,7 +442,6 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
     }
     if ( !bDone )
     {
-        if ( !SfxViewShell::Current()->KeyInput( rKEvt ) )
             Window::KeyInput( rKEvt );
     }
     else
@@ -473,15 +464,15 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void __EXPORT EditorWindow::Paint( const Rectangle& rRect )
+void EditorWindow::Paint( const Rectangle& rRect )
 {
-    if ( !pEditEngine )     // spaetestens jetzt brauche ich sie...
+    if ( !pEditEngine )     // We need it now at latest
         CreateEditEngine();
 
     pEditView->Paint( rRect );
 }
 
-void __EXPORT EditorWindow::LoseFocus()
+void EditorWindow::LoseFocus()
 {
     SetSourceInBasic();
     Window::LoseFocus();
@@ -493,10 +484,10 @@ sal_Bool EditorWindow::SetSourceInBasic( sal_Bool bQuiet )
 
     sal_Bool bChanged = sal_False;
     if ( pEditEngine && pEditEngine->IsModified()
-        && !GetEditView()->IsReadOnly() )   // Added because of #i60626, otherwise
+        && !GetEditView()->IsReadOnly() )   // Added for #i60626, otherwise
             // any read only bug in the text engine could lead to a crash later
     {
-        if ( !StarBASIC::IsRunning() ) // Nicht zur Laufzeit!
+        if ( !StarBASIC::IsRunning() ) // Not at runtime!
         {
             ::rtl::OUString aModule = getTextEngineText( pEditEngine );
 
@@ -863,12 +854,6 @@ IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
         p = aSyntaxLineTable.Next();
     }
 
-    // MT: Removed, because of idle format now when set/remove attribs...
-    // pEditView->SetAutoScroll( sal_False );  // #101043# Don't scroll because of syntax highlight
-    // pEditEngine->SetUpdateMode( sal_True );
-    // pEditView->ShowCursor( sal_False, sal_True );
-    // pEditView->SetAutoScroll( sal_True );
-
     // #i45572#
     if ( pEditView )
         pEditView->ShowCursor( sal_False, sal_True );
@@ -941,7 +926,6 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
     pModulWindow = 0;
     nCurYOffset = 0;
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
-    m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
     nMarkerPos = MARKER_NOMARKER;
 
     // nCurYOffset merken und nicht von EditEngine holen.
@@ -953,20 +937,20 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
 
 
 
-__EXPORT BreakPointWindow::~BreakPointWindow()
+BreakPointWindow::~BreakPointWindow()
 {
 }
 
 
 
-void __EXPORT BreakPointWindow::Resize()
+void BreakPointWindow::Resize()
 {
 /// Invalidate();
 }
 
 
 
-void __EXPORT BreakPointWindow::Paint( const Rectangle& )
+void BreakPointWindow::Paint( const Rectangle& )
 {
     if ( SyncYOffset() )
         return;
@@ -975,22 +959,21 @@ void __EXPORT BreakPointWindow::Paint( const Rectangle& )
     long nLineHeight = GetTextHeight();
 
     Image aBrk1(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
-                getImage(IMGID_BRKENABLED, m_bHighContrastMode));
+                getImage(IMGID_BRKENABLED));
     Image aBrk0(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
-                getImage(IMGID_BRKDISABLED, m_bHighContrastMode));
+                getImage(IMGID_BRKDISABLED));
     Size aBmpSz( aBrk1.GetSizePixel() );
     aBmpSz = PixelToLogic( aBmpSz );
     Point aBmpOff( 0, 0 );
     aBmpOff.X() = ( aOutSz.Width() - aBmpSz.Width() ) / 2;
     aBmpOff.Y() = ( nLineHeight - aBmpSz.Height() ) / 2;
 
-    BreakPoint* pBrk = GetBreakPoints().First();
-    while ( pBrk )
+    for ( size_t i = 0, n = GetBreakPoints().size(); i < n ; ++i )
     {
-        sal_uLong nLine = pBrk->nLine-1;
-        sal_uLong nY = nLine*nLineHeight - nCurYOffset;
+        BreakPoint* pBrk = GetBreakPoints().at( i );
+        size_t nLine = pBrk->nLine-1;
+        size_t nY = nLine*nLineHeight - nCurYOffset;
         DrawImage( Point( 0, nY ) + aBmpOff, pBrk->bEnabled ? aBrk1 : aBrk0 );
-        pBrk = GetBreakPoints().Next();
     }
     ShowMarker( sal_True );
 }
@@ -1026,8 +1009,7 @@ void BreakPointWindow::ShowMarker( sal_Bool bShow )
 
     Image aMarker(((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->
                   getImage(bErrorMarker
-                           ? IMGID_ERRORMARKER : IMGID_STEPMARKER,
-                           m_bHighContrastMode));
+                           ? IMGID_ERRORMARKER : IMGID_STEPMARKER));
 
     Size aMarkerSz( aMarker.GetSizePixel() );
     aMarkerSz = PixelToLogic( aMarkerSz );
@@ -1049,25 +1031,21 @@ void BreakPointWindow::ShowMarker( sal_Bool bShow )
 
 BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
 {
-    long nLineHeight = GetTextHeight();
-    long nYPos = rMousePos.Y() + nCurYOffset;
-//  Image aBrk( ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_BRKENABLED ) );
-//  Size aBmpSz( aBrk.GetSizePixel() );
-//  aBmpSz = PixelToLogic( aBmpSz );
+    size_t nLineHeight = GetTextHeight();
+    size_t nYPos = rMousePos.Y() + nCurYOffset;
 
-    BreakPoint* pBrk = GetBreakPoints().First();
-    while ( pBrk )
+    for ( size_t i = 0, n = GetBreakPoints().size(); i < n ; ++i )
     {
-        sal_uLong nLine = pBrk->nLine-1;
-        long nY = nLine*nLineHeight;
+        BreakPoint* pBrk = GetBreakPoints().at( i );
+        size_t nLine = pBrk->nLine-1;
+        size_t nY = nLine*nLineHeight;
         if ( ( nYPos > nY ) && ( nYPos < ( nY + nLineHeight ) ) )
             return pBrk;
-        pBrk = GetBreakPoints().Next();
     }
     return 0;
 }
 
-void __EXPORT BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.GetClicks() == 2 )
     {
@@ -1083,7 +1061,7 @@ void __EXPORT BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 
 
-void __EXPORT BreakPointWindow::Command( const CommandEvent& rCEvt )
+void BreakPointWindow::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
@@ -1159,7 +1137,6 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
             != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
         {
             setBackgroundColor(aColor);
-            m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
             Invalidate();
         }
     }
@@ -1230,8 +1207,6 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
     aXEdit.Show();
 
-    aRemoveWatchButton.SetModeImage(Image(IDEResId(RID_IMG_REMOVEWATCH_HC)),
-                                    BMP_COLOR_HIGHCONTRAST);
     aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
     Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
@@ -1250,14 +1225,14 @@ WatchWindow::WatchWindow( Window* pParent ) :
 
 
 
-__EXPORT WatchWindow::~WatchWindow()
+WatchWindow::~WatchWindow()
 {
     GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
 
 
-void __EXPORT WatchWindow::Paint( const Rectangle& )
+void WatchWindow::Paint( const Rectangle& )
 {
     DrawText( Point( DWBORDER, 7 ), aWatchStr );
     lcl_DrawIDEWindowFrame( this );
@@ -1265,7 +1240,7 @@ void __EXPORT WatchWindow::Paint( const Rectangle& )
 
 
 
-void __EXPORT WatchWindow::Resize()
+void WatchWindow::Resize()
 {
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
@@ -1475,7 +1450,6 @@ IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
 
     sal_Int32 nPos = 0;
     sal_uInt16 nTabs = aHeaderBar.GetItemCount();
-    // OSL_ASSERT( m_treelb->TabCount() == nTabs );
     for( sal_uInt16 i = 1 ; i < nTabs ; ++i )
     {
         nPos += aHeaderBar.GetItemSize( i );
@@ -1522,7 +1496,6 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 StackWindow::StackWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
-    aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
        aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
@@ -1537,29 +1510,20 @@ StackWindow::StackWindow( Window* pParent ) :
 
     SetHelpId( HID_BASICIDE_STACKWINDOW );
 
-    aGotoCallButton.SetClickHdl( LINK( this, StackWindow, ButtonHdl ) );
-    aGotoCallButton.SetPosPixel( Point( DWBORDER, 2 ) );
-    Size aSz( aGotoCallButton.GetModeImage().GetSizePixel() );
-    aSz.Width() += 6;
-    aSz.Height() += 6;
-    aGotoCallButton.SetSizePixel( aSz );
-//  aGotoCallButton.Show(); // wird vom Basic noch nicht unterstuetzt!
-    aGotoCallButton.Hide();
-
     // make stack window keyboard accessible
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
 
 
-__EXPORT StackWindow::~StackWindow()
+StackWindow::~StackWindow()
 {
     GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
 
 
-void __EXPORT StackWindow::Paint( const Rectangle& )
+void StackWindow::Paint( const Rectangle& )
 {
     DrawText( Point( DWBORDER, 7 ), aStackStr );
     lcl_DrawIDEWindowFrame( this );
@@ -1567,7 +1531,7 @@ void __EXPORT StackWindow::Paint( const Rectangle& )
 
 
 
-void __EXPORT StackWindow::Resize()
+void StackWindow::Resize()
 {
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
@@ -1584,25 +1548,15 @@ void __EXPORT StackWindow::Resize()
 
 
 
-IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, pButton )
+IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, /*pButton*/ )
 {
-    if ( pButton == &aGotoCallButton )
-    {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_GOTOCALL );
-        }
-    }
     return 0;
 }
 IMPL_LINK_INLINE_END( StackWindow, ButtonHdl, ImageButton *, pButton )
 
 
 
-void __EXPORT StackWindow::UpdateCalls()
+void StackWindow::UpdateCalls()
 {
     aTreeListBox.SetUpdateMode( sal_False );
     aTreeListBox.Clear();
@@ -1690,7 +1644,7 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
 
 
 
-void __EXPORT ComplexEditorWindow::Resize()
+void ComplexEditorWindow::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
     Size aSz( aOutSz );
@@ -1706,11 +1660,6 @@ void __EXPORT ComplexEditorWindow::Resize()
     aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()-1, DWBORDER ), aEWSz );
 
     aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
-
-    // Macht das EditorWindow, ausserdem hier falsch, da Pixel
-//  aEWVScrollBar.SetPageSize( aEWSz.Height() * 8 / 10 );
-//  aEWVScrollBar.SetVisibleSize( aSz.Height() );
-//  Invalidate();
 }
 
 IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
@@ -1728,7 +1677,6 @@ IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
     return 0;
 }
 
-// virtual
 void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
@@ -1745,7 +1693,6 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
     }
 }
 
-// virtual
 uno::Reference< awt::XWindowPeer >
 EditorWindow::GetComponentInterface(sal_Bool bCreate)
 {
@@ -1769,7 +1716,7 @@ WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
 
 WatchTreeListBox::~WatchTreeListBox()
 {
-    // User-Daten zerstoeren...
+    // Destroy user data
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
     {
@@ -1854,7 +1801,6 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
             pChildItem->maName = aBaseName;
 
             String aIndexStr = String( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
-            // pChildItem->mpArray = pItem->mpArray;
             pChildItem->mpArrayParentItem = pItem;
             pChildItem->nDimLevel = nThisLevel;
             pChildItem->nDimCount = pItem->nDimCount;
@@ -1920,14 +1866,10 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
         }
         // Array?
         else if( (pArray = pItem->GetRootArray()) != NULL )
-        // else if( (pArray = pItem->mpArray) != NULL )
         {
             rbArrayElement = true;
             if( pParentItem->nDimLevel + 1 == pParentItem->nDimCount )
-            // if( pItem->nDimLevel == pItem->nDimCount )
                 pSBX = pArray->Get( pItem->pIndices );
-            // else
-                // pSBX = pArray;
         }
     }
     else
@@ -1937,7 +1879,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
     return pSBX;
 }
 
-sal_Bool __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
@@ -1966,7 +1908,7 @@ sal_Bool __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection
     return bEdit;
 }
 
-sal_Bool __EXPORT WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );
@@ -2051,8 +1993,8 @@ sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const Stri
 
     UpdateWatches();
 
-    // Der Text soll niemals 1-zu-1 uebernommen werden, weil dann das
-    // UpdateWatches verlorengeht.
+    // The text should never be taken/copied 1:1,
+    // as the UpdateWatches will be lost
     return sal_False;
 }
 
@@ -2105,7 +2047,6 @@ static String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eTy
 
 
 void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
-// inline void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
 {
     if( bEnable )
     {
@@ -2133,7 +2074,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     {
         WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
         String aVName( pItem->maName );
-        DBG_ASSERT( aVName.Len(), "Var? - Darf nicht leer sein!" );
+        DBG_ASSERT( aVName.Len(), "Var? - Must not be empty!" );
         String aWatchStr;
         String aTypeStr;
         if ( pCurMethod )
@@ -2146,7 +2087,6 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             {
                 SbxDimArray* pRootArray = pItem->GetRootArray();
                 SbxDataType eType = pRootArray->GetType();
-                // SbxDataType eType = pItem->mpArray->GetType();
                 aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                 implEnableChildren( pEntry, true );
             }
@@ -2155,7 +2095,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
             {
                 SbxVariable* pVar = (SbxVariable*)pSBX;
-                // Sonderbehandlung fuer Arrays:
+                // extra treatment of arrays
                 SbxDataType eType = pVar->GetType();
                 if ( eType & SbxARRAY )
                 {
@@ -2323,3 +2263,4 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     setBasicWatchMode( false );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,30 +31,7 @@
 #include <svx/dlgctrl.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
-#include <svx/dstribut_enum.hxx> //CHINA001
-/*************************************************************************
-|*
-\************************************************************************/
-
-/*
-enum SvxDistributeHorizontal
-{
-    SvxDistributeHorizontalNone = 0,
-    SvxDistributeHorizontalLeft,
-    SvxDistributeHorizontalCenter,
-    SvxDistributeHorizontalDistance,
-    SvxDistributeHorizontalRight
-};
-
-enum SvxDistributeVertical
-{
-    SvxDistributeVerticalNone = 0,
-    SvxDistributeVerticalTop,
-    SvxDistributeVerticalCenter,
-    SvxDistributeVerticalDistance,
-    SvxDistributeVerticalBottom
-};
-*/
+#include <svx/dstribut_enum.hxx>
 
 /*************************************************************************
 |*
@@ -123,3 +101,4 @@ public:
 
 #endif // _SVX_DSTRIBUT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

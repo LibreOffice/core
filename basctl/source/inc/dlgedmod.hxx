@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,12 +55,13 @@ public:
     DlgEdModel();
     virtual ~DlgEdModel();
 
-    virtual void DlgEdModelChanged( FASTBOOL bChanged = sal_True );
+    virtual void DlgEdModelChanged( bool bChanged = true );
 
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*  AllocPage(bool bMasterPage);
 
     virtual Window* GetCurDocViewWin();
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

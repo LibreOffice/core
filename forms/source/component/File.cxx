@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 
 #include <com/sun/star/form/FormComponentType.hpp>
 
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/container.hxx>
@@ -249,7 +248,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
             readHelpTextCompatibly(_rxInStream);
             break;
         default:
-            DBG_ERROR("OFileControlModel::read : unknown version !");
+            OSL_FAIL("OFileControlModel::read : unknown version !");
             m_sDefaultValue = ::rtl::OUString();
     }
 
@@ -295,7 +294,6 @@ void OFileControlModel::_reset()
     {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
-        // FS - 72451 - 31.01.00
         MutexRelease aRelease(m_aMutex);
         m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(m_sDefaultValue));
     }
@@ -305,3 +303,4 @@ void OFileControlModel::_reset()
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

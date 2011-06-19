@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,9 @@
 #include <comphelper/attributelist.hxx>
 
 using namespace ::com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
@@ -169,11 +173,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             {
                 // this is ODF12 generation, let encrypted streams contain start-key-generation entry
                 bStoreStartKeyGeneration = sal_True;
-
-                // starting from ODF12 the version should be also in manifest:manifest element
-                pRootAttrList->AddAttribute ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) ),
-                                            sCdataAttribute,
-                                            aDocVersion );
+                pRootAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aDocVersion );
             }
         }
         else
@@ -390,3 +390,5 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
     xHandler->endElement( sManifestElement );
     xHandler->endDocument();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

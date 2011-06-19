@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -340,7 +341,7 @@ namespace frm
         break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_ENSURE( false, "ValueItemList is read-only!" );
+            OSL_FAIL( "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
@@ -391,7 +392,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_ENSURE( false, "ValueItemList is read-only!" );
+            OSL_FAIL( "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_DEFAULT_SELECT_SEQ :
@@ -412,7 +413,7 @@ namespace frm
     void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< ::rtl::OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         // if both SelectedItems and StringItemList are set, care for this
-        // #i27024# / 2004-04-05 / fs@openoffice.org
+        // #i27024#
         const Any* pSelectSequenceValue = NULL;
 
         const ::rtl::OUString* pStartPos = _rPropertyNames.getConstArray();
@@ -545,7 +546,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+            OSL_FAIL( "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
         }
 
         // Version
@@ -554,7 +555,7 @@ namespace frm
 
         if (nVersion > 0x0004)
         {
-            DBG_ERROR("OListBoxModel::read : invalid (means unknown) version !");
+            OSL_FAIL("OListBoxModel::read : invalid (means unknown) version !");
             ValueList().swap(m_aListSourceValues);
             m_aBoundColumn <<= (sal_Int16)0;
             ValueList().swap(m_aBoundValues);
@@ -749,17 +750,17 @@ namespace frm
 
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                    ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT ");
+                    ::rtl::OUString aStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
                     if (!aBoundFieldName.getLength())   // act like a combobox
-                        aStatement += ::rtl::OUString::createFromAscii("DISTINCT ");
+                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISTINCT ") );
 
                     aStatement += quoteName(aQuote,aFieldName);
                     if (aBoundFieldName.getLength())
                     {
-                        aStatement += ::rtl::OUString::createFromAscii(", ");
+                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ") );
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
-                    aStatement += ::rtl::OUString::createFromAscii(" FROM ");
+                    aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ") );
 
                     ::rtl::OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
@@ -851,7 +852,7 @@ namespace frm
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= m_nBoundColumnType );
+                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type") ) ) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {
@@ -899,7 +900,7 @@ namespace frm
                 }
                 break;
                 default:
-                    OSL_ENSURE( false, "OListBoxModel::loadData: unreachable!" );
+                    OSL_FAIL( "OListBoxModel::loadData: unreachable!" );
                     break;
             }
         }
@@ -1001,7 +1002,7 @@ namespace frm
         size_t selectedValue = aSelectedIndices[0];
         if ( selectedValue >= aValues.size() )
         {
-            OSL_ENSURE( false, "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
+            OSL_FAIL( "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
             return s_aEmptyVaue;
         }
 
@@ -1040,7 +1041,7 @@ namespace frm
         Reference< XPropertySet > xBoundField( getField() );
         if ( !xBoundField.is() )
         {
-            OSL_ENSURE( false, "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
+            OSL_FAIL( "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
             return Any();
         }
 
@@ -1148,7 +1149,7 @@ namespace frm
             default:
                 break;
             }
-            OSL_ENSURE( false, "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
+            OSL_FAIL( "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
             return eEntry;
         }
     }
@@ -1565,6 +1566,8 @@ namespace frm
     void SAL_CALL OListBoxControl::itemStateChanged(const ItemEvent& _rEvent) throw(RuntimeException)
     {
         // forward this to our listeners
+        Reference< XChild > xChild( getModel(), UNO_QUERY );
+        if ( xChild.is() && xChild->getParent().is() )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             if ( m_aItemListeners.getLength() )
@@ -1577,6 +1580,8 @@ namespace frm
                 m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent ), this );
             }
         }
+        else
+            m_aItemListeners.notifyEach( &XItemListener::itemStateChanged, _rEvent );
 
         // and do the handling for the ChangeListeners
         ::osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -1854,3 +1859,4 @@ namespace frm
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

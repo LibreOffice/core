@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,19 +57,19 @@
 #include <oletest/XSimple2.hpp>
 #include <oletest/XSimple3.hpp>
 #include <oletest/XTestInParameters.hpp>
-//#include <oletest/XTestOutParameters.hpp>
 #include <oletest/XIdentity.hpp>
 #include <com/sun/star/beans/Property.hpp>
 using namespace cppu;
 using namespace osl;
 using namespace oletest;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
+
+using ::rtl::OUString;
 
 
 #define IMPL_NAME L"oletest.OleTestImpl"  // oletest.OleTestImpl in applicat.rdb
@@ -280,29 +281,6 @@ public: // XTestSequence
     virtual Any SAL_CALL other_methodAny( const Any& rAny, const OUString& typeInAny )
         throw (RuntimeException);
 
-
-    // XTestOutParameters ------------------------------------------------------------------------
-//     virtual void SAL_CALL out_test(sal_Int8 rIn) throw( RuntimeException );
-
-//  virtual void SAL_CALL out_methodByte(sal_Int8& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodFloat(float& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodDouble(double& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodBool(sal_Bool& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodShort(sal_Int16& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodUShort(sal_uInt16& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodLong(sal_Int32& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodULong(sal_uInt32& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodHyper(sal_Int64& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodUHyper(sal_uInt64& rOut) throw( RuntimeException );
-//     virtual void SAL_CALL out_methodString(OUString& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodChar(sal_Unicode& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodAny(Any& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodSequence(Sequence< sal_Int32 >& rOut) throw( RuntimeException );
-//  virtual void SAL_CALL out_methodSequence2(Sequence< Sequence< sal_Int32 > >& rOut) throw( RuntimeException );
-//     virtual void SAL_CALL out_methodMulParams1(sal_Int32& rout1, sal_Int32& rout2) throw( RuntimeException );
-//     virtual void SAL_CALL out_methodMulParams2(sal_Int32& rout1, sal_Int32& rout2, OUString& rout3) throw( RuntimeException );
-//     virtual void SAL_CALL out_methodMulParams3(const OUString& sin, OUString& sout) throw( RuntimeException );
-
     // XTestInParameters
     virtual sal_Int8 SAL_CALL in_methodByte( sal_Int8 rIn ) throw (RuntimeException);
     virtual float SAL_CALL in_methodFloat( float rIn ) throw (RuntimeException);
@@ -385,13 +363,13 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * /*pServiceManager*/, 
         }
         catch(InvalidRegistryException &)
         {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!\n");
+            OSL_FAIL( "### InvalidRegistryException!\n");
         }
     }
     return sal_False;
 }
 
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     static void * pRet= NULL;
@@ -417,7 +395,7 @@ extern "C" void * SAL_CALL component_getFactory(
     return  pRet;
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -526,8 +504,7 @@ Sequence< Type > SAL_CALL OComponent::methodType(const Sequence< Type >& aSeq) t
     }
     return aSeq;
 }
-//Sequence< Reference< XInterface> > SAL_CALL methodXInterface ( const Sequence< Reference < XInterface> >& aSeq)
-//  throw (RuntimeException)
+
 Sequence< Reference< XInterface > > SAL_CALL OComponent::methodXInterface( const Sequence< Reference< XInterface > >& aSeq ) throw(RuntimeException)
 {
     for( sal_Int32 i= 0; i < aSeq.getLength(); i++)
@@ -993,9 +970,6 @@ void SAL_CALL OComponent::testout_methodMulParams4( float in1, float& out1, sal_
 void SAL_CALL OComponent::testout_methodXInterface( Reference< XInterface >& rOut ) throw(RuntimeException)
 {
     rOut = m_xinterface;
-//  OUString string( L"Property Any");
-//  m_any <<= string;
-//  rOut=  Reference<XInterface> (static_cast<XTestSequence*>(this), UNO_QUERY);
 }
 
 // XTestInParameters ------------------------------------------------------------
@@ -1250,17 +1224,6 @@ void SAL_CALL OComponent::testinout_methodXInterface2( Reference< XInterface > &
     Reference<XInterface> tmp = rOut;
     rOut = m_xinterface;
     m_xinterface = tmp;
-//  Reference<XTestSequence> xTest( rOut, UNO_QUERY);
-//  if( xTest.is())
-//  {
-//      Any any= xTest->getAttrAny2();
-//      OUString _s;
-//      any >>= _s;
-//      OUString string= _s + OUString((L" this string was written in the UNO component to the inout pararmeter"));
-//      any <<= string;
-//      xTest->setAttrAny2( any);
-//  }
-
 }
 Any SAL_CALL OComponent::methodAnyTest1(const Any& rIn) throw( RuntimeException )
 {
@@ -1360,94 +1323,6 @@ Any SAL_CALL OComponent::other_methodAny( const Any& rAny, const OUString& typeI
     return rAny;
 }
 
-// XTestOutParameters ============================================================================
-// void SAL_CALL OComponent::out_test(sal_Int8 rIn) throw( RuntimeException )
-// {
-// }
-
-// void SAL_CALL OComponent::out_methodByte(sal_Int8& rOut) throw( RuntimeException )
-// {
-//  rOut= 100;
-// }
-
-// void SAL_CALL OComponent::out_methodDouble(double& rOut) throw( RuntimeException )
-// {
-//  rOut= 3.14;
-// }
-// void SAL_CALL OComponent::out_methodFloat(float& rOut) throw( RuntimeException )
-// {
-//  rOut= 3.14;
-// }
-// void SAL_CALL OComponent::out_methodBool(sal_Bool& rOut) throw( RuntimeException )
-// {
-//  rOut= sal_True;
-// }
-// void SAL_CALL OComponent::out_methodShort(sal_Int16& rOut) throw( RuntimeException )
-// {
-//  rOut= -100;
-// }
-// void SAL_CALL OComponent::out_methodUShort(sal_uInt16& rOut) throw( RuntimeException )
-// {
-//  rOut= 100;
-// }
-// void SAL_CALL OComponent::out_methodLong(sal_Int32& rOut) throw( RuntimeException )
-// {
-//  rOut= -100;
-// }
-
-// void SAL_CALL OComponent::out_methodULong(sal_uInt32& rOut) throw( RuntimeException )
-// {
-//  rOut= 100;
-// }
-// void SAL_CALL OComponent::out_methodHyper(sal_Int64& rOut) throw( RuntimeException )
-// {
-
-// }
-
-// void SAL_CALL OComponent::out_methodUHyper(sal_uInt64& rOut) throw( RuntimeException )
-// {
-// }
-
-// void SAL_CALL OComponent::out_methodString(OUString& rOut) throw( RuntimeException )
-// {
-//  rOut= L"I'm a string";
-// }
-// void SAL_CALL OComponent::out_methodChar(sal_Unicode& rOut) throw( RuntimeException )
-// {
-//  rOut= 'A';
-// }
-// void SAL_CALL OComponent::out_methodAny(Any& rOut) throw( RuntimeException)
-// {
-//  Any a;
-//     a <<= OUString( L"Hi");
-//  rOut= a;
-// }
-// void SAL_CALL OComponent::out_methodSequence(Sequence< sal_Int32 >& rOut) throw( RuntimeException )
-// {
-//  Sequence< sal_Int32 > aseq(10);
-//  for( sal_Int16 i= 0; i < aseq.getLength(); i++) aseq.getArray()[i]= i;
-//  rOut= aseq;
-// }
-// void SAL_CALL OComponent::out_methodSequence2(Sequence< Sequence< sal_Int32 > >& rOut) throw( RuntimeException )
-// {
-//  rOut= Sequence< Sequence< sal_Int32 > >();
-// }
-// void SAL_CALL OComponent::out_methodMulParams1(sal_Int32& rout1, sal_Int32& rout2) throw( RuntimeException )
-// {
-//  rout1= 111;
-//  rout2= 222;
-// }
-// void SAL_CALL OComponent::out_methodMulParams2(sal_Int32& rout1, sal_Int32& rout2, OUString& rout3) throw( RuntimeException )
-// {
-//  rout1= 111;
-//  rout2= 222;
-//  rout3= L"this is a neet little string";
-// }
-// void SAL_CALL OComponent::out_methodMulParams3(const OUString& sin, OUString& sout) throw( RuntimeException )
-// {
-//  sout= L"this is a neet little string";
-// }
-
 // XTestInterfaces -------------------------------------------------------------------------------------
 void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallback, sal_Int32 mode ) throw(RuntimeException)
 {
@@ -1469,8 +1344,6 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
     sal_Int8 aByte;
     sal_Int16 aShort;
     sal_Int32 aLong;
-//  sal_uInt16 aUShort;
-//  sal_uInt32 aULong;
 
     switch( mode)
     {
@@ -1588,8 +1461,6 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             sal_Int8    aByte;
             sal_Int16   aShort;
             sal_Int32   aLong;
-//          sal_uInt16  aUShort;
-//          sal_uInt32  aULong;
             xCallback->outValuesAll( xSimple, aSimpleStruct, aSimpleEnum, seqAny, aAny, aBool,
                 aChar, aString,
             aFloat, aDouble,
@@ -1639,7 +1510,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             if( any.getValueTypeClass() == TypeClass_STRUCT)
             {
                 SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                pStruct->message= OUString::createFromAscii("This struct was created in OleTest");
+                pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
 
                 SimpleStruct aStruct;
                 any >>= aStruct;
@@ -1788,7 +1659,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             if( any.getValueTypeClass() == TypeClass_STRUCT)
             {
                 SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                pStruct->message= OUString::createFromAscii("This struct was created in OleTest");
+                pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
                 any >>= aStruct;
             }
         }
@@ -1880,25 +1751,10 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
             Reference<XInterface> xIntCallback= oleFact->createInstance(L"XCallback_Impl.Callback");
             Reference<XInvocation> xInv( xIntCallback, UNO_QUERY);
-//Any SAL_CALL invoke( const OUString& aFunctionName, const Sequence<Any >& aParams,Sequence< sal_Int16 >& aOutParamIndex,
-//          Sequence<Any >& aOutParam );
             Sequence<sal_Int16> seqIndizes;
             Sequence<Any> seqOutParams;
             xInv->invoke( OUString( L"outValuesAll"), Sequence<Any>(), seqIndizes, seqOutParams);
 
-//          void outValuesAll( [out] oletest::XSimple outInterface,
-//                     [out] SimpleStruct outStruct ,
-//                     [out] SimpleEnum outEnum,
-//                     [out] sequence<any> outSeqAny,
-//                     [out] any outAny,
-//                     [out] boolean outBool,
-//                     [out] char outChar,
-//                     [out] string outString,
-//                     [out] float outFloat,
-//                     [out] double outDouble,
-//                     [out] byte   outByte,
-//                     [out] short outShort,
-//                     [out] long outLong);
             if( seqOutParams.getLength() == 12)
             {
                 Reference<XSimple> xSimple= *(XSimple**)seqOutParams[0].getValue();
@@ -1959,7 +1815,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
                 if( any.getValueTypeClass() == TypeClass_STRUCT)
                 {
                     SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                    pStruct->message= OUString::createFromAscii("This struct was created in OleTest");
+                    pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
                     any >>= aStruct;
                 }
             }
@@ -2026,8 +1882,6 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             break;
         }
     case 303:
-        // in parameter
-//  void inValues( [in] char aChar, [in] long aLong, [in] string aString);
         {
             Reference<XInterface> xIntFact = m_rFactory->createInstance(
                 L"com.sun.star.bridge.oleautomation.Factory");
@@ -2082,7 +1936,6 @@ sal_Bool SAL_CALL OComponent::isSame( const Reference< XInterface >& val ) throw
 
 Reference< XInterface > SAL_CALL OComponent::getThis(  ) throw (RuntimeException)
 {
-//    return Reference<XInterface>(static_cast<XIdentity*>(this), UNO_QUERY);
     Reference<XInterface> ret(static_cast<XIdentity*>(this), UNO_QUERY);
     return ret;
 }
@@ -2122,3 +1975,5 @@ void SAL_CALL OComponent::testInterface2(  const Reference< XSimple >& xSimple, 
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

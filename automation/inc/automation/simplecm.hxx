@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,13 @@
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 
 #include <automation/commdefines.hxx>
 
-// CM steht für CommunicationManager
+// CM steht fï¿½r CommunicationManager
 #define CM_UNLIMITED_CONNECTIONS    0xffff
 
 typedef sal_uInt16 CM_NameType;
@@ -98,15 +99,6 @@ typedef sal_uInt16 CM_InfoType;
 
 class CommunicationLink;
 
-/*#undef  PRV_SV_DECL_REF_LOCK
-#define PRV_SV_DECL_REF_LOCK(ClassName, Ref)    \
-protected:                                      \
-    ClassName * pObj;                           \
-public:                                         \
-PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)       \
-    inline               ClassName##Ref( void * pObjP ){ClassName##Ref ((ClassName *) pObjP);}          \
-*/
-
 SV_DECL_REF( CommunicationLink )
 
 class InfoString : public ByteString
@@ -132,9 +124,9 @@ protected:
     friend class SingleCommunicationManager;
     friend class MultiCommunicationManager;
     friend class CommunicationManagerServerAcceptThread;
-    // Darf nicht abgeräumt werden zwischen Empfang des Streams und ende des Callbacks
+    // Darf nicht abgerï¿½umt werden zwischen Empfang des Streams und ende des Callbacks
 
-protected:  // so daß nur über Ref gelöscht werden kann
+protected:  // so daï¿½ nur ï¿½ber Ref gelï¿½scht werden kann
     virtual ~CommunicationLink();
     void InvalidateManager() { pMyManager = NULL; }
 
@@ -162,19 +154,19 @@ public:
     sal_Bool TransferDataStream( SvStream *pDataStream, CMProtocol nProtocol = CM_PROTOCOL_OLDSTYLE );
 
     // Liefert die ID, die vom Sender angegeben wurde.
-    // Dadurch lassen sich virtuelle Kommunikationen über einen physikalischen Link realisiren.
-    // Da die Kommunikation zu älteren Versionen kompatibel bleiben muß, muß der Empfänger raten,
-    // die neue oder die alte verwendet wird, da sich der Kopf eines Auftrages dann ändert.
+    // Dadurch lassen sich virtuelle Kommunikationen ï¿½ber einen physikalischen Link realisiren.
+    // Da die Kommunikation zu ï¿½lteren Versionen kompatibel bleiben muï¿½, muï¿½ der Empfï¿½nger raten,
+    // die neue oder die alte verwendet wird, da sich der Kopf eines Auftrages dann ï¿½ndert.
     sal_uInt16 GetProtocol(){ return nServiceProtocol; }
 
-    // Der Stream wird hier übergeben. Der Aufrufer ist für dessen Löschung zuständig
+    // Der Stream wird hier ï¿½bergeben. Der Aufrufer ist fï¿½r dessen Lï¿½schung zustï¿½ndig
     // Die Methode MUSS gerufen werden, da sonst keine weiteren Daten empfangen werden.
     SvStream* GetServiceData(){ SvStream *pTemp = pServiceData; pServiceData = NULL; return pTemp; }
 
-    /// Ermöglicht das Auslösen des nächsten Callbacks. Wird auch Implizit gerufen.
+    /// Ermï¿½glicht das Auslï¿½sen des nï¿½chsten Callbacks. Wird auch Implizit gerufen.
     void FinishCallback(){ bIsInsideCallback = sal_False; }
 
-    /// Syncrones Empfangen der Daten. Nur für Kommandozeile, sonst leer implementiert
+    /// Syncrones Empfangen der Daten. Nur fï¿½r Kommandozeile, sonst leer implementiert
     virtual sal_Bool ReceiveDataStream(){ return sal_False; }
 
     /// Statistics
@@ -198,7 +190,7 @@ protected:
     sal_uInt16 nServiceProtocol;
     sal_uInt16 nServiceHeaderType;
 
-    /// Verhindert das vorzeitige Auslösen des nächsten Callbacks.
+    /// Verhindert das vorzeitige Auslï¿½sen des nï¿½chsten Callbacks.
     void StartCallback(){ bIsInsideCallback = sal_True; }
     sal_Bool bIsInsideCallback;
 
@@ -237,14 +229,14 @@ public:
     virtual sal_Bool StartCommunication()=0;
     virtual sal_Bool StartCommunication( String aApp, String aParams );
     virtual sal_Bool StartCommunication( ByteString aHost, sal_uLong nPort );
-    virtual sal_Bool StopCommunication()=0;     // Hält alle CommunicationLinks an
+    virtual sal_Bool StopCommunication()=0;     // Hï¿½lt alle CommunicationLinks an
     virtual sal_Bool IsCommunicationRunning() { return bIsCommunicationRunning; }
 //  virtual sal_Bool IsCommunicationError();
 
 //  Der Name oder die IP-Adresse oder sonstwas um den Communikationspartner zu identifizieren
     virtual ByteString GetMyName( CM_NameType eType );
 
-    virtual sal_Bool IsLinkValid( CommunicationLink* pCL )=0;   // Notwendig für call im Destruktor
+    virtual sal_Bool IsLinkValid( CommunicationLink* pCL )=0;   // Notwendig fï¿½r call im Destruktor
 
     virtual sal_uInt16 GetCommunicationLinkCount()=0;
     virtual CommunicationLinkRef GetCommunicationLink( sal_uInt16 nNr )=0;
@@ -274,7 +266,7 @@ protected:
 
     CM_InfoType nInfoType;
 
-    //  Diese Routinen rufen den Link oder sind überladen
+    //  Diese Routinen rufen den Link oder sind ï¿½berladen
     virtual void ConnectionOpened( CommunicationLink* pCL ){ mlConnectionOpened.Call( pCL ); }
     virtual void ConnectionClosed( CommunicationLink* pCL ){ mlConnectionClosed.Call( pCL ); }
     virtual void DataReceived( CommunicationLink* pCL ){ mlDataReceived.Call( pCL ); }
@@ -282,7 +274,7 @@ protected:
 
     sal_Bool bIsCommunicationRunning;
 
-    virtual void DestroyingLink( CommunicationLink *pCL )=0;    // Link trägt sich im Destruktor aus
+    virtual void DestroyingLink( CommunicationLink *pCL )=0;    // Link trï¿½gt sich im Destruktor aus
 
 private:
     ByteString maApplication;
@@ -300,7 +292,7 @@ class SingleCommunicationManager : public CommunicationManager
 public:
     SingleCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
     virtual ~SingleCommunicationManager();
-    virtual sal_Bool StopCommunication();       // Hält alle CommunicationLinks an
+    virtual sal_Bool StopCommunication();       // Hï¿½lt alle CommunicationLinks an
     virtual sal_Bool IsLinkValid( CommunicationLink* pCL );
     virtual sal_uInt16 GetCommunicationLinkCount();
     virtual CommunicationLinkRef GetCommunicationLink( sal_uInt16 nNr );
@@ -310,7 +302,7 @@ protected:
     virtual void CallConnectionClosed( CommunicationLink* pCL );
     CommunicationLinkRef xActiveLink;
     CommunicationLink *pInactiveLink;
-    virtual void DestroyingLink( CommunicationLink *pCL );  // Link trägt sich im Destruktor aus
+    virtual void DestroyingLink( CommunicationLink *pCL );  // Link trï¿½gt sich im Destruktor aus
 };
 
 class ICommunicationManagerClient
@@ -337,19 +329,19 @@ private:
     ByteString aMyName;
 
     TCPIO* pTCPIO;
-    vos::OStreamSocket *pStreamSocket;
+    osl::StreamSocket* pStreamSocket;
 
 protected:
-    SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
+    SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket );
     virtual ~SimpleCommunicationLinkViaSocket();
 
-    vos::OStreamSocket* GetStreamSocket() { return pStreamSocket; }
-    void SetStreamSocket( vos::OStreamSocket* pSocket );
+    osl::StreamSocket* GetStreamSocket() { return pStreamSocket; }
+    void SetStreamSocket( osl::StreamSocket* pSocket );
 
     SvStream *pReceiveStream;
     sal_Bool DoReceiveDataStream();             /// Recieve DataPacket from Socket
     virtual sal_Bool SendHandshake( HandshakeType aHandshakeType, SvStream* pData = NULL);
-    void SetFinalRecieveTimeout();
+    bool IsReceiveReady();
     sal_Bool bIsRequestShutdownPending;
     virtual void WaitForShutdown()=0;
     void SetNewPacketAsCurrent();
@@ -358,7 +350,7 @@ protected:
 class SimpleCommunicationLinkViaSocketWithReceiveCallbacks : public SimpleCommunicationLinkViaSocket
 {
 public:
-    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
+    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, osl::StreamSocket* pSocket );
     ~SimpleCommunicationLinkViaSocketWithReceiveCallbacks();
     virtual sal_Bool ReceiveDataStream();
 protected:
@@ -371,7 +363,7 @@ class CommonSocketFunctions
 public:
     sal_Bool DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, sal_uLong nPort );
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS )=0;
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS )=0;
 };
 
 class SingleCommunicationManagerClientViaSocket : public SingleCommunicationManager, public ICommunicationManagerClient, CommonSocketFunctions
@@ -387,7 +379,9 @@ private:
     ByteString aHostToTalk;
     sal_uLong nPortToTalk;
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

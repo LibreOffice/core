@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _CUI_TBXFORM_HXX
 #define _CUI_TBXFORM_HXX
 
@@ -5,9 +6,7 @@
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 //========================================================================
 
@@ -27,3 +26,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

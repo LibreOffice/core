@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -51,8 +49,6 @@ SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical, long
 , mnMaxVertical( nMaxVertical )
 , mnMaxHorizontal( nMaxHorizontal )
 {
-    maVertBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_VERT)), BMP_COLOR_HIGHCONTRAST);
-    maHorzBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_HORZ)), BMP_COLOR_HIGHCONTRAST);
     FreeResource();
     maHorzBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
     maPropCB.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
@@ -109,3 +105,5 @@ short SvxSplitTableDlg::Execute()
 void SvxSplitTableDlg::Apply()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

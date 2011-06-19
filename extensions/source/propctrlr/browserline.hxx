@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 /** === end UNO includes === **/
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 namespace com { namespace sun { namespace star { namespace inspection { namespace PropertyLineElement
 {
@@ -80,7 +79,7 @@ namespace pcr
                             ~OBrowserLine();
 
         void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
-        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl()
+        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl() const
         {
             return m_xControl;
         }
@@ -132,7 +131,7 @@ namespace pcr
         void    impl_layoutComponents();
 
         PushButton& impl_ensureButton( bool _bPrimary );
-        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage );
+        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage );
     };
 
 //............................................................................
@@ -141,3 +140,4 @@ namespace pcr
 
 #endif // _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

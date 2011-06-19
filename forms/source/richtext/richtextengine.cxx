@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@
 #include <vcl/outdev.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svl/undo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -94,7 +95,7 @@ namespace frm
     {
         RichTextEngine* pClone( NULL );
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             EditTextObject* pMyText = CreateTextObject();
             OSL_ENSURE( pMyText, "RichTextEngine::Clone: CreateTextObject returned nonsense!" );
 
@@ -120,7 +121,6 @@ namespace frm
     //--------------------------------------------------------------------
     RichTextEngine::~RichTextEngine( )
     {
-        //delete m_pEnginePool; // must be done after the RichTextEngine was deleted
         DBG_DTOR(RichTextEngine,NULL);
     }
 
@@ -160,3 +160,4 @@ namespace frm
 }   // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

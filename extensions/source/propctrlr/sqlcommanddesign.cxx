@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #include "precompiled_extensions.hxx"
 #include "sqlcommanddesign.hxx"
 #include "formstrings.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "unourl.hxx"
 
 /** === begin UNO includes === **/
@@ -391,3 +388,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include "hangulhanjadlg.hxx"
 #include "hangulhanjadlg.hrc"
@@ -57,15 +55,6 @@
 namespace svx
 {
 //.............................................................................
-/*
-    using HangulHanjaConversion::eSimpleConversion;
-    using HangulHanjaConversion::eHangulBracketed;
-    using HangulHanjaConversion::eHanjaBracketed;
-    using HangulHanjaConversion::eRubyHanjaAbove;
-    using HangulHanjaConversion::eRubyHanjaBelow;
-    using HangulHanjaConversion::eRubyHangulAbove;
-    using HangulHanjaConversion::eRubyHangulBelow;
-*/
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::linguistic2;
@@ -369,7 +358,7 @@ namespace svx
         m_aValueSet.SetLineCount( LINE_CNT );
         m_aValueSet.SetStyle( m_aValueSet.GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
         m_aValueSet.SetBorderStyle( WINDOW_BORDER_MONO );
-        String aOneCharacter(RTL_CONSTASCII_STRINGPARAM("AU"));
+        String aOneCharacter(RTL_CONSTASCII_USTRINGPARAM("AU"));
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
         m_aValueSet.SetItemWidth( nItemWidth );
 
@@ -599,19 +588,15 @@ namespace svx
         m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eOptions,
                                         LINK( this, HangulHanjaConversionDialog, OnOption ) );
         m_pPlayground->GetButton( SvxCommonLinguisticControl::eOptions )->Show();
-//      m_pPlayground->EnableButton( SvxCommonLinguisticControl::eOptions, true );
 
         if ( editeng::HangulHanjaConversion::eHangulToHanja == _ePrimaryDirection )
         {
-//          m_aHanjaOnly.Enable( sal_False );
             m_pIgnoreNonPrimary = &m_aHangulOnly;
         }
         else
         {
-//          m_aHangulOnly.Enable( sal_False );
             m_pIgnoreNonPrimary = &m_aHanjaOnly;
         }
-//        m_pIgnoreNonPrimary->Check();
 
         // initial focus
         FocusSuggestion( );
@@ -882,8 +867,6 @@ namespace svx
     //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversionDialog::GetUseBothDirections( ) const
     {
-//      DBG_ASSERT( m_pIgnoreNonPrimary, "HangulHanjaConversionDialog::GetUseBothDirections: where's the check box pointer?" );
-//      return m_pIgnoreNonPrimary ? !m_pIgnoreNonPrimary->IsChecked( ) : sal_True;
         return !m_aHangulOnly.IsChecked() && !m_aHanjaOnly.IsChecked();
     }
 
@@ -912,7 +895,7 @@ namespace svx
             case HHC::eRubyHangulAbove: m_pHangulAbove->Check(); break;
             case HHC::eRubyHangulBelow: m_pHangulBelow->Check(); break;
         default:
-            DBG_ERROR( "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
+            OSL_FAIL( "HangulHanjaConversionDialog::SetConversionFormat: unknown type!" );
         }
     }
 
@@ -934,7 +917,7 @@ namespace svx
         if ( m_pHangulBelow->IsChecked() )
             return HHC::eRubyHangulBelow;
 
-        DBG_ERROR( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
+        OSL_FAIL( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" );
         return HHC::eSimpleConversion;
     }
 
@@ -1161,7 +1144,6 @@ namespace svx
         m_aDictsLB.SetStyle( m_aDictsLB.GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
         m_aDictsLB.SetSelectionMode( SINGLE_SELECTION );
         m_aDictsLB.SetHighlightRange();
-//      m_aDictsLB.SetHelpId( xxx );
         m_aDictsLB.SetSelectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
         m_aDictsLB.SetDeselectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
 
@@ -1753,13 +1735,13 @@ namespace svx
 
             //fill found entries into boxes
             sal_uInt32 nCnt = aEntries.getLength();
-            sal_uInt32 n = 0;
             if( nCnt )
             {
                 if( !m_pSuggestions )
                     m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
 
                 const OUString* pSugg = aEntries.getConstArray();
+                sal_uInt32 n = 0;
                 while( nCnt )
                 {
                     m_pSuggestions->Set( pSugg[ n ], sal_uInt16( n ) );
@@ -1897,3 +1879,5 @@ namespace svx
 //.............................................................................
 }   // namespace svx
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

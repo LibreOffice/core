@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,6 @@ class ElementCollector : public ElementMark
  *  of the ElementMark class, this class also maintains the priority, and
  *  manages the notify process
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -88,7 +86,6 @@ public:
             xReferenceResolvedListener);
     virtual ~ElementCollector() {};
 
-    //bool isInternalNotificationSuppressed() const;
     com::sun::star::xml::crypto::sax::ElementMarkPriority getPriority() const;
     bool getModify() const;
     void notifyListener();
@@ -106,3 +103,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

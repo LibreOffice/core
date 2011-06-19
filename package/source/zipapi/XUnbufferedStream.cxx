@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -178,10 +179,12 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
     if ( mnMyCurrent + nRequestedBytes > mnZipSize + maHeader.getLength() )
         nRequestedBytes = static_cast < sal_Int32 > ( mnZipSize + maHeader.getLength() - mnMyCurrent );
 
-    sal_Int32 nRead = 0, nLastRead = 0, nTotal = 0;
+    sal_Int32 nTotal = 0;
     aData.realloc ( nRequestedBytes );
     if ( nRequestedBytes )
     {
+        sal_Int32 nRead = 0;
+        sal_Int32 nLastRead = 0;
         if ( mbRawStream )
         {
             sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
@@ -314,8 +317,8 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                 if ( 0 )
                 {
                     uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-                    uno::Reference< ucb::XSimpleFileAccess > xAccess( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY );
-                    uno::Reference< io::XOutputStream > xOut = xAccess->openFileWrite( ::rtl::OUString::createFromAscii( "file:///d:/777/Encrypted/picture" ) );
+                    uno::Reference< ucb::XSimpleFileAccess > xAccess( xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ), uno::UNO_QUERY );
+                    uno::Reference< io::XOutputStream > xOut = xAccess->openFileWrite(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "file:///d:/777/Encrypted/picture") ) );
                     xOut->writeBytes( aData );
                     xOut->closeOutput();
                 }
@@ -372,3 +375,5 @@ sal_Int64 SAL_CALL XUnbufferedStream::getLength(  )
     return mnZipSize;
 }
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@ $(eval $(call gb_Jar_add_jars,query,\
 	$(OUTDIR)/bin/java_uno.jar \
 	$(OUTDIR)/bin/commonwizards.jar \
 ))
-
 $(eval $(call gb_Jar_set_manifest,query,$(SRCDIR)/wizards/com/sun/star/wizards/query/MANIFEST.MF))
 
 $(eval $(call gb_Jar_set_packageroot,query,com))

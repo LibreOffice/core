@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
 
-#include <tools/prewin.h>
 #ifndef _SHOBJ_H
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -46,7 +46,6 @@
 #pragma warning(pop)
 #endif
 #endif
-#include <tools/postwin.h>
 // as we define it ourselves further down the line we remove it here
 #ifdef IS_ERROR
     #undef IS_ERROR
@@ -103,3 +102,4 @@ String _SHGetSpecialFolder_COMMON_APPDATA()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef EXTENSIONS_LOGHANDLER_HXX
 #include "loghandler.hxx"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/logging/LogLevel.hpp>
@@ -202,3 +201,4 @@ namespace logging
 } // namespace logging
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

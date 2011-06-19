@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@ class SvxAreaTabDialog : public SfxTabDialog
 {
 private:
     SdrModel*           mpDrawModel;
-//  const SdrView*      mpView;
 
     XColorTable*        mpColorTab;
     XColorTable*        mpNewColorTab;
@@ -119,10 +119,8 @@ class SvxTransparenceTabPage : public SvxTabPage
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    //CHINA001 sal_uInt16*             pPageType;
-    //CHINA001 sal_uInt16*             pDlgType;
-    sal_uInt16             nPageType; //add CHINA001
-    sal_uInt16             nDlgType;  //add CHINA001
+    sal_uInt16          nPageType;
+    sal_uInt16          nDlgType;
 
     // main selection
     FixedLine           aFlProp;
@@ -187,11 +185,9 @@ public:
     virtual int  DeactivatePage(SfxItemSet* pSet);
     virtual void PointChanged(Window* pWindow, RECT_POINT eRP);
 
-    //CHINA001 void SetPageType(sal_uInt16 *pInType) { pPageType = pInType; }
-    //CHINA001 void SetDlgType(sal_uInt16* pInType) { pDlgType = pInType; }
-    void SetPageType(sal_uInt16 nInType) { nPageType = nInType; } //add CHINA001
-    void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }//add CHINA001
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    void SetPageType(sal_uInt16 nInType) { nPageType = nInType; }
+    void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
+    virtual void PageCreated (SfxAllItemSet aSet);
 };
 
 /*************************************************************************
@@ -257,12 +253,9 @@ private:
     ChangeType*         pnGradientListState;
     ChangeType*         pnHatchingListState;
 
-    //CHINA001 sal_uInt16*             pPageType;
-    //CHINA001 sal_uInt16*             pDlgType;
-    //CHINA001 sal_uInt16*             pPos;
-    sal_uInt16 nPageType; //add CHINA001
-    sal_uInt16 nDlgType;//add CHINA001
-    sal_uInt16 nPos; //add CHINA001
+    sal_uInt16 nPageType;
+    sal_uInt16 nDlgType;
+    sal_uInt16 nPos;
 
     sal_Bool*               pbAreaTP;
 
@@ -286,7 +279,6 @@ private:
     DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
     DECL_LINK( ClickBitmapHdl_Impl, void * );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
-//  DECL_LINK( ModifyTransparentHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void * );
     DECL_LINK( ModifyTileHdl_Impl, void * );
     DECL_LINK( ClickScaleHdl_Impl, void * );
@@ -313,14 +305,11 @@ public:
                 { pHatchingList = pHtchLst; }
     void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
 
-    //CHINA001 void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; } //add CHINA001
-    //CHINA001 void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }//add CHINA001
-    //CHINA001 void    SetPos( sal_uInt16* pInPos ) { pPos = pInPos; }
-    void    SetPos( sal_uInt16 nInPos ) { nPos = nInPos; }//add CHINA001
+    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
+    void    SetPos( sal_uInt16 nInPos ) { nPos = nInPos; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
@@ -356,8 +345,8 @@ private:
 
     XColorTable*        pColorTab;
     ChangeType*         pnColorTableState;
-    sal_uInt16              nPageType;  //add CHINA001
-    sal_uInt16              nDlgType;   //add CHINA001
+    sal_uInt16              nPageType;
+    sal_uInt16              nDlgType;
     sal_uInt16*             pPos;
     sal_Bool*               pbAreaTP;
 
@@ -387,13 +376,11 @@ public:
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
     void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
-//CHINA001  void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-//CHINA001  void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
-    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; } //add CHINA001
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }    //add CHINA001
+    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
     void    DisablePage( sal_Bool bIn ) { bDisable = bIn; }
 };
 
@@ -760,11 +747,11 @@ private:
     DECL_LINK( ClickDeleteHdl_Impl, void * );   // Button 'loeschen'
     DECL_LINK( ClickWorkOnHdl_Impl, void * );   // Button 'Bearbeiten'
 
-    DECL_LINK( SelectColorLBHdl_Impl, void * ); // Farbe aus Listbox auswählen
-    DECL_LINK( SelectValSetHdl_Impl, void * );  // Farbe aus Farbpalette (links) auswählen
+    DECL_LINK( SelectColorLBHdl_Impl, void * ); // Farbe aus Listbox auswï¿½hlen
+    DECL_LINK( SelectValSetHdl_Impl, void * );  // Farbe aus Farbpalette (links) auswï¿½hlen
     DECL_LINK( SelectColorModelHdl_Impl, void * );  // Auswahl Listbox 'Farbmodell'
     long ChangeColorHdl_Impl( void* p );
-    DECL_LINK( ModifiedHdl_Impl, void * );      // Inhalt der Farbwerte-Felder wurde verändert
+    DECL_LINK( ModifiedHdl_Impl, void * );      // Inhalt der Farbwerte-Felder wurde verï¿½ndert
     DECL_LINK( ClickLoadHdl_Impl, void * );     // Button 'Farbtabelle laden'
     DECL_LINK( ClickSaveHdl_Impl, void * );     // Button 'Farbtabelle sichern'
 
@@ -797,6 +784,6 @@ public:
     virtual void FillUserData();
 };
 
-
 #endif // _CUI_TAB_AREA_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

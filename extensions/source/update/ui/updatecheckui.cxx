@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/window.hxx>
@@ -310,17 +310,10 @@ Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
     if ( pMBarWin )
         nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
 
-    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() ) {
-        if ( nMBarHeight >= 35 )
-            nResID = RID_UPDATE_AVAILABLE_26_HC;
-        else
-            nResID = RID_UPDATE_AVAILABLE_16_HC;
-    } else {
-        if ( nMBarHeight >= 35 )
-            nResID = RID_UPDATE_AVAILABLE_26;
-        else
-            nResID = RID_UPDATE_AVAILABLE_16;
-    }
+    if ( nMBarHeight >= 35 )
+        nResID = RID_UPDATE_AVAILABLE_26;
+    else
+        nResID = RID_UPDATE_AVAILABLE_16;
 
     return Image( ResId( nResID, *mpUpdResMgr ) );
 }
@@ -343,12 +336,12 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(
                     xServiceManager->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ) ),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ),
                     uno::UNO_QUERY );
             if ( xGraphProvider.is() )
             {
                 uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                aMediaProps[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+                aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
                 aMediaProps[0].Value <<= rURL;
 
                 uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
@@ -375,7 +368,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
     if ( ! mbShowMenuIcon )
         return;
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     MenuBar *pActiveMBar = pSysWin->GetMenuBar();
     if ( ( pSysWin != mpIconSysWin ) || ( pActiveMBar != mpIconMBar ) )
@@ -427,7 +420,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
 void SAL_CALL UpdateCheckUI::notifyEvent(const document::EventObject& rEvent)
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnPrepareViewClosing") ) == 0 )
     {
@@ -454,7 +447,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     rtl::OUString aString;
 
@@ -518,7 +511,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
 uno::Any UpdateCheckUI::getPropertyValue(const rtl::OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
 
@@ -611,7 +604,7 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
 //------------------------------------------------------------------------------
 void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     maWaitTimer.Stop();
     maTimeoutTimer.Stop();
@@ -644,7 +637,7 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, ClickHdl, sal_uInt16*, EMPTYARG )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     maWaitTimer.Stop();
     if ( mpBubbleWin )
@@ -678,7 +671,7 @@ IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pDat
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, WaitTimeOutHdl, Timer*, EMPTYARG )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     mpBubbleWin = GetBubbleWindow();
 
@@ -701,7 +694,7 @@ IMPL_LINK( UpdateCheckUI, TimeOutHdl, Timer*, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Window *pTopWin = Application::GetFirstTopLevelWindow();
     Window *pActiveWin = Application::GetActiveTopWindow();
@@ -738,7 +731,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
 
     if ( VCLEVENT_OBJECT_DYING == nEventID )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( mpIconSysWin == pEvent->GetWindow() )
         {
             mpIconSysWin->RemoveEventListener( maWindowEventHdl );
@@ -747,7 +740,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     }
     else if ( VCLEVENT_WINDOW_MENUBARADDED == nEventID )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window *pWindow = pEvent->GetWindow();
         if ( pWindow )
         {
@@ -760,7 +753,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     }
     else if ( VCLEVENT_WINDOW_MENUBARREMOVED == nEventID )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         MenuBar *pMBar = (MenuBar*) pEvent->GetData();
         if ( pMBar && ( pMBar == mpIconMBar ) )
             RemoveBubbleWindow( true );
@@ -768,7 +761,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     else if ( ( nEventID == VCLEVENT_WINDOW_MOVE ) ||
               ( nEventID == VCLEVENT_WINDOW_RESIZE ) )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( ( mpIconSysWin == pEvent->GetWindow() ) &&
              ( mpBubbleWin != NULL ) && ( mpIconMBar != NULL ) )
         {
@@ -791,7 +784,7 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
         case VCLEVENT_WINDOW_SHOW:
         case VCLEVENT_WINDOW_ACTIVATE:
         case VCLEVENT_WINDOW_GETFOCUS: {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             Window *pWindow = static_cast< VclWindowEvent * >(pEvent)->GetWindow();
             if ( pWindow && pWindow->IsTopWindow() )
@@ -844,7 +837,7 @@ BubbleWindow::~BubbleWindow()
 //------------------------------------------------------------------------------
 void BubbleWindow::Resize()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FloatingWindow::Resize();
 
@@ -887,7 +880,7 @@ void BubbleWindow::SetTitleAndText( const XubString& rTitle,
 //------------------------------------------------------------------------------
 void BubbleWindow::Paint( const Rectangle& )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     LineInfo aThickLine( LINE_SOLID, 2 );
 
@@ -933,7 +926,7 @@ void BubbleWindow::MouseButtonDown( const MouseEvent& )
 //------------------------------------------------------------------------------
 void BubbleWindow::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !bVisible )
     {
@@ -1051,16 +1044,14 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 
 //------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL
-component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
 {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" void *
-component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pszImplementationName,
@@ -1069,3 +1060,4 @@ component_getFactory(const sal_Char *pszImplementationName, void *pServiceManage
         kImplementations_entries) ;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

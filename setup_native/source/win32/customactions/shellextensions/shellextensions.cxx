@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,7 +144,7 @@ extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE hMSI)
     HKEY hKey;
 
 
-// 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
+// to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
 // in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
 // Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
 // extensions\source\activex\main\so_activex.cpp
@@ -211,3 +212,5 @@ extern "C" UINT __stdcall DeinstallExecSequenceEntry(MSIHANDLE)
     }
     return ERROR_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

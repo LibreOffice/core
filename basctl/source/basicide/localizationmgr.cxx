@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::resource;
 
-static ::rtl::OUString aDot  = ::rtl::OUString::createFromAscii( "." );
-static ::rtl::OUString aEsc  = ::rtl::OUString::createFromAscii( "&" );
-static ::rtl::OUString aSemi = ::rtl::OUString::createFromAscii( ";" );
+static ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
+static ::rtl::OUString aEsc( RTL_CONSTASCII_USTRINGPARAM( "&" ));
+static ::rtl::OUString aSemi( RTL_CONSTASCII_USTRINGPARAM( ";" ));
 
 
 LocalizationMgr::LocalizationMgr( BasicIDEShell* pIDEShell,
@@ -72,9 +73,8 @@ bool LocalizationMgr::isLibraryLocalized( void )
 
 void LocalizationMgr::handleTranslationbar( void )
 {
-    static ::rtl::OUString aLayoutManagerName = ::rtl::OUString::createFromAscii( "LayoutManager" );
-    static ::rtl::OUString aToolBarResName =
-        ::rtl::OUString::createFromAscii( "private:resource/toolbar/translationbar" );
+    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
+    static ::rtl::OUString aToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/translationbar" ));
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pIDEShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
@@ -99,7 +99,6 @@ void LocalizationMgr::handleTranslationbar( void )
 }
 
 
-//============================================
 // TODO: -> export from toolkit
 
 struct LanguageDependentProp
@@ -135,7 +134,7 @@ bool isLanguageDependentProperty( ::rtl::OUString aName )
     }
     return bRet;
 }
-//============================================
+
 
 void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode )
 {
@@ -265,7 +264,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
-                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -338,7 +336,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
-                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -376,7 +373,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         ::rtl::OUString aPropIdStr = aEsc;
                         aPropIdStr += aPureIdStr;
                         // TODO?: Change here and in toolkit
-                        //aPropIdStr += aSemi;
                         (void)aSemi;
                         aPropAny <<= aPropIdStr;
                         xPropertySet->setPropertyValue( aPropName, aPropAny );
@@ -660,50 +656,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
     return nChangedCount;
 }
 
-/*
-void TEST_simulateDialogAddRemoveLocale( bool bAdd )
-{
-    Sequence< Locale > aLocaleSeq( 1 );
-    Locale* pLocales = aLocaleSeq.getArray();
-
-    ::com::sun::star::lang::Locale aLocale_en;
-    aLocale_en.Language = ::rtl::OUString::createFromAscii( "en" );
-    aLocale_en.Country = ::rtl::OUString::createFromAscii( "US" );
-
-    ::com::sun::star::lang::Locale aLocale_de;
-    aLocale_de.Language = ::rtl::OUString::createFromAscii( "de" );
-    aLocale_de.Country = ::rtl::OUString::createFromAscii( "DE" );
-
-    ::com::sun::star::lang::Locale aLocale_fr;
-    aLocale_fr.Language = ::rtl::OUString::createFromAscii( "fr" );
-    aLocale_fr.Country = ::rtl::OUString::createFromAscii( "FR" );
-
-    int n = 0;
-    if( n == 0 )
-        pLocales[0] = aLocale_en;
-    else if( n == 1 )
-        pLocales[0] = aLocale_de;
-    else if( n == 2 )
-        pLocales[0] = aLocale_fr;
-
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    LocalizationMgr* pMgr = pIDEShell->GetCurLocalizationMgr();
-    if( bAdd )
-        pMgr->handleAddLocales( aLocaleSeq );
-    else
-        pMgr->handleRemoveLocales( aLocaleSeq );
-}
-
-void TEST_simulateDialogAddLocale( void )
-{
-    TEST_simulateDialogAddRemoveLocale( true );
-}
-
-void TEST_simulateDialogRemoveLocale( void )
-{
-    TEST_simulateDialogAddRemoveLocale( false );
-}
-*/
 
 void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
 {
@@ -797,6 +749,7 @@ void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
 
     DBG_ASSERT( bConsistant,
         "LocalizationMgr::handleRemoveLocales(): sequence contains unsupported locales" );
+    (void)bConsistant;
 }
 
 void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
@@ -809,7 +762,7 @@ void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
         }
         catch(IllegalArgumentException&)
         {
-            DBG_ERROR( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
+            OSL_FAIL( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
         }
 
         // update locale toolbar
@@ -829,7 +782,7 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
         }
         catch(IllegalArgumentException&)
         {
-            DBG_ERROR( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
+            OSL_FAIL( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
         }
 
         // update locale toolbar
@@ -978,7 +931,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName,
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
-    static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
+    static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
@@ -1224,3 +1177,4 @@ Reference< XStringResourceManager > LocalizationMgr::getStringResourceFromDialog
     return xStringResourceManager;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

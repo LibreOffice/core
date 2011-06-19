@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -192,7 +193,7 @@
             if ( aAnyProp >>= aProperties ) )
             {
                 for ( sal_Int32 nInd = 0; nInd < aProperties.getLength; nInd++ )
-                if ( aProperties[nInd].Name.equalsAscii( "UIName" )
+                if ( aProperties[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) )
                 {
                     aProperties[nInd].Value >>= aResult;
                     break;
@@ -211,3 +212,5 @@
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

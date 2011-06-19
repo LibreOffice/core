@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,10 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <dialmgr.hxx>
 #include <cuires.hrc>
+#include <sal/macros.h>
 #include <com/sun/star/task/UrlRecord.hpp>
 #include <com/sun/star/task/XPasswordContainer.hpp>
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
@@ -127,7 +126,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog( Window* pParent ) :
     long nBtnTextWidth = 0;
     Window* pButtons[] = { &m_aRemoveBtn, &m_aRemoveAllBtn, &m_aChangeBtn };
     Window** pButton = pButtons;
-    const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
+    const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
     for ( ; i < nBCount; ++i, ++pButton )
     {
         long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
@@ -207,7 +206,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                     aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
                     SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
-                    pEntry->SetUserData( (void*)(nCount++) );
+                    pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
                 }
             }
 
@@ -226,7 +225,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                 aUIEntry += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
                 SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
-                pEntry->SetUserData( (void*)(nCount++) );
+                pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
             }
         }
     }
@@ -370,3 +369,4 @@ IMPL_LINK( WebConnectionInfoDialog, EntrySelectedHdl, void*, EMPTYARG )
 }   // namespace svx
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

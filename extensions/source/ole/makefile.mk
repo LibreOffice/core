@@ -47,9 +47,9 @@ INCPRE+= $(foreach,i,$(ATL_INCLUDE) -I$(i))
 
 .IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
-.IF "$(USE_STLP_DEBUG)"!=""
+.IF "$(USE_DEBUG_RUNTIME)"!=""
 CDEFS+=-D_DEBUG
-.ENDIF # "$(USE_STLP_DEBUG)"!=""
+.ENDIF # "$(USE_DEBUG_RUNTIME)"!=""
 
 SLOFILES= \
             $(SLO)$/servreg.obj		\
@@ -71,7 +71,6 @@ OWNGUIDCDEFS+= -DOWNGUID
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=\
         $(SALLIB) 	\
-    $(VOSLIB)	\
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
     $(OLE32LIB) 	\
@@ -80,13 +79,11 @@ SHL1STDLIBS=\
     $(OLEAUT32LIB)
 
 .IF "$(COM)"=="MSC"
-.IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
-.IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(USE_DEBUG_RUNTIME)" != ""
     SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
-.ENDIF # "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
 .ENDIF # "$(COM)"=="MSC"
 
 SHL1LIBS=
@@ -99,7 +96,6 @@ DEF1EXPORTFILE=$(SHL1TARGET).dxp
 SHL2TARGET=$(TARGET2)
 SHL2STDLIBS=\
         $(SALLIB) 	\
-    $(VOSLIB)	\
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
     $(OLE32LIB) 	\
@@ -108,13 +104,11 @@ SHL2STDLIBS=\
     $(OLEAUT32LIB)
 
 .IF "$(COM)"=="MSC"
-.IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
-.IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(USE_DEBUG_RUNTIME)" != ""
     SHL2STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
     SHL2STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
-.ENDIF # "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
 .ENDIF # "$(COM)"=="MSC"
 
 SHL2LIBS=
@@ -123,7 +117,7 @@ SHL2OBJS=$(REAL_OWNGUID_SLOFILES)
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=$(TARGET).dxp
 
-.ENDIF
+.ENDIF # "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
 #----------------------------------------------------------------
 

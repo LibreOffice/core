@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include <connectivity/sqlparse.hxx>
 #include <svx/ParseContext.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //.........................................................................
 namespace frm
@@ -74,7 +75,7 @@ namespace frm
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >           m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xMessageParent;
 
-        typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > MapString2String;
+        typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > MapString2String;
         MapString2String                m_aDisplayItemToValueItem;
 
         ::rtl::OUString                 m_aText;
@@ -156,3 +157,5 @@ namespace frm
 //.........................................................................
 
 #endif // FORMS_COMPONENT_FILTER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

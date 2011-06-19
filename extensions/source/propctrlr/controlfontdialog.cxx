@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef _EXTENSIONS_PROPCTRLR_FONTITEMIDS_HXX_
 #include "controlfontdialog.hxx"
-#endif
 #include <cppuhelper/typeprovider.hxx>
 #include "fontdialog.hxx"
 #include "formstrings.hxx"
@@ -98,7 +97,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString OControlFontDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.form.ui.OControlFontDialog");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.OControlFontDialog"));
     }
 
     //---------------------------------------------------------------------
@@ -111,7 +110,7 @@ namespace pcr
     ::comphelper::StringSequence OControlFontDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog");
+        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.ControlFontDialog"));
         return aSupported;
     }
 
@@ -175,3 +174,4 @@ namespace pcr
 }   // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

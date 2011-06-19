@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,9 @@
 #include <list>
 
 
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+#ifndef A2OU
+#  define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
+#endif
 
 #define OU2A(rtlOUString) \
     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
@@ -111,3 +114,4 @@ rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset);
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

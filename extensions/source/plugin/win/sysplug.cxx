@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,21 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+
 #include <plugin/impl.hxx>
 
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-    #include <tools/prewin.h>
-
-    #include <windows.h>
-    #include <string.h>
-    #include <tchar.h>
-    #include <winreg.h>
-    #include <winbase.h>
-    #include <objbase.h>
-
-    #include <tools/postwin.h>
+#include <string.h>
+#include <tchar.h>
+#include <objbase.h>
 
 #pragma warning (pop)
 
@@ -55,7 +53,9 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 #include <tools/debug.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #if OSL_DEBUG_LEVEL > 1
 void TRACE( char const * s );
@@ -273,11 +273,11 @@ long PluginComm_Impl::doIt()
     break;
     case eNPP_Initialize:
         TRACE( "eNPP_Initialize" );
-        OSL_ENSURE( false, "NPP_Initialize: not implemented!" );
+        OSL_FAIL( "NPP_Initialize: not implemented!" );
         break;
     case eNPP_GetJavaClass:
         TRACE( "eNPP_GetJavaClass" );
-        OSL_ENSURE( false, "NPP_GetJavaClass: not implemented!" );
+        OSL_FAIL( "NPP_GetJavaClass: not implemented!" );
         break;
     }
     return nRet;
@@ -425,7 +425,7 @@ NPError PluginComm_Impl::NPP_SetValue( NPP instance, NPNVariable variable, void 
 //--------------------------------------------------------------------------------------------------
 void * PluginComm_Impl::NPP_GetJavaClass()
 {
-    DBG_ERROR( "no java class available!" );
+    OSL_FAIL( "no java class available!" );
     return 0;
 }
 
@@ -441,3 +441,5 @@ void PluginComm_Impl::NPP_Shutdown()
     m_eCall = eNPP_Shutdown;
     execute();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

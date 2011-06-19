@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -204,9 +205,9 @@ int nspluginOOoModuleHook (void** aResult)
         strcpy (realFileName, libFileName);
     }
 
-        #if OSL_DEBUG_LEVEL > 1
-    fprintf (stderr, "OpenOffice path before fixup is '%s'\n", realFileName);
-        #endif
+#if OSL_DEBUG_LEVEL > 0
+    fprintf (stderr, "LibreOffice path before fixup is '%s'\n", realFileName);
+#endif
 
     if (realFileName[0] != '/') {
         /* a relative sym-link and we need to get an absolute path */
@@ -225,9 +226,9 @@ int nspluginOOoModuleHook (void** aResult)
 
     *aResult = realFileName;
 
-        #if OSL_DEBUG_LEVEL > 1
-    fprintf (stderr, "OpenOffice path is '%s'\n", realFileName);
-        #endif
+#if OSL_DEBUG_LEVEL > 0
+    fprintf (stderr, "LibreOffice path is '%s'\n", realFileName);
+#endif
 
     return 0;
 }
@@ -505,3 +506,4 @@ void NSP_WriteLog(int level,  const char* pFormat, ...)
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

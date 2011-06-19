@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
-#ifndef _CRetStream_HXX
 #include "cretstrm.hxx"
-#endif
 #include <tools/debug.hxx>
 #include "rcontrol.hxx"
 #include "svcommstream.hxx"
@@ -64,10 +63,11 @@ void CRetStream::Read( SbxValue &aValue )
     *pSammel >> nId;
     if (nId != BinSbxValue)
     {
-        DBG_ERROR1( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
+        OSL_TRACE( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
     }
     SbxBaseRef xBase = SbxBase::Load( *pSammel );
     if ( IS_TYPE( SbxValue, xBase ) )
         aValue = *PTR_CAST( SbxValue, &xBase );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

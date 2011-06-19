@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include <sfx2/basedlgs.hxx>
 #include <cuires.hrc>
@@ -87,36 +85,27 @@ SvxDistributePage::SvxDistributePage(
 :   SvxTabPage(pWindow, CUI_RES(RID_SVXPAGE_DISTRIBUTE), rInAttrs),
     meDistributeHor(eHor),
     meDistributeVer(eVer),
-    maFlHorizontal      (this, CUI_RES(FL_HORIZONTAL        )),
+    maFlHorizontal      (this, CUI_RES(FL_HORIZONTAL    )),
     maBtnHorNone        (this, CUI_RES(BTN_HOR_NONE     )),
     maBtnHorLeft        (this, CUI_RES(BTN_HOR_LEFT     )),
-    maBtnHorCenter      (this, CUI_RES(BTN_HOR_CENTER       )),
+    maBtnHorCenter      (this, CUI_RES(BTN_HOR_CENTER   )),
     maBtnHorDistance    (this, CUI_RES(BTN_HOR_DISTANCE )),
-    maBtnHorRight       (this, CUI_RES(BTN_HOR_RIGHT        )),
+    maBtnHorRight       (this, CUI_RES(BTN_HOR_RIGHT    )),
     maHorLow            (this, CUI_RES(IMG_HOR_LOW      )),
-    maHorCenter         (this, CUI_RES(IMG_HOR_CENTER       )),
+    maHorCenter         (this, CUI_RES(IMG_HOR_CENTER   )),
     maHorDistance       (this, CUI_RES(IMG_HOR_DISTANCE )),
     maHorHigh           (this, CUI_RES(IMG_HOR_HIGH     )),
     maFlVertical        (this, CUI_RES(FL_VERTICAL      )),
     maBtnVerNone        (this, CUI_RES(BTN_VER_NONE     )),
     maBtnVerTop         (this, CUI_RES(BTN_VER_TOP      )),
-    maBtnVerCenter      (this, CUI_RES(BTN_VER_CENTER       )),
+    maBtnVerCenter      (this, CUI_RES(BTN_VER_CENTER   )),
     maBtnVerDistance    (this, CUI_RES(BTN_VER_DISTANCE )),
-    maBtnVerBottom      (this, CUI_RES(BTN_VER_BOTTOM       )),
-    maVerLow            (this, CUI_RES(IMG_VER_LOW        )),
-    maVerCenter         (this, CUI_RES(IMG_VER_CENTER       )),
-    maVerDistance       (this, CUI_RES(IMG_VER_DISTANCE   )),
-    maVerHigh           (this, CUI_RES(IMG_VER_HIGH       ))
+    maBtnVerBottom      (this, CUI_RES(BTN_VER_BOTTOM   )),
+    maVerLow            (this, CUI_RES(IMG_VER_LOW      )),
+    maVerCenter         (this, CUI_RES(IMG_VER_CENTER   )),
+    maVerDistance       (this, CUI_RES(IMG_VER_DISTANCE )),
+    maVerHigh           (this, CUI_RES(IMG_VER_HIGH     ))
 {
-    maHorLow.SetModeImage( Image( CUI_RES( IMG_HOR_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maHorCenter.SetModeImage( Image( CUI_RES( IMG_HOR_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maHorDistance.SetModeImage( Image( CUI_RES( IMG_HOR_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maHorHigh.SetModeImage( Image( CUI_RES( IMG_HOR_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerDistance.SetModeImage( Image( CUI_RES( IMG_VER_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerLow.SetModeImage( Image( CUI_RES( IMG_VER_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerCenter.SetModeImage( Image( CUI_RES( IMG_VER_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerHigh.SetModeImage( Image( CUI_RES( IMG_VER_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
-
     FreeResource();
 }
 
@@ -169,7 +158,7 @@ void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
 |*
 \************************************************************************/
 
-void __EXPORT SvxDistributePage::Reset(const SfxItemSet& )
+void SvxDistributePage::Reset(const SfxItemSet& )
 {
     maBtnHorNone.SetState(sal_False);
     maBtnHorLeft.SetState(sal_False);
@@ -183,7 +172,7 @@ void __EXPORT SvxDistributePage::Reset(const SfxItemSet& )
         case SvxDistributeHorizontalLeft : maBtnHorLeft.SetState(sal_True); break;
         case SvxDistributeHorizontalCenter : maBtnHorCenter.SetState(sal_True); break;
         case SvxDistributeHorizontalDistance : maBtnHorDistance.SetState(sal_True); break;
-        case SvxDistributeHorizontalRight : maBtnHorRight.SetState(sal_True); break;
+        case SvxDistributeHorizontalRight    : maBtnHorRight.SetState(sal_True);    break;
     }
 
     maBtnVerNone.SetState(sal_False);
@@ -242,3 +231,4 @@ sal_Bool SvxDistributePage::FillItemSet( SfxItemSet& )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

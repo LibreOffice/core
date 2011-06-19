@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,10 +55,6 @@ class SignatureCreatorImpl : public cppu::ImplInheritanceHelper4
  *   FUNCTION
  *  Collects all resources for a signature generation, then generates the
  *  signature by invoking a xmlsec-based signature bridge component.
- *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XBlockerMonitor,
- *          XInitialization, XServiceInfo
  *
  *   AUTHOR
  *  Michael Mi
@@ -145,3 +142,4 @@ SAL_CALL SignatureCreatorImpl_createInstance(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

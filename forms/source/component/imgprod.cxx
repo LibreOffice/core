@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <svtools/filter.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#ifndef SVTOOLS_SOURCE_MISC_IMAGERESOURCEACCESS_HXX
 #include "svtools/imageresourceaccess.hxx"
-#endif
 #include <comphelper/processfactory.hxx>
 
 // --------------------
@@ -165,7 +164,7 @@ ErrCode ImgProdLockBytes::SetSize( sal_Size nSize )
         return SvLockBytes::SetSize( nSize );
     else
     {
-        DBG_ERROR( "ImgProdLockBytes::SetSize not supported for xInputStream..." );
+        OSL_FAIL( "ImgProdLockBytes::SetSize not supported for xInputStream..." );
         return ERRCODE_IO_CANTWRITE;
     }
 }
@@ -205,9 +204,6 @@ ImageProducer::~ImageProducer()
 
     delete mpStm;
     mpStm = NULL;
-
-    for( void* pCons = maConsList.First(); pCons; pCons = maConsList.Next() )
-        delete (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons;
 }
 
 // ------------------------------------------------------------
@@ -227,24 +223,17 @@ void ImageProducer::addConsumer( const ::com::sun::star::uno::Reference< ::com::
 {
     DBG_ASSERT( rxConsumer.is(), "::AddConsumer(...): No consumer referenced!" );
     if( rxConsumer.is() )
-        maConsList.Insert( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( rxConsumer ), LIST_APPEND );
+        maConsList.push_back( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( rxConsumer ));
 }
 
 // ------------------------------------------------------------
 
 void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException)
 {
-    for( sal_uInt32 n = maConsList.Count(); n; )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > * pRef = (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) maConsList.GetObject( --n );
+    ConsumerList_t::reverse_iterator riter = std::find(maConsList.rbegin(),maConsList.rend(),rxConsumer);
 
-        if( *pRef == rxConsumer )
-        {
-            delete pRef;
-            maConsList.Remove( n );
-            break;
-        }
-    }
+    if (riter != maConsList.rend())
+        maConsList.erase(riter.base()-1);
 }
 
 // ------------------------------------------------------------
@@ -308,7 +297,7 @@ void ImageProducer::NewDataAvailable()
 
 void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeException)
 {
-    if( maConsList.Count() || maDoneHdl.IsSet() )
+    if( !maConsList.empty() || maDoneHdl.IsSet() )
     {
         bool bNotifyEmptyGraphics = false;
 
@@ -334,23 +323,15 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
         if ( bNotifyEmptyGraphics )
         {
             // reset image
-            List    aTmp;
-            void*   pCons;
-
             // create temporary list to hold interfaces
-            for( pCons = maConsList.First(); pCons; pCons = maConsList.Next() )
-                aTmp.Insert( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons ), LIST_APPEND );
+            ConsumerList_t aTmp = maConsList;
 
             // iterate through interfaces
-            for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
+            for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter )
             {
-                ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->init( 0, 0 );
-                ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->complete( ::com::sun::star::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
+                (*iter)->init( 0, 0 );
+                (*iter)->complete( ::com::sun::star::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
             }
-
-            // delete interfaces in temporary list
-            for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-                delete (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons;
 
             if ( maDoneHdl.IsSet() )
                 maDoneHdl.Call( NULL );
@@ -381,25 +362,17 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 {
     ImplInitConsumer( rGraphic );
 
-    if( mbConsInit && maConsList.Count() )
+    if( mbConsInit && !maConsList.empty() )
     {
-        List    aTmp;
-        void*   pCons;
+        // create temporary list to hold interfaces
+        ConsumerList_t aTmp = maConsList;
 
         ImplUpdateConsumer( rGraphic );
         mbConsInit = sal_False;
 
-        // create temporary list to hold interfaces
-        for( pCons = maConsList.First(); pCons; pCons = maConsList.Next() )
-            aTmp.Insert( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons ), LIST_APPEND );
-
         // iterate through interfaces
-        for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-            ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->complete( ::com::sun::star::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
-
-        // delete interfaces in temporary list
-        for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-            delete (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons;
+        for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter )
+            (*iter)->complete( ::com::sun::star::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
     }
 }
 
@@ -412,8 +385,6 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 
     if( pBmpAcc )
     {
-        List             aTmp;
-        void *           pCons;
         sal_uInt16       nPalCount = 0;
         sal_uInt32       nRMask = 0;
         sal_uInt32       nGMask = 0;
@@ -462,20 +433,14 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
         }
 
         // create temporary list to hold interfaces
-        for( pCons = maConsList.First(); pCons; pCons = maConsList.Next() )
-            aTmp.Insert( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons ), LIST_APPEND );
+        ConsumerList_t aTmp = maConsList;
 
         // iterate through interfaces
-        for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
+        for( ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
         {
-            ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->init( pBmpAcc->Width(), pBmpAcc->Height() );
-            ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->setColorModel( pBmpAcc->GetBitCount(),
-                                                       aRGBPal, nRMask, nGMask, nBMask, nAMask );
+            (*iter)->init( pBmpAcc->Width(), pBmpAcc->Height() );
+            (*iter)->setColorModel( pBmpAcc->GetBitCount(),aRGBPal, nRMask, nGMask, nBMask, nAMask );
         }
-
-        // delete interfaces in temporary list
-        for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-            delete (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons;
 
         aBmp.ReleaseAccess( pBmpAcc );
         mbConsInit = sal_True;
@@ -492,8 +457,6 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
     if( pBmpAcc )
     {
-        List                aTmp;
-        void*               pCons;
         Bitmap              aMask( aBmpEx.GetMask() );
         BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : NULL;
         const long          nWidth = pBmpAcc->Width();
@@ -513,8 +476,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
         }
 
         // create temporary list to hold interfaces
-        for( pCons = maConsList.First(); pCons; pCons = maConsList.Next() )
-            aTmp.Insert( new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons ), LIST_APPEND );
+        ConsumerList_t aTmp = maConsList;
 
         if( pBmpAcc->HasPalette() )
         {
@@ -538,9 +500,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                 }
 
                 // iterate through interfaces
-                for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-                    ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->setPixelsByBytes( nStartX, nStartY, nPartWidth, nPartHeight,
-                                                                       aData, 0UL, nPartWidth );
+                for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
+                    (*iter)->setPixelsByBytes( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
             }
             else
             {
@@ -559,9 +520,8 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                 }
 
                 // iterate through interfaces
-                for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-                    ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight,
-                                                                       aData, 0UL, nPartWidth );
+                for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
+                    (*iter)->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
             }
         }
         else
@@ -586,14 +546,9 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
             }
 
             // iterate through interfaces
-            for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-                ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight,
-                                                                   aData, 0UL, nPartWidth );
+                for (ConsumerList_t::iterator iter = aTmp.begin(); iter != aTmp.end(); ++iter)
+                    (*iter)->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
         }
-
-        // delete interfaces in temporary list
-        for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-            delete (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons;
 
         aBmp.ReleaseAccess( pBmpAcc );
         aMask.ReleaseAccess( pMskAcc );
@@ -623,3 +578,5 @@ SAL_CALL ImageProducer_CreateInstance(
         ( ::cppu::OWeakObject* ) new ImageProducer );
 }
 } // namespace frm
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

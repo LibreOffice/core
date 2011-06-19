@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,7 +150,6 @@ struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox_Impl : public SvTreeListBox
 {
     SvxConfigGroupBoxResource_Impl* pImp;
-    //SfxSlotPool*                    pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
     sal_uLong                       nMode;
@@ -161,9 +161,17 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
 
-    Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
+    Image GetImage(
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx,
+        bool bIsRootNode
+    );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
+        ::rtl::OUString& docName
+    );
+
 
     void InitModule();
     void InitBasic();
@@ -202,3 +210,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,9 @@
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 #include <usr/weak.hxx>      // OWeakObject
 
-#include <vos/conditn.hxx>
-#include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 
 #include <string.h>
 
@@ -48,11 +49,10 @@
 #define IMPLEMENTATION_NAME L"test.com.sun.star.comp.extensions.stm.Pipe"
 #define SERVICE_NAME        L"test.com.sun.star.io.Pipe"
 
-using namespace vos;
 using namespace usr;
 
 class WriteToStreamThread :
-        public OThread
+        public osl::Thread
 {
 
 public:
@@ -367,7 +367,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
     Sequence<BYTE> seqRead;
 
     // deletes itself
-    OThread *p = new WriteToStreamThread( output,  iMax );
+    osl::Thread *p = new WriteToStreamThread( output,  iMax );
 
     ERROR_ASSERT( p , "couldn't create thread for testing !\n" );
 
@@ -444,3 +444,5 @@ UString     OPipeTest_getImplementationName() THROWS( () )
 {
     return IMPLEMENTATION_NAME;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

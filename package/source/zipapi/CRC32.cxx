@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 #include <PackageConstants.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
@@ -94,3 +94,5 @@ sal_Int32 SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
 
     return nTotal;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

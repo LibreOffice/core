@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_basctl.hxx"
 
 #include <vector>
-#include <algorithm>
 #include <dlgeddef.hxx>
 #include "dlgedobj.hxx"
 #include "dlged.hxx"
@@ -40,9 +40,7 @@
 #include <iderid.hxx>
 #include <localizationmgr.hxx>
 
-#ifndef _BASCTL_DLGRESID_HRC
 #include <dlgresid.hrc>
-#endif
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -61,6 +59,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -194,8 +193,8 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     }
 
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->PixelToLogic( aSize, MapMode( MAP_APPFONT ) );
+    aPos = pDevice->PixelToLogic( aPos, MAP_APPFONT );
+    aSize = pDevice->PixelToLogic( aSize, MAP_APPFONT );
 
     // set out parameters
     nXOut = aPos.Width();
@@ -242,10 +241,9 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
         aSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
         aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
     }
-
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->PixelToLogic( aSize, MapMode( MAP_APPFONT ) );
+    aPos = pDevice->PixelToLogic( aPos, MAP_APPFONT );
+    aSize = pDevice->PixelToLogic( aSize, MAP_APPFONT );
 
     // set out parameters
     nXOut = aPos.Width();
@@ -287,9 +285,9 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     DBG_ASSERT( pDevice, "DlgEdObj::TransformControlToSdrCoordinates: missing default device!" );
     if ( !pDevice )
         return false;
-    aPos = pDevice->LogicToPixel( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_APPFONT ) );
-    aFormPos = pDevice->LogicToPixel( aFormPos, MapMode( MAP_APPFONT ) );
+    aPos = pDevice->LogicToPixel( aPos, MAP_APPFONT );
+    aSize = pDevice->LogicToPixel( aSize, MAP_APPFONT );
+    aFormPos = pDevice->LogicToPixel( aFormPos, MAP_APPFONT );
 
     // add form position
     aPos.Width() += aFormPos.Width();
@@ -333,13 +331,14 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
     DBG_ASSERT( pDevice, "DlgEdObj::TransformFormToSdrCoordinates: missing default device!" );
     if ( !pDevice )
         return false;
-    aPos = pDevice->LogicToPixel( aPos, MapMode( MAP_APPFONT ) );
-    aSize = pDevice->LogicToPixel( aSize, MapMode( MAP_APPFONT ) );
 
     // take window borders into account
     DlgEdForm* pForm = NULL;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
+
+    aPos = pDevice->LogicToPixel( aPos, MAP_APPFONT );
+    aSize = pDevice->LogicToPixel( aSize, MAP_APPFONT );
 
     // take window borders into account
     Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
@@ -648,7 +647,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             ::std::transform(
                     aIndexToNameMap.begin(), aIndexToNameMap.end(),
                     aNameList.begin(),
-                    ::std::select2nd< IndexToNameMap::value_type >( )
+                    ::o3tl::select2nd< IndexToNameMap::value_type >( )
                 );
 
             // check tab index
@@ -980,16 +979,14 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::Clone() const
+DlgEdObj* DlgEdObj::Clone() const
 {
-    SdrObject* pReturn = SdrUnoObj::Clone();
-
-    DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pReturn);
+    DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >();
     DBG_ASSERT( pDlgEdObj != NULL, "DlgEdObj::Clone: invalid clone!" );
     if ( pDlgEdObj )
         pDlgEdObj->clonedFrom( this );
 
-    return pReturn;
+    return pDlgEdObj;
 }
 
 //----------------------------------------------------------------------------
@@ -1002,13 +999,6 @@ SdrObject* DlgEdObj::getFullDragClone() const
     *pObj = *((const SdrUnoObj*)this);
 
     return pObj;
-}
-
-//----------------------------------------------------------------------------
-
-void DlgEdObj::operator= (const SdrObject& rObj)
-{
-    SdrUnoObj::operator= (rObj);
 }
 
 //----------------------------------------------------------------------------
@@ -1051,9 +1041,9 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
 
 //----------------------------------------------------------------------------
 
-FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     SetDefaults();
     StartListening();
@@ -1827,9 +1817,9 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
 
 //----------------------------------------------------------------------------
 
-FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     // stop listening
     EndListening(sal_False);
@@ -1869,7 +1859,7 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
     {
         // don't create a temporary control all the time, this method here is called
         // way too often. Instead, use a cached DeviceInfo.
-        // 2007-02-05 / i74065 / frank.schoenheit@sun.com
+        // #i74065#
         if ( !!mpDeviceInfo )
             return *mpDeviceInfo;
 
@@ -1894,3 +1884,4 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
 //----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

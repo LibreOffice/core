@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,6 @@
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -234,60 +234,12 @@ void Model::dbg_assertInvariant() const
 {
     OSL_ENSURE( mpInstances != NULL, "no instances found" );
     OSL_ENSURE( mxInstances.is(), "No instance container!" );
-    //    OSL_ENSURE( mxInstances->hasElements(), "no instance!" );
 
     OSL_ENSURE( mpBindings != NULL, "no bindings element" );
     OSL_ENSURE( mxBindings.is(), "No Bindings container" );
 
     OSL_ENSURE( mpSubmissions != NULL, "no submissions element" );
     OSL_ENSURE( mxSubmissions.is(), "No Submission container" );
-
-
-
-    /*
-    // check bindings, and things that have to do with our binding
-    std::vector<MIP*> aAllMIPs; // check MIP map
-    sal_Int32 nCount = mpBindings->countItems();
-    for( sal_Int32 i = 0; i < nCount; i++ )
-    {
-        Binding* pBind = Binding::getBinding(
-            mpBindings->Collection<XPropertySet_t>::getItem( i ) );
-
-        // examine and check binding
-        OSL_ENSURE( pBind != NULL, "invalid binding found" );
-
-        OSL_ENSURE( Model::getModel( pBind->getModel() ) == this,
-                    "our binding doesn't know us.");
-        // check this binding's MIP against MIP map
-        MIP* pMIP = const_cast<MIP*>( pBind->_getMIP() );
-        sal_Int32 nFound = 0;
-        if( pMIP != NULL )
-        {
-            aAllMIPs.push_back( pMIP );
-            for( MIPs_t::const_iterator aIter = maMIPs.begin();
-                 aIter != maMIPs.end();
-                 aIter++ )
-            {
-                if( pMIP == aIter->second )
-                    nFound++;
-            }
-        }
-        OSL_ENSURE( ( pMIP == NULL ) == ( nFound == 0 ), "MIP-map wrong" );
-    }
-
-    // check MIP map for left-over MIPs
-    for( MIPs_t::const_iterator aIter = maMIPs.begin();
-         aIter != maMIPs.end();
-         aIter++ )
-    {
-        MIP* pMIP = aIter->second;
-        std::vector<MIP*>::iterator aFound =
-            std::find( aAllMIPs.begin(), aAllMIPs.end(), pMIP );
-        if( aFound != aAllMIPs.end() )
-            aAllMIPs.erase( aFound );
-    }
-    OSL_ENSURE( aAllMIPs.empty(), "lonely MIPs found!" );
-    */
 }
 #endif
 
@@ -325,8 +277,6 @@ void Model::removeMIPs( void* pTag )
 
 MIP Model::queryMIP( const XNode_t& xNode ) const
 {
-    //    OSL_ENSURE( xNode.is(), "no node" );
-
     // travel up inheritance chain and inherit MIPs
     MIP aRet;
     for( XNode_t xCurrent = xNode;
@@ -337,7 +287,7 @@ MIP Model::queryMIP( const XNode_t& xNode ) const
         MIP aMIP;
         MIPs_t::const_iterator aEnd = maMIPs.upper_bound( xCurrent );
         MIPs_t::const_iterator aIter = maMIPs.lower_bound( xCurrent );
-        for( ; aIter != aEnd; aIter++ )
+        for( ; aIter != aEnd; ++aIter )
           aMIP.join( aIter->second.second );
 
         // inherit from current node (or set if we are at the start node)
@@ -435,7 +385,7 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
 
         default:
         {
-            OSL_ENSURE( false, "bound to unknown node type?" );
+            OSL_FAIL( "bound to unknown node type?" );
         }
         break;
 
@@ -717,15 +667,6 @@ Model::XSet_t Model::getSubmissions()
     return mxSubmissions;
 }
 
-
-
-//
-// implementation of XFormsUIHelper1 interface
-//   can be found in file model_ui.cxx
-//
-
-
-
 //
 // implement XPropertySet & friends
 //
@@ -778,31 +719,4 @@ Sequence<sal_Int8> Model::getImplementationId()
     return getUnoTunnelID();
 }
 
-
-//
-// 'shift' operators for getting data into and out of Anys
-//
-
-void operator <<= ( com::sun::star::uno::Any& rAny,
-                    xforms::Model* pModel)
-{
-    Reference<XPropertySet> xPropSet( static_cast<XPropertySet*>( pModel ) );
-    rAny <<= xPropSet;
-}
-
-bool operator >>= ( xforms::Model* pModel,
-                    com::sun::star::uno::Any& rAny )
-{
-    bool bRet = false;
-
-    // acquire model pointer through XUnoTunnel
-    Reference<XUnoTunnel> xTunnel( rAny, UNO_QUERY );
-    if( xTunnel.is() )
-    {
-        pModel = reinterpret_cast<xforms::Model*>(
-            xTunnel->getSomething( xforms::Model::getUnoTunnelID() ) );
-        bRet = true;
-    }
-
-    return bRet;
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

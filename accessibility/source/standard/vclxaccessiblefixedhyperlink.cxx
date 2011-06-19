@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundar
 
 ::rtl::OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleFixedHyperlink" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleFixedHyperlink") );
 }
 
 // -----------------------------------------------------------------------------
@@ -77,9 +78,10 @@ void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundar
 uno::Sequence< ::rtl::OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleFixedHyperlink" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleFixedHyperlink") );
     return aNames;
 }
 
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

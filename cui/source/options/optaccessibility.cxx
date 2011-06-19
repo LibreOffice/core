@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include <optaccessibility.hxx>
 #include <optaccessibility.hrc>
@@ -161,7 +159,6 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
     m_aAnimatedGraphics.Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
     m_aAnimatedTexts.Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
     m_aAutomaticFontColor.Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
-//  m_aSystemFont.Check(              m_pImpl->m_aConfig.GetIsSystemFont() );
     m_aTextSelectionInReadonly.Check( m_pImpl->m_aConfig.IsSelectionInReadonly() );
     m_aAutoDetectHC.Check(            m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
 
@@ -183,3 +180,5 @@ void SvxAccessibilityOptionsTabPage::EnableTipHelp(sal_Bool bCheck)
     m_aTipHelpCB.Check(bCheck);
     m_aTipHelpNF.Enable(bCheck);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

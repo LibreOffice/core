@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef ACCESSIBILITY_HELPER_TKARESMGR_HXX
 #define ACCESSIBILITY_HELPER_TKARESMGR_HXX
 
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
 class SimpleResMgr;
 
@@ -70,3 +69,4 @@ public:
 
 #endif // ACCESSIBILITY_HELPER_TKARESMGR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

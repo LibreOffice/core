@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-#ifndef _BASCTL_BASIDECTRLR_HXX_
 #include <basidectrlr.hxx>
-#endif
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -150,3 +149,5 @@ Reference< beans::XPropertySetInfo > SAL_CALL BasicIDEController::getPropertySet
 }
 
 //----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,8 +43,6 @@
 // Starting new IDs with 30 as eventdlg.hrc also includes this file
 #define     IMG_MACRO               30
 #define     IMG_COMPONENT           31
-#define     IMG_MACRO_H             32
-#define     IMG_COMPONENT_H         33
 
 #define     RID_PB_OK               41
 #define     RID_PB_CANCEL           42

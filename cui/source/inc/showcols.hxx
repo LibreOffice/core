@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -64,3 +63,4 @@ protected:
 
 #endif // _SVX_SHOWCOLS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

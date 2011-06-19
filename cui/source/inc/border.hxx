@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,10 @@
 
 // forward ---------------------------------------------------------------
 
-class SvxBorderLine;
+namespace editeng
+{
+    class SvxBorderLine;
+}
 class XColorTable;
 
 #include <svx/flagsdef.hxx>
@@ -58,7 +62,7 @@ public:
     virtual void        Reset( const SfxItemSet& );
 
     void                HideShadowControls();
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -77,9 +81,11 @@ private:
     FixedLine           aFlSep1;
     FixedLine           aFlLine;
     FixedText           aStyleFT;
-    LineListBox         aLbLineStyle;
+    LineListBox    aLbLineStyle;
     FixedText           aColorFT;
     ColorListBox        aLbLineColor;
+    FixedText           aWidthFT;
+    MetricField         aLineWidthMF;
 
     FixedLine           aFlSep2;
     FixedLine           aDistanceFL;
@@ -104,9 +110,8 @@ private:
     //properties - "Merge with next paragraph" in Writer
     FixedLine           aPropertiesFL;
     CheckBox            aMergeWithNextCB;
-    // --> collapsing table borders FME 2005-05-27 #i29550#
+    // #i29550#
     CheckBox            aMergeAdjacentBordersCB;
-    // <--
 
     ImageList           aShadowImgLstH;
     ImageList           aShadowImgLst;
@@ -132,6 +137,7 @@ private:
     DECL_LINK( SelSdwHdl_Impl, void* );
     DECL_LINK( LinesChanged_Impl, void* );
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
+    DECL_LINK( ModifyWidthHdl_Impl, void*);
     DECL_LINK( SyncHdl_Impl, CheckBox*);
 
     sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;
@@ -144,9 +150,9 @@ private:
     // Filler
     void                FillLineListBox_Impl();
 
-    // Setzen von einzelnen Frame-/Core-Linien
+    // share for individual Frame-/Core-Line
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
-                                             const SvxBorderLine* pCurLine,
+                                             const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
 #endif
 };
@@ -154,3 +160,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

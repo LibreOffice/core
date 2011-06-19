@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,9 +72,6 @@ bool EncryptionEngine::checkReady() const
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -121,9 +119,6 @@ void EncryptionEngine::tryToPerform( )
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -178,9 +173,6 @@ void EncryptionEngine::clearUp( ) const
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -214,3 +206,4 @@ void SAL_CALL EncryptionEngine::setBlockerId( sal_Int32 id )
     tryToPerform();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

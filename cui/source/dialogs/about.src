@@ -29,39 +29,57 @@
 
 ModalDialog RID_DEFAULTABOUT
 {
-    HelpID = "cui:ModalDialog:RID_DEFAULTABOUT";
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 245 , 260 ) ;
+    Size = MAP_APPFONT ( 245 , 280 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-    Text [ x-comment ] = "PB: ; PB: only %PRODUCTNAME";
-    Text [ en-US ] = "About %PRODUCTNAME" ;
+//    TEXT_DEFAULTABOUT
     OKButton ABOUT_BTN_OK
     {
         DefButton = TRUE ;
         Pos = MAP_APPFONT ( 174 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    FixedText ABOUT_FTXT_VERSION
+    MultiLineEdit ABOUT_FTXT_VERSION
     {
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 54 , 6 ) ;
         Size = MAP_APPFONT ( 118 , 16 ) ;
-        WordBreak = TRUE ;
-        Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION" ;
-    };
-    MultiLineEdit ABOUT_FTXT_COPYRIGHT
-    {
-        HelpID = "cui:MultiLineEdit:RID_DEFAULTABOUT:ABOUT_FTXT_COPYRIGHT";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 25 ) ;
-        Size = MAP_APPFONT ( 168 , 51 ) ;
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
+    };
+    MultiLineEdit ABOUT_FTXT_COPYRIGHT
+    {
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 54 , 25 ) ;
+        Size = MAP_APPFONT ( 168 , 71 ) ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        AutoVScroll = TRUE ;
+    };
+    FixedText ABOUT_FTXT_LINK
+    {
+        NoLabel = TRUE;
+        TabStop = TRUE;
+        Text [ en-US ] = "Contributor credits";
+        Pos = MAP_APPFONT ( 54 , 100 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+    };
+    String ABOUT_STR_VERSION
+    {
+        Text[ en-US ] = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION";
+    };
+    String ABOUT_STR_COPYRIGHT
+    {
+        Text[ en-US ] = "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights reserved.\nThis product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2010 Oracle and/or its affiliates.\n%OOOVENDOR acknowledges all community members, please find more info at the link below:";
+    };
+    String ABOUT_STR_LINK
+    {
+        Text[ en-US ] = "http://www.libreoffice.org/credits.html";
     };
     String ABOUT_STR_ACCEL
     {
         Text = "SDT" ;
     };
 };
-

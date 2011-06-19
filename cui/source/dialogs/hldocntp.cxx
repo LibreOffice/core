@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include "hldocntp.hxx"
 #include <sfx2/viewfrm.hxx>
@@ -123,7 +121,6 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtCreate.SetModeImage( Image( CUI_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtCreate.EnableTextDisplay (sal_False);
 
     InitStdControls();
@@ -135,7 +132,6 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
                                 LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
     maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
-//  maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
 
     // set defaults
     maRbtEditNow.Check();
@@ -210,7 +206,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
         // Insert into listbox
         if ( aDocumentUrl.getLength() )
         {
-            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=6686" ) )             // SJ: #106216# do not start
+            if ( aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:factory/simpress?slot=6686" ) ) )              // SJ: #106216# do not start
                 aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
 
             // insert private-url and default-extension as user-data
@@ -362,7 +358,6 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
                                                 RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
                     SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
-                    //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, sal_True );
 
                     String aStrFlags ( sal_Unicode('S') );
                     if ( maRbtEditLater.IsChecked() )
@@ -384,7 +379,6 @@ void SvxHyperlinkNewDocTp::DoApply ()
                         pViewFrame = pItem->GetFrame();
                         if (pViewFrame)
                         {
-                            //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
                             SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
                             pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
@@ -488,3 +482,4 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     return( 0L );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

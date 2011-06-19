@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,7 +135,7 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
     throw ( uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     return BBINDEX_FIRSTCONTROL + mpBrowseBox->GetAccessibleControlCount();
@@ -145,7 +146,7 @@ Reference< XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -167,15 +168,6 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
         throw lang::IndexOutOfBoundsException();
     return xRet;
 }
-// -----------------------------------------------------------------------------
-
-//sal_Int16 SAL_CALL AccessibleBrowseBox::getAccessibleRole()
-//    throw ( uno::RuntimeException )
-//{
-//    ensureIsAlive();
-//    return AccessibleRole::PANEL;
-//}
-// -----------------------------------------------------------------------------
 
 // XAccessibleComponent -------------------------------------------------------
 
@@ -183,7 +175,7 @@ Reference< XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -214,7 +206,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 void SAL_CALL AccessibleBrowseBox::grabFocus()
     throw ( uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     mpBrowseBox->GrabFocus();
@@ -379,8 +371,8 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
     DBG_ASSERT( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
         "accessibility/extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
 
-    // if the context died meanwhile (we're no listener, so it won't tell us explicitily when this happens),
-    // then reset an re-create.
+    // if the context died meanwhile (there is no listener, so it won't tell us explicitily when this happens),
+    // then reset and re-create.
     if ( m_pContext && !m_pContext->isAlive() )
         m_xContext = m_pContext = NULL;
 
@@ -399,3 +391,5 @@ bool AccessibleBrowseBoxAccess::isContextAlive() const
 // ============================================================================
 
 }   // namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

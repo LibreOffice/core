@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_accessibility.hxx"
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLETABLISTBOX_HXX_
 #include "accessibility/extended/accessibletablistbox.hxx"
-#endif
 #include "accessibility/extended/accessibletablistboxtable.hxx"
 #include <svtools/svtabbx.hxx>
 #include <comphelper/sequence.hxx>
@@ -39,15 +38,6 @@
 namespace accessibility
 {
 //........................................................................
-
-    // class TLBSolarGuard ---------------------------------------------------------
-
-    /** Aquire the solar mutex. */
-    class TLBSolarGuard : public ::vos::OGuard
-    {
-    public:
-        inline TLBSolarGuard() : ::vos::OGuard( Application::GetSolarMutex() ) {}
-    };
 
     // class AccessibleTabListBox -----------------------------------------------------
 
@@ -118,7 +108,7 @@ namespace accessibility
     AccessibleTabListBox::getAccessibleChild( sal_Int32 nChildIndex )
         throw ( IndexOutOfBoundsException, RuntimeException )
     {
-        TLBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
         ensureIsAlive();
 
@@ -144,3 +134,4 @@ namespace accessibility
 }// namespace accessibility
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

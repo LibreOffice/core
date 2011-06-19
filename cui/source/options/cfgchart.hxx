@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,9 @@ class SvxChartColorTable
 {
 private:
     ::std::vector< XColorEntry >     m_aColorEntries;
+    int                              nNextElementNumber;
+    String                           sDefaultNamePrefix;
+    String                           sDefaultNamePostfix;
 
 public:
     SvxChartColorTable();
@@ -56,8 +60,10 @@ public:
     // mutators
     void clear();
     void append( const XColorEntry & _rEntry );
+    void remove( size_t _nIndex );
     void replace( size_t _nIndex, const XColorEntry & _rEntry );
     void useDefault();
+    String getDefaultName(size_t _nIndex);
 
     // comparison
     bool operator==( const SvxChartColorTable & _rOther ) const;
@@ -69,7 +75,7 @@ public:
 class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
-    SvxChartColorTable      maDefColors;
+    SvxChartColorTable          maDefColors;
     sal_Bool                    mbIsInitialized;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
@@ -114,3 +120,4 @@ private:
 
 #endif  // _SVX_CFGCHART_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

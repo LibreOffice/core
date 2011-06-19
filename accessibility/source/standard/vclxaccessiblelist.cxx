@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
       m_bVisible                ( true ),
       m_xParent                 ( _xParent )
 {
-    // Because combo boxes and list boxes have the no common interface for
+    // Because combo boxes and list boxes don't have a common interface for
     // methods with identical signature we have to write down twice the
     // same code.
     switch (m_aBoxType)
@@ -125,10 +126,6 @@ void SAL_CALL VCLXAccessibleList::disposing (void)
 
 void VCLXAccessibleList::clearItems()
 {
-//  ListItems::iterator aEnd = m_aAccessibleChildren.end();
-//  for (ListItems::iterator aIter = m_aAccessibleChildren.begin(); aIter != aEnd; ++aIter)
-//      ::comphelper::disposeComponent(*aIter);
-
     // Clear the list itself and delete all the rest.
     ListItems().swap(m_aAccessibleChildren); // clear and minimize
 }
@@ -136,7 +133,7 @@ void VCLXAccessibleList::clearItems()
 
 void VCLXAccessibleList::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
     // check if our list should be visible
@@ -397,7 +394,7 @@ Reference<XAccessibleContext> SAL_CALL
 sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount (void)
     throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Int32 nCount = 0;
@@ -411,7 +408,7 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount (void)
 Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int32 i)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( i < 0 || i >= getAccessibleChildCount() )
@@ -462,7 +459,7 @@ sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole (void)
 
 sal_Bool SAL_CALL VCLXAccessibleList::contains( const awt::Point& rPoint ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Bool bInside = sal_False;
@@ -481,7 +478,7 @@ sal_Bool SAL_CALL VCLXAccessibleList::contains( const awt::Point& rPoint ) throw
 Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleAt( const awt::Point& rPoint )
     throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     Reference< XAccessible > xChild;
@@ -546,7 +543,7 @@ void VCLXAccessibleList::UpdateVisibleLineCount()
 // -----------------------------------------------------------------------------
 void VCLXAccessibleList::UpdateEntryRange_Impl()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Int32 nTop = m_nLastTopEntry;
@@ -597,7 +594,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
     uno::Any aOldValue, aNewValue;
 
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
         Reference< XAccessible > xNewAcc;
 
@@ -661,7 +658,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex )
     sal_Bool bNotify = sal_False;
 
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
         if ( m_pListBoxHelper )
@@ -683,7 +680,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex )
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL VCLXAccessibleList::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Bool bRet = sal_False;
@@ -701,7 +698,7 @@ void SAL_CALL VCLXAccessibleList::clearAccessibleSelection(  ) throw (RuntimeExc
     sal_Bool bNotify = sal_False;
 
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
         if ( m_pListBoxHelper )
@@ -720,7 +717,7 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  ) throw (Runtime
     sal_Bool bNotify = sal_False;
 
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
         if ( m_pListBoxHelper )
@@ -742,7 +739,7 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  ) throw (Runtime
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Int32 nCount = 0;
@@ -753,7 +750,7 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  ) throw
 // -----------------------------------------------------------------------------
 Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( m_pListBoxHelper )
@@ -770,7 +767,7 @@ void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedCh
     sal_Bool bNotify = sal_False;
 
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
         if ( m_pListBoxHelper )
@@ -790,7 +787,6 @@ void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedCh
         UpdateSelection_Impl();
 }
 // -----------------------------------------------------------------------------
-// accessibility::XAccessibleComponent
 awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
 {
     awt::Rectangle aBounds ( 0, 0, 0, 0 );
@@ -825,7 +821,7 @@ awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
 
 awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     awt::Point aPos;
@@ -852,3 +848,4 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeExcept
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

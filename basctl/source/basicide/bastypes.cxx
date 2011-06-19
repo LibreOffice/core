@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,19 +50,16 @@
 #include <sbxitem.hxx>
 #include <iderdll.hxx>
 
-#ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
+using ::std::vector;
 
 DBG_NAME( IDEBaseWindow )
 
@@ -84,7 +82,7 @@ IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, 
 
 
 
-__EXPORT IDEBaseWindow::~IDEBaseWindow()
+IDEBaseWindow::~IDEBaseWindow()
 {
     DBG_DTOR( IDEBaseWindow, 0 );
     if ( pShellVScrollBar )
@@ -107,7 +105,7 @@ void IDEBaseWindow::Init()
 
 
 
-void __EXPORT IDEBaseWindow::DoInit()
+void IDEBaseWindow::DoInit()
 {
 }
 
@@ -133,14 +131,14 @@ IMPL_LINK_INLINE_END( IDEBaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 
 
 
-void __EXPORT IDEBaseWindow::ExecuteCommand( SfxRequest& )
+void IDEBaseWindow::ExecuteCommand( SfxRequest& )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
 
 
 
-void __EXPORT IDEBaseWindow::GetState( SfxItemSet& )
+void IDEBaseWindow::GetState( SfxItemSet& )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
@@ -178,34 +176,34 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
 }
 
 
-void __EXPORT IDEBaseWindow::DoScroll( ScrollBar* )
+void IDEBaseWindow::DoScroll( ScrollBar* )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
 
 
-void __EXPORT IDEBaseWindow::StoreData()
+void IDEBaseWindow::StoreData()
 {
 }
 
-sal_Bool __EXPORT IDEBaseWindow::CanClose()
-{
-    return sal_True;
-}
-
-sal_Bool __EXPORT IDEBaseWindow::AllowUndo()
+sal_Bool IDEBaseWindow::CanClose()
 {
     return sal_True;
 }
 
+sal_Bool IDEBaseWindow::AllowUndo()
+{
+    return sal_True;
+}
 
 
-void __EXPORT IDEBaseWindow::UpdateData()
+
+void IDEBaseWindow::UpdateData()
 {
 }
 
 
-String __EXPORT IDEBaseWindow::GetTitle()
+String IDEBaseWindow::GetTitle()
 {
     return String();
 }
@@ -237,30 +235,30 @@ sal_Bool IDEBaseWindow::IsReadOnly()
     return sal_False;
 }
 
-void __EXPORT IDEBaseWindow::BasicStarted()
+void IDEBaseWindow::BasicStarted()
 {
 }
 
-void __EXPORT IDEBaseWindow::BasicStopped()
+void IDEBaseWindow::BasicStopped()
 {
 }
 
-sal_Bool __EXPORT IDEBaseWindow::IsModified()
+sal_Bool IDEBaseWindow::IsModified()
 {
     return sal_True;
 }
 
-sal_Bool __EXPORT IDEBaseWindow::IsPasteAllowed()
+sal_Bool IDEBaseWindow::IsPasteAllowed()
 {
     return sal_False;
 }
 
-Window* __EXPORT IDEBaseWindow::GetLayoutWindow()
+Window* IDEBaseWindow::GetLayoutWindow()
 {
     return this;
 }
 
-::svl::IUndoManager* __EXPORT IDEBaseWindow::GetUndoManager()
+::svl::IUndoManager* IDEBaseWindow::GetUndoManager()
 {
     return NULL;
 }
@@ -268,11 +266,10 @@ Window* __EXPORT IDEBaseWindow::GetLayoutWindow()
 BreakPointList::BreakPointList()
 {}
 
-BreakPointList::BreakPointList(BreakPointList const & rList):
-    BreakPL( sal::static_int_cast<sal_uInt16>( rList.Count() ))
+BreakPointList::BreakPointList(BreakPointList const & rList)
 {
-    for (sal_uLong i = 0; i < rList.Count(); ++i)
-        Insert(new BreakPoint(*rList.GetObject(i)), i);
+    for (size_t i = 0; i < rList.size(); ++i)
+        maBreakPoints.push_back( new BreakPoint(*rList.at( i ) ) );
 }
 
 BreakPointList::~BreakPointList()
@@ -282,76 +279,69 @@ BreakPointList::~BreakPointList()
 
 void BreakPointList::reset()
 {
-    while (Count() > 0)
-        delete Remove(Count() - 1);
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
+        delete maBreakPoints[ i ];
+    maBreakPoints.clear();
 }
 
 void BreakPointList::transfer(BreakPointList & rList)
 {
     reset();
-    for (sal_uLong i = 0; i < rList.Count(); ++i)
-        Insert(rList.GetObject(i), i);
-    rList.Clear();
+    for (size_t i = 0; i < rList.size(); ++i)
+        maBreakPoints.push_back( rList.at( i ) );
+    rList.reset();
 }
 
 void BreakPointList::InsertSorted( BreakPoint* pNewBrk )
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
     {
-        if ( pNewBrk->nLine <= pBrk->nLine )
+        if ( pNewBrk->nLine <= (*i)->nLine )
         {
-            DBG_ASSERT( ( pBrk->nLine != pNewBrk->nLine ) || pNewBrk->bTemp, "BreakPoint existiert schon!" );
-            Insert( pNewBrk );
+            DBG_ASSERT( ( (*i)->nLine != pNewBrk->nLine ) || pNewBrk->bTemp, "BreakPoint existiert schon!" );
+            maBreakPoints.insert( i, pNewBrk );
             return;
         }
-        pBrk = Next();
     }
     // Keine Einfuegeposition gefunden => LIST_APPEND
-    Insert( pNewBrk, LIST_APPEND );
+    maBreakPoints.push_back( pNewBrk );
 }
 
 void BreakPointList::SetBreakPointsInBasic( SbModule* pModule )
 {
     pModule->ClearAllBP();
 
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = maBreakPoints[ i ];
         if ( pBrk->bEnabled )
             pModule->SetBP( (sal_uInt16)pBrk->nLine );
-        pBrk = Next();
     }
 }
 
-BreakPoint* BreakPointList::FindBreakPoint( sal_uLong nLine )
+BreakPoint* BreakPointList::FindBreakPoint( size_t nLine )
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = maBreakPoints[ i ];
         if ( pBrk->nLine == nLine )
             return pBrk;
-
-        pBrk = Next();
     }
-
-    return (BreakPoint*)0;
+    return NULL;
 }
 
-
-
-void BreakPointList::AdjustBreakPoints( sal_uLong nLine, sal_Bool bInserted )
+void BreakPointList::AdjustBreakPoints( size_t nLine, bool bInserted )
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0; i < maBreakPoints.size(); )
     {
-        sal_Bool bDelBrk = sal_False;
+        BreakPoint* pBrk = maBreakPoints[ i ];
+        bool bDelBrk = false;
         if ( pBrk->nLine == nLine )
         {
             if ( bInserted )
                 pBrk->nLine++;
             else
-                bDelBrk = sal_True;
+                bDelBrk = true;
         }
         else if ( pBrk->nLine > nLine )
         {
@@ -363,32 +353,71 @@ void BreakPointList::AdjustBreakPoints( sal_uLong nLine, sal_Bool bInserted )
 
         if ( bDelBrk )
         {
-            sal_uLong n = GetCurPos();
-            delete Remove( pBrk );
-            pBrk = Seek( n );
+            delete remove( pBrk );
         }
         else
         {
-            pBrk = Next();
+            ++i;
         }
     }
 }
 
 void BreakPointList::ResetHitCount()
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = maBreakPoints[ i ];
         pBrk->nHitCount = 0;
-        pBrk = Next();
     }
 }
+
+size_t BreakPointList::size() const
+{
+    return maBreakPoints.size();
+}
+
+BreakPoint* BreakPointList::at( size_t i )
+{
+    if ( i < maBreakPoints.size() )
+        return maBreakPoints[ i ];
+    else
+        return NULL;
+}
+
+const BreakPoint* BreakPointList::at( size_t i ) const
+{
+    return maBreakPoints[ i ];
+}
+
+BreakPoint* BreakPointList::remove( BreakPoint* ptr )
+{
+    for ( vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
+    {
+        if ( ptr == *i )
+        {
+            maBreakPoints.erase( i );
+            return ptr;
+        }
+    }
+    return NULL;
+}
+
+void BreakPointList::push_back( BreakPoint* item )
+{
+    maBreakPoints.push_back( item );
+}
+
+void BreakPointList::clear()
+{
+    maBreakPoints.clear();
+}
+
 
 void IDEBaseWindow::Deactivating()
 {
 }
 
-sal_uInt16 __EXPORT IDEBaseWindow::GetSearchOptions()
+sal_uInt16 IDEBaseWindow::GetSearchOptions()
 {
     return 0;
 }
@@ -403,7 +432,7 @@ BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
 
 
 
-sal_Bool __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
     Rectangle aTmpRec( rRect );
@@ -422,7 +451,7 @@ sal_Bool __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRe
 
 
 
-void __EXPORT BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
+void BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
     if ( bFloatMode )
         DockingWindow::EndDocking( rRect, bFloatMode );
@@ -436,7 +465,7 @@ void __EXPORT BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool b
 
 
 
-void __EXPORT BasicDockingWindow::ToggleFloatingMode()
+void BasicDockingWindow::ToggleFloatingMode()
 {
     ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
     if ( IsFloatingMode() )
@@ -450,7 +479,7 @@ void __EXPORT BasicDockingWindow::ToggleFloatingMode()
 
 
 
-sal_Bool __EXPORT BasicDockingWindow::PrepareToggleFloatingMode()
+sal_Bool BasicDockingWindow::PrepareToggleFloatingMode()
 {
     if ( IsFloatingMode() )
     {
@@ -463,7 +492,7 @@ sal_Bool __EXPORT BasicDockingWindow::PrepareToggleFloatingMode()
 
 
 
-void __EXPORT BasicDockingWindow::StartDocking()
+void BasicDockingWindow::StartDocking()
 {
     // Position und Groesse auf dem Desktop merken...
     if ( IsFloatingMode() )
@@ -525,7 +554,7 @@ BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
     SetHelpId( HID_BASICIDE_TABBAR );
 }
 
-void __EXPORT BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
+void BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) && !IsInEditMode() )
     {
@@ -543,7 +572,7 @@ void __EXPORT BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
+void BasicIDETabBar::Command( const CommandEvent& rCEvt )
 {
     if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && !IsInEditMode() )
     {
@@ -629,7 +658,7 @@ long BasicIDETabBar::AllowRenaming()
 }
 
 
-void __EXPORT BasicIDETabBar::EndRenaming()
+void BasicIDETabBar::EndRenaming()
 {
     if ( !IsEditModeCanceled() )
     {
@@ -702,7 +731,6 @@ void BasicIDETabBar::Sort()
 void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines )
 {
     sal_Int32 nStartPos = 0;
-    sal_Int32 nEndPos = 0;
     sal_Int32 nLine = 0;
     while ( nLine < nStartLine )
     {
@@ -717,7 +745,8 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
 
     if ( nStartPos != -1 )
     {
-        nEndPos = nStartPos;
+        sal_Int32 nEndPos = nStartPos;
+
         for ( sal_Int32 i = 0; i < nLines; i++ )
             nEndPos = searchEOL( rStr, nEndPos+1 );
 
@@ -1022,3 +1051,4 @@ sal_Bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContai
     return bOK;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,11 +37,7 @@ void show_usage()
     fputs("ztool usage: ztool <source> <dest>\n", stderr);
 }
 
-int
-#ifdef WNT
-__cdecl
-#endif
-main( int argc, char **argv )
+int SAL_CALL main( int argc, char **argv )
 {
     if ( argc != 3 )
     {
@@ -61,3 +58,5 @@ main( int argc, char **argv )
 }
 
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

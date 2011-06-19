@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,11 @@
 
 #include <vcl/fixed.hxx>
 #include <svtools/svtreebx.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <vcl/dialog.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 
 //............................................................................
 namespace pcr
@@ -89,3 +86,4 @@ namespace pcr
 
 #endif // _EXTENSIONS_PROPCTRLR_SELECTLABELDIALOG_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

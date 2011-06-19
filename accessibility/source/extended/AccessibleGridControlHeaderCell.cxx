@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
         if( implIsShowing() )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
-        TCSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
@@ -168,3 +169,4 @@ sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

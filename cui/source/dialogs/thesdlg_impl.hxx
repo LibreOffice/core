@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +188,6 @@ struct SvxThesaurusDialog_Impl
 
     String          aErrStr;
     Image           aVendorDefaultImage;
-    Image           aVendorDefaultImageHC;
 
     uno::Reference< linguistic2::XThesaurus >   xThesaurus;
     OUString                aLookUpText;
@@ -225,3 +222,4 @@ struct SvxThesaurusDialog_Impl
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

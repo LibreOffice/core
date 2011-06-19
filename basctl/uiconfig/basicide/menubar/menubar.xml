@@ -40,6 +40,7 @@
             <menu:menuitem menu:id=".uno:Paste"/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
         </menu:menupopup>
     </menu:menu>
@@ -81,9 +82,9 @@
             <menu:menuitem menu:id=".uno:HelpIndex"/>
             <menu:menuitem menu:id=".uno:ExtendedHelp"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HelpSupport"/>
-            <menu:menuitem menu:id=".uno:OnlineRegistrationDlg"/>
+            <menu:menuitem menu:id=".uno:ShowLicense"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowCredits"/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
     </menu:menu>

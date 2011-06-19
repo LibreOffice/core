@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,6 @@ class XSecParser: public cppu::WeakImplHelper2
  *  security elements in the SAX event stream, then notifies
  *  the XSecController.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XDocumentHandler, XInitialization
- *
  *   NOTES
  *  This class is used when importing a document.
  *
@@ -75,7 +73,6 @@ private:
     rtl::OUString m_ouDigestValue;
     rtl::OUString m_ouSignatureValue;
     rtl::OUString m_ouDate;
-    //rtl::OUString m_ouTime;
 
     /*
      * whether inside a particular element
@@ -86,7 +83,6 @@ private:
     bool m_bInDigestValue;
     bool m_bInSignatureValue;
     bool m_bInDate;
-    //bool m_bInTime;
 
     /*
      * the XSecController collaborating with XSecParser
@@ -163,3 +159,5 @@ public:
 
 #endif
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

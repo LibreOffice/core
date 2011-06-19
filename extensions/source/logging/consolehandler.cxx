@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -249,9 +250,9 @@ namespace logging
             return sal_False;
 
         if ( _rRecord.Level >= m_nThreshold )
-            fprintf( stderr, sEntry.getStr() );
+            fprintf( stderr, "%s\n", sEntry.getStr() );
         else
-            fprintf( stdout, sEntry.getStr() );
+            fprintf( stdout, "%s\n", sEntry.getStr() );
 
         return sal_True;
     }
@@ -340,3 +341,5 @@ namespace logging
 //........................................................................
 } // namespace logging
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

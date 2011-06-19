@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,6 @@
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
 #define SYSTEM_JAVA    3
-#define SYSTEM_OS2     4
 #define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
 
@@ -100,3 +100,4 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindo
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

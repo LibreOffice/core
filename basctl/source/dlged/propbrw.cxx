@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,25 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
+#include <sal/macros.h>
 #include "propbrw.hxx"
 #include "dlgedobj.hxx"
 
 #include "basidesh.hxx"
 #include <iderid.hxx>
 
-#ifndef _BASCTL_DLGRESID_HRC
 #include <dlgresid.hrc>
-#endif
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/objitem.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/shl.hxx>
 #include <vcl/stdtext.hxx>
 #include <svx/svdview.hxx>
@@ -55,9 +52,7 @@
 #include <svx/svditer.hxx>
 #include <sfx2/viewsh.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/property.hxx>
 #include <comphelper/composedprops.hxx>
 #include <comphelper/stl_types.hxx>
@@ -80,13 +75,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 
-//============================================================================
-// PropBrwMgr
-//============================================================================
 
 SFX_IMPL_FLOATINGWINDOW(PropBrwMgr, SID_SHOW_PROPERTYBROWSER)
 
-//----------------------------------------------------------------------------
 
 PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
                         SfxBindings *pBindings, SfxChildWinInfo* pInfo)
@@ -108,7 +99,7 @@ PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
     ((PropBrw*)pWindow)->Update( pShell );
 }
 
-//----------------------------------------------------------------------------
+
 void PropBrw::Update( const SfxViewShell* _pShell )
 {
     const BasicIDEShell* pBasicIDEShell = dynamic_cast< const BasicIDEShell* >( _pShell );
@@ -127,7 +118,6 @@ void PropBrw::Update( const SfxViewShell* _pShell )
     }
 }
 
-//----------------------------------------------------------------------------
 
 const long STD_WIN_SIZE_X = 300;
 const long STD_WIN_SIZE_Y = 350;
@@ -141,15 +131,9 @@ const long WIN_BORDER = 2;
 const long MIN_WIN_SIZE_X = 50;
 const long MIN_WIN_SIZE_Y = 50;
 
-//----------------------------------------------------------------------------
-
-//============================================================================
-// PropBrw
-//============================================================================
 
 DBG_NAME(PropBrw)
 
-//----------------------------------------------------------------------------
 
 PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings, PropBrwMgr* _pMgr, Window* _pParent,
             const Reference< XModel >& _rxContextDocument )
@@ -168,23 +152,22 @@ PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Frame" ))), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("form property browser"));  // change name!
+            m_xMeAsFrame->setName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "form property browser" )));  // change name!
         }
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize my frame!");
+        OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
     ImplReCreateController();
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::ImplReCreateController()
 {
@@ -209,12 +192,11 @@ void PropBrw::ImplReCreateController()
             ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_xContextDocument ) )
         };
         Reference< XComponentContext > xInspectorContext(
-            ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
-            xOwnContext ) );
+            ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), xOwnContext ) );
 
         // create a property browser controller
         Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
-        static const ::rtl::OUString s_sControllerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.awt.PropertyBrowserController");
+        static const ::rtl::OUString s_sControllerServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.PropertyBrowserController" ));
         m_xBrowserController = Reference< XPropertySet >(
             xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY
         );
@@ -254,7 +236,7 @@ void PropBrw::ImplReCreateController()
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
+        OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
         try
         {
             ::comphelper::disposeComponent(m_xBrowserController);
@@ -271,7 +253,6 @@ void PropBrw::ImplReCreateController()
     Resize();
 }
 
-//----------------------------------------------------------------------------
 
 PropBrw::~PropBrw()
 {
@@ -281,7 +262,6 @@ PropBrw::~PropBrw()
     DBG_DTOR(PropBrw,NULL);
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::ImplDestroyController()
 {
@@ -306,7 +286,6 @@ void PropBrw::ImplDestroyController()
     m_xBrowserController.clear();
 }
 
-//----------------------------------------------------------------------------
 
 sal_Bool PropBrw::Close()
 {
@@ -320,7 +299,7 @@ sal_Bool PropBrw::Close()
     return bClose;
 }
 
-//----------------------------------------------------------------------------
+
 Sequence< Reference< XInterface > >
     PropBrw::CreateMultiSelectionSequence( const SdrMarkList& _rMarkList )
 {
@@ -365,7 +344,7 @@ Sequence< Reference< XInterface > >
     return aSeq;
 }
 
-//----------------------------------------------------------------------------
+
 void PropBrw::implSetNewObjectSequence
     ( const Sequence< Reference< XInterface > >& _rObjectSeq )
 {
@@ -380,14 +359,13 @@ void PropBrw::implSetNewObjectSequence
     }
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 {
     if ( m_xBrowserController.is() )
     {
         m_xBrowserController->setPropertyValue(
-            ::rtl::OUString::createFromAscii( "IntrospectedObject" ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IntrospectedObject" )),
             makeAny( _rxObject )
         );
 
@@ -396,7 +374,6 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     }
 }
 
-//----------------------------------------------------------------------------
 
 ::rtl::OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
 {
@@ -506,24 +483,16 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     {
         aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES)));
     }
-    // #i73075 Handled in implSetNewObjectSequence
-    //else    // multiselection
-    //{
-    //  aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
-    //  aName += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
-    //}
 
     return aName;
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     rInfo.bVisible = sal_False;
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::Resize()
 {
@@ -542,7 +511,6 @@ void PropBrw::Resize()
     }
 }
 
-//----------------------------------------------------------------------------
 
 void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView* pNewView )
 {
@@ -625,4 +593,4 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
     }
 }
 
-//----------------------------------------------------------------------------
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

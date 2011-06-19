@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,7 +105,7 @@ public:
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
 };
 
 /*************************************************************************
@@ -125,3 +126,4 @@ public:
 
 #endif // _SVX_MEASURE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

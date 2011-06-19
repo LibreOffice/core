@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -155,7 +156,7 @@ private:
     sal_uInt16                          nMode;
     ::basctl::DocumentEventNotifier m_aNotifier;
 
-    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC );
+    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage );
 
 protected:
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
@@ -203,12 +204,12 @@ public:
     sal_uInt16          ConvertType( BasicEntryType eType );
     bool            IsValidEntry( SvLBoxEntry* pEntry );
 
-    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage, const Image& rImageHC,
+    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage,
                               SvLBoxEntry* pParent, bool bChildrenOnDemand,
                               std::auto_ptr< BasicEntry > aUserData );
 
     String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
-    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC );
+    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
     void            SetCurrentEntry( BasicEntryDescriptor& rDesc );
 
@@ -217,3 +218,5 @@ private:
 };
 
 #endif  // _BASTYPE2_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

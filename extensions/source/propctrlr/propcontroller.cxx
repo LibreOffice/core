@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,16 +32,10 @@
 #include "pcrstrings.hxx"
 #include "standardcontrol.hxx"
 #include "linedescriptor.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "propertyeditor.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
 #include "formbrowsertools.hxx"
@@ -57,18 +52,17 @@
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/property.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <algorithm>
 #include <functional>
+#include <sal/macros.h>
 
 //------------------------------------------------------------------------
 // !!! outside the namespace !!!
@@ -289,7 +283,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::inspect( const Sequence< Reference< XInterface > >& _rObjects ) throw (com::sun::star::util::VetoException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( m_bSuspendingPropertyHandlers || !suspendAll_nothrow() )
@@ -377,11 +371,11 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if (_rxFrame.is() && haveView())
-            throw RuntimeException(::rtl::OUString::createFromAscii("Unable to attach to a second frame."),*this);
+            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to attach to a second frame.")),*this);
 
         // revoke as focus listener from the old container window
         stopContainerWindowListening();
@@ -397,7 +391,7 @@ namespace pcr
         VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
         Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
         if (!pParentWin)
-            throw RuntimeException(::rtl::OUString::createFromAscii("The frame is invalid. Unable to extract the container window."),*this);
+            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The frame is invalid. Unable to extract the container window.")),*this);
 
         if ( Construct( pParentWin ) )
         {
@@ -407,7 +401,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::attachFrame: caught an exception!" );
+                OSL_FAIL( "OPropertyBrowserController::attachFrame: caught an exception!" );
             }
         }
 
@@ -476,7 +470,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
+                OSL_FAIL( "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
             }
         }
         return sal_True;
@@ -542,7 +536,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::dispose(  ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
 
         // stop inspecting the current object
         stopInspection( false );
@@ -603,14 +597,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.ObjectInspector");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.ObjectInspector"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.inspection.ObjectInspector" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.inspection.ObjectInspector"));
         return aSupported;
     }
 
@@ -754,7 +748,7 @@ namespace pcr
     {
         if ( _rEvent.Source == m_xModel )
         {
-            if ( _rEvent.PropertyName.equalsAscii( "IsReadOnly" ) )
+            if ( _rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
                 impl_updateReadOnlyView_nothrow();
             return;
         }
@@ -996,7 +990,7 @@ namespace pcr
 
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
+            OSL_FAIL("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
         }
     }
 
@@ -1127,7 +1121,7 @@ namespace pcr
         }
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::doInspection : caught an exception !");
+            OSL_FAIL("OPropertyBrowserController::doInspection : caught an exception !");
         }
     }
 
@@ -1198,7 +1192,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPropertyBrowserController::describePropertyLine: caught an exception!" );
+            OSL_FAIL( "OPropertyBrowserController::describePropertyLine: caught an exception!" );
         }
     }
 
@@ -1263,7 +1257,7 @@ namespace pcr
                     ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
                     sMessage += ::rtl::OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'!";
-                    OSL_ENSURE( false, sMessage );
+                    OSL_FAIL( sMessage );
                 }
             #endif
                 // finally insert this property control
@@ -1371,7 +1365,7 @@ namespace pcr
                 // also okay, we expect that the handler has disabled the UI as necessary
                 break;
             default:
-                OSL_ENSURE( false, "OPropertyBrowserController::Clicked: unknown result value!" );
+                OSL_FAIL( "OPropertyBrowserController::Clicked: unknown result value!" );
                 break;
             }
         }
@@ -1447,7 +1441,7 @@ namespace pcr
         }
         catch(Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::Commit : caught an exception !");
+            OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
         }
 
         m_sCommittingProperty = ::rtl::OUString();
@@ -1512,7 +1506,7 @@ namespace pcr
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
             };
             xHandlerContext = ::cppu::createComponentContext(
-                aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+                aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
                 m_aContext.getUNOContext() );
         }
 
@@ -1596,7 +1590,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
+            OSL_FAIL( "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
         }
 
         getPropertyBox().ChangeEntry( aDescriptor );
@@ -1730,7 +1724,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::setHelpSectionText( const ::rtl::OUString& _rHelpText ) throw (NoSupportException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !haveView() )
@@ -1776,3 +1770,4 @@ namespace pcr
 //............................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

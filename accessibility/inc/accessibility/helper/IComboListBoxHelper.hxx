@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 #ifndef ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
 #define ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
 
-#include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <tools/wintypes.hxx>
 
@@ -67,3 +67,5 @@ namespace accessibility
     };
 }
 #endif // ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

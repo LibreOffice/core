@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,17 +32,11 @@
 #include <rtl/uuid.h>
 #include "xmlencryption_nssimpl.hxx"
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SECURITYENVIRONMENT_NSSIMPL_HXX_
 #include "securityenvironment_nssimpl.hxx"
-#endif
 #include "errorcallback.hxx"
 
 #include <sal/types.h>
@@ -104,12 +99,6 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
          throw RuntimeException() ;
     }
 
-#if 0
-    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
-        throw RuntimeException() ;
-#endif
-
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
@@ -135,7 +124,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
         throw RuntimeException() ;
     }
 
-    //MM : Get the element to be encrypted
+    // Get the element to be encrypted
     Reference< XXMLElementWrapper > xTarget = aTemplate->getTarget() ;
     if( !xTarget.is() ) {
         throw XMLEncryptionException() ;
@@ -155,16 +144,10 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     }
 
     pContent = pTarget->getNativeElement() ;
-    //MM : end
 
     if( pContent == NULL ) {
         throw XMLEncryptionException() ;
     }
-
-    /* MM : remove the following 2 lines
-    xmlUnlinkNode(pContent);
-    xmlAddNextSibling(pEncryptedData, pContent);
-    */
 
     //remember the position of the element to be signed
     sal_Bool isParentRef = sal_True;
@@ -201,32 +184,6 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     pEncryptedData = pTemplate->getNativeElement() ;
 
     //Find the element to be encrypted.
-    /* MM : remove the old method to get the target element
-    //This element is wrapped in the CipherValue sub-element.
-    xmlNodePtr pCipherData = pEncryptedData->children;
-    while (pCipherData != NULL && stricmp((const char *)(pCipherData->name), "CipherData"))
-    {
-        pCipherData = pCipherData->next;
-    }
-
-    if( pCipherData == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw XMLEncryptionException() ;
-    }
-
-    xmlNodePtr pCipherValue = pCipherData->children;
-    while (pCipherValue != NULL && stricmp((const char *)(pCipherValue->name), "CipherValue"))
-    {
-        pCipherValue = pCipherValue->next;
-    }
-
-    if( pCipherValue == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw XMLEncryptionException() ;
-    }
-
-    pContent = pCipherValue->children;
-    */
 
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 )
@@ -404,12 +361,12 @@ Sequence< OUString > SAL_CALL XMLEncryption_NssImpl :: getSupportedServiceNames(
 Sequence< OUString > XMLEncryption_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLEncryption" ) ;
+    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLEncryption")) ;
     return seqServiceNames ;
 }
 
 OUString XMLEncryption_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_NssImpl" ) ;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_NssImpl")) ;
 }
 
 //Helper for registry
@@ -424,3 +381,4 @@ Reference< XSingleServiceFactory > XMLEncryption_NssImpl :: impl_createFactory( 
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

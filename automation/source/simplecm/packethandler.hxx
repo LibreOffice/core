@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,8 +59,8 @@ protected:
 public:
     PacketHandler( ITransmiter* pTransmitter_, IReceiver* pReceiver_, comm_BOOL bMC = sal_False );
 
-    comm_UINT16 GetReceiveProtocol() { return nReceiveProtocol; }
-    comm_UINT16 GetReceiveHeaderType() { return nReceiveHeaderType; }
+    comm_UINT16 GetReceiveProtocol() const { return nReceiveProtocol; }
+    comm_UINT16 GetReceiveHeaderType() const { return nReceiveHeaderType; }
 
     comm_BOOL ReceiveData( void* &pData, comm_UINT32 &nLen );               /// Recieve DataPacket from Socket
     virtual comm_BOOL SendHandshake( HandshakeType aHandshakeType, const void* pData = NULL, comm_UINT32 nLen = 0 );
@@ -67,3 +68,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

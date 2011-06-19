@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@ class SvxSearchItem;
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <basic/sbmod.hxx>
 #include <vcl/split.hxx>
 #include "svl/lstner.hxx"
@@ -74,9 +73,6 @@ private:
 public:
 
     inline          ProgressInfo( SfxObjectShell* pObjSh, const String& rText, sal_uLong nRange );
-
-//  inline void     StartProgress( const String& rName, sal_uLong nStates );
-//  inline void     EndProgress();
     inline void     StepProgress();
 };
 
@@ -85,19 +81,6 @@ inline ProgressInfo::ProgressInfo( SfxObjectShell* pObjSh, const String& rText, 
 {
     nCurState = 0;
 }
-
-// inline void ProgressInfo::StartProgress( const String& rName, sal_uLong nStates )
-// {
-//  nCurState = 0;
-//  if ( pStbMgr )
-//      pStbMgr->StartProgressMode( rName, nStates );
-// }
-
-// inline void ProgressInfo::EndProgress()
-// {
-//  if ( pStbMgr )
-//      pStbMgr->EndProgressMode();
-//}
 
 inline void ProgressInfo::StepProgress()
 {
@@ -193,7 +176,6 @@ private:
     BreakPointList  aBreakPointList;
     ModulWindow*    pModulWindow;
     sal_Bool            bErrorMarker;
-    bool m_bHighContrastMode;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -234,16 +216,6 @@ protected:
 
     sal_Bool            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
     SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
-
-//  virtual DragDropMode    NotifyBeginDrag( SvLBoxEntry* );
-//  virtual sal_Bool    NotifyQueryDrop( SvLBoxEntry* );
-
-//  virtual sal_Bool    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-//                      SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
-//  virtual sal_Bool    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-//                      SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
-//  sal_Bool            NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-//                      SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
 public:
     WatchTreeListBox( Window* pParent, WinBits nWinBits );
@@ -293,7 +265,6 @@ class StackWindow : public BasicDockingWindow
 {
 private:
     SvTreeListBox   aTreeListBox;
-    ImageButton     aGotoCallButton;
     String          aStackStr;
 
 protected:
@@ -379,7 +350,6 @@ public:
     virtual void    StoreData();
     virtual void    UpdateData();
     virtual sal_Bool    CanClose();
-    // virtual void PrintData( Printer* pPrinter );
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
@@ -414,8 +384,6 @@ public:
     sal_Bool            ImportDialog();
 
     void            EditMacro( const String& rMacroName );
-
-//  void            InsertFromObjectCatalog( ObjectCatalog* pObjDlg );
 
     sal_Bool            ToggleBreakPoint( sal_uLong nLine );
 
@@ -469,7 +437,6 @@ private:
     svtools::ColorConfig m_aColorConfig;
 
     ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -498,10 +465,12 @@ public:
     WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
     StackWindow&    GetStackWindow()    { return aStackWindow; }
 
-    Image getImage(sal_uInt16 nId, bool bHighContrastMode) const;
+    Image getImage(sal_uInt16 nId) const;
 
     inline Color const & getSyntaxColor(TokenTypes eType) const
     { return m_aSyntaxColors[eType]; }
 };
 
 #endif  // _BASIDE2_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

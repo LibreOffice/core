@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include <tools/shl.hxx>
 #include <svl/eitem.hxx>
@@ -138,26 +136,15 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     aOrigSizePB.SetAccessibleRelationLabeledBy( &aOrigSizeFT );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SvxGrfCropPage::~SvxGrfCropPage()
 {
     aTimer.Stop();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* SvxGrfCropPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SvxGrfCropPage( pParent, rSet );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 {
@@ -248,10 +235,6 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     bReset = sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 {
     const SfxItemPool& rPool = *rSet.GetPool();
@@ -316,10 +299,6 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 
     return bModified;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -391,10 +370,6 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 
     CalcZoom();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 {
@@ -494,16 +469,12 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         {
             if(pField == &aLeftMF)
             {
-//              nLeft = aPageSize.Width() -
-//                  ((nRight + aOrigSize.Width()) * nWidthZoom) / 100;
                 nLeft = aOrigSize.Width() -
                             ( aPageSize.Width() * 100 / nWidthZoom + nRight );
                 aLeftMF.SetValue( aLeftMF.Normalize( nLeft ), eUnit );
             }
             else
             {
-//              nRight = aPageSize.Width() -
-//                  ((nLeft - aOrigSize.Width()) * nWidthZoom) / 100;
                 nRight = aOrigSize.Width() -
                             ( aPageSize.Width() * 100 / nWidthZoom + nLeft );
                 aRightMF.SetValue( aRightMF.Normalize( nRight ), eUnit );
@@ -527,16 +498,12 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         {
             if(pField == &aTopMF)
             {
-//              nTop = aPageSize.Height() -
-//                  ((aOrigSize.Height() - nBottom) * nHeightZoom)/ 100;
                 nTop = aOrigSize.Height() -
                             ( aPageSize.Height() * 100 / nHeightZoom + nBottom);
                 aTopMF.SetValue( aWidthMF.Normalize( nTop ), eUnit );
             }
             else
             {
-//              nBottom = aPageSize.Height() -
-//                  ((aOrigSize.Height() - nTop)*nHeightZoom) / 100;
                 nBottom = aOrigSize.Height() -
                             ( aPageSize.Height() * 100 / nHeightZoom + nTop);
                 aBottomMF.SetValue( aWidthMF.Normalize( nBottom ), eUnit );
@@ -629,11 +596,6 @@ void SvxGrfCropPage::CalcMinMaxBorder()
     nMin = nMinWidth - (nL >= 0 ? nL : 0);
     aRightMF.SetMax( aRightMF.Normalize(nMin), eUnit );
 
-    // Zoom nicht unter 2%
-/*  nMin = (aOrigSize.Width() * 102) /100;
-    aLeftMF.SetMax(aPageSize.Width() - nR - nMin);
-    aRightMF.SetMax(aPageSize.Width() - nL - nMin);
-*/
     long nUp  = lcl_GetValue( aTopMF, eUnit );
     long nMinHeight = (aOrigSize.Height() * 10) /11;
     nMin = nMinHeight - (nUp >= 0 ? nUp : 0);
@@ -642,11 +604,6 @@ void SvxGrfCropPage::CalcMinMaxBorder()
     long nLow = lcl_GetValue(aBottomMF, eUnit );
     nMin = nMinHeight - (nLow >= 0 ? nLow : 0);
     aTopMF.SetMax( aTopMF.Normalize(nMin), eUnit );
-
-    // Zoom nicht unter 2%
-/*  nMin = (aOrigSize.Height() * 102) /100;
-    aTopMF.SetMax(aPageSize.Height() - nLow - nMin);
-    aBottomMF.SetMax(aPageSize.Height() - nUp - nMin);*/
 }
 /*--------------------------------------------------------------------
     Beschreibung:   Spinsize auf 1/20 der Originalgroesse setzen,
@@ -832,6 +789,4 @@ void SvxGrfCropPage::SvxCropExample::SetFrameSize( const Size& rSz )
     Invalidate();
 }
 
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

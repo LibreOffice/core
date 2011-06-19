@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "boost/utility.hpp"
 #include <osl/mutex.hxx>
 #include "com/sun/star/uno/Any.h"
-#ifndef  _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include "com/sun/star/uno/Reference.h"
-#endif
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/awt/Rectangle.hpp"
 #include "com/sun/star/awt/XActionListener.hpp"
@@ -219,3 +218,5 @@ public:
 };
 
 #endif /* INCLUDED_UPDATE_HDL_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

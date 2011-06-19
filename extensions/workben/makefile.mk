@@ -32,11 +32,6 @@ TARGET=workben
 LIBTARGET=NO
 
 TESTAPP=testpgp
-#TESTAPP=testcomponent
-#TESTAPP=pythontest
-#TESTAPP=pythonautotest
-#TESTAPP=testresource
-#TESTAPP=testframecontrol
 
 .IF "$(TESTAPP)" == "testresource" || "$(TESTAPP)" == "testframecontrol"
 TARGETTYPE=GUI
@@ -83,7 +78,6 @@ APP1OBJS=	$(OBJFILES)
 APP1STDLIBS= \
             $(CPPUHELPERLIB)\
             $(CPPULIB)		\
-            $(VOSLIB)		\
             $(SALLIB)
 
 .ENDIF # testpgp
@@ -98,7 +92,6 @@ OBJFILES=	$(OBJ)$/testcomponent.obj
 APP2TARGET = testcomponent
 APP2OBJS   = $(OBJ)$/testcomponent.obj
 APP2STDLIBS = \
-              $(VOSLIB) \
               $(TOOLSLIB)	\
               $(SALLIB)
 
@@ -108,28 +101,14 @@ APP2STDLIBS = \
 # test python.
 #
 .IF "$(TESTAPP)" == "phytontest"
-
 OBJFILES=	$(OBJ)$/pythontest.obj
-
-#APP4TARGET=	pythontest
-#APP4OBJS=	$(OBJ)$/pythontest.obj 
-#APP4STDLIBS=$(TOOLSLIB)		\
-#			$(VOSLIB)
-
 .ENDIF # phytontest
 
 #
 # python auto test
 #
 .IF "$(TESTAPP)" == "phytonautotest"
-
 OBJFILES=	$(OBJ)$/pythonautotest.obj
-
-#APP5TARGET= pythonautotest
-#APP5OBJS = $(OBJ)$/pythonautotest.obj
-#APP5STDLIBS=$(TOOLSLIB)		\
-#			$(VOSLIB)
-
 .ENDIF # phytonautotest
 
 #
@@ -162,7 +141,6 @@ OBJFILES=	$(OBJ)$/testframecontrol.obj
 APP3TARGET=	testframecontrol
 APP3OBJS=	$(OBJ)$/testframecontrol.obj
 APP3STDLIBS=$(TOOLSLIB)		\
-            $(VOSLIB)		\
             $(SVTOOLLIB)	\
             $(VCLLIB)
 

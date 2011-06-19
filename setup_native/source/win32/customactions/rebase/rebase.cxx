@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #undef UNICODE
 #undef _UNICODE
 
@@ -19,11 +20,11 @@
 #include <malloc.h>
 #include <time.h>
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 const DWORD PE_Signature = 0x00004550;
 typedef std::pair< std::string, bool > StringPair;
-typedef std::hash_map< std::string, bool > ExcludeLibsMap;
+typedef boost::unordered_map< std::string, bool > ExcludeLibsMap;
 
 #ifdef DEBUG
 static void OutputDebugStringFormat( LPCSTR pFormat, ... )
@@ -71,8 +72,8 @@ static BOOL rebaseImage( const std::string& filePath, LPVOID address )
     ULONG_PTR lpNewImageBase = reinterpret_cast<ULONG_PTR>(address);
 
     BOOL bResult = ReBaseImage(
-        filePath.c_str(),
-        "",
+        (PSTR)filePath.c_str(),
+        (PSTR)"",
         TRUE,
         FALSE,
         FALSE,
@@ -221,3 +222,5 @@ extern "C" BOOL __stdcall RebaseLibrariesOnProperties( MSIHANDLE handle )
 
     return TRUE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

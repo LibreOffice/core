@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#if STLPORT_VERSION>=321
-#include <cstdarg>
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
 #endif
 
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
+#include <cstdarg>
 #include <list>
 
 #include <plugin/impl.hxx>
@@ -80,8 +90,11 @@ void TRACES( char const* s, char const* s2 )
 #define TRACES(x,s)
 #endif
 
-using namespace rtl;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 NPNetscapeFuncs aNPNFuncs =
 {
@@ -576,23 +589,6 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
             *(NPBool*)value = false;
             break;
     }
-    /*
-    provisional code should there ever be NPNVariables that we actually
-    want to query from the PluginContext
-    ::rtl::OUString aValue;
-    try
-    {
-        pImpl->enterPluginCallback();
-        aValue = pImpl->getPluginContext()->
-            getValue( pImpl, (::com::sun::star::plugin::PluginVariable)variable );
-        pImpl->leavePluginCallback();
-    }
-    catch( ::com::sun::star::plugin::PluginException& e )
-    {
-        pImpl->leavePluginCallback();
-        return e.ErrorCode;
-    }
-    */
 
     return aResult;
 }
@@ -675,3 +671,5 @@ void SAL_CALL NP_LOADDS  NPN_ForceRedraw(NPP instance)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

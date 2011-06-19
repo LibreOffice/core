@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -49,7 +50,7 @@ namespace
     // [add additional conditions here]
     static bool lcl_IsInvitationAllowed()
     {
-        static OUString sNoFirstStartWizard = OUString::createFromAscii("-nofirststartwizard");
+        static OUString sNoFirstStartWizard(RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
         sal_Int32 nCount = rtl_getAppCommandArgCount();
         for(sal_Int32 nCurrent=0; nCurrent<nCount; nCurrent++)
         {
@@ -64,12 +65,6 @@ namespace
 
 namespace oooimprovement
 {
-//    InviteJob::InviteJob(const Reference<XComponentContext>& context)
-//        : m_ServiceFactory(Reference<XMultiServiceFactory>(
-//            context->getServiceManager()->createInstanceWithContext(
-//                OUString::createFromAscii("com.sun.star.lang.XMultiServiceFactory"), context),
-//            UNO_QUERY))
-//    { }
 
     InviteJob::InviteJob(const Reference<XMultiServiceFactory>& sf)
         : m_ServiceFactory(sf)
@@ -92,7 +87,7 @@ namespace oooimprovement
             if(lcl_IsInvitationAllowed() && !config.getShowedInvitation())
             {
                 Reference<XCore> core(
-                    m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.oooimprovement.Core")),
+                    m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.Core"))),
                     UNO_QUERY);
                 if(core.is()) core->inviteUser();
             }
@@ -116,18 +111,17 @@ namespace oooimprovement
     { return getSupportedServiceNames_static(); }
 
     OUString SAL_CALL InviteJob::getImplementationName_static()
-    { return OUString::createFromAscii("com.sun.star.comp.extensions.oooimprovement.InviteJob"); }
+    { return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.oooimprovement.InviteJob")); }
 
     Sequence<OUString> SAL_CALL InviteJob::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.AsyncJob");
+        aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.AsyncJob"));
         return aServiceNames;
     }
-
-//    Reference<XInterface> InviteJob::Create(const Reference<XComponentContext>& context)
-//    { return *(new InviteJob(context)); }
 
     Reference<XInterface> InviteJob::Create(const Reference<XMultiServiceFactory>& sm)
     { return *(new InviteJob(sm)); }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

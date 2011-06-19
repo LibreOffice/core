@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "editwin.hxx"
 #include <tools/stream.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 
 sal_Bool GHEditWindow::Close()
@@ -125,3 +124,4 @@ sal_Bool EditFileWindow::Close()
     return GHEditWindow::Close();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

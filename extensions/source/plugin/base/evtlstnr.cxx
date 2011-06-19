@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#if STLPORT_VERSION>=321
-#include <cstdarg>
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
 #endif
+
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
+#include <cstdarg>
 
 #include <plugin/impl.hxx>
 
@@ -62,3 +73,5 @@ void PluginEventListener::disposing( const ::com::sun::star::lang::EventObject& 
                        NPRES_DONE,
                        m_pNotifyData );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

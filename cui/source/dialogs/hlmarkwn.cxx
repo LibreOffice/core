@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <vcl/wrkwin.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/docfile.hxx>
@@ -37,7 +35,6 @@
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -259,7 +256,7 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
                     uno::UNO_QUERY );
         if( xDesktop.is() )
         {
@@ -274,9 +271,9 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                     try
                     {
                         uno::Sequence< beans::PropertyValue > aArg(1);
-                        aArg.getArray()[0].Name = OUString::createFromAscii( "Hidden" );
+                        aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
                         aArg.getArray()[0].Value <<= (sal_Bool) sal_True;
-                        xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_blank" ), 0, aArg );
+                        xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
                     }
                     catch( const io::IOException& )
                     {
@@ -318,27 +315,6 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
     }
     return (mnError==0);
 }
-/*
-void SvxHlinkDlgMarkWnd::Error(int nNr)
-{
-    switch(nNr)
-    {
-        case 0:
-        {
-            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
-            //maLbTree.SetTextColor( Color(COL_BLACK) );
-            //maLbTree.DrawText( aDrawRect, "Keine Ziele im Dokument vorhanden.", TEXT_DRAW_LEFT);// | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-            maLbTree.DrawText( Point(0,0), "Keine Ziele im Dokument vorhanden.");
-            maLbTree.DrawLine(aDrawRect.TopLeft(), aDrawRect.BottomRight() );
-        }
-        break;
-        case 1:
-            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
-            maLbTree.DrawText( aDrawRect, "Das Dokument konnte nicht ge�ffnet werden.", TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-            break;
-    }
-}
-*/
 /*************************************************************************
 |*
 |* Fill Tree-Control
@@ -409,8 +385,6 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                                                         pParentEntry,
                                                         sal_False, LIST_APPEND,
                                                         (void*)pData );
-                        maLbTree.SetExpandedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
-                        maLbTree.SetCollapsedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
                         nEntries++;
                     }
                     else
@@ -544,3 +518,4 @@ IMPL_LINK ( SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, void *, EMPTYARG )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
@@ -166,6 +164,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     }
     else if ( LANGUAGE_JAPANESE == eLang ||
           LANGUAGE_KOREAN == eLang ||
+          LANGUAGE_HUNGARIAN == eLang ||
           LANGUAGE_CHINESE_TRADITIONAL == eLang ||
           LANGUAGE_CHINESE_SIMPLIFIED == eLang)
     {
@@ -335,7 +334,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
         switch ( aShortStr.Len() )
         {
             case 0:
-                aShortStr = String( RTL_CONSTASCII_STRINGPARAM("  ") );
+                aShortStr = String( RTL_CONSTASCII_USTRINGPARAM("  ") );
                 break;
 
             case 1:
@@ -559,3 +558,4 @@ int SvxGeneralTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

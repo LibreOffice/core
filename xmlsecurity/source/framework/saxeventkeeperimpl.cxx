@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,9 +111,6 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -158,9 +156,6 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
  *  pBufferNode - the BufferNode that has been connected with both new
  *                ElementCollectors and new Blocker.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -168,7 +163,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
 {
     BufferNode* pBufferNode = NULL;
 
-    if ( (m_vNewElementCollectors.size()>0) ||
+    if ( (!m_vNewElementCollectors.empty()) ||
          (m_pNewBlocker != NULL))
     {
         /*
@@ -209,7 +204,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
             m_pNewBlocker = NULL;
         }
 
-        if (m_vNewElementCollectors.size()>0)
+        if (!m_vNewElementCollectors.empty())
         {
             std::vector< const ElementCollector* >::const_iterator ii = m_vNewElementCollectors.begin();
 
@@ -244,9 +239,6 @@ ElementMark* SAXEventKeeperImpl::findElementMarkBuffer(sal_Int32 nId) const
  *   RESULT
  *  pElementMark - the ElementMark with the particular Id, or NULL when
  *                 no such Id exists.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -286,9 +278,6 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -361,9 +350,6 @@ rtl::OUString SAXEventKeeperImpl::printBufferNode(
  *
  *   RESULT
  *  info - the information string
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -445,9 +431,6 @@ cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
  *   RESULT
  *  list - the child Elements list.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -505,9 +488,6 @@ void SAXEventKeeperImpl::smashBufferNode(
  *  cleared, with a stop flag seting at the next Blocking BufferNode. This
  *  operation can delete all useless bufferred SAX events which are only
  *  needed by the Blocker to be deleted.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -651,9 +631,6 @@ BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
  *  pBufferNode - the next blocking BufferNode, or NULL if no such
  *                BufferNode exists.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -698,9 +675,6 @@ void SAXEventKeeperImpl::diffuse(BufferNode* pBufferNode) const
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -735,16 +709,13 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_bIsReleasing = true;
-    while (m_vReleasedElementMarkBuffers.size()>0)
+    while (!m_vReleasedElementMarkBuffers.empty())
     {
         std::vector< sal_Int32 >::iterator pId = m_vReleasedElementMarkBuffers.begin();
         sal_Int32 nId = *pId;
@@ -897,9 +868,6 @@ void SAXEventKeeperImpl::markElementMarkBuffer(sal_Int32 nId)
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -941,9 +909,6 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
  *
  *   RESULT
  *  nId - the Id of the new ElementCollector
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -989,9 +954,6 @@ sal_Int32 SAXEventKeeperImpl::createBlocker(sal_Int32 nSecurityId)
  *
  *   RESULT
  *  nId - the Id of the new Blocker
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -1461,3 +1423,4 @@ cssu::Sequence< rtl::OUString > SAL_CALL SAXEventKeeperImpl::getSupportedService
     return SAXEventKeeperImpl_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

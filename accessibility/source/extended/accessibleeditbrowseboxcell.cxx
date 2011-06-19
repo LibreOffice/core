@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -258,7 +259,7 @@ namespace accessibility
             catch( const Exception& e )
             {
                 (void)e;
-                OSL_ENSURE( false, "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
+                OSL_FAIL( "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
             }
         }
 
@@ -271,3 +272,5 @@ namespace accessibility
 // .................................................................................
 } // namespace accessibility
 // .................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

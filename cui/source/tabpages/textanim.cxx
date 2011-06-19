@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
@@ -58,7 +56,7 @@ static sal_uInt16 pRanges[] =
 |*
 \************************************************************************/
 
-__EXPORT SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
+SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
                                 const SfxItemSet* pAttr,
                                 const SdrView* pSdrView ) :
         SfxTabDialog        ( pParent, CUI_RES( RID_SVXDLG_TEXT ), pAttr ),
@@ -77,7 +75,7 @@ __EXPORT SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -194,7 +192,7 @@ SvxTextAnimationPage::~SvxTextAnimationPage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
+void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 {
     const SfxItemPool* pPool = rAttrs.GetPool();
 
@@ -773,3 +771,4 @@ sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

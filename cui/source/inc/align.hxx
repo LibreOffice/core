@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,6 +55,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     static sal_uInt16*      GetRanges();
 
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -63,6 +65,8 @@ private:
 
     void                InitVsRefEgde();
     void                UpdateEnableControls();
+
+    bool                HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const;
 
     DECL_LINK( UpdateEnableHdl, void* );
 
@@ -99,3 +103,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

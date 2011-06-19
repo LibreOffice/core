@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 
 /** === begin UNO includes === **/
@@ -87,3 +86,4 @@ namespace pcr
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

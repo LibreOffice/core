@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,6 +84,7 @@ using ::rtl::OString;
 #define SECURITY_ENVIRONMENT "com.sun.star.xml.crypto.SecurityEnvironment"
 #define SECURITY_CONTEXT "com.sun.star.xml.crypto.XMLSecurityContext"
 
+            int nProduct = 4;
 SEInitializer_NssImpl::SEInitializer_NssImpl(
     const css::uno::Reference< css::lang::XMultiServiceFactory > &rxMSF )
 {
@@ -194,3 +196,4 @@ cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServ
     return SEInitializer_NssImpl_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

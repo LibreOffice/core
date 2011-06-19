@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,8 +54,7 @@ public:
 class ObjectCatalogToolBox_Impl: public ToolBox
 {
 public:
-    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId,
-                              ResId const & rImagesHighContrastId);
+    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId);
 
 private:
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
@@ -62,8 +62,6 @@ private:
     void setImages();
 
     ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
-    bool m_bHighContrast;
 };
 
 class ObjectCatalog : public FloatingWindow
@@ -95,3 +93,4 @@ public:
 
 #endif  //_OBJDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

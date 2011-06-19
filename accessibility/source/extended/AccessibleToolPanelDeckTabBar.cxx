@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -45,7 +46,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/button.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>
@@ -295,7 +296,7 @@ namespace accessibility
         {
         public:
             MethodGuard( AccessibleToolPanelTabBar_Impl& i_rImpl )
-                :m_aGuard( Application::GetSolarMutex() )
+                :m_aGuard()
             {
                 i_rImpl.checkDisposed();
             }
@@ -303,13 +304,8 @@ namespace accessibility
             {
             }
 
-            void clear()
-            {
-                m_aGuard.clear();
-            }
-
         private:
-            ::vos::OClearableGuard  m_aGuard;
+            SolarMutexGuard  m_aGuard;
         };
     }
 
@@ -457,3 +453,5 @@ namespace accessibility
 //......................................................................................................................
 } // namespace accessibility
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

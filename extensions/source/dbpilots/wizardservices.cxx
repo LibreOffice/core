@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef _EXTENSIONS_DBP_WIZARDSERVICES_HXX_
 #include "wizardservices.hxx"
-#endif
 #include "unoautopilot.hxx"
 #include "groupboxwiz.hxx"
 #include "listcombowizard.hxx"
@@ -71,14 +70,14 @@ namespace dbp
     //---------------------------------------------------------------------
     ::rtl::OUString OGroupBoxSI::getImplementationName() const
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbp.OGroupBoxWizard");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbp.OGroupBoxWizard"));
     }
 
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > OGroupBoxSI::getServiceNames() const
     {
         Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.GroupBoxAutoPilot");
+        aReturn[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.GroupBoxAutoPilot"));
         return aReturn;
     }
 
@@ -88,14 +87,14 @@ namespace dbp
     //---------------------------------------------------------------------
     ::rtl::OUString OListComboSI::getImplementationName() const
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbp.OListComboWizard");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbp.OListComboWizard"));
     }
 
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > OListComboSI::getServiceNames() const
     {
         Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ListComboBoxAutoPilot");
+        aReturn[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ListComboBoxAutoPilot"));
         return aReturn;
     }
 
@@ -105,14 +104,14 @@ namespace dbp
     //---------------------------------------------------------------------
     ::rtl::OUString OGridSI::getImplementationName() const
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbp.OGridWizard");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbp.OGridWizard"));
     }
 
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > OGridSI::getServiceNames() const
     {
         Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.GridControlAutoPilot");
+        aReturn[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.GridControlAutoPilot"));
         return aReturn;
     }
 
@@ -120,3 +119,4 @@ namespace dbp
 }   // namespace dbp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

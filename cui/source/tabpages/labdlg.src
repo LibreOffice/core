@@ -154,8 +154,6 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 6 , 85  ) ;
         Size = MAP_APPFONT ( 42 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Länge : ~Lõnge */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Länge : ~Lõnge */
         Text [ en-US ] = "~Length" ;
     };
     MetricField MF_LAENGE
@@ -220,22 +218,6 @@ TabPage RID_SVXPAGE_CAPTION
     Bitmap BMP_CAPTTYPE_4
     {
         File = "legtyp4.bmp" ;
-    };
-    Bitmap BMP_CAPTTYPE_1_H
-    {
-        File = "legtyp1_hc.bmp" ;
-    };
-    Bitmap BMP_CAPTTYPE_2_H
-    {
-        File = "legtyp2_hc.bmp" ;
-    };
-    Bitmap BMP_CAPTTYPE_3_H
-    {
-        File = "legtyp3_hc.bmp" ;
-    };
-    Bitmap BMP_CAPTTYPE_4_H
-    {
-        File = "legtyp4_hc.bmp" ;
     };
 };
  // RID_SVXDLG_CAPTION ----------------------------------------------------

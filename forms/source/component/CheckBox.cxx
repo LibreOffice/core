@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_forms.hxx"
 #include "CheckBox.hxx"
 #include "property.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
@@ -201,7 +200,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
             readCommonProperties(_rxInStream);
             break;
         default:
-            DBG_ERROR("OCheckBoxModel::read : unknown version !");
+            OSL_FAIL("OCheckBoxModel::read : unknown version !");
             defaultCommonProperties();
             break;
     }
@@ -258,12 +257,12 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                     m_xColumnUpdate->updateBoolean( sal_False );
                     break;
                 default:
-                    DBG_ERROR("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
+                    OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
             }
         }
         catch(Exception&)
         {
-            DBG_ERROR("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
+            OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
         }
     }
     return sal_True;
@@ -273,3 +272,4 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

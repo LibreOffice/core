@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,10 @@
 #include <stdarg.h>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <vos/pipe.hxx>
-#include <vos/mutex.hxx>
-#include <vos/conditn.hxx>
-#include <vos/thread.hxx>
+#include <osl/pipe.hxx>
+#include <osl/mutex.hxx>
+#include <osl/conditn.hxx>
+#include <osl/thread.hxx>
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -90,10 +91,10 @@ protected:
     int                                 m_nSocket;
 
     std::vector<MediatorMessage*>       m_aMessageQueue;
-    vos::OMutex             m_aQueueMutex;
-    vos::OMutex             m_aSendMutex;
+    osl::Mutex m_aQueueMutex;
+    osl::Mutex m_aSendMutex;
     // only one thread can send a message at any given time
-    vos::OCondition         m_aNewMessageCdtn;
+    osl::Condition                      m_aNewMessageCdtn;
     MediatorListener*                   m_pListener;
     // thread to fill the queue
 
@@ -150,12 +151,12 @@ public:
         }
 };
 
-class MediatorListener : public vos:: OThread
+class MediatorListener : public osl::Thread
 {
     friend class Mediator;
   private:
     Mediator*       m_pMediator;
-    ::vos::OMutex   m_aMutex;
+    ::osl::Mutex    m_aMutex;
 
     MediatorListener( Mediator* );
     ~MediatorListener();
@@ -181,3 +182,5 @@ inline void medDebug( int condition, const char* pFormat, ... )
 }
 
 #endif // _MEDIATOR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

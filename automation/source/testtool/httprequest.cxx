@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <stdio.h>
 #include "httprequest.hxx"
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 #include <tools/debug.hxx>
 
 
@@ -44,15 +45,18 @@ void HttpRequest::Init()
 }
 
 HttpRequest::HttpRequest()
-: nStatus( HTTP_INIT )
-, nResultId( 0 )
-, pStream( NULL )
-{}
+    : nStatus(HTTP_INIT), pOutSocket(NULL),
+      nResultId(0), pStream(NULL)
+{
+}
 
 HttpRequest::~HttpRequest()
 {
     delete pStream;
     pStream = NULL;
+
+    delete pOutSocket;
+    pOutSocket = NULL;
 }
 
 void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort )
@@ -78,35 +82,29 @@ sal_Bool HttpRequest::Execute()
     Init();
 
     // Open channel to standard redir host
-    vos::OInetSocketAddr aConnectAddr;
+    osl::SocketAddr aConnectAddr;
 
     if ( aProxyHost.Len() )
     {
-        aConnectAddr.setAddr( rtl::OUString( UniString( aProxyHost, RTL_TEXTENCODING_UTF8 ) ) );
-        aConnectAddr.setPort( nProxyPort );
+        aConnectAddr = osl::SocketAddr( rtl::OUString( UniString( aProxyHost, RTL_TEXTENCODING_UTF8 ) ), nProxyPort );
     }
     else
     {
-        aConnectAddr.setAddr( rtl::OUString( UniString( aRequestHost, RTL_TEXTENCODING_UTF8 ) ) );
-        aConnectAddr.setPort( nRequestPort );
+        aConnectAddr = osl::SocketAddr( rtl::OUString( UniString( aRequestHost, RTL_TEXTENCODING_UTF8 ) ), nRequestPort );
     }
 
     TimeValue aTV;
     aTV.Seconds = 10;       // Warte 10 Sekunden
     aTV.Nanosec = 0;
 
-    pOutSocket = new vos::OConnectorSocket();
-    if ( pOutSocket->connect( aConnectAddr, &aTV ) == vos::ISocketTypes::TResult_Ok )
-    {
-//      pOutSocket->setTcpNoDelay( 1 );
-    }
-    else
+    pOutSocket = new osl::ConnectorSocket();
+    if ( pOutSocket->connect( aConnectAddr, &aTV ) != osl_Socket_Ok )
     {
         delete pOutSocket;
+        pOutSocket = NULL;
         nStatus = HTTP_REQUEST_ERROR;
         return sal_False;
     }
-
 
     SendString( pOutSocket, "GET " );
     if ( aProxyHost.Len() )
@@ -202,7 +200,7 @@ Servlet-Engine: Tomcat Web Server/3.2.1 (JSP 1.1; Servlet 2.2; Java 1.3.0; Linux
 Connection: close
 Content-Type: text/xml; charset=ISO-8859-1
   */
-void HttpRequest::SendString( vos::OStreamSocket* pSocket , ByteString aText )
+void HttpRequest::SendString( osl::StreamSocket* pSocket , ByteString aText )
 {
     if ( nStatus == HTTP_REQUEST_PENDING )
         pSocket->write( aText.GetBuffer(), aText.Len() );
@@ -219,13 +217,10 @@ void HttpRequest::Abort()
     if ( pOutSocket )
     {
         nStatus = HTTP_REQUEST_ERROR;
-          pOutSocket->shutdown();
+        pOutSocket->shutdown();
         pOutSocket->close();
     }
 }
-
-
-
 
 SvMemoryStream* HttpRequest::GetBody()
 {
@@ -237,3 +232,4 @@ sal_uInt16 HttpRequest::GetStatus()
     return nStatus;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

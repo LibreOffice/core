@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,17 +145,21 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
         < ::com::sun::star::container::XNameAccess > m_xModuleCommands;
 
     Image m_hdImage;
-    Image m_hdImage_hc;
     Image m_libImage;
-    Image m_libImage_hc;
     Image m_macImage;
-    Image m_macImage_hc;
     Image m_docImage;
-    Image m_docImage_hc;
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
-    Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
+    Image GetImage(
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx,
+        bool bIsRootNode
+    );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
+        ::rtl::OUString& docName
+    );
 
 private:
     void    fillScriptList(
@@ -238,3 +243,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

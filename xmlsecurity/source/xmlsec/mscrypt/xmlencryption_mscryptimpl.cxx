@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,17 +33,11 @@
 #include <rtl/uuid.h>
 #include "xmlencryption_mscryptimpl.hxx"
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
 #include "securityenvironment_mscryptimpl.hxx"
-#endif
 #include "errorcallback.hxx"
 
 #include "xmlsec/xmlsec.h"
@@ -368,12 +363,12 @@ Sequence< OUString > SAL_CALL XMLEncryption_MSCryptImpl :: getSupportedServiceNa
 Sequence< OUString > XMLEncryption_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLEncryption" ) ;
+    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLEncryption")) ;
     return seqServiceNames ;
 }
 
 OUString XMLEncryption_MSCryptImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl" ) ;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl")) ;
 }
 
 //Helper for registry
@@ -388,3 +383,4 @@ Reference< XSingleServiceFactory > XMLEncryption_MSCryptImpl :: impl_createFacto
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,31 +32,9 @@
 
 #include <layout/layout.hxx>
 #include <sfx2/basedlgs.hxx>
-#ifndef _SV_BUTTON_HXX //autogen wg. Radio-/OK-/Cancel-/HelpButton
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-
-// define ----------------------------------------------------------------
-/* CHINA001
-#define ZOOMBTN_OPTIMAL     ((sal_uInt16)0x0001)
-#define ZOOMBTN_PAGEWIDTH   ((sal_uInt16)0x0002)
-#define ZOOMBTN_WHOLEPAGE   ((sal_uInt16)0x0004)
-*/
-#ifndef _SVX_ZOOM_HXX
-#include "zoom_def.hxx"
-#endif
-// class SvxZoomDialog ---------------------------------------------------
-/*
-    {k:\svx\prototyp\dialog\zoom.bmp}
-
-    [Beschreibung]
-    Mit diesem Dialog wird ein Zoom-Faktor eingestellt.
-
-    [Items]
-    SvxZoomItem <SID_ATTR_ZOOM>
-*/
 
 #include <layout/layout-pre.hxx>
 
@@ -112,3 +91,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

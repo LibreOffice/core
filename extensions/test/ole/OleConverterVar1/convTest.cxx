@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace oletest;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
+
 HRESULT doTest();
 HRESULT InitializeParameter();
 void printResultVariantArray( VARIANT & var);
@@ -71,7 +74,7 @@ void printVariant( VARIANT & var);
 
 
 
-int __cdecl _tmain( int argc, _TCHAR * argv[] )
+int SAL_CALL _tmain( int argc, _TCHAR * argv[] )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))
@@ -654,3 +657,4 @@ void printVariant( VARIANT & _var)
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

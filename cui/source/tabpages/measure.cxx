@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -49,8 +47,8 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/strarray.hxx>
-#include <sfx2/request.hxx> //add CHINA001
-#include "svx/ofaitem.hxx" //add CHINA001
+#include <sfx2/request.hxx>
+#include "svx/ofaitem.hxx"
 
 static sal_uInt16 pRanges[] =
 {
@@ -190,7 +188,7 @@ SvxMeasurePage::~SvxMeasurePage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
+void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -526,9 +524,6 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
             bModified = sal_True;
         }
     }
-
-//enum SdrMeasureTextHPos {SDRMEASURE_TEXTHAUTO,SDRMEASURE_TEXTLEFTOUTSIDE,SDRMEASURE_TEXTINSIDE,SDRMEASURE_TEXTRIGHTOUTSIDE};
-//enum SdrMeasureTextVPos {SDRMEASURE_TEXTVAUTO,SDRMEASURE_ABOVE,SDRMEASURETEXT_VERTICALCENTERED,SDRMEASURE_BELOW};
 
     if( bPositionModified )
     {
@@ -866,7 +861,7 @@ void SvxMeasurePage::FillUnitLB()
         aLbUnit.SetEntryData( nPos, (void*)nUnit );
     }
 }
-void SvxMeasurePage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxMeasurePage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
 
@@ -876,3 +871,4 @@ void SvxMeasurePage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     Construct();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

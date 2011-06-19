@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,16 @@
 #include "osl/file.h"
 #include "osl/module.hxx"
 
-using namespace rtl;
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 namespace plugstringhelper
 {
@@ -412,7 +419,7 @@ static bool checkBlackList( CFBundleRef i_xBundle )
 
     bool bReject = false;
     // #i102735# VLC plugin prior to 1.0 tends to crash
-    if( aBundleName.equalsAscii( "VLC Plug-in" ) )
+    if( aBundleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VLC Plug-in" ) ) )
     {
         sal_Int32 nIndex = 0;
         rtl::OUString aMajor( aBundleVersion.getToken( 0, '.', nIndex ) );
@@ -422,7 +429,7 @@ static bool checkBlackList( CFBundleRef i_xBundle )
         }
     }
     // #i103674# Garmin Communicator Plugin crashes
-    else if( aBundleName.equalsAscii( "Garmin Communicator Plugin" ) )
+    else if( aBundleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Garmin Communicator Plugin" ) ) )
     {
         bReject = true;
     }
@@ -644,3 +651,4 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
     return aDescriptions;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

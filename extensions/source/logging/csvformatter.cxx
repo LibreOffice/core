@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -33,18 +34,10 @@
 #include <string>
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_LOGGING_XLOGFORMATTER_HPP_
 #include <com/sun/star/logging/XCsvLogFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOGGING_XLOGFORMATTER_HPP_
 #include <com/sun/star/logging/XLogFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -380,3 +373,5 @@ namespace logging
         static OAutoRegistration< CsvFormatter > aAutoRegistration;
     }
 } // namespace logging
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

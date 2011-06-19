@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,25 +30,23 @@
 #define _COMM_BAS_HXX
 
 #include <basic/sbxfac.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <basic/sbxobj.hxx>
 
 class CommunicationManagerClientViaSocket;
 class CommunicationLink;
 
-class CommunicationWrapper : public SbxObject   // Einer für Manager und Links
+class CommunicationWrapper : public SbxObject   // Einer fï¿½r Manager und Links
 {
     // Definition eines Tabelleneintrags. Dies wird hier gemacht,
     // da dadurch die Methoden und Properties als private deklariert
     // werden koennen.
-#if defined ( ICC ) || defined ( HPUX ) || defined ( C50 ) || defined ( C52 )
+#if defined ( ICC ) || defined ( C50 )
 public:
 #endif
     typedef void( CommunicationWrapper::*pMeth )
         ( SbxVariable* pThis, SbxArray* pArgs, sal_Bool bWrite );
-#if defined ( ICC ) || defined ( HPUX )
+#if defined ( ICC )
 private:
 #endif
 
@@ -82,7 +81,7 @@ private:
     CommunicationLink *m_pLink;
     sal_Bool m_bIsManager;  // Ist es kein Manager, so ist es ein Link
 
-    // Kram für Manager
+    // Kram fï¿½r Manager
     DECL_LINK( Open, CommunicationLink* );
     DECL_LINK( Close, CommunicationLink* );
     DECL_LINK( Data, CommunicationLink* );
@@ -118,3 +117,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

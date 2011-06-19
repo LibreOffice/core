@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #define _MANIFEST_WRITER_HXX
 
 #include <cppuhelper/implbase2.hxx>
-#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; class XSingleServiceFactory; }
@@ -72,3 +69,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,19 +47,12 @@ namespace logging
 
     static void initializeModule()
     {
-        static bool bInitialized( false );
-        if ( !bInitialized )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !bInitialized )
-            {
-                createRegistryInfo_LoggerPool();
-                createRegistryInfo_FileHandler();
-                createRegistryInfo_ConsoleHandler();
-                createRegistryInfo_PlainTextFormatter();
-                createRegistryInfo_CsvFormatter();
-            }
-        }
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        createRegistryInfo_LoggerPool();
+        createRegistryInfo_FileHandler();
+        createRegistryInfo_ConsoleHandler();
+        createRegistryInfo_PlainTextFormatter();
+        createRegistryInfo_CsvFormatter();
     }
 
 //........................................................................
@@ -67,3 +61,4 @@ namespace logging
 
 IMPLEMENT_COMPONENT_LIBRARY_API( ::logging::LogModule, ::logging::initializeModule )
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

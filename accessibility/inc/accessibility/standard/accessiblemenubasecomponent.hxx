@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
-#endif
 #include <tools/link.hxx>
 
 #include <vector>
@@ -155,3 +154,4 @@ public:
 
 #endif // ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

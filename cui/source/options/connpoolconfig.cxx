@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "connpoolconfig.hxx"
 #include "connpoolsettings.hxx"
 
@@ -50,42 +48,42 @@ namespace offapp
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getConnectionPoolNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/ConnectionPool");
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/ConnectionPool") );
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getEnablePoolingNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("EnablePooling");
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("EnablePooling"));
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getDriverSettingsNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverSettings");
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverSettings"));
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getDriverNameNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverName");
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverName"));
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getEnableNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Enable");
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Enable"));
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getTimeoutNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Timeout"));
         return s_sNodeName;
     }
 
@@ -221,3 +219,4 @@ namespace offapp
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

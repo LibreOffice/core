@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,8 @@
 #define __Foo_H_
 
 #include "resource.h"       // main symbols
-//#include "AxTestComponents.h"
 #import  "AxTestComponents.tlb" no_namespace no_implementation raw_interfaces_only named_guids
-//#include "AxTestComponents.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CBasic
 class ATL_NO_VTABLE CFoo :
@@ -63,3 +63,4 @@ public:
 
 #endif //__BASIC_H_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

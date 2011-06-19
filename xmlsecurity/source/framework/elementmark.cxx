@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,9 +62,6 @@ ElementMark::ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId)
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -103,3 +101,4 @@ sal_Int32 ElementMark::getBufferId() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

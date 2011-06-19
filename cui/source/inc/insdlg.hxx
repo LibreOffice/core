@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #define _SVX_INSDLG_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 
@@ -211,3 +211,4 @@ public:
 
 #endif // _SVX_INSDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

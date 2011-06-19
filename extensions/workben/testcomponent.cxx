@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,21 +40,21 @@
 #include <stdio.h>
 #include <smart/com/sun/star/registry/XImplementationRegistration.hxx>
 #include <smart/com/sun/star/lang/XComponent.hxx>
-//#include <com/sun/star/registry/ stardiv/uno/repos/simplreg.hxx>
 
-#include <vos/dynload.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
 #include <usr/ustring.hxx>
 #include <tools/string.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 
-using namespace rtl;
-using namespace vos;
 using namespace usr;
+
+using ::rtl::OString;
+using ::rtl::OWStringToOString;
+using ::rtl::OStringToOWString;
 
 
 // Needed to switch on solaris threads
@@ -86,15 +87,10 @@ int __LOADONCALLAPI main (int argc, char **argv)
     try {
         // Create registration service
         XInterfaceRef x = xSMgr->createInstance(
-            UString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            UString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.ImplementationRegistration" )) );
         x->queryInterface( XImplementationRegistration::getSmartUik() , xReg );
 
-/*      x = xSMgr->createInstance( L"stardiv.uno.repos.SimpleRegistry" );
-        OSL_ASSERT( x.is() );
-        x->queryInterface( XSimpleRegistry::getSmartUik() , xSimpleReg );
-        OSL_ASSERT( xSimpleReg.is() );
-        xSimpleReg->open( L"testcomp.rdb" , FALSE , TRUE );
-*/  }
+    }
     catch( Exception& e ) {
         printf( "%s\n" , OWStringToOString( e.getName() , CHARSET_SYSTEM ).getStr() );
         exit(1);
@@ -110,7 +106,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
             UString aDllName( OStringToOWString( szBuf, CHARSET_SYSTEM ) );
 
             xReg->registerImplementation(
-                UString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                UString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )),
                 aDllName,
                 xSimpleReg );
         }
@@ -131,7 +127,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
         ORealDynamicLoader::computeModuleName( sTestName.getStr() , szBuf, 1024 );
         UString aDllName = OStringToOWString( szBuf, CHARSET_SYSTEM );
         xReg->registerImplementation(
-            UString::createFromAscii( "com.sun.star.loader.SharedLibrary" ) ,
+            UString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )) ,
             aDllName,
             xSimpleReg );
     }
@@ -220,3 +216,5 @@ int __LOADONCALLAPI main (int argc, char **argv)
     rComp->dispose();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

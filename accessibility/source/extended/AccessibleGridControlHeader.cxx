@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
 #include "accessibility/extended/AccessibleGridControlTableCell.hxx"
 #include <svtools/accessibletable.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 // ============================================================================
@@ -78,7 +80,7 @@ Reference< XAccessible > SAL_CALL
 AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
@@ -114,7 +116,7 @@ Reference< XAccessible > SAL_CALL
 AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -146,7 +148,7 @@ Any SAL_CALL AccessibleGridControlHeader::getAccessibleKeyBinding()
 OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidRow( nRow );
@@ -156,7 +158,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_
 OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    TCSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidColumn( nColumn );
@@ -226,13 +228,15 @@ OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControlHeader" ) );
 }
 
+namespace
+{
+    class theAccessibleGridControlHeaderImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlHeaderImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleGridControlHeaderImplementationId::get().getSeq();
 }
 
 // internal virtual methods ---------------------------------------------------
@@ -282,3 +286,4 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

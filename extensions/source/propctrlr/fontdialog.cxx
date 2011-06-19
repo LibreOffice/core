@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,19 +30,11 @@
 #include "precompiled_extensions.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "fontdialog.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "formresid.hrc"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
 #include "formlocalid.hrc"
-#endif
 #include <vcl/svapp.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -52,9 +45,7 @@
 #include "formstrings.hxx"
 #include "fontitemids.hxx"
 #include <editeng/charreliefitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <editeng/emphitem.hxx>
-#endif
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -62,7 +53,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/flstitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -72,11 +62,9 @@
 #include <svtools/ctrltool.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc> //CHINA001
-#endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxids.hrc>
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 //............................................................................
 namespace pcr
@@ -293,7 +281,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
+            OSL_FAIL("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
         }
 
         _pSet->DisableItem(SID_ATTR_CHAR_CJK_FONT);
@@ -538,7 +526,7 @@ namespace pcr
         *pCounter++ = new SvxFontListItem (new FontList(Application::GetDefaultDevice()), CFID_FONTLIST);
 
         // create the pool
-        static SfxItemInfo __READONLY_DATA aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
+        static SfxItemInfo const aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
         {
             { SID_ATTR_CHAR_FONT,               0 },
             { SID_ATTR_CHAR_FONTHEIGHT,         0 },
@@ -606,22 +594,10 @@ namespace pcr
     void ControlCharacterDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        switch ( _nId )
-        {
-            case TABPAGE_CHARACTERS:
-//CHINA001              static_cast<SvxCharNamePage&>(_rPage).SetFontList(
-//CHINA001              static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))
-//CHINA001              );
-//CHINA001              static_cast<SvxCharNamePage&>(_rPage).DisableControls( DISABLE_HIDE_LANGUAGE );
-
-//CHINA001              SvxFontListItem aFontListItem( static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST) ));
-//CHINA001              aSet.Put ( SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-
-//              aSet.Put (SfxUInt16Item(SID_CFID_FONTLIST,CFID_FONTLIST));
-                aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
-                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
-                _rPage.PageCreated(aSet);
-                break;
+        if ( _nId == TABPAGE_CHARACTERS ) {
+            aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
+            _rPage.PageCreated(aSet);
         }
     }
 
@@ -629,3 +605,4 @@ namespace pcr
 }   // namespace pcr
 //............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,7 +148,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "ORichTextFeatureDispatcher::doNotify: caught an exception!" );
+                OSL_FAIL( "ORichTextFeatureDispatcher::doNotify: caught an exception!" );
             }
         }
     }
@@ -155,3 +156,5 @@ namespace frm
 //........................................................................
 }   // namespace frm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
 
-// MM : added for password exception
+// added for password exception
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
 using namespace ::com::sun::star::security;
@@ -76,7 +77,6 @@ MacroWarning::MacroWarning( Window* _pParent, uno::Reference< dcss::xml::crypto:
 
     maViewSignsBtn.SetClickHdl( LINK( this, MacroWarning, ViewSignsBtnHdl ) );
     maEnableBtn.SetClickHdl( LINK( this, MacroWarning, EnableBtnHdl ) );
-//  maDisableBtn.SetClickHdl( LINK( this, MacroWarning, DisableBtnHdl ) );
 
     if( mxCert.is() )
         maSignsFI.SetText( XmlSec::GetContentPart( mxCert->getSubjectName() ) );
@@ -138,8 +138,4 @@ IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-/*IMPL_LINK( MacroWarning, DisableBtnHdl, void*, EMPTYARG )
-{
-    return 0;
-}*/
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

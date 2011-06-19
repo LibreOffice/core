@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -186,14 +187,14 @@ namespace frm
     //------------------------------------------------------------------------------
     Any OSpinButtonModel::translateDbColumnToControlValue( )
     {
-        OSL_ENSURE( sal_False, "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return Any();
     }
 
     //------------------------------------------------------------------------------
     sal_Bool OSpinButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
-        OSL_ENSURE( sal_False, "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
     }
 
@@ -273,3 +274,5 @@ namespace frm
 //........................................................................
 }   // namespace frm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

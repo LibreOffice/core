@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@ static const char base64_tab[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst
 
 extern "C" size_t base64_encode( FILE *fin, FILE *fout )
 {
-    size_t nBytesRead = 0;
     size_t nLineLength = 0;
     size_t nBytesWritten = 0;
 
@@ -45,7 +45,6 @@ extern "C" size_t base64_encode( FILE *fin, FILE *fout )
 
         memset( in_buffer, 0, sizeof(in_buffer) );
         nBytes = fread( in_buffer, 1, sizeof(in_buffer), fin );
-        nBytesRead += nBytes;
 
         if ( nBytes )
         {
@@ -81,3 +80,5 @@ extern "C" size_t base64_encode( FILE *fin, FILE *fout )
 
     return nBytesWritten;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

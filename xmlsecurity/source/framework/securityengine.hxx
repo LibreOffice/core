@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,10 +53,6 @@ class SecurityEngine : public cppu::WeakImplHelper3
  *  Maintains common members and methods related with security engine
  *  operation.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XReferenceResolvedListener,
- *          XKeyCollector, and XMissionTaker
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -108,7 +105,6 @@ protected:
     /*
      * the status of the operation
      */
-    //bool      m_bOperationSucceed;
     com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     /*
@@ -170,3 +166,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

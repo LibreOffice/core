@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,13 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svtools/ivctrl.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
+#include <vector>
 
 #define CTRLS_OFFSET        3
 #define BUTTON_DISTANCE     8
@@ -53,9 +52,6 @@ class IconChoicePage;
 // Create-Function
 typedef IconChoicePage* (*CreatePage)(Window *pParent, const SfxItemSet &rAttrSet);
 typedef sal_uInt16*         (*GetPageRanges)(); // liefert internationale Which-Wert
-
-// page-list
-DECLARE_LIST( IconChoicePageList, IconChoicePageData * )
 
 // position of iconchoicectrl
 enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
@@ -162,7 +158,7 @@ private :
     friend class IconChoicePage;
 
     EIconChoicePos          meChoicePos;    // Position des IconChoiceCtrl's
-    IconChoicePageList      maPageList;     // Liste von PageData-Pointer
+    ::std::vector< IconChoicePageData* > maPageList;    // Liste von PageData-Pointer
 
     SvtIconChoiceCtrl       maIconCtrl;     // DAS IconChoice-Control
 
@@ -220,7 +216,7 @@ protected :
 
 public :
 
-    // im Ctor könnte auch die Position des IconChoiceCtrl's gesetzt werden.
+    // im Ctor kï¿½nnte auch die Position des IconChoiceCtrl's gesetzt werden.
 
     IconChoiceDialog ( Window* pParent, const ResId &rResId,
                        const EIconChoicePos ePos = PosLeft, const SfxItemSet * pItemSet = 0 );
@@ -237,13 +233,15 @@ public :
     //
 
     SvxIconChoiceCtrlEntry* AddTabPage(
-        sal_uInt16 nId, const String& rIconText, const Image& rChoiceIcon, const Image& rChoiceIconHC,
+        sal_uInt16 nId, const String& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
         sal_Bool bItemsOnDemand = sal_False, sal_uLong nPos = LIST_APPEND );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
     sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
     void                ShowPage( sal_uInt16 nId );
+    void                RemoveTabPage( sal_uInt16 nId );
+    void                RemoveResetButton();
 
                         // liefert ggf. per Map konvertierte lokale Slots
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
@@ -268,3 +266,4 @@ public :
 
 #endif //_ICCDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

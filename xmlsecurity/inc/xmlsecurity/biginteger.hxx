@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 #include "com/sun/star/uno/Sequence.h"
 
 rtl::OUString bigIntegerToNumericString( ::com::sun::star::uno::Sequence< sal_Int8 > serial );
@@ -41,3 +40,4 @@ rtl::OUString bigIntegerToNumericString( ::com::sun::star::uno::Sequence< sal_In
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <vcl/wrkwin.hxx>
@@ -92,3 +90,6 @@ sal_Int32 SvxJSearchOptionsDialog::GetTransliterationFlags() const
 {
     return pPage->GetTransliterationFlags();
 }
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

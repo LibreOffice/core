@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,18 +34,12 @@
 #include "doceventnotifier.hxx"
 #include <sfx2/viewfac.hxx>
 #include <sfx2/shell.hxx>
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
 
 #include <com/sun/star/container/XContainerListener.hpp>
 
@@ -157,7 +152,7 @@ protected:
     virtual void        Deactivate(sal_Bool bMDI);
 
     virtual void        Move();
-    virtual void        ShowCursor( FASTBOOL bOn = sal_True );
+    virtual void        ShowCursor( bool bOn = true );
 
     void                CreateModulWindowLayout();
     void                DestroyModulWindowLayout();
@@ -241,3 +236,5 @@ public:
 };
 
 #endif // _BASIDESH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

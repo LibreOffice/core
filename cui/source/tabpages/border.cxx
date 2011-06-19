@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -51,11 +49,14 @@
 #include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 #include <vcl/msgbox.hxx>
-#include "svx/flagsdef.hxx" //CHINA001
+#include "svx/flagsdef.hxx"
 #include <sfx2/request.hxx>
-#include <svl/intitem.hxx> //CHINA001
+#include <svl/intitem.hxx>
 #include <sfx2/itemconnect.hxx>
+#include <sal/macros.h>
 #include "borderconn.hxx"
+
+using namespace ::editeng;
 
 // -----------------------------------------------------------------------
 
@@ -87,59 +88,7 @@ static sal_uInt16 pRanges[] =
 
 sal_Bool SvxBorderTabPage::bSync = sal_True;
 
-
 //------------------------------------------------------------------------
-
-#define LINE_WIDTH0     (DEF_LINE_WIDTH_0 *100)
-#define LINE_WIDTH1     (DEF_LINE_WIDTH_1 *100)
-#define LINE_WIDTH2     (DEF_LINE_WIDTH_2 *100)
-#define LINE_WIDTH3     (DEF_LINE_WIDTH_3 *100)
-#define LINE_WIDTH4     (DEF_LINE_WIDTH_4 *100)
-#define LINE_WIDTH5     (DEF_LINE_WIDTH_5 *100)
-
-#define DLINE0_OUT      (DEF_DOUBLE_LINE0_OUT  *100)
-#define DLINE0_IN       (DEF_DOUBLE_LINE0_IN   *100)
-#define DLINE0_DIST     (DEF_DOUBLE_LINE0_DIST *100)
-
-#define DLINE1_OUT      (DEF_DOUBLE_LINE1_OUT  *100)
-#define DLINE1_IN       (DEF_DOUBLE_LINE1_IN   *100)
-#define DLINE1_DIST     (DEF_DOUBLE_LINE1_DIST *100)
-
-#define DLINE2_OUT      (DEF_DOUBLE_LINE2_OUT  *100)
-#define DLINE2_IN       (DEF_DOUBLE_LINE2_IN   *100)
-#define DLINE2_DIST     (DEF_DOUBLE_LINE2_DIST *100)
-
-#define DLINE3_OUT      (DEF_DOUBLE_LINE3_OUT  *100)
-#define DLINE3_IN       (DEF_DOUBLE_LINE3_IN   *100)
-#define DLINE3_DIST     (DEF_DOUBLE_LINE3_DIST *100)
-
-#define DLINE4_OUT      (DEF_DOUBLE_LINE4_OUT  *100)
-#define DLINE4_IN       (DEF_DOUBLE_LINE4_IN   *100)
-#define DLINE4_DIST     (DEF_DOUBLE_LINE4_DIST *100)
-
-#define DLINE5_OUT      (DEF_DOUBLE_LINE5_OUT  *100)
-#define DLINE5_IN       (DEF_DOUBLE_LINE5_IN   *100)
-#define DLINE5_DIST     (DEF_DOUBLE_LINE5_DIST *100)
-
-#define DLINE6_OUT      (DEF_DOUBLE_LINE6_OUT  *100)
-#define DLINE6_IN       (DEF_DOUBLE_LINE6_IN   *100)
-#define DLINE6_DIST     (DEF_DOUBLE_LINE6_DIST *100)
-
-#define DLINE7_OUT      (DEF_DOUBLE_LINE7_OUT  *100)
-#define DLINE7_IN       (DEF_DOUBLE_LINE7_IN   *100)
-#define DLINE7_DIST     (DEF_DOUBLE_LINE7_DIST *100)
-
-#define DLINE8_OUT      (DEF_DOUBLE_LINE8_OUT  *100)
-#define DLINE8_IN       (DEF_DOUBLE_LINE8_IN   *100)
-#define DLINE8_DIST     (DEF_DOUBLE_LINE8_DIST *100)
-
-#define DLINE9_OUT      (DEF_DOUBLE_LINE9_OUT  *100)
-#define DLINE9_IN       (DEF_DOUBLE_LINE9_IN   *100)
-#define DLINE9_DIST     (DEF_DOUBLE_LINE9_DIST *100)
-
-#define DLINE10_OUT     (DEF_DOUBLE_LINE10_OUT *100)
-#define DLINE10_IN      (DEF_DOUBLE_LINE10_IN  *100)
-#define DLINE10_DIST    (DEF_DOUBLE_LINE10_DIST*100)
 
 #define RGBCOL(eColorName) (TpBorderRGBColor(eColorName))
 
@@ -180,6 +129,8 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aLbLineStyle    ( this, CUI_RES( LB_LINESTYLE ) ),
         aColorFT        ( this, CUI_RES( FT_COLOR ) ),
         aLbLineColor    ( this, CUI_RES( LB_LINECOLOR ) ),
+        aWidthFT        ( this, CUI_RES( FT_WIDTH ) ),
+        aLineWidthMF    ( this, CUI_RES( MF_LINEWIDTH ) ),
 
         aFlSep2         ( this, CUI_RES( FL_SEPARATOR2 ) ),
         aDistanceFL     ( this, CUI_RES( FL_DISTANCE ) ),
@@ -203,9 +154,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aPropertiesFL   ( this, CUI_RES( FL_PROPERTIES ) ),
         aMergeWithNextCB( this, CUI_RES( CB_MERGEWITHNEXT ) ),
         aMergeAdjacentBordersCB( this, CUI_RES( CB_MERGEADJACENTBORDERS ) ),
-        aShadowImgLstH( CUI_RES(ILH_SDW_BITMAPS)),
         aShadowImgLst( CUI_RES(IL_SDW_BITMAPS)),
-        aBorderImgLstH( CUI_RES(ILH_PRE_BITMAPS)),
         aBorderImgLst( CUI_RES(IL_PRE_BITMAPS)),
         nMinValue(0),
         nSWMode(0),
@@ -332,6 +281,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     aFrameSel.SetSelectHdl(LINK(this, SvxBorderTabPage, LinesChanged_Impl));
     aLbLineStyle.SetSelectHdl( LINK( this, SvxBorderTabPage, SelStyleHdl_Impl ) );
     aLbLineColor.SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
+    aLineWidthMF.SetModifyHdl( LINK( this, SvxBorderTabPage, ModifyWidthHdl_Impl ) );
     aLbShadowColor.SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
     aWndPresets.SetSelectHdl( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
     aWndShadows.SetSelectHdl( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
@@ -385,7 +335,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_TLBR, aFrameSel, svx::FRAMEBORDER_TLBR ) );
     if( aFrameSel.IsBorderEnabled( svx::FRAMEBORDER_BLTR ) )
         AddItemConnection( svx::CreateFrameLineConnection( SID_ATTR_BORDER_DIAG_BLTR, aFrameSel, svx::FRAMEBORDER_BLTR ) );
-    // --> OD 2005-03-01 #i43593# - item connection doesn't work for Writer,
+    // #i43593# - item connection doesn't work for Writer,
     // because the Writer item sets contain these items
     // checkbox "Merge with next paragraph" only visible for Writer dialog format.paragraph
     AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, aMergeWithNextCB, sfx::ITEMCONN_DEFAULT ) );
@@ -393,7 +343,6 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
     AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, aMergeAdjacentBordersCB, sfx::ITEMCONN_DEFAULT ) );
     aMergeAdjacentBordersCB.Hide();
-    // <--
 }
 
 // -----------------------------------------------------------------------
@@ -440,10 +389,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     const SvxBoxInfoItem*   pBoxInfoItem;
     sal_uInt16                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
     SfxMapUnit              eCoreUnit;
-    const Color             aColBlack       = RGBCOL(COL_BLACK);
 
     pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
-
 
     pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER, sal_False );
 
@@ -553,10 +500,21 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     //-------------------------------------------------------------
     {
         // Do all visible lines show the same line widths?
-        sal_uInt16 nPrim, nDist, nSecn;
-        bool bWidthEq = aFrameSel.GetVisibleWidth( nPrim, nDist, nSecn );
+        long nWidth;
+        SvxBorderStyle nStyle;
+        bool bWidthEq = aFrameSel.GetVisibleWidth( nWidth, nStyle );
         if( bWidthEq )
-            aLbLineStyle.SelectEntry( nPrim * 100, nSecn * 100, nDist * 100 );
+        {
+            // Determine the width first as some styles can be missing depending on it
+            sal_Int64 nWidthPt =  static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+                        sal_Int64( nWidth ), aLineWidthMF.GetDecimalDigits( ),
+                        MAP_TWIP,aLineWidthMF.GetUnit() ));
+            aLineWidthMF.SetValue( nWidthPt );
+            aLbLineStyle.SetWidth( nWidth );
+
+            // then set the style
+            aLbLineStyle.SelectEntry( nStyle );
+        }
         else
             aLbLineStyle.SelectEntryPos( 1 );
 
@@ -681,7 +639,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                 TBorderPair(svx::FRAMEBORDER_RIGHT,BOX_LINE_RIGHT),
                             };
 
-    for (sal_uInt32 i=0; i < sizeof(eTypes1)/sizeof(TBorderPair); ++i)
+    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(eTypes1); ++i)
         aBoxItem.SetLine( aFrameSel.GetFrameBorderStyle( eTypes1[i].first ), eTypes1[i].second );
 
     //--------------------------------
@@ -691,7 +649,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                 TBorderPair(svx::FRAMEBORDER_HOR,BOXINFO_LINE_HORI),
                                 TBorderPair(svx::FRAMEBORDER_VER,BOXINFO_LINE_VERT)
                             };
-    for (sal_uInt32 j=0; j < sizeof(eTypes2)/sizeof(TBorderPair); ++j)
+    for (sal_uInt32 j=0; j < SAL_N_ELEMENTS(eTypes2); ++j)
         aBoxInfoItem.SetLine( aFrameSel.GetFrameBorderStyle( eTypes2[j].first ), eTypes2[j].second );
 
     aBoxInfoItem.EnableHor( mbHorEnabled );
@@ -919,15 +877,33 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
     return 0;
 }
 
+IMPL_LINK( SvxBorderTabPage, ModifyWidthHdl_Impl, void *, EMPTYARG )
+{
+    sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+                aLineWidthMF.GetValue( ),
+                aLineWidthMF.GetDecimalDigits( ),
+                aLineWidthMF.GetUnit(), MAP_TWIP ));
+    aLbLineStyle.SetWidth( nVal );
+
+    aFrameSel.SetStyleToSelection( nVal,
+        SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
+
+    return 0;
+}
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 {
     if ( pLb == &aLbLineStyle )
-        aFrameSel.SetStyleToSelection(
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine1() / 100 ),
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryDistance() / 100 ),
-            static_cast< sal_uInt16 >( aLbLineStyle.GetSelectEntryLine2() / 100 ) );
+    {
+        sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+                    aLineWidthMF.GetValue( ),
+                    aLineWidthMF.GetDecimalDigits( ),
+                    aLineWidthMF.GetUnit(), MAP_TWIP ));
+        aFrameSel.SetStyleToSelection ( nVal,
+            SvxBorderStyle( aLbLineStyle.GetSelectEntryStyle() ) );
+    }
 
     return 0;
 }
@@ -1014,9 +990,7 @@ sal_uInt16 SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
 
 void SvxBorderTabPage::FillPresetVS()
 {
-    // find correct image list
-    bool bHC = aWndPresets.GetSettings().GetStyleSettings().GetHighContrastMode();
-    ImageList& rImgList = bHC ? aBorderImgLstH : aBorderImgLst;
+    ImageList& rImgList = aBorderImgLst;
     Size aImgSize( rImgList.GetImage( IID_PRE_CELL_NONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet
@@ -1041,9 +1015,7 @@ void SvxBorderTabPage::FillPresetVS()
 
 void SvxBorderTabPage::FillShadowVS()
 {
-    // find correct image list
-    bool bHC = aWndPresets.GetSettings().GetStyleSettings().GetHighContrastMode();
-    ImageList& rImgList = bHC ? aShadowImgLstH : aShadowImgLst;
+    ImageList& rImgList = aShadowImgLst;
     Size aImgSize( rImgList.GetImage( IID_SHADOWNONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet
@@ -1080,36 +1052,50 @@ void SvxBorderTabPage::FillValueSets()
 }
 
 // ============================================================================
+Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
+{
+    return SvxBorderLine::threeDMediumColor( aMain );
+}
 
 void SvxBorderTabPage::FillLineListBox_Impl()
 {
-    aLbLineStyle.SetUnit( FUNIT_POINT );
     aLbLineStyle.SetSourceUnit( FUNIT_TWIP );
 
-    // Writer 2.0 Defaults:
-    aLbLineStyle.InsertEntry( SVX_RESSTR( RID_SVXSTR_NONE ) );
+    aLbLineStyle.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
 
-    aLbLineStyle.InsertEntry( LINE_WIDTH0 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH5 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH1 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH2 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH3 );
-    aLbLineStyle.InsertEntry( LINE_WIDTH4 );
+    // Simple lines
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
 
-    // OS: wenn hier neue Linienstaerken zugfuegt werden, dann
-    // LINESTYLE_HTML_MAX anpassen
+    // Double lines
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 20 );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_MEDIUMGAP ), THINTHICK_MEDIUMGAP );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_LARGEGAP ), THINTHICK_LARGEGAP );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 20 );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_MEDIUMGAP ), THICKTHIN_MEDIUMGAP );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_LARGEGAP ), THICKTHIN_LARGEGAP );
 
-    aLbLineStyle.InsertEntry( DLINE0_OUT, DLINE0_IN, DLINE0_DIST );
-    aLbLineStyle.InsertEntry( DLINE7_OUT, DLINE7_IN, DLINE7_DIST );
-    aLbLineStyle.InsertEntry( DLINE1_OUT, DLINE1_IN, DLINE1_DIST );
-    aLbLineStyle.InsertEntry( DLINE2_OUT, DLINE2_IN, DLINE2_DIST );
-    aLbLineStyle.InsertEntry( DLINE8_OUT, DLINE8_IN, DLINE8_DIST );
-    aLbLineStyle.InsertEntry( DLINE9_OUT, DLINE9_IN, DLINE9_DIST );
-    aLbLineStyle.InsertEntry( DLINE10_OUT,DLINE10_IN,DLINE10_DIST);
-    aLbLineStyle.InsertEntry( DLINE3_OUT, DLINE3_IN, DLINE3_DIST );
-    aLbLineStyle.InsertEntry( DLINE4_OUT, DLINE4_IN, DLINE4_DIST );
-    aLbLineStyle.InsertEntry( DLINE5_OUT, DLINE5_IN, DLINE5_DIST );
-    aLbLineStyle.InsertEntry( DLINE6_OUT, DLINE6_IN, DLINE6_DIST );
+    // Engraved / Embossed
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 15,
+            &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor,
+            &lcl_mediumColor );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 15,
+            &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor,
+            &lcl_mediumColor );
+
+    // Inset / Outset
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 10,
+           &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
+    aLbLineStyle.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 10,
+           &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
+
+    sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+                aLineWidthMF.GetValue( ),
+                aLineWidthMF.GetDecimalDigits( ),
+                aLineWidthMF.GetUnit(), MAP_TWIP ));
+    aLbLineStyle.SetWidth( nVal );
 }
 
 // -----------------------------------------------------------------------
@@ -1214,9 +1200,6 @@ IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, CheckBox*, pBox)
     return 0;
 }
 
-/* -----------------------------03.06.2002 10:15------------------------------
-
- ---------------------------------------------------------------------------*/
 void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
@@ -1225,14 +1208,14 @@ void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
 }
 
-void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pSWModeItem)
     {
         nSWMode = pSWModeItem->GetValue();
-        // --> OD 2005-03-01 #i43593#
+        // #i43593#
         // show checkbox <aMergeWithNextCB> for format.paragraph
         if ( nSWMode == SW_BORDER_MODE_PARA )
         {
@@ -1245,7 +1228,6 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
             aMergeAdjacentBordersCB.Show();
             aPropertiesFL.Show();
         }
-        // <--
     }
     if (pFlagItem)
         if ( ( pFlagItem->GetValue() & SVX_HIDESHADOWCTL ) == SVX_HIDESHADOWCTL )
@@ -1254,3 +1236,4 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/pathoptions.hxx>
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svl/filenotation.hxx>
-#endif
 #include <sfx2/docfilt.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -227,3 +226,4 @@ namespace abp
 }   // namespace abp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,10 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
-
+#include <ZipPackageEntry.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <ZipPackageEntry.hxx>
 #include <EncryptionData.hxx>
 #include <mutexholder.hxx>
 
@@ -214,3 +214,5 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

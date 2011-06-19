@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -62,6 +60,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/svlbox.hxx>
+#include <svtools/langhelp.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -146,10 +145,11 @@ static sal_Int32 lcl_SeqGetEntryPos(
     return i < nLen ? i : -1;
 }
 
-static void lcl_OpenURL( const ::rtl::OUString& rURL )
+static void lcl_OpenURL( ::rtl::OUString sURL )
 {
-    if ( rURL.getLength() > 0 )
+    if ( sURL.getLength() > 0 )
     {
+        localizeWebserviceURI(sURL);
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xSMGR =
@@ -159,7 +159,7 @@ static void lcl_OpenURL( const ::rtl::OUString& rURL )
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                 uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
-                xSystemShell->execute( rURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShell->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
         }
         catch( const uno::Exception& e )
         {
@@ -168,9 +168,6 @@ static void lcl_OpenURL( const ::rtl::OUString& rURL )
         }
     }
 }
-
-/*--------------------------------------------------
---------------------------------------------------*/
 
 static const sal_uInt16 nNameLen = 8;
 
@@ -187,7 +184,7 @@ sal_Bool KillFile_Impl( const String& rURL )
     try
     {
         Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
@@ -202,9 +199,7 @@ sal_Bool KillFile_Impl( const String& rURL )
 
     return bRet;
 }
-/* -----------------------------27.11.00 14:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 // 0x 0p 0t 0c nn
 // p: 1 -> parent
 // t: 1 -> spell, 2 -> hyph, 3 -> thes, 4 -> grammar
@@ -242,8 +237,6 @@ public:
 
 };
 
-/*--------------------------------------------------
---------------------------------------------------*/
 //
 // User for user-dictionaries (XDictionary interface)
 //
@@ -298,7 +291,6 @@ void lcl_SetCheckButton( SvLBoxEntry* pEntry, sal_Bool bCheck )
             pItem->SetStateChecked();
         else
             pItem->SetStateUnchecked();
-        //InvalidateEntry( pEntry );
     }
 }
 
@@ -332,10 +324,6 @@ void BrwStringDic_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
     rDev.DrawText( aPos, GetText() );
     rDev.SetFont( aOldFont );
 }
-
-
-/*--------------------------------------------------
---------------------------------------------------*/
 
 class OptionsBreakSet : public ModalDialog
 {
@@ -404,7 +392,7 @@ static const char * aEidToPropName[] =
 
 static inline String lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
-    DBG_ASSERT( (unsigned int) eEntryId < sizeof(aEidToPropName) / sizeof(aEidToPropName[0]), "index out of range" );
+    DBG_ASSERT( (unsigned int) eEntryId < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
     return String::CreateFromAscii( aEidToPropName[ (int) eEntryId ] );
 }
 
@@ -459,7 +447,6 @@ void OptionsUserData::SetChecked( sal_Bool bVal )
 
 void OptionsUserData::SetNumericValue( sal_uInt8 nNumVal )
 {
-//  DBG_ASSERT( nNumVal < 256, "value out of range" );
     if (HasNumericValue()  &&  (GetNumericValue() != nNumVal))
     {
         nVal &= 0xffffff00;
@@ -500,8 +487,6 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
         Font aFont( aOldFont );
         aFont.SetWeight( WEIGHT_BOLD );
 
-//      sal_Bool bFett = sal_True;
-//      sal_uInt16 nPos = 0;
         //??? das untere byte aus dem user data in string wandeln
         OptionsUserData aData( (sal_uLong) pEntry->GetUserData() );
         if(aData.HasNumericValue())
@@ -511,9 +496,6 @@ void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
             rDev.SetFont( aFont );
             rDev.DrawText( aNewPos, sTxt );
         }
-
-//          if( STRING_NOTFOUND != nPos )
-//              aNewPos.X() += rDev.GetTextWidth( sTxt );
 
         rDev.SetFont( aOldFont );
     }
@@ -573,7 +555,7 @@ public:
     void SetChecked( const Sequence< OUString > &rConfiguredServices );
     void Reconfigure( const OUString &rDisplayName, sal_Bool bEnable );
 
-    const Sequence<Locale> &    GetAllSupportedLocales() { return aAllServiceLocales; }
+    const Sequence<Locale> &    GetAllSupportedLocales() const { return aAllServiceLocales; }
 
     const LangImplNameTable &   GetSpellTable() const   { return aCfgSpellTable; }
     LangImplNameTable &         GetSpellTable()         { return aCfgSpellTable; }
@@ -708,9 +690,7 @@ void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >&
     for(i = 0; i < nFound; i++)
         pAllLocales2[nLength++] = pLocToAdd[i];
 }
-/* -----------------------------27.11.00 16:48--------------------------------
 
- ---------------------------------------------------------------------------*/
 void lcl_MergeDisplayArray(
         SvxLinguData_Impl &rData,
         const ServiceInfo_Impl &rToAdd )
@@ -765,9 +745,7 @@ void lcl_MergeDisplayArray(
     rData.GetDisplayServiceArray().push_back( rToAdd );
     rData.SetDisplayServiceCount( nCnt + 1 );
 }
-/* -----------------------------26.11.00 18:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxLinguData_Impl::SvxLinguData_Impl() :
     nDisplayServices    (0)
 {
@@ -910,9 +888,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         }
     }
 }
-/* -----------------------------22.05.01 10:43--------------------------------
 
----------------------------------------------------------------------------*/
 SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
     aDisplayServiceArr  (rData.aDisplayServiceArr),
     nDisplayServices    (rData.nDisplayServices),
@@ -925,9 +901,7 @@ SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
     xLinguSrvcMgr       (rData.xLinguSrvcMgr)
 {
 }
-/* -----------------------------22.05.01 10:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rData)
 {
     xMSF                = rData.xMSF;
@@ -941,15 +915,11 @@ SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rDat
     nDisplayServices    = rData.nDisplayServices;
     return *this;
 }
-/* -----------------------------26.11.00 18:08--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxLinguData_Impl::~SvxLinguData_Impl()
 {
 }
-/* -----------------------------26.11.00 19:42--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices)
 {
     const OUString* pConfiguredServices = rConfiguredServices.getConstArray();
@@ -975,9 +945,6 @@ void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices
         }
     }
 }
-/* -----------------------------26.11.00 20:43--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 sal_Bool SvxLinguData_Impl::AddRemove(
             Sequence< OUString > &rConfigured,
@@ -1170,7 +1137,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
+            RTL_CONSTASCII_USTRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
     }
     else
@@ -1358,7 +1325,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     for (sal_uLong i = 0;  i < nEntries;  ++i)
     {
         sal_Int32 nDics = aDics.getLength();
-//        const uno::Reference< XDictionary > *pDic = aDics.getConstArray();
 
         aActiveDics.realloc( nDics );
         OUString *pActiveDic = aActiveDics.getArray();
@@ -1386,7 +1352,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
         }
     }
-    //
+
     aActiveDics.realloc( nActiveDics );
     Any aTmp;
     aTmp <<= aActiveDics;
@@ -1460,11 +1426,9 @@ sal_uLong SvxLinguTabPage::GetDicUserData( const uno::Reference< XDictionary > &
     {
         uno::Reference< frame::XStorable > xStor( rxDic, UNO_QUERY );
 
-//        sal_uLong nUserData = 0;
         sal_Bool bChecked = rxDic->isActive();
         sal_Bool bEditable = !xStor.is() || !xStor->isReadonly();
         sal_Bool bDeletable = bEditable;
-//        sal_Bool bNegativ = rxDic->getDictionaryType() == DictionaryType_NEGATIVE;
 
         nRes = DicUserData( nIdx,
                 bChecked, bEditable, bDeletable ).GetUserData();
@@ -1578,9 +1542,6 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
     pEntry = CreateEntry( sGrammarAuto,       CBCOL_FIRST );
     aLngCfg.GetProperty( C2U(UPN_IS_GRAMMAR_AUTO) ) >>= bVal;
-//    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
-//    if (pItem)
-//        bVal = ((SfxBoolItem *) pItem)->GetValue();
     nUserData = OptionsUserData( EID_GRAMMAR_AUTO, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
@@ -1782,7 +1743,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
 
                 AddDicBoxEntry( xNewDic, (sal_uInt16) nLen );
             }
-            delete aDlg; //add by CHINA001
+            delete aDlg;
         }
     }
     else if (&aLinguDicsEditPB == pBtn)
@@ -1881,7 +1842,6 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         DBG_ASSERT( pEntry, "no entry selected" );
         if (pEntry)
         {
-            long nVal = -1;
             OptionsUserData aData( (sal_uLong)pEntry->GetUserData() );
             if(aData.HasNumericValue())
             {
@@ -1892,14 +1852,14 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                     case EID_NUM_POST_BREAK : nRID = STR_NUM_POST_BREAK_DLG; break;
                     case EID_NUM_MIN_WORDLEN: nRID = STR_NUM_MIN_WORDLEN_DLG; break;
                     default:
-                        DBG_ERROR( "unexpected case" );
+                        OSL_FAIL( "unexpected case" );
                 }
 
                 OptionsBreakSet aDlg( this, nRID );
                 aDlg.GetNumericFld().SetValue( aData.GetNumericValue() );
                 if (RET_OK == aDlg.Execute() )
                 {
-                    nVal = static_cast<long>(aDlg.GetNumericFld().GetValue());
+                    long nVal = static_cast<long>(aDlg.GetNumericFld().GetValue());
                     if (-1 != nVal && aData.GetNumericValue() != nVal)
                     {
                         aData.SetNumericValue( (sal_uInt8)nVal ); //! sets IsModified !
@@ -1912,7 +1872,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "pBtn unexpected value" );
+        OSL_FAIL( "pBtn unexpected value" );
     }
 
     return 0;
@@ -1948,7 +1908,7 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
     }
     else
     {
-        DBG_ERROR( "pBox unexpected value" );
+        OSL_FAIL( "pBox unexpected value" );
     }
 
     return 0;
@@ -1989,7 +1949,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
                        aLinguModulesFT.GetPosPixel().Y();
         DBG_ASSERT( nDeltaY >= 0, "move/resize value is negative" );
         Point   aPos;
-        //
+
         aPos = aLinguDicsFT.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguDicsFT.SetPosPixel( aPos );
@@ -2005,7 +1965,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         aPos = aLinguDicsDelPB.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguDicsDelPB.SetPosPixel( aPos );
-        //
+
         aPos = aLinguOptionsFT.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguOptionsFT.SetPosPixel( aPos );
@@ -2015,7 +1975,7 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         aPos = aLinguOptionsEditPB.GetPosPixel();
         aPos.Y() -= nDeltaY;
         aLinguOptionsEditPB.SetPosPixel( aPos );
-        //
+
         Size aSize( aLinguOptionsCLB.GetSizePixel() );
         aSize.Height() += nDeltaY;
         aLinguOptionsCLB.SetSizePixel( aSize );
@@ -2030,8 +1990,6 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         }
     }
 }
-/*--------------------------------------------------
---------------------------------------------------*/
 
 SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) :
     ModalDialog( pParent, CUI_RES(RID_SVXDLG_EDIT_MODULES ) ),
@@ -2075,7 +2033,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
+            RTL_CONSTASCII_USTRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
     }
     else
@@ -2141,9 +2099,6 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, sal_uInt16 nCol )
     return pEntry;
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 {
     if (&aModulesCLB == pBox)
@@ -2174,18 +2129,14 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
     }
     else
     {
-        DBG_ERROR( "pBox unexpected value" );
+        OSL_FAIL( "pBox unexpected value" );
     }
 
     return 0;
 }
-/* -----------------------------28.05.01 11:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 {
-//    if (pBox == (SvTreeListBox *) &aModulesCLB)
-//    {
         pBox = &aModulesCLB;
         SvLBoxEntry *pCurEntry = pBox->GetCurEntry();
         if (pCurEntry)
@@ -2211,12 +2162,9 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
                 }
             }
         }
-//    }
     return 0;
 }
-/* -----------------------------27.11.00 14:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString lcl_GetServiceName(sal_uInt8 nType)
 {
     switch(nType)
@@ -2237,7 +2185,6 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     Locale aCurLocale;
     SvxLanguageToLocale(aCurLocale, eCurLanguage);
     SvLBoxTreeList *pModel = aModulesCLB.GetModel();
-//  uno::Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
 
     if (pBox)
     {
@@ -2303,8 +2250,6 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     aModulesCLB.Clear();
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
-//      sal_Int32 nEntryPos = 1;
-
         sal_uLong n;
         ServiceInfo_Impl* pInfo;
 
@@ -2316,7 +2261,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                                          String(), sal_True, sal_False, TYPE_SPELL, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
         const OUString *pName = aNames.getConstArray();
         sal_uLong nNames = (sal_uLong) aNames.getLength();
@@ -2360,7 +2305,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), sal_True, sal_False, TYPE_GRAMMAR, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
         pName = aNames.getConstArray();
         nNames = (sal_uLong) aNames.getLength();
@@ -2404,7 +2349,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), sal_True, sal_False, TYPE_HYPH, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
         pName = aNames.getConstArray();
         nNames = (sal_uLong) aNames.getLength();
@@ -2448,7 +2393,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), sal_True, sal_False, TYPE_THES, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-        //
+
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
         pName = aNames.getConstArray();
         nNames = (sal_uLong) aNames.getLength();
@@ -2489,9 +2434,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     aLastLocale.Country = aCurLocale.Country;
     return 0;
 }
-/* -----------------------------27.11.00 19:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
 {
     sal_Bool bUp = &aPrioUpPB == pBtn;
@@ -2520,9 +2463,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
     }
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
 {
     if (&aClosePB == pBtn)
@@ -2533,14 +2474,12 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "pBtn unexpected value" );
+        OSL_FAIL( "pBtn unexpected value" );
     }
 
     return 0;
 }
-/* -----------------------------27.11.00 20:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, BackHdl_Impl, PushButton *, EMPTYARG )
 {
     rLinguData = *pDefaultLinguData;
@@ -2557,3 +2496,4 @@ IMPL_LINK( SvxEditModulesDlg, OpenURLHdl_Impl, svt::FixedHyperlink *, EMPTYARG )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

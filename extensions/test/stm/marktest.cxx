@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,16 +42,15 @@
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 #include <usr/weak.hxx>      // OWeakObject
 
-#include <vos/conditn.hxx>
-#include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 
 #include <string.h>
 
 #include "testfactreg.hxx"
 
 
-using namespace vos;
 using namespace usr;
 
 class OMarkableOutputStreamTest :
@@ -364,19 +364,8 @@ void OMarkableOutputStreamTest::testSimple(     const XOutputStreamRef &rOutput 
 
 }
 
-/***
-* the test methods
-*
-****/
-
-
-
-
-
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OMarkableOutputStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {
@@ -413,7 +402,6 @@ UString     OMarkableOutputStreamTest_getImplementationName() THROWS( () )
 
 //-----------------------------------------------------
 // Input stream
-
 
 class OMarkableInputStreamTest :
         public XSimpleTest,
@@ -637,19 +625,8 @@ void OMarkableInputStreamTest::testSimple(      const XOutputStreamRef &rOutput 
     rInput->closeInput();
 }
 
-/***
-* the test methods
-*
-****/
-
-
-
-
-
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OMarkableInputStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {
@@ -677,3 +654,5 @@ UString     OMarkableInputStreamTest_getImplementationName() THROWS( () )
 {
     return L"test.com.sun.star.extensions.stm.MarkableInputStream";
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

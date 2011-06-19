@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,13 +120,13 @@ namespace frm
     {
         if ( !m_xField.is() )
         {
-            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: improperly initialized: no field!" );
+            OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no field!" );
             return sal_False;
         }
 
         if ( !m_xConnection.is() )
         {
-            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: improperly initialized: no connection!" );
+            OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no connection!" );
             return sal_False;
         }
 
@@ -143,7 +144,7 @@ namespace frm
         }
         if ( !m_xFormatter.is() )
         {
-            OSL_ENSURE( sal_False, "OFilterControl::ensureInitialized: no number formatter!" );
+            OSL_FAIL( "OFilterControl::ensureInitialized: no number formatter!" );
             // no fallback anymore
             return sal_False;
         }
@@ -168,22 +169,22 @@ namespace frm
         switch (m_nControlClass)
         {
             case FormComponentType::RADIOBUTTON:
-                aServiceName = ::rtl::OUString::createFromAscii("radiobutton");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("radiobutton") );
                 break;
             case FormComponentType::CHECKBOX:
-                aServiceName = ::rtl::OUString::createFromAscii("checkbox");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("checkbox") );
                 break;
             case FormComponentType::COMBOBOX:
-                aServiceName = ::rtl::OUString::createFromAscii("combobox");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("combobox") );
                 break;
             case FormComponentType::LISTBOX:
-                aServiceName = ::rtl::OUString::createFromAscii("listbox");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("listbox") );
                 break;
             default:
                 if (m_bMultiLine)
-                    aServiceName = ::rtl::OUString::createFromAscii("MultiLineEdit");
+                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLineEdit") );
                 else
-                    aServiceName = ::rtl::OUString::createFromAscii("Edit");
+                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit") );
         }
         return aServiceName;
     }
@@ -256,7 +257,6 @@ namespace frm
             OControl::initFormControlPeer( getPeer() );
 
             // filter controls are _never_ readonly
-            // #107013# - 2002-02-03 - fs@openoffice.org
             Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
             if ( xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
@@ -590,14 +590,14 @@ namespace frm
                 if (xVclWindow.is())
                 {
                     Any aValue;
-                    if  (   aText.equalsAscii( "1" )
+                    if  (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) )
                         ||  aText.equalsIgnoreAsciiCaseAscii( "TRUE" )
                         ||  aText.equalsIgnoreAsciiCaseAscii( "IS TRUE" )
                         )
                     {
                         aValue <<= (sal_Int32)STATE_CHECK;
                     }
-                    else if (   aText.equalsAscii( "0" )
+                    else if (   aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "0" ) )
                             ||  aText.equalsIgnoreAsciiCaseAscii( "FALSE" )
                             )
                     {
@@ -758,10 +758,10 @@ namespace frm
         try
         {
             Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
+            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException") ), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
+            aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow") ), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
 
-            static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.ErrorMessageDialog" );
+            static ::rtl::OUString s_sDialogServiceName (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
 
             Reference< XExecutableDialog > xErrorDialog( maContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
             if ( xErrorDialog.is() )
@@ -804,7 +804,7 @@ namespace frm
             }
             else
             {
-                DBG_ERROR( "OFilterControl::initialize: unrecognized argument!" );
+                OSL_FAIL( "OFilterControl::initialize: unrecognized argument!" );
                 continue;
             }
 
@@ -826,7 +826,7 @@ namespace frm
                 Reference< XPropertySet > xControlModel;
                 if ( !(*pValue >>= xControlModel ) || !xControlModel.is() )
                 {
-                    OSL_ENSURE( sal_False, "OFilterControl::initialize: invalid control model argument!" );
+                    OSL_FAIL( "OFilterControl::initialize: invalid control model argument!" );
                     continue;
                 }
 
@@ -929,3 +929,5 @@ namespace frm
 //.........................................................................
 }   // namespace frm
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

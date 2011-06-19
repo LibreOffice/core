@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -130,7 +131,7 @@ namespace accessibility
                     }
                     break;
 
-                // --> OD 2009-04-01 #i92103#
+                // #i92103#
                 case VCLEVENT_ITEM_EXPANDED :
                 case VCLEVENT_ITEM_COLLAPSED :
                 {
@@ -154,7 +155,6 @@ namespace accessibility
                     }
                     break;
                 }
-                // <--
                 }
                 default:
                     VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
@@ -430,3 +430,4 @@ namespace accessibility
 }// namespace accessibility
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include "dlged.hxx"
 #include <dlgedpage.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/viewfrm.hxx>
 
 #include <basidesh.hxx>
@@ -214,3 +213,5 @@ SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol
 
 //----------------------------------------------------------------------------
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

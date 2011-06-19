@@ -1,4 +1,4 @@
-ex  extensions :  officecfg  L10N:l10n rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc ZLIB:zlib CURL:curl LIBXSLT:libxslt NULL
+ex  extensions :  officecfg  TRANSLATIONS:translations rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc ZLIB:zlib CURL:curl LIBXSLT:libxslt NULL
 
 ex  extensions                                  usr1    -   all ex_mkout NULL
 ex  extensions\inc                              nmake   -   all ex_inc NULL

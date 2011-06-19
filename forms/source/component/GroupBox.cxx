@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_forms.hxx"
 #include "GroupBox.hxx"
 #include "property.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "services.hxx"
 #include <tools/debug.hxx>
 
@@ -138,7 +137,7 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
 
     if (nVersion > 0x0002)
     {
-        DBG_ERROR("OGroupBoxModel::read : unknown version !");
+        OSL_FAIL("OGroupBoxModel::read : unknown version !");
     }
 };
 
@@ -173,3 +172,4 @@ StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(Runti
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

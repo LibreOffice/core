@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,17 +111,17 @@ namespace dbp
         if (!xColumnFactory.is() || !xColumnContainer.is())
             return;
 
-        static const ::rtl::OUString s_sDataFieldProperty   = ::rtl::OUString::createFromAscii("DataField");
-        static const ::rtl::OUString s_sLabelProperty       = ::rtl::OUString::createFromAscii("Label");
-        static const ::rtl::OUString s_sWidthProperty       = ::rtl::OUString::createFromAscii("Width");
-        static const ::rtl::OUString s_sMouseWheelBehavior  = ::rtl::OUString::createFromAscii("MouseWheelBehavior");
+        static const ::rtl::OUString s_sDataFieldProperty   (RTL_CONSTASCII_USTRINGPARAM("DataField"));
+        static const ::rtl::OUString s_sLabelProperty       (RTL_CONSTASCII_USTRINGPARAM("Label"));
+        static const ::rtl::OUString s_sWidthProperty       (RTL_CONSTASCII_USTRINGPARAM("Width"));
+        static const ::rtl::OUString s_sMouseWheelBehavior (RTL_CONSTASCII_USTRINGPARAM("MouseWheelBehavior"));
         static const ::rtl::OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
-        DECLARE_STL_VECTOR( ::rtl::OUString, StringArray );
-        StringArray aColumnServiceNames;    // service names to be used with the XGridColumnFactory
-        StringArray aColumnLabelPostfixes;  // postfixes to append to the column labels
-        StringArray aFormFieldNames;        // data field names
+        DECLARE_STL_VECTOR( ::rtl::OUString, OUStringArray );
+        OUStringArray aColumnServiceNames;  // service names to be used with the XGridColumnFactory
+        OUStringArray aColumnLabelPostfixes;    // postfixes to append to the column labels
+        OUStringArray aFormFieldNames;      // data field names
 
         aColumnServiceNames.reserve(getSettings().aSelectedFields.getLength());
         aColumnLabelPostfixes.reserve(getSettings().aSelectedFields.getLength());
@@ -142,14 +143,14 @@ namespace dbp
             {
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("CheckBox"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckBox")));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                 case DataType::INTEGER:
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("NumericField"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumericField")));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
@@ -158,31 +159,31 @@ namespace dbp
                 case DataType::DOUBLE:
                 case DataType::NUMERIC:
                 case DataType::DECIMAL:
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("FormattedField"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField")));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::DATE:
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("DateField"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateField")));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIME:
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("TimeField"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeField")));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIMESTAMP:
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("DateField"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateField")));
                     aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_DATEPOSTFIX)));
 
                     aFormFieldNames.push_back(*pSelectedFields);
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("TimeField"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeField")));
                     aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_TIMEPOSTFIX)));
                     break;
 
                 default:
-                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("TextField"));
+                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextField")));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
             }
         }
@@ -195,10 +196,10 @@ namespace dbp
         {
             Reference< XNameAccess > xExistenceChecker(xColumnContainer.get());
 
-            ConstStringArrayIterator pColumnServiceName = aColumnServiceNames.begin();
-            ConstStringArrayIterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
-            ConstStringArrayIterator pFormFieldName = aFormFieldNames.begin();
-            ConstStringArrayIterator pColumnServiceNameEnd = aColumnServiceNames.end();
+            ConstOUStringArrayIterator pColumnServiceName = aColumnServiceNames.begin();
+            ConstOUStringArrayIterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
+            ConstOUStringArrayIterator pFormFieldName = aFormFieldNames.begin();
+            ConstOUStringArrayIterator pColumnServiceNameEnd = aColumnServiceNames.end();
 
             for (;pColumnServiceName < pColumnServiceNameEnd; ++pColumnServiceName, ++pColumnLabelPostfix, ++pFormFieldName)
             {
@@ -226,9 +227,9 @@ namespace dbp
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR(  ::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
-                            +=  ::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), gsl_getSystemTextEncoding())
-                            +=  ::rtl::OString("!"));
+                    OSL_FAIL( ( ::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
+                            += ::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), gsl_getSystemTextEncoding())
+                            += ::rtl::OString("!") ).getStr() );
                 }
             }
         }
@@ -483,3 +484,4 @@ namespace dbp
 }   // namespace dbp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

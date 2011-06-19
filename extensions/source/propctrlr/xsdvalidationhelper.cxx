@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::XSDValidationHelper: caught an exception while examining the introspectee!" );
+            OSL_FAIL( "XSDValidationHelper::XSDValidationHelper: caught an exception while examining the introspectee!" );
         }
     }
 
@@ -102,7 +103,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::getAvailableDataTypeNames: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::getAvailableDataTypeNames: caught an exception!" );
         }
     }
 
@@ -159,7 +160,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::getValidatingDataTypeName: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::getValidatingDataTypeName: caught an exception!" );
         }
         return sDataTypeName;
     }
@@ -181,7 +182,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::getDataTypeByName: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::getDataTypeByName: caught an exception!" );
         }
 
         return pReturn;
@@ -216,7 +217,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::cloneDataType: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::cloneDataType: caught an exception!" );
         }
         return true;
     }
@@ -233,7 +234,7 @@ namespace pcr
 
             if ( !xRepository->hasByName( _rName ) )
             {
-                OSL_ENSURE( sal_False, "XSDValidationHelper::removeDataTypeFromRepository: invalid repository and/or data type!" );
+                OSL_FAIL( "XSDValidationHelper::removeDataTypeFromRepository: invalid repository and/or data type!" );
                 return false;
             }
 
@@ -241,7 +242,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::removeDataTypeFromRepository: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::removeDataTypeFromRepository: caught an exception!" );
             return false;
         }
         return true;
@@ -321,7 +322,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::copyDataType: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::copyDataType: caught an exception!" );
         }
     }
 
@@ -373,7 +374,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::findDefaultFormatForIntrospectee: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::findDefaultFormatForIntrospectee: caught an exception!" );
         }
     }
 
@@ -400,7 +401,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDValidationHelper::getBasicTypeNameForClass: caught an exception!" );
+            OSL_FAIL( "XSDValidationHelper::getBasicTypeNameForClass: caught an exception!" );
         }
 
         return sReturn;
@@ -410,3 +411,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

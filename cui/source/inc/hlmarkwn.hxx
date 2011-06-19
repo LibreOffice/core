@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,10 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/svtreebx.hxx>
 
-#include "hlmarkwn_def.hxx" //ADD CHINA001
+#include "hlmarkwn_def.hxx"
 class SvxHyperlinkTabPageBase;
 
 //########################################################################
@@ -70,7 +69,6 @@ private:
 
     PushButton      maBtApply;
     PushButton      maBtClose;
-    //SvTreeListBox maLbTree;
     SvxHlmarkTreeLBox maLbTree;
 
     sal_Bool            mbUserMoved;
@@ -109,3 +107,5 @@ public:
 
 
 #endif  // _SVX_BKWND_HYPERLINK_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

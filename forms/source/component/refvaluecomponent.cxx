@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -217,7 +218,7 @@ namespace frm
         }
         else
         {
-            OSL_ENSURE( false, "OReferenceValueComponent::translateExternalValueToControlValue: unexpected value type!" );
+            OSL_FAIL( "OReferenceValueComponent::translateExternalValueToControlValue: unexpected value type!" );
         }
 
         return makeAny( nState );
@@ -259,14 +260,14 @@ namespace frm
                 }
                 else if ( bStringExchange )
                 {
-                    aExternalValue <<= m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : ::rtl::OUString();
+                    aExternalValue <<= (m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : ::rtl::OUString());
                 }
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OReferenceValueComponent::translateControlValueToExternalValue: caught an exception!" );
+            OSL_FAIL( "OReferenceValueComponent::translateControlValueToExternalValue: caught an exception!" );
         }
 
         return aExternalValue;
@@ -299,3 +300,4 @@ namespace frm
 } // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

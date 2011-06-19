@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#include <vector>
+
 #ifdef __MINGW32__
 #define INITGUID
 #include <initguid.h>
@@ -41,7 +44,7 @@
 #include <rtl/unload.h>
 
 #include <tools/presys.h>
-#define _WIN32_WINNT 0x0400
+#define _WIN32_WINNT 0x0403
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #undef _DEBUG
@@ -52,24 +55,19 @@ extern CComModule _Module;
 #include <tools/postsys.h>
 
 
-using namespace std;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 
-
+using ::rtl::OUString;
 
 namespace ole_adapter
 {
 
 #include <initguid.h>
-// prior 5.2 ( src569 ver m)
-// {3ECF78F0-B149-11D2-8EBE-00105AD848AF}
-//DEFINE_GUID(OID_ServiceManager, 0x3ECF78F0, 0xB149, 0x11d2, 0x8E, 0xBE, 0x00, 0x10, 0x5A, 0xD8, 0x48, 0xAF);
 
 #ifndef OWNGUID
 // GUID used since 5.2 ( src569 m)
@@ -752,3 +750,5 @@ sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUI
 
 
 } // end namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

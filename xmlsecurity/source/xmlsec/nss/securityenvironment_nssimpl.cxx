@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,10 @@
 #include "ocsp.h"
 
 #include <sal/config.h>
+#include <sal/macros.h>
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include "../diagnose.hxx"
 
 #include <sal/types.h>
@@ -65,7 +67,7 @@
 
 #include "secerror.hxx"
 
-// MM : added for password exception
+// added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
 namespace csss = ::com::sun::star::security;
 using namespace xmlsecurity;
@@ -120,7 +122,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
     if ( xMSF.is() )
     {
         uno::Reference < task::XInteractionHandler > xInteractionHandler(
-            xMSF->createInstance( rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
+            xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler")) ), uno::UNO_QUERY );
 
         if ( xInteractionHandler.is() )
         {
@@ -163,21 +165,21 @@ SecurityEnvironment_NssImpl :: ~SecurityEnvironment_NssImpl() {
     if( !m_tSymKeyList.empty()  ) {
         std::list< PK11SymKey* >::iterator symKeyIt ;
 
-        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; symKeyIt ++ )
+        for( symKeyIt = m_tSymKeyList.begin() ; symKeyIt != m_tSymKeyList.end() ; ++symKeyIt )
             PK11_FreeSymKey( *symKeyIt ) ;
     }
 
     if( !m_tPubKeyList.empty()  ) {
         std::list< SECKEYPublicKey* >::iterator pubKeyIt ;
 
-        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; pubKeyIt ++ )
+        for( pubKeyIt = m_tPubKeyList.begin() ; pubKeyIt != m_tPubKeyList.end() ; ++pubKeyIt )
             SECKEY_DestroyPublicKey( *pubKeyIt ) ;
     }
 
     if( !m_tPriKeyList.empty()  ) {
         std::list< SECKEYPrivateKey* >::iterator priKeyIt ;
 
-        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; priKeyIt ++ )
+        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt )
             SECKEY_DestroyPrivateKey( *priKeyIt ) ;
     }
 }
@@ -212,12 +214,12 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl :: getSupportedService
 Sequence< OUString > SecurityEnvironment_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.SecurityEnvironment" ) ;
+    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.SecurityEnvironment")) ;
     return seqServiceNames ;
 }
 
 OUString SecurityEnvironment_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl" ) ;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl")) ;
 }
 
 //Helper for registry
@@ -226,9 +228,6 @@ Reference< XInterface > SAL_CALL SecurityEnvironment_NssImpl :: impl_createInsta
 }
 
 Reference< XSingleServiceFactory > SecurityEnvironment_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
@@ -243,17 +242,14 @@ sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< 
 }
 
 /* XUnoTunnel extension */
+
+namespace
+{
+    class theSecurityEnvironment_NssImplUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironment_NssImplUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
-    static Sequence< sal_Int8 >* pSeq = 0 ;
-    if( !pSeq ) {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if( !pSeq ) {
-            static Sequence< sal_Int8> aSeq( 16 ) ;
-            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
-            pSeq = &aSeq ;
-        }
-    }
-    return *pSeq ;
+    return theSecurityEnvironment_NssImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
@@ -300,7 +296,7 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
 
     if( aSymKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey )
                 return ;
         }
@@ -323,7 +319,7 @@ void SecurityEnvironment_NssImpl :: rejectSymKey( PK11SymKey* aSymKey ) throw( E
     std::list< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey ) {
                 symkey = *keyIt ;
                 PK11_FreeSymKey( symkey ) ;
@@ -354,7 +350,7 @@ void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) thro
 
     if( aPubKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey )
                 return ;
         }
@@ -377,7 +373,7 @@ void SecurityEnvironment_NssImpl :: rejectPubKey( SECKEYPublicKey* aPubKey ) thr
     std::list< SECKEYPublicKey* >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey ) {
                 pubkey = *keyIt ;
                 SECKEY_DestroyPublicKey( pubkey ) ;
@@ -408,7 +404,7 @@ void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) thr
 
     if( aPriKey != NULL ) {
         //First try to find the key in the list
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey )
                 return ;
         }
@@ -431,7 +427,7 @@ void SecurityEnvironment_NssImpl :: rejectPriKey( SECKEYPrivateKey* aPriKey ) th
     std::list< SECKEYPrivateKey* >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; keyIt ++ ) {
+        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey ) {
                 prikey = *keyIt ;
                 SECKEY_DestroyPrivateKey( prikey ) ;
@@ -558,7 +554,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
     if( !m_tPriKeyList.empty()  ) {
         std::list< SECKEYPrivateKey* >::iterator priKeyIt ;
 
-        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; priKeyIt ++ ) {
+        for( priKeyIt = m_tPriKeyList.begin() ; priKeyIt != m_tPriKeyList.end() ; ++priKeyIt ) {
             xcert = NssPrivKeyToXCert( *priKeyIt ) ;
             if( xcert != NULL )
                 certsList.push_back( xcert ) ;
@@ -571,7 +567,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
         std::list< X509Certificate_NssImpl* >::iterator xcertIt ;
         Sequence< Reference< XCertificate > > certSeq( length ) ;
 
-        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); xcertIt ++, i++ ) {
+        for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i ) {
             certSeq[i] = *xcertIt ;
         }
 
@@ -597,55 +593,14 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
         if( arena == NULL )
             throw RuntimeException() ;
 
-                /*
-                 * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
-                 *      it, so the 'S' tag should be changed to 'ST' tag
-                 *
-                 * PS  : it can work, but inside libxmlsec, the 'S' tag is till used to find cert in NSS engine, so it
-                 *       is not useful at all. (comment out now)
-                 */
-
-                /*
-                sal_Int32 nIndex = 0;
-                OUString newIssuerName;
-                do
-                {
-                    OUString aToken = issuerName.getToken( 0, ',', nIndex ).trim();
-                    if (aToken.compareToAscii("S=",2) == 0)
-                    {
-                        newIssuerName+=OUString::createFromAscii("ST=");
-                        newIssuerName+=aToken.copy(2);
-                    }
-                    else
-                    {
-                        newIssuerName+=aToken;
-                    }
-
-                    if (nIndex >= 0)
-                    {
-                        newIssuerName+=OUString::createFromAscii(",");
-                    }
-                } while ( nIndex >= 0 );
-                */
-
-                /* end */
-
-        //Create cert info from issue and serial
+        // Create cert info from issue and serial
         rtl::OString ostr = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
         chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
             PORT_FreeArena( arena, PR_FALSE ) ;
-
-            /*
-             * i40394
-             *
-             * mmi : no need to throw exception
-             *       just return "no found"
-             */
-            //throw RuntimeException() ;
-            return NULL;
+            return NULL; // no need for exception cf. i40394
         }
 
         derIssuer = SEC_ASN1EncodeItem( arena, NULL, ( void* )nmIssuer, SEC_ASN1_GET( CERT_NameTemplate ) ) ;
@@ -852,9 +807,13 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         CERT_DisableOCSPDefaultResponder(certDb);
         CERTValOutParam cvout[5];
         CERTValInParam cvin[3];
+        int ncvinCount=0;
 
-        cvin[0].type = cert_pi_useAIACertFetch;
-        cvin[0].value.scalar.b = PR_TRUE;
+#if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 0 )
+        cvin[ncvinCount].type = cert_pi_useAIACertFetch;
+        cvin[ncvinCount].value.scalar.b = PR_TRUE;
+        ncvinCount++;
+#endif
 
         PRUint64 revFlagsLeaf[2];
         PRUint64 revFlagsChain[2];
@@ -884,7 +843,6 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         rev.leafTests.preferred_methods = NULL;
         rev.leafTests.cert_rev_method_independent_flags =
             CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
-//            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
 
         rev.chainTests.number_of_defined_methods = 2;
         rev.chainTests.cert_rev_flags_per_method = revFlagsChain;
@@ -898,15 +856,16 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         rev.chainTests.preferred_methods = NULL;
         rev.chainTests.cert_rev_method_independent_flags =
             CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
-//            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
 
 
-        cvin[1].type = cert_pi_revocationFlags;
-        cvin[1].value.pointer.revocation = &rev;
+        cvin[ncvinCount].type = cert_pi_revocationFlags;
+        cvin[ncvinCount].value.pointer.revocation = &rev;
+        ncvinCount++;
         // does not work, not implemented yet in 3.12.4
-//         cvin[2].type = cert_pi_keyusage;
-//         cvin[2].value.scalar.ui = KU_DIGITAL_SIGNATURE;
-        cvin[2].type = cert_pi_end;
+//         cvin[ncvinCount].type = cert_pi_keyusage;
+//         cvin[ncvinCount].value.scalar.ui = KU_DIGITAL_SIGNATURE;
+//         ncvinCount++;
+        cvin[ncvinCount].type = cert_pi_end;
 
         cvout[0].type = cert_po_trustAnchor;
         cvout[0].value.pointer.cert = NULL;
@@ -935,7 +894,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         arUsages[3] = UsageDescription( certificateUsageEmailSigner, "certificateUsageEmailSigner" );
         arUsages[4] = UsageDescription( certificateUsageEmailRecipient, "certificateUsageEmailRecipient" );
 
-        int numUsages = sizeof(arUsages) / sizeof(UsageDescription);
+        int numUsages = SAL_N_ELEMENTS(arUsages);
         for (int i = 0; i < numUsages; i++)
         {
             xmlsec_trace("Testing usage %d of %d: %s (0x%x)", i + 1,
@@ -996,7 +955,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
 
     //Destroying the temporary certificates
     std::vector<CERTCertificate*>::const_iterator cert_i;
-    for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); cert_i++)
+    for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); ++cert_i)
     {
         xmlsec_trace("Destroying temporary certificate");
         CERT_DestroyCertificate(*cert_i);
@@ -1166,3 +1125,5 @@ void SecurityEnvironment_NssImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

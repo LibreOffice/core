@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #include "precompiled_extensions.hxx"
 #include <scanner.hxx>
 #include <sanedlg.hxx>
-#include <vos/thread.hxx>
-#include <tools/list.hxx>
+#include <osl/thread.hxx>
+#include <boost/shared_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -64,7 +65,7 @@ ANY SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( Runti
 
 AWT::Size BitmapTransporter::getSize() throw()
 {
-    vos::OGuard aGuard( m_aProtector );
+    osl::MutexGuard aGuard( m_aProtector );
     int         nPreviousPos = m_aStream.Tell();
     AWT::Size   aRet;
 
@@ -88,7 +89,7 @@ AWT::Size BitmapTransporter::getSize() throw()
 
 SEQ( sal_Int8 ) BitmapTransporter::getDIB() throw()
 {
-    vos::OGuard aGuard( m_aProtector );
+    osl::MutexGuard aGuard( m_aProtector );
     int         nPreviousPos = m_aStream.Tell();
 
     // create return value
@@ -111,7 +112,7 @@ struct SaneHolder
 {
     Sane                m_aSane;
     REF( AWT::XBitmap ) m_xBitmap;
-    vos::OMutex         m_aProtector;
+    osl::Mutex          m_aProtector;
     ScanError           m_nError;
     bool                m_bBusy;
 
@@ -146,7 +147,7 @@ namespace
             m_aSanes.clear();
     }
 
-    struct theSaneProtector : public rtl::Static<vos::OMutex, theSaneProtector> {};
+    struct theSaneProtector : public rtl::Static<osl::Mutex, theSaneProtector> {};
     struct theSanes : public rtl::Static<allSanes, theSanes> {};
 }
 
@@ -154,7 +155,7 @@ namespace
 // - ScannerThread -
 // -----------------
 
-class ScannerThread : public vos::OThread
+class ScannerThread : public osl::Thread
 {
     boost::shared_ptr<SaneHolder>               m_pHolder;
     REF( com::sun::star::lang::XEventListener ) m_xListener;
@@ -192,7 +193,7 @@ ScannerThread::~ScannerThread()
 
 void ScannerThread::run()
 {
-    vos::OGuard         aGuard( m_pHolder->m_aProtector );
+    osl::MutexGuard         aGuard( m_pHolder->m_aProtector );
     BitmapTransporter*  pTransporter = new BitmapTransporter;
     REF( XInterface )   aIf( static_cast< OWeakObject* >( pTransporter ) );
 
@@ -224,13 +225,13 @@ void ScannerThread::run()
 
 void ScannerManager::AcquireData()
 {
-    vos::OGuard aGuard( theSaneProtector::get() );
+    osl::MutexGuard aGuard( theSaneProtector::get() );
     theSanes::get().acquire();
 }
 
 void ScannerManager::ReleaseData()
 {
-    vos::OGuard aGuard( theSaneProtector::get() );
+    osl::MutexGuard aGuard( theSaneProtector::get() );
     theSanes::get().release();
 }
 
@@ -254,7 +255,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
 
 SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 {
-    vos::OGuard aGuard( theSaneProtector::get() );
+    osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
     if( rSanes.empty() )
@@ -267,7 +268,7 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
     if( Sane::IsSane() )
     {
         SEQ( ScannerContext ) aRet(1);
-        aRet.getArray()[0].ScannerName      = ::rtl::OUString::createFromAscii( "SANE" );
+        aRet.getArray()[0].ScannerName      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SANE"));
         aRet.getArray()[0].InternalData     = 0;
         return aRet;
     }
@@ -279,7 +280,7 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 
 sal_Bool ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( ScannerException )
 {
-    vos::OGuard aGuard( theSaneProtector::get() );
+    osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -288,7 +289,7 @@ sal_Bool ScannerManager::configureScanner( ScannerContext& scanner_context ) thr
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
@@ -296,7 +297,7 @@ sal_Bool ScannerManager::configureScanner( ScannerContext& scanner_context ) thr
     boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
-            ::rtl::OUString::createFromAscii( "Scanner is busy" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner is busy")),
             REF( XScannerManager )( this ),
             ScanError_ScanInProgress
             );
@@ -314,7 +315,7 @@ sal_Bool ScannerManager::configureScanner( ScannerContext& scanner_context ) thr
 void ScannerManager::startScan( const ScannerContext& scanner_context,
                                 const REF( com::sun::star::lang::XEventListener )& listener ) throw( ScannerException )
 {
-    vos::OGuard aGuard( theSaneProtector::get() );
+    osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -323,14 +324,14 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
     boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
-            ::rtl::OUString::createFromAscii( "Scanner is busy" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner is busy")),
             REF( XScannerManager )( this ),
             ScanError_ScanInProgress
             );
@@ -344,12 +345,12 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 
 ScanError ScannerManager::getError( const ScannerContext& scanner_context ) throw( ScannerException )
 {
-    vos::OGuard aGuard( theSaneProtector::get() );
+    osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
@@ -363,21 +364,23 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
 
 REF( AWT::XBitmap ) ScannerManager::getBitmap( const ScannerContext& scanner_context ) throw( ScannerException )
 {
-    vos::OGuard aGuard( theSaneProtector::get() );
+    osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
     boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
 
-    vos::OGuard aProtGuard( pHolder->m_aProtector );
+    osl::MutexGuard aProtGuard( pHolder->m_aProtector );
 
     REF( AWT::XBitmap ) xRet( pHolder->m_xBitmap );
     pHolder->m_xBitmap = REF( AWT::XBitmap )();
 
     return xRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

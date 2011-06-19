@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #define _FRM_INTERFACE_CONTAINER_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
@@ -39,7 +40,6 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -83,7 +83,7 @@ namespace frm
     };
 
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
-typedef ::std::hash_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStringHash, ::comphelper::UStringEqual> OInterfaceMap;
+typedef ::boost::unordered_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStringHash, ::comphelper::UStringEqual> OInterfaceMap;
 
 //==================================================================
 // OInterfaceContainer
@@ -326,3 +326,4 @@ public:
 
 #endif          // _FRM_INTERFACE_CONTAINER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

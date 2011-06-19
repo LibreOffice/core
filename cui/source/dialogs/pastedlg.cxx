@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <pastedlg.hxx>
@@ -124,10 +123,6 @@ SvPasteObjectDialog::~SvPasteObjectDialog()
 
 /*************************************************************************
 |*    SvPasteObjectDialog::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.06.94
-|*    Letzte Aenderung  KA 16.03.2001
 *************************************************************************/
 void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const String& rFormatName )
 {
@@ -164,53 +159,6 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
         String* pName = (String*) aSupplementTable.Get( nFormat );
         String aName;
-
-#ifdef WNT
-/*
-        if( !pName &&
-            ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) )
-        {
-            sal_Bool IsClipboardObject_Impl( SotDataObject * );
-            if( IsClipboardObject_Impl( pDataObj ) )
-            {
-                IDataObject * pDO = NULL;
-                OleGetClipboard( &pDO );
-                if( pDO )
-                {
-                    FORMATETC fe;
-                    STGMEDIUM stm;
-                    (fe).cfFormat=RegisterClipboardFormat( "Object Descriptor" );
-                    (fe).dwAspect=DVASPECT_CONTENT;
-                    (fe).ptd=NULL;
-                    (fe).tymed=TYMED_HGLOBAL;
-                    (fe).lindex=-1;
-
-                    if (SUCCEEDED(pDO->GetData(&fe, &stm)))
-                    {
-                        LPOBJECTDESCRIPTOR pOD=(LPOBJECTDESCRIPTOR)GlobalLock(stm.hGlobal);
-                        if( pOD->dwFullUserTypeName )
-                        {
-                            OLECHAR * pN = (OLECHAR *)(((sal_uInt8 *)pOD) + pOD->dwFullUserTypeName);
-                            aName.Append( pN );
-                            pName = &aName;
-                            // set format to ole object
-                            nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
-                        }
-                        if( pOD->dwSrcOfCopy )
-                        {
-                            OLECHAR * pN = (OLECHAR *)(((sal_uInt8 *)pOD) + pOD->dwSrcOfCopy);
-                            aSourceName.Append( *pN++ );
-                        }
-                        else
-                            aSourceName = String( ResId( STR_UNKNOWN_SOURCE, SOAPP->GetResMgr() ) );
-                        GlobalUnlock(stm.hGlobal);
-                        ReleaseStgMedium(&stm);
-                    }
-                }
-            }
-        }
-*/
-#endif
 
         // if there is an "Embed Source" or and "Embedded Object" on the
         // Clipboard we read the Description and the Source of this object
@@ -307,3 +255,4 @@ void SvPasteObjectDialog::SetObjName( const SvGlobalName & rClass, const String 
     aObjName = rObjName;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

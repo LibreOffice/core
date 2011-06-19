@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "cuihyperdlg.hxx"
 #include <unotools/localfilehelper.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -35,13 +33,13 @@
 
 #include "hldoctp.hxx"
 #include "hyperdlg.hrc"
-#include "hlmarkwn_def.hxx" //ADD CHINA001
+#include "hlmarkwn_def.hxx"
 
-sal_Char __READONLY_DATA sHash[]                = "#";
-sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
-sal_Char __READONLY_DATA sNewsSRVScheme[] = "news://";
+sal_Char const sHash[]              = "#";
+sal_Char const sFileScheme[]            = INET_FILE_SCHEME;
+sal_Char const sNewsSRVScheme[] = "news://";
     // TODO news:// is nonsense
-sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
+sal_Char const sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 /*************************************************************************
 |*
@@ -63,10 +61,8 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
     mbMarkWndOpen   ( sal_False )
 {
-    // Set HC bitmaps and disable display of bitmap names.
-    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    // Disable display of bitmap names.
     maBtBrowse.EnableTextDisplay (sal_False);
-    maBtFileopen.SetModeImage( Image( CUI_RES( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtFileopen.EnableTextDisplay (sal_False);
 
     InitStdControls();
@@ -376,3 +372,5 @@ SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( String& aStrPath )
     else
         return Type_ExistsFile;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

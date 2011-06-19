@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,3 +54,5 @@ const sal_uInt32 n_ConstHeader = 0x05024d4dL; // "MM\002\005"
 const sal_Int32 n_ConstHeaderSize = 38; // + salt length + iv length + digest length + mediatype length
 const sal_Int16 n_ConstCurrentVersion = 1;
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

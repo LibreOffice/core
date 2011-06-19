@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_accessibility.hxx"
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <accessibility/extended/textwindowaccessibility.hxx>
-#endif
 #include "comphelper/accessibleeventnotifier.hxx"
 #include "unotools/accessiblerelationsethelper.hxx"
 #include <unotools/accessiblestatesethelper.hxx>
@@ -39,7 +38,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -604,8 +603,7 @@ ParagraphImpl::getRunAttributes(::sal_Int32 Index, const ::css::uno::Sequence< :
     checkDisposed();
 
     ::sal_Int32 nLineNo = -1;
-    ::css::i18n::Boundary aBoundary =
-        m_xDocument->retrieveParagraphLineBoundary( this, nIndex, &nLineNo );
+    m_xDocument->retrieveParagraphLineBoundary( this, nIndex, &nLineNo );
 
     return nLineNo;
 }
@@ -1724,33 +1722,38 @@ Document::getAccessibleChild(Paragraphs::iterator const & rIt)
 
 void Document::determineVisibleRange()
 {
-    m_aVisibleBegin = m_xParagraphs->end();
-    m_aVisibleEnd = m_aVisibleBegin;
+    Paragraphs::iterator const aEnd = m_xParagraphs->end();
+
+    m_aVisibleBegin = aEnd;
+    m_aVisibleEnd = aEnd;
+    m_nVisibleBeginOffset = 0;
+
     ::sal_Int32 nPos = 0;
-    for (Paragraphs::iterator aIt = m_xParagraphs->begin();;)
+    for (Paragraphs::iterator aIt = m_xParagraphs->begin(); m_aVisibleEnd == aEnd && aIt != aEnd; ++aIt)
     {
-        if (aIt == m_xParagraphs->end())
-        {
-            m_nVisibleBeginOffset = 0;
-            break;
-        }
-        ::sal_Int32 nOldPos = nPos;
+        ::sal_Int32 const nOldPos = nPos;
         nPos += aIt->getHeight(); // XXX  numeric overflow
-        if (m_aVisibleBegin == m_xParagraphs->end() && nPos >= m_nViewOffset)
+        if (m_aVisibleBegin == aEnd)
         {
-            m_aVisibleBegin = aIt;
-            m_nVisibleBeginOffset = m_nViewOffset - nOldPos;
+            if (nPos >= m_nViewOffset)
+            {
+                m_aVisibleBegin = aIt;
+                m_nVisibleBeginOffset = m_nViewOffset - nOldPos;
+            }
         }
-        ++aIt;
-        if (m_aVisibleBegin != m_xParagraphs->end()
-            && (aIt == m_xParagraphs->end()
-                || nPos >= m_nViewOffset + m_nViewHeight))
-            // XXX  numeric overflow
+        else
         {
-            m_aVisibleEnd = aIt;
-            break;
+            if (nPos >= m_nViewOffset + m_nViewHeight) // XXX  numeric overflow
+            {
+                m_aVisibleEnd = aIt;
+            }
         }
     }
+
+    OSL_POSTCOND(
+            (m_aVisibleBegin == m_xParagraphs->end() && m_aVisibleEnd == m_xParagraphs->end() && m_nVisibleBeginOffset == 0)
+            || (m_aVisibleBegin < m_aVisibleEnd && m_nVisibleBeginOffset >= 0),
+            "invalid visible range");
 }
 
 void Document::notifyVisibleRangeChanges(
@@ -1959,7 +1962,7 @@ void Document::handleParagraphNotifications()
                         NotifyAccessibleEvent(
                             ::css::accessibility::AccessibleEventId::
                             CHILD,
-                            ::css::uno::makeAny(getAccessibleChild(aIt)),
+                            ::css::uno::makeAny(xStrong),
                             ::css::uno::Any());
 
                     ::css::uno::Reference< ::css::lang::XComponent > xComponent(
@@ -2000,7 +2003,7 @@ void Document::handleParagraphNotifications()
                 break;
             }
         default:
-            OSL_ENSURE(false, "bad buffered hint");
+            OSL_FAIL( "bad buffered hint");
             break;
         }
     }
@@ -2101,7 +2104,7 @@ void Document::handleSelectionChangeNotification()
     }
     else if ( aOldTextStart == aOldTextEnd && aNewTextStart == aNewTextEnd )
     {
-        // old an new selection empty => no events
+        // old and new selection empty => no events
         nFirst1 = 0;
         nLast1 = 0;
         nFirst2 = 0;
@@ -2252,3 +2255,4 @@ void Document::disposeParagraphs()
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

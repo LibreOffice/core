@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,8 @@
 #include "precompiled_lingucomponent.hxx"
 
 #if defined(WNT)
-#include <tools/prewin.h>
+#include <windows.h>
 #endif
-
-#if defined(WNT)
-#include <Windows.h>
-#endif
-
-#if defined(WNT)
-#include <tools/postwin.h>
-#endif
-
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
@@ -60,7 +52,7 @@
 #include <lingutil.hxx>
 #include <dictmgr.hxx>
 
-
+#include <sal/macros.h>
 
 
 using ::com::sun::star::lang::Locale;
@@ -88,7 +80,7 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
     rtl::OString aRes;
 
     sal_Unicode aShortBuffer[1024] = {0};
-    sal_Int32   nShortBufSize = sizeof( aShortBuffer ) / sizeof( aShortBuffer[0] );
+    sal_Int32   nShortBufSize = SAL_N_ELEMENTS( aShortBuffer );
 
     // use the version of 'GetShortPathName' that can deal with Unicode...
     sal_Int32 nShortLen = GetShortPathNameW(
@@ -99,7 +91,7 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
     if (nShortLen < nShortBufSize) // conversion successful?
         aRes = rtl::OString( OU2ENC( rtl::OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
     else
-        DBG_ERROR( "Win_GetShortPathName: buffer to short" );
+        OSL_FAIL( "Win_GetShortPathName: buffer to short" );
 
     return aRes;
 }
@@ -124,9 +116,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     rtl::OUString aSystemPrefix;
     rtl::OUString aSystemSuffix;
 #endif
-    bool bSpell = false;
-    bool bHyph  = false;
-    bool bThes  = false;
     if (strcmp( pDicType, "DICT" ) == 0)
     {
         aFormatName     = A2OU("DICT_SPELL");
@@ -135,7 +124,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemDir      = A2OU( DICT_SYSTEM_DIR );
         aSystemSuffix       = aDicExtension;
 #endif
-        bSpell = true;
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
@@ -146,7 +134,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "hyph_" );
         aSystemSuffix       = aDicExtension;
 #endif
-        bHyph = true;
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
@@ -157,7 +144,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "th_" );
         aSystemSuffix       = A2OU( "_v2.dat" );
 #endif
-        bThes = true;
     }
 
 
@@ -173,7 +159,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
    if (aSystemDicts.open() == osl::FileBase::E_None)
    {
        osl::DirectoryItem aItem;
-       osl::FileStatus aFileStatus(FileStatusMask_FileURL);
+       osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
        while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
        {
            aItem.getFileStatus(aFileStatus);
@@ -254,7 +240,7 @@ void MergeNewStyleDicsAndOldStyleDics(
 
             if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_NONE)
             {
-                DBG_ERROR( "old style dictionary with invalid language found!" );
+                OSL_FAIL( "old style dictionary with invalid language found!" );
                 continue;
             }
 
@@ -264,7 +250,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         }
         else
         {
-            DBG_ERROR( "old style dictionary with no language found!" );
+            OSL_FAIL( "old style dictionary with no language found!" );
         }
     }
 }
@@ -291,3 +277,4 @@ rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

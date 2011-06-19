@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,24 +31,13 @@
 #include <ManifestReader.hxx>
 #include <ManifestImport.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 #include <vector>
 
-using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -57,6 +47,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::packages::manifest;
+using ::rtl::OUString;
 
 ManifestReader::ManifestReader( const Reference < XMultiServiceFactory > & xNewFactory )
 : xFactory ( xNewFactory )
@@ -148,3 +139,5 @@ Reference < XSingleServiceFactory > ManifestReader::createServiceFactory( Refere
                                            ManifestReader_createInstance,
                                            static_getSupportedServiceNames());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

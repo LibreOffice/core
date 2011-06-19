@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframeexample.hxx>
 
-/*-- 01.03.2004 15:45:01---------------------------------------------------
-  SvxSwPosSizeTabPage - position and size page for Writer drawing objects
-  -----------------------------------------------------------------------*/
+// SvxSwPosSizeTabPage - position and size page for Writer drawing objects
 struct FrmMap;
 class SdrView;
 class SvxSwPosSizeTabPage : public SfxTabPage
@@ -156,3 +155,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

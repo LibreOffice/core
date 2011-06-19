@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #define _SVXCFG_HXX
 
 #include <vcl/lstbox.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/menubtn.hxx>
@@ -423,7 +423,7 @@ protected:
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
 
-    SvxConfigPage( Window*, /* const ResId&, */ const SfxItemSet& );
+    SvxConfigPage( Window*, const SfxItemSet& );
     virtual ~SvxConfigPage();
 
     DECL_LINK( MoveHdl, Button * );
@@ -568,7 +568,6 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
     Size            m_aCheckBoxImageSizePixel;
     Link            m_aChangedListener;
     SvLBoxButtonData*   m_pButtonData;
-    sal_Bool            m_bHiContrastMode;
     SvxConfigPage*  pPage;
 
     void            ChangeVisibility( SvLBoxEntry* pEntry );
@@ -768,7 +767,7 @@ private:
     void ImportGraphics(
         const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
 
-    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);// Added by shizhoubo
+    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
 
 public:
 
@@ -817,3 +816,5 @@ public:
     SvxIconChangeDialog(Window *pWindow, const rtl::OUString& aMessage);
 };
 #endif // _SVXCFG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

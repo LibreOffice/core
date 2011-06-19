@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -136,7 +137,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleTextField::getAccessibleParent( 
 ::rtl::OUString VCLXAccessibleTextField::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("com.sun.star.comp.toolkit.AccessibleTextField");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleTextField" ));
 }
 
 
@@ -148,7 +149,8 @@ Sequence< ::rtl::OUString > VCLXAccessibleTextField::getSupportedServiceNames (v
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleTextComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString::createFromAscii(
-        "com.sun.star.accessibility.AccessibleTextField");
+    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleTextField" ));
     return aNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

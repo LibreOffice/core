@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,7 +184,7 @@ void ComputedExpression::clear()
     mxResult.clear();
 }
 
-Reference<XXPathObject> ComputedExpression::getXPath()
+Reference<XXPathObject> ComputedExpression::getXPath() const
 {
     return mxResult;
 }
@@ -244,3 +245,5 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
 
 
 } // namespace xforms
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

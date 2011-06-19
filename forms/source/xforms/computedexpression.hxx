@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,7 +128,7 @@ public:
     // get the result of this expression as string/bool/...
     // (Results will be based on the last call of evaluate(..). The caller
     // must call evaluate to ensure current results.)
-    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath();
+    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath() const;
     bool getBool( bool bDefault = false ) const;
     rtl::OUString getString( const rtl::OUString& rDefault = rtl::OUString() ) const;
 
@@ -136,3 +137,5 @@ public:
 } // namespace xforms
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

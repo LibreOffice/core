@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 
 #include <memory>
 #include <queue>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class TextEngine;
 class TextView;
@@ -395,7 +396,7 @@ private:
 };
 
 
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                          ::css::beans::PropertyValue,
                          ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > tPropValMap;
@@ -709,3 +710,5 @@ private:
 }
 
 #endif // INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

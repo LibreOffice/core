@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,16 +36,13 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/stdtext.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
-#ifndef EXTENSIONS_ABPRESID_HRC
 #include "abpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include <unotools/confignode.hxx>
+#include "sal/macros.h"
 
 //.........................................................................
 namespace abp
@@ -63,16 +61,14 @@ namespace abp
     //---------------------------------------------------------------------
     static const ::rtl::OUString& lcl_getDriverSettingsNodeName()
     {
-        static const ::rtl::OUString s_sDriverSettingsNodeName =
-            ::rtl::OUString::createFromAscii( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" );
+        static const ::rtl::OUString s_sDriverSettingsNodeName(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" ));
         return s_sDriverSettingsNodeName;
     }
 
     //---------------------------------------------------------------------
     static const ::rtl::OUString& lcl_getAddressBookNodeName()
     {
-        static const ::rtl::OUString s_sAddressBookNodeName =
-            ::rtl::OUString::createFromAscii( "/org.openoffice.Office.DataAccess/AddressBook" );
+        static const ::rtl::OUString s_sAddressBookNodeName(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/AddressBook" ));
         return s_sAddressBookNodeName;
     }
 
@@ -101,22 +97,22 @@ namespace abp
 
                 // the parent window
                 Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "ParentWindow" ), -1, makeAny( xDialogParent ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" )), -1, makeAny( xDialogParent ), PropertyState_DIRECT_VALUE);
 
                 // the data source to use
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSource" ), -1, makeAny( _rxDataSource ), PropertyState_DIRECT_VALUE);
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSourceName" ), -1, makeAny( (sal_Bool)_rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSource" )), -1, makeAny( _rxDataSource ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceName" )), -1, makeAny( (sal_Bool)_rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName ), PropertyState_DIRECT_VALUE);
 
                 // the table to use
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "Command" ), -1, makeAny( _rSettings.sSelectedTable ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Command" )), -1, makeAny( _rSettings.sSelectedTable ), PropertyState_DIRECT_VALUE);
 
                 // the title
                 ::rtl::OUString sTitle = String( ModuleRes( RID_STR_FIELDDIALOGTITLE ) );
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "Title" ), -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )), -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
 
                 // ........................................................
                 // create an instance of the dialog service
-                static ::rtl::OUString s_sAdressBookFieldAssignmentServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
+                static ::rtl::OUString s_sAdressBookFieldAssignmentServiceName(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
                 Reference< XExecutableDialog > xDialog(
                     _rxORB->createInstanceWithArguments( s_sAdressBookFieldAssignmentServiceName, aArguments ),
                     UNO_QUERY
@@ -137,7 +133,7 @@ namespace abp
 #ifdef DBG_UTIL
                     sal_Bool bSuccess =
 #endif
-                    xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii( "FieldMapping" ) ) >>= aMapping;
+                    xDialogProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FieldMapping" )) ) >>= aMapping;
                     DBG_ASSERT( bSuccess, "fieldmapping::invokeDialog: invalid property type for FieldMapping!" );
 
                     // and copy it into the map
@@ -152,7 +148,7 @@ namespace abp
             }
             catch(const Exception&)
             {
-                DBG_ERROR("fieldmapping::invokeDialog: caught an exception while executing the dialog!");
+                OSL_FAIL("fieldmapping::invokeDialog: caught an exception while executing the dialog!");
             }
             return sal_False;
         }
@@ -203,17 +199,17 @@ namespace abp
 
                 // access the configuration information which the driver uses for determining it's column names
                 ::rtl::OUString sDriverAliasesNodeName = lcl_getDriverSettingsNodeName();
-                sDriverAliasesNodeName += ::rtl::OUString::createFromAscii( "/ColumnAliases" );
+                sDriverAliasesNodeName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/ColumnAliases" ));
 
                 // create a config node for this
                 OConfigurationTreeRoot aDriverFieldAliasing = OConfigurationTreeRoot::createWithServiceFactory(
                     _rxORB, sDriverAliasesNodeName, -1, OConfigurationTreeRoot::CM_READONLY);
 
                 // loop through all programmatic pairs
-                DBG_ASSERT( 0 == ( sizeof( pMappingProgrammatics ) / sizeof( pMappingProgrammatics[ 0 ] ) ) % 2,
+                DBG_ASSERT( 0 == SAL_N_ELEMENTS( pMappingProgrammatics ) % 2,
                     "fieldmapping::defaultMapping: invalid programmatic map!" );
                 // number of pairs
-                sal_Int32 nIntersectedProgrammatics = sizeof( pMappingProgrammatics ) / sizeof( pMappingProgrammatics[ 0 ] ) / 2;
+                sal_Int32 nIntersectedProgrammatics = SAL_N_ELEMENTS( pMappingProgrammatics ) / 2;
 
                 const sal_Char** pProgrammatic = pMappingProgrammatics;
                 ::rtl::OUString sAddressProgrammatic;
@@ -232,20 +228,20 @@ namespace abp
                         aDriverFieldAliasing.getNodeValue( sDriverProgrammatic ) >>= sDriverUI;
                         if ( 0 == sDriverUI.getLength() )
                         {
-                            DBG_ERROR( "fieldmapping::defaultMapping: invalid driver UI column name!");
+                            OSL_FAIL( "fieldmapping::defaultMapping: invalid driver UI column name!");
                         }
                         else
                             _rFieldAssignment[ sAddressProgrammatic ] = sDriverUI;
                     }
                     else
                     {
-                        DBG_ERROR( "fieldmapping::defaultMapping: invalid driver programmatic name!" );
+                        OSL_FAIL( "fieldmapping::defaultMapping: invalid driver programmatic name!" );
                     }
                 }
             }
             catch( const Exception& )
             {
-                DBG_ERROR("fieldmapping::defaultMapping: code is assumed to throw no exceptions!");
+                OSL_FAIL("fieldmapping::defaultMapping: code is assumed to throw no exceptions!");
                     // the config nodes we're using herein should not do this ....
             }
         }
@@ -263,15 +259,15 @@ namespace abp
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithServiceFactory(
                 _rxORB, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
-            OConfigurationNode aFields = aAddressBookSettings.openNode( ::rtl::OUString::createFromAscii( "Fields" ) );
+            OConfigurationNode aFields = aAddressBookSettings.openNode( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Fields" )) );
 
             // loop through all existent fields
             Sequence< ::rtl::OUString > aExistentFields = aFields.getNodeNames();
             const ::rtl::OUString* pExistentFields = aExistentFields.getConstArray();
             const ::rtl::OUString* pExistentFieldsEnd = pExistentFields + aExistentFields.getLength();
 
-            const ::rtl::OUString sProgrammaticNodeName = ::rtl::OUString::createFromAscii( "ProgrammaticFieldName" );
-            const ::rtl::OUString sAssignedNodeName = ::rtl::OUString::createFromAscii( "AssignedFieldName" );
+            const ::rtl::OUString sProgrammaticNodeName(RTL_CONSTASCII_USTRINGPARAM( "ProgrammaticFieldName" ));
+            const ::rtl::OUString sAssignedNodeName(RTL_CONSTASCII_USTRINGPARAM( "AssignedFieldName" ));
 
             for ( ; pExistentFields != pExistentFieldsEnd; ++pExistentFields )
             {
@@ -340,9 +336,9 @@ namespace abp
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithServiceFactory(
                 _rxORB, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
-            aAddressBookSettings.setNodeValue( ::rtl::OUString::createFromAscii( "DataSourceName" ), makeAny( _rDataSourceName ) );
-            aAddressBookSettings.setNodeValue( ::rtl::OUString::createFromAscii( "Command" ), makeAny( _rTableName ) );
-            aAddressBookSettings.setNodeValue( ::rtl::OUString::createFromAscii( "CommandType" ), makeAny( (sal_Int32)CommandType::TABLE ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceName" )), makeAny( _rDataSourceName ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Command" )), makeAny( _rTableName ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CommandType" )), makeAny( (sal_Int32)CommandType::TABLE ) );
 
             // commit the changes done
             aAddressBookSettings.commit();
@@ -359,7 +355,7 @@ namespace abp
                 _rxORB, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
             // set the flag
-            aAddressBookSettings.setNodeValue( ::rtl::OUString::createFromAscii( "AutoPilotCompleted" ), makeAny( (sal_Bool)sal_True ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoPilotCompleted" )), makeAny( (sal_Bool)sal_True ) );
 
             // commit the changes done
             aAddressBookSettings.commit();
@@ -373,3 +369,4 @@ namespace abp
 }   // namespace abp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

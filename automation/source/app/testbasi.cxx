@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,29 +30,13 @@
 #include "precompiled_automation.hxx"
 #include <basic/sbx.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/testtool.hxx>
 #include "testbasi.hxx"
-//#include "app.hxx"
-//#include "basic.hrc"
-//#include "appbased.hxx"
 #define P_FEHLERLISTE TestToolObj::pFehlerListe
-
-//#include "status.hxx"
-//#include "basic.hrc"
-
-//#include "object.hxx"
 
 #include <testapp.hxx>
 #include <testtool.hxx>
-#ifndef _SB_INTERN_HXX
-//#include "sbintern.hxx"
-#endif
-
-//#include "comm_bas.hxx"
-//#include "processw.hxx"
 
 TYPEINIT1(TTBasic,MyBasic)
 
@@ -159,3 +144,5 @@ void TTBasic::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
 {
     ((TestToolObj*)pTestObject)->DebugFindNoErrors( bDebugFindNoErrors );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

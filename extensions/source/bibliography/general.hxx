@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,11 @@
 
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-//#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-//#endif
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <svtools/stdctrl.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
@@ -208,3 +204,4 @@ inline BibDataManager* BibGeneralPage::GetDataManager()
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

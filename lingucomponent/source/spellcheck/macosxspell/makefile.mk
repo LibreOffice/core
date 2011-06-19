@@ -39,7 +39,7 @@ USE_DEFFILE=TRUE
 .INCLUDE : settings.mk
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell -DHUNSPELL_STATIC
 .ENDIF
 
 CXXFLAGS += $(HUNSPELL_CFLAGS)
@@ -65,7 +65,6 @@ SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
-        $(VOSLIB)		\
         $(TOOLSLIB)		\
         $(SVLLIB)		\
         $(SALLIB)		\

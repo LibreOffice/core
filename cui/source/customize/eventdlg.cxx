@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ***************************************************************
 #include <svtools/svmedit.hxx>
@@ -80,8 +78,6 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
     mpImpl->pMacroImg           = new Image( CUI_RES( IMG_MACRO) );
     mpImpl->pComponentImg       = new Image( CUI_RES( IMG_COMPONENT) );
-    mpImpl->pMacroImg_h         = new Image( CUI_RES( IMG_MACRO_H) );
-    mpImpl->pComponentImg_h     = new Image( CUI_RES( IMG_COMPONENT_H) );
 
     FreeResource();
 
@@ -95,11 +91,10 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
 
     uno::Reference< document::XEventsSupplier > xSupplier;
 
-//    xSupplier = uno::Reference< document::XEventsSupplier >( new GlobalEventConfig());
     xSupplier = uno::Reference< document::XEventsSupplier > (
         ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii(
-                "com.sun.star.frame.GlobalEventBroadcaster" ) ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.frame.GlobalEventBroadcaster" )) ),
         uno::UNO_QUERY );
 
     sal_uInt16 nPos(0);
@@ -203,7 +198,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 
         uno::Reference< frame::XFramesSupplier > xFramesSupplier(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
             uno::UNO_QUERY );
 
         uno::Reference< frame::XFrame > xFrame =
@@ -244,3 +239,4 @@ void SvxEventConfigPage::Reset( const SfxItemSet& )
     _SvxMacroTabPage::Reset();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

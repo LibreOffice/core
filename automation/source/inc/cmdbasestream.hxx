@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,33 +51,33 @@ public:
 
     void GenError( rtl::OString *pUId, comm_String *pString );
 
-    void GenReturn( comm_USHORT nRet, comm_ULONG nNr );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_ULONG nNr );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_String *pString );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_BOOL bBool );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_ULONG nNr, comm_String *pString, comm_BOOL bBool );
+    void GenReturn( comm_UINT16 nRet, comm_UINT32 nNr );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32 nNr );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_String *pString );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_BOOL bBool );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32 nNr, comm_String *pString, comm_BOOL bBool );
 
-    void GenReturn( comm_USHORT nRet, comm_USHORT nMethod, comm_ULONG nNr );
-    void GenReturn( comm_USHORT nRet, comm_USHORT nMethod, comm_String *pString );
-    void GenReturn( comm_USHORT nRet, comm_USHORT nMethod, comm_BOOL bBool );
-    void GenReturn( comm_USHORT nRet, comm_USHORT nMethod, comm_USHORT nNr );
+    void GenReturn( comm_UINT16 nRet, comm_UINT16 nMethod, comm_UINT32 nNr );
+    void GenReturn( comm_UINT16 nRet, comm_UINT16 nMethod, comm_String *pString );
+    void GenReturn( comm_UINT16 nRet, comm_UINT16 nMethod, comm_BOOL bBool );
+    void GenReturn( comm_UINT16 nRet, comm_UINT16 nMethod, comm_UINT16 nNr );
 
 // MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod ); // also used outside MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString, comm_BOOL bBool );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_BOOL bBool );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_ULONG nNr );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod ); // also used outside MacroRecorder
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString, comm_BOOL bBool );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_BOOL bBool );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_UINT32 nNr );
 
-    void Read ( comm_USHORT &nNr );
-    void Read ( comm_ULONG &nNr );
-    void Read (comm_UniChar* &aString, comm_USHORT &nLenInChars );
+    void Read ( comm_UINT16 &nNr );
+    void Read ( comm_UINT32 &nNr );
+    void Read (comm_UniChar* &aString, comm_UINT16 &nLenInChars );
     void Read ( comm_BOOL &bBool );
-    comm_USHORT GetNextType();
+    comm_UINT16 GetNextType();
 
-    void Write( comm_USHORT nNr );
-    void Write( comm_ULONG nNr );
-    void Write( const comm_UniChar* aString, comm_USHORT nLenInChars );
+    void Write( comm_UINT16 nNr );
+    void Write( comm_UINT32 nNr );
+    void Write( const comm_UniChar* aString, comm_UINT16 nLenInChars );
     void Write( comm_BOOL bBool );
 
 // Complex Datatypes to be handled system dependent
@@ -88,3 +89,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

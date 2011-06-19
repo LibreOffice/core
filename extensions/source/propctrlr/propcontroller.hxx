@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
 #include "browserview.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPCR_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "propertyinfo.hxx"
 #include "pcrcomponentcontext.hxx"
 
@@ -56,7 +55,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/inspection/XPropertyControlFactory.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
@@ -70,7 +68,7 @@
 #include <comphelper/broadcasthelper.hxx>
 
 #include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <memory>
 
@@ -139,9 +137,9 @@ namespace pcr
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
                                                         PropertyHandlerRef;
         typedef ::std::vector< PropertyHandlerRef >     PropertyHandlerArray;
-        typedef ::std::hash_map< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
+        typedef ::boost::unordered_map< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
                                                         PropertyHandlerRepository;
-        typedef ::std::hash_multimap< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
+        typedef ::boost::unordered_multimap< ::rtl::OUString, PropertyHandlerRef, ::rtl::OUStringHash >
                                                         PropertyHandlerMultiRepository;
         PropertyHandlerRepository                       m_aPropertyHandlers;
         PropertyHandlerMultiRepository                  m_aDependencyHandlers;
@@ -159,7 +157,7 @@ namespace pcr
         /// the property we're just committing
         ::rtl::OUString                                 m_sCommittingProperty;
 
-        typedef ::std::hash_map< ::rtl::OUString, sal_uInt16, ::rtl::OUStringHash >     HashString2Int16;
+        typedef ::boost::unordered_map< ::rtl::OUString, sal_uInt16, ::rtl::OUStringHash >     HashString2Int16;
         HashString2Int16                                m_aPageIds;
 
         bool        m_bContainerFocusListening;
@@ -428,3 +426,4 @@ namespace pcr
 
 #endif // _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

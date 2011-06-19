@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,33 +29,15 @@
 #define _TESTAPP_HXX
 
 #include <vcl/svapp.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <svl/poolitem.hxx>
 
 
@@ -103,13 +86,12 @@ public:
 
 class MyApp : public Application
 {
-    PopupMenu  *MyMenu;
     Timer aCommandTimer;
     PlugInDispatcher *pMyDispatcher;
 
 public:
     MyApp();
-    void Main();
+    int Main();
 
     virtual void                Property( ApplicationProperty& );
     virtual PlugInDispatcher*   GetDispatcher();
@@ -123,3 +105,4 @@ extern MyApp aApp;
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

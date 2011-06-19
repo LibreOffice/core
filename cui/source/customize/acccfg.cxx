@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 //-----------------------------------------------
 // include own files
 
@@ -42,6 +40,8 @@
 #include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
 
+#include <sal/macros.h>
+
 #include "cuires.hrc"
 #include "acccfg.hrc"
 
@@ -54,13 +54,10 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/form/XReset.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -94,25 +91,25 @@ using namespace com::sun::star;
 // definitions
 
 //-----------------------------------------------
-static ::rtl::OUString SERVICE_STORAGEFACTORY           = ::rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory"                          );
-static ::rtl::OUString SERVICE_UICONFIGMGR              = ::rtl::OUString::createFromAscii("com.sun.star.ui.UIConfigurationManager"              );
-static ::rtl::OUString SERVICE_DESKTOP                  = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"                                 );
-static ::rtl::OUString SERVICE_MODULEMANAGER            = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"                    );
-static ::rtl::OUString SERVICE_GLOBALACCCFG             = ::rtl::OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration"      );
-static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   = ::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
-static ::rtl::OUString SERVICE_UICMDDESCRIPTION         = ::rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription"             );
+static ::rtl::OUString SERVICE_STORAGEFACTORY           (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"                        ));
+static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
+static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
+static ::rtl::OUString SERVICE_MODULEMANAGER            (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"                  ));
+static ::rtl::OUString SERVICE_GLOBALACCCFG             (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"      ));
+static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"));
+static ::rtl::OUString SERVICE_UICMDDESCRIPTION         (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"             ));
 
-static ::rtl::OUString MODULEPROP_SHORTNAME             = ::rtl::OUString::createFromAscii("ooSetupFactoryShortName"                                    );
-static ::rtl::OUString MODULEPROP_UINAME                = ::rtl::OUString::createFromAscii("ooSetupFactoryUIName"                                       );
-static ::rtl::OUString CMDPROP_UINAME                   = ::rtl::OUString::createFromAscii("Name"                                                       );
+static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
+static ::rtl::OUString MODULEPROP_UINAME                (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"                                     ));
+static ::rtl::OUString CMDPROP_UINAME                   (RTL_CONSTASCII_USTRINGPARAM("Name"                                                     ));
 
-static ::rtl::OUString FOLDERNAME_UICONFIG              = ::rtl::OUString::createFromAscii("Configurations2"                                            );
+static ::rtl::OUString FOLDERNAME_UICONFIG              (RTL_CONSTASCII_USTRINGPARAM("Configurations2"                                          ));
 
-static ::rtl::OUString MEDIATYPE_PROPNAME               = ::rtl::OUString::createFromAscii("MediaType"                                                  );
-static ::rtl::OUString MEDIATYPE_UICONFIG               = ::rtl::OUString::createFromAscii("application/vnd.sun.xml.ui.configuration"                   );
+static ::rtl::OUString MEDIATYPE_PROPNAME               (RTL_CONSTASCII_USTRINGPARAM("MediaType"                                                ));
+static ::rtl::OUString MEDIATYPE_UICONFIG               (RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.ui.configuration"                 ));
 
 //-----------------------------------------------
-static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
+static sal_uInt16 KEYCODE_ARRAY[] =
 {
     KEY_F1       ,
     KEY_F2       ,
@@ -126,6 +123,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10      ,
     KEY_F11      ,
     KEY_F12      ,
+    KEY_F13      ,
+    KEY_F14      ,
+    KEY_F15      ,
+    KEY_F16      ,
 
     KEY_DOWN     ,
     KEY_UP       ,
@@ -166,6 +167,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT,
     KEY_F11       | KEY_SHIFT,
     KEY_F12       | KEY_SHIFT,
+    KEY_F13       | KEY_SHIFT,
+    KEY_F14       | KEY_SHIFT,
+    KEY_F15       | KEY_SHIFT,
+    KEY_F16       | KEY_SHIFT,
 
     KEY_DOWN      | KEY_SHIFT,
     KEY_UP        | KEY_SHIFT,
@@ -218,6 +223,9 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_X         | KEY_MOD1 ,
     KEY_Y         | KEY_MOD1 ,
     KEY_Z         | KEY_MOD1 ,
+    KEY_SEMICOLON    | KEY_MOD1 ,
+    KEY_BRACKETLEFT  | KEY_MOD1 ,
+    KEY_BRACKETRIGHT | KEY_MOD1,
 
     KEY_F1        | KEY_MOD1 ,
     KEY_F2        | KEY_MOD1 ,
@@ -231,6 +239,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10       | KEY_MOD1 ,
     KEY_F11       | KEY_MOD1 ,
     KEY_F12       | KEY_MOD1 ,
+    KEY_F13       | KEY_MOD1 ,
+    KEY_F14       | KEY_MOD1 ,
+    KEY_F15       | KEY_MOD1 ,
+    KEY_F16       | KEY_MOD1 ,
 
     KEY_DOWN      | KEY_MOD1 ,
     KEY_UP        | KEY_MOD1 ,
@@ -287,6 +299,9 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_X         | KEY_SHIFT | KEY_MOD1,
     KEY_Y         | KEY_SHIFT | KEY_MOD1,
     KEY_Z         | KEY_SHIFT | KEY_MOD1,
+    KEY_SEMICOLON    | KEY_SHIFT | KEY_MOD1 ,
+    KEY_BRACKETLEFT  | KEY_SHIFT | KEY_MOD1 ,
+    KEY_BRACKETRIGHT | KEY_SHIFT | KEY_MOD1,
 
     KEY_F1        | KEY_SHIFT | KEY_MOD1,
     KEY_F2        | KEY_SHIFT | KEY_MOD1,
@@ -300,6 +315,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT | KEY_MOD1,
     KEY_F11       | KEY_SHIFT | KEY_MOD1,
     KEY_F12       | KEY_SHIFT | KEY_MOD1,
+    KEY_F13       | KEY_SHIFT | KEY_MOD1,
+    KEY_F14       | KEY_SHIFT | KEY_MOD1,
+    KEY_F15       | KEY_SHIFT | KEY_MOD1,
+    KEY_F16       | KEY_SHIFT | KEY_MOD1,
 
     KEY_DOWN      | KEY_SHIFT | KEY_MOD1,
     KEY_UP        | KEY_SHIFT | KEY_MOD1,
@@ -351,6 +370,9 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_X         | KEY_MOD2 ,
     KEY_Y         | KEY_MOD2 ,
     KEY_Z         | KEY_MOD2 ,
+    KEY_SEMICOLON    | KEY_MOD2 ,
+    KEY_BRACKETLEFT  | KEY_MOD2 ,
+    KEY_BRACKETRIGHT | KEY_MOD2,
 
     KEY_F1        | KEY_MOD2 ,
     KEY_F2        | KEY_MOD2 ,
@@ -364,6 +386,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10       | KEY_MOD2 ,
     KEY_F11       | KEY_MOD2 ,
     KEY_F12       | KEY_MOD2 ,
+    KEY_F13       | KEY_MOD2 ,
+    KEY_F14       | KEY_MOD2 ,
+    KEY_F15       | KEY_MOD2 ,
+    KEY_F16       | KEY_MOD2 ,
 
     KEY_DOWN      | KEY_MOD2 ,
     KEY_UP        | KEY_MOD2 ,
@@ -415,6 +441,9 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_X         | KEY_SHIFT | KEY_MOD2,
     KEY_Y         | KEY_SHIFT | KEY_MOD2,
     KEY_Z         | KEY_SHIFT | KEY_MOD2,
+    KEY_SEMICOLON    | KEY_SHIFT | KEY_MOD2 ,
+    KEY_BRACKETLEFT  | KEY_SHIFT | KEY_MOD2 ,
+    KEY_BRACKETRIGHT | KEY_SHIFT | KEY_MOD2,
 
     KEY_F1        | KEY_SHIFT | KEY_MOD2,
     KEY_F2        | KEY_SHIFT | KEY_MOD2,
@@ -428,6 +457,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT | KEY_MOD2,
     KEY_F11       | KEY_SHIFT | KEY_MOD2,
     KEY_F12       | KEY_SHIFT | KEY_MOD2,
+    KEY_F13       | KEY_SHIFT | KEY_MOD2,
+    KEY_F14       | KEY_SHIFT | KEY_MOD2,
+    KEY_F15       | KEY_SHIFT | KEY_MOD2,
+    KEY_F16       | KEY_SHIFT | KEY_MOD2,
 
     KEY_DOWN      | KEY_SHIFT | KEY_MOD2,
     KEY_UP        | KEY_SHIFT | KEY_MOD2,
@@ -492,6 +525,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10       | KEY_MOD1 | KEY_MOD2 ,
     KEY_F11       | KEY_MOD1 | KEY_MOD2 ,
     KEY_F12       | KEY_MOD1 | KEY_MOD2 ,
+    KEY_F13       | KEY_MOD1 | KEY_MOD2 ,
+    KEY_F14       | KEY_MOD1 | KEY_MOD2 ,
+    KEY_F15       | KEY_MOD1 | KEY_MOD2 ,
+    KEY_F16       | KEY_MOD1 | KEY_MOD2 ,
 
     KEY_DOWN      | KEY_MOD1 | KEY_MOD2 ,
     KEY_UP        | KEY_MOD1 | KEY_MOD2 ,
@@ -543,6 +580,9 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_X         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_Y         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_Z         | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_SEMICOLON    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_BRACKETLEFT  | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_BRACKETRIGHT | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
 
     KEY_F1        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_F2        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
@@ -556,6 +596,10 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_F10       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_F11       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_F12       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_F13       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_F14       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_F15       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
+    KEY_F16       | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
 
     KEY_DOWN      | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
     KEY_UP        | KEY_SHIFT | KEY_MOD1 | KEY_MOD2,
@@ -572,7 +616,7 @@ static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
     KEY_DELETE    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2
 };
 
-static sal_uInt16 KEYCODE_ARRAY_SIZE = (sizeof(KEYCODE_ARRAY) / sizeof(KEYCODE_ARRAY[0]));
+static sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
 //-----------------------------------------------
 // seems to be needed to layout the list box, which shows all
@@ -619,11 +663,6 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
                                            sal_uInt16       /*nFlags*/,
                                            SvLBoxEntry* pEntry )
 {
-    /*/ ??? realy needed !!!
-    Font aOldFont(rDevice.GetFont());
-    Font aNewFont(aOldFont         );
-    rDevice.SetFont( aFont );
-    */
 
     if (!pEntry)
         return;
@@ -637,7 +676,6 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
     else
         rDevice.DrawCtrlText(aPos, GetText(), 0, STRING_LEN, TEXT_DRAW_DISABLE);
 
-    //rDev.SetFont( aOldFont );
 }
 
 //-----------------------------------------------
@@ -1536,3 +1574,5 @@ SvxShortcutAssignDlg::~SvxShortcutAssignDlg()
 
 
 // .uno:InsertSymbol?Symbols:string=bla
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

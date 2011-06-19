@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,10 +26,6 @@
  *
  ************************************************************************/
 
-//---------------------------------------
-//
-//---------------------------------------
-
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
@@ -47,10 +44,6 @@
 #ifdef _MSC_VER
 #pragma warning(disable : 4786 4350)
 #endif
-
-//---------------------------------------
-//
-//---------------------------------------
 
 const size_t MAX_TMP_BUFF_SIZE = 1024 * sizeof(wchar_t);
 
@@ -142,9 +135,6 @@ size_t RegistryKeyImplWinNT::GetSubKeyCount() const
     return nSubKeys;
 }
 
-//-----------------------------------------------------
-/**
-*/
 StringListPtr RegistryKeyImplWinNT::GetSubKeyNames() const
 {
     assert(IsOpen());
@@ -184,9 +174,6 @@ StringListPtr RegistryKeyImplWinNT::GetSubKeyNames() const
 #endif
 }
 
-//-----------------------------------------------------
-/**
-*/
 StringListPtr RegistryKeyImplWinNT::GetSubValueNames() const
 {
     assert(IsOpen());
@@ -617,3 +604,4 @@ void RegistryKeyImplWinNT::SetValue(const RegistryValue& Value)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

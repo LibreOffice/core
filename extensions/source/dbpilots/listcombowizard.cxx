@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -186,12 +187,12 @@ namespace dbp
             }
 
             // ListSourceType: SQL
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSourceType"), makeAny((sal_Int32)ListSourceType_SQL));
+            getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListSourceType")), makeAny((sal_Int32)ListSourceType_SQL));
 
             if (isListBox())
             {
                 // BoundColumn: 1
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("BoundColumn"), makeAny((sal_Int16)1));
+                getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundColumn")), makeAny((sal_Int16)1));
 
                 // build the statement to set as list source
                 String sStatement;
@@ -203,7 +204,7 @@ namespace dbp
                 sStatement += getSettings().sListContentTable;
                 Sequence< ::rtl::OUString > aListSource(1);
                 aListSource[0] = sStatement;
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSource"), makeAny(aListSource));
+                getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListSource")), makeAny(aListSource));
             }
             else
             {
@@ -213,15 +214,15 @@ namespace dbp
                 sStatement += getSettings().sListContentField;
                 sStatement.AppendAscii(" FROM ");
                 sStatement += getSettings().sListContentTable;
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSource"), makeAny(::rtl::OUString(sStatement)));
+                getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListSource")), makeAny(::rtl::OUString(sStatement)));
             }
 
             // the bound field
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
+            getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataField")), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
         }
         catch(Exception&)
         {
-            DBG_ERROR("OListComboWizard::implApplySettings: could not set the property values for the listbox!");
+            OSL_FAIL("OListComboWizard::implApplySettings: could not set the property values for the listbox!");
         }
     }
 
@@ -352,7 +353,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OContentTableSelection::initializePage: could not retrieve the table names!");
+            OSL_FAIL("OContentTableSelection::initializePage: could not retrieve the table names!");
         }
 
         m_aSelectTable.SelectEntry(getSettings().sListContentTable);
@@ -560,3 +561,4 @@ namespace dbp
 }   // namespace dbp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

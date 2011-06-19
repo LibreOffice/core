@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <ZipPackage.hxx>
 #include <ZipFile.hxx>
 #include <EncryptedDataHeader.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include "wrapstreamforshare.hxx"
 
 #include <comphelper/seekableinput.hxx>
@@ -58,8 +59,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 
+using rtl::OUString;
 namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::static_getImplementationId()
@@ -506,12 +507,12 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
     }
     catch ( ZipException & )//rException )
     {
-        VOS_ENSURE( 0, "ZipException thrown" );//rException.Message );
+        OSL_FAIL( "ZipException thrown" );//rException.Message);
         return uno::Reference < io::XInputStream > ();
     }
     catch ( Exception & )
     {
-        VOS_ENSURE( 0, "Exception is thrown during stream wrapping!\n" );
+        OSL_FAIL( "Exception is thrown during stream wrapping!\n" );
         return uno::Reference < io::XInputStream > ();
     }
 }
@@ -535,12 +536,12 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
     }
     catch ( ZipException & )//rException )
     {
-        VOS_ENSURE( 0,"ZipException thrown" );//rException.Message );
+        OSL_FAIL( "ZipException thrown" );//rException.Message);
         return uno::Reference < io::XInputStream > ();
     }
     catch ( Exception & )
     {
-        VOS_ENSURE( 0, "Exception is thrown during stream wrapping!\n" );
+        OSL_FAIL( "Exception is thrown during stream wrapping!\n" );
         return uno::Reference < io::XInputStream > ();
     }
 }
@@ -886,7 +887,7 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     }
     else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Encrypted" ) ) )
     {
-        aAny <<= ( m_nStreamMode == PACKAGE_STREAM_RAW ) ? sal_True : bToBeEncrypted;
+        aAny <<= ((m_nStreamMode == PACKAGE_STREAM_RAW) ? sal_True : bToBeEncrypted);
         return aAny;
     }
     else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WasEncrypted" ) ) )
@@ -942,3 +943,4 @@ sal_Bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceNa
     return rServiceName == getSupportedServiceNames()[0];
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

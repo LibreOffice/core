@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,7 +96,7 @@ public:
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
 };
 
 /*************************************************************************
@@ -113,6 +114,6 @@ public:
     ~SvxConnectionDialog();
 };
 
-
 #endif // _SVX_CONNECT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

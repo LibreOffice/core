@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,22 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
 #include <sal/config.h>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include "x509certificate_mscryptimpl.hxx"
 #include "certificateextension_xmlsecimpl.hxx"
 #include "sanextension_mscryptimpl.hxx"
 
-//MM : added by MM
 #include "oid.hxx"
-//MM : end
 
-//CP : added by CP
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <utility>
-
-//CP : end
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
@@ -241,15 +237,14 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
                 throw RuntimeException() ;
             }
 
-            // By CP , for correct encoding
+            // for correct encoding
             sal_uInt16 encoding ;
             rtl_Locale *pLocale = NULL ;
             osl_getProcessLocale( &pLocale ) ;
             encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-            // CP end
 
             if(issuer[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
-            OUString xIssuer(issuer , cbIssuer ,encoding ) ; //By CP
+            OUString xIssuer(issuer , cbIssuer ,encoding ) ;
             delete [] issuer ;
 
             return replaceTagSWithTagST(xIssuer);
@@ -494,17 +489,14 @@ sal_Int64 SAL_CALL X509Certificate_MSCryptImpl :: getSomething( const Sequence< 
 }
 
 /* XUnoTunnel extension */
+
+namespace
+{
+    class theX509Certificate_MSCryptImplUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theX509Certificate_MSCryptImplUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8>& X509Certificate_MSCryptImpl :: getUnoTunnelId() {
-    static Sequence< sal_Int8 >* pSeq = 0 ;
-    if( !pSeq ) {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if( !pSeq ) {
-            static Sequence< sal_Int8> aSeq( 16 ) ;
-            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
-            pSeq = &aSeq ;
-        }
-    }
-    return *pSeq ;
+    return theX509Certificate_MSCryptImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
@@ -516,7 +508,6 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
         return NULL ;
 }
 
-// MM : added by MM
 ::rtl::OUString findOIDDescription(char *oid)
 {
     OUString ouOID = OUString::createFromAscii( oid );
@@ -662,5 +653,4 @@ sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
     return usage;
 }
 
-// MM : end
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

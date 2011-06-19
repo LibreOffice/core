@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _CUI_GALDLG_HXX_
 #define _CUI_GALDLG_HXX_
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/fixed.hxx>
@@ -46,8 +47,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <svtools/dialogclosedlistener.hxx>
-
-DECLARE_LIST( StringList, String* )
+#include <vector>
 
 // ------------
 // - Forwards -
@@ -58,6 +58,9 @@ class GalleryTheme;
 class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
+
+typedef ::std::vector< UniString* > StringList;
+typedef ::std::vector< sal_uLong > TokenList_impl;
 
 // ---------------
 // - FilterEntry -
@@ -72,7 +75,7 @@ struct FilterEntry
 // - SearchThread -
 // ----------------
 
-class SearchThread : public ::vos::OThread
+class SearchThread : public ::osl::Thread
 {
 private:
 
@@ -129,20 +132,24 @@ public:
 // - TakeThread -
 // --------------
 
-class TakeThread : public ::vos::OThread
+class TakeThread : public ::osl::Thread
 {
 private:
 
     TakeProgress*               mpProgress;
     TPGalleryThemeProperties*   mpBrowser;
-    List&                       mrTakenList;
+    TokenList_impl&             mrTakenList;
 
     virtual void SAL_CALL       run();
     virtual void SAL_CALL       onTerminated();
 
 public:
 
-                                TakeThread( TakeProgress* pProgess, TPGalleryThemeProperties* pBrowser, List& rTakenList );
+                                TakeThread(
+                                    TakeProgress* pProgess,
+                                    TPGalleryThemeProperties* pBrowser,
+                                    TokenList_impl& rTakenList
+                                );
     virtual                     ~TakeThread();
 };
 
@@ -158,7 +165,7 @@ private:
     FixedLine           aFLTakeProgress;
     CancelButton        aBtnCancel;
     TakeThread          maTakeThread;
-    List                maTakenList;
+    TokenList_impl      maTakenList;
 
                         DECL_LINK( ClickCancelBtn, void* );
     void                Terminate();
@@ -371,3 +378,5 @@ public:
 };
 
 #endif // _CUI_GALDLG_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

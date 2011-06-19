@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,13 +53,6 @@ DlgEdPropListenerImpl::~DlgEdPropListenerImpl()
 
 void SAL_CALL DlgEdPropListenerImpl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    /*
-    // disconnect the listener
-    if (pDlgEdObj)
-    {
-        (pDlgEdObj->m_xPropertyChangeListener).clear();
-    }
-    */
 }
 
 // XPropertyChangeListener
@@ -93,13 +87,6 @@ DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl()
 
 void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    /*
-    // disconnect the listener
-    if (pDlgEdObj)
-    {
-        (pDlgEdObj->m_xContainerListener).clear();
-    }
-    */
 }
 
 // XContainerListener
@@ -125,3 +112,5 @@ void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const ::com::sun::star::c
 }
 
 //----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

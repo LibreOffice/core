@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,12 +45,8 @@
 #include <sbxitem.hxx>
 #include <iderdll.hxx>
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -77,7 +74,7 @@ ExtBasicTreeListBox::~ExtBasicTreeListBox()
 {
 }
 
-sal_Bool __EXPORT ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     sal_Bool bRet = sal_False;
 
@@ -103,7 +100,7 @@ sal_Bool __EXPORT ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Select
     return bRet;
 }
 
-sal_Bool __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
     sal_Bool bValid = BasicIDE::IsValidSbxName( rNewText );
     if ( !bValid )
@@ -155,7 +152,7 @@ sal_Bool __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const S
 }
 
 
-DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
+DragDropMode ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
 {
     DragDropMode nMode_ = SV_DRAGDROP_NONE;
 
@@ -195,7 +192,7 @@ DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContaine
 }
 
 
-sal_Bool __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
+sal_Bool ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 {
     // don't drop on a BasicManager (nDepth == 0)
     sal_uInt16 nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;
@@ -261,7 +258,7 @@ sal_Bool __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 }
 
 
-sal_Bool __EXPORT ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+sal_Bool ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return NotifyCopyingMoving( pTarget, pEntry,
@@ -269,7 +266,7 @@ sal_Bool __EXPORT ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBo
 }
 
 
-sal_Bool __EXPORT ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
 //  return sal_False;   // Wie kopiere ich ein SBX ?!
@@ -312,7 +309,7 @@ void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& 
     Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rSourceDoc.isDocument() ? rSourceDoc.getDocument() : Reference< frame::XModel >() );
 
     if( xDialogModel.is() )
     {
@@ -329,12 +326,12 @@ void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& 
         {
             LocalizationMgr::setResourceIDsForDialog( xDialogModel, xDestMgr );
         }
-        io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+        io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDestDoc.isDocument() ? rDestDoc.getDocument() : Reference< frame::XModel >() );
     }
 }
 
 
-sal_Bool __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
 {
     (void)pEntry;
@@ -511,7 +508,7 @@ OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDesc
     }
 }
 
-__EXPORT OrganizeDialog::~OrganizeDialog()
+OrganizeDialog::~OrganizeDialog()
 {
     for ( sal_uInt16 i = 0; i < aTabCtrl.GetPageCount(); i++ )
         delete aTabCtrl.GetTabPage( aTabCtrl.GetPageId( i ) );
@@ -556,7 +553,7 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
                 ((LibPage*)pNewTabPage)->SetTabDlg( this );
             }
             break;
-            default:    DBG_ERROR( "PageHdl: Unbekannte ID!" );
+            default:    OSL_FAIL( "PageHdl: Unbekannte ID!" );
         }
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );
@@ -611,12 +608,12 @@ void ObjectPage::SetCurrentEntry( BasicEntryDescriptor& rDesc )
     aBasicBox.SetCurrentEntry( rDesc );
 }
 
-void __EXPORT ObjectPage::ActivatePage()
+void ObjectPage::ActivatePage()
 {
     aBasicBox.UpdateEntries();
 }
 
-void __EXPORT ObjectPage::DeactivatePage()
+void ObjectPage::DeactivatePage()
 {
 }
 
@@ -869,7 +866,6 @@ void ObjectPage::NewDialog()
                             pEntry = aBasicBox.AddEntry(
                                 aDlgName,
                                 Image( IDEResId( RID_IMG_DIALOG ) ),
-                                Image( IDEResId( RID_IMG_DIALOG_HC ) ),
                                 pLibEntry, false,
                                 std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_DIALOG ) ) );
                             DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
@@ -1043,7 +1039,6 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                         pEntry = rBasicBox.AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            Image( IDEResId( RID_IMG_MODULE_HC ) ),
                             pSubRootEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
                         DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
@@ -1069,3 +1064,4 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

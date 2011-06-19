@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,29 +30,23 @@
 #define _EXT_SCANNER_HXX
 
 #include <tools/stream.hxx>
-#include <vos/mutex.hxx>
-#ifndef __RTL_USTRING_HXX_
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#endif
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
-#ifndef __COM_SUN_STAR_AWT_XBITMAP_HPP
 #include <com/sun/star/awt/XBitmap.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#ifndef __COM_SUN_STAR_LANG_EVENTOBJECT_HPP
 #include <com/sun/star/lang/EventObject.hpp>
-#endif
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/scanner/ScannerException.hpp>
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::scanner;
+
+using ::rtl::OUString;
 
 // -----------
 // - Defines -
@@ -70,7 +65,7 @@ class ScannerManager : public OWeakObject, XScannerManager, AWT::XBitmap
 {
 protected:
 
-    vos::OMutex                             maProtector;
+    osl::Mutex                              maProtector;
     void*                                   mpData;
 
     void                                    AcquireData();
@@ -114,3 +109,5 @@ public:
 REF( XInterface ) SAL_CALL ScannerManager_CreateInstance( const REF( com::sun::star::lang::XMultiServiceFactory )& rxFactory ) throw( Exception );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

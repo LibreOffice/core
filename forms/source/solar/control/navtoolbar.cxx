@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include <vcl/fixed.hxx>
 
 #include <memory>
+#include <sal/macros.h>
 
 #define LID_RECORD_LABEL    1000
 #define LID_RECORD_FILLER   1001
@@ -100,7 +102,7 @@ namespace frm
             if ( pAsciiCommandName != NULL )
                 return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) ) + ::rtl::OUString::createFromAscii( pAsciiCommandName );
 
-            OSL_ENSURE( false, "lcl_getCommandURL: unknown FormFeature!" );
+            OSL_FAIL( "lcl_getCommandURL: unknown FormFeature!" );
             return ::rtl::OUString();
         }
     }
@@ -294,7 +296,7 @@ namespace frm
             { FormFeature::RemoveFilterAndSort,     false, false },
         };
 
-        size_t nSupportedFeatures = sizeof( aSupportedFeatures ) / sizeof( aSupportedFeatures[0] );
+        size_t nSupportedFeatures = SAL_N_ELEMENTS( aSupportedFeatures );
         FeatureDescription* pSupportedFeatures = aSupportedFeatures;
         FeatureDescription* pSupportedFeaturesEnd = aSupportedFeatures + nSupportedFeatures;
         for ( ; pSupportedFeatures < pSupportedFeaturesEnd; ++pSupportedFeatures )
@@ -367,8 +369,6 @@ namespace frm
         if ( !m_pImageProvider )
             return;
 
-        const bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         const sal_uInt16 nItemCount = m_pToolbar->GetItemCount();
 
         // collect the FormFeatures in the toolbar
@@ -394,7 +394,7 @@ namespace frm
         }
 
         // retrieve the images for the command URLs
-        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge, bIsHighContrast );
+        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge );
 
         // and set them at the toolbar
         CommandImages::const_iterator commandImage = aCommandImages.begin();
@@ -466,7 +466,7 @@ namespace frm
         }
         break;
         default:
-            OSL_ENSURE( sal_False, "NavigationToolBar::ShowFunctionGroup: invalid group id!" );
+            OSL_FAIL( "NavigationToolBar::ShowFunctionGroup: invalid group id!" );
         }
 
         if ( pGroupIds )
@@ -485,7 +485,7 @@ namespace frm
         case eRecordActions : nIndicatorItem = FormFeature::SaveRecordChanges;  break;
         case eFilterSort    : nIndicatorItem = FormFeature::SortAscending;       break;
         default:
-            OSL_ENSURE( sal_False, "NavigationToolBar::IsFunctionGroupVisible: invalid group id!" );
+            OSL_FAIL( "NavigationToolBar::IsFunctionGroupVisible: invalid group id!" );
         }
 
         return m_pToolbar->IsItemVisible( nIndicatorItem );
@@ -545,9 +545,6 @@ namespace frm
         m_pToolbar->SetControlBackground();
         forEachItemWindow( &NavigationToolBar::setItemBackground, NULL );
 
-        // the contrast of the background color may have changed, so force
-        // the images to be rebuild (high contrast requires a possibly different
-        // image set)
         implUpdateImages();
     }
 
@@ -558,9 +555,6 @@ namespace frm
         m_pToolbar->SetControlBackground( _rColor );
         forEachItemWindow( &NavigationToolBar::setItemBackground, &_rColor );
 
-        // the contrast of the background color may have changed, so force
-        // the images to be rebuild (high contrast requires a possibly different
-        // image set)
         implUpdateImages();
     }
 
@@ -734,3 +728,5 @@ namespace frm
 //.........................................................................
 }   // namespace frm
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

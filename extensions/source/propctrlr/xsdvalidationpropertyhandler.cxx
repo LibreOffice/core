@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,6 +53,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>
+#include <sal/macros.h>
 
 #include <algorithm>
 #include <functional>
@@ -161,7 +163,7 @@ namespace pcr
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
         if ( !pType.is() )
         {
-            DBG_ERROR( "XSDValidationPropertyHandler::setPropertyValue: you're trying to set a type facet, without a current type!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::setPropertyValue: you're trying to set a type facet, without a current type!" );
             return;
         }
 
@@ -413,7 +415,7 @@ namespace pcr
             break;
 
         default:
-            DBG_ERROR( "XSDValidationPropertyHandler::describePropertyLine: cannot handle this property!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::describePropertyLine: cannot handle this property!" );
             break;
         }
 
@@ -469,7 +471,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "XSDValidationPropertyHandler::onInteractivePropertySelection: unexpected property to build a dedicated UI!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::onInteractivePropertySelection: unexpected property to build a dedicated UI!" );
             break;
         }
         return InteractiveSelectionResult_Cancelled;
@@ -501,7 +503,7 @@ namespace pcr
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
         if ( !pType.is() )
         {
-            DBG_ERROR( "XSDValidationPropertyHandler::implPrepareCloneDataCurrentType: invalid current data type!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::implPrepareCloneDataCurrentType: invalid current data type!" );
             return false;
         }
 
@@ -540,7 +542,7 @@ namespace pcr
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
         if ( !pType.is() )
         {
-            DBG_ERROR( "XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType: invalid current data type!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType: invalid current data type!" );
             return false;
         }
 
@@ -628,7 +630,7 @@ namespace pcr
             size_t i=0;
             const ::rtl::OUString* pLoop = NULL;
             for ( i = 0, pLoop = aFacets;
-                  i < sizeof( aFacets ) / sizeof( aFacets[0] );
+                  i < SAL_N_ELEMENTS( aFacets );
                   ++i, ++pLoop
                 )
             {
@@ -654,7 +656,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "XSDValidationPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
+            OSL_FAIL( "XSDValidationPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
             return;
         }
 
@@ -690,3 +692,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

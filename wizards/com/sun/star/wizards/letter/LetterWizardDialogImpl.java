@@ -1115,14 +1115,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         {
             PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
         };
-        String[] nameList1 =
-        {
-            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
-        };
-        String[] nameList1b =
-        {
-            PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
-        };
         String[] nameList2 =
         {
             PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
@@ -1145,47 +1137,13 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             sMainPath = FileAccess.deleteLastSlashfromUrl(sMainPath);
 
             sLetterPath = sMainPath + sLetterSubPath;
-            //sLetterLangPackPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
 
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
-            nameList1 = xSimpleFileAccess.getFolderContents(sMainPath, true);
             nameList2 = xSimpleFileAccess.getFolderContents(sLetterPath, true);
-            for (int i = 0; i < nameList1.length; i++)
-            {
-                String theFileName = FileAccess.getFilename(nameList1[i]);
-                if (!theFileName.equalsIgnoreCase("wizard"))
-                {
-                    sLocLetterPath = FileAccess.deleteLastSlashfromUrl(nameList1[i] + sLetterSubPath);
-                    try
-                    {
-                        nameList1b = xSimpleFileAccess.getFolderContents(sLocLetterPath, true);
-                        for (int j = 0; j < nameList1b.length; j++)
-                        {
-                            String theFileNameb = FileAccess.getFilename(nameList1b[j]);
-                            allPaths.add(nameList1[i] + sLetterSubPath + theFileNameb);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        //if the path is invalid an exception is thrown - try the fallback below then
-                    }
-                }
-            }
             for (int i = 0; i < nameList2.length; i++)
             {
-                boolean found = false;
-                for (int t = 0; t < nameList1.length; t++)
-                {
-                    if (FileAccess.getFilename(nameList2[i]).equalsIgnoreCase(FileAccess.getFilename(nameList1[t])))
-                    {
-                        found = true;
-                    }
-                }
-                if (!found)
-                {
-                    allPaths.add(nameList2[i]);
-                }
+                allPaths.add(nameList2[i]);
             }
             nameList = allPaths.toArray();
 
@@ -1247,12 +1205,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 NormsVector.add(cIsoCode);
                 NormsPathVector.add(nameList[i]);
                 LanguageLabelsVector.add(lc.getLanguageString(MSID));
-            /*
-            Norms[z] = cIsoCode;
-            NormPaths[z] = (String) nameList[i];
-            LanguageLabels[z] = lc.getLanguageString(MSID);
-            z++;
-             **/
             }
         }
 
@@ -1265,10 +1217,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
         LanguageLabels = new String[LanguageLabelsVector.size()];
         LanguageLabelsVector.toArray(LanguageLabels);
-
-        //Norms = new String[nameList.length];
-        //NormPaths = new String[nameList.length];
-        //LanguageLabels = new String[Norms.length];
 
         setControlProperty("lstLetterNorm", PropertyNames.STRING_ITEM_LIST, LanguageLabels);
     }

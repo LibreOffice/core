@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_extensions.hxx"
 #include "loadlisteneradapter.hxx"
 #include <osl/diagnose.h>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 //.........................................................................
 namespace bib
@@ -117,7 +118,7 @@ namespace bib
     {
         if ( m_bListening )
         {
-            ::vos::ORef< OComponentAdapterBase > xPreventDelete(this);
+            ::rtl::Reference< OComponentAdapterBase > xPreventDelete(this);
 
             disposing();
 
@@ -237,3 +238,4 @@ namespace bib
 }   // namespace bib
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

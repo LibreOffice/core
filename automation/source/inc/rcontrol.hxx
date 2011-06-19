@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #ifndef _RCONTROL_HXX
 #define _RCONTROL_HXX
 
-
 #define UID_ACTIVE          "UID_ACTIVE"
-
 
 #define SI_IPCCommandBlock  1
 #define SI_SocketCommandBlock   SI_IPCCommandBlock  // Zumindest erstmal
@@ -55,12 +54,11 @@
 #define SIReturnError       13
 
 // Typisierung im Stream
-#define BinUSHORT           11
-#define BinULONG            14
+#define BinUINT16           11
+#define BinUINT32           14
 #define BinString           12
 #define BinBool             13
 #define BinSbxValue         15
-
 
 // Classes
 // !!!Diese Defines duerfen niemals geaendert werden!!!
@@ -116,7 +114,6 @@
 
 #define C_Window            47
 
-
 #define C_PatternBox        60
 #define C_ToolBox           61
 #define C_ValueSet          62
@@ -128,9 +125,6 @@
 #define C_ButtonDialog      67
 
 #define C_Dialog            68
-
-
-
 
 #define M_WITH_RETURN       0x0200  // Die Variable wird zum Aufnehmen des Wertes gespeichert
 #define M_KEY_STRING        0x0400  // Key Befehle werden umgewandelt i.e. "<return><up>"
@@ -172,8 +166,6 @@
 #define M_Dock              47
 #define M_Undock            48
 
-
-
 #define M_TypeKeys          ( M_KEY_STRING | 50 )
 #define M_MouseDown         51
 #define M_MouseUp           52
@@ -206,7 +198,6 @@
 #define M_Pin               82
 
 #define M_UseMenu           83      // Use the menu of the next possible parent of given Window
-
 #define M_OpenMenu          84      // MenuButtons and Menus in ToolBoxes
 
 #define M_Restore           85      // Window Control together with M_Maximize and M_Minimize
@@ -216,7 +207,7 @@
 #define M_LAST_NO_RETURN    200
 
 #if ( M_LAST_NO_RETURN >= M_WITH_RETURN )
-#error "Bereich überschritten"
+#error "Bereich ï¿½berschritten"
 #endif
 
 #define M_Exists            ( M_WITH_RETURN |  1 )
@@ -259,7 +250,6 @@
 #define M_StatusGetItemCount ( M_WITH_RETURN | 34 )
 #define M_StatusGetItemId   ( M_WITH_RETURN | 35 )
 
-//
 #define M_GetMouseStyle     ( M_WITH_RETURN | 36 )
 
 // support for Messagebox with checkbox
@@ -272,10 +262,8 @@
 // Dieser befehl wird nur intern im Controller (sts library) verwendet. Sie tauchen nicht im Testtool auf!
 #define _M_IsEnabled        ( M_WITH_RETURN | 50 )
 
-
 #define M_GetFixedTextCount ( M_WITH_RETURN | 51 )
 #define M_GetFixedText      ( M_WITH_RETURN | 52 )
-
 
 #define M_IsMin             ( M_WITH_RETURN | 53 )
 #define M_IsRestore         ( M_WITH_RETURN | 54 )
@@ -291,7 +279,6 @@
 
 //#define M_SOFFICE           0x0800  // Command valid for Star/Open Office
 //#define M_MOZILLA           0x1000  // Command valid for Mozilla
-
 
 // RemoteCommands
 #define RC_AppAbort         ( M_SOFFICE | M_MOZILLA | 1 )
@@ -315,29 +302,20 @@
 
 #define RC_CaptureAssertions (M_SOFFICE | M_MOZILLA | 17 )
 #define RC_Assert           ( M_SOFFICE | M_MOZILLA | 18 )
-
 #define RC_MenuOpen         ( M_SOFFICE | M_MOZILLA | 19 )
-
 #define RC_TypeKeysDelay    ( M_SOFFICE | M_MOZILLA | 20 )
-
 #define RC_ShowBar          (             M_MOZILLA | 21 )
-
 #define RC_LoadURL          (             M_MOZILLA | 22 )
-
 #define RC_CloseSysDialog   ( M_SOFFICE             | 23 )
-
 #define RC_SAXRelease       ( M_SOFFICE             | 24 )
-
 #define RC_RecordMacro      ( M_SOFFICE             | 25 )
-
 #define RC_ActivateDocument ( M_SOFFICE             | 26 )
-
 #define RC_CatchGPF         ( M_SOFFICE             | 27 )
 
 #define _RC_LAST_NO_RETURN                            27
 
 #if ( _RC_LAST_NO_RETURN >= M_WITH_RETURN )
-#error "Bereich überschritten"
+#error "Bereich ï¿½berschritten"
 #endif
 
 // Befehle mit Returnwert
@@ -396,23 +374,21 @@
 #define RC_WaitSlot         ( M_SOFFICE             | M_WITH_RETURN | 44 )
 
 // Flow Control
-#define F_EndCommandBlock   101         // Initiiert Rückmeldung des Status
-#define F_Sequence          102         // Übergibt Sequence Nummer (1. in jedem Stream)
+#define F_EndCommandBlock   101         // Initiiert Rï¿½ckmeldung des Status
+#define F_Sequence          102         // ï¿½bergibt Sequence Nummer (1. in jedem Stream)
 
 // Return codes
-#define RET_Sequence        132         // Übergibt Sequence Nummer (1. in jedem Stream)
-#define RET_Value           133         // Übergibt Return-wert
-#define RET_WinInfo         134         // Information über aktuelles Fenster/Control
+#define RET_Sequence        132         // ï¿½bergibt Sequence Nummer (1. in jedem Stream)
+#define RET_Value           133         // ï¿½bergibt Return-wert
+#define RET_WinInfo         134         // Information ï¿½ber aktuelles Fenster/Control
 #define RET_ProfileInfo     135         // Profile Information
-#define RET_DirectLoging    136         // Direktes Übertragen von Informationen in das Log
-#define RET_MacroRecorder   137         // MakroRecorder Befehl übertragen
-
-
+#define RET_DirectLoging    136         // Direktes ï¿½bertragen von Informationen in das Log
+#define RET_MacroRecorder   137         // MakroRecorder Befehl ï¿½bertragen
 
 // Subcodes die in nUId geliefert werden
-// für F_ProfileInfo
+// fï¿½r F_ProfileInfo
 #define S_ProfileReset      201         // nNr1 = Anzahl Borders
-    // Achtung!! Diese Defines müssen aufeinanderfolgende Nummern haben!!
+    // Achtung!! Diese Defines mï¿½ssen aufeinanderfolgende Nummern haben!!
 #define S_ProfileBorder1    202         // nNr1 = Border1 in ms
 #define S_ProfileBorder2    203         // nNr1 = Border2 in ms
 #define S_ProfileBorder3    204         // nNr1 = Border3 in ms
@@ -421,13 +397,11 @@
 #define S_ProfileTime       210         // nNr1 = remote Zeit des Befehls
 #define S_ProfileDump       211         // Gibt die daten aus.
 
-// für F_DirectLoging
+// fï¿½r F_DirectLoging
 #define S_AssertError       220
 #define S_AssertWarning     221
 #define S_AssertTrace       222
 #define S_QAError           223
-
-
 
 // Constants which are available in VCLTestTool scripts
 
@@ -439,7 +413,7 @@
 #define CONST_CTTableControl    106
 #define CONST_CTUnknown         199
 
-// Konstanten für das ALignment des gesuchten Splitters
+// Konstanten fï¿½r das ALignment des gesuchten Splitters
 #define CONST_ALIGN_LEFT        120
 #define CONST_ALIGN_TOP         121
 #define CONST_ALIGN_RIGHT       122
@@ -469,21 +443,20 @@
 // Beschreibt die Parametertypen als Bitfeld  Reihenfolge immer!
 // wie hier Aufgelistet
 #define PARAM_NONE              0x0000
-#define PARAM_USHORT_1          0x0001
-#define PARAM_USHORT_2          0x0002
-#define PARAM_USHORT_3          0x0100      // Nicht in der Reihe!!
-#define PARAM_USHORT_4          0x0200      // Nicht in der Reihe!!
-#define PARAM_ULONG_1           0x0004
-#define PARAM_ULONG_2           0x0008
+#define PARAM_UINT16_1          0x0001
+#define PARAM_UINT16_2          0x0002
+#define PARAM_UINT16_3          0x0100      // Nicht in der Reihe!!
+#define PARAM_UINT16_4          0x0200      // Nicht in der Reihe!!
+#define PARAM_UINT32_1          0x0004
+#define PARAM_UINT32_2          0x0008
 #define PARAM_STR_1             0x0010
 #define PARAM_STR_2             0x0020
 #define PARAM_BOOL_1            0x0040
 #define PARAM_BOOL_2            0x0080
 #define PARAM_SBXVALUE_1        0x0400      // hier mit 0x0400 Weiter!!! Siehe Oben!
 
-// Zusätzliche Beschreibung!! wird auch mit dem Rest verodert
-//#define PARAM_STR_RAW           0x8000        // Der Zeichensatz der Strings wird nicht konvertiert(für Fareastern)
-
+// Zusï¿½tzliche Beschreibung!! wird auch mit dem Rest verodert
+//#define PARAM_STR_RAW           0x8000        // Der Zeichensatz der Strings wird nicht konvertiert(fï¿½r Fareastern)
 
 #define ERR_SEND_TIMEOUT        100
 #define ERR_EXEC_TIMEOUT        101
@@ -494,3 +467,5 @@
 #define ERR_NO_FILE             106     // Datei nicht gefunden
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

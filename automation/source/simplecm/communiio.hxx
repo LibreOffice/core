@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,23 +44,25 @@
 class ITransmiter
 {
 protected:
-    comm_ULONG nLastSent;
+    comm_UINT32 nLastSent;
 public:
     ITransmiter() :nLastSent( 0 ){}
     virtual ~ITransmiter() {}
-    virtual comm_USHORT TransferBytes( const void* pBuffer, comm_UINT32 nLen ) = 0;
+    virtual comm_UINT16 TransferBytes( const void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastSent() { return nLastSent; }
+    comm_UINT32 GetLastSent() const { return nLastSent; }
 };
 
 class IReceiver
 {
 protected:
-    comm_ULONG nLastReceived;
+    comm_UINT32 nLastReceived;
 public:
     IReceiver() :nLastReceived( 0 ){}
     virtual ~IReceiver() {;}
-    virtual comm_USHORT ReceiveBytes( void* pBuffer, comm_UINT32 nLen ) = 0;
+    virtual comm_UINT16 ReceiveBytes( void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastReceived() { return nLastReceived; }
+    comm_UINT32 GetLastReceived() const { return nLastReceived; }
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

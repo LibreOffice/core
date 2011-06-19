@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -243,7 +244,7 @@ void VCLXAccessibleStatusBarItem::disposing()
 
 ::rtl::OUString VCLXAccessibleStatusBarItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleStatusBarItem" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleStatusBarItem" ));
 }
 
 // -----------------------------------------------------------------------------
@@ -264,7 +265,7 @@ sal_Bool VCLXAccessibleStatusBarItem::supportsService( const ::rtl::OUString& rS
 Sequence< ::rtl::OUString > VCLXAccessibleStatusBarItem::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleStatusBarItem" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleStatusBarItem" ));
     return aNames;
 }
 
@@ -627,3 +628,5 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
 }
 
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

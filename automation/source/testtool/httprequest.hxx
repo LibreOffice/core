@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,10 +38,10 @@
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 
-namespace vos
+namespace osl
 {
-    class OStreamSocket;
-    class OConnectorSocket;
+    class StreamSocket;
+    class ConnectorSocket;
 }
 
 class HttpRequest
@@ -52,14 +53,14 @@ class HttpRequest
     sal_uInt16 nProxyPort;
 
     sal_uInt16 nStatus;
-    vos::OConnectorSocket *pOutSocket;
+    osl::ConnectorSocket *pOutSocket;
 
     ByteString aHeader;
     sal_uInt16 nResultId;
     ByteString aContentType;
     SvMemoryStream* pStream;
 
-    void SendString( vos::OStreamSocket* pSocket, ByteString aText );
+    void SendString( osl::StreamSocket* pSocket, ByteString aText );
     sal_Bool IsItem( ByteString aItem, ByteString aLine );
     void Init();
 public:
@@ -72,14 +73,16 @@ public:
     sal_Bool Execute();
     void Abort();
 
-    ByteString GetHeader() { return aHeader; }
+    ByteString GetHeader() const { return aHeader; }
     SvMemoryStream* GetBody();
 
-    ByteString GetContentType() { return aContentType; }
-    sal_uInt16 GetResultId() { return nResultId; }
+    ByteString GetContentType() const { return aContentType; }
+    sal_uInt16 GetResultId() const { return nResultId; }
 
     sal_uInt16 GetStatus();
 
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

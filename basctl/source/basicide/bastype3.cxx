@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ using namespace ::com::sun::star;
 typedef std::deque< SvLBoxEntry* > EntryArray;
 
 
-void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
+void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
@@ -121,12 +122,11 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
                 // exchange image
                 bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                 Image aImage( IDEResId( bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB ) );
-                Image aImageHC( IDEResId( bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC ) );
-                SetEntryBitmaps( pEntry, aImage, aImageHC );
+                SetEntryBitmaps( pEntry, aImage );
             }
             else
             {
-                DBG_ERROR( "BasicTreeListBox::RequestingChilds: Error loading library!" );
+                OSL_FAIL( "BasicTreeListBox::RequestingChilds: Error loading library!" );
             }
         }
     }
@@ -139,11 +139,11 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
-        DBG_ERROR( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
+        OSL_FAIL( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
     }
 }
 
-void __EXPORT BasicTreeListBox::ExpandedHdl()
+void BasicTreeListBox::ExpandedHdl()
 {
     SvLBoxEntry* pEntry = GetHdlEntry();
     DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
@@ -262,7 +262,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 }
                 default:
                 {
-                    DBG_ERROR( "FindVariable: Unbekannter Typ!" );
+                    OSL_FAIL( "FindVariable: Unbekannter Typ!" );
                     pVar = 0;
                 }
                 break;
@@ -364,7 +364,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
                 break;
                 default:
                 {
-                    DBG_ERROR( "GetEntryDescriptor: Unbekannter Typ!" );
+                    OSL_FAIL( "GetEntryDescriptor: Unbekannter Typ!" );
                     eType = OBJ_TYPE_UNKNOWN;
                 }
                 break;
@@ -503,3 +503,5 @@ String CreateMgrAndLibStr( const String& rMgrName, const String& rLibName )
     aName += rLibName;
     return aName;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

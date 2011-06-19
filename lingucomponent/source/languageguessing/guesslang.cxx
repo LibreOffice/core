@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,15 +42,14 @@
 #include <simpleguesser.hxx>
 #include <guess.hxx>
 
-//#include <cppuhelper/queryinterface.hxx> // helper for queryInterface() impl
-
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <osl/thread.h>
+
+#include <sal/macros.h>
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -66,7 +66,6 @@ namespace css = ::com::sun::star;
 #define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
 #define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
-
 #define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"
 
 static Sequence< OUString > getSupportedServiceNames_LangGuess_Impl()
@@ -174,7 +173,7 @@ void LangGuess_Impl::EnsureInitialized()
             {"sa", ""}, {"ta", ""}, {"th", ""},
             {"qu", ""}, {"yi", ""}
         };
-        sal_Int32 nNum = sizeof(aDisable) / sizeof(aDisable[0]);
+        sal_Int32 nNum = SAL_N_ELEMENTS(aDisable);
         Sequence< Locale > aDisableSeq( nNum );
         Locale *pDisableSeq = aDisableSeq.getArray();
         for (sal_Int32 i = 0;  i < nNum;  ++i)
@@ -189,40 +188,6 @@ void LangGuess_Impl::EnsureInitialized()
     }
 }
 
-//*************************************************************************
-
-/* TL: currently not part of the API
-Sequence< com::sun::star::lang::Locale > SAL_CALL LangGuess_Impl::guessLanguages(
-        const rtl::OUString   &rText,
-        sal_Int32       nStartPos,
-        sal_Int32       nLen )
-    throw (RuntimeException)
-{
-    Sequence< com::sun::star::lang::Locale > aRes;
-
-    OString o = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
-    vector<Guess> gs = m_aGuesser.GuessLanguage(o.pData->buffer);
-
-    aRes.realloc(gs.size());
-
-    com::sun::star::lang::Locale *pRes = aRes.getArray();
-
-#ifdef DEBUG
-    std::cout << " We have " << gs.size() << " candidates" << std::endl;
-#endif
-
-    for(int i = 0; i < gs.size() ; i++ ){
-        com::sun::star::lang::Locale current_aRes;
-
-        current_aRes.Language   = A2OU( gs[i].getLanguage().c_str() );
-        current_aRes.Country    = A2OU( gs[i].getCountry().c_str() );
-
-        pRes[i] = current_aRes;
-    }
-
-    return aRes;
-}
-*/
 //*************************************************************************
 
 Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
@@ -261,8 +226,6 @@ void LangGuess_Impl::SetFingerPrintsDB(
     OString conf_file_name( DEFAULT_CONF_FILE_NAME );
     OString conf_file_path(path);
     conf_file_path += conf_file_name;
-
-    //cout << "Conf file : " << conf_file_path.getStr() << " directory : " << path.getStr() << endl;
 
     m_aGuesser.SetDBPath((const char*)conf_file_path.getStr(), (const char*)path.getStr());
 }
@@ -459,13 +422,13 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 extern "C"
 {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     sal_Char const ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
     registry::XRegistryKey * xRegistry )
 {
@@ -475,3 +438,4 @@ void * SAL_CALL component_getFactory(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

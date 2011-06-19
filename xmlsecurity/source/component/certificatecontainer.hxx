@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,13 +35,9 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#ifndef _XCERTIFICATECONTAINER_HPP_
 #include <com/sun/star/security/XCertificateContainer.hpp>
-#endif
 
-#ifndef _CERTIFICATECONTAINERSTATUS_HPP_
 #include <com/sun/star/security/CertificateContainerStatus.hpp>
-#endif
 
 
 #include <vector>
@@ -97,3 +94,4 @@ class CertificateContainer : public ::cppu::WeakImplHelper2< ::com::sun::star::l
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

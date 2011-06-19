@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,7 +99,7 @@ public:
             sal_Int16   _nWhitespaceTreatment
     );
 
-    /** replace all occurences 0x08, 0x0A, 0x0D with 0x20
+    /** replace all occurrences 0x08, 0x0A, 0x0D with 0x20
     */
     static ::rtl::OUString replaceWhitespace( const ::rtl::OUString& _rString );
 
@@ -111,3 +112,5 @@ public:
 } // namespace xforms
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

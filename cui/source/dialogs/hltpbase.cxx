@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/formats.hxx>
@@ -36,17 +34,17 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "hyperdlg.hrc"
-#include "cuihyperdlg.hxx"  //CHINA001
+#include "cuihyperdlg.hxx"
 #include "hltpbase.hxx"
 #include "macroass.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <cuires.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <cuires.hrc>
 
 using namespace ::ucbhelper;
 
 //########################################################################
 //#                                                                      #
-//# ComboBox-Control, wich is filled with all current framenames         #
+//# ComboBox-Control, which is filled with all current framenames        #
 //#                                                                      #
 //########################################################################
 
@@ -66,17 +64,17 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
     if ( pFrame )
     {
         pFrame->GetTargetList(*pList);
-        sal_uInt16 nCount = (sal_uInt16)pList->Count();
-        if( nCount )
+        if( !pList->empty() )
         {
-            sal_uInt16 i;
+            size_t nCount = pList->size();
+            size_t i;
             for ( i = 0; i < nCount; i++ )
             {
-                InsertEntry(*pList->GetObject(i));
+                InsertEntry( *pList->at( i ) );
             }
-            for ( i = nCount; i; i-- )
+            for ( i = nCount; i; )
             {
-                delete pList->GetObject( i - 1 );
+                delete pList->at( --i );
             }
         }
         delete pList;
@@ -124,130 +122,6 @@ sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     return nRet;
 }
-
-/*
-Diese Methode parsed eine EMailadresse aus einem D&D-DataObjekt aus der Adre�datenbank heraus
-
-#ifndef _OFF_OFADBMGR_HXX
-#include <offmgr/ofadbmgr.hxx>
-#endif
-#ifndef _SFX_APP_HXX
-#include <offmgr/app.hxx>
-#endif
-#ifndef _SDB_SDBCURS_HXX
-#include <sdb/sdbcurs.hxx>
-#endif
-
-#define DB_DD_DELIM         ((char)11)
-
-String SvxHyperURLBox::GetAllEmailNamesFromDragItem( sal_uInt16 nItem )
-{
-#if !defined( ICC ) && !defined( SOLARIS )
-    String aAddress;
-
-    if (  DragServer::HasFormat( nItem, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) )
-    {
-        sal_uLong nLen = DragServer::GetDataLen( nItem, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) - 1;
-        sal_uInt16 i = 0;
-        String aTxt;
-        char *pTxt = aTxt.AllocStrBuf( (sal_uInt16)nLen );
-        DragServer::PasteData( nItem, pTxt, nLen, SOT_FORMATSTR_ID_SBA_DATAEXCHANGE );
-        String aDBName = aTxt.GetToken( i++, DB_DD_DELIM );
-        String aTableName = aTxt.GetToken( i++, DB_DD_DELIM );
-        i++;    // Format"anderung
-        String aStatement = aTxt.GetToken( i++, DB_DD_DELIM );
-        if ( !aStatement )
-        {
-            aDBName += DB_DELIM;
-            aDBName += aTableName;
-        }
-        else
-        {
-            // use here another delimiter, because the OfaDBMgr uses two
-            // delimiters ( (char)11 and ; )
-            aDBName += ';';
-            aDBName += aStatement;
-        }
-        SbaSelectionListRef pSelectionList;
-        pSelectionList.Clear();
-        pSelectionList = new SbaSelectionList;
-        sal_uInt16 nTokCnt = aTxt.GetTokenCount( DB_DD_DELIM );
-
-        for ( ; i < nTokCnt; ++i )
-            pSelectionList->Insert(
-                (void*)(sal_uInt16)aTxt.GetToken( i, DB_DD_DELIM ), LIST_APPEND );
-
-        OfaDBMgr* pDBMgr = SFX_APP()->GetOfaDBMgr();
-        sal_Bool bBasic = DBMGR_STD;
-
-        if ( !pDBMgr->OpenDB( bBasic, aDBName ) )
-            return aAddress;
-
-        OfaDBParam& rParam = pDBMgr->GetDBData( bBasic );
-        pDBMgr->ChangeStatement( bBasic, aStatement );
-        rParam.pSelectionList->Clear();
-
-        if ( pSelectionList.Is() &&
-                (long)pSelectionList->GetObject(0) != -1L )
-            *rParam.pSelectionList = *pSelectionList;
-
-        if ( !pDBMgr->ToFirstSelectedRecord( bBasic ) )
-        {
-            pDBMgr->CloseAll();
-            return aAddress;
-        }
-
-        if ( pDBMgr->IsSuccessful( bBasic ) )
-        {
-            //  Spaltenk"opfe
-            SbaDBDataDefRef aDBDef = pDBMgr->OpenColumnNames( bBasic );
-
-            if ( aDBDef.Is() )
-            {
-                SbaColumn* pCol = aDBDef->GetColumn("EMAIL");
-                sal_uLong nPos = 0;
-
-                if ( pCol )
-                    nPos = aDBDef->GetOriginalColumns().GetPos( pCol ) + 1;
-                for ( i = 0 ; nPos && i < pSelectionList->Count(); ++i )
-                {
-                    sal_uLong nIndex = (sal_uLong)pSelectionList->GetObject(i);
-
-                    // N"achsten zu lesenden Datensatz ansteuern
-
-                    sal_Bool bEnd = rParam.GetCursor()->IsOffRange();
-
-                    if ( !bEnd )
-                    {
-                        const ODbRowRef aRow =
-                            pDBMgr->GetSelectedRecord( bBasic, i );
-
-                        if ( aRow.Is() )
-                        {
-                            aAddress += pDBMgr->
-                                ImportDBField( (sal_uInt16)nPos, &aDBDef, aRow.getBodyPtr() );
-                            aAddress += ',';
-                        }
-                        else
-                        {
-                            aAddress.Erase();
-                            break;
-                        }
-                    }
-                    else
-                        break;
-                }
-            }
-        }
-        pDBMgr->CloseAll();
-    }
-    aAddress.EraseTrailingChars( ',' );
-    return aAddress;
-#else
-    return String();
-#endif
-}
-*/
 
 void SvxHyperURLBox::Select()
 {
@@ -353,8 +227,6 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT, *m_pResMgr) );
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
-
-        mpBtScript->SetModeImage( Image( ResId( IMG_SCRIPT_HC, *m_pResMgr ) ), BMP_COLOR_HIGHCONTRAST );
         mpBtScript->EnableTextDisplay (sal_False);
 
         mpBtScript->SetAccessibleRelationMemberOf( mpGrpMore );
@@ -574,7 +446,6 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
                                               SID_ATTR_MACROITEM );
         pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 
-        // --> PB 2006-01-13 #123474#
         /*  disable HyperLinkDlg for input while the MacroAssignDlg is working
             because if no JAVA is installed an error box occurs and then it is possible
             to close the HyperLinkDlg before its child (MacroAssignDlg) -> GPF
@@ -582,7 +453,6 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
         sal_Bool bIsInputEnabled = GetParent()->IsInputEnabled();
         if ( bIsInputEnabled )
             GetParent()->EnableInput( sal_False );
-        // <--
         SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
 
         // add events
@@ -598,10 +468,8 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
             pMacroPage->AddEvent( String( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
-        // --> PB 2006-01-13 #123474#
         if ( bIsInputEnabled )
             GetParent()->EnableInput( sal_True );
-        // <--
         // execute dlg
         DisableClose( sal_True );
         short nRet = aDlg.Execute();
@@ -660,12 +528,12 @@ sal_Bool SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
             Content     aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
             ::rtl::OUString aTitle;
 
-            aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
+            aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
         }
         catch( ... )
         {
-            DBG_ERROR( "FileExists: ucb error" );
+            OSL_FAIL( "FileExists: ucb error" );
         }
     }
 
@@ -871,3 +739,5 @@ sal_Bool SvxHyperlinkTabPageBase::ShouldOpenMarkWnd()
 void SvxHyperlinkTabPageBase::SetMarkWndShouldOpen(sal_Bool)
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

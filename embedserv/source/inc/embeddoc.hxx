@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,17 +39,15 @@
 #include <oleidl.h>
 #include <objidl.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/Reference.h>
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/SEQUENCE.h>
-#endif
 
 #include "embeddocaccess.hxx"
 #include "docholder.hxx"
 
-typedef ::std::hash_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
-typedef ::std::hash_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
+typedef ::boost::unordered_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
+typedef ::boost::unordered_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
 
 class GDIMetaFile;
 class CIIAObj;
@@ -208,3 +207,5 @@ public:
 };
 
 #endif //_EMBEDDOC_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

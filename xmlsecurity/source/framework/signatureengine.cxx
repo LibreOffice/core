@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,9 +72,6 @@ bool SignatureEngine::checkReady() const
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -121,9 +119,6 @@ void SignatureEngine::tryToPerform( )
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -190,9 +185,6 @@ void SignatureEngine::clearUp( ) const
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -266,3 +258,5 @@ cssu::Reference< com::sun::star::io::XInputStream > SAL_CALL SignatureEngine::ge
     return xInputStream;
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

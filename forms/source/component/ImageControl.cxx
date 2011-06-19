@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -179,7 +180,6 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     osl_incrementInterlockedCount( &m_refCount );
     {
         // simulate a propertyChanged event for the ImageURL
-        // 2003-05-15 - #109591# - fs@openoffice.org
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_handleNewImageURL_lck( eOther );
     }
@@ -408,7 +408,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             readCommonProperties(_rxInStream);
             break;
         default :
-            DBG_ERROR("OImageControlModel::read : unknown version !");
+            OSL_FAIL("OImageControlModel::read : unknown version !");
             m_bReadOnly = sal_False;
             defaultCommonProperties();
             break;
@@ -488,7 +488,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
     break;
 
     case ImageStoreInvalid:
-        OSL_ENSURE( false, "OImageControlModel::impl_handleNewImageURL_lck: image storage type type!" );
+        OSL_FAIL( "OImageControlModel::impl_handleNewImageURL_lck: image storage type type!" );
         break;
     }
 
@@ -588,7 +588,7 @@ Any OImageControlModel::translateDbColumnToControlValue()
         return makeAny( sImageLink );
     }
     case ImageStoreInvalid:
-        OSL_ENSURE( false, "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
+        OSL_FAIL( "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
         break;
     }
     return Any();
@@ -630,7 +630,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
     break;
 
     case ImageStoreInvalid:
-        OSL_ENSURE( false, "OImageControlModel::doSetControlValue: invalid field type!" );
+        OSL_FAIL( "OImageControlModel::doSetControlValue: invalid field type!" );
         break;
 
     }   // switch ( lcl_getImageStoreType( getFieldType() ) )
@@ -643,7 +643,6 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
             // release our mutex once (it's acquired in the calling method!), as starting the image production may
             // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
             // VCLXImageControl, does this locking)
-            // FS - 74438 - 30.03.00
             MutexRelease aRelease(m_aMutex);
             xProducer->startProduction();
         }
@@ -860,7 +859,7 @@ bool OImageControlControl::implInsertGraphics()
             // Force bIsLink to be sal_True if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
             // in this case, and disabled the respective control, there might be picker implementations which do not
             // respect this, and return IsLink=FALSE here. In this case, "normalize" the flag.
-            // #i112659# / 2010-08-26 / frank.schoenheit@oracle.com
+            // #i112659#
             bIsLink |= bHasField;
             if ( !bIsLink )
             {
@@ -876,7 +875,7 @@ bool OImageControlControl::implInsertGraphics()
     }
     catch(Exception&)
     {
-        DBG_ERROR("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
+        OSL_FAIL("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
     }
     return false;
 }
@@ -905,7 +904,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
 //------------------------------------------------------------------------------
 void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (e.Buttons != MouseButton::LEFT)
         return;
@@ -933,7 +932,6 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             if ( ( e.X < 0 ) || ( e.Y < 0 ) )
             {   // context menu triggered by keyboard
                 // position it in the center of the control
-                // 102205 - 16.08.2002 - fs@openoffice.org
                 Reference< XWindow > xWindow( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
                 OSL_ENSURE( xWindow.is(), "OImageControlControl::mousePressed: me not a window? How this?" );
                 if ( xWindow.is() )
@@ -973,7 +971,6 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 
             // wenn Control nicht gebunden ist, kein Dialog (da die zu schickende URL hinterher sowieso
             // versanden wuerde)
-            // FS - #64946# - 19.04.99
             Reference<XPropertySet> xBoundField;
             if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
                 ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));
@@ -1021,3 +1018,4 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) th
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

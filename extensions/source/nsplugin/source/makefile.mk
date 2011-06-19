@@ -49,7 +49,8 @@ dummy:
     @echo GTK disabled - nothing to build
 
 .ELSE           # "$(ENABLE_GTK)"==""
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
+    "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
 INC+= -DNP_LINUX
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
@@ -72,9 +73,6 @@ SHL1OBJS=	$(SLO)$/npshell.obj \
 .IF "$(GUI)"=="UNX"
 STDLIBS+=$(SOLARLIBDIR)$/npunix.o
 SHL1STDLIBS+=$(SOLARLIBDIR)$/npunix.o
-#.IF "$(OS)"!="FREEBSD"
-#SHL1STDLIBS+= -ldl -lnsl
-#.ENDIF #FREEBSD
 .ENDIF #UNX
 .IF "$(GUI)"=="WNT"
 SHL1OBJS+=$(SOLARLIBDIR)$/pathutils-obj.obj

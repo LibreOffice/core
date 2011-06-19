@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,9 +76,6 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 {
     std::_tstring   sOfficeMenuFolder = GetMsiProperty( handle, TEXT("OfficeMenuFolder") );
     std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
-
-    //    MessageBox(NULL, sDesktopFile.c_str(), TEXT("OfficeMenuFolder"), MB_OK | MB_ICONINFORMATION);
-
     std::_tstring   sIconFile = GetMsiProperty( handle, TEXT("INSTALLLOCATION") ) + TEXT("program\\soffice.exe");
 
     OSVERSIONINFO   osverinfo;
@@ -113,14 +111,6 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
         TEXT("0"),
         sDesktopFile.c_str() );
 
-    /*
-      WritePrivateProfileString(
-      TEXT(".ShellClassInfo"),
-      TEXT("InfoTip"),
-      TEXT("StarOffice Productivity Suite"),
-      sDesktopFile.c_str() );
-    */
-
     SetFileAttributes( sDesktopFile.c_str(), FILE_ATTRIBUTE_HIDDEN );
     SetFileAttributes( sOfficeMenuFolder.c_str(), FILE_ATTRIBUTE_SYSTEM );
 
@@ -140,3 +130,5 @@ extern "C" UINT __stdcall DeinstallStartmenuFolderIcon(MSIHANDLE handle)
 
     return ERROR_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

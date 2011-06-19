@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,7 @@
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-#include <tools/prewin.h>
-
-#include <windows.h>
 #include <tchar.h>
-#include <winbase.h>
-
-#include <tools/postwin.h>
 
 #pragma pack( push, 8 )
 #include <npsdk/npapi.h>
@@ -123,3 +118,4 @@ private:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

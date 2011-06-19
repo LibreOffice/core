@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef EXTENSIONS_ABPRESID_HRC
 #include "abpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include <vcl/fixed.hxx>
 
@@ -73,3 +72,4 @@ namespace abp
 
 #endif // EXTENSIONS_ABP_ABSPAGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <cstdarg>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -38,10 +46,14 @@
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
 
-using namespace rtl;
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
 
 // Unix specific implementation
 static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rDescriptions )
@@ -300,7 +312,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         // create return value
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found %d plugins\n", aPlugins.size() );
+        fprintf( stderr, "found %" SAL_PRI_SIZET "u plugins\n", aPlugins.size() );
 #endif
         list<PluginDescription*>::iterator iter;
         for( iter = aPlugins.begin(), i=0; iter != aPlugins.end(); ++iter ,i++ )
@@ -313,3 +325,5 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
     }
     return aDescriptions;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

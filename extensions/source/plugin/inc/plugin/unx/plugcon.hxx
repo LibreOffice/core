@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <plugin/unx/mediator.hxx>
 
 #if defined SOLARIS
-#define USE_MOTIF
+#    define USE_MOTIF
 #endif
 
 #define Window      XLIB_Window
@@ -57,11 +58,7 @@ extern "C" {
 #if defined USE_MOTIF
 #include <Xm/DrawingA.h>
 #else
-#  if defined DISABLE_XAW
-#     include <X11/Composite.h>
-#  else
-#     include <X11/Xaw/Label.h>
-#  endif
+#include <X11/Composite.h>
 #endif
 #include <X11/Xatom.h>
 #ifndef XP_UNIX
@@ -80,7 +77,7 @@ extern "C" {
 //https://bugzilla.mozilla.org/show_bug.cgi?id=241262
 #ifdef UNIX
 #  ifndef _UINT32
-#    if defined(__alpha) || defined(__LP64__)
+#    if defined(__alpha) || defined(__LP64__) || defined(AIX)
        typedef unsigned int uint32;
 #    else  /* __alpha */
        typedef unsigned long uint32;
@@ -88,7 +85,7 @@ extern "C" {
 #    define _UINT32
 #  endif
 #  ifndef _INT32
-#    if defined(__alpha) || defined(__LP64__)
+#    if defined(__alpha) || defined(__LP64__) || defined(AIX)
        typedef int int32;
 #    else  /* __alpha */
        typedef long int32;
@@ -97,7 +94,7 @@ extern "C" {
 #  endif
 #endif
 
-#ifndef _NPAPI_H_
+#if ! defined ( _NPAPI_H_) && ! defined (npapi_h_)
 extern "C" {
 #include <npsdk/npupp.h>
 }
@@ -166,7 +163,7 @@ public:
 class PluginConnector : public Mediator
 {
 protected:
-    vos::OMutex               m_aUserEventMutex;
+    osl::Mutex               m_aUserEventMutex;
 
     static std::vector<PluginConnector*>  allConnectors;
 
@@ -249,3 +246,5 @@ const char* GetCommandName( CommandAtoms );
 #define POST_STRING( x ) x ? x : const_cast<char*>(""), x ? strlen(x) : 1
 
 #endif // _PLUGCON_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,12 +66,6 @@ class SAXEventKeeperImpl : public cppu::WeakImplHelper6
  *   FUNCTION
  *  Controls SAX events to be bufferred, and controls bufferred SAX events
  *  to be released.
- *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XSecuritySAXEventKeeper,
- *                  XReferenceResolvedBroadcaster,
- *                  XSAXEventKeeperStatusChangeBroadcaster,
- *                  XDocumentHandler, XInitialization, XServiceInfo
  *
  *   AUTHOR
  *  Michael Mi
@@ -367,3 +362,4 @@ SAL_CALL SAXEventKeeperImpl_createInstance( const com::sun::star::uno::Reference
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

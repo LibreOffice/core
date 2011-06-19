@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -47,6 +45,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/svxdlg.hxx>
+#include <sal/macros.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
@@ -72,7 +71,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 
         // hide the options for the japanese search
         Control* pFieldsToMove[] = { &m_flState, &m_ftRecordLabel, &m_ftRecord, &m_ftHint };
-        implMoveControls(pFieldsToMove, sizeof(pFieldsToMove)/sizeof(pFieldsToMove[0]), nDifference, &m_flOptions);
+        implMoveControls(pFieldsToMove, SAL_N_ELEMENTS(pFieldsToMove), nDifference, &m_flOptions);
 
         m_aSoundsLikeCJK.Hide();
         m_aSoundsLikeCJKSettings.Hide();
@@ -83,7 +82,6 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
         m_aHalfFullFormsCJK.Hide();
 
         // never ignore the width (ignoring is expensive) if the option is not available at all
-        // 04.12.2001 - 91973 - fs@openoffice.org
         m_pSearchEngine->SetIgnoreWidthCJK( sal_False );
     }
 
@@ -171,7 +169,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
                 &m_pbApproxSettings, &m_aHalfFullFormsCJK, &m_aSoundsLikeCJK, &m_aSoundsLikeCJKSettings,
                 &m_flState, &m_ftRecordLabel, &m_ftRecord, &m_ftHint };
 
-        implMoveControls(pFieldsToMove, sizeof(pFieldsToMove)/sizeof(pFieldsToMove[0]), nDifference, &m_flWhere);
+        implMoveControls(pFieldsToMove, SAL_N_ELEMENTS(pFieldsToMove), nDifference, &m_flWhere);
 
         Point pt = m_rbAllFields.GetPosPixel();
         pt.X() = m_ftForm.GetPosPixel().X();
@@ -239,7 +237,7 @@ FmSearchDialog::~FmSearchDialog()
 //------------------------------------------------------------------------
 void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sInitialText)
 {
-    // die Initialisierung all der Controls
+    //the initialization of all the Controls
     m_rbSearchForText.SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_rbSearchForNull.SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_rbSearchForNotNull.SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
@@ -267,19 +265,19 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
     m_aHalfFullFormsCJK.SetToggleHdl(LINK(this, FmSearchDialog, OnCheckBoxToggled));
     m_aSoundsLikeCJK.SetToggleHdl(LINK(this, FmSearchDialog, OnCheckBoxToggled));
 
-    // die Listboxen fuellen
-    // die Methoden des Feldvergleiches
+    // fill the listboxes
+    // method of field comparison
     sal_uInt16 nResIds[] = {
         RID_STR_SEARCH_ANYWHERE,
         RID_STR_SEARCH_BEGINNING,
         RID_STR_SEARCH_END,
         RID_STR_SEARCH_WHOLE
     };
-    for ( size_t i=0; i<sizeof(nResIds)/sizeof(nResIds[0]); ++i )
+    for ( size_t i=0; i<SAL_N_ELEMENTS(nResIds); ++i )
         m_lbPosition.InsertEntry( String( CUI_RES( nResIds[i] ) ) );
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
-    // die Feld-Listbox
+    // the field listbox
     for (sal_uInt16 i=0; i<strVisibleFields.GetTokenCount(';'); ++i)
         m_lbField.InsertEntry(strVisibleFields.GetToken(i, ';'));
 
@@ -288,14 +286,15 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
     LoadParams();
 
     m_cmbSearchText.SetText(sInitialText);
-    // wenn die Edit-Zeile den Text veraendert hat (weil er zum Beispiel Steuerzeichen enthielt, wie das bei Memofeldern der Fall
-    // sein kann), nehme ich einen leeren UniString
+    // if the Edit-line has changed the text (e.g. because it contains
+    // control characters, as can be the case with memo fields), I use
+    // an empty UniString.
     UniString sRealSetText = m_cmbSearchText.GetText();
     if (!sRealSetText.Equals(sInitialText))
         m_cmbSearchText.SetText(UniString());
     LINK(this, FmSearchDialog, OnSearchTextModified).Call(&m_cmbSearchText);
 
-    // initial die ganzen UI-Elemente fuer die Suche an
+    // initial
     m_aDelayedPaint.SetTimeoutHdl(LINK(this, FmSearchDialog, OnDelayedPaint));
     m_aDelayedPaint.SetTimeout(500);
     EnableSearchUI(sal_True);
@@ -309,8 +308,10 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
 //------------------------------------------------------------------------
 sal_Bool FmSearchDialog::Close()
 {
-    // Wenn der Close-Button disabled ist und man im Dialog ESC drueckt, dann wird irgendwo vom Frame trotzdem Close aufgerufen,
-    // was ich allerdings nicht will, wenn ich gerade mitten in einer (eventuell in einem extra Thread laufenden) Suche bin
+    // If the close button is disabled and ESC is pressed in a dialog,
+    // then Frame will call Close anyway, which I don't want to happen
+    // while I'm in the middle of a search (maybe one that's running
+    // in its own thread)
     if (!m_pbClose.IsEnabled())
         return sal_False;
     return ModalDialog::Close();
@@ -324,7 +325,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
         EnableSearchForDependees(sal_True);
     }
     else
-        // die Feldlistbox entsprechend en- oder disablen
+        // en- or disable field list box accordingly
         if (pButton == &m_rbSingleField)
         {
             m_lbField.Enable();
@@ -411,23 +412,22 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
     else if (&m_aSoundsLikeCJKSettings == pButton)
     {
         SfxItemSet aSet( SFX_APP()->GetPool() );
-        //CHINA001 SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, m_pSearchEngine->GetTransliterationFlags() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
             AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() );
-            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
-            aDlg->Execute(); //CHINA001 aDlg.Execute();
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");
+            aDlg->Execute();
 
 
-            sal_Int32 nFlags = aDlg->GetTransliterationFlags(); //CHINA001 sal_Int32 nFlags = aDlg.GetTransliterationFlags();
+            sal_Int32 nFlags = aDlg->GetTransliterationFlags();
             m_pSearchEngine->SetTransliterationFlags(nFlags);
 
             m_cbCase.Check(m_pSearchEngine->GetCaseSensitive());
             OnCheckBoxToggled( &m_cbCase );
             m_aHalfFullFormsCJK.Check( !m_pSearchEngine->GetIgnoreWidthCJK() );
             OnCheckBoxToggled( &m_aHalfFullFormsCJK );
-            delete aDlg; //add for CHINA001
+            delete aDlg;
         }
     }
 
@@ -492,7 +492,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
     {
         // die beiden jeweils anderen Boxes disablen oder enablen
         CheckBox* pBoxes[] = { &m_cbWildCard, &m_cbRegular, &m_cbApprox };
-        for (sal_uInt32 i=0; i<sizeof(pBoxes)/sizeof(CheckBox*); ++i)
+        for (sal_uInt32 i=0; i< SAL_N_ELEMENTS(pBoxes); ++i)
         {
             if (pBoxes[i] != pBox)
             {
@@ -629,7 +629,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
     if ( !bEnable )
     {
         // if one of my children has the focus, remember it
-        // 104332 - 2002-10-17 - fs@openoffice.org
         Window* pFocusWindow = Application::GetFocusWindow( );
         if ( pFocusWindow && IsChild( pFocusWindow ) )
             m_pPreSearchFocus = pFocusWindow;
@@ -664,7 +663,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
         {   // this means we're preparing for starting a search
             // In this case, EnableSearchForDependees disabled the search button
             // But as we're about to use it for cancelling the search, we really need to enable it, again
-            // 07.12.2001 - 95246 - fs@openoffice.org
             m_pbSearchAgain.Enable( sal_True );
         }
     }
@@ -677,7 +675,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 
     if ( bEnable )
     {   // restore focus
-        // 104332 - 2002-10-17 - fs@openoffice.org
         if ( m_pPreSearchFocus )
         {
             m_pPreSearchFocus->GrabFocus();
@@ -725,13 +722,13 @@ void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
         &m_pbSearchAgain, &m_pbClose };
 
     if (!bEnable)
-        for (sal_uInt32 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
+        for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(pAffectedControls); ++i)
         {
             pAffectedControls[i]->SetUpdateMode(bEnable);
             pAffectedControls[i]->EnablePaint(bEnable);
         }
     else
-        for (sal_uInt32 i=0; i<sizeof(pAffectedControls)/sizeof(pAffectedControls[0]); ++i)
+        for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(pAffectedControls); ++i)
         {
             pAffectedControls[i]->EnablePaint(bEnable);
             pAffectedControls[i]->SetUpdateMode(bEnable);
@@ -769,7 +766,7 @@ void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_I
 //------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
         // diese eine Methode Thread-sicher machen (das ist ein Overkill, die ganze restliche Applikation dafuer zu blockieren,
         // aber im Augenblick haben wir kein anderes Sicherheitskonpzept)
 
@@ -808,7 +805,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
                 : RID_SVXERR_SEARCH_NORECORD;
             ErrorBox(this, CUI_RES(nErrorId)).Execute();
         }
-            // KEIN break !
+            // NO break !
         case FmSearchProgress::STATE_CANCELED:
             EnableSearchUI(sal_True);
             if (m_lnkCanceledNotFoundHdl.IsSet())
@@ -963,3 +960,4 @@ void FmSearchDialog::SaveParams() const
     m_pConfig->setParams( aCurrentSettings );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

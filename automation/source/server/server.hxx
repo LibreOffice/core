@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,17 +27,6 @@
  ************************************************************************/
 #ifndef _SERVER_HXX
 #define _SERVER_HXX
-
-/*#include <vos/thread.hxx>
-#ifndef _STD_NO_NAMESPACE
-namespace vos
-{
-#endif
-    class OAcceptorSocket;
-#ifndef _STD_NO_NAMESPACE
-}
-#endif
-*/
 
 #include "editwin.hxx"
 #include <automation/communi.hxx>
@@ -71,11 +61,8 @@ public:
 
     static sal_uLong GetPort();
     static sal_uInt16 nComm;
-
-#if OSL_DEBUG_LEVEL > 1
-//  virtual void DataReceived( CommunicationLink* pCL );
-#endif
-
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

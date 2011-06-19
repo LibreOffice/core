@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "align.hxx" //add for SvxAlignmentTabPage
 #include "dlgfact.hxx"
 
@@ -42,7 +40,6 @@
 #include "splitcelldlg.hxx"
 #include "gallery.hrc"
 #include "dstribut.hxx"
-#include "cuigaldlg.hxx"
 #include "cuiimapwnd.hxx"
 #include "hlmarkwn.hxx"
 #include "cuicharmap.hxx"
@@ -133,7 +130,6 @@ short AbstractSvxZoomDialog_Impl::Execute()
     return pDlg->Execute();
 }
 
-//IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSearchProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTakeProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
@@ -1135,7 +1131,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
     return new AbstractTabDialog_Impl( pDlg );
 }
 
-//TabDialog that use functionality of the drawing layer and add AnchorTypes  -- for SvxCaptionTabDialog CHINA001
+// TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
 AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
                                             sal_uInt16 nAnchorTypes )
@@ -1978,3 +1974,4 @@ AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordT
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

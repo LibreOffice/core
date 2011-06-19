@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ Mediator::~Mediator()
     if( m_pListener )
     {
         {
-            ::vos::OGuard aGuard( m_pListener->m_aMutex );
+            ::osl::MutexGuard aGuard( m_pListener->m_aMutex );
             m_pListener->m_pMediator = NULL;
         }
         m_pListener = NULL;
@@ -80,7 +81,7 @@ sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong
     if( ! m_pListener )
         return 0;
 
-    vos::OGuard aGuard( m_aSendMutex );
+    osl::MutexGuard aGuard( m_aSendMutex );
     if( ! nMessageID )
         nMessageID = m_nCurrentID;
 
@@ -132,7 +133,7 @@ MediatorMessage* Mediator::WaitForAnswer( sal_uLong nMessageID )
     while( m_pListener )
     {
         {
-            vos::OGuard aGuard( m_aQueueMutex );
+            osl::MutexGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
@@ -157,7 +158,7 @@ MediatorMessage* Mediator::GetNextMessage( sal_Bool bWait )
         {
             // guard must be after WaitForMessage, else the listener
             // cannot insert a new one -> deadlock
-            vos::OGuard aGuard( m_aQueueMutex );
+            osl::MutexGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
@@ -205,9 +206,9 @@ void MediatorListener::run()
             char* pBuffer = new char[ nHeader[ 1 ] ];
             if( m_pMediator && (sal_uLong)read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
             {
-                ::vos::OGuard aMyGuard( m_aMutex );
+                ::osl::MutexGuard aMyGuard( m_aMutex );
                 {
-                    vos::OGuard
+                    osl::MutexGuard
                         aGuard( m_pMediator->m_aQueueMutex );
                     MediatorMessage* pMessage =
                         new MediatorMessage( nHeader[ 0 ], nHeader[ 1 ], pBuffer );
@@ -307,3 +308,5 @@ sal_uInt32 MediatorMessage::GetUINT32()
     m_pRun += sizeof( sal_uInt32 );
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

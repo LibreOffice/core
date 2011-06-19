@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "browserlistbox.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 #include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
 #include "linedescriptor.hxx"
@@ -46,7 +45,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //............................................................................
 namespace pcr
@@ -245,7 +244,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::dispose()
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( impl_isDisposed_nothrow() )
             return;
 
@@ -256,7 +255,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void PropertyControlContext_Impl::setNotificationMode( NotifcationMode _eMode )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         m_eMode = _eMode;
     }
 
@@ -266,7 +265,7 @@ namespace pcr
         ::comphelper::AnyEventRef pEvent;
 
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             impl_checkAlive_throw();
             pEvent = new ControlEvent( _rxControl, _eType );
 
@@ -283,21 +282,21 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
     {
-        DBG_TRACE( "PropertyControlContext_Impl: FOCUS_GAINED" );
+        OSL_TRACE( "PropertyControlContext_Impl: FOCUS_GAINED" );
         impl_notify_throw( Control, FOCUS_GAINED );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException)
     {
-        DBG_TRACE( "PropertyControlContext_Impl: VALUE_CHANGED" );
+        OSL_TRACE( "PropertyControlContext_Impl: VALUE_CHANGED" );
         impl_notify_throw( Control, VALUE_CHANGED );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException)
     {
-        DBG_TRACE( "PropertyControlContext_Impl: ACTIVATE_NEXT" );
+        OSL_TRACE( "PropertyControlContext_Impl: ACTIVATE_NEXT" );
         impl_notify_throw( CurrentControl, ACTIVATE_NEXT );
     }
 
@@ -316,7 +315,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void PropertyControlContext_Impl::processEvent( const ::comphelper::AnyEvent& _rEvent )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( impl_isDisposed_nothrow() )
             return;
 
@@ -339,15 +338,15 @@ namespace pcr
         switch ( rControlEvent.eType )
         {
         case FOCUS_GAINED:
-            DBG_TRACE( "PropertyControlContext_Impl::processEvent: FOCUS_GAINED" );
+            OSL_TRACE( "PropertyControlContext_Impl::processEvent: FOCUS_GAINED" );
             m_pContext->focusGained( rControlEvent.xControl );
             break;
         case VALUE_CHANGED:
-            DBG_TRACE( "PropertyControlContext_Impl::processEvent: VALUE_CHANGED" );
+            OSL_TRACE( "PropertyControlContext_Impl::processEvent: VALUE_CHANGED" );
             m_pContext->valueChanged( rControlEvent.xControl );
             break;
         case ACTIVATE_NEXT:
-            DBG_TRACE( "PropertyControlContext_Impl::processEvent: ACTIVATE_NEXT" );
+            OSL_TRACE( "PropertyControlContext_Impl::processEvent: ACTIVATE_NEXT" );
             m_pContext->activateNextControl( rControlEvent.xControl );
             break;
         }
@@ -394,7 +393,6 @@ namespace pcr
             // doing the commit here, while we, as well as our owner, as well as some other components,
             // are already "half dead" (means within their dtor) is potentially dangerous.
             // By definition, CommitModified has to be called (if necessary) before destruction
-            // #105868# - 2002-12-13 - fs@openoffice.org
 
         m_pControlContextImpl->dispose();
         m_pControlContextImpl.clear();
@@ -422,7 +420,7 @@ namespace pcr
         if ( IsModified() && m_xActiveControl.is() )
         {
             // for the time of this commit, notify all events synchronously
-            // #i63814# / 2006-03-31 / frank.schoenheit@sun.com
+            // #i63814#
             m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eSynchronously );
             try
             {
@@ -921,7 +919,7 @@ namespace pcr
                     ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
                     sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
                     sMessage += ::rtl::OString( "')!" );
-                    DBG_ERROR( sMessage );
+                    OSL_FAIL( sMessage.getStr() );
                 }
     #endif
                 if ( _rLine.xHandler.is() )
@@ -952,7 +950,7 @@ namespace pcr
                 ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
                 sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += ::rtl::OString( "')!" );
-                DBG_ERROR( sMessage );
+                OSL_FAIL( sMessage.getStr() );
             }
         #endif
             if ( _rLine.xHandler.is() )
@@ -976,7 +974,7 @@ namespace pcr
             )
             if ( (*search)->second.pLine->getControl().get() == _rxControl.get() )
                 return sal_uInt16( search - m_aOrderedLines.begin() );
-        DBG_ERROR( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
+        OSL_FAIL( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
         return (sal_uInt16)-1;
     }
 
@@ -1266,7 +1264,7 @@ namespace pcr
                         m_aOrderedLines[ nFocusControlPos ]->second.pLine->GrabFocus();
                     }
                     else
-                        OSL_ENSURE( false, "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
+                        OSL_FAIL( "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
                 }
             }
 
@@ -1310,3 +1308,4 @@ namespace pcr
 //............................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

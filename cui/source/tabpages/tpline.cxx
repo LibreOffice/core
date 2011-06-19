@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,13 +26,7 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
-// include ---------------------------------------------------------------
-
 #ifndef _SVX_SIZEITEM_HXX //autogen
-
 #include <editeng/sizeitem.hxx>
 #endif
 #include <tools/shl.hxx>
@@ -51,9 +46,7 @@
 #include "dlgname.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <svx/svdmodel.hxx>
 #include "svx/svxgrahicitem.hxx"
-//#include "linectrl.hrc"
 #include <sfx2/request.hxx>
 #include "svx/ofaitem.hxx"
 #include <svx/svdobj.hxx>
@@ -164,7 +157,7 @@ SvxLineTabPage::SvxLineTabPage
      pnLineEndListState( 0 ),
     pnDashListState( 0 ),
     pnColorTableState( 0 ),
-   nPageType           ( 0 )//CHINA001 pPageType           ( NULL ),
+   nPageType           ( 0 )
 {
     aLbEndStyle.SetAccessibleName(String(CUI_RES(STR_STYLE)));
     aLbStartStyle.SetAccessibleName(String(CUI_RES( STR_LB_START_STYLE ) ) );
@@ -273,18 +266,11 @@ SvxLineTabPage::~SvxLineTabPage()
     if(pSymbolList)
         delete aSymbolMB.GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
 
-    String* pStr = (String*)aGrfNames.First();
-    while( pStr )
+    for ( size_t i = 0, n = aGrfBrushItems.size(); i < n; ++i )
     {
-        delete pStr;
-        pStr = (String*)aGrfNames.Next();
-    }
-    SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.First();
-    while( pInfo )
-    {
+        SvxBmpItemInfo* pInfo = aGrfBrushItems[ i ];
         delete pInfo->pBrushItem;
         delete pInfo;
-        pInfo = (SvxBmpItemInfo*)aGrfBrushItems.Next();
     }
 }
 void SvxLineTabPage::Construct()
@@ -320,10 +306,10 @@ void SvxLineTabPage::FillListboxes()
 
 void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False); //add CHINA001 begin
+    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False);
     if (pPageTypeItem)
-        SetPageType(pPageTypeItem->GetValue()); //add CHINA001 end
-    if( nDlgType == 0 && pDashList )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
+        SetPageType(pPageTypeItem->GetValue());
+    if( nDlgType == 0 && pDashList )
     {
         sal_uInt16 nPos;
         sal_uInt16 nCount;
@@ -361,20 +347,6 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
         aDashURL.Append( pDashList->GetName() );
         DBG_ASSERT( aDashURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-/*      // Ermitteln (evtl. abschneiden) des Namens und in
-        // der GroupBox darstellen
-        String          aString( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-        if ( aDashURL.getBase().Len() > 18 )
-        {
-            aString += aDashURL.getBase().Copy( 0, 15 );
-            aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-        }
-        else
-            aString += aDashURL.getBase();
-
-        aGrpLine.SetText( aString );
-*/
         // LineEndliste
         if( ( *pnLineEndListState & CT_MODIFIED ) ||
             ( *pnLineEndListState & CT_CHANGED ) )
@@ -415,29 +387,15 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
         aLineURL.Append( pLineEndList->GetName() );
         DBG_ASSERT( aLineURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-/*      // Ermitteln (evtl. abschneiden) des Namens und in
-        // der GroupBox darstellen
-        aString = String( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-        if ( aLineURL.getBase().Len() > 18 )
-        {
-            aString += aLineURL.getBase().Copy( 0, 15 );
-            aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-        }
-        else
-            aString += aLineURL.getBase();
-
-        aGrpLineEnds.SetText( aString );
-*/
         // Auswertung, ob von einer anderen TabPage ein anderer Fuelltyp gesetzt wurde
         if( aLbLineStyle.GetSelectEntryPos() != 0 )
         {
-            if( nPageType == 2 ) // 1//CHINA001 if( *pPageType == 2 ) // 1
+            if( nPageType == 2 ) // 1
             {
                 aLbLineStyle.SelectEntryPos( *pPosDashLb + 2 ); // +2 wegen SOLID und INVLISIBLE
                 ChangePreviewHdl_Impl( this );
             }
-            if( nPageType == 3 )//CHINA001 if( *pPageType == 3 )
+            if( nPageType == 3 )
             {
                 aLbStartStyle.SelectEntryPos( *pPosLineEndLb + 1 );// +1 wegen SOLID
                 aLbEndStyle.SelectEntryPos( *pPosLineEndLb + 1 );// +1 wegen SOLID
@@ -466,12 +424,12 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 ChangePreviewHdl_Impl( this );
             }
 
-        nPageType = 0;//CHINA001 *pPageType = 0;
+        nPageType = 0;
     }
     // Seite existiert im Ctor noch nicht, deswegen hier!
 
-    else if ( nDlgType == 1100 || // Chart-Dialog//CHINA001 else if ( *pDlgType == 1100 || // Chart-Dialog
-              nDlgType == 1101 )//CHINA001 *pDlgType == 1101 )
+    else if ( nDlgType == 1100 ||
+              nDlgType == 1101 )
     {
         aFtLineEndsStyle.Hide();
         aFtLineEndsWidth.Hide();
@@ -495,9 +453,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
 int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( nDlgType == 0 ) // Linien-Dialog//CHINA001 if( *pDlgType == 0 ) // Linien-Dialog
+    if( nDlgType == 0 ) // Linien-Dialog
     {
-        nPageType = 1; // evtl. fuer Erweiterungen//CHINA001 *pPageType = 1; // evtl. fuer Erweiterungen
+        nPageType = 1; // evtl. fuer Erweiterungen
         *pPosDashLb = aLbLineStyle.GetSelectEntryPos() - 2;// erster Eintrag SOLID !!!
         sal_uInt16 nPos = aLbStartStyle.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -521,7 +479,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
     // Um evtl. Modifikationen der Liste vorzubeugen
     // werden Items anderer Seiten nicht gesetzt
-    if( nDlgType != 0 || nPageType != 2 )//CHINA001 if( *pDlgType != 0 || *pPageType != 2 )
+    if( nDlgType != 0 || nPageType != 2 )
     {
         nPos = aLbLineStyle.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
@@ -607,7 +565,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
         }
     }
 
-    if( nDlgType != 0 || nPageType != 3 )//CHINA001 if( *pDlgType != 0 || *pPageType != 3 )
+    if( nDlgType != 0 || nPageType != 3 )
     {
         // Linienanfang
         nPos = aLbStartStyle.GetSelectEntryPos();
@@ -791,7 +749,7 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             }
         }
     }
-    rAttrs.Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));//add CHINA001
+    rAttrs.Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
     return( bModified );
 }
 
@@ -803,7 +761,6 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
 
     if( aLbLineStyle.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
     {
-        //rXLSet.Put( XLineDashItem ( rOutAttrs.Get( GetWhich( XATTR_LINEDASH ) ) ) );
         rXLSet.Put( XLineStyleItem( XLINE_NONE ) );
     }
     else if( aLbLineStyle.IsEntryPosSelected( 0 ) )
@@ -906,13 +863,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     XLineStyle  eXLS; // XLINE_NONE, XLINE_SOLID, XLINE_DASH
 
     // Linienstil
-/*
-    if( bObjSelected &&
-        rAttrs.GetItemState( GetWhich( XATTR_LINESTYLE ) ) == SFX_ITEM_DEFAULT )
-    {
-        aLbLineStyle.Disable();
-    }
-*/
     const SfxPoolItem *pPoolItem;
     long nSymType=SVX_SYMBOLTYPE_UNKNOWN;
     sal_Bool bPrevSym=sal_False;
@@ -949,7 +899,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->hideMarkHandles();
         SdrPageView* pPageView = pView->ShowSdrPage(pPage);
-//      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
         SdrObject *pObj=NULL;
         long nSymTmp=nSymType;
         if(pSymbolList)
@@ -1056,13 +1005,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
 
     // Linienstaerke
-/*
-    if( bObjSelected &&
-        rAttrs.GetItemState( GetWhich( XATTR_LINEWIDTH ) ) == SFX_ITEM_DEFAULT )
-    {
-        aMtrLineWidth.Disable();
-    }
-*/
     if( rAttrs.GetItemState( XATTR_LINEWIDTH ) != SFX_ITEM_DONTCARE )
     {
         SetMetricValue( aMtrLineWidth, ( ( const XLineWidthItem& ) rAttrs.
@@ -1072,13 +1014,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         aMtrLineWidth.SetText( String() );
 
     // Linienfarbe
-/*
-    if( bObjSelected &&
-        rAttrs.GetItemState( GetWhich( XATTR_LINECOLOR ) ) == SFX_ITEM_DEFAULT )
-    {
-        aLbColor.Disable();
-    }
-*/
     aLbColor.SetNoSelection();
 
     if ( rAttrs.GetItemState( XATTR_LINECOLOR ) != SFX_ITEM_DONTCARE )
@@ -1279,15 +1214,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         maLBEdgeStyle.SetNoSelection();
     }
 
-    /*
-    if( aLbStartStyle.GetSelectEntryPos() == aLbEndStyle.GetSelectEntryPos() &&
-        aMtrStartWidth.GetValue() == aMtrEndWidth.GetValue() &&
-        aTsbCenterStart.GetState() == aTsbCenterEnd.GetState() )
-    {
-        aCbxSynchronize.Check();
-    }
-    */
-
     // Werte sichern
     aLbLineStyle.SaveValue();
     aMtrLineWidth.SaveValue();
@@ -1304,8 +1230,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     maLBEdgeStyle.SaveValue();
 
     ClickInvisibleHdl_Impl( this );
-    //ClickMeasuringHdl_Impl( this );
-    //aCtlPosition.Reset();
 
     ChangePreviewHdl_Impl( NULL );
 }
@@ -1497,26 +1421,6 @@ IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
 }
 
 //------------------------------------------------------------------------
-/*
-
-long SvxLineTabPage::ClickMeasuringHdl_Impl( void* )
-{
-    if( aTsbShowMeasuring.GetState() == STATE_NOCHECK )
-    {
-        aFtPosition.Disable();
-        aCtlPosition.Disable();
-    }
-    else
-    {
-        aFtPosition.Enable();
-        aCtlPosition.Enable();
-    }
-    aCtlPosition.Invalidate();
-
-    return( 0L );
-}
-*/
-//------------------------------------------------------------------------
 
 IMPL_LINK( SvxLineTabPage, ChangeTransparentHdl_Impl, void *, EMPTYARG )
 {
@@ -1563,25 +1467,28 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
-
-        nNumMenuGalleryItems=aGrfNames.Count();
-        for(long i = 0; i < nNumMenuGalleryItems; i++)
+        const String *pUIName = NULL;
+        sal_uInt32 i = 0;
+        for(std::vector<String>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
         {
-            const String* pGrfName = (const String*)aGrfNames.GetObject(i);
-            const String* pUIName = pGrfName;
+            pUIName = &(*it);
 
             // convert URL encodings to UI characters (eg %20 for spaces)
             String aPhysicalName;
-            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *pGrfName, aPhysicalName ))
+            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *it, aPhysicalName ))
                 pUIName = &aPhysicalName;
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(*pGrfName, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
+            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i);
-            aGrfBrushItems.Insert(pInfo, i);
+            if ( i < aGrfBrushItems.size() ) {
+                aGrfBrushItems.insert( aGrfBrushItems.begin() + i, pInfo );
+            } else {
+                aGrfBrushItems.push_back( pInfo );
+            }
             const Graphic* pGraphic = pBrushItem->GetGraphic();
 
             if(pGraphic)
@@ -1608,7 +1515,8 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             }
         }
         aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
-        if(!aGrfNames.Count())
+
+        if(aGrfNames.empty())
             aSymbolMB.GetPopupMenu()->EnableItem(MN_GALLERY, sal_False);
     }
 
@@ -1625,7 +1533,6 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         // 3D View
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->hideMarkHandles();
-//      SdrPageView* pPageView = pView->ShowSdrPage(pPage, Point());
         SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 
         PopupMenu* pPopup = new PopupMenu;
@@ -1636,10 +1543,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             if(pObj==NULL)
                 break;
             pObj=pObj->Clone();
-            //const String* pGrfName = (const String*)aGrfNames.GetObject(i);
-            String *pStr=new String();//String(i));
-            aGrfNames.Insert(pStr,LIST_APPEND);
-            //Rectangle aRect(pObj->GetLogicRect());
+            aGrfNames.push_back(aEmptyStr);
             pPage->NbcInsertObject(pObj);
             pView->MarkObj(pObj,pPageView);
             if(pSymbolAttr)
@@ -1663,7 +1567,11 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + nNumMenuGalleryItems);
-            aGrfBrushItems.Insert(pInfo, nNumMenuGalleryItems + i);
+            if ( (size_t)(nNumMenuGalleryItems + i) < aGrfBrushItems.size() ) {
+                aGrfBrushItems.insert( aGrfBrushItems.begin() + nNumMenuGalleryItems + i, pInfo );
+            } else {
+                aGrfBrushItems.push_back( pInfo );
+            }
 
             Size aSize(aBitmap.GetSizePixel());
             if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
@@ -1675,10 +1583,11 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
                 aBitmap.Scale(nScale, nScale);
             }
             Image aImage(aBitmap);
-            pPopup->InsertItem(pInfo->nItemId,*pStr,aImage);
+            pPopup->InsertItem(pInfo->nItemId,aEmptyStr,aImage);
         }
         aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
-        if(!aGrfNames.Count())
+
+        if(aGrfNames.empty())
             aSymbolMB.GetPopupMenu()->EnableItem(MN_SYMBOLS, sal_False);
 
         delete pView;
@@ -1694,9 +1603,9 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
     PopupMenu* pPopup = pThis->aSymbolMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
     SvxBmpItemInfo* pBmpInfo = 0;
-    for ( sal_uInt16 i = 0; i < pThis->aGrfBrushItems.Count(); i++ )
+    for ( size_t i = 0; i < pThis->aGrfBrushItems.size(); i++ )
     {
-        SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)pThis->aGrfBrushItems.GetObject(i);
+        SvxBmpItemInfo* pInfo = pThis->aGrfBrushItems[ i ];
         if( pInfo->pBrushItem == pItem )
         {
             pBmpInfo = pInfo; break;
@@ -1748,7 +1657,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
             nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
             bResetSize = sal_True;
         }
-        SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.GetObject(nItemId - MN_GALLERY_ENTRY);
+        SvxBmpItemInfo* pInfo = aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
         pGraphic = pInfo->pBrushItem->GetGraphic();
     }
     else switch(nItemId)
@@ -1899,7 +1808,7 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void SvxLineTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,sal_False);
@@ -1932,3 +1841,5 @@ void SvxLineTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
             aAutoSymbolGraphic = pGraphicItem->GetGraphic();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/wizdlg.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/tabpage.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit.hxx>
@@ -154,3 +153,4 @@ namespace preload
 
 #endif // _EXTENSIONS_PRELOAD_OEMWIZ_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

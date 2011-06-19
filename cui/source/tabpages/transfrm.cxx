@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -562,7 +560,6 @@ void SvxSlantTabPage::Construct()
 sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     sal_Bool  bModified = sal_False;
-    sal_Int32 nValue = 0L;
     String aStr = aMtrRadius.GetText();
 
     if( aStr != aMtrRadius.GetSavedValue() )
@@ -579,7 +576,7 @@ sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 
     if( aStr != aMtrAngle.GetSavedValue() )
     {
-        nValue = static_cast<sal_Int32>(aMtrAngle.GetValue());
+        sal_Int32 nValue = static_cast<sal_Int32>(aMtrAngle.GetValue());
         rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
         bModified = sal_True;
     }
@@ -1704,3 +1701,5 @@ void SvxPositionSizeTabPage::FillUserData()
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

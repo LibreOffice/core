@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,21 +32,13 @@
 #include <rtl/uuid.h>
 #include "xmlsignature_nssimpl.hxx"
 
-#ifndef _XMLDOCUMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX_
 #include "xmlelementwrapper_xmlsecimpl.hxx"
-#endif
 
-#ifndef _SECURITYENVIRONMENT_NSSIMPL_HXX_
 #include "securityenvironment_nssimpl.hxx"
-#endif
 
-#ifndef _XMLSECURITYCONTEXT_NSSIMPL_HXX_
 #include "xmlsecuritycontext_nssimpl.hxx"
-#endif
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
 
@@ -133,11 +126,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
          throw RuntimeException() ;
     }
 
-#if 0 //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
-    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
-        throw RuntimeException() ;
-#endif
+    //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
 
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
@@ -332,12 +321,12 @@ Sequence< OUString > SAL_CALL XMLSignature_NssImpl :: getSupportedServiceNames()
 Sequence< OUString > XMLSignature_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSignature" ) ;
+    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSignature")) ;
     return seqServiceNames ;
 }
 
 OUString XMLSignature_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl" ) ;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl")) ;
 }
 
 //Helper for registry
@@ -352,3 +341,4 @@ Reference< XSingleServiceFactory > XMLSignature_NssImpl :: impl_createFactory( c
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

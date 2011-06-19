@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 
 //---------------------------------------------------------------------------------------
 
@@ -93,8 +92,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
@@ -122,3 +120,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     return xRet.get();
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

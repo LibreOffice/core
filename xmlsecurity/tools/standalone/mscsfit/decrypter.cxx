@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /** -- C++ Source File -- **/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -109,11 +110,11 @@ int SAL_CALL main( int argc, char **argv )
         Reference< XMultiComponentFactory > xManager = NULL ;
         Reference< XComponentContext > xContext = NULL ;
 
-        xManager = serviceManager( xContext , OUString::createFromAscii( "local" ), OUString::createFromAscii( argv[4] ) ) ;
+        xManager = serviceManager( xContext , OUString(RTL_CONSTASCII_USTRINGPARAM("local")), OUString::createFromAscii( argv[4] ) ) ;
 
         //Create encryption template
         Reference< XInterface > tplElement =
-            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.xsec.XMLElementWrapper" ) , xContext ) ;
+            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.xsec.XMLElementWrapper")) , xContext ) ;
         OSL_ENSURE( tplElement.is() ,
             "Decryptor - "
             "Cannot get service instance of \"xsec.XMLElementWrapper\"" ) ;
@@ -137,7 +138,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Encryption template
         Reference< XInterface > enctpl =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.XMLEncryptionTemplate"), xContext ) ;
+            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.xsec.XMLEncryptionTemplate")), xContext ) ;
         OSL_ENSURE( enctpl.is() ,
             "Decryptor - "
             "Cannot get service instance of \"xsec.XMLEncryptionTemplate\"" ) ;
@@ -153,7 +154,7 @@ int SAL_CALL main( int argc, char **argv )
         //Create security environment
         //Build Security Environment
         Reference< XInterface > xsecenv =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.SecurityEnvironment"), xContext ) ;
+            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.xsec.SecurityEnvironment")), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Decryptor - "
             "Cannot get service instance of \"xsec.SecurityEnvironment\"" ) ;
@@ -180,7 +181,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Security Context
         Reference< XInterface > xmlsecctx =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.XMLSecurityContext"), xContext ) ;
+            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.xsec.XMLSecurityContext")), xContext ) ;
         OSL_ENSURE( xmlsecctx.is() ,
             "Decryptor - "
             "Cannot get service instance of \"xsec.XMLSecurityContext\"" ) ;
@@ -195,7 +196,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Get encrypter
         Reference< XInterface > xmlencrypter =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.XMLEncryption"), xContext ) ;
+            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.xsec.XMLEncryption")), xContext ) ;
         OSL_ENSURE( xmlencrypter.is() ,
             "Decryptor - "
             "Cannot get service instance of \"xsec.XMLEncryption\"" ) ;
@@ -244,3 +245,4 @@ done:
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

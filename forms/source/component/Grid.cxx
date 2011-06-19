@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -202,7 +203,7 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "OGridControlModel::cloneColumns: caught an exception while cloning the columns!" );
+        OSL_FAIL( "OGridControlModel::cloneColumns: caught an exception while cloning the columns!" );
     }
 }
 
@@ -255,7 +256,7 @@ Reference< XRowSet > SAL_CALL OGridControlModel::getRowSet(  ) throw (RuntimeExc
 //------------------------------------------------------------------------------
 void SAL_CALL OGridControlModel::setRowSet( const Reference< XRowSet >& /*_rxDataSource*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "OGridControlModel::setRowSet: not supported!" );
+    OSL_FAIL( "OGridControlModel::setRowSet: not supported!" );
 }
 
 //--------------------------------------------------------------------
@@ -398,7 +399,7 @@ Reference<XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) cons
         case TYPE_TIMEFIELD:        xReturn = new TimeFieldColumn( getContext() ); break;
         case TYPE_FORMATTEDFIELD:   xReturn = new FormattedFieldColumn( getContext() ); break;
         default:
-            DBG_ERROR("OGridControlModel::createColumn: Unknown Column");
+            OSL_FAIL("OGridControlModel::createColumn: Unknown Column");
             break;
     }
     return xReturn;
@@ -1161,3 +1162,4 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,15 +40,6 @@
 #include <editeng/svxenum.hxx>
 #include <i18npool/paper.hxx>
 #include <svx/flagsdef.hxx>
-
-// enum ------------------------------------------------------------------
-
-//CHINA001 enum SvxModeType
-//CHINA001 {
-//CHINA001  SVX_PAGE_MODE_STANDARD,
-//CHINA001  SVX_PAGE_MODE_CENTER,
-//CHINA001  SVX_PAGE_MODE_PRESENTATION
-//CHINA001 };
 
 // class SvxPageDescPage -------------------------------------------------
 
@@ -166,7 +158,7 @@ class SvxPageDescPage : public SfxTabPage
 
     Size                aMaxSize;
     sal_Bool                bLandscape;
-    FASTBOOL            bBorderModified;
+    bool                bBorderModified;
     SvxModeType         eMode;
     Paper               ePaperStart;
     Paper               ePaperEnd;
@@ -178,7 +170,7 @@ class SvxPageDescPage : public SfxTabPage
     DECL_LINK(          LayoutHdl_Impl, ListBox* );
     DECL_LINK(          PaperBinHdl_Impl, ListBox* );
     DECL_LINK(          SwapOrientation_Impl, RadioButton* );
-    void                SwapFirstValues_Impl( FASTBOOL bSet );
+    void                SwapFirstValues_Impl( bool bSet );
     DECL_LINK(          BorderModify_Impl, MetricField* );
     void                InitHeadFoot_Impl( const SfxItemSet& rSet );
     DECL_LINK(          CenterHdl_Impl, CheckBox* );
@@ -230,9 +222,10 @@ public:
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
-    void                SetCollectionList(const List* pList);
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    void                SetCollectionList(const std::vector<String> &aList);
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 #endif // #ifndef _SVX_PAGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

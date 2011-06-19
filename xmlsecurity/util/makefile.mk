@@ -30,8 +30,6 @@ PRJ=..
 PRJNAME=xmlsecurity
 TARGET=xmlsecurity
 
-# Disable '-z defs' due to broken libxpcom.
-#LINKFLAGSDEFS=$(0)
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -112,6 +110,9 @@ SHL2STDLIBS += $(NSPR_LIB)
 .ENDIF
 .IF "$(NSS_LIB)" != ""
 SHL2STDLIBS += $(NSS_LIB)
+.ENDIF
+.IF "$(MOZ_NSS_LIBS)" != ""
+SHL2STDLIBS += $(MOZ_NSS_LIBS)
 .ENDIF
 .ENDIF
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
@@ -125,10 +123,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
 
     sal_uInt16 nBitmap;
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
-    {
         mpBmpCapTypes[nBitmap]  = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
-        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
-    }
 
     //------------ValueSet installieren--------------------------
     aCT_CAPTTYPE.SetStyle( aCT_CAPTTYPE.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );
@@ -156,10 +151,7 @@ SvxCaptionTabPage::~SvxCaptionTabPage()
 {
     sal_uInt16 nBitmap;
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
-    {
         delete mpBmpCapTypes[nBitmap];
-        delete mpBmpCapTypesH[nBitmap];
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -567,9 +559,7 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxCaptionTabPage::FillValueSet()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    Image** ppBitmaps = bHighContrast ? mpBmpCapTypesH : mpBmpCapTypes;
+    Image** ppBitmaps = mpBmpCapTypes;
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_1, *(ppBitmaps[0]) );
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_2, *(ppBitmaps[1]) );
     aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_3, *(ppBitmaps[2]) );
@@ -639,12 +629,11 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
     }
 }
-/*-- 05.03.2004 13:54:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxCaptionTabDialog::SetValidateFramePosLink( const Link& rLink )
 {
     aValidateLink = rLink;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

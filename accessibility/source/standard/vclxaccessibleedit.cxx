@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,7 +197,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponen
 
 ::rtl::OUString VCLXAccessibleEdit::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleEdit" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleEdit") );
 }
 
 // -----------------------------------------------------------------------------
@@ -204,7 +205,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleEdit, VCLXAccessibleTextComponen
 Sequence< ::rtl::OUString > VCLXAccessibleEdit::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleEdit" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleEdit") );
     return aNames;
 }
 
@@ -618,9 +619,11 @@ sal_Bool VCLXAccessibleEdit::setText( const ::rtl::OUString& sText ) throw (Runt
     }
     catch( const IndexOutOfBoundsException& )
     {
-        OSL_ENSURE( sal_False, "VCLXAccessibleText::setText: caught an exception!" );
+        OSL_FAIL( "VCLXAccessibleText::setText: caught an exception!" );
     }
     return bSuccess;
 }
 
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

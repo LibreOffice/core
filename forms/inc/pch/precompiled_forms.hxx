@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -310,7 +311,6 @@
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
-#include "osl/mutex.hxx"
 
 #include "rtl/alloc.h"
 #include "rtl/logfile.hxx"
@@ -328,7 +328,6 @@
 #include "sfx2/imgmgr.hxx"
 #include "sfx2/msgpool.hxx"
 #include "sfx2/sfxuno.hxx"
-
 
 #include "svtools/cliplistener.hxx"
 #include "svtools/imageresourceaccess.hxx"
@@ -364,7 +363,6 @@
 #include "tools/diagnose_ex.h"
 #include "tools/inetmsg.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/resid.hxx"
 #include "tools/simplerm.hxx"
 #include "tools/solar.h"
@@ -374,7 +372,6 @@
 
 #include "ucbhelper/activedatasink.hxx"
 #include "ucbhelper/content.hxx"
-
 
 #include "uno/lbnames.h"
 #include "uno/mapping.hxx"
@@ -394,7 +391,9 @@
 #include "vcl/timer.hxx"
 #include "tools/wintypes.hxx"
 
-#include "vos/mutex.hxx"
-#include "vos/thread.hxx"
+#include "osl/mutex.hxx"
+#include "osl/thread.hxx"
 //---MARKER---
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

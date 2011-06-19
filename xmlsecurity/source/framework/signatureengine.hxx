@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
-#ifndef _COM_SUN_STAR_XML_CRYPTO_SAX_XSIGNATURECOLLECTOR_HPP_
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
-#endif
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
@@ -63,9 +62,6 @@ class SignatureEngine : public cppu::ImplInheritanceHelper2
  *
  *   FUNCTION
  *  Maintains common members and methods related with signature operation.
- *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XReferenceCollector
  *
  *   AUTHOR
  *  Michael Mi
@@ -142,3 +138,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

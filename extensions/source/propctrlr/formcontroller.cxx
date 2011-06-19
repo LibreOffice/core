@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "pcrcommon.hxx"
 #include "formstrings.hxx"
 #include "defaultforminspection.hxx"
-#ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
 #include "propctrlr.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -146,14 +145,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString FormController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.FormController");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.FormController"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.form.PropertyBrowserController" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.PropertyBrowserController"));
         return aSupported;
     }
 
@@ -274,14 +273,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.DialogController");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.DialogController"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.PropertyBrowserController" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.PropertyBrowserController"));
         return aSupported;
     }
 
@@ -297,3 +296,5 @@ namespace pcr
 //........................................................................
 } // namespace pcr
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

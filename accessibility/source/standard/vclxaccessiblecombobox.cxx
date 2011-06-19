@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,7 @@ void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindo
 ::rtl::OUString VCLXAccessibleComboBox::getImplementationName (void)
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("com.sun.star.comp.toolkit.AccessibleComboBox");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleComboBox" ));
 }
 
 
@@ -90,7 +91,8 @@ Sequence< ::rtl::OUString > VCLXAccessibleComboBox::getSupportedServiceNames (vo
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString::createFromAscii(
-        "com.sun.star.accessibility.AccessibleComboBox" );
+    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComboBox" ));
     return aNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

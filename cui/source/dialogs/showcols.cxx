@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include "showcols.hxx"
 #include "fmsearch.hrc"
@@ -81,12 +79,11 @@ IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, EMPTYARG )
             {
                 try
                 {
-                    //CHINA001 xCol->setPropertyValue(::svxform::FM_PROP_HIDDEN, ::cppu::bool2any(sal_False));
                     xCol->setPropertyValue(CUIFM_PROP_HIDDEN, ::cppu::bool2any(sal_False));
                 }
                 catch(...)
                 {
-                    DBG_ERROR("FmShowColsDialog::OnClickedOk Exception occured!");
+                    OSL_FAIL("FmShowColsDialog::OnClickedOk Exception occurred!");
                 }
             }
         }
@@ -115,19 +112,16 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
         sal_Bool bIsHidden = sal_False;
         try
         {
-            //CHINA001 ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(::svxform::FM_PROP_HIDDEN);
             ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);
             bIsHidden = ::comphelper::getBOOL(aHidden);
 
             ::rtl::OUString sName;
-            //CHINA001 xCurCol->getPropertyValue(::svxform::FM_PROP_LABEL) >>= sName;
-
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
-            sCurName = (const sal_Unicode*)sName;
+            sCurName = sName;
         }
         catch(...)
         {
-            DBG_ERROR("FmShowColsDialog::SetColumns Exception occured!");
+            OSL_FAIL("FmShowColsDialog::SetColumns Exception occurred!");
         }
 
         // if the col is hidden, put it into the list
@@ -136,3 +130,4 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

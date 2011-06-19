@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
 #define ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/font.hxx>
 
@@ -58,3 +57,5 @@ public:
 };
 
 #endif  // ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

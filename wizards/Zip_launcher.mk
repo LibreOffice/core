@@ -24,13 +24,10 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-
 $(eval $(call gb_Zip_Zip,basicsrvlauncher,$(SRCDIR)/wizards/source/launcher))
-
 $(eval $(call gb_Zip_add_files,basicsrvlauncher,\
 	dialog.xlb \
 	DicOOo.xba \
 	script.xlb \
 ))
-
 # vim: set noet sw=4 ts=4:

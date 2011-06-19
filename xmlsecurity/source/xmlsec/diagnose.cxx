@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlstreamio.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +34,7 @@
 
 namespace xmlsecurity {
 
-struct UseDiagnose : public rtl::StaticWithInit<
-    const bool, UseDiagnose>
+struct UseDiagnose : public rtl::StaticWithInit< bool, UseDiagnose>
 {
     bool operator () () const
     {
@@ -75,3 +72,5 @@ void xmlsec_trace(const char* pszFormat, ...)
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

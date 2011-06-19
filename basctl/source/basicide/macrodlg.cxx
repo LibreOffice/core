@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,16 +53,15 @@
 #include <sbxitem.hxx>
 #include <sfx2/minfitem.hxx>
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/document/MacroExecMode.hpp>
+
+#include <map>
+using ::std::map;
+using ::std::pair;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-
-DECLARE_LIST( MacroList, SbMethod* )
 
 MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
         SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
@@ -210,7 +210,7 @@ void MacroChooser::RestoreMacroDescription()
     }
 }
 
-short __EXPORT MacroChooser::Execute()
+short MacroChooser::Execute()
 {
     RestoreMacroDescription();
     aRunButton.GrabFocus();
@@ -554,39 +554,24 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
         // Die Macros sollen in der Reihenfolge angezeigt werden,
         // wie sie im Modul stehen.
-        MacroList aMacros;
-        sal_uInt16 nMacroCount = pModule->GetMethods()->Count();
-        sal_uInt16 nRealMacroCount = 0;
-        sal_uInt16 iMeth;
-        for ( iMeth = 0; iMeth  < nMacroCount; iMeth++ )
+
+        map< sal_uInt16, SbMethod* > aMacros;
+        size_t nMacroCount = pModule->GetMethods()->Count();
+        for ( size_t iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
             SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( iMeth );
             if( pMethod->IsHidden() )
                 continue;
-            ++nRealMacroCount;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
-            sal_uLong nPos = LIST_APPEND;
             // Eventuell weiter vorne ?
             sal_uInt16 nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
-            for ( sal_uLong n = 0; n < aMacros.Count(); n++ )
-            {
-                sal_uInt16 nS, nE;
-                SbMethod* pM = aMacros.GetObject( n );
-                DBG_ASSERT( pM, "Macro nicht in Liste ?!" );
-                pM->GetLineRange( nS, nE );
-                if ( nS > nStart )
-                {
-                    nPos = n;
-                    break;
-                }
-            }
-            aMacros.Insert( pMethod, nPos );
+            aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
         }
 
         aMacroBox.SetUpdateMode( sal_False );
-        for ( iMeth = 0; iMeth < nRealMacroCount; iMeth++ )
-            aMacroBox.InsertEntry( aMacros.GetObject( iMeth )->GetName() );
+        for ( map< sal_uInt16, SbMethod* >::iterator it = aMacros.begin(); it != aMacros.end(); ++it )
+            aMacroBox.InsertEntry( (*it).second->GetName() );
         aMacroBox.SetUpdateMode( sal_True );
 
         if ( aMacroBox.GetEntryCount() )
@@ -922,3 +907,4 @@ String MacroChooser::GetInfo( SbxVariable* pVar )
     return aComment;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

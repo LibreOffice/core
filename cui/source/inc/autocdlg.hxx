@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,9 +62,7 @@ public:
 
 #ifdef _OFA_AUTOCDLG_CXX
 #include <vcl/group.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svx/simptabl.hxx>
@@ -116,6 +115,7 @@ private:
     String      sDash;
     String      sNonBrkSpace;
     String      sFirst;
+    String      sAccidentalCaps;
 
 public:
                         OfaAutocorrOptionsPage( Window* pParent, const SfxItemSet& rSet );
@@ -153,6 +153,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     String          sByInputBullet;
     String          sBoldUnder;
     String          sNoDblSpaces;
+    String          sCorrectCapsLock;
     String          sDetectURL;
     String          sDash;
     String          sNonBrkSpace;
@@ -239,7 +240,6 @@ private:
         SvStringsISortDtor*     pFormatText;
         DoubleStringTable       aDoubleStringTable;
         CollatorWrapper*        pCompareClass;
-        CollatorWrapper*        pCompareCaseClass;
         CharClass*              pCharClass;
         LanguageType            eLang;
 
@@ -305,7 +305,7 @@ private:
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
 
-    void            RefillReplaceBoxes(sal_Bool bFromReset, //Box mit neuer Sprache fuellen
+    void            RefillReplaceBoxes(sal_Bool bFromReset, //Box filled with new language
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
@@ -417,7 +417,6 @@ class OfaAutoCompleteTabPage : public SfxTabPage
 
     CheckBox        aCBCollect;//Collect words
     CheckBox        aCBRemoveList;//...save the list for later use...
-    //--removed--CheckBox        aCBEndless;//
 
     FixedText       aFTExpandKey;
     ListBox         aDCBExpandKey;
@@ -516,3 +515,4 @@ public:
 
 #endif //
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

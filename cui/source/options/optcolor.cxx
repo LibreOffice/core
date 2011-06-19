@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <svtools/colorcfg.hxx>
@@ -148,10 +146,6 @@ const char* aColorCBHids[] =
      HID_COLORPAGE_BASICERROR_CB
 };
 
-/* -----------------------------2002/06/26 10:48------------------------------
-
- ---------------------------------------------------------------------------*/
-
 class SvxExtFixedText_Impl : public FixedText
 {
 private:
@@ -168,9 +162,6 @@ public:
     inline void     SetGroupHeight( long _nHeight ) { m_nGroupHeight = _nHeight; }
 };
 
-/* -----------------------------25.03.2002 15:48------------------------------
-
- ---------------------------------------------------------------------------*/
 class ColorConfigCtrl_Impl;
 class ColorConfigWindow_Impl : public Window
 {
@@ -207,6 +198,9 @@ class ColorConfigWindow_Impl : public Window
     FixedText       aSmarttagsFT;
     ColorListBox    aSmarttagsLB;
     Window          aSmarttagsWN;
+    CheckBox        aShadowColorCB;
+    ColorListBox    aShadowColorLB;
+    Window          aShadowColorWN;
     Window          aWriterBackWN;
     SvxExtFixedText_Impl    aWriterFT;
     FixedText       aWrtTextGridFT;
@@ -337,6 +331,9 @@ class ColorConfigWindow_Impl : public Window
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
+    // calculate position behind last chapter
+    sal_Int32 impl_getPosBehindLastChapter() const;
+
 public:
     ColorConfigWindow_Impl(Window* pParent, const ResId& rResId);
     ~ColorConfigWindow_Impl();
@@ -399,6 +396,7 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
         case ANCHOR :
         case SPELL :
         case SMARTTAGS :
+        case SHADOWCOLOR :
         {
             nRet = GROUP_GENERAL;
             break;
@@ -472,9 +470,6 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
     return nRet;
 }
 
-/* -----------------------------25.03.2002 17:05------------------------------
-
- ---------------------------------------------------------------------------*/
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
         aGeneralBackWN(this),
@@ -509,6 +504,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aSmarttagsFT(this, ResId(        FT_SMARTTAGS, *rResId.GetResMgr() )),
         aSmarttagsLB(this, ResId(        LB_SMARTTAGS, *rResId.GetResMgr() )),
         aSmarttagsWN(this, ResId(        WN_SMARTTAGS, *rResId.GetResMgr() )),
+        aShadowColorCB(this, ResId(      CB_SHADOWCOLOR, *rResId.GetResMgr())),
+        aShadowColorLB(this, ResId(      LB_SHADOWCOLOR, *rResId.GetResMgr())),
+        aShadowColorWN(this, ResId(      WN_SHADOWCOLOR, *rResId.GetResMgr())),
         aWriterBackWN(this),
         aWriterFT(this, ResId(FT_WRITER, *rResId.GetResMgr())),
         aWrtTextGridFT(this, ResId(     FT_WRITERTEXTGRID, *rResId.GetResMgr())),
@@ -646,6 +644,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aCheckBoxes[LINKSVISITED        ] = &aLinksVisitedCB         ;
     aFixedTexts[SPELL            ]=& aSpellFT;
     aFixedTexts[SMARTTAGS        ]=& aSmarttagsFT;
+    aCheckBoxes[SHADOWCOLOR      ]=& aShadowColorCB;
     aFixedTexts[WRITERTEXTGRID   ]=& aWrtTextGridFT;
     aCheckBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldCB             ;
     aCheckBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackCB       ;
@@ -691,6 +690,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[LINKSVISITED        ] = &aLinksVisitedLB         ;
     aColorBoxes[SPELL               ] = &aSpellLB             ;
     aColorBoxes[SMARTTAGS           ] = &aSmarttagsLB             ;
+    aColorBoxes[SHADOWCOLOR         ] = &aShadowColorLB  ;
     aColorBoxes[WRITERTEXTGRID      ] = &aWrtTextGridLB          ;
     aColorBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldLB             ;
     aColorBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackLB       ;
@@ -736,6 +736,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[LINKSVISITED        ] = &aLinksVisitedWN         ;
     aWindows[SPELL               ] = &aSpellWN             ;
     aWindows[SMARTTAGS           ] = &aSmarttagsWN             ;
+    aWindows[SHADOWCOLOR         ] = &aShadowColorWN    ;
     aWindows[WRITERTEXTGRID      ] = &aWrtTextGridWN          ;
     aWindows[WRITERFIELDSHADINGS ] = &aWrtFieldWN             ;
     aWindows[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackWN       ;
@@ -785,20 +786,18 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aChapters[GROUP_CALC    ]->SetGroupHeight( aChapters[GROUP_DRAW]->GetPosPixel().Y() -  aChapters[GROUP_CALC]->GetPosPixel().Y() );
     aChapters[GROUP_DRAW    ]->SetGroupHeight( aChapters[GROUP_BASIC]->GetPosPixel().Y() - aChapters[GROUP_DRAW]->GetPosPixel().Y() );
     aChapters[GROUP_BASIC   ]->SetGroupHeight( aChapters[GROUP_SQL]->GetPosPixel().Y() - aChapters[GROUP_BASIC]->GetPosPixel().Y() );
+    aChapters[GROUP_SQL]->SetGroupHeight(impl_getPosBehindLastChapter()
+            - aChapters[GROUP_SQL]->GetPosPixel().Y());
 
     ExtendedColorConfig aExtConfig;
     sal_Int32 nExtCount = aExtConfig.GetComponentCount();
     if ( nExtCount )
     {
-        // calculate position behind last chapter
-        sal_Int32 nLastY = aSQLCommentWN.GetPosPixel().Y() + aSQLCommentWN.GetSizePixel().Height();
-        nLastY = nLastY + LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+        const sal_Int32 nLastY(impl_getPosBehindLastChapter());
         // to calculate the number of lines
         sal_Int32 nHeight = LogicToPixel( Size( 0, _LINE_HEIGHT ), MAP_APPFONT ).Height();
         sal_Int32 nLineNum = nLastY / nHeight;
 
-        Point aFixedPos = LogicToPixel( Point( _FT_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT );
-        Point aLBPos = LogicToPixel( Point( _LB_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT );
         Size aFixedSize = LogicToPixel( Size( _FT_WIDTH , _FT_HEIGHT ), MAP_APPFONT );
         Size aLBSize = LogicToPixel( Size( _LB_WIDTH , _LB_HEIGHT ), MAP_APPFONT );
         Size aWinSize = LogicToPixel( Size( _WN_WIDTH , _WN_HEIGHT ), MAP_APPFONT );
@@ -956,9 +955,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
 }
-/* -----------------------------27.03.2002 11:04------------------------------
 
- ---------------------------------------------------------------------------*/
 ColorConfigWindow_Impl::~ColorConfigWindow_Impl()
 {
     aChapters.clear();
@@ -978,9 +975,15 @@ ColorConfigWindow_Impl::~ColorConfigWindow_Impl()
     aChapterWins.clear();
     ::std::vector< Window*>().swap(aChapterWins);
 }
-/* -----------------------------2002/06/20 12:48------------------------------
 
- ---------------------------------------------------------------------------*/
+sal_Int32
+ColorConfigWindow_Impl::impl_getPosBehindLastChapter() const
+{
+    sal_Int32 nLastY = aSQLCommentWN.GetPosPixel().Y() + aSQLCommentWN.GetSizePixel().Height();
+    nLastY = nLastY + LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+    return nLastY;
+}
+
 void ColorConfigWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -997,9 +1000,7 @@ void ColorConfigWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
     }
 }
-/* -----------------------------2002/06/26 10:49------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxExtFixedText_Impl::DataChanged(const DataChangedEvent& rDCEvt)
 {
     FixedText::DataChanged(rDCEvt);
@@ -1038,16 +1039,11 @@ void ColorConfigWindow_Impl::SetNewPosition( sal_Int32 _nFeature, Window* _pWin 
     }
 }
 
-/* -----------------------------08.04.2002 17:10------------------------------
-
- ---------------------------------------------------------------------------*/
 void ColorConfigWindow_Impl::Command( const CommandEvent& rCEvt )
 {
     GetParent()->Command(rCEvt);
 }
-/* -----------------------------25.03.2002 10:44------------------------------
 
- ---------------------------------------------------------------------------*/
 class ColorConfigCtrl_Impl : public Control
 {
     HeaderBar               aHeaderHB;
@@ -1086,9 +1082,7 @@ public:
                         ScrollHdl(&aVScroll);
                     }
 };
-/* -----------------------------25.03.2002 17:09------------------------------
 
- ---------------------------------------------------------------------------*/
 ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
         Window* pParent, const ResId& rResId) :
         Control(pParent, rResId),
@@ -1179,15 +1173,11 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
         }
     }
 }
-/* -----------------------------27.03.2002 10:46------------------------------
 
- ---------------------------------------------------------------------------*/
 ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 {
 }
-/* -----------------------------25.03.2002 17:19------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColorConfigCtrl_Impl::Update()
 {
     DBG_ASSERT(pColorConfig, "Configuration not set" );
@@ -1252,10 +1242,8 @@ void ColorConfigCtrl_Impl::Update()
         }
     }
 }
-/* -----------------------------26.03.2002 12:55------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, bool _bShow)
+sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, sal_Bool _bShow)
 {
     sal_Bool bHide = sal_True;
     if(pWindow)
@@ -1286,12 +1274,14 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
             continue;
         Point aPos;
         //controls outside of the view need to be hidden to speed up accessibility tools
-        bool bShowCtrl = ( lcl_isGroupVisible(
+        sal_Bool bShowCtrl = ( lcl_isGroupVisible(
             lcl_getGroup(i), aScrollWindow.GetModuleOptions() ) != sal_False );
-        lcl_MoveAndShow(aScrollWindow.aCheckBoxes[i], nOffset, nWindowHeight, bShowCtrl);
-        lcl_MoveAndShow(aScrollWindow.aFixedTexts[i], nOffset, nWindowHeight, bShowCtrl);
-        lcl_MoveAndShow(aScrollWindow.aWindows[i]   , nOffset, nWindowHeight, bShowCtrl);
-        sal_Bool bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight, bShowCtrl);
+        // if any of the items on the current line is visible, the
+        // whole line should be visible
+        sal_Bool bShow(lcl_MoveAndShow(aScrollWindow.aCheckBoxes[i], nOffset, nWindowHeight, bShowCtrl));
+        bShow = lcl_MoveAndShow(aScrollWindow.aFixedTexts[i], nOffset, nWindowHeight, bShowCtrl) || bShow;
+        bShow = lcl_MoveAndShow(aScrollWindow.aWindows[i]   , nOffset, nWindowHeight, bShowCtrl) || bShow;
+        bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight, bShowCtrl) || bShow;
         if(bShow)
         {
             if(nFirstVisible == -1)
@@ -1303,7 +1293,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
     //show the one prior to the first visible and the first after the last visble control
     //to enable KEY_TAB travelling
 
-    if(nFirstVisible)
+    if(nFirstVisible > 0)
     {
         //skip gaps where no controls exist for the related ColorConfigEntry
         do
@@ -1348,9 +1338,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
     aScrollWindow.SetUpdateMode(sal_True);
     return 0;
 }
-/* -----------------------------29.04.2002 17:02------------------------------
 
- ---------------------------------------------------------------------------*/
 long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType() == EVENT_COMMAND)
@@ -1365,9 +1353,7 @@ long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     return Control::PreNotify(rNEvt);
 }
-/* -----------------------------08.04.2002 16:37------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
 {
     switch ( rCEvt.GetCommand() )
@@ -1389,9 +1375,6 @@ void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
     }
 }
 
-/* -----------------------------14.12.2005 12:37------------------------------
-
- ---------------------------------------------------------------------------*/
 void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -1403,10 +1386,6 @@ void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-
-/* -----------------------------27.03.2002 11:43------------------------------
-
- ---------------------------------------------------------------------------*/
 IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set" );
@@ -1422,12 +1401,10 @@ IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
             pColorConfig->SetColorValue(ColorConfigEntry(i), aBoundCol);
             break;
         }
-    } // for( sal_Int32 i = 0; i < ColorConfigEntryCount; i++ )
+    }
     return 0;
 }
-/* -----------------------------27.03.2002 11:43------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set" );
@@ -1518,9 +1495,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
     }
     return 0;
 };
-/* -----------------------------25.03.2002 10:47------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet) :
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_COLORCONFIG ), rCoreSet ),
@@ -1541,9 +1516,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     aSaveSchemePB.SetClickHdl(aLk);
     aDeleteSchemePB.SetClickHdl(aLk);
 }
-/* -----------------------------25.03.2002 10:47------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 {
     //when the dialog is cancelled but the color scheme ListBox has been changed these
@@ -1565,16 +1538,12 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     pExtColorConfig->EnableBroadcast();
     delete pExtColorConfig;
 }
-/* -----------------------------25.03.2002 10:47------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxColorOptionsTabPage( pParent, rAttrSet ) );
 }
-/* -----------------------------25.03.2002 10:47------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
     bFillItemSetCalled = sal_True;
@@ -1589,9 +1558,7 @@ sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
         pExtColorConfig->Commit();
     return sal_True;
 }
-/* -----------------------------25.03.2002 10:47------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
 {
     if(pColorConfig)
@@ -1625,26 +1592,20 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
     aDeleteSchemePB.Enable( aSchemes.getLength() > 1 );
     UpdateColorConfig();
 }
-/* -----------------------------25.03.2002 10:47------------------------------
 
- ---------------------------------------------------------------------------*/
 int SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( *_pSet );
     return( LEAVE_PAGE );
 }
-/* -----------------------------25.03.2002 15:32------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxColorOptionsTabPage::UpdateColorConfig()
 {
     //update the color config control
     pColorConfigCT->Update();
 }
-/* -----------------------------25.03.2002 15:30------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox*, pBox)
 {
     pColorConfig->LoadScheme(pBox->GetSelectEntry());
@@ -1652,37 +1613,33 @@ IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox*, pBox)
     UpdateColorConfig();
     return 0;
 }
-/* -----------------------------09.04.2002 15:21------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
 {
     if(&aSaveSchemePB == pButton)
     {
         String sName;
-        //CHINA001 SvxNameDialog aNameDlg(pButton,
-        //CHINA001                     sName,
-        //CHINA001                     String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)));
+
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pButton,
                             sName, String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)) );
-        DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         aNameDlg->SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1)));
         aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
         aNameDlg->SetEditHelpId(HID_OPTIONS_COLORCONFIG_NAME_SCHEME);
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
-        if(RET_OK == aNameDlg->Execute()) //CHINA001 if(RET_OK == aNameDlg.Execute())
+        if(RET_OK == aNameDlg->Execute())
         {
-            aNameDlg->GetName(sName); //CHINA001 aNameDlg.GetName(sName);
+            aNameDlg->GetName(sName);
             pColorConfig->AddScheme(sName);
             pExtColorConfig->AddScheme(sName);
             aColorSchemeLB.InsertEntry(sName);
             aColorSchemeLB.SelectEntry(sName);
             aColorSchemeLB.GetSelectHdl().Call(&aColorSchemeLB);
         }
-        delete aNameDlg; //add by CHINA001
+        delete aNameDlg;
     }
     else
     {
@@ -1703,20 +1660,17 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     aDeleteSchemePB.Enable( aColorSchemeLB.GetEntryCount() > 1 );
     return 0;
 }
-/* -----------------------------09.04.2002 15:47------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog*, pDialog )
 {
     String sName;
     pDialog->GetName(sName);
     return sName.Len() && LISTBOX_ENTRY_NOTFOUND == aColorSchemeLB.GetEntryPos( sName );
 }
-/* -----------------------------25.04.2002 15:12------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxColorOptionsTabPage::FillUserData()
 {
     SetUserData(String::CreateFromInt32(pColorConfigCT->GetScrollPosition()));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

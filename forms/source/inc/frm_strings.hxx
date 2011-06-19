@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,6 +98,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_TABINDEX,                 "TabIndex" );
     FORMS_CONSTASCII_STRING( PROPERTY_TAG,                      "Tag" );
     FORMS_CONSTASCII_STRING( PROPERTY_NAME,                     "Name" );
+    FORMS_CONSTASCII_STRING( PROPERTY_GROUP_NAME,               "GroupName" );
     FORMS_CONSTASCII_STRING( PROPERTY_CLASSID,                  "ClassId" );
     FORMS_CONSTASCII_STRING( PROPERTY_FETCHSIZE,                "FetchSize" );
     FORMS_CONSTASCII_STRING( PROPERTY_VALUE,                    "Value" );
@@ -359,3 +361,5 @@ namespace frm
 
 
 #endif // FRM_STRINGS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

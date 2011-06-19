@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,10 @@
 #include "Base64Codec.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
+
+using ::rtl::OUStringBuffer;
 
 const
   sal_Char aBase64EncodeTable[] =
@@ -202,3 +204,5 @@ void Base64Codec::decodeBase64(uno::Sequence< sal_Int8 >& aBuffer, const rtl::OU
     aBuffer = uno::Sequence<sal_Int8>( reinterpret_cast< sal_Int8* >( pBuffer ), nSecondLength );
     delete[] pBuffer;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

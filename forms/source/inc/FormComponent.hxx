@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ namespace frm
     // old macro for quickly implementing XServiceInfo::getImplementationName
     #define IMPLEMENTATION_NAME(ImplName)                                       \
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) \
-        { return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.") + ::rtl::OUString::createFromAscii(#ImplName); }
+        { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.forms.") ) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(#ImplName)); }
 
     class OControlModel;
 
@@ -1318,3 +1319,4 @@ private:
 
 #endif // _FORMS_FORMCOMPONENT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

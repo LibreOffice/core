@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@ CreateTabPage   GetSSOCreator( void );
 
 // class OfaOptionsTreeListBox -------------------------------------------
 
-//!#define NUMBER_OF_OPTION_PAGES  12
 class SfxModule;
 class SfxShell;
 class SfxItemSet;
@@ -188,7 +188,6 @@ private:
     FixedImage      aHelpImg;
 
     ImageList       aPageImages;
-    ImageList       aPageImagesHC;
 
     ResStringArray  aHelpTextsArr;
 
@@ -350,3 +349,4 @@ public:
     void            SavePage();
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -147,7 +147,6 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 69 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Führende ~Nullen : F³hrende ~Nullen */
         Text [ en-US ] = "Leading ~zeroes" ;
     };
     NumericField ED_LEADZEROES
@@ -241,18 +240,6 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageList IL_ICON
     {
         Prefix = "nu";
-        MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-        IdList =
-        {
-            IID_ADD ;
-            IID_REMOVE ;
-            IID_INFO ;
-        };
-        IdCount = { 3 ; };
-    };
-    ImageList IL_ICON_HC
-    {
-        Prefix = "nuh";
         MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
         IdList =
         {

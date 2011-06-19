@@ -34,22 +34,10 @@ Image IMG_REPORT_ORIENTATION_PORTRAIT
     ImageBitmap = Bitmap { File = "portrait_32.png"; };
 };
 
-#define IMG_REPORT_ORIENTATION_PORTRAIT_HC      REPORTWIZARD_BASE + 1
-Image IMG_REPORT_ORIENTATION_PORTRAIT_HC
-{
-    ImageBitmap = Bitmap { File = "portrait_32_h.png"; };
-};
-
 #define IMG_REPORT_ORIENTATION_LANDSCAPE        REPORTWIZARD_BASE + 2
 Image IMG_REPORT_ORIENTATION_LANDSCAPE
 {
     ImageBitmap = Bitmap { File = "landscape_32.png"; };
-};
-
-#define IMG_REPORT_ORIENTATION_LANDSCAPE_HC     REPORTWIZARD_BASE + 3
-Image IMG_REPORT_ORIENTATION_LANDSCAPE_HC
-{
-    ImageBitmap = Bitmap { File = "landscape_32_h.png"; };
 };
 
 #define IMG_FORM_ARRANGELISTSIDE                FORMWIZARD_BASE + 0
@@ -58,22 +46,10 @@ Image IMG_FORM_ARRANGELISTSIDE
     ImageBitmap = Bitmap { File = "formarrangelistside_42.png"; };
 };
 
-#define IMG_FORM_ARRANGELISTSIDE_HC             FORMWIZARD_BASE + 1
-Image IMG_FORM_ARRANGELISTSIDE_HC
-{
-    ImageBitmap = Bitmap { File = "formarrangelistside_42_h.png"; };
-};
-
 #define IMG_FORM_ARRANGELISTTOP                 FORMWIZARD_BASE + 2
 Image IMG_FORM_ARRANGELISTTOP
 {
     ImageBitmap = Bitmap { File = "formarrangelisttop_42.png"; };
-};
-
-#define IMG_FORM_ARRANGELISTTOP_HC              FORMWIZARD_BASE + 3
-Image IMG_FORM_ARRANGELISTTOP_HC
-{
-    ImageBitmap = Bitmap { File = "formarrangelisttop_42_h.png"; };
 };
 
 #define IMG_FORM_ARRANGETABLE                   FORMWIZARD_BASE + 4
@@ -82,25 +58,11 @@ Image IMG_FORM_ARRANGETABLE
     ImageBitmap = Bitmap { File = "formarrangetable_42.png"; };
 };
 
-#define IMG_FORM_ARRANGETABLE_HC                    FORMWIZARD_BASE + 5
-Image IMG_FORM_ARRANGETABLE_HC
-{
-    ImageBitmap = Bitmap { File = "formarrangetable_42_h.png"; };
-};
-
-
 #define IMG_FORM_ARRANGEFREE                    FORMWIZARD_BASE + 6
 Image IMG_FORM_ARRANGEFREE
 {
     ImageBitmap = Bitmap { File = "formarrangefree_42.png"; };
 };
-
-#define IMG_FORM_ARRANGEFREE_HC                 FORMWIZARD_BASE + 7
-Image IMG_FORM_ARRANGEFREE_HC
-{
-    ImageBitmap = Bitmap { File = "formarrangefree_42_h.png"; };
-};
-
 
 #define IMG_WEB_LAYOUT_TABLE3                       WEBWIZARD_BASE + 0
 Image IMG_WEB_LAYOUT_TABLE3
@@ -108,37 +70,16 @@ Image IMG_WEB_LAYOUT_TABLE3
     ImageBitmap = Bitmap { File = "table_3.png"; };
 };
 
-#define IMG_WEB_LAYOUT_TABLE3_HC                        WEBWIZARD_BASE + 1
-Image IMG_WEB_LAYOUT_TABLE3_HC
-{
-    ImageBitmap = Bitmap { File = "table_3_h.png"; };
-};
-
-
 #define IMG_WEB_LAYOUT_TABLE2                       WEBWIZARD_BASE + 2
 Image IMG_WEB_LAYOUT_TABLE2
 {
     ImageBitmap = Bitmap { File = "table_2.png"; };
 };
 
-
-#define IMG_WEB_LAYOUT_TABLE2_HC                    WEBWIZARD_BASE + 3
-Image IMG_WEB_LAYOUT_TABLE2_HC
-{
-    ImageBitmap = Bitmap { File = "table_2_h.png"; };
-};
-
-
 #define IMG_WEB_LAYOUT_SIMPLE                       WEBWIZARD_BASE + 4
 Image IMG_WEB_LAYOUT_SIMPLE
 {
     ImageBitmap = Bitmap { File = "simple.png"; };
-};
-
-#define IMG_WEB_LAYOUT_SIMPLE_HC                    WEBWIZARD_BASE + 5
-Image IMG_WEB_LAYOUT_SIMPLE_HC
-{
-    ImageBitmap = Bitmap { File = "simple_h.png"; };
 };
 
 #define IMG_WEB_LAYOUT_DIAGONAL                     WEBWIZARD_BASE + 6
@@ -147,22 +88,10 @@ Image IMG_WEB_LAYOUT_DIAGONAL
     ImageBitmap = Bitmap { File = "diagonal.png"; };
 };
 
-#define IMG_WEB_LAYOUT_DIAGONAL_HC                  WEBWIZARD_BASE + 7
-Image IMG_WEB_LAYOUT_DIAGONAL_HC
-{
-    ImageBitmap = Bitmap { File = "diagonal_h.png"; };
-};
-
 #define IMG_WEB_LAYOUT_ZIGZAG                       WEBWIZARD_BASE + 8
 Image IMG_WEB_LAYOUT_ZIGZAG
 {
     ImageBitmap = Bitmap { File = "zigzag.png"; };
-};
-
-#define IMG_WEB_LAYOUT_ZIGZAG_HC                        WEBWIZARD_BASE + 9
-Image IMG_WEB_LAYOUT_ZIGZAG_HC
-{
-    ImageBitmap = Bitmap { File = "zigzag_h.png"; };
 };
 
 #define IMG_WEB_LAYOUT_FRAMELEFT                        WEBWIZARD_BASE + 10
@@ -171,22 +100,10 @@ Image IMG_WEB_LAYOUT_FRAMELEFT
     ImageBitmap = Bitmap { File = "frame_left.png"; };
 };
 
-#define IMG_WEB_LAYOUT_FRAMELEFT_HC                     WEBWIZARD_BASE + 11
-Image IMG_WEB_LAYOUT_FRAMELEFT_HC
-{
-    ImageBitmap = Bitmap { File = "frame_left_h.png"; };
-};
-
 #define IMG_WEB_LAYOUT_FRAMERIGHT                       WEBWIZARD_BASE + 12
 Image IMG_WEB_LAYOUT_FRAMERIGHT
 {
     ImageBitmap = Bitmap { File = "frame_right.png"; };
-};
-
-#define IMG_WEB_LAYOUT_FRAMERIGHT_HC                        WEBWIZARD_BASE + 13
-Image IMG_WEB_LAYOUT_FRAMERIGHT_HC
-{
-    ImageBitmap = Bitmap { File = "frame_right_h.png"; };
 };
 
 #define IMG_WEB_LAYOUT_FRAMETOP                         WEBWIZARD_BASE + 14
@@ -195,21 +112,8 @@ Image IMG_WEB_LAYOUT_FRAMETOP
     ImageBitmap = Bitmap { File = "frame_top.png"; };
 };
 
-#define IMG_WEB_LAYOUT_FRAMETOP_HC                      WEBWIZARD_BASE + 15
-Image IMG_WEB_LAYOUT_FRAMETOP_HC
-{
-    ImageBitmap = Bitmap { File = "frame_top_h.png"; };
-};
-
 #define IMG_WEB_LAYOUT_FRAMEBOTTOM                          WEBWIZARD_BASE + 16
 Image IMG_WEB_LAYOUT_FRAMEBOTTOM
 {
     ImageBitmap = Bitmap { File = "frame_bottom.png"; };
 };
-
-#define IMG_WEB_LAYOUT_FRAMEBOTTOM_HC                           WEBWIZARD_BASE + 17
-Image IMG_WEB_LAYOUT_FRAMEBOTTOM_HC
-{
-    ImageBitmap = Bitmap { File = "frame_bottom_h.png"; };
-};
-

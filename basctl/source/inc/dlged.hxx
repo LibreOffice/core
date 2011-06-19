@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
@@ -128,9 +130,11 @@ protected:
     sal_Bool                bDialogModelChanged;
     Timer               aMarkTimer;
     long                mnPaintGuard;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
 
+    DlgEditor(); // not implemented
 public:
-    DlgEditor();
+    DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
     ~DlgEditor();
 
     void            SetWindow( Window* pWindow );
@@ -207,3 +211,5 @@ public:
 };
 
 #endif //_BASCTL_DLGED_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

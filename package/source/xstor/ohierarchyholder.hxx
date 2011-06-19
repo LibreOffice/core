@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <vector>
 
@@ -51,7 +52,7 @@ struct eqFunc
         return r1 == r2;
     }
 };
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                          ::rtl::Reference< OHierarchyElement_Impl >,
                          ::rtl::OUStringHash,
                          eqFunc > OHierarchyElementList_Impl;
@@ -139,3 +140,4 @@ public:
 
 #endif // _OHIERARCHYHOLDER
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

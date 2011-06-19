@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <tools/debug.hxx>
 #include <vcl/toolbox.hxx>
@@ -391,7 +391,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdd
                 if ( pItem )
                 {
                     sal_Int32 nIndex = pItem->getIndexInParent( );
-                    nIndex += _bItemAdded ? +1 : -1;
+                    nIndex += (_bItemAdded ? +1 : -1);
                     pItem->setIndexInParent( nIndex );
                 }
             }
@@ -400,7 +400,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdd
                 if ( pWindowItem )
                 {
                     sal_Int32 nIndex = pWindowItem->getIndexInParent( );
-                    nIndex += _bItemAdded ? +1 : -1;
+                    nIndex += (_bItemAdded ? +1 : -1);
                     pWindowItem->setIndexInParent( nIndex );
                 }
             }
@@ -685,7 +685,7 @@ void SAL_CALL VCLXAccessibleToolBox::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString VCLXAccessibleToolBox::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleToolBox" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleToolBox" ));
 }
 // -----------------------------------------------------------------------------
 Sequence< ::rtl::OUString > VCLXAccessibleToolBox::getSupportedServiceNames() throw (RuntimeException)
@@ -693,7 +693,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleToolBox::getSupportedServiceNames() th
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleComponent::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleToolBox" );
+    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleToolBox" ));
     return aNames;
 }
 // -----------------------------------------------------------------------------
@@ -880,3 +880,5 @@ void VCLXAccessibleToolBox::deselectAccessibleChild( sal_Int32 nChildIndex ) thr
     clearAccessibleSelection(); // a toolbox can only have (n)one selected child
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

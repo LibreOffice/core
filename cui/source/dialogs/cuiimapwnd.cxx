@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -87,11 +85,13 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeT
     maEdtDescription.SetText( rDescription );
     maEdtName.SetText( rName );
 
-    for( String* pStr = rTargetList.First(); pStr; pStr = rTargetList.Next() )
-        maCbbTargets.InsertEntry( *pStr );
+    for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
+        maCbbTargets.InsertEntry( *rTargetList[ i ] );
 
     if( !rTarget.Len() )
         maCbbTargets.SetText( String::CreateFromAscii( "_self" ) );
     else
         maCbbTargets.SetText( rTarget );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

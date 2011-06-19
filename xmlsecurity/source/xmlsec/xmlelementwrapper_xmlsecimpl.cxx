@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,9 +146,6 @@ xmlNodePtr XMLElementWrapper_XmlSecImpl::getNativeElement(  ) const
  *   RESULT
  *  pNode - the libxml2 node wrapped by this object
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -174,9 +172,6 @@ void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -185,3 +180,4 @@ void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
     m_pElement = pNode;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

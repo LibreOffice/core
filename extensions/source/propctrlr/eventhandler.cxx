@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,6 +79,7 @@
 
 #include <map>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()
@@ -220,7 +222,7 @@ namespace pcr
                     DESCRIBE_EVENT( "sdb",  "XRowSetApproveListener",       "approveCursorMove",        POSITIONING );
                     DESCRIBE_EVENT( "sdbc", "XRowSetListener",              "cursorMoved",              POSITIONED );
                     DESCRIBE_EVENT( "form", "XDatabaseParameterListener",   "approveParameter",         APPROVEPARAMETER );
-                    DESCRIBE_EVENT( "sdb",  "XSQLErrorListener",            "errorOccured",             ERROROCCURED );
+                    DESCRIBE_EVENT( "sdb",  "XSQLErrorListener",            "errorOccured",             ERROROCCURRED );
                     DESCRIBE_EVENT( "awt",  "XAdjustmentListener",          "adjustmentValueChanged",   ADJUSTMENTVALUECHANGED );
                 }
             }
@@ -265,13 +267,13 @@ namespace pcr
                     ||  ( pAssignedEvent->ScriptType.getLength() == 0 )
                     )
                 {
-                    DBG_ERROR( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
+                    OSL_FAIL( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
                     continue;
                 }
 
                 aScriptEvent = *pAssignedEvent;
 
-                if ( !aScriptEvent.ScriptType.equalsAscii( "StarBasic" ) )
+                if ( !aScriptEvent.ScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarBasic" ) ) )
                     continue;
 
                 // this is an old-style macro specification:
@@ -304,7 +306,7 @@ namespace pcr
             EventDescription aKnownEvent;
             if ( lcl_getEventDescriptionForMethod( _rFormComponentEventDescriptor.EventMethod, aKnownEvent ) )
                 return aKnownEvent.sListenerClassName;
-            DBG_ERROR( "lcl_getQualifiedKnownListenerName: unknown method name!" );
+            OSL_FAIL( "lcl_getQualifiedKnownListenerName: unknown method name!" );
                 // somebody assigned an script to a form component event which we don't know
                 // Speaking strictly, this is not really an error - it is possible to do
                 // this programmatically -, but it should rarely happen, since it's not possible
@@ -354,7 +356,7 @@ namespace pcr
     class EventHolder : public EventHolder_Base
     {
     private:
-        typedef ::std::hash_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
+        typedef ::boost::unordered_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
         typedef ::std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
 
         EventMap            m_aEventNameAccess;
@@ -447,9 +449,9 @@ namespace pcr
 
         Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
-        aScriptDescriptor[0].Name = ::rtl::OUString::createFromAscii( "EventType" );
+        aScriptDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EventType"));
         aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
-        aScriptDescriptor[1].Name = ::rtl::OUString::createFromAscii( "Script" );
+        aScriptDescriptor[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
         aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
 
         return makeAny( aScriptDescriptor );
@@ -845,7 +847,7 @@ namespace pcr
 
         StlSyntaxSequence< Property > aReturn( aOrderedProperties.size() );
         ::std::transform( aOrderedProperties.begin(), aOrderedProperties.end(), aReturn.begin(),
-            ::std::select2nd< ::std::map< EventId, Property >::value_type >() );
+            ::o3tl::select2nd< ::std::map< EventId, Property >::value_type >() );
         return aReturn;
     }
 
@@ -971,7 +973,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL EventHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
-        DBG_ERROR( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
+        OSL_FAIL( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
 
     //--------------------------------------------------------------------
@@ -1284,3 +1286,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

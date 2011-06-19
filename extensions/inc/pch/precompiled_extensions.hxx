@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 //---MARKER---
 #include "sal/config.h"
 #include "sal/types.h"
-
 
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
@@ -456,28 +456,22 @@
 #include "cppuhelper/weakagg.hxx"
 #include "cppuhelper/weakref.hxx"
 
-
-
 #include "i18npool/mslangid.hxx"
 
-
-
-
 #include "osl/conditn.h"
+#include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/doublecheckedlocking.h"
 #include "osl/file.hxx"
 #include "osl/getglobalmutex.hxx"
 #include "osl/interlck.h"
 #include "osl/module.h"
-#include "osl/module.hxx"
-#include "osl/mutex.hxx"
 #include "osl/nlsupport.h"
+#include "osl/pipe.hxx"
 #include "osl/process.h"
 #include "osl/security.hxx"
 #include "osl/thread.h"
 #include "osl/time.h"
-
 
 #include "rtl/alloc.h"
 #include "rtl/bootstrap.hxx"
@@ -487,6 +481,7 @@
 #include "rtl/math.hxx"
 #include "rtl/memory.h"
 #include "rtl/process.h"
+#include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -497,12 +492,9 @@
 #include "rtl/uuid.h"
 
 #include "salhelper/simplereferenceobject.hxx"
+#include "salhelper/timer.hxx"
 
 #include "sane/sane.h"
-
-
-
-
 
 #include "svl/filenotation.hxx"
 #include "svtools/imgdef.hxx"
@@ -515,14 +507,11 @@
 #include "sys/stat.h"
 #include "sys/types.h"
 
-
 #include "tools/diagnose_ex.h"
-
 
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
 #include "typelib/typedescription.hxx"
-
 
 #include "uno/dispatcher.h"
 #include "uno/environment.h"
@@ -532,21 +521,14 @@
 #include "unotools/confignode.hxx"
 #include "unotools/processfactory.hxx"
 
-
 #include "tools/fldunit.hxx"
 
-#include "vos/conditn.hxx"
-#include "vos/diagnose.hxx"
-#include "vos/macros.hxx"
-#include "vos/module.hxx"
-#include "vos/mutex.hxx"
-#include "vos/pipe.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
-#include "vos/thread.hxx"
-#include "vos/timer.hxx"
+#include "osl/module.hxx"
+#include "osl/mutex.hxx"
 
 #include "xmloff/nmspmap.hxx"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

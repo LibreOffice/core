@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,14 +90,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString DefaultHelpProvider::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.extensions.DefaultHelpProvider");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.DefaultHelpProvider"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DefaultHelpProvider::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.inspection.DefaultHelpProvider" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.inspection.DefaultHelpProvider"));
         return aSupported;
     }
 
@@ -204,3 +205,5 @@ namespace pcr
 //........................................................................
 } // namespace pcr
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

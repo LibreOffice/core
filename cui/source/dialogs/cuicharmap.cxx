@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 
 #include <stdio.h>
@@ -37,15 +35,16 @@
 #include <tools/debug.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/itempool.hxx>
 
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
+#include <sfx2/objsh.hxx>
+#include <vcl/msgbox.hxx>
+#include <svl/stritem.hxx>
 
 #include <cuires.hrc>
 #include <dialmgr.hxx>
@@ -263,12 +262,10 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
 :   mpDialog( pDialog ),
     aShowSet        ( pDialog, ResId( CT_SHOWSET, *pResContext ) ),
     aShowText       ( pDialog, ResId( CT_SHOWTEXT, *pResContext ) ),
-//    aShowShortcut   ( pDialog, ResId( CT_ASSIGN, *pResContext ) ),
     aOKBtn          ( pDialog, ResId( BTN_CHAR_OK, *pResContext ) ),
     aCancelBtn      ( pDialog, ResId( BTN_CHAR_CANCEL, *pResContext ) ),
     aHelpBtn        ( pDialog, ResId( BTN_CHAR_HELP, *pResContext ) ),
     aDeleteBtn      ( pDialog, ResId( BTN_DELETE, *pResContext ) ),
-//    aAssignBtn      ( pDialog, ResId( BT_ASSIGN, *pResContext ) ),
     aFontText       ( pDialog, ResId( FT_FONT, *pResContext ) ),
     aFontLB         ( pDialog, ResId( LB_FONT, *pResContext ) ),
     aSubsetText     ( pDialog, ResId( FT_SUBSET, *pResContext ) ),
@@ -276,7 +273,6 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
     aSymbolText     ( pDialog, ResId( FT_SYMBOLE, *pResContext ) ),
     aShowChar       ( pDialog, ResId( CT_SHOWCHAR, *pResContext ), sal_True ),
     aCharCodeText   ( pDialog, ResId( FT_CHARCODE, *pResContext ) ),
-//    aAssignText     ( pDialog, ResId( FT_ASSIGN, *pResContext ) ),
     bOne( bOne_ ),
     pSubsetMap( NULL )
 {
@@ -312,7 +308,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
     // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
-    FASTBOOL bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
+    bool bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
     if( !bFound )
     {
         for ( xub_StrLen i = 0; i < aDefStr.GetTokenCount(); ++i )
@@ -341,7 +337,6 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
     aShowSet.SetHighlightHdl( LINK( this, SvxCharMapData, CharHighlightHdl ) );
     aShowSet.SetPreSelectHdl( LINK( this, SvxCharMapData, CharPreSelectHdl ) );
     aDeleteBtn.SetClickHdl( LINK( this, SvxCharMapData, DeleteHdl ) );
-//    aAssignBtn.SetClickHdl( LINK( this, SvxCharMapData, AssignHdl ) );
 
     if( SvxShowCharSet::getSelectedChar() == ' ')
         aOKBtn.Disable();
@@ -351,7 +346,6 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
     // left align aShowText field
     int nLeftEdge = aSymbolText.GetPosPixel().X();
     nLeftEdge += aSymbolText.GetTextWidth( aSymbolText.GetText() );
-    Size aNewSize = aShowText.GetOutputSizePixel();
     aShowText.SetPosPixel( Point( nLeftEdge+4, aShowText.GetPosPixel().Y() ) );
 }
 
@@ -564,10 +558,6 @@ IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-#include <sfx2/objsh.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/stritem.hxx>
-
 IMPL_LINK( SvxCharMapData, AssignHdl, PushButton *, EMPTYARG )
 {
     SfxAllItemSet aSet( SfxObjectShell::Current()->GetPool() );
@@ -587,3 +577,5 @@ IMPL_LINK( SvxCharMapData, AssignHdl, PushButton *, EMPTYARG )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

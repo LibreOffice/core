@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _XMXCOM_HXX
 
 #include <cppuhelper/weak.hxx>
-#ifndef __RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
@@ -41,7 +40,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -63,3 +61,5 @@
 #define B2UCONST( _def_pChar )              (NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
 
 #endif // _XMXCOM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,14 +34,14 @@
 /** === end UNO includes === **/
 #include <rtl/ustring.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //........................................................................
 namespace pcr
 {
 //........................................................................
 
-    typedef ::std::hash_map< ::rtl::OUString, ::com::sun::star::beans::Property, ::rtl::OUStringHash >
+    typedef ::boost::unordered_map< ::rtl::OUString, ::com::sun::star::beans::Property, ::rtl::OUStringHash >
         PropertyMap;
 
 //........................................................................
@@ -49,3 +50,4 @@ namespace pcr
 
 #endif // EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _MANIFEST_IMPORT_HXX
 
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#ifndef _COM_SUN_STAR_XML_SAX_XDUCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <vector>
 
 #include <HashMaps.hxx>
@@ -41,7 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, eqFunc > StringHashMap;
+typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, eqFunc > StringHashMap;
 
 struct ManifestScopeEntry
 {
@@ -151,3 +150,5 @@ public:
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

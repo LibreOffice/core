@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,11 +53,7 @@ class SvtInetOptions;
 #define CACHE_CONTROLS  20
 #define INET_SEARCH     19
 
-#if defined(OS2)
-#define TYPE_CONTROLS  20
-#else
 #define TYPE_CONTROLS  18
-#endif
 
 namespace svx {
     class SecurityOptionsDialog;
@@ -199,7 +196,7 @@ private:
 
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    sal_Bool                ConfirmLeave( const String& rStringSelection );   //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    sal_Bool                ConfirmLeave( const String& rStringSelection );
 
     SvxSearchTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSearchTabPage();
@@ -277,7 +274,6 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-//added by jmeng begin
 class MozPluginTabPage : public SfxTabPage
 {
     FixedLine       aMSWordGB;
@@ -299,12 +295,9 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
 };
-//added by jmeng end
+
 #endif
 
-/* -----------------------------20.06.01 16:32--------------------------------
-
- ---------------------------------------------------------------------------*/
 #ifdef WNT
 #else
 #define HELPER_PAGE_COMPLETE
@@ -338,3 +331,4 @@ public:
 #endif // #ifndef _SVX_OPTINET_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

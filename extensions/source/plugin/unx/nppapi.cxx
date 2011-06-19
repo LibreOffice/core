@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#if STLPORT_VERSION>=321
-#include <cstdarg>
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
 #endif
+
+#include <cstdarg>
 
 #include <plugin/impl.hxx>
 #include <vcl/svapp.hxx>
@@ -46,7 +51,7 @@ PluginConnector::PluginConnector( int nSocket ) :
 
 PluginConnector::~PluginConnector()
 {
-    vos::OGuard aGuard( m_aUserEventMutex );
+    osl::MutexGuard aGuard( m_aUserEventMutex );
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
          it != allConnectors.end(); ++it )
     {
@@ -60,7 +65,7 @@ PluginConnector::~PluginConnector()
 
 IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
-    vos::OGuard aGuard( m_aUserEventMutex );
+    osl::MutexGuard aGuard( m_aUserEventMutex );
     bool bFound = false;
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
          it != allConnectors.end() && bFound == false; ++it )
@@ -87,7 +92,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         return 0;
 /*
     {
-        vos::OGuard aGuard( m_aUserEventMutex );
+        osl::MutexGuard aGuard( m_aUserEventMutex );
         m_aUserEventIDs.pop_front();
     }
 */
@@ -619,3 +624,5 @@ NPError UnxPluginComm::NPP_SetValue( NPP /*instance*/, NPNVariable /*variable*/,
 {
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

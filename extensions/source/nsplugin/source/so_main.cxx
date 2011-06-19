@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <winsock2.h>
-#include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
@@ -65,6 +65,7 @@
 #include "nsp_func.hxx"
 
 #include "sal/main.h"
+#include <sal/macros.h>
 
 #include "rtl/process.h"
 #include "rtl/bootstrap.hxx"
@@ -84,7 +85,6 @@
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-#define ARLEN(x) sizeof (x) / sizeof *(x)
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -388,7 +388,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         oslProcessError rc = osl_executeProcess(
             aOfficePath.pData,
             ar_args,
-            ARLEN( ar_args ),
+            SAL_N_ELEMENTS( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
             0, // => current working dir
@@ -495,3 +495,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     _exit(0);
     return EXIT_SUCCESS; // avoid warnings
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

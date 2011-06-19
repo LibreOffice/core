@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/scripttypeitem.hxx>
 
 #include <editeng/editobj.hxx>
@@ -177,7 +176,7 @@ namespace frm
         StateCache::const_iterator aCachedStatePos = m_aLastKnownStates.find( _nAttributeId );
         if ( aCachedStatePos == m_aLastKnownStates.end() )
         {
-            OSL_ENSURE( sal_False, "RichTextControlImpl::getAttributeState: Don't ask for the state of an attribute which I never encountered!" );
+            OSL_FAIL( "RichTextControlImpl::getAttributeState: Don't ask for the state of an attribute which I never encountered!" );
             return AttributeState( eIndetermined );
         }
         return aCachedStatePos->second;
@@ -678,3 +677,4 @@ namespace frm
 }   // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

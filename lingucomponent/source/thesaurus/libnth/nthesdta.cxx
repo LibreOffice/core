@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,17 +36,15 @@
 #include "nthesdta.hxx"
 #include <linguistic/misc.hxx>
 
-// #include "lngsvcmgr.hxx"
-
-
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
+
+using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -114,3 +113,4 @@ void Meaning::SetMeaning( const OUString &rTerm )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

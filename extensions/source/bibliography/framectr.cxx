@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <vcl/waitobj.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/URL.hpp>
-#include <osl/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>
@@ -59,17 +59,18 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <vcl/edit.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace osl;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -110,7 +111,7 @@ static DispatchInfo SupportedCommandsArray[] =
     { 0                         ,   0                               , sal_False }
 };
 
-typedef ::std::hash_map< ::rtl::OUString, CacheDispatchInfo, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > CmdToInfoCache;
+typedef ::boost::unordered_map< ::rtl::OUString, CacheDispatchInfo, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > CmdToInfoCache;
 
 SV_IMPL_PTRARR( BibStatusDispatchArr, BibStatusDispatchPtr );
 
@@ -185,7 +186,7 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    ::SolarMutexGuard aGuard;
     if ( pController )
         pController->getFrame()->removeFrameActionListener( this );
 }
@@ -217,14 +218,14 @@ BibFrameController_Impl::~BibFrameController_Impl()
 
 ::rtl::OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.extensions.Bibliography");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.Bibliography"));
 }
 
 sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
 {
     return (
-            sServiceName.equalsAscii("com.sun.star.frame.Bibliography") ||
-            sServiceName.equalsAscii("com.sun.star.frame.Controller")
+            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.Bibliography")) ||
+            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.Controller"))
            );
 }
 
@@ -233,7 +234,7 @@ sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUStrin
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
     ::com::sun::star::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.Bibliography");
+    lNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Bibliography"));
     return lNames;
 }
 
@@ -378,14 +379,11 @@ sal_Bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
     _rxCursorSet->getPropertyValue(C2U("Privileges")) >>= nPriv;
     return ((_rxCursorSet.is() && (nPriv & sdbcx::Privilege::INSERT) != 0));
 }
-/* -----------------------------08.05.2002 08:58------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XFormController>& xController)
 {
     if (!xController.is())
         return sal_False;
-    sal_Bool bInserted = sal_False;
 
     Reference< XResultSetUpdate> _xCursor = Reference< XResultSetUpdate>(xController->getModel(), UNO_QUERY);
 
@@ -396,7 +394,7 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
     if (!_xSet.is())
         return sal_False;
 
-    // muß gespeichert werden ?
+    // need to save?
     sal_Bool  bIsNew        = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsNew")));
     sal_Bool  bIsModified   = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsModified")));
     sal_Bool bResult = !bIsModified;
@@ -412,10 +410,8 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
         }
         catch(Exception&)
         {
-            DBG_ERROR("SaveModified: Exception occured!");
+            OSL_FAIL("SaveModified: Exception occurred!");
         }
-
-        bInserted = bIsNew && bResult;
     }
     return bResult;
 }
@@ -440,7 +436,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
 {
     if ( !bDisposing )
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        ::SolarMutexGuard aGuard;
         Window* pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 
@@ -468,7 +464,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(const Exception&)
                 {
-                    DBG_ERROR("Exception catched while changing the data source");
+                    OSL_FAIL("Exception catched while changing the data source");
                 }
             }
         }
@@ -512,27 +508,27 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 Sequence< Any > aDialogCreationArgs( 3 );
                 Any* pDialogCreationArgs = aDialogCreationArgs.getArray();
                 // the query composer
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "QueryComposer" ),
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" )),
                                                         -1,
                                                         makeAny( pDatMan->getParser() ),
                                                         beans::PropertyState_DIRECT_VALUE
                                                       );
 
                 // the rowset
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "RowSet" ),
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowSet" )),
                                                         -1,
                                                         makeAny( pDatMan->getForm() ),
                                                         beans::PropertyState_DIRECT_VALUE
                                                       );
                 // the parent window for the dialog
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "ParentWindow" ),
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" )),
                                                         -1,
                                                         makeAny( xWindow ),
                                                         beans::PropertyState_DIRECT_VALUE
                                                       );
 
                 // create the dialog object
-                const ::rtl::OUString sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.FilterDialog" );
+                const ::rtl::OUString sDialogServiceName(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FilterDialog" ));
                 uno::Reference< uno::XInterface > xDialog = xORB->createInstanceWithArguments(
                     sDialogServiceName,
                     aDialogCreationArgs
@@ -558,7 +554,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             }
             catch( const uno::Exception& )
             {
-                DBG_ERROR( "BibFrameController_Impl::dispatch: caught an exception!" );
+                OSL_FAIL( "BibFrameController_Impl::dispatch: caught an exception!" );
             }
 
             sal_uInt16 nCount = aStatusListeners.Count();
@@ -602,7 +598,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("Exception in last() or moveToInsertRow()");
+                    OSL_FAIL("Exception in last() or moveToInsertRow()");
                 }
             }
         }
@@ -662,7 +658,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                         }
                         catch(Exception&)
                         {
-                            DBG_ERROR("DeleteRecord : exception caught !");
+                            OSL_FAIL("DeleteRecord : exception caught !");
                         }
                     }
                 }
@@ -749,7 +745,7 @@ void BibFrameController_Impl::addStatusListener(
     else if(aURL.Path == C2U("Bib/sdbsource") ||
             aURL.Path == C2U("Bib/Mapping") ||
             aURL.Path == C2U("Bib/autoFilter") ||
-            aURL.Path.equalsAscii("Bib/standardFilter"))
+            aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bib/standardFilter")))
     {
         aEvent.IsEnabled  = sal_True;
     }
@@ -975,3 +971,4 @@ void BibFrameController_Impl::deactivate()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

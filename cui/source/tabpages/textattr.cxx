@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -52,8 +50,8 @@
 #include "textattr.hrc"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <sfx2/request.hxx> //add CHINA001
-#include <svx/ofaitem.hxx> //add CHINA001
+#include <sfx2/request.hxx>
+#include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 
 static sal_uInt16 pRanges[] =
@@ -62,35 +60,6 @@ static sal_uInt16 pRanges[] =
     SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_AUTOGROWSIZE,
     0
 };
-
-/*************************************************************************
-|*
-|* Dialog zum Kopieren von Objekten
-|*
-\************************************************************************/
-
-//CHINA001 SvxTextAttrDialog::SvxTextAttrDialog( Window* pParent, const SfxItemSet& rInAttrs,
-//CHINA001                              const SdrView* pSdrView ) :
-//CHINA001      SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
-//CHINA001 {
-//CHINA001 SvxTextAttrPage* pPage = new SvxTextAttrPage( this, rInAttrs );
-//CHINA001
-//CHINA001 pPage->SetView( pSdrView );
-//CHINA001 pPage->Construct();
-//CHINA001
-//CHINA001 SetTabPage( pPage );
-//CHINA001 SetText( pPage->GetText() );
-//CHINA001 }
-//CHINA001
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-//CHINA001 SvxTextAttrDialog::~SvxTextAttrDialog()
-//CHINA001 {
-//CHINA001 }
 
 /*************************************************************************
 |*
@@ -164,7 +133,7 @@ SvxTextAttrPage::~SvxTextAttrPage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
+void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -451,10 +420,9 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         switch( eState )
         {
             default: ; //prevent warning
-                DBG_ERROR( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
+                OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
-            //case STATE_CHECK: eFTS = SDRTEXTFIT_RESIZEATTR; break;
-            case STATE_CHECK: eFTS = SDRTEXTFIT_PROPORTIONAL; break;
+            case STATE_CHECK: eFTS = SDRTEXTFIT_AUTOFIT; break;
         }
         rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
@@ -786,7 +754,6 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
     return bLeftToRightDirection;
 }
 
-//add CHINA001 begin
 void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,sal_False);
@@ -797,4 +764,4 @@ void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
     Construct();
 }
 
-//end of CHINA001
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

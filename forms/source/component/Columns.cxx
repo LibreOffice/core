@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "Columns.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "property.hxx"
 #include "componenttools.hxx"
 #include "ids.hxx"
@@ -48,12 +47,10 @@
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "services.hxx"
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 #include <tools/debug.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 
 //.........................................................................
@@ -100,8 +97,8 @@ const StringSequence& getColumnTypes()
 //------------------------------------------------------------------------------
 sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 {
-    const ::rtl::OUString aModelPrefix = ::rtl::OUString::createFromAscii("com.sun.star.form.component.");
-    const ::rtl::OUString aCompatibleModelPrefix = ::rtl::OUString::createFromAscii("stardiv.one.form.component.");
+    const ::rtl::OUString aModelPrefix (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.") );
+    const ::rtl::OUString aCompatibleModelPrefix (RTL_CONSTASCII_USTRINGPARAM("stardiv.one.form.component.") );
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FRM_COMPONENT_EDIT)
@@ -127,21 +124,14 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 
 /*************************************************************************/
 
-//------------------------------------------------------------------
+namespace
+{
+    class theOGridColumnImplementationId : public rtl::Static< UnoTunnelIdInit, theOGridColumnImplementationId > {};
+}
+
 const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theOGridColumnImplementationId::get().getSeq();
 }
 
 //------------------------------------------------------------------
@@ -609,3 +599,4 @@ IMPL_COLUMN(FormattedFieldColumn,   FRM_SUN_COMPONENT_FORMATTEDFIELD,   sal_Fals
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

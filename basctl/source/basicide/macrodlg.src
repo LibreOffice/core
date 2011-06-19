@@ -102,7 +102,6 @@ ModalDialog RID_MACROCHOOSER
         Pos = MAP_APPFONT ( 231 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;
-        /* ### ACHTUNG: Neuer Text in Resource? Aus~führen : Aus~f³hren */
         Text [ en-US ] = "R~un" ;
         TabStop = TRUE ;
     };
@@ -149,7 +148,6 @@ ModalDialog RID_MACROCHOOSER
         HelpID = "basctl:PushButton:RID_MACROCHOOSER:RID_PB_DEL";
         Pos = MAP_APPFONT ( 231 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -183,7 +181,6 @@ String RID_STR_STDMACRONAME
 };
 String RID_STR_BTNDEL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
     Text [ en-US ] = "~Delete" ;
 };
 String RID_STR_BTNNEW
@@ -192,17 +189,14 @@ String RID_STR_BTNNEW
 };
 String RID_STR_CLOSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
     Text [ en-US ] = "Close" ;
 };
 String RID_STR_CHOOSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Auswählen : Auswõhlen */
     Text [ en-US ] = "Choose" ;
 };
 String RID_STR_RUN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Ausführen : Ausf³hren */
     Text [ en-US ] = "Run" ;
 };
 

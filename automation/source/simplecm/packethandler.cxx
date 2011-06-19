@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <automation/commtypes.hxx>
 #include <automation/commdefines.hxx>
 #include "communiio.hxx"
+#include <osl/diagnose.h>
 
 /**
 Forces switch to multichannel headers even for old communication Method
@@ -97,7 +99,7 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
         if ( bWasError )
             return sal_False;
 
-        if ( 0xFFFFFFFF == nBytes )     // Expliziter Request für dieses Datenpaket auf MultiChannel umzuschalten
+        if ( 0xFFFFFFFF == nBytes )     // Expliziter Request fï¿½r dieses Datenpaket auf MultiChannel umzuschalten
         {
             READ_SOCKET( &nBytes, sizeof(nBytes) )
             if ( bWasError )
@@ -109,20 +111,20 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 
         if ( bMultiChannel || bForceMultiChannelThisPacket )
         {
-            comm_ULONG nReadSoFar = 0;
-            comm_ULONG nHeaderReadSoFar = 0;
+            comm_UINT32 nReadSoFar = 0;
+            comm_UINT32 nHeaderReadSoFar = 0;
 
-            // Prüfbyte für Längenangabe
+            // Prï¿½fbyte fï¿½r Lï¿½ngenangabe
             unsigned char nLenCheck = 0;
             READ_SOCKET_LEN( &nLenCheck, 1, nReadSoFar );
-            // Stimmt das Prüfbyte?
+            // Stimmt das Prï¿½fbyte?
             bWasError |= nLenCheck != CalcCheckByte( nBytes );
 
 
             comm_UINT16 nHeaderBytes;
             READ_SOCKET_LEN( &nHeaderBytes, 2, nReadSoFar );
             nHeaderBytes = NETWORD( nHeaderBytes );
-            // reicht der Header über das Ende hinaus?
+            // reicht der Header ï¿½ber das Ende hinaus?
             bWasError |= !(nBytes >= nReadSoFar + nHeaderBytes);
 
             READ_SOCKET_LEN( &nReceiveHeaderType, 2, nHeaderReadSoFar );
@@ -142,7 +144,7 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
                 break;
             default:
                 {
-                    DBG_ERROR("Unbekannter Headertyp in der Kommunikation");
+                    OSL_FAIL("Unbekannter Headertyp in der Kommunikation");
                     bWasError = sal_True;
                 }
 
@@ -151,7 +153,7 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
             if ( bWasError )
                 return sal_False;
 
-            /// Längen anpassen und ggf restheader überlesen.
+            /// Lï¿½ngen anpassen und ggf restheader ï¿½berlesen.
             while ( nHeaderBytes > nHeaderReadSoFar )
             {
                 unsigned char nDummy;
@@ -209,7 +211,7 @@ comm_BOOL PacketHandler::TransferData( const void* pData, comm_UINT32 nLen, CMPr
 #ifndef FORCE_MULTI_CHANNEL_HEADERS
     if ( bMultiChannel )
 #endif
-        nBuffer += 1+2+2+2; // für einen CH_SimpleMultiChannel
+        nBuffer += 1+2+2+2; // fï¿½r einen CH_SimpleMultiChannel
 
 #ifdef FORCE_MULTI_CHANNEL_HEADERS
     if ( !bMultiChannel )
@@ -236,7 +238,7 @@ comm_BOOL PacketHandler::TransferData( const void* pData, comm_UINT32 nLen, CMPr
         c = CalcCheckByte( nBuffer );
         WRITE_SOCKET( &c, 1 );
 
-        n16 = 4;    // Länge des Headers für einen CH_SimpleMultiChannel
+        n16 = 4;    // Lï¿½nge des Headers fï¿½r einen CH_SimpleMultiChannel
         n16 = NETWORD( n16 );
         WRITE_SOCKET( &n16, 2 );
 
@@ -258,10 +260,10 @@ comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void
 
     comm_UINT32 nBuffer = 0;
 
-//  if ( pMyManager->IsMultiChannel() )     Wir senden immer FFFFFFFF vorweg -> immer MultiChannel (Oder GPF bei älteren)
-        nBuffer += 1+2+2;   // für einen CH_Handshake
+//  if ( pMyManager->IsMultiChannel() )     Wir senden immer FFFFFFFF vorweg -> immer MultiChannel (Oder GPF bei ï¿½lteren)
+        nBuffer += 1+2+2;   // fï¿½r einen CH_Handshake
 
-    nBuffer += 2;   // für den Typ des Handshakes
+    nBuffer += 2;   // fï¿½r den Typ des Handshakes
 
     switch ( aHandshakeType )
     {
@@ -284,7 +286,7 @@ comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void
             nBuffer += 0 ;  // one word extradata for options
             break;
         default:
-            DBG_ERROR("Unknown HandshakeType");
+            OSL_FAIL("Unknown HandshakeType");
     }
 
     if ( pData )
@@ -305,7 +307,7 @@ comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void
     c = CalcCheckByte( nBuffer );
     WRITE_SOCKET( &c, 1 );
 
-    n16 = 2;    // Länge des Headers für einen CH_Handshake
+    n16 = 2;    // Lï¿½nge des Headers fï¿½r einen CH_Handshake
     n16 = NETWORD( n16 );
     WRITE_SOCKET( &n16, 2 );
 
@@ -332,3 +334,5 @@ comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void
 
     return !bWasError;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

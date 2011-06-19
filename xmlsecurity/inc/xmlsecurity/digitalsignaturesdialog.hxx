@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,7 +80,7 @@ private:
     FixedText           maHintDocFT;
     FixedText           maHintBasicFT;
     FixedText           maHintPackageFT;
-    SvxSimpleTable      maSignaturesLB; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxSimpleTable      maSignaturesLB; // #i48648 now SvHeaderTabListBox
     FixedImage          maSigsValidImg;
     FixedInfo           maSigsValidFI;
     FixedImage          maSigsInvalidImg;
@@ -148,3 +149,4 @@ public:
 
 #endif // _XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

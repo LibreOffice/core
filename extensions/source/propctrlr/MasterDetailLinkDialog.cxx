@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString MasterDetailLinkDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.form.ui.MasterDetailLinkDialog");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.MasterDetailLinkDialog"));
     }
 
     //---------------------------------------------------------------------
@@ -86,7 +87,7 @@ namespace pcr
     ::comphelper::StringSequence MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.MasterDetailLinkDialog");
+        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.MasterDetailLinkDialog"));
         return aSupported;
     }
 
@@ -155,3 +156,5 @@ namespace pcr
 //............................................................................
 }   // namespace pcr
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,15 +26,11 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "dbregister.hxx"
 #include "dbregister.hrc"
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
-#include <cuires.hrc>
 #include "helpid.hrc"
 #include <svtools/editbrowsebox.hxx>
 #include <cuires.hrc>
@@ -282,7 +279,7 @@ void DbRegistrationOptionsPage::FillUserData()
     aUserData += ';';
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    aUserData += bUp ? '1' : '0';
+    aUserData += (bUp ? '1' : '0');
     SetUserData( aUserData );
 }
 // -----------------------------------------------------------------------
@@ -412,8 +409,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,co
     SvLBoxEntry* pEntry = NULL;
     if ( _bReadOnly )
     {
-        sal_Bool bHighContrast = pPathBox->GetDisplayBackground().GetColor().IsDark();
-        Image aLocked( CUI_RES( bHighContrast ? RID_SVXBMP_LOCK_HC : RID_SVXBMP_LOCK ) );
+        Image aLocked( CUI_RES( RID_SVXBMP_LOCK ) );
         pEntry = pPathBox->InsertEntry( aStr, aLocked, aLocked );
     }
     else
@@ -468,3 +464,4 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOXITEM_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_ACTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#endif
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
@@ -38,9 +37,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#ifndef _CPPUHELPER_IMPLBASE4_HXX
 #include <cppuhelper/implbase4.hxx>
-#endif
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/solar.h>
 
@@ -168,3 +165,4 @@ public:
 
 #endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOXITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

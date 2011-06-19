@@ -137,12 +137,6 @@ ImageList RID_TOOLBAR_IMGLIST
     MASKCOLOR
     BIB_IMAGES
 };
-ImageList RID_TOOLBAR_IMGLIST_HC
-{
-    Prefix = "sch";
-    MASKCOLOR
-    BIB_IMAGES
-};
 
 ImageList RID_TOOLBAR_BIGIMGLIST
 {
@@ -150,13 +144,6 @@ ImageList RID_TOOLBAR_BIGIMGLIST
     MASKCOLOR
     BIB_IMAGES
 };
-ImageList RID_TOOLBAR_BIGIMGLIST_HC
-{
-    Prefix = "lch";
-    MASKCOLOR
-    BIB_IMAGES
-};
-
 
 
 

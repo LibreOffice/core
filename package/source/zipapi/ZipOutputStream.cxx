@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include <ZipPackageStream.hxx>
 #include <ZipOutputStream.hxx>
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -135,18 +135,17 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 {
                     if (pEntry->nSize != aDeflater.getTotalIn())
                     {
-                        OSL_ENSURE(false,"Invalid entry size");
+                        OSL_FAIL("Invalid entry size");
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
-                        //VOS_DEBUG_ONLY("Invalid entry compressed size");
                         // Different compression strategies make the merit of this
                         // test somewhat dubious
                         pEntry->nCompressedSize = aDeflater.getTotalOut();
                     }
                     if (pEntry->nCrc != aCRC.getValue())
                     {
-                        OSL_ENSURE(false,"Invalid entry CRC-32");
+                        OSL_FAIL("Invalid entry CRC-32");
                     }
                 }
                 else
@@ -164,10 +163,10 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 break;
             case STORED:
                 if (!((pEntry->nFlag & 8) == 0))
-                    OSL_ENSURE ( false, "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
+                    OSL_FAIL( "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
                 break;
             default:
-                OSL_ENSURE(false,"Invalid compression method");
+                OSL_FAIL("Invalid compression method");
                 break;
         }
 
@@ -241,7 +240,7 @@ void SAL_CALL ZipOutputStream::finish(  )
         closeEntry();
 
     if (aZipList.size() < 1)
-        OSL_ENSURE(false,"Zip file must have at least one entry!\n");
+        OSL_FAIL("Zip file must have at least one entry!\n");
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.GetPosition());
     for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
@@ -450,3 +449,4 @@ void ZipOutputStream::dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate)
 }
 */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

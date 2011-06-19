@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ void VCLXAccessibleDropDownListBox::ProcessWindowEvent( const VclWindowEvent& rV
 ::rtl::OUString VCLXAccessibleDropDownListBox::getImplementationName()
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.toolkit.AccessibleDropDownListBox");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleDropDownListBox" ));
 }
 
 
@@ -104,7 +105,8 @@ Sequence< ::rtl::OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNa
     Sequence< ::rtl::OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();
     aNames.realloc( nLength + 1 );
-    aNames[nLength] = ::rtl::OUString::createFromAscii(
-        "com.sun.star.accessibility.AccessibleDropDownListBox" );
+    aNames[nLength] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleDropDownListBox" ));
     return aNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

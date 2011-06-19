@@ -524,7 +524,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         DecimalDigits = 2 ;
         Value = 1 ;
         Unit = FUNIT_MM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         SpinSize = 10 ;
     };
     MetricField MTR_FLD_LENGTH_2
@@ -545,7 +545,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         DecimalDigits = 2 ;
         Value = 1 ;
         Unit = FUNIT_MM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         SpinSize = 10 ;
     };
     FixedText FT_DISTANCE
@@ -569,7 +569,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         DecimalDigits = 2 ;
         Value = 1 ;
         Unit = FUNIT_MM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
         Last = 5000 ;
         SpinSize = 10 ;
     };

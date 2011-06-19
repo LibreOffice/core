@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,10 @@
 #define _SERVPROV_HXX
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
-
 
 using namespace com::sun::star::bridge;
 using namespace cppu;
@@ -149,7 +147,6 @@ public:
 
 protected:
 
-    //ORefCount         m_refCount;
     oslInterlockedCount m_refCount;
     Reference<XInterface>       m_xInst;
     GUID                m_guid;
@@ -276,5 +273,4 @@ protected:
 } // end namespace
 #endif
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

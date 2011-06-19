@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <plugin/unx/plugcon.hxx>
 
 #include <unistd.h>
@@ -331,27 +339,6 @@ static const char* l_NPN_UserAgent( NPP instance )
 
     return pAgent;
 }
-
-#if 0
-static void l_NPN_Version( int* major, int* minor, int* net_major, int* net_minor )
-{
-    MediatorMessage* pMes = pConnector->
-        Transact( eNPN_Version,
-                  NULL );
-
-    if( ! pMes )
-        return;
-
-    *major = pMes->GetUINT32();
-    *minor = pMes->GetUINT32();
-    *net_major = pMes->GetUINT32();
-    *net_minor = pMes->GetUINT32();
-
-    medDebug( 1, "pluginapp: NPN_Version: results %d %d, %d %d\n", *major, *minor, *net_major, *net_minor );
-
-    delete pMes;
-}
-#endif
 
 static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffer )
 {
@@ -717,7 +704,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         gtk_widget_show( pInst->pGtkWidget );
                         gtk_container_add( GTK_CONTAINER(pInst->pGtkWindow), pInst->pGtkWidget );
                         gtk_widget_show_all( pInst->pGtkWindow );
-                        pInst->window.window = (void *)gtk_socket_get_id( GTK_SOCKET(pInst->pGtkWidget ) );
+                        pInst->window.window = (void *)(sal_uIntPtr)gtk_socket_get_id( GTK_SOCKET(pInst->pGtkWidget ) );
 
                         XSync( pAppDisplay, False );
 
@@ -915,3 +902,4 @@ void LoadAdditionalLibs( const char* _pPluginLib )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

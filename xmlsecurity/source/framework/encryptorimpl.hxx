@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <com/sun/star/xml/crypto/sax/XEncryptionResultBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XEncryptionResultListener.hpp>
-#ifndef _COM_SUN_STAR_XML_CRYPTO_SAX_XSIGNATURECOLLECTOR_HPP_
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
-#endif
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -56,9 +55,6 @@ class EncryptorImpl : public cppu::ImplInheritanceHelper4
  *   FUNCTION
  *  Collects all resources for an encryption generation, then generates the
  *  encryption by invoking a xmlsec-based encryption bridge component.
- *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XInitialization, XServiceInfo
  *
  *   AUTHOR
  *  Michael Mi
@@ -148,3 +144,4 @@ SAL_CALL EncryptorImpl_createInstance(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

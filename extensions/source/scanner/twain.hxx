@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _TWAIN_HXX
 #define _TWAIN_HXX
 
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <vcl/bitmap.hxx>
 #include "twain/twain.h"
 
@@ -57,7 +58,7 @@ class ImpTwain
     Link                        aNotifyLink;
     Bitmap                      aBitmap;
     DSMENTRYPROC                pDSM;
-    vos:: OModule * pMod;
+    osl::Module                 pMod;
     sal_uLong                       nCurState;
 
     void                        ImplCreate();
@@ -74,14 +75,8 @@ public:
 
     sal_Bool                        ImplHandleMsg( void* pMsg );
 
-#ifdef OS2
-    HAB                         hAB;
-    HWND                        hTwainWnd;
-    long                        hTwainHook;
-#else
     HWND                        hTwainWnd;
     HHOOK                       hTwainHook;
-#endif
 
 public:
 
@@ -96,3 +91,5 @@ public:
 };
 
 #endif // _TWAIN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

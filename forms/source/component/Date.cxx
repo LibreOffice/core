@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,7 +119,7 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "ODateModel::ODateModel: caught an exception!" );
+        OSL_FAIL( "ODateModel::ODateModel: caught an exception!" );
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -361,3 +362,4 @@ Sequence< Type > ODateModel::getSupportedBindingTypes()
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

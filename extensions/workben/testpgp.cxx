@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,11 +33,8 @@
 #ifndef _RTL_WSTRING_
 #include <rtl/wstring>
 #endif
-#include <vos/macros.hxx>
 
-#ifndef _USR_SMARTSERVICES_HXX_
 #include <usr/smartservices.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -283,7 +281,7 @@ sal_Int32 SAL_CALL DataSource_Impl::readBytes (
         throw IOException();
 
     sal_Int32 k = m_buffer.getLength() - m_position;
-    k = VOS_BOUND(k, 0, nBytesToRead);
+    k = SAL_BOUND(k, 0, nBytesToRead);
     if (k > 0)
     {
         rData.realloc(k);
@@ -514,75 +512,6 @@ inline rtl::OWString S2U (const sal_Char *ascii)
     return rtl::OWString::createFromAscii (ascii);
 }
 
-#if 0  /* OLD */
-
-/*
- * queryModuleActivator.
- */
-BOOL queryModuleActivator (
-    const XServiceManagerRef &rxManager,
-    XServiceActivatorRef     &rxActivator)
-{
-    XServiceProviderRef xProv;
-    XInterfaceRef       xProvInst;
-
-    xProv = rxManager->queryServiceProvider (
-        L"stardiv.uno.ServiceActivator.module");
-    if (!xProv.is())
-    {
-        printf ("Error: no ServiceActivator service.\n");
-        return FALSE;
-    }
-
-    xProvInst = xProv->createInstance();
-    if (!xProvInst.is())
-    {
-        printf ("Error: no ServiceActivator instance.\n");
-        return FALSE;
-    }
-
-    return xProvInst->queryInterface (
-        XServiceActivator::getSmartUik(), rxActivator);
-}
-
-/*
- * install.
- */
-BOOL install (
-    const XServiceActivatorRef &rxActivator,
-    const char                 *prefix)
-{
-    String aModule ("module://");
-    char   pBuffer[1024];
-
-    vos::ORealDynamicLoader::computeModuleName (
-        prefix, pBuffer, sizeof(pBuffer));
-    aModule += pBuffer;
-
-    return rxActivator->install (
-        StringToUString (aModule, CHARSET_SYSTEM));
-}
-
-/*
- * uninstall.
- */
-BOOL uninstall (
-    const XServiceActivatorRef &rxActivator,
-    const char                 *prefix)
-{
-    String aModule ("module://");
-    char   pBuffer[1024];
-
-    vos::ORealDynamicLoader::computeModuleName (
-        prefix, pBuffer, sizeof(pBuffer));
-    aModule += pBuffer;
-
-    return rxActivator->deinstall (
-        StringToUString (aModule, CHARSET_SYSTEM));
-}
-
-#endif /* OLD */
-
 /*
  * main.
  */
@@ -677,17 +606,7 @@ int SAL_CALL main (int argc, char **argv)
 
     if (nOptions & OPTION_INSTALL)
     {
-#if 0  /* OLD */
-        XServiceActivatorRef xActivator;
-        if (queryModuleActivator (xManager, xActivator))
-        {
-            if (install (xActivator, "pgp"))
-                printf ("Module PGP installed.\n");
-            else
-                printf ("Error: module PGP not installed.\n");
-        }
-        nOptions &= ~OPTION_INSTALL;
-#endif /* OLD */
+
     }
 
     if (nOptions & (OPTION_DECRYPT | OPTION_ENCRYPT | OPTION_SIGN))
@@ -757,8 +676,7 @@ int SAL_CALL main (int argc, char **argv)
                     S2U("mhu@rabbit")
                 };
 
-                sal_Int32 nRecipients =
-                    sizeof(aRecipients) / sizeof(aRecipients[0]);
+                sal_Int32 nRecipients = SAL_N_ELEMENTS(aRecipients);
 
                 if (nOptions & OPTION_SIGN)
                 {
@@ -826,19 +744,10 @@ int SAL_CALL main (int argc, char **argv)
 
     if (nOptions & OPTION_UNINSTALL)
     {
-#if 0  /* OLD */
-        XServiceActivatorRef xActivator;
-        if (queryModuleActivator (xManager, xActivator))
-        {
-            if (uninstall (xActivator, "pgp"))
-                printf ("Module PGP uninstalled.\n");
-            else
-                printf ("Error: module PGP not uninstalled.\n");
-        }
-        nOptions &= ~OPTION_UNINSTALL;
-#endif /* OLD */
+
     }
 
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

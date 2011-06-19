@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -46,7 +47,7 @@ namespace
 {
     using namespace oooimprovement;
 
-    static const OUString CSSU_PATHSUB = OUString::createFromAscii("com.sun.star.util.PathSubstitution");
+    static const OUString CSSU_PATHSUB(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution"));
 
     static OUString getLogPathFromCfg(const Reference<XMultiServiceFactory>& sf)
     {
@@ -62,14 +63,14 @@ namespace
 
     static bool isZipfile(const OUString& fileurl)
     {
-        static const OUString file_extension = OUString::createFromAscii(".zip");
+        static const OUString file_extension(RTL_CONSTASCII_USTRINGPARAM(".zip"));
         return fileurl.match(file_extension, fileurl.getLength()-file_extension.getLength());
     };
 
     static bool isLogfile(const OUString& fileurl)
     {
-        static const OUString file_extension = OUString::createFromAscii(".csv");
-        static const OUString current = OUString::createFromAscii("Current.csv");
+        static const OUString file_extension(RTL_CONSTASCII_USTRINGPARAM(".csv"));
+        static const OUString current(RTL_CONSTASCII_USTRINGPARAM("Current.csv"));
         return
             fileurl.match(file_extension, fileurl.getLength()-file_extension.getLength())
             && !fileurl.match(current, fileurl.getLength()-current.getLength());
@@ -83,7 +84,7 @@ namespace
     static Sequence<OUString> getAllLogStoragefiles(const Reference<XMultiServiceFactory>& sf)
     {
         Reference<XSimpleFileAccess> file_access(
-            sf->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
+            sf->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
             UNO_QUERY_THROW);
         return file_access->getFolderContents(
             getLogPathFromCfg(sf),
@@ -106,7 +107,7 @@ namespace
     static void assureLogStorageExists(const Reference<XMultiServiceFactory>& sf)
     {
         Reference<XSimpleFileAccess> file_access(
-            sf->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
+            sf->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
             UNO_QUERY_THROW);
         OUString log_path(getLogPathFromCfg(sf));
         if(!file_access->isFolder(log_path))
@@ -129,12 +130,12 @@ namespace oooimprovement
     void LogStorage::clear()
     {
         Reference<XSimpleFileAccess> file_access(
-            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
+            m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
             UNO_QUERY_THROW);
         vector<OUString> files_to_kill = getLogStoragefiles(m_ServiceFactory, &isZipOrLogFile);
         for(vector<OUString>::iterator item = files_to_kill.begin();
             item != files_to_kill.end();
-            item++)
+            ++item)
             file_access->kill(*item);
     }
 
@@ -144,3 +145,5 @@ namespace oooimprovement
     const vector<OUString> LogStorage::getZippedLogFiles() const
     { return getLogStoragefiles(m_ServiceFactory, &isZipfile); }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

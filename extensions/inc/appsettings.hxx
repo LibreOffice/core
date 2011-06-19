@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _APPSETTINGS_HXX
 #define _APPSETTINGS_HXX
 
-#ifndef __STARDIV_UNO_UTIL_CONTAINR_HXX__
 #include <stardiv/uno/util/containr.hxx>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,3 +42,4 @@ XNameContainer* getApplicationSettings();
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

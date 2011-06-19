@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ DBG_NAME( AccessibleDialogWindow )
 
 
 // -----------------------------------------------------------------------------
-//  class ChildDescriptor
+// class ChildDescriptor
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
@@ -115,7 +116,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 }
 
 // -----------------------------------------------------------------------------
-//  class AccessibleDialogWindow
+// class AccessibleDialogWindow
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
@@ -647,7 +648,7 @@ void AccessibleDialogWindow::disposing()
 
 ::rtl::OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.basctl.AccessibleWindow" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleWindow" ));
 }
 
 // -----------------------------------------------------------------------------
@@ -668,7 +669,7 @@ sal_Bool AccessibleDialogWindow::supportsService( const ::rtl::OUString& rServic
 Sequence< ::rtl::OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleWindow" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleWindow" ));
     return aNames;
 }
 
@@ -777,7 +778,7 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(   ) throw (RuntimeException)
+::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -1121,3 +1122,5 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
 }
 
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

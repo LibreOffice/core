@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,9 @@
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/InvocationInfo.hpp>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
-#include <tools/presys.h>
 #include "comifaces.hxx"
-#include <tools/postsys.h>
-
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
@@ -88,7 +86,7 @@ struct MemberInfo
     OUString name;
 };
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     DISPID,
@@ -96,7 +94,7 @@ typedef hash_map
     equalOUString_Impl
 > NameToIdMap;
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     sal_Bool,
@@ -104,7 +102,7 @@ typedef hash_map
     equalOUString_Impl
 > BadNameMap;
 
-typedef hash_map
+typedef boost::unordered_map
 <
     DISPID,
     MemberInfo
@@ -220,7 +218,6 @@ protected:
 
     sal_Bool getInvocationInfoForCall(DISPID id, InvocationInfo& info);
 
-//  vos::ORefCount                      m_refCount;
     Reference<XInvocation>                  m_xInvocation;
     Reference<XExactName>                   m_xExactName;
     Reference<XInterface>                   m_xOrigin;
@@ -293,8 +290,8 @@ protected:
 
 };
 
-
-
 } // end namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

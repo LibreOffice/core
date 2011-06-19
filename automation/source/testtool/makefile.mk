@@ -37,18 +37,16 @@ TARGET=testtool
 # --- Allgemein ------------------------------------------------------------
 
 OBJFILES = \
-    $(OBJ)$/cmdstrm.obj              \
+    $(EXCEPTIONSFILES)               \
     $(OBJ)$/cretstrm.obj             \
-    $(OBJ)$/objtest.obj              \
-    $(OBJ)$/tcommuni.obj             \
-    $(OBJ)$/comm_bas.obj             \
     $(OBJ)$/httprequest.obj          \
     
 
 EXCEPTIONSFILES= \
-    $(OBJ)$/tcommuni.obj             \
     $(OBJ)$/cmdstrm.obj              \
-    $(OBJ)$/objtest.obj
+    $(OBJ)$/comm_bas.obj             \
+    $(OBJ)$/objtest.obj              \
+    $(OBJ)$/tcommuni.obj
 
 HXXFILES = $(INCCOM)$/keycodes.hxx			\
     $(INCCOM)$/classes.hxx			\
@@ -95,7 +93,7 @@ $(MISC)$/xfilter.pl : filter.pl
 .IF "$(GUI)"=="UNX"
 INIFILESUFFIX=rc
 BRANDPATH=none
-.ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.ELIF "$(GUI)"=="WNT"
 INIFILESUFFIX=.ini
 BRANDPATH=..
 .END

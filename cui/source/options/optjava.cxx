@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -130,8 +128,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
 
-//!   m_aJavaList.EnableCheckButton( new SvLBoxButtonData( &m_aJavaList, true ) );
-
     static long aStaticTabs[]=
     {
         5, 0, 15, 90, 130, 300
@@ -192,13 +188,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
         JavaInfo* pInfo = *pIter;
         jfw_freeJavaInfo( pInfo );
     }
-/*
-    rtl_uString** pParamArr = m_parParameters;
-    for ( sal_Int32 i = 0; i < m_nParamSize; ++i )
-        rtl_uString_release( *pParamArr++ );
-    rtl_freeMemory( m_parParameters );
-    rtl_uString_release( m_pClassPath );
-*/
+
     jfw_unlock();
 }
 
@@ -253,7 +243,7 @@ IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
     {
         Reference < XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         xFolderPicker = Reference< XFolderPicker >(
-            xMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" ) ), UNO_QUERY );
+            xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FolderPicker") ) ), UNO_QUERY );
 
         String sWorkFolder = SvtPathOptions().GetWorkPath();
         xFolderPicker->setDisplayDirectory( sWorkFolder );
@@ -531,11 +521,11 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
 void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
 {
     bool bStartAgain = true;
-    sal_Int32 nPos = 0;
     JavaInfo* pInfo = NULL;
     javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
     if ( JFW_E_NONE == eErr && pInfo )
     {
+        sal_Int32 nPos = 0;
         bool bFound = false;
         JavaInfo** parInfo = m_parJavaInfo;
         for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
@@ -942,7 +932,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
         String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
         {
-            sal_uInt16 nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
+            sal_uInt16 nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
             m_aPathList.SelectEntryPos( nPos );
         }
         else
@@ -980,7 +970,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
         String sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
-            sal_uInt16 nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL ) );
+            sal_uInt16 nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
             m_aPathList.SelectEntryPos( nPos );
         }
         else
@@ -1076,10 +1066,11 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
         String sToken = _rPath.GetToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, INetURLObject::FSYS_DETECT );
         String sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
-        m_aPathList.InsertEntry( sPath, SvFileInformationManager::GetImage( aURL ) );
+        m_aPathList.InsertEntry( sPath, SvFileInformationManager::GetImage( aURL, false ) );
     }
     // select first entry
     m_aPathList.SelectEntryPos(0);
     SelectHdl_Impl( NULL );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

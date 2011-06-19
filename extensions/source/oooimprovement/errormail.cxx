@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -34,7 +35,7 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
-#if defined(UNIX) || defined(OS2)
+#if defined(UNIX)
     #include <sys/utsname.h>
 #endif
 #ifdef WIN32
@@ -80,14 +81,12 @@ namespace {
             return "Win32";
         #elif defined UNIX
             return "Unix";
-        #elif defined OS2
-            return "OS/2";
         #else
             return "Unknown";
         #endif
     };
 
-#if defined(UNIX) || defined(OS2)
+#if defined(UNIX)
     static const OString getLocale()
     {
         const char * locale = getenv( "LC_ALL" );
@@ -205,3 +204,5 @@ namespace oooimprovement
         return result.makeStringAndClear();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

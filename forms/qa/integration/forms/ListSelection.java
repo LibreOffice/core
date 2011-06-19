@@ -271,7 +271,7 @@ public class ListSelection extends integration.forms.TestCase
         {
             XStorable storable = (XStorable)m_document.query( XStorable.class );
             java.io.File testFile = java.io.File.createTempFile( getTestObjectName(),".ods");
-            storable.storeAsURL( testFile.getAbsoluteFile().toURL().toString(), new com.sun.star.beans.PropertyValue[]{} );
+            storable.storeAsURL( testFile.getAbsoluteFile().toURI().toURL().toString(), new com.sun.star.beans.PropertyValue[]{} );
             testFile.deleteOnExit();
         }
         catch( java.lang.Throwable e )

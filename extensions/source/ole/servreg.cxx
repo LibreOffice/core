@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,10 @@
 #include "servprov.hxx"
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-using namespace rtl;
 using namespace ole_adapter;
 using namespace cppu;
+
+using ::rtl::OUString;
 
 namespace ole_adapter
 {
@@ -72,7 +74,7 @@ Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiS
 }
 } // end namespace
 
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
@@ -119,7 +121,7 @@ extern "C" void * SAL_CALL component_getFactory(
 }
 
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -130,3 +132,5 @@ extern "C"  sal_Bool component_canUnload( TimeValue* libUnused)
 {
     return globalModuleCount.canUnload( &globalModuleCount, libUnused);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

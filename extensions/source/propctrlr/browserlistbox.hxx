@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 
 #include "browserline.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "pcrcommon.hxx"
 
 /** === begin UNO includes === **/
@@ -40,15 +39,13 @@
 /** === end UNO includes === **/
 #include <vcl/scrbar.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
 #include <set>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 //............................................................................
@@ -79,7 +76,7 @@ namespace pcr
         {
         }
     };
-    typedef ::std::hash_map< ::rtl::OUString, ListBoxLine, ::rtl::OUStringHash >    ListBoxLines;
+    typedef ::boost::unordered_map< ::rtl::OUString, ListBoxLine, ::rtl::OUStringHash >    ListBoxLines;
     typedef ::std::vector< ListBoxLines::iterator >                                 OrderedListBoxLines;
 
     //========================================================================
@@ -248,3 +245,4 @@ namespace pcr
 #endif // _EXTENSIONS_PROPCTRLR_BROWSERLISTBOX_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

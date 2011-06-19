@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 // header for ColorLB
 #include <svx/dlgctrl.hxx>
 // header for PushButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for XColorTable
 #include <svx/xtable.hxx>
 
@@ -56,18 +55,23 @@ public:
 
 class SvxDefaultColorOptPage : public SfxTabPage
 {
+
 private:
-    FixedLine               aGbChartColors;
-    ChartColorLB            aLbChartColors;
-    FixedLine               aGbColorBox;
-    ValueSet                aValSetColorBox;
-    PushButton              aPBDefault;
+    FixedLine                           aGbChartColors;
+    ChartColorLB                        aLbChartColors;
+    FixedLine                           aGbColorBox;
+    ValueSet                            aValSetColorBox;
+    PushButton                          aPBDefault;
+    PushButton                          aPBAdd;
+    PushButton                          aPBRemove;
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
     XColorTable*            pColorTab;
 
     DECL_LINK( ResetToDefaults, void * );
+    DECL_LINK( AddChartColor, void * );
+    DECL_LINK( RemoveChartColor, PushButton * );
     DECL_LINK( ListClickedHdl, ChartColorLB * );
     DECL_LINK( BoxClickedHdl, ValueSet * );
 
@@ -87,3 +91,4 @@ public:
 
 #endif  // _SVX_OPTCHART_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
 using namespace com::sun::star::bridge::oleautomation;
-using namespace rtl;
 using namespace cppu;
+
+using ::rtl::OUString;
 
 template< class T >
 bool equalSequences(const Sequence<T>& seqIn, const Sequence<Any> & returned);
@@ -352,3 +354,5 @@ void printSequence( Sequence<Any>& val)
 
     MessageBox( NULL, A2T(buff), _T("clientTest: printing Sequence elements"), MB_OK);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

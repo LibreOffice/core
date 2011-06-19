@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,8 @@
 #include "formlinkdialog.hxx"
 #include "formlinkdialog.hrc"
 
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "formstrings.hxx"
 #include <vcl/combobox.hxx>
 #include <vcl/msgbox.hxx>
@@ -242,7 +239,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::commitLinkPairs: caught an exception while setting the properties!" );
+            OSL_FAIL( "FormLinkDialog::commitLinkPairs: caught an exception while setting the properties!" );
         }
     }
 
@@ -346,7 +343,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::initializeLinks: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::initializeLinks: caught an exception!" );
         }
     }
 
@@ -397,7 +394,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getFormDataSourceType: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::getFormDataSourceType: caught an exception!" );
         }
         return sReturn;
     }
@@ -436,7 +433,7 @@ namespace pcr
         catch (const SQLException& e ) { aErrorInfo = e; }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getFormFields: caught a non-SQL exception!" );
+            OSL_FAIL( "FormLinkDialog::getFormFields: caught a non-SQL exception!" );
         }
 
         if ( aErrorInfo.isValid() )
@@ -503,7 +500,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getCanonicUnderlyingTable: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::getCanonicUnderlyingTable: caught an exception!" );
         }
         return xTable;
     }
@@ -568,7 +565,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getExistingRelation: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::getExistingRelation: caught an exception!" );
         }
 
         return ( _rLeftFields.getLength() > 0 ) && ( _rLeftFields[ 0 ].getLength() > 0 );
@@ -644,7 +641,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::initializeSuggest: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::initializeSuggest: caught an exception!" );
         }
     }
 
@@ -674,3 +671,5 @@ namespace pcr
 //............................................................................
 }   // namespace pcr
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,9 @@
 
 #include <svx/dlgctrl.hxx>
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
 
 class SdrView;
@@ -98,7 +95,6 @@ private:
     bool IsTextDirectionLeftToRight (void) const;
 
 public:
-
     SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs );
     ~SvxTextAttrPage();
 
@@ -112,24 +108,9 @@ public:
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void            PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void         PageCreated(SfxAllItemSet aSet);
 };
-
-/*************************************************************************
-|*
-|* Von SfxSingleTabDialog abgeleitet, um vom Control "uber virtuelle Methode
-|* benachrichtigt werden zu k"onnen.
-|*
-\************************************************************************/
-
-//CHINA001 class SvxTextAttrDialog : public SfxSingleTabDialog
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 SvxTextAttrDialog( Window* pParent, const SfxItemSet& rAttr,
-//CHINA001 const SdrView* pView );
-//CHINA001 ~SvxTextAttrDialog();
-//CHINA001 };
-
 
 #endif // _SVX_TEXTATTR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

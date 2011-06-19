@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -62,10 +63,10 @@ namespace
 
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment(const sal_Char** env_type_name, uno_Environment**)
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char** env_type_name, uno_Environment**)
     { *env_type_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME; }
 
-    void* SAL_CALL component_getFactory(const sal_Char* pImplName, void* pServiceManager, void*)
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplName, void* pServiceManager, void*)
     {
         if ( !pServiceManager || !pImplName ) return 0;
 
@@ -86,3 +87,5 @@ extern "C"
         return factory.get();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "handlerhelper.hxx"
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 #include "formresid.hrc"
 #include <comphelper/extract.hxx>
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
 #include "enumrepresentation.hxx"
 #include "formmetadata.hxx"
 #include "pcrcomponentcontext.hxx"
@@ -116,7 +113,7 @@ namespace pcr
             break;
 
         default:
-            DBG_ERROR( "PropertyHandlerHelper::describePropertyLine: don't know how to represent this at the UI!" );
+            OSL_FAIL( "PropertyHandlerHelper::describePropertyLine: don't know how to represent this at the UI!" );
             // NO break!
 
         case TypeClass_STRING:
@@ -219,7 +216,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "PropertyHandlerHelper::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "PropertyHandlerHelper::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
         }
 
@@ -249,7 +246,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "PropertyHandlerHelper::convertToControlValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "PropertyHandlerHelper::convertToControlValue: caught an exception while converting via TypeConverter!" );
             }
         }
 
@@ -289,3 +286,5 @@ namespace pcr
 //........................................................................
 } // namespace pcr
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

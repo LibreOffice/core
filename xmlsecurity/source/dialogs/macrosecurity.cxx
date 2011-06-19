@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
         pCheck->Check();
     else
     {
-        DBG_ERROR("illegal macro security level");
+        OSL_FAIL("illegal macro security level");
     }
     maSecReadonlyFI.Show(bReadonly);
     if(bReadonly)
@@ -281,7 +282,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
-        // --> PB 2004-09-21 #i33584#
+        // Trusted Path could not be removed (#i33584#)
         // after remove an entry, select another one if exists
         sal_uInt16 nNewCount = maTrustFileLocLB.GetEntryCount();
         if ( nNewCount > 0 )
@@ -290,7 +291,6 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
                 nSel = nNewCount - 1;
             maTrustFileLocLB.SelectEntryPos( nSel );
         }
-        // <--
         ImplCheckButtons();
     }
 
@@ -328,7 +328,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
             SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
             maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
             maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-            pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
+            pLBEntry->SetUserData( ( void* ) (sal_IntPtr)nEntry );      // missuse user data as index
         }
     }
 }
@@ -370,8 +370,6 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS );
     maTrustCertROFI.Show( mbAuthorsReadonly );
     mbAuthorsReadonly ? maTrustCertLB.DisableTable() : maTrustCertLB.EnableTable();
-//  unused button
-//    maAddCertPB.Enable( !mbAuthorsReadonly );
 
     FillCertLB();
 
@@ -411,33 +409,24 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 
         mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
     }
-    // --> PB 2004-09-21 #i33584#
+    // Trusted Path could not be removed (#i33584#)
     // don't forget to remove the old saved SecureURLs
     else
         mpDlg->maSecOptions.SetSecureURLs( cssu::Sequence< rtl::OUString >() );
-    // <--
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
-/*-- 26.02.2004 13:31:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
-    sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetImage( Image(XMLSEC_RES( bHighContrast ? RID_XMLSECTP_LOCK_HC : RID_XMLSECTP_LOCK )));
+    SetImage( Image(XMLSEC_RES( RID_XMLSECTP_LOCK )));
 }
 
-/*-- 26.02.2004 13:31:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 ReadOnlyImage::~ReadOnlyImage()
 {
 }
-/*-- 26.02.2004 13:31:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 {
     if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
@@ -457,12 +446,10 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-/*-- 26.02.2004 14:20:21---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 const String& ReadOnlyImage::GetHelpTip()
 {
      static String  aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));
      return aStr;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

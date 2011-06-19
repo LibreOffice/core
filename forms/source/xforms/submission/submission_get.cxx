@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,10 +45,13 @@ using namespace CSS::uno;
 using namespace CSS::ucb;
 using namespace CSS::task;
 using namespace CSS::io;
-using namespace rtl;
 using namespace osl;
 using namespace ucbhelper;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OStringToOUString;
+using ::rtl::OStringBuffer;
 
 
 CSubmissionGet::CSubmissionGet(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
@@ -70,7 +74,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
         pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"))), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
@@ -97,21 +101,22 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
         ucbhelper::Content aContent(aQueryURL, aEnvironment);
         CSS::uno::Reference< XOutputStream > aPipe(m_aFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))), UNO_QUERY_THROW);
         aContent.openStream(aPipe);
         // get reply
         try {
             m_aResultStream = aContent.openStream();
         } catch (Exception&) {
-            OSL_ENSURE(sal_False, "Cannot open reply stream from content");
+            OSL_FAIL("Cannot open reply stream from content");
         }
     } catch (Exception&)
     {
         // XXX
-        OSL_ENSURE(sal_False, "Exception during UCB operatration.");
+        OSL_FAIL("Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
 
     return SUCCESS;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

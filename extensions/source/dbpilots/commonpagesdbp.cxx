@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "commonpagesdbp.hxx"
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
 #include "dbpresid.hrc"
-#endif
 #include "componentmodule.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -49,9 +48,7 @@
 #include <sfx2/docfilt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svl/filenotation.hxx>
-#endif
 //.........................................................................
 namespace dbp
 {
@@ -123,7 +120,7 @@ namespace dbp
         try
         {
             ::rtl::OUString sDataSourceName;
-            rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+            rContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sDataSourceName;
 
             Reference< XConnection > xConnection;
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
@@ -141,9 +138,9 @@ namespace dbp
             implFillTables(xConnection);
 
             ::rtl::OUString sCommand;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("Command") ) >>= sCommand );
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command")) ) >>= sCommand );
             sal_Int32 nCommandType = CommandType::TABLE;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("CommandType") ) >>= nCommandType );
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType")) ) >>= nCommandType );
 
             // search the entry of the given type with the given name
             XubString sLookup( sCommand );
@@ -159,7 +156,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OTableSelectionPage::initializePage: caught an exception!");
+            OSL_FAIL("OTableSelectionPage::initializePage: caught an exception!");
         }
     }
 
@@ -178,13 +175,13 @@ namespace dbp
                 xOldConn = getFormConnection();
 
                 ::rtl::OUString sDataSource = m_aDatasource.GetSelectEntry();
-                rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("DataSourceName"), makeAny( sDataSource ) );
+                rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName")), makeAny( sDataSource ) );
             }
             ::rtl::OUString sCommand = m_aTable.GetSelectEntry();
             sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
 
-            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("Command"), makeAny( sCommand ) );
-            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("CommandType"), makeAny( nCommandType ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command")), makeAny( sCommand ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType")), makeAny( nCommandType ) );
 
             if ( !rContext.bEmbedded )
                 setFormConnection( xOldConn, sal_False );
@@ -194,7 +191,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OTableSelectionPage::commitPage: caught an exception!");
+            OSL_FAIL("OTableSelectionPage::commitPage: caught an exception!");
         }
 
         return sal_True;
@@ -309,7 +306,7 @@ namespace dbp
                     }
                     else
                     {
-                        DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
+                        OSL_FAIL("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
                     }
                 }
             }
@@ -318,7 +315,7 @@ namespace dbp
             catch(SQLException& e) { aSQLException <<= e; }
             catch (Exception&)
             {
-                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
+                OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
         }
 
@@ -350,7 +347,7 @@ namespace dbp
             catch(SQLException& e) { aSQLException <<= e; }
             catch (Exception&)
             {
-                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
+                OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
         }
 
@@ -373,9 +370,8 @@ namespace dbp
         {
             ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
 
-            bool bIsHiContrast = m_aTable.GetSettings().GetStyleSettings().GetHighContrastMode();
-            aTableImage = Image( ModuleRes( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE ) );
-            aQueryImage = Image( ModuleRes( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY ) );
+            aTableImage = Image( ModuleRes( IMG_TABLE ) );
+            aQueryImage = Image( ModuleRes( IMG_QUERY ) );
         }
         lcl_fillEntries( m_aTable, aTableNames, aTableImage, CommandType::TABLE );
         lcl_fillEntries( m_aTable, aQueryNames, aQueryImage, CommandType::QUERY );
@@ -392,7 +388,7 @@ namespace dbp
         }
         catch (Exception&)
         {
-            DBG_ERROR("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
+            OSL_FAIL("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
         }
     }
 
@@ -507,3 +503,4 @@ namespace dbp
 }   // namespace dbp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

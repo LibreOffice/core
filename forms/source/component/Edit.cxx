@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -458,7 +459,7 @@ namespace
 
             if ( !xSourceInfo.is() || !xDestInfo.is() )
             {
-                OSL_ENSURE( sal_False, "lcl_transferProperties: invalid property set(s)!" );
+                OSL_FAIL( "lcl_transferProperties: invalid property set(s)!" );
                 return;
             }
 
@@ -495,7 +496,7 @@ namespace
                         sMessage += ::rtl::OString( "\n\nMessage:\n" );
                         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
                     }
-                    OSL_ENSURE( sal_False, sMessage.getStr() );
+                    OSL_FAIL( sMessage.getStr() );
 #endif
                 }
 
@@ -560,7 +561,6 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
     {   // -> fuer die Dauer des Speicherns meinem aggregierten Model die alte TextLen einreden
 
         // before doing this we have to save the current text value of the aggregate, as this may be affected by resetting the text len
-        // FS - 08.12.99 - 70606
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
 
         m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN) >>= nOldTextLen;
@@ -628,7 +628,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
             if ( !m_bMaxTextLenModified )
             {
                 sal_Int32 nFieldLen = 0;
-                xField->getPropertyValue(::rtl::OUString::createFromAscii("Precision")) >>= nFieldLen;
+                xField->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Precision") ) ) >>= nFieldLen;
 
                 if (nFieldLen && nFieldLen <= USHRT_MAX)
                 {
@@ -756,3 +756,4 @@ Any OEditModel::getDefaultForReset() const
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

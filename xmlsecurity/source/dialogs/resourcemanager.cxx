@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,6 @@ namespace XmlSec
         if( !pResMgr )
         {
             ByteString  aName( "xmlsec" );
-//          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILanguage() );
-//          LanguageType    aLang( LANGUAGE_ENGLISH_US );
-//          pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), aLang );
 // MT: Change to Locale
             pResMgr = ResMgr::CreateResMgr( aName.GetBuffer() );
         }
@@ -78,7 +76,7 @@ namespace XmlSec
 
     String GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )
     {
-        // --> PB 2004-10-12 #i20172# String with date and time information
+        // String with date and time information (#i20172#)
         DateTime aDT( GetDateTime( _rDT ) );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
         String sRet( rLoDa.getDate( aDT ) );
@@ -126,7 +124,7 @@ namespace XmlSec
         ::rtl::OUStringBuffer s1, s2;
         OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
         typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); i ++)
+        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); ++i)
         {
             if (i != vecAttrValueOfDN.begin())
             {
@@ -343,7 +341,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         {
             OUString sPartId = OUString::createFromAscii( aIDs[i++] );
             typedef vector< pair < OUString, OUString > >::const_iterator CIT;
-            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); idn++)
+            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); ++idn)
             {
                 if (idn->first.equals(sPartId))
                 {
@@ -371,7 +369,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         {
             nNum = sal_uInt8( pSerNumSeq[ i ] );
 
-            //MM : exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
+            // exchange the buffer[0] and buffer[1], which make it consistent with Mozilla and Windows
             pBuffer[ 1 ] = pHexDigs[ nNum & 0x0F ];
             nNum >>= 4;
             pBuffer[ 0 ] = pHexDigs[ nNum ];
@@ -429,3 +427,4 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

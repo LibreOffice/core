@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,10 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "stdafx.h"
-//#include "AxTestComponents.h"
-#include "Basic.h"
 
+#include "stdafx.h"
+#include "Basic.h"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1362,3 +1362,5 @@ STDMETHODIMP CBasic::put_prpUnknown(IUnknown* newVal)
     m_prpUnknown = newVal;
     return S_OK;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

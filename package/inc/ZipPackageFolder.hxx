@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <HashMaps.hxx>
 #include <ZipPackageEntry.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
 namespace beans
@@ -144,3 +146,5 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

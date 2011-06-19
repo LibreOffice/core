@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ DlgEdModel::~DlgEdModel()
 
 //----------------------------------------------------------------------------
 
-SdrPage* DlgEdModel::AllocPage(FASTBOOL bMasterPage)
+SdrPage* DlgEdModel::AllocPage(bool bMasterPage)
 {
     DBG_CHKTHIS(DlgEdModel, 0);
     return new DlgEdPage(*this, bMasterPage);
@@ -63,9 +64,9 @@ SdrPage* DlgEdModel::AllocPage(FASTBOOL bMasterPage)
 
 //----------------------------------------------------------------------------
 
-void DlgEdModel::DlgEdModelChanged( FASTBOOL bChanged )
+void DlgEdModel::DlgEdModelChanged(bool bChanged )
 {
-    SetChanged( static_cast< sal_Bool > ( bChanged ) );
+    SetChanged( bChanged );
 }
 
 //----------------------------------------------------------------------------
@@ -77,3 +78,4 @@ Window* DlgEdModel::GetCurDocViewWin()
 
 //----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

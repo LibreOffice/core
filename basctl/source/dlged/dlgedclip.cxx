@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 #include "dlgedclip.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
@@ -88,7 +89,7 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
 
 Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor ) throw(UnsupportedFlavorException, IOException, RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     if ( !isDataFlavorSupported( rFlavor ) )
         throw UnsupportedFlavorException();
@@ -111,7 +112,7 @@ Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor )
 
 Sequence< DataFlavor > SAL_CALL DlgEdTransferableImpl::getTransferDataFlavors(  ) throw(RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     return m_SeqFlavors;
 }
@@ -120,7 +121,7 @@ Sequence< DataFlavor > SAL_CALL DlgEdTransferableImpl::getTransferDataFlavors(  
 
 sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rFlavor ) throw(RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     sal_Bool bRet = sal_False;
 
@@ -141,9 +142,10 @@ sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor
 
 void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& ) throw(RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     m_SeqFlavors = Sequence< DataFlavor >();
     m_SeqData = Sequence< Any >();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

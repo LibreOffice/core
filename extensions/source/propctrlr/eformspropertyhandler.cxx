@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -152,7 +153,7 @@ namespace pcr
             break;
 
             default:
-                DBG_ERROR( "EFormsPropertyHandler::getPropertyValue: cannot handle this property!" );
+                OSL_FAIL( "EFormsPropertyHandler::getPropertyValue: cannot handle this property!" );
                 break;
             }
         }
@@ -163,7 +164,7 @@ namespace pcr
             sMessage += "\n(have been asked for the \"";
             sMessage += ::rtl::OString( _rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += "\" property.)";
-            OSL_ENSURE( sal_False, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
 #endif
         }
         return aReturn;
@@ -268,7 +269,7 @@ namespace pcr
             break;
 
             default:
-                DBG_ERROR( "EFormsPropertyHandler::setPropertyValue: cannot handle this property!" );
+                OSL_FAIL( "EFormsPropertyHandler::setPropertyValue: cannot handle this property!" );
                 break;
             }
 
@@ -279,7 +280,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EFormsPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_FAIL( "EFormsPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 
@@ -462,7 +463,7 @@ namespace pcr
         case PROPERTY_ID_XSD_CALCULATION:   aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_CALCULATION); break;
 
         default:
-            DBG_ERROR( "EFormsPropertyHandler::describePropertyLine: cannot handle this property!" );
+            OSL_FAIL( "EFormsPropertyHandler::describePropertyLine: cannot handle this property!" );
             break;
         }
 
@@ -537,7 +538,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EFormsPropertyHandler::onInteractivePropertySelection: caught an exception!" );
+            OSL_FAIL( "EFormsPropertyHandler::onInteractivePropertySelection: caught an exception!" );
         }
 
         // something went wrong here ...(but has been asserted already)
@@ -605,7 +606,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "EFormsPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
+            OSL_FAIL( "EFormsPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
             break;
         }
     }
@@ -614,3 +615,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

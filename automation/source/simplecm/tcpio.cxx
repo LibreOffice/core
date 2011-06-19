@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,9 @@
 #include "tcpio.hxx"
 
 /// implement ITransmiter
-comm_USHORT TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
+comm_UINT16 TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
 {
-    vos::OGuard aGuard( aMSocketWriteAccess );
+    osl::MutexGuard aGuard( aMSocketWriteAccess );
     if ( !pStreamSocket )
     {
         nLastSent = 0;
@@ -47,9 +48,9 @@ comm_USHORT TCPIO::TransferBytes( const void* pBuffer, comm_UINT32 nLen )
 
 
 /// implement IReceiver
-comm_USHORT TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
+comm_UINT16 TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
 {
-    vos::OGuard aGuard( aMSocketReadAccess );
+    osl::MutexGuard aGuard( aMSocketReadAccess );
     if ( !pStreamSocket )
     {
         nLastReceived = 0;
@@ -63,9 +64,11 @@ comm_USHORT TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
 
 
 // helper
-void TCPIO::SetStreamSocket( vos::OStreamSocket *pSocket )
+void TCPIO::SetStreamSocket( osl::StreamSocket* pSocket )
 {
-    vos::OGuard aRGuard( aMSocketReadAccess );
-    vos::OGuard aWGuard( aMSocketWriteAccess );
+    osl::MutexGuard aRGuard( aMSocketReadAccess );
+    osl::MutexGuard aWGuard( aMSocketWriteAccess );
     pStreamSocket = pSocket;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

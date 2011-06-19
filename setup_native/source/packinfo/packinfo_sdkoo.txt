@@ -26,16 +26,16 @@
 #*************************************************************************
 
 Start
-module = "gid_Module_Root"
+module = "gid_Module_Root_SDK"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-sdk"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01, SUNWbtool (Name="CCS tools bundled with SunOS"), SUNWxcu4 (Name="XCU4 Utilities")"
 packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-sdk"
 freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
 requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
-copyright = "1999-2009 by OpenOffice.org"
+copyright = "1999-2009 by OpenOffice.org Community"
 solariscopyright = "solariscopyrightfile"
-vendor = "OpenOffice.org"
-description = "Software Development Kit for OpenOffice.org %OOOBASEVERSION"
+vendor = "The Document Foundation"
+description = "Software Development Kit for LibreOffice %OOOBASEVERSION"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
 End

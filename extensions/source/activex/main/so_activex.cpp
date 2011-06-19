@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // so_activex.cpp : Implementation of DLL Exports.
 
 
@@ -16,8 +17,6 @@
 
 #include <comphelper\documentconstants.hxx>
 
-// #define MY_DEBUG 1
-
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -28,7 +27,7 @@ END_OBJECT_MAP()
 #define X64_LIB_NAME "so_activex_x64.dll"
 #define X32_LIB_NAME "so_activex.dll"
 
-// 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
+// to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
 // in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
 // Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
 // extensions\source\activex\main\so_activex.cpp
@@ -50,7 +49,7 @@ const BOOL bX64 = FALSE;
 #define REG_DELETE_KEY_A( key, aPath, nKeyAccess ) RegDeleteKeyA( key, aPath )
 #endif
 
-// 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExA if WINVER < 0x0502.
+// MinGW doesn't know anything about RegDeleteKeyExA if WINVER < 0x0502.
 extern "C" {
 WINADVAPI LONG WINAPI RegDeleteKeyExA(HKEY,LPCSTR,REGSAM,DWORD);
 }
@@ -209,10 +208,6 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     // Unfortunately it can be done only for the user who installs the office.
     if ( bForAllUsers )
         DllUnregisterServerNative( nMode, sal_False, sal_False );
-
-#ifdef MY_DEBUG
-    MessageBoxA(NULL, pProgramPath, "Library Path, ( from library )", MB_OK | MB_ICONINFORMATION);
-#endif
 
     if ( pProgramPath && strlen( pProgramPath ) < 1024 )
     {
@@ -688,3 +683,4 @@ STDAPI DllUnregisterServer( void )
     return DllUnregisterServerNative( 63, TRUE, bX64 );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -50,9 +51,6 @@ namespace oooimprovement
             ::rtl::OUString getSoapId() const;
             ::rtl::OUString getSoapUrl() const;
             sal_Int32 getReportCount() const;
-#ifdef FUTURE
-            sal_Int32 getFailedAttempts() const;
-#endif
             sal_Int32 getOfficeStartCounterdown() const;
             sal_Int32 incrementEventCount(sal_Int32 by);
             sal_Int32 incrementReportCount(sal_Int32 by);
@@ -66,3 +64,5 @@ namespace oooimprovement
     };
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

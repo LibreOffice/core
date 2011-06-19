@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <string.h> // for memset
 
 using namespace com::sun::star::uno;
+using namespace ZipUtils;
 
 /** Provides general purpose decompression using the ZLIB library */
 
@@ -160,3 +162,4 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

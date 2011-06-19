@@ -31,7 +31,6 @@ PRJNAME=xmlsecurity
 TARGET=xmlsecurity-mscxsfit
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-#TARGETTYPE=CUI
 LIBTARGET=NO
 
 
@@ -108,21 +107,6 @@ APP4STDLIBS+= -lstdc++
 
 APP4STDLIBS+=	\
         $(SHARE_LIBS)
-
-##
-## The 4th application
-##
-#APP5TARGET=	decrypter
-#APP5OBJS=	\
-#		$(SHARE_OBJS)	\
-#		$(OBJ)$/decrypter.obj
-#		
-#.IF "$(OS)" == "LINUX"
-#APP5STDLIBS+= -lstdc++
-#.ENDIF
-#
-#APP5STDLIBS+=	\
-#		$(SHARE_LIBS)
 
 #
 # The 5th application

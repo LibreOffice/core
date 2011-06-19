@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,6 +49,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_WHEEL_BEHAVIOR,         "MouseWheelBehavior");
     PCR_CONSTASCII_STRING( PROPERTY_TAG,                    "Tag");
     PCR_CONSTASCII_STRING( PROPERTY_NAME,                   "Name");
+    PCR_CONSTASCII_STRING( PROPERTY_GROUP_NAME,             "GroupName");
     PCR_CONSTASCII_STRING( PROPERTY_VALUE,                  "Value");
     PCR_CONSTASCII_STRING( PROPERTY_TEXT,                   "Text");
     PCR_CONSTASCII_STRING( PROPERTY_NAVIGATION,             "NavigationBarMode");
@@ -305,3 +307,4 @@ namespace pcr
 
 #endif // _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

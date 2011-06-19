@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,21 +35,15 @@
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XSECVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XXMLSignatureTemplate ,
@@ -123,3 +118,5 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
 } ;
 
 #endif  // _XMLSIGNATURETEMPLATE_XMLSECIMPL_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

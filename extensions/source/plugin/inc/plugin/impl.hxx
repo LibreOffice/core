@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,8 +75,6 @@
 
 #ifdef WNT
 #include <plugin/win/sysplug.hxx>
-#elif defined(OS2)
-#include "plugin/os2/sysplug.hxx"
 #elif defined(QUARTZ)
 #include "plugin/aqua/sysplug.hxx"
 #elif defined(UNX)
@@ -307,7 +306,7 @@ public:
     static rtl::OUString                getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */
-        return rtl::OUString::createFromAscii( "com.sun.star.extensions.PluginManager" );
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.extensions.PluginManager" ));
     }
 };
 Reference< XInterface >  SAL_CALL PluginManager_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
@@ -428,3 +427,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
-//#include <statreg.cpp>
 #endif
 
-//#include <atlimpl.cpp>
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

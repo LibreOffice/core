@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include <sys/utsname.h>
 #include <_version.h>
 #include <errno.h>
-#include <string>
 #include <string.h>
 #include <assert.h>
 
@@ -40,7 +40,7 @@
 #include <pthread.h>
 #include <limits.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <string>
 
@@ -148,7 +148,7 @@ static string xml_encode( const string &rString )
     string temp = rString;
     string::size_type pos = 0;
 
-    // First replace all occurences of '&' because it may occur in further
+    // First replace all occurrences of '&' because it may occur in further
     // encoded chardters too
 
     for( pos = 0; (pos = temp.find( '&', pos )) != string::npos; pos += 4 )
@@ -182,7 +182,7 @@ static size_t fcopy( FILE *fpout, FILE *fpin )
    from which it can be reviewed and sent
 */
 
-bool write_report( const hash_map< string, string >& rSettings )
+bool write_report( const boost::unordered_map< string, string >& rSettings )
 {
     FILE    *fp = fopen( tmpnam( g_szReportFile ), "w" );
     const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
@@ -249,7 +249,7 @@ bool write_report( const hash_map< string, string >& rSettings )
 }
 
 
-bool write_description( const hash_map< string, string >& rSettings )
+bool write_description( const boost::unordered_map< string, string >& rSettings )
 {
     bool    bSuccess = false;
     FILE    *fp = fopen( tmpnam( g_szDescriptionFile ), "w" );
@@ -267,17 +267,17 @@ bool write_description( const hash_map< string, string >& rSettings )
 
 #if 0
 // unused
-static void printSettings( const hash_map<string,string>& rSettings )
+static void printSettings( const boost::unordered_map<string,string>& rSettings )
 {
     printf( "Settings:\n" );
-    for( hash_map<string,string>::const_iterator it = rSettings.begin(); it != rSettings.end(); ++it )
+    for( boost::unordered_map<string,string>::const_iterator it = rSettings.begin(); it != rSettings.end(); ++it )
     {
         printf( "%s=\"%s\"\n", it->first.c_str(), it->second.c_str() );
     }
 }
 #endif
 
-bool save_crash_report( const string& rFileName, const hash_map< string, string >& /*rSettings*/ )
+bool save_crash_report( const string& rFileName, const boost::unordered_map< string, string >& /*rSettings*/ )
 {
     bool bSuccess = false;
     FILE    *fpout = fopen( rFileName.c_str(), "w" );
@@ -368,7 +368,7 @@ bool SendHTTPRequest(
                 if ( g_bDebugMode )
                 {
                     printf( "*** Sending HTTP request ***\n\n" );
-                    printf( buffer );
+                    printf( "%s", buffer );
                 }
 
                 if ( SOCKET_ERROR != send( s, buffer, strlen(buffer), 0 ) )
@@ -405,7 +405,7 @@ bool SendHTTPRequest(
                         if ( g_bDebugMode )
                             do
                             {
-                                printf( buffer );
+                                printf( "%s", buffer );
                                 memset( buffer, 0, sizeof(buffer) );
                             } while ( 0 < recv( s, buffer, sizeof(buffer), 0 ) );
                     }
@@ -484,16 +484,13 @@ static void WriteSOAPRequest( FILE *fp )
 
 struct RequestParams
 {
-    bool    success;
-    FILE    *fpin;
+    FILE *fpin;
     const char *pServer;
-    unsigned short uPort;
     const char *pProxyServer;
-    unsigned short uProxyPort;
 };
 
 
-bool send_crash_report( const hash_map< string, string >& rSettings )
+bool send_crash_report( const boost::unordered_map< string, string >& rSettings )
 {
     if ( 0 == strcasecmp( rSettings.find( "CONTACT" )->second.c_str(), "true" ) &&
          !trim_string(rSettings.find( "EMAIL" )->second).length() )
@@ -540,24 +537,24 @@ bool send_crash_report( const hash_map< string, string >& rSettings )
 
 static bool append_file( const char *filename, string& rString )
 {
-    char    buf[1024];
-    bool    bSuccess = false;
+    char buf[1024];
+    bool bSuccess = false;
 
     FILE *fp = fopen( filename, "r" );
     if ( fp )
     {
-        bSuccess = true;
         while (fgets(buf, sizeof(buf), fp) != NULL)
         {
             rString.append( buf );
         }
         fclose( fp );
+        bSuccess = true;
     }
 
-    return true;
+    return bSuccess;
 }
 
-string crash_get_details( const hash_map< string, string >& rSettings )
+string crash_get_details( const boost::unordered_map< string, string >& rSettings )
 {
     string aRet;
 
@@ -911,7 +908,7 @@ static bool write_crash_data()
 
 #if 0
 // unused
-static bool write_settings( const hash_map< string, string >& rSettings )
+static bool write_settings( const boost::unordered_map< string, string >& rSettings )
 {
     bool success = false;
     string  sRCFile = get_home_dir();
@@ -936,7 +933,7 @@ static bool write_settings( const hash_map< string, string >& rSettings )
 }
 #endif
 
-static void read_settings( hash_map< string, string >& rSettings )
+static void read_settings( boost::unordered_map< string, string >& rSettings )
 {
     string  sRCFile = get_home_dir();
 
@@ -952,7 +949,7 @@ static void read_settings( hash_map< string, string >& rSettings )
     rSettings[ "TITLE" ] = "";
 }
 
-static void read_settings_from_environment( hash_map< string, string >& rSettings )
+static void read_settings_from_environment( boost::unordered_map< string, string >& rSettings )
 {
     string  strEnv;
 
@@ -1071,7 +1068,7 @@ int main( int argc, char** argv )
 
         if ( g_bSendReport )
         {
-            hash_map< string, string > aDialogSettings;
+            boost::unordered_map< string, string > aDialogSettings;
 
             read_settings( aDialogSettings );
             read_settings_from_environment( aDialogSettings );
@@ -1080,7 +1077,7 @@ int main( int argc, char** argv )
         }
         else
         {
-            hash_map< string, string > aDialogSettings;
+            boost::unordered_map< string, string > aDialogSettings;
 
             read_settings( aDialogSettings );
             read_settings_from_environment( aDialogSettings );
@@ -1120,3 +1117,5 @@ int main( int argc, char** argv )
 
     return -1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

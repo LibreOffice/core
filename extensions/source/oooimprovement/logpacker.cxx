@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -73,13 +74,13 @@ namespace oooimprovement
     sal_Int32 LogPacker::pack(const OUString& fileurl)
     {
         Reference<XSimpleFileAccess> file_access(
-            m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
+            m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
             UNO_QUERY_THROW);
 
         Reference<XStorage> storage;
         {
             Reference<XSingleServiceFactory> storage_factory(
-                m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.embed.StorageFactory")),
+                m_ServiceFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"))),
                 UNO_QUERY_THROW);
             Sequence<Any> storage_init_args(2);
             storage_init_args[0] = Any(getZipfileurl(fileurl));
@@ -90,7 +91,7 @@ namespace oooimprovement
         }
 
         Reference<XOutputStream> zipped_stream = storage->openStreamElement(
-            OUString::createFromAscii("logdata.csv"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("logdata.csv")),
             ElementModes::WRITE)->getOutputStream();
         Reference<XInputStream> unzipped_stream = file_access->openFileRead(fileurl);
         const sal_Int32 bufsize = 1024;
@@ -112,3 +113,5 @@ namespace oooimprovement
         return logged_events;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

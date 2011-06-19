@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -200,14 +201,14 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 {
     for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
     {
-        if ( namedValues[ n ].Name.equalsAscii( "DynamicData" ) )
+        if ( namedValues[ n ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DynamicData" ) ) )
         {
             uno::Sequence<beans::NamedValue> aListProp;
             if ( namedValues[n].Value >>= aListProp )
             {
                 for ( sal_Int32 i=aListProp.getLength(); i-- > 0; )
                 {
-                    if ( aListProp[ i ].Name.equalsAscii( "updateList" ) )
+                    if ( aListProp[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "updateList" ) ) )
                     {
                         handleExtensionUpdates( aListProp );
                         return uno::Any();
@@ -232,7 +233,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     m_pInitThread.reset(
         new InitUpdateCheckJobThread(
             m_xContext, aConfig,
-            !aEventName.equalsAscii("onFirstVisibleTask")));
+            !aEventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("onFirstVisibleTask"))));
 
     return uno::Any();
 }
@@ -380,16 +381,14 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 
 //------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL
-component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
 {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" void *
-component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pszImplementationName,
@@ -397,3 +396,5 @@ component_getFactory(const sal_Char *pszImplementationName, void *pServiceManage
         pRegistryKey,
         kImplementations_entries) ;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

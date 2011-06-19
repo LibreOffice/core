@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,9 +84,6 @@ namespace dbp
     {
         switch (_nState)
         {
-//          case GBW_STATE_DATASELECTION:
-//              return new OTableSelectionPage(this);
-//
             case GBW_STATE_OPTIONLIST:
                 return new ORadioSelectionPage(this);
 
@@ -110,9 +108,6 @@ namespace dbp
     {
         switch (_nCurrentState)
         {
-//          case GBW_STATE_DATASELECTION:
-//              return GBW_STATE_OPTIONLIST;
-//
             case GBW_STATE_OPTIONLIST:
                 return GBW_STATE_DEFAULTOPTION;
 
@@ -182,7 +177,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
+            OSL_FAIL("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
         }
     }
 
@@ -567,3 +562,4 @@ namespace dbp
 }   // namespace dbp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

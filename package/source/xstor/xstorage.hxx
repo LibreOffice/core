@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -296,8 +297,6 @@ class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::embed::XTransactedObject
                 , public ::com::sun::star::embed::XTransactionBroadcaster
                 , public ::com::sun::star::util::XModifiable
-                // , public ::com::sun::star::container::XNameAccess
-                // , public ::com::sun::star::lang::XComponent
                 , public ::com::sun::star::embed::XEncryptionProtectedStorage
                 , public ::com::sun::star::beans::XPropertySet
                 , public ::com::sun::star::embed::XOptimizedStorage
@@ -858,3 +857,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

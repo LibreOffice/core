@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -239,13 +240,13 @@ namespace dbp
             sal_Int32 nCommandType = CommandType::COMMAND;
             try
             {
-                rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSource;
-                rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sCommand;
-                rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")) >>= nCommandType;
+                rContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sDataSource;
+                rContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command"))) >>= sCommand;
+                rContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType"))) >>= nCommandType;
             }
             catch(const Exception&)
             {
-                DBG_ERROR("OControlWizardPage::initializePage: caught an exception!");
+                OSL_FAIL("OControlWizardPage::initializePage: caught an exception!");
             }
 
             INetURLObject aURL( sDataSource );
@@ -305,11 +306,11 @@ namespace dbp
         sal_Int16 nClassId = FormComponentType::CONTROL;
         try
         {
-            getContext().xObjectModel->getPropertyValue(::rtl::OUString::createFromAscii("ClassId")) >>= nClassId;
+            getContext().xObjectModel->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassId"))) >>= nClassId;
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::activate: could not obtain the class id!");
+            OSL_FAIL("OControlWizard::activate: could not obtain the class id!");
         }
         if (!approveControl(nClassId))
         {
@@ -433,7 +434,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::implDeterminePage: caught an exception!");
+            OSL_FAIL("OControlWizard::implDeterminePage: caught an exception!");
         }
     }
 
@@ -447,7 +448,7 @@ namespace dbp
 
             Reference< XInterface > xContext;
             if (xORB.is())
-                xContext = xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.DatabaseContext"));
+                xContext = xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext")));
             DBG_ASSERT(xContext.is(), "OControlWizard::implGetDSContext: invalid database context!");
 
             m_aContext.xDatasourceContext = Reference< XNameAccess >(xContext, UNO_QUERY);
@@ -455,7 +456,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::implGetDSContext: invalid database context!");
+            OSL_FAIL("OControlWizard::implGetDSContext: invalid database context!");
         }
     }
 
@@ -471,11 +472,11 @@ namespace dbp
         try
         {
             if ( !::dbtools::isEmbeddedInDatabase(m_aContext.xForm,xConn) )
-                m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
+                m_aContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) >>= xConn;
         }
         catch(const Exception&)
         {
-            DBG_ERROR("OControlWizard::getFormConnection: caught an exception!");
+            OSL_FAIL("OControlWizard::getFormConnection: caught an exception!");
         }
         return xConn;
     }
@@ -501,12 +502,12 @@ namespace dbp
             }
             else
             {
-                m_aContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("ActiveConnection"), makeAny( _rxConn ) );
+                m_aContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")), makeAny( _rxConn ) );
             }
         }
         catch(const Exception&)
         {
-            DBG_ERROR("OControlWizard::setFormConnection: caught an exception!");
+            OSL_FAIL("OControlWizard::setFormConnection: caught an exception!");
         }
     }
 
@@ -518,7 +519,7 @@ namespace dbp
     //---------------------------------------------------------------------
     Reference< XInteractionHandler > OControlWizard::getInteractionHandler(Window* _pWindow) const
     {
-        const ::rtl::OUString sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler");
+        const ::rtl::OUString sInteractionHandlerServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"));
         Reference< XInteractionHandler > xHandler;
         try
         {
@@ -571,8 +572,8 @@ namespace dbp
             if (m_aContext.xForm.is())
             {
                 // collect some properties of the form
-                ::rtl::OUString sObjectName = ::comphelper::getString(m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")));
-                sal_Int32 nObjectType = ::comphelper::getINT32(m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")));
+                ::rtl::OUString sObjectName = ::comphelper::getString(m_aContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command"))));
+                sal_Int32 nObjectType = ::comphelper::getINT32(m_aContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType"))));
 
                 // calculate the connection the rowset is working with
                 Reference< XConnection > xConnection;
@@ -617,7 +618,7 @@ namespace dbp
 
                             // not interested in any results, only in the fields
                             Reference< XPropertySet > xStatementProps(xStatement, UNO_QUERY);
-                            xStatementProps->setPropertyValue(::rtl::OUString::createFromAscii("MaxRows"), makeAny(sal_Int32(0)));
+                            xStatementProps->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRows")), makeAny(sal_Int32(0)));
 
                             // TODO: think about handling local SQLExceptions here ...
                             Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
@@ -631,7 +632,7 @@ namespace dbp
             if (xColumns.is())
             {
                 m_aContext.aFieldNames = xColumns->getElementNames();
-                static const ::rtl::OUString s_sFieldTypeProperty   = ::rtl::OUString::createFromAscii("Type");
+                static const ::rtl::OUString s_sFieldTypeProperty(RTL_CONSTASCII_USTRINGPARAM("Type"));
                 const ::rtl::OUString* pBegin = m_aContext.aFieldNames.getConstArray();
                 const ::rtl::OUString* pEnd   = pBegin + m_aContext.aFieldNames.getLength();
                 for(;pBegin != pEnd;++pBegin)
@@ -645,7 +646,7 @@ namespace dbp
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("OControlWizard::initContext: unexpected exception while gathering column information!");
+                        OSL_FAIL("OControlWizard::initContext: unexpected exception while gathering column information!");
                     }
                     m_aContext.aTypes.insert(OControlWizardContext::TNameTypeMap::value_type(*pBegin,nFieldType));
                 }
@@ -656,7 +657,7 @@ namespace dbp
         catch(SQLException& e) { aSQLException <<= e; }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::initContext: could not retrieve the control context (caught an exception)!");
+            OSL_FAIL("OControlWizard::initContext: could not retrieve the control context (caught an exception)!");
         }
 
         ::comphelper::disposeComponent(xStatement);
@@ -696,20 +697,20 @@ namespace dbp
         // the only thing we have at the moment is the label
         try
         {
-            ::rtl::OUString sLabelPropertyName = ::rtl::OUString::createFromAscii("Label");
+            ::rtl::OUString sLabelPropertyName(RTL_CONSTASCII_USTRINGPARAM("Label"));
             Reference< XPropertySetInfo > xInfo = m_aContext.xObjectModel->getPropertySetInfo();
             if (xInfo.is() && xInfo->hasPropertyByName(sLabelPropertyName))
             {
                 ::rtl::OUString sControlLabel(_pSettings->sControlLabel);
                 m_aContext.xObjectModel->setPropertyValue(
-                    ::rtl::OUString::createFromAscii("Label"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),
                     makeAny(sControlLabel)
                 );
             }
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::commitControlSettings: could not commit the basic control settings!");
+            OSL_FAIL("OControlWizard::commitControlSettings: could not commit the basic control settings!");
         }
     }
 
@@ -723,7 +724,7 @@ namespace dbp
         // initialize some settings from the control model give
         try
         {
-            ::rtl::OUString sLabelPropertyName = ::rtl::OUString::createFromAscii("Label");
+            ::rtl::OUString sLabelPropertyName(RTL_CONSTASCII_USTRINGPARAM("Label"));
             Reference< XPropertySetInfo > xInfo = m_aContext.xObjectModel->getPropertySetInfo();
             if (xInfo.is() && xInfo->hasPropertyByName(sLabelPropertyName))
             {
@@ -734,7 +735,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("OControlWizard::initControlSettings: could not retrieve the basic control settings!");
+            OSL_FAIL("OControlWizard::initControlSettings: could not retrieve the basic control settings!");
         }
     }
 
@@ -744,34 +745,10 @@ namespace dbp
         // lemme see ...
         return (0 == getContext().aFieldNames.getLength());
             // if we got fields, the data source is valid ...
-//      try
-//      {
-//          // first, we need a valid data source name
-//          ::rtl::OUString sDataSourceName;
-//          m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
-//          if (m_aContext.xDatasourceContext.is() && m_aContext.xDatasourceContext->hasByName(sDataSourceName))
-//          {   // at least the data source name is valid ...
-//              // then, a CommandType "table" would be nice ...
-//              sal_Int32 nCommandType = CommandType::COMMAND;
-//              m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")) >>= nCommandType;
-//              if (CommandType::TABLE == nCommandType)
-//              {   // okay ....
-//                  // now the table itself should be valid
-//                  ::rtl::OUString sTableName;
-//                  m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sTableName;
-//                  if (m_aContext.xObjectContainer.is() && m_aContext.xObjectContainer->hasByName(sTableName))
-//                      return sal_False;
-//              }
-//          }
-//      }
-//      catch(Exception&)
-//      {
-//          DBG_ERROR("OControlWizard::needDatasourceSelection: caught an exception while checking the form settings!");
-//      }
-//      return sal_True;
     }
 
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

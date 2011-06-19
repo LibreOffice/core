@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include "specialdispatchers.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #define ITEMID_SCRIPTSPACE          SID_ATTR_PARA_SCRIPTSPACE
 #include <editeng/scriptspaceitem.hxx>
 
@@ -177,7 +176,7 @@ namespace frm
         const PropertyValue* pLookupEnd = _rArguments.getConstArray() + _rArguments.getLength();
         while ( pLookup != pLookupEnd )
         {
-            if ( pLookup->Name.equalsAscii( "Enable" ) )
+            if ( pLookup->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enable" ) ) )
                 break;
             ++pLookup;
         }
@@ -190,7 +189,7 @@ namespace frm
             return new SfxBoolItem( (WhichId)m_nAttributeId, bEnable );
         }
 
-        OSL_ENSURE( sal_False, "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
+        OSL_FAIL( "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
         return NULL;
     }
 
@@ -198,3 +197,4 @@ namespace frm
 }   // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

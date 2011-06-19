@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <bastype2.hxx>
 #include <vcl/dialog.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <svtools/svtabbx.hxx>
 #include <vcl/tabdlg.hxx>
@@ -274,3 +273,5 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
 
 #endif // _MODULDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

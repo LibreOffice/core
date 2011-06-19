@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ namespace dbp
         }
         catch(Exception&)
         {
-            DBG_ERROR("::dbp::disambiguateName: something went (strangely) wrong!");
+            OSL_FAIL("::dbp::disambiguateName: something went (strangely) wrong!");
         }
     }
 
@@ -68,3 +69,4 @@ namespace dbp
 }   // namespace dbp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

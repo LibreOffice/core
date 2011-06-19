@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include <optasian.hrc>
+#include "optasian.hrc"
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 #include <cuires.hrc>
@@ -145,39 +145,3 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     };
     Text [ en-US ] = "Proxy";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

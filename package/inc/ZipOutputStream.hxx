@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,10 @@
 
 struct ZipEntry;
 class ZipPackageStream;
+namespace rtl
+{
+    template < class T > class Reference;
+}
 
 class ZipOutputStream
 {
@@ -53,7 +58,7 @@ protected:
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
 
     ::rtl::OUString     sComment;
-    Deflater            aDeflater;
+    ZipUtils::Deflater  aDeflater;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > m_xDigestContext;
@@ -106,3 +111,5 @@ protected:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

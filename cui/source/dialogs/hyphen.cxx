@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "hyphen.hxx"
 #include "hyphen.hrc"
 #include "cuires.hrc"
@@ -39,7 +37,6 @@
 #include <svtools/langtab.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -74,7 +71,6 @@ HyphenEdit_Impl::HyphenEdit_Impl( Window* pParent, const ResId& rResId ) :
 
 void HyphenEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 {
-//  sal_uInt16 nMod  = rKEvt.GetKeyCode().GetModifier();
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
     switch ( nCode )
@@ -104,7 +100,6 @@ void HyphenEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 struct SvxHyphenWordDialog_Impl
 {
     SvxHyphenWordDialog *       m_pDialog;
-//    Window *                    m_pParent;
 
     FixedText           aWordFT;
     HyphenEdit_Impl     aWordEdit;
@@ -513,7 +508,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, HyphenateAllHdl_Impl, Button *, EMPTYARG /*
         try
         {
             uno::Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
-            const rtl::OUString aName( rtl::OUString::createFromAscii( "IsHyphAuto" ) );
+            const rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "IsHyphAuto" ) );
             uno::Any aAny;
 
             aAny <<= sal_True;
@@ -655,3 +650,4 @@ void SvxHyphenWordDialog::SelRight()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

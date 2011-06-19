@@ -4,7 +4,7 @@
   <module-name>pcr</module-name>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>org.openoffice.comp.form.ui.OTabOrderDialog</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -14,7 +14,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>org.openoffice.comp.form.ControlFontDialog</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -24,7 +24,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.FormComponentPropertyHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -34,7 +34,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.EFormsPropertyHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -44,7 +44,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.EditPropertyHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -54,7 +54,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>org.openoffice.comp.extensions.ObjectInspector</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -64,7 +64,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>org.openoffice.comp.extensions.ObjectInspectorModel</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -74,7 +74,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>org.openoffice.comp.extensions.FormController</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -84,7 +84,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.GenericPropertyHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -94,7 +94,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.EventHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -104,7 +104,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.XSDValidationPropertyHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -114,7 +114,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.CellBindingPropertyHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -124,7 +124,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.ButtonNavigationHandler</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
@@ -134,7 +134,7 @@
   </component-description>
 
   <component-description>
-    <author>Frank Sch&ouml;nheit</author>
+    <author>Frank Sch&#246;nheit</author>
     <name>com.sun.star.comp.extensions.DefaultFormComponentInspectorModel</name>
     <description></description>
     <loader-name>com.sun.star.loader.SharedLibrary</loader-name>

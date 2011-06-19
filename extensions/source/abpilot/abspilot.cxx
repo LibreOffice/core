@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,13 +116,12 @@ namespace abp
         m_pCancel->SetClickHdl( LINK( this, OAddessBookSourcePilot, OnCancelClicked) );
 
         // some initial settings
+#ifdef UNX
 #ifdef MACOSX
         m_aSettings.eType = AST_MACAB;
-#elif WITH_MOZILLA
-#ifdef UNX
-        m_aSettings.eType = AST_MORK;
 #else
-        m_aSettings.eType = AST_OE;
+// FIXME: if KDE use KAB instead
+        m_aSettings.eType = AST_EVOLUTION;
 #endif
 #else
         m_aSettings.eType = AST_OTHER;
@@ -280,7 +280,7 @@ namespace abp
 
             if ( aTables.empty() )
             {
-                if ( RET_YES != QueryBox( this, ModuleRes( RID_QRY_NOTABLES ) ).Execute() )
+                if ( RET_YES != QueryBox( this, ModuleRes( ( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_QRY_NO_EVO_GW : RID_QRY_NOTABLES ) ) ).Execute() )
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
                     bAllow = sal_False;
@@ -319,7 +319,7 @@ namespace abp
             case AST_EVOLUTION_GROUPWISE:
             case AST_EVOLUTION_LDAP     : pGuess = "Personal"; break;
             default:
-                DBG_ERROR( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
+                OSL_FAIL( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
                 return;
         }
         const ::rtl::OUString sGuess = ::rtl::OUString::createFromAscii( pGuess );
@@ -398,7 +398,7 @@ namespace abp
                 break;
 
             case AST_INVALID:
-                DBG_ERROR( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
+                OSL_FAIL( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
                 break;
         }
         m_eNewDataSourceType = m_aSettings.eType;
@@ -437,7 +437,7 @@ namespace abp
                 return new FinalPage( this );
 
             default:
-                DBG_ERROR("OAddessBookSourcePilot::createPage: invalid state!");
+                OSL_FAIL("OAddessBookSourcePilot::createPage: invalid state!");
                 return NULL;
         }
     }
@@ -498,3 +498,4 @@ namespace abp
 }   // namespace abp
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

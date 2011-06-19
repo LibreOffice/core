@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,6 +51,7 @@
 #include <string>
 #include <queue>
 #include <stdio.h>
+#include <sal/macros.h>
 
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
@@ -64,7 +66,7 @@ inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
     va_list args;
 
     va_start( args, pFormat );
-    _vsntprintf( buffer, elementsof(buffer), pFormat, args );
+    _vsntprintf( buffer, SAL_N_ELEMENTS(buffer), pFormat, args );
     OutputDebugString( buffer );
 }
 #else
@@ -195,7 +197,7 @@ static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWO
             )
         {
             CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
-            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, elementsof(szBuffer), WININIT_FILENAME );
+            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, SAL_N_ELEMENTS(szBuffer), WININIT_FILENAME );
 
             CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
             strcpy( szRename, szNewFileNameA );
@@ -203,7 +205,7 @@ static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWO
             strcat( szRename, szExistingFileNameA );
             size_t  lnRename = strlen(szRename);
 
-            if ( dwBufLen + lnRename + 2 <= elementsof(szBuffer) )
+            if ( dwBufLen + lnRename + 2 <= SAL_N_ELEMENTS(szBuffer) )
             {
                 CopyMemory( &szBuffer[dwBufLen], szRename, lnRename );
                 szBuffer[dwBufLen + lnRename ] = 0;
@@ -283,18 +285,6 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
         if (hdl == INVALID_HANDLE_VALUE)
         {
             fSuccess = MoveFileExImpl( sFileName2.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING );
-
-            // if ( fSuccess )
-            // {
-            //  mystr = "Success";
-            //  MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
-            // }
-            // else
-            // {
-            //  char buff[256];
-            //  wsprintf(buff, "Failure %d", GetLastError());
-            //  MessageBox( NULL, buff, "Titel", MB_OK );
-            // }
         }
         else
         {
@@ -552,17 +542,11 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 
     OutputDebugStringA( "Starting Custom Action" );
 
-    // std::_tstring    mystr;
-    // mystr = "Patchfile: " + sPatchFile;
-    // MessageBox( NULL, mystr.c_str(), "Patchfile", MB_OK );
-
     aSectionNames = getProfileSections( sPatchFile );
     while ( !aSectionNames.empty() )
     {
         std::_tstring   sSectionName = aSectionNames.front();
         if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
-        // mystr = "Section: " + sSectionName;
-        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
         aKeyNames = getProfileKeys( sPatchFile, sSectionName );
         while ( !aKeyNames.empty() )
@@ -581,9 +565,6 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 
                 sFileName1 = sInstDir + sSectionName + sFileName1;
                 sFileName2 = sFileName1 + sExtension;
-
-                // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
-                // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
                 SwapFiles( sFileName1, sFileName2 );
             }
@@ -632,17 +613,11 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     std::queue< std::_tstring > aSectionNames;
     std::queue< std::_tstring > aKeyNames;
 
-    // std::_tstring    mystr;
-    // mystr = "Patchfile: " + sPatchFile;
-    // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
-
     aSectionNames = getProfileSections( sPatchFile );
     while ( !aSectionNames.empty() )
     {
         std::_tstring   sSectionName = aSectionNames.front();
         if ( std::_tstring(TEXT("_root")) == sSectionName ) { sSectionName = TEXT(""); }
-        // mystr = "Section: " + sSectionName;
-        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
         aKeyNames = getProfileKeys( sPatchFile, sSectionName );
         while( !aKeyNames.empty() )
@@ -661,9 +636,6 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
 
                 sFileName1 = sInstDir + sSectionName + sFileName1;
                 sFileName2 = sFileName1 + sExtension;
-
-                // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
-                // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
                 SwapFiles( sFileName2, sFileName1 );
             }
@@ -724,7 +696,6 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
     // 1. Reading Product Code from setup.ini of installed Office
 
     std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
-    // MessageBox(NULL, sInstallPath.c_str(), "INSTALLLOCATION", MB_OK);
     std::_tstring sSetupiniPath = sInstallPath + TEXT("program\\setup.ini");
 
     TCHAR szProductCode[32767];
@@ -734,14 +705,13 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
         TEXT("ProductCode"),
         TEXT("NOTFOUND"),
         szProductCode,
-        elementsof(szProductCode),
+        SAL_N_ELEMENTS(szProductCode),
         sSetupiniPath.c_str()
         );
 
     if ( !_tcsicmp( szProductCode, TEXT("NOTFOUND") ) )
     {
         // No setup.ini or no "ProductCode" in setup.ini. This is an invalid directory.
-        // MessageBox(NULL, "NOTFOUND set", "DEBUG", MB_OK);
         return ERROR_SUCCESS;
     }
 
@@ -750,7 +720,6 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
     std::_tstring productCode = TEXT(szProductCode);
     productCode = ConvertGuid(std::_tstring(productCode.c_str() + 1, productCode.length() - 2));
     mystr = TEXT("Changed product code: ") + productCode;
-    // MessageBox(NULL, mystr.c_str(), "ProductCode", MB_OK);
 
     // 3. Setting path in the Windows registry to find installed features
 
@@ -762,14 +731,12 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
         registryRoot = HKEY_LOCAL_MACHINE;
         registryKey = TEXT("Software\\Classes\\Installer\\Features\\") + productCode;
         mystr = registryKey;
-        // MessageBox( NULL, mystr.c_str(), "ALLUSERS", MB_OK );
     }
     else
     {
         registryRoot = HKEY_CURRENT_USER;
         registryKey = TEXT("Software\\Microsoft\\Installer\\Features\\") + productCode;
         mystr = registryKey;
-        // MessageBox( NULL, mystr.c_str(), "ALLUSERS", MB_OK );
     }
 
     // 4. Collecting all installed features from Windows registry
@@ -778,7 +745,6 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
     if (RegOpenKey(registryRoot, registryKey.c_str(), &hKey) == ERROR_SUCCESS)
     {
         int counter = 0;
-        // DWORD counter = 0;
         LONG lEnumResult;
 
         do
@@ -796,11 +762,6 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
                 std::_tstring sValueName = szValueName;
                 std::_tstring sValueData = szValueData;
 
-                // mystr = sValueName;
-                // MessageBox( NULL, mystr.c_str(), "ValueName", MB_OK );
-                // mystr = sValueData;
-                // MessageBox( NULL, mystr.c_str(), "ValueData", MB_OK );
-
                 // Does this feature exist in this patch?
                 if ( IsSetMsiProperty(handle, sValueName) )
                 {
@@ -808,14 +769,10 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
                     if ( 6 == szValueData[0] )
                     {
                         MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_ABSENT); // do not install this feature
-                        // mystr = TEXT("Do NOT install: ") + sValueName;
-                        // MessageBox( NULL, mystr.c_str(), "ValueName", MB_OK );
                     }
                     else
                     {
                         MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_LOCAL); // do install this feature
-                        // mystr = TEXT("Do install: ") + sValueName;
-                        // MessageBox( NULL, mystr.c_str(), "ValueName", MB_OK );
                     }
                 }
             }
@@ -840,14 +797,10 @@ extern "C" UINT __stdcall SetNewFeatureState( MSIHANDLE handle )
     if (IsSetMsiProperty(handle, TEXT("SELECT_OU_FEATURE")))
     {
         MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_LOCAL); // do install this feature
-        // mystr = TEXT("OnlineUpdate wird installiert!");
-        // MessageBox(NULL, mystr.c_str(), "INSTALLSTATE_LOCAL", MB_OK);
     }
     else
     {
         MsiSetFeatureState(handle,sValueName.c_str(),INSTALLSTATE_ABSENT); // do not install this feature
-        // mystr = TEXT("OnlineUpdate wird NICHT installiert!");
-        // MessageBox(NULL, mystr.c_str(), "INSTALLSTATE_ABSENT", MB_OK);
     }
 
     return ERROR_SUCCESS;
@@ -867,10 +820,6 @@ extern "C" UINT __stdcall ShowOnlineUpdateDialog( MSIHANDLE handle )
     HANDLE hdl = FindFirstFile(sSearchFile.c_str(), &data);
     if (hdl != INVALID_HANDLE_VALUE)  // the file exists
     {
-        // std::_tstring mystr;
-        // mystr = "Found file: " + sSearchFile;
-        // MessageBox( NULL, mystr.c_str(), "Found file", MB_OK );
-
         // And finally setting property SHOW_ONLINEUPDATE_DIALOG
         // to hide this dialog
         UnsetMsiProperty(handle, TEXT("SHOW_ONLINEUPDATE_DIALOG"));
@@ -884,10 +833,6 @@ extern "C" UINT __stdcall ShowOnlineUpdateDialog( MSIHANDLE handle )
     }
     else
     {
-        // std::_tstring mystr;
-        // mystr = "Did not find file: " + sSearchFile;
-        // MessageBox( NULL, mystr.c_str(), "File not found", MB_OK );
-
         // If the file does not exist, the Online Update dialog
         // has to be shown.
         SetMsiProperty(handle, TEXT("SHOW_ONLINEUPDATE_DIALOG"));
@@ -896,3 +841,5 @@ extern "C" UINT __stdcall ShowOnlineUpdateDialog( MSIHANDLE handle )
 
     return ERROR_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

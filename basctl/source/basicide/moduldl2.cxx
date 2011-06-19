@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
 #define GLOBALOVERFLOW
 
 #include <ide_pch.hxx>
 
 #include <svtools/filedlg.hxx>
-
 
 #include <sot/storinfo.hxx>
 
@@ -60,9 +59,7 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -181,7 +178,7 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
 
 //----------------------------------------------------------------------------
 
-__EXPORT BasicCheckBox::~BasicCheckBox()
+BasicCheckBox::~BasicCheckBox()
 {
     delete pCheckButton;
 
@@ -288,7 +285,7 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     if ( nMode != LIBMODE_MANAGER )
         return sal_False;
@@ -332,22 +329,12 @@ sal_Bool __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 
     // TODO: check if library is reference/link
 
-    // Prueffen, ob Referenz...
-    /*
-    sal_uInt16 nLib = pBasMgr->GetLibId( GetEntryText( pEntry, 0 ) );
-    DBG_ASSERT( nLib != LIB_NOTFOUND, "LibId ?!" );
-    if ( pBasMgr->IsReference( nLib ) )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMEREFLIB ) ) ).Execute();
-        return sal_False;
-    }
-    */
     return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
     sal_Bool bValid = ( rNewText.Len() <= 30 ) && BasicIDE::IsValidSbxName( rNewText );
     String aCurText( GetEntryText( pEntry, 0 ) );
@@ -604,7 +591,7 @@ void LibPage::CheckButtons()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT LibPage::ActivatePage()
+void LibPage::ActivatePage()
 {
     SetCurLib();
 }
@@ -612,7 +599,7 @@ void __EXPORT LibPage::ActivatePage()
 //----------------------------------------------------------------------------
 
 
-void __EXPORT LibPage::DeactivatePage()
+void LibPage::DeactivatePage()
 {
 }
 
@@ -1279,7 +1266,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
         if( !xSFA.is() )
         {
-            DBG_ERROR( "No simpleFileAccess" );
+            OSL_FAIL( "No simpleFileAccess" );
             return;
         }
 
@@ -1583,13 +1570,8 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos 
     if (bProtected)
     {
         Image aImage(IDEResId(RID_IMG_LOCKED));
-        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-        aImage = Image(IDEResId(RID_IMG_LOCKED_HC));
-        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage,
-                                    BMP_COLOR_HIGHCONTRAST);
-        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage,
-                                     BMP_COLOR_HIGHCONTRAST);
+        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage);
+        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage);
     }
 
     // check, if library is link
@@ -1693,11 +1675,9 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     sal_uInt16 nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                     sal_uInt16 nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
-                    sal_uInt16 nIdHC = bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC;
                     SvLBoxEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
                         Image( IDEResId( nId ) ),
-                        Image( IDEResId( nIdHC ) ),
                         pRootEntry, false,
                         std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_LIBRARY ) ) );
                     DBG_ASSERT( pNewLibEntry, "InsertEntry fehlgeschlagen!" );
@@ -1707,7 +1687,6 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                         SvLBoxEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            Image( IDEResId( RID_IMG_MODULE_HC ) ),
                             pNewLibEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
                         DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );
@@ -1726,3 +1705,4 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
 //----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

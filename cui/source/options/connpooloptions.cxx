@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include "connpooloptions.hxx"
 #include "connpooloptions.hrc"
@@ -106,7 +104,6 @@ namespace offapp
 
     //--------------------------------------------------------------------
     DriverListControl::DriverListControl( Window* _pParent, const ResId& _rId)
-//      :DriverListControl_Base(_pParent, _rId, DBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_HIDESELECT | BROWSER_CURSOR_WO_FOCUS)
         :DriverListControl_Base(_pParent, _rId, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL)
         ,m_aSeekRow(m_aSettings.end())
         ,m_sYes(ResId(STR_YES,*_rId.GetResMgr()))
@@ -240,7 +237,7 @@ namespace offapp
                     sReturn = String::CreateFromInt32(_rPos->nTimeoutSeconds);
                 break;
             default:
-                OSL_ENSURE(sal_False, "DriverListControl::implGetCellText: invalid column id!");
+                OSL_FAIL("DriverListControl::implGetCellText: invalid column id!");
         }
         return sReturn;
     }
@@ -259,7 +256,7 @@ namespace offapp
         String sReturn;
         if (nRow > m_aSettings.size())
         {
-            OSL_ENSURE(sal_False, "DriverListControl::GetCellText: don't ask me for such rows!");
+            OSL_FAIL("DriverListControl::GetCellText: don't ask me for such rows!");
         }
         else
         {
@@ -379,7 +376,7 @@ namespace offapp
             m_pDriverList->Update(pDriverSettings->getSettings());
         else
         {
-            OSL_ENSURE(sal_False, "ConnectionPoolOptionsPage::implInitControls: missing the DriverTimeouts item!");
+            OSL_FAIL("ConnectionPoolOptionsPage::implInitControls: missing the DriverTimeouts item!");
             m_pDriverList->Update(DriverPoolingSettings());
         }
         m_pDriverList->saveValue();
@@ -505,3 +502,4 @@ namespace offapp
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

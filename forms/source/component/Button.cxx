@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //.........................................................................
 namespace frm
@@ -223,7 +224,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         break;
 
         default:
-            DBG_ERROR("OButtonModel::read : unknown version !");
+            OSL_FAIL("OButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();
@@ -479,7 +480,6 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
                 // catch exceptions
                 // and catch them on a per-listener basis - if one listener fails, the others still need
                 // to get notified
-                // 97676 - 21.02.2002 - fs@openoffice.org
                 try
                 {
                     static_cast< XActionListener* >( aIter.next() )->actionPerformed(aEvt);
@@ -492,7 +492,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 #endif
                 catch( const Exception& )
                 {
-                    DBG_ERROR( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
+                    OSL_FAIL( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
                 }
             }
         }
@@ -517,7 +517,7 @@ void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::co
             if ( !approveAction() )
                 return;
 
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             dispatch( nFeatureId );
             return;
         }
@@ -778,3 +778,4 @@ void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Referenc
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

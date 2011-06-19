@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,9 +52,7 @@
 #include "dlged.hxx"
 #include <dlgeddef.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -103,7 +102,6 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
         {
             sal_Bool bValid = sal_False;
             String aStdMacroText( RTL_CONSTASCII_USTRINGPARAM( "Macro" ) );
-            //String aStdMacroText( IDEResId( RID_STR_STDMACRONAME ) );
             sal_uInt16 nMacro = 1;
             while ( !bValid )
             {
@@ -180,7 +178,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
 {
     if ( !rDocument.hasDialog( rLibName, rOldName ) )
     {
-        OSL_ENSURE( false, "BasicIDE::RenameDialog: old module name is invalid!" );
+        OSL_FAIL( "BasicIDE::RenameDialog: old module name is invalid!" );
         return false;
     }
 
@@ -374,10 +372,10 @@ void BasicStopped( sal_Bool* pbAppWindowDisabled,
         *ppSWLockViewCount = 0;
 
     // AppWait ?
-    sal_uInt16 nWait = 0;
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if( pIDEShell )
     {
+        sal_uInt16 nWait = 0;
         while ( pIDEShell->GetViewFrame()->GetWindow().IsWait() )
         {
             pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
@@ -386,15 +384,6 @@ void BasicStopped( sal_Bool* pbAppWindowDisabled,
         if ( pnWaitCount )
             *pnWaitCount = nWait;
     }
-
-    /*
-    // Interactive = sal_False ?
-    if ( SFX_APP()->IsDispatcherLocked() )
-    {
-        SFX_APP()->LockDispatcher( sal_False );
-        if ( pbDispatcherLocked )
-            *pbDispatcherLocked = sal_True;
-    } */
 
     Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )
@@ -526,3 +515,5 @@ SfxBindings* GetBindingsPtr()
 } //namespace BasicIDE
 
 //----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

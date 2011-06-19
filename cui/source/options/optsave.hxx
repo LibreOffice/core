@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,6 @@ private:
     DECL_LINK( FilterHdl_Impl, ListBox * );
     DECL_LINK( ODFVersionHdl_Impl, ListBox * );
 
-    bool    AcceptFilter( sal_uInt16 nPos );
     void    DetectHiddenControls();
 #endif
 
@@ -103,3 +103,4 @@ public:
 
 #endif  // #ifndef _SVX_OPTSAVE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

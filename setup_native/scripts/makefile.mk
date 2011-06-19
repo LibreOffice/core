@@ -46,10 +46,6 @@ UNIXTEXT= \
     $(BIN)$/update.sh \
     $(BIN)$/downloadscript.sh
 
-.IF "$(OS)" == "SOLARIS" || "$(OS)" == "LINUX"
-UNIXTEXT+= $(BIN)$/stclient_wrapper.sh
-.ENDIF
-
 NOARCH=$(BIN)$/noarch
 FAKEDB=$(NOARCH)/fake-db-1.0-0.noarch.rpm
 FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root

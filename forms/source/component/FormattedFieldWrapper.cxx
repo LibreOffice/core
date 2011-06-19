@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -204,7 +205,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 //------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.OFormattedFieldWrapper");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.forms.OFormattedFieldWrapper") );
 }
 
 //------------------------------------------------------------------
@@ -379,7 +380,7 @@ void OFormattedFieldWrapper::ensureAggregate()
             Reference< XServiceInfo > xSI(m_xAggregate, UNO_QUERY);
             if (!xSI.is())
             {
-                DBG_ERROR("OFormattedFieldWrapper::ensureAggregate: the aggregate has no XServiceInfo!");
+                OSL_FAIL("OFormattedFieldWrapper::ensureAggregate: the aggregate has no XServiceInfo!");
                 m_xAggregate.clear();
             }
         }
@@ -396,3 +397,4 @@ void OFormattedFieldWrapper::ensureAggregate()
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #include "precompiled_accessibility.hxx"
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
 #include <svtools/accessibletableprovider.hxx>
-#include <rtl/uuid.h>
-//
+#include <comphelper/servicehelper.hxx>
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -117,7 +118,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
     ::osl::MutexGuard aGuard( getOslMutex() );
     if ( m_xFocusWindow.is() )
     {
-        BBSolarGuard aSolarGuard;
+        SolarMutexGuard aSolarGuard;
         m_xFocusWindow->removeFocusListener( this );
     }
 
@@ -207,7 +208,7 @@ Reference< XAccessibleStateSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleStateSet()
     throw ( uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     // don't check whether alive -> StateSet may contain DEFUNC
     return implCreateStateSetHelper();
@@ -263,7 +264,7 @@ awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::isShowing()
     throw ( uno::RuntimeException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     return implIsShowing();
@@ -343,13 +344,15 @@ void SAL_CALL AccessibleBrowseBoxBase::removeEventListener(
 
 // XTypeProvider --------------------------------------------------------------
 
+namespace
+{
+    class theAccessibleBrowseBoxBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleBrowseBoxBaseImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleBrowseBoxBaseImplementationId::get().getSeq();
 }
 
 // XServiceInfo ---------------------------------------------------------------
@@ -462,7 +465,7 @@ void AccessibleBrowseBoxBase::ensureIsAlive() const
 Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     throw ( lang::DisposedException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBox();
@@ -476,7 +479,7 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBox()
 Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBoxOnScreen();
@@ -507,17 +510,7 @@ void AccessibleBrowseBoxBase::commitEvent(
 
     AccessibleEventNotifier::addEvent( getClientId( ), aEvent );
 }
-// -----------------------------------------------------------------------------
 
-void AccessibleBrowseBoxBase::implCreateUuid( Sequence< sal_Int8 >& rId )
-{
-    if( !rId.hasElements() )
-    {
-        rId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( rId.getArray() ), 0, sal_True );
-    }
-}
-// -----------------------------------------------------------------------------
 sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     throw ( uno::RuntimeException )
 {
@@ -568,7 +561,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing( const ::com::sun::star::lang::
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
@@ -594,7 +587,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    BBSolarGuard aSolarGuard;
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     sal_Int32 nColor = 0;
@@ -656,3 +649,4 @@ BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

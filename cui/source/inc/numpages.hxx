@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,8 @@
 
 // include ---------------------------------------------------------------
 
+#include <vector>
+
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
@@ -36,9 +39,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#ifndef _SVX_NUMDEF_HXX
 #include <editeng/numdef.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 #include <svl/svarray.hxx>
 
@@ -50,9 +51,8 @@ class ValueSet;
 class SvxNumberingPreview;
 class SvxBrushItem;
 
-/*-----------------13.02.97 14.02-------------------
 
---------------------------------------------------*/
+//------------------------------------------------
 
 struct SvxNumSettings_Impl
 {
@@ -71,9 +71,8 @@ struct SvxNumSettings_Impl
 typedef SvxNumSettings_Impl* SvxNumSettings_ImplPtr;
 SV_DECL_PTRARR_DEL(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr,8,4)
 
-/*-----------------07.02.97 11.36-------------------
 
---------------------------------------------------*/
+//------------------------------------------------
 class SvxSingleNumPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -111,9 +110,8 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
 };
 
-/*-----------------07.02.97 11.36-------------------
 
---------------------------------------------------*/
+//------------------------------------------------
 
 class SvxBulletPickTabPage : public SfxTabPage
 {
@@ -147,10 +145,10 @@ class SvxBulletPickTabPage : public SfxTabPage
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetCharFmtName(const String& rName){sBulletCharFmtName = rName;}
-    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void        PageCreated(SfxAllItemSet aSet);
 };
 
-/*-----------------07.02.97 11.36-------------------
+/*--------------------------------------------------
     TabPage fuer vollstaendig Numerierung
 --------------------------------------------------*/
 #define NUMTYPE_MEMBER 4   // Anzahl der Elemente des FormatStrings je Ebene
@@ -195,12 +193,11 @@ class SvxNumPickTabPage : public SfxTabPage
     void                SetCharFmtNames(const String& rCharName, const String& rBulName)
                             {   sNumCharFmtName = rCharName;
                                 sBulletCharFmtName = rBulName;}
-    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void        PageCreated(SfxAllItemSet aSet);
 };
 
-/*-----------------12.02.97 07.42-------------------
 
---------------------------------------------------*/
+//------------------------------------------------
 class SvxBitmapPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -211,7 +208,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     FixedText           aErrorText;
     CheckBox            aLinkedCB;
 
-    List                aGrfNames;
+    std::vector<String> aGrfNames;
     String              sNumCharFmtName;
 
     SvxNumRule*         pActNum;
@@ -243,9 +240,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
 };
 
-/*-----------------01.12.97 16:13-------------------
-
---------------------------------------------------*/
+//------------------------------------------------
 class SvxNumOptionsTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -306,7 +301,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     sal_Bool                bHTMLMode           : 1;
     sal_Bool                bMenuButtonInitialized : 1;
 
-    List                aGrfNames;
+    std::vector<String> aGrfNames;
     Font                aActBulletFont;
     String              sBullet;
     String              sStartWith;
@@ -351,7 +346,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-//???   void                SetWrtShell(SwWrtShell* pSh);
     void                SetCharFmts(const String& rNumName, const String& rBulletName )
                                 {
                                     sNumCharFmtName = rNumName;
@@ -361,12 +355,10 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     ListBox&            GetCharFmtListBox() {return aCharFmtLB;}
     void                SetModified(sal_Bool bRepaint = sal_True);
-    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void        PageCreated(SfxAllItemSet aSet);
 };
 
-/*-----------------03.12.97 10:18-------------------
-
---------------------------------------------------*/
+//------------------------------------------------
 class SvxNumPositionTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -376,7 +368,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     FixedText           aLevelFT;
     MultiListBox        aLevelLB;
 
-    // --> OD 2008-01-11 #newlistlevelattrs#
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
     FixedText           aDistBorderFT;
@@ -388,9 +379,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     MetricField         aDistNumMF;
     FixedText           aAlignFT;
     ListBox             aAlignLB;
-    // <--
 
-    // --> OD 2008-01-10 #newlistlevelattrs#
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
     FixedText           aLabelFollowedByFT;
@@ -403,7 +392,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     MetricField         aAlignedAtMF;
     FixedText           aIndentAtFT;
     MetricField         aIndentAtMF;
-    // <--
 
     PushButton          aStandardPB;
 
@@ -422,9 +410,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     sal_Bool                bModified           : 1;
     sal_Bool                bPreset             : 1;
     sal_Bool                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
-    // --> OD 2008-01-11 #newlistlevelattrs#
     bool                bLabelAlignmentPosAndSpaceModeActive;
-    // <--
 
     void                InitControls();
 
@@ -434,7 +420,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK( RelativeHdl_Impl, CheckBox * );
     DECL_LINK( StandardHdl_Impl, PushButton * );
 
-    // --> OD 2008-01-11 #newlistlevelattrs#
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
@@ -442,7 +427,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );
-    // <--
 
 public:
         SvxNumPositionTabPage(Window* pParent,
@@ -459,7 +443,7 @@ public:
 
     void                SetMetric(FieldUnit eSet);
     void                SetModified(sal_Bool bRepaint = sal_True);
-    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
+    virtual void        PageCreated(SfxAllItemSet aSet);
 };
 
 #endif
@@ -467,3 +451,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

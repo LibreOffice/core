@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <sanedlg.hrc>
 #include <grid.hxx>
 #include <math.h>
-
-#define USE_SAVE_STATE
-#undef  SAVE_ALL_STATES
+#include <sal/macros.h>
 
 ResId SaneResId( sal_uInt32 nID )
 {
@@ -132,6 +131,7 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
 
 SaneDlg::~SaneDlg()
 {
+    mrSane.SetReloadOptionsHdl( maOldLink );
 }
 
 short SaneDlg::Execute()
@@ -222,7 +222,7 @@ void SaneDlg::InitFields()
                     maReslBox.SetMin( (long)pDouble[0] );
                     maReslBox.SetMax( (long)pDouble[1] );
                     maReslBox.InsertValue( (long)pDouble[0] );
-                    // mh@openoffice.org: issue 68557: Can only select 75 and 2400 dpi in Scanner dialogue
+                    // Can only select 75 and 2400 dpi in Scanner dialogue
                     // scanner allows random setting of dpi resolution, a slider might be useful
                     // support that
                     // workaround: offer at least some more standard dpi resolution between
@@ -395,7 +395,7 @@ void SaneDlg::InitFields()
         {
             sal_Bool bIsSpecial = sal_False;
             for( size_t n = 0; !bIsSpecial &&
-                     n < sizeof(ppSpecialOptions)/sizeof(ppSpecialOptions[0]); n++ )
+                     n < SAL_N_ELEMENTS(ppSpecialOptions); n++ )
             {
                 if( aOption.EqualsAscii( ppSpecialOptions[n] ) )
                     bIsSpecial=sal_True;
@@ -478,14 +478,12 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     {
         double fRes = (double)maReslBox.GetValue();
         SetAdjustedNumericalValue( "resolution", fRes );
-        mrSane.SetReloadOptionsHdl( maOldLink );
         UpdateScanArea( sal_True );
         SaveState();
         EndDialog( mrSane.IsOpen() ? 1 : 0 );
     }
     else if( pButton == &maCancelButton )
     {
-        mrSane.SetReloadOptionsHdl( maOldLink );
         mrSane.Close();
         EndDialog( 0 );
     }
@@ -688,9 +686,9 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
 
 IMPL_LINK( SaneDlg, ReloadSaneOptionsHdl, Sane*, /*pSane*/ )
 {
-     mnCurrentOption = -1;
-     mnCurrentElement = 0;
-     DisableOption();
+    mnCurrentOption = -1;
+    mnCurrentElement = 0;
+    DisableOption();
     // #92024# preserve preview rect, should only be set
     // initially or in AcquirePreview
     Rectangle aPreviewRect = maPreviewRect;
@@ -743,21 +741,23 @@ void SaneDlg::AcquirePreview()
     maReslBox.SetValue( (sal_uLong)fResl );
 
     if( mbDragEnable )
+    {
         maPreviewRect = Rectangle( maTopLeft,
                                    Size( maBottomRight.X() - maTopLeft.X(),
                                          maBottomRight.Y() - maTopLeft.Y() )
                                    );
+    }
     else
     {
         Size aBMSize( maPreviewBitmap.GetSizePixel() );
-        if( aBMSize.Width() > aBMSize.Height() )
+        if( aBMSize.Width() > aBMSize.Height() && aBMSize.Width() )
         {
             int nVHeight = (maBottomRight.X() - maTopLeft.X()) * aBMSize.Height() / aBMSize.Width();
             maPreviewRect = Rectangle( Point( maTopLeft.X(), ( maTopLeft.Y() + maBottomRight.Y() )/2 - nVHeight/2 ),
                                        Size( maBottomRight.X() - maTopLeft.X(),
                                              nVHeight ) );
         }
-        else
+        else if (aBMSize.Height())
         {
             int nVWidth = (maBottomRight.Y() - maTopLeft.Y()) * aBMSize.Width() / aBMSize.Height();
             maPreviewRect = Rectangle( Point( ( maTopLeft.X() + maBottomRight.X() )/2 - nVWidth/2, maTopLeft.Y() ),
@@ -1168,7 +1168,6 @@ void SaneDlg::UpdateScanArea( sal_Bool bSend )
 
 sal_Bool SaneDlg::LoadState()
 {
-#ifdef USE_SAVE_STATE
     int i;
 
     if( ! Sane::IsSane() )
@@ -1234,14 +1233,10 @@ sal_Bool SaneDlg::LoadState()
     InitFields();
 
     return sal_True;
-#else
-    return sal_False;
-#endif
 }
 
 void SaneDlg::SaveState()
 {
-#ifdef USE_SAVE_STATE
     if( ! Sane::IsSane() )
         return;
 
@@ -1254,59 +1249,6 @@ void SaneDlg::SaveState()
     aConfig.SetGroup( "SANE" );
     aConfig.WriteKey( "SO_LastSANEDevice", ByteString( maDeviceBox.GetSelectEntry(), RTL_TEXTENCODING_UTF8 ) );
 
-#ifdef SAVE_ALL_STATES
-    for( int i = 1; i < mrSane.CountOptions(); i++ )
-    {
-        String aOption=mrSane.GetOptionName( i );
-        SANE_Value_Type nType = mrSane.GetOptionType( i );
-        switch( nType )
-        {
-            case SANE_TYPE_BOOL:
-            {
-                sal_Bool bValue;
-                if( mrSane.GetOptionValue( i, bValue ) )
-                {
-                    ByteString aString( "BOOL=" );
-                    aString += (sal_uLong)bValue;
-                    aConfig.WriteKey( aOption, aString );
-                }
-            }
-            break;
-            case SANE_TYPE_STRING:
-            {
-                String aString( "STRING=" );
-                String aValue;
-                if( mrSane.GetOptionValue( i, aValue ) )
-                {
-                    aString += aValue;
-                    aConfig.WriteKey( aOption, aString );
-                }
-            }
-            break;
-            case SANE_TYPE_FIXED:
-            case SANE_TYPE_INT:
-            {
-                String aString( "NUMERIC=" );
-                double fValue;
-                char buf[256];
-                for( int n = 0; n < mrSane.GetOptionElements( i ); n++ )
-                {
-                    if( ! mrSane.GetOptionValue( i, fValue, n ) )
-                        break;
-                    if( n > 0 )
-                        aString += ":";
-                    sprintf( buf, "%lg", fValue );
-                    aString += buf;
-                }
-                if( n >= mrSane.GetOptionElements( i ) )
-                    aConfig.WriteKey( aOption, aString );
-            }
-            break;
-            default:
-                break;
-        }
-     }
-#else
     static char const* pSaveOptions[] = {
         "resolution",
         "tl-x",
@@ -1314,9 +1256,7 @@ void SaneDlg::SaveState()
         "br-x",
         "br-y"
     };
-    for( size_t i = 0;
-         i < (sizeof(pSaveOptions)/sizeof(pSaveOptions[0]));
-         i++ )
+    for( size_t i = 0; i < SAL_N_ELEMENTS(pSaveOptions); i++ )
     {
         ByteString aOption = pSaveOptions[i];
         int nOption = mrSane.GetOptionByName( pSaveOptions[i] );
@@ -1373,8 +1313,6 @@ void SaneDlg::SaveState()
             }
         }
     }
-#endif
-#endif
 }
 
 sal_Bool SaneDlg::SetAdjustedNumericalValue(
@@ -1429,3 +1367,5 @@ sal_Bool SaneDlg::SetAdjustedNumericalValue(
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,6 @@
 #ifndef _BASIDE3_HXX
 #define _BASIDE3_HXX
 
-#ifndef _SVHEADER_HXX
-//#include <svheader.hxx>
-#endif
-
 #include <bastypes.hxx>
 #include <svl/undo.hxx>
 #include <vcl/dialog.hxx>
@@ -39,9 +36,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
 
 class Printer;
 class StarBASIC;
@@ -118,3 +113,5 @@ public:
 };
 
 #endif  // _BASIDE3_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

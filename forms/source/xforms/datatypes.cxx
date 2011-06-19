@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,10 @@
 #include "precompiled_forms.hxx"
 #include "datatypes.hxx"
 #include "resourcehelper.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 #include "convert.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
@@ -506,7 +503,7 @@ namespace xforms
             break;
 
         default:
-            OSL_ENSURE( false, "OValueLimitedType::_explainInvalid: unknown reason!" );
+            OSL_FAIL( "OValueLimitedType::_explainInvalid: unknown reason!" );
             break;
         }
 
@@ -993,3 +990,4 @@ namespace xforms
 } // namespace xforms
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

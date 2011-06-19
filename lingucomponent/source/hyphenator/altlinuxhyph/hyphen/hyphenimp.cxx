@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,8 +36,6 @@
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <i18npool/mslangid.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/useroptions.hxx>
 #include <tools/debug.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
@@ -65,13 +64,14 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 // values asigned to capitalization types
 #define CAPTYPE_UNKNOWN 0
@@ -81,8 +81,6 @@ using namespace linguistic;
 #define CAPTYPE_MIXED   4
 
 // min, max
-
-//#define Min(a,b) (a < b ? a : b)
 #define Max(a,b) (a > b ? a : b)
 
 ///////////////////////////////////////////////////////////////////////////
@@ -97,26 +95,24 @@ Hyphenator::Hyphenator() :
     numdict = 0;
 }
 
-
 Hyphenator::~Hyphenator()
 {
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
 
-    if ((numdict) && (aDicts))
+    if (numdict && aDicts)
     {
-        for (int i=0; i < numdict; i++)
+        for (int i=0; i < numdict; ++i)
         {
-            if (aDicts[i].apCC) delete aDicts[i].apCC;
-            aDicts[i].apCC = NULL;
+            delete aDicts[i].apCC;
+            if (aDicts[i].aPtr)
+                hnj_hyphen_free(aDicts[i].aPtr);
         }
-    }
-    if (aDicts) delete[] aDicts;
-    aDicts = NULL;
-    numdict = 0;
     delete pPropHelper;
-}
+    }
 
+    delete[] aDicts;
+}
 
 PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
 {
@@ -652,7 +648,6 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         while((n >=0) && (lcword[n] == '.'))
             n--;
         n++;
-        // fprintf(stderr,"hyphenate... %s\n",lcword); fflush(stderr);
         if (n > 0)
         {
             const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL,
@@ -682,7 +677,6 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         for (int c = n; c < wordlen; c++)
             hyphens[c] = '0';
         hyphens[wordlen] = '\0';
-        // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
 
         sal_Int16 nHyphCount = 0;
         sal_Int16 i;
@@ -712,8 +706,6 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         }
 
         hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
-        //fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
-        //fflush(stderr);
 
         xRes = PossibleHyphens::CreatePossibleHyphens( aWord, LocaleToLanguage( aLocale ),
                   hyphenatedWord, aHyphPos );
@@ -861,9 +853,8 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
             pPropHelper = new PropertyHelper_Hyphenation( (XHyphenator *) this, xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
-        else
-        {
-            DBG_ERROR( "wrong number of arguments in sequence" );
+        else {
+            OSL_FAIL( "wrong number of arguments in sequence" );
         }
     }
 }
@@ -976,3 +967,5 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
 #undef CAPTYPE_INITCAP
 #undef CAPTYPE_ALLCAP
 #undef CAPTYPE_MIXED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

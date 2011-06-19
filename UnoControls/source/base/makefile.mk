@@ -29,41 +29,18 @@ PRJ=..$/..
 PRJNAME=UnoControls
 TARGET=base
 ENABLE_EXCEPTIONS=TRUE
-#LIBTARGET=NO
-#USE_LDUMP2=TRUE
-#USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
-
 # --- Files --------------------------------------------------------
+
 SLOFILES=		$(SLO)$/multiplexer.obj				\
                 $(SLO)$/basecontrol.obj				\
                 $(SLO)$/basecontainercontrol.obj	\
                 $(SLO)$/registercontrols.obj
 
-#LIB1TARGET= 	$(SLB)$/$(TARGET).lib
-#LIB1OBJFILES=	$(SLOFILES)
-
-#SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
-
-#SHL1STDLIBS=\
-#		$(ONELIB)	 \
-#		$(USRLIB)	 \
-#		$(UNOLIB)	 \
-#		$(VOSLIB) 	 \
-#		$(OSLLIB) 	 \
-#		$(TOOLSLIB) 	 \
-#		$(RTLLIB)
-
-#SHL1DEPN=		makefile.mk
-#SHL1LIBS=		$(LIB1TARGET)
-#SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-#DEF1NAME=		$(SHL1TARGET)
-#DEF1EXPORTFILE=	exports.dxp
-
 # --- Targets ------------------------------------------------------
+
 .INCLUDE :	target.mk
-#.INCLUDE :	$(PRJ)$/util$/target.pmk

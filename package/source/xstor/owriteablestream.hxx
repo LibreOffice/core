@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -189,10 +190,10 @@ public:
     void AddLog( const ::rtl::OUString& aMessage );
 
     sal_Bool UsesCommonEncryption_Impl() { return m_bUseCommonEncryption; }
-    sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
+    sal_Bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }
     sal_Bool IsTransacted();
 
-    sal_Bool HasWriteOwner_Impl() { return ( m_pAntiImpl != NULL ); }
+    sal_Bool HasWriteOwner_Impl() const { return ( m_pAntiImpl != NULL ); }
 
     void InsertIntoPackageFolder(
             const ::rtl::OUString& aName,
@@ -415,3 +416,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

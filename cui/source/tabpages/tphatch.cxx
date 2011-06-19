@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,10 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -42,15 +39,14 @@
 
 #include <cuires.hrc>
 #include "tabarea.hrc"
-//#include "dlgname.hrc"
 #include "helpid.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
-#include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
+#include "defdlgname.hxx"
+#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
@@ -106,9 +102,6 @@ SvxHatchTabPage::SvxHatchTabPage
     rXFSet              ( aXFillAttr.GetItemSet() )
 
 {
-    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
-
     FreeResource();
 
     // diese Page braucht ExchangeSupport
@@ -271,18 +264,18 @@ long SvxHatchTabPage::CheckChanges_Impl()
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_HATCH ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
                                                         &aWarningBoxImage );
-        DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
-        aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
+        DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
+        aMessDlg->SetButtonText( MESS_BTN_1,
                                 String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-        aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
+        aMessDlg->SetButtonText( MESS_BTN_2,
                                 String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
-        short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
+        short nRet = aMessDlg->Execute();
 
         switch( nRet )
         {
@@ -299,11 +292,9 @@ long SvxHatchTabPage::CheckChanges_Impl()
             break;
 
             case RET_CANCEL:
-                // return( -1L ); <-- wuerde die Seite nicht verlassen
             break;
-            // return( sal_True ); // Abbruch
         }
-        delete aMessDlg; //add by CHINA001
+        delete aMessDlg;
     }
 
     sal_uInt16 nPos = aLbHatchings.GetSelectEntryPos();
@@ -352,7 +343,6 @@ sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 
 void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
 {
-    // aLbHatchings.SelectEntryPos( 0 );
     ChangeHatchHdl_Impl( this );
 
     // Status der Buttons ermitteln
@@ -475,19 +465,6 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
             default:  aCtlAngle.SetActualRP( RP_MM ); break;
         }
 
-        // Backgroundcolor
-        /*
-        const SfxPoolItem* pPoolItem = NULL;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBACKGROUND ), sal_True, &pPoolItem ) )
-        {
-            rXFSet.Put ( XFillBackgroundItem( ( ( XFillBackgroundItem* )pPoolItem)->GetValue() ) );
-            if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
-            {
-                Color aColor( ( ( const XFillColorItem* ) pPoolItem )->GetValue() );
-                rXFSet.Put( XFillColorItem( String(), aColor ) );
-            }
-        }
-        */
         // ItemSet fuellen und an aCtlPreview weiterleiten
         rXFSet.Put( XFillHatchItem( String(), *pHatch ) );
         aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
@@ -530,9 +507,9 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     WarningBox*    pWarnBox = NULL;
     sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
@@ -562,7 +539,6 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    //Rectangle aDlgRect( pDlg->GetPosPixel(), pDlg->GetSizePixel() );
     delete pDlg;
     delete pWarnBox;
 
@@ -586,7 +562,6 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( sal_True ) {                // ??? overlapped with pDlg
                                     // and srolling
             Invalidate( aRect );
-            //aLbHatchings.Invalidate();
         }
 #endif
 
@@ -621,9 +596,9 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         String aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pHatchingList->Count();
         sal_Bool bDifferent = sal_False;
@@ -752,39 +727,36 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pHatchList->SetName( aURL.getName() );
             if( pHatchList->Load() )
             {
-                if( pHatchList )
+                // Pruefen, ob Tabelle geloescht werden darf:
+                if( pHatchingList != ( (SvxAreaTabDialog*) DLGWIN )->GetHatchingList() )
+                    delete pHatchingList;
+
+                pHatchingList = pHatchList;
+                ( (SvxAreaTabDialog*) DLGWIN )->SetNewHatchingList( pHatchingList );
+
+                aLbHatchings.Clear();
+                aLbHatchings.Fill( pHatchingList );
+                Reset( rOutAttrs );
+
+                pHatchingList->SetName( aURL.getName() );
+
+                // Ermitteln (evtl. abschneiden) des Namens und in
+                // der GroupBox darstellen
+                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+                if ( aURL.getBase().getLength() > 18 )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pHatchingList != ( (SvxAreaTabDialog*) DLGWIN )->GetHatchingList() )
-                        delete pHatchingList;
-
-                    pHatchingList = pHatchList;
-                    ( (SvxAreaTabDialog*) DLGWIN )->SetNewHatchingList( pHatchingList );
-
-                    aLbHatchings.Clear();
-                    aLbHatchings.Fill( pHatchingList );
-                    Reset( rOutAttrs );
-
-                    pHatchingList->SetName( aURL.getName() );
-
-                    // Ermitteln (evtl. abschneiden) des Namens und in
-                    // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-                    if ( aURL.getBase().getLength() > 18 )
-                    {
-                        aString += String(aURL.getBase()).Copy( 0, 15 );
-                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-                    }
-                    else
-                        aString += String(aURL.getBase());
-
-                    // Flag fuer gewechselt setzen
-                    *pnHatchingListState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnHatchingListState &= ~CT_MODIFIED;
+                    aString += String(aURL.getBase()).Copy( 0, 15 );
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
                 }
+                else
+                    aString += String(aURL.getBase());
+
+                // Flag fuer gewechselt setzen
+                *pnHatchingListState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnHatchingListState &= ~CT_MODIFIED;
             }
             else
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
@@ -901,3 +873,4 @@ void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     SvxTabPage::DataChanged( rDCEvt );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <ZipPackageFolderEnumeration.hxx>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <osl/time.h>
 #include <rtl/digest.h>
 #include <ContentInfo.hxx>
@@ -57,7 +58,6 @@ using namespace com::sun::star::io;
 using namespace cppu;
 using namespace std;
 using namespace ::com::sun::star;
-using vos::ORef;
 
 namespace { struct lcl_CachedImplId : public rtl::Static< uno::Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
@@ -96,7 +96,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
           !bHasUnexpected && aCI != aEnd;
-          aCI++)
+          ++aCI)
     {
         const ::rtl::OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
@@ -154,7 +154,7 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
           aCI != aEnd;
-          aCI++)
+          ++aCI)
     {
         const ::rtl::OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
@@ -400,7 +400,7 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
 
             if ( !xStream.is() )
             {
-                VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                OSL_FAIL( "ZipPackageStream didn't have a stream associated with it, skipping!" );
                 bSuccess = false;
                 return bSuccess;
             }
@@ -415,7 +415,7 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
                     if ( !bToBeCompressed || bRawStream )
                     {
                         // The raw stream can neither be encrypted nor connected
-                        OSL_ENSURE( !bRawStream || !bToBeCompressed && !bToBeEncrypted, "The stream is already encrypted!\n" );
+                        OSL_ENSURE( !bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
                         xSeek->seek ( bRawStream ? rInfo.pStream->GetMagicalHackPos() : 0 );
                         ImplSetStoredData ( *pTempEntry, xStream );
 
@@ -728,8 +728,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
     }
 
     for ( ContentHash::const_iterator aCI = maContents.begin(), aEnd = maContents.end();
-          aCI != aEnd;
-          aCI++)
+          aCI != aEnd; ++aCI)
     {
         const ::rtl::OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
@@ -767,7 +766,7 @@ void ZipPackageFolder::releaseUpwardRef( void )
     }
     clearParent();
 
-    VOS_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
+    OSL_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
 #endif
 }
 
@@ -853,3 +852,5 @@ sal_Bool SAL_CALL ZipPackageFolder::supportsService( ::rtl::OUString const & rSe
 {
     return rServiceName == getSupportedServiceNames()[0];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

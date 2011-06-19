@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #define ITEMID_MACRO 0
 #include <svl/macitem.hxx>
@@ -108,7 +106,7 @@ _SfxMacroTabPage_Impl::~_SfxMacroTabPage_Impl()
 }
 
 
-static sal_uInt16 __FAR_DATA aPageRg[] = {
+static sal_uInt16 aPageRg[] = {
     SID_ATTR_MACROITEM, SID_ATTR_MACROITEM,
     0
 };
@@ -235,9 +233,9 @@ void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
     {
         mpImpl->bGotEvents = sal_True;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
-        for ( sal_uInt16 nNo = 0; nNo < rList.Count(); ++nNo )
+        for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
-            const SfxEventName *pOwn = rList.GetObject(nNo);
+            const SfxEventName *pOwn = rList.at(nNo);
             AddEvent( pOwn->maUIName, pOwn->mnId );
         }
     }
@@ -254,9 +252,9 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
     {
         mpImpl->bGotEvents = sal_True;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
-        for ( sal_uInt16 nNo = 0; nNo < rList.Count(); ++nNo )
+        for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
-            const SfxEventName *pOwn = rList.GetObject(nNo);
+            const SfxEventName *pOwn = rList.at(nNo);
             AddEvent( pOwn->maUIName, pOwn->mnId );
         }
     }
@@ -500,3 +498,4 @@ SfxMacroAssignDlg::~SfxMacroAssignDlg()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

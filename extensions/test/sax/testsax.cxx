@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,11 +35,9 @@
 
 #include <rtl/wstring.hxx>
 #include <osl/time.h>
-//#include <vos/dynload.hxx>
-//#include <vos/diagnose.hxx>
 #include <usr/weak.hxx>
 #include <tools/string.hxx>
-#include <vos/conditn.hxx>
+#include <osl/conditn.hxx>
 
 #include <smart/com/sun/star/io/XOutputStream.hxx>
 #include <smart/com/sun/star/xml/sax/SAXParseException.hxx>
@@ -52,10 +51,7 @@
 
 #include "factory.hxx"
 
-using namespace rtl;
-using namespace vos;
 using namespace usr;
-
 
 #define BUILD_ERROR(expr, Message)\
         {\
@@ -111,11 +107,7 @@ using namespace usr;
 
 /****
 * test szenarios :
-*
-*
-*
 ****/
-
 
 
 class OSaxParserTest :
@@ -167,8 +159,6 @@ private:
 
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OSaxParserTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {
@@ -909,3 +899,4 @@ UNO_INTERFACE(XInterface) EXTERN_SERVICE_CALLTYPE exService_getFactory
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

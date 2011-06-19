@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 #ifndef _XUNBUFFERED_STREAM_HXX
 #define _XUNBUFFERED_STREAM_HXX
 
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -61,7 +61,7 @@ protected:
     ::rtl::Reference< EncryptionData > mxData;
     sal_Int32 mnBlockSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
-    Inflater maInflater;
+    ZipUtils::Inflater maInflater;
     sal_Bool mbRawStream, mbWrappedRaw, mbFinished;
     sal_Int16 mnHeaderToRead;
     sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;
@@ -111,3 +111,5 @@ public:
     */
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

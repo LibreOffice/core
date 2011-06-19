@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,80 +29,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
 
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
-//#ifndef _SFXITEMPOOL_HXX
-//#include <svl/itempool.hxx>
-//#endif
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-
 #include <svl/eitem.hxx>
-
-
 #include <xmlsecurity/stbcontrl.hxx>
 
 #define PAINT_OFFSET    5
 
-//#include "sizeitem.hxx"
-//#include "dialmgr.hxx"
-//#include "dlgutil.hxx"
-//#include "stbctrls.h"
-
-//#include "dialogs.hrc"
-
-/*#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif*/
-
-
-
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxBoolItem );
-
-/*
-class FunctionPopup_Impl : public PopupMenu
-{
-public:
-    FunctionPopup_Impl( sal_uInt16 nCheck );
-
-    sal_uInt16          GetSelected() const { return nSelected; }
-
-private:
-    sal_uInt16          nSelected;
-
-    virtual void    Select();
-};
-
-// -----------------------------------------------------------------------
-
-FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
-    PopupMenu( ResId( RID_SVXMNU_PSZ_FUNC, DIALOG_MGR() ) ),
-    nSelected( 0 )
-{
-    if (nCheck)
-        CheckItem( nCheck );
-}
-
-// -----------------------------------------------------------------------
-
-void FunctionPopup_Impl::Select()
-{
-    nSelected = GetCurItemId();
-}
-*/
-
 
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
@@ -119,7 +60,6 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nId, StatusBar& _rSt
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
     mpImpl->mbSigned = false;
-//  pImp->maImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
@@ -155,13 +95,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     // can / has to be done when integrated in Office!
-//  if( rCEvt.GetCommand() == .... )
-    if( false )
-    {
-//      GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
-    }
-    else
-        SfxStatusBarControl::Command( rCEvt );
+    SfxStatusBarControl::Command( rCEvt );
 }
 
 void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
@@ -186,3 +120,4 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetFillColor( aOldFillColor );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

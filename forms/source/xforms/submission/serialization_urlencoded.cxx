@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ using namespace CSS::xml::dom;
 CSerializationURLEncoded::CSerializationURLEncoded()
     : m_aFactory(getProcessServiceFactory())
     , m_aPipe(Reference< XOutputStream > (m_aFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY))
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), UNO_QUERY))
 {
 }
 
@@ -169,23 +170,7 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
         if (aChild.is() && aChild->getNodeType() == NodeType_ELEMENT_NODE)
             serialize_node(aChild);
     }
-
-    // siblings...
-//    Reference< XNode > aSibling = aNode->getNextSibling();
-//    if (aSibling.is())
-//        serialize_node(aSibling);
-
 }
-
-/*
-void CSerializationURLEncoded::serialize_nodeset()
-{
-    Reference< XNodeList > aNodeList = m_aXPathObject->getNodeList();
-    for (sal_Int32 i=0; i<aNodeList->getLength(); i++)
-        serialize_node(aNodeList->item(i));
-    m_aPipe->closeOutput();
-}
-*/
 
 void CSerializationURLEncoded::serialize()
 {
@@ -208,3 +193,4 @@ Reference< XInputStream > CSerializationURLEncoded::getInputStream()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

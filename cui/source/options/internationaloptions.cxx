@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 #include "internationaloptions.hxx"
 #include "internationaloptions.hrc"
@@ -98,11 +96,6 @@ namespace offapp
                                     m_aRB_TxtDirLeft2Right.IsChecked() ),
                     SID_ATTR_PARA_LEFT_TO_RIGHT );
 
-        // handling of SheetView stuff
-//      if( m_bEnable_SheetView_Opt )
-//      {
-//      }
-
         return sal_True;
     }
 
@@ -116,13 +109,6 @@ namespace offapp
         sal_Bool                bLeft2Right = pLeft2RightItem? pLeft2RightItem->GetValue() : sal_True;
         m_aRB_TxtDirLeft2Right.Check( bLeft2Right );
 
-        // handling of SheetView stuff
-//      if( m_bEnable_SheetView_Opt )
-//      {
-//          m_aCB_ShtVwRight2Left.Check( sal_False );
-//
-//          m_aCB_ShtVwCurrentDocOnly.Check( sal_False );
-//      }
     }
 
     InternationalOptionsPage::InternationalOptionsPage( Window* _pParent, const SfxItemSet& _rAttrSet ) :
@@ -141,7 +127,6 @@ namespace offapp
     SfxTabPage* InternationalOptionsPage::CreateSc( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
         InternationalOptionsPage*   p = new InternationalOptionsPage( _pParent, _rAttrSet );
-//      p->m_pImpl->EnableOption_SheetView();
         return p;
     }
 
@@ -160,5 +145,6 @@ namespace offapp
         m_pImpl->Reset( _rSet );
     }
 
-}   // /namespace offapp
+}   // namespace offapp
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

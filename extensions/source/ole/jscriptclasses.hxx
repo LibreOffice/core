@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,8 @@
 #pragma warning (disable:4548)
 
 #include <tools/presys.h>
-//#include "stdafx.h"
 #define STRICT
-#define _WIN32_WINNT 0x0400
+#define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
 #if OSL_DEBUG_LEVEL > 0
 //#define _ATL_DEBUG_INTERFACES
@@ -42,7 +42,6 @@
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
-#include <tools/postsys.h>
 
 #pragma warning (pop)
 #pragma warning (disable:4505)
@@ -158,4 +157,8 @@ private:
     CComVariant m_varValue;
 };
 
+#include <tools/postsys.h>
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

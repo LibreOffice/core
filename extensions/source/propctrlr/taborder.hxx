@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,22 +34,13 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _TOOLS_LIST_HXX
-#include <tools/list.hxx>
-#endif
 #include <comphelper/uno3.hxx>
 
 //............................................................................
@@ -130,3 +122,5 @@ namespace pcr
 //............................................................................
 
 #endif  // EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

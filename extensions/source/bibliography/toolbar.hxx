@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ public:
     BibToolBarListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId);
     ~BibToolBarListener();
 
-    rtl::OUString           GetCommand();
+    rtl::OUString           GetCommand() const;
 
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
@@ -119,7 +120,6 @@ class BibToolBar:   public ToolBox
         BibToolBarListenerArr   aListenerArr;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            xController;
         Timer                   aTimer;
-//      Timer                   aMenuTimer;
         ImageList               aImgLst;
         ImageList               aImgLstHC;
         ImageList               aBigImgLst;
@@ -187,3 +187,5 @@ class BibToolBar:   public ToolBox
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

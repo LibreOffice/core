@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,10 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -49,9 +46,8 @@
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
-#include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
-//#include "dlgname.hrc"
-#include <svx/svxdlg.hxx> //CHINA001
+#include "defdlgname.hxx"
+#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <cuitabline.hxx>
 #include <svx/dialmgr.hxx>
@@ -128,9 +124,6 @@ SvxColorTabPage::SvxColorTabPage
     eCM                 ( CM_RGB )
 
 {
-    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
-
     FreeResource();
 
     // diese Page braucht ExchangeSupport
@@ -169,7 +162,7 @@ SvxColorTabPage::SvxColorTabPage
     // ValueSet
     aValSetColorTable.SetStyle( aValSetColorTable.GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
     aValSetColorTable.SetColCount( 8 );
-    aValSetColorTable.SetLineCount( 10 );
+    aValSetColorTable.SetLineCount( 13 );
     aValSetColorTable.SetExtraSpacing( 0 );
     aValSetColorTable.Show();
 
@@ -308,18 +301,18 @@ long SvxColorTabPage::CheckChanges_Impl()
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                         String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ) ),
                                                         &aWarningBoxImage );
-            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
-            aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
+            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
+            aMessDlg->SetButtonText( MESS_BTN_1,
                                     String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-            aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
+            aMessDlg->SetButtonText( MESS_BTN_2,
                                     String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
-            short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
+            short nRet = aMessDlg->Execute();
 
             switch( nRet )
             {
@@ -339,11 +332,9 @@ long SvxColorTabPage::CheckChanges_Impl()
                 break;
 
                 case RET_CANCEL:
-                    // return( -1L ); <-- wuerde die Seite nicht verlassen
                 break;
-                // return( sal_True ); // Abbruch
             }
-            delete aMessDlg; //add by CHINA001
+            delete aMessDlg;
         }
     }
     if( *pDlgType == 0 ) // Flaechen-Dialog
@@ -366,8 +357,6 @@ sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
     {
         String aString;
         Color  aColor;
-
-        // CheckChanges_Impl(); <-- doppelte Abfrage ?
 
         sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -469,10 +458,8 @@ IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
     Window *pWindow = this;
-    bool bEnabled;
     while( pWindow )
     {
-        bEnabled = pWindow->IsEnabled();
         pWindow = pWindow->GetParent();
     }
 
@@ -497,9 +484,9 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         sal_Bool bLoop = sal_True;
 
         while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -583,9 +570,9 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             sal_Bool bLoop = sal_True;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -647,6 +634,7 @@ IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
         ConvertColorValues (aTmpColor, CM_RGB);
 
     pColorDlg->SetColor (aTmpColor);
+    pColorDlg->SetMode( svtools::ColorPickerMode_MODIFY );
 
     if( pColorDlg->Execute() == RET_OK )
     {
@@ -772,78 +760,74 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pColTab->SetName( aURL.getName() ); // XXX
             if( pColTab->Load() )
             {
-                if( pColTab )
+                // Pruefen, ob Tabelle geloescht werden darf:
+                const XColorTable *pTempTable = 0;
+                SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
+                SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
+                if( pArea )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    const XColorTable *pTempTable = 0;
-                    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
-                    SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
-                    if( pArea )
-                    {
-                        pTempTable = pArea->GetColorTable();
-                    }
-                    else if( pLine )
-                    {
-                            pTempTable = pLine->GetColorTable();
-                    }
-
-                    if( pColorTab != pTempTable )
-                    {
-                        if( bDeleteColorTable )
-                            delete pColorTab;
-                        else
-                            bDeleteColorTable = sal_True;
-                    }
-
-                    pColorTab = pColTab;
-                    if( pArea )
-                    {
-                        pArea->SetNewColorTable( pColorTab );
-                    }
-                    else if( pLine )
-                    {
-                        pLine->SetNewColorTable( pColorTab );
-                    }
-
-                    aLbColor.Clear();
-                    aValSetColorTable.Clear();
-                    Construct();
-                    Reset( rOutAttrs );
-
-                    pColorTab->SetName( aURL.getName() );
-
-                    // Ermitteln (evtl. abschneiden) des Namens und in
-                    // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-                    if ( aURL.getBase().getLength() > 18 )
-                    {
-                        aString += String(aURL.getBase()).Copy( 0, 15 );
-                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-                    }
-                    else
-                        aString += String(aURL.getBase());
-
-                    aTableNameFT.SetText( aString );
-
-                    // Flag fuer gewechselt setzen
-                    *pnColorTableState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnColorTableState &= ~CT_MODIFIED;
-
-                    if( aLbColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
-                        aLbColor.SelectEntryPos( 0 );
-                    else
-                        aLbColor.SelectEntryPos( aLbColor.GetSelectEntryPos() );
-
-                    ChangeColorHdl_Impl( this );
-                    SelectColorLBHdl_Impl( this );
+                    pTempTable = pArea->GetColorTable();
                 }
+                else if( pLine )
+                {
+                        pTempTable = pLine->GetColorTable();
+                }
+
+                if( pColorTab != pTempTable )
+                {
+                    if( bDeleteColorTable )
+                        delete pColorTab;
+                    else
+                        bDeleteColorTable = sal_True;
+                }
+
+                pColorTab = pColTab;
+                if( pArea )
+                {
+                    pArea->SetNewColorTable( pColorTab );
+                }
+                else if( pLine )
+                {
+                    pLine->SetNewColorTable( pColorTab );
+                }
+
+                aLbColor.Clear();
+                aValSetColorTable.Clear();
+                Construct();
+                Reset( rOutAttrs );
+
+                pColorTab->SetName( aURL.getName() );
+
+                // Ermitteln (evtl. abschneiden) des Namens und in
+                // der GroupBox darstellen
+                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+                if ( aURL.getBase().getLength() > 18 )
+                {
+                    aString += String(aURL.getBase()).Copy( 0, 15 );
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                }
+                else
+                    aString += String(aURL.getBase());
+
+                aTableNameFT.SetText( aString );
+
+                // Flag fuer gewechselt setzen
+                *pnColorTableState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnColorTableState &= ~CT_MODIFIED;
+
+                if( aLbColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+                    aLbColor.SelectEntryPos( 0 );
+                else
+                    aLbColor.SelectEntryPos( aLbColor.GetSelectEntryPos() );
+
+                ChangeColorHdl_Impl( this );
+                SelectColorLBHdl_Impl( this );
             }
             else
             {
-                //aIStream.Close();
                 ErrorBox aErrorBox( DLGWIN, WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) );
                 aErrorBox.Execute();
@@ -1170,6 +1154,9 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
     long nCount = pColorTab->Count();
     XColorEntry* pColorEntry;
 
+    if( nCount > 104 )
+        rVs.SetStyle( rVs.GetStyle() | WB_VSCROLL );
+
     for( long i = 0; i < nCount; i++ )
     {
         pColorEntry = pColorTab->GetColor( i );
@@ -1187,17 +1174,9 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 
 void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
 {
-    sal_uInt16 nColor1, nColor2, nColor3;
-    sal_uInt16 nProzent; // nur temporaer !!!
-
-    nColor1 = 255 - rColor.GetRed();
-    nProzent = ColorToPercent_Impl( nColor1 );
-
-    nColor2 = 255 - rColor.GetGreen();
-    nProzent = ColorToPercent_Impl( nColor2 );
-
-    nColor3 = 255 - rColor.GetBlue();
-    nProzent = ColorToPercent_Impl( nColor3 );
+    sal_uInt16 const nColor1 = 255 - rColor.GetRed();
+    sal_uInt16 const nColor2 = 255 - rColor.GetGreen();
+    sal_uInt16 const nColor3 = 255 - rColor.GetBlue();
 
     rK = Min( Min( nColor1, nColor2 ), nColor3 );
 
@@ -1282,3 +1261,4 @@ void SvxColorTabPage::FillUserData()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,12 +57,14 @@ private:
     FixedLine           aFileDlgFL;
     ReadOnlyImage       aFileDlgROImage;
     CheckBox            aFileDlgCB;
+    CheckBox            aODMADlgCB;
 
     FixedLine           aPrintDlgFL;
     CheckBox            aPrintDlgCB;
 
     FixedLine           aDocStatusFL;
     CheckBox            aDocStatusCB;
+    CheckBox            aSaveAlwaysCB;
 
     FixedLine           aTwoFigureFL;
     FixedText           aInterpretFT;
@@ -70,10 +73,15 @@ private:
 
     String              aStrDateInfo;
 
+    CheckBox            aExperimentalCB;
+
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
     DECL_LINK( HelpCheckHdl_Impl, CheckBox* );
     DECL_LINK( HelpAgentResetHdl_Impl, PushButton* );
+#ifdef WNT
+    DECL_LINK( OnFileDlgToggled, CheckBox* );
+#endif
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 
@@ -157,9 +165,7 @@ public:
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
-/* -----------------------------23.11.00 13:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct LanguageConfig_Impl;
 class OfaLanguagesTabPage : public SfxTabPage
 {
@@ -215,3 +221,4 @@ public:
 #endif // #ifndef _OFA_OPTGDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,12 +64,13 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::connection;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 char SoPluginInstance::sSO_Dir[] = {0};
 Reference< XMultiServiceFactory > SoPluginInstance::mxRemoteMSF = Reference< XMultiServiceFactory >(NULL);
-
 
 SoPluginInstance::SoPluginInstance(long pParent, Reference< XMultiServiceFactory > xMSF):
     m_xUnoWin(NULL),
@@ -85,7 +87,6 @@ SoPluginInstance::SoPluginInstance(long pParent, Reference< XMultiServiceFactory
     m_nY = 0;
     m_nFlag = 15;
     m_bInit = sal_False;
-    m_sURL = rtl::OUString::createFromAscii("");
     m_hParent = 0;
     m_pParent = pParent;
     m_dParentStyl = 0;
@@ -135,7 +136,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
     {
         // try to create netscape plugin window
         Reference< awt::XToolkit > xToolkit(
-            mxRemoteMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ),
+            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ),
             uno::UNO_QUERY );
         if( !xToolkit.is() )
         {
@@ -188,7 +189,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // create frame
         m_xFrame = Reference< frame::XFrame >(
-            mxRemoteMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.Frame") ),
+            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame") )),
             uno::UNO_QUERY );
         if (!m_xFrame.is())
         {
@@ -204,16 +205,16 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             // currently ignore errors in this code
             uno::Reference< beans::XPropertySet > xFrameProps( m_xFrame, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xLMProps;
-            xFrameProps->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") ) >>= xLMProps;
+            xFrameProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ) >>= xLMProps;
             if ( xLMProps.is() )
-                xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii("AutomaticToolbars"), uno::makeAny( (sal_Bool)sal_False ) );
+                xLMProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticToolbars")), uno::makeAny( (sal_Bool)sal_False ) );
         }
         catch( uno::Exception& )
         {}
 
         // get frames supplier
         Reference< frame::XFramesSupplier > m_xFramesSupplier(
-            mxRemoteMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ),
+            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             uno::UNO_QUERY );
         if ( !m_xFramesSupplier.is() )
         {
@@ -242,7 +243,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         //create stream for the document
         Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-            mxRemoteMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
+            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccessw")) ),
             uno::UNO_QUERY );
         if(!xSimpleFileAccess.is())
         {
@@ -274,14 +275,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             ::rtl::OUStringToOString( m_sURL, RTL_TEXTENCODING_ASCII_US ).getStr( ),
             m_sURL.getLength() );
 
-
         // load document
-/*
-        m_xComponent = xLoader->loadComponentFromURL(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("private:stream")), //m_sURL,
-            m_xFrame->getName(), 0, setPropValues );
-  */
-
          Sequence< ::com::sun::star::beans::PropertyValue > setPropValues2(3);
         setPropValues2[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOnly") );
         setPropValues2[0].Value <<= sal_True;
@@ -315,7 +309,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // create frame::XDispatchHelper and frame::XDispatchProvider
         m_xDispatcher = Reference< frame::XDispatchHelper > (
-            mxRemoteMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")),
+            mxRemoteMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))),
             uno::UNO_QUERY );
         if(!m_xDispatcher.is())
         {
@@ -334,7 +328,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         propertyValue[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FunctionBarVisible") );
         propertyValue[0].Value <<= sal_True;
         m_xDispatcher->executeDispatch(m_xDispatchProvider,
-                ::rtl::OUString::createFromAscii(".uno:FunctionBarVisible"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FunctionBarVisible")),
                 m_xFrame->getName(), 0,
                 propertyValue );
 
@@ -418,12 +412,6 @@ sal_Bool SoPluginInstance::Destroy(void)
     if(m_dParentStyl != 0)
         NSP_RestoreWinStyl(m_hParent, m_dParentStyl);
 #endif
-//  if(m_xDispatcher.is()){
-//   m_xDispatcher->executeDispatch(m_xDispatchProvider,
-//                ::rtl::OUString::createFromAscii(".uno:CloseFrame"),
-//                ::rtl::OUString::createFromAscii("_top"), 0,
-//                Sequence< ::com::sun::star::beans::PropertyValue >() );
-//  }
 
     uno::Reference< util::XCloseable > xCloseable( m_xFrame, uno::UNO_QUERY );
 
@@ -488,8 +476,10 @@ sal_Bool SoPluginInstance::Print(void)
 
     Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
     m_xDispatcher->executeDispatch(m_xDispatchProvider,
-        ::rtl::OUString::createFromAscii(".uno:PrintDefault"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:PrintDefault")),
         m_xFrame->getName(), 0,
         propertyValue );
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

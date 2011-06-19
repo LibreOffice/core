@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@ RetStream::RetStream()
 {
     pSammel = new SvMemoryStream();
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
 }
 
 RetStream::~RetStream()
@@ -58,18 +58,18 @@ void RetStream::GenReturn ( sal_uInt16 nRet, rtl::OString aUId, String aString )
     CmdBaseStream::GenReturn ( nRet, &aUId, &aString );
 }
 
-void RetStream::GenReturn ( sal_uInt16 nRet, rtl::OString aUId, comm_ULONG nNr, String aString, sal_Bool bBool )
+void RetStream::GenReturn ( sal_uInt16 nRet, rtl::OString aUId, comm_UINT32 nNr, String aString, sal_Bool bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nNr, &aString, bBool );
 }
 
 // MacroRecorder
-void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString )
+void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString );
 }
 
-void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, sal_Bool bBool )
+void RetStream::GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_UINT16 nMethod, String aString, sal_Bool bBool )
 {
     CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString, bBool );
 }
@@ -79,7 +79,7 @@ void RetStream::GenReturn ( sal_uInt16 nRet, sal_uInt16 nMethod, SbxValue &aValu
 {
     Write(sal_uInt16(SIReturn));
     Write(nRet);
-    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
     Write(sal_uInt16(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
     Write(aValue);
 }
@@ -122,6 +122,6 @@ void RetStream::Reset ()
     delete pSammel;
     pSammel = new SvMemoryStream();
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

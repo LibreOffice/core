@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,68 +50,6 @@ static ::rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private
 
 SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxAllEnumItem )
 
-/*************************************************************************
-|*
-|* WorkWindow Alignment
-|*
-\************************************************************************/
-/*
-IMPL_LINK( PopupWindowTbx, SelectHdl, void*, EMPTYARG )
-{
-    if ( IsInPopupMode() )
-        EndPopupMode();
-
-    aSelectLink.Call( &aTbx.GetToolBox() );
-
-    return 0;
-}
-
-PopupWindowTbx::PopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
-                                ResId aRIdWin, ResId aRIdTbx,
-                                SfxBindings& rBind ) :
-                SfxPopupWindow  ( nId, aRIdWin, rBind ),
-                aTbx            ( this, GetBindings(), aRIdTbx )
-{
-    FreeResource();
-    aTbx.Initialize();
-
-    ToolBox& rBox = aTbx.GetToolBox();
-    rBox.SetAlign( eAlign );
-    if( eAlign == WINDOWALIGN_LEFT )
-        SetText( String() );
-
-    Size aSize = aTbx.CalcWindowSizePixel();
-    rBox.SetSizePixel( aSize );
-    SetOutputSizePixel( aSize );
-    aSelectLink = rBox.GetSelectHdl();
-    rBox.SetSelectHdl( LINK( this, PopupWindowTbx, SelectHdl ) );
-}
-
-SfxPopupWindow* PopupWindowTbx::Clone() const
-{
-    return new PopupWindowTbx( GetId(), aTbx.GetAlign(),
-                        IDEResId( RID_TBXCONTROLS ),
-                        IDEResId( RID_TOOLBOX ),
-                        (SfxBindings&) GetBindings() );
-}
-
-void PopupWindowTbx::PopupModeEnd()
-{
-    aTbx.GetToolBox().EndSelection();
-    SfxPopupWindow::PopupModeEnd();
-}
-
-void PopupWindowTbx::Update()
-{
-    ToolBox *pBox = &aTbx.GetToolBox();
-    aTbx.Activate( pBox );
-    aTbx.Deactivate( pBox );
-}
-
-PopupWindowTbx::~PopupWindowTbx()
-{
-}
-*/
 /*************************************************************************
 |*
 |* Klasse fuer Toolbox
@@ -182,8 +121,8 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nTemp ));
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
-                                         hasBigImages(),
-                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
+                                         hasBigImages()
+                                       );
                 ToolBox& rBox = GetToolBox();
                 rBox.SetItemImage(GetId(), aImage);
                 nLastSlot = nLastEnum;
@@ -218,24 +157,8 @@ SfxPopupWindow* TbxControls::CreatePopupWindow()
     if ( GetSlotId() == SID_CHOOSE_CONTROLS )
         createAndPositionSubToolBar( aSubToolBarResName );
 
-/*
-    if (GetId() == SID_CHOOSE_CONTROLS)
-    {
-        PopupWindowTbx *pWin =
-            new PopupWindowTbx( GetId(),
-                                GetToolBox().IsHorizontal() ?
-                                    WINDOWALIGN_LEFT : WINDOWALIGN_TOP,
-                                IDEResId( RID_TBXCONTROLS ),
-                                IDEResId( RID_TOOLBOX ),
-                                GetBindings() );
-        pWin->StartPopupMode(&GetToolBox(), sal_True);
-        pWin->Update();
-        pWin->StartSelection();
-        pWin->Show();
-        return(pWin);
-    }
-*/
     return(0);
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef FORMS_MODULE_IMPLEMENTATION_INCLUDE_CONTEXT
     #error "not to be included directly! use 'foo_module.hxx instead'!"
 #endif
@@ -73,7 +74,7 @@ namespace FORMS_MODULE_NAMESPACE
     {
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OFormsModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OFormsModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
             return;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -116,7 +117,7 @@ namespace FORMS_MODULE_NAMESPACE
 
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OFormsModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OFormsModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
             return NULL;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -159,3 +160,4 @@ namespace FORMS_MODULE_NAMESPACE
 }   // namespace FORMS_MODULE_NAMESPACE
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

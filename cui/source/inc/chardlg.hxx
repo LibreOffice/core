@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,12 +66,8 @@ protected:
                                             sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT );
     virtual             ~SvxCharBasePage();
 
-    void                SetPrevFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
-    void                SetPrevFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
-    void                SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
-    void                SetPrevFontWidthScale( const SfxItemSet& rSet );
-
-    void                SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
+    void SetPrevFontWidthScale( const SfxItemSet& rSet );
+    void SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
 
     inline SvxFont&     GetPreviewFont();
     inline SvxFont&     GetPreviewCJKFont();
@@ -81,7 +78,6 @@ public:
     using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet );
-//    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
 
@@ -252,10 +248,8 @@ private:
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
-//    using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-//    virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
@@ -394,3 +388,4 @@ public:
 
 #endif // #ifndef _SVX_CHARDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

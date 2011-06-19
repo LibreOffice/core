@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,29 +46,29 @@ public:
 
     void GenCmdUNOSlot( const String &aURL );
 
-    void GenCmdControl( comm_ULONG nUId, sal_uInt16 nMethodId, SbxArray* rPar );
+    void GenCmdControl( comm_UINT32 nUId, sal_uInt16 nMethodId, SbxArray* rPar );
     void GenCmdControl( String aUId, sal_uInt16 nMethodId, SbxArray* rPar );
 
 
     void GenCmdFlow( sal_uInt16 nArt );
     void GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 );
-    void GenCmdFlow( sal_uInt16 nArt, comm_ULONG nNr1 );
+    void GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 );
     void GenCmdFlow( sal_uInt16 nArt, String aString1 );
 
-    void Reset(comm_ULONG nSequence);
+    void Reset(comm_UINT32 nSequence);
 
     SvMemoryStream* GetStream();
 
     static CNames *pKeyCodes;           // Namen der Sondertasten  MOD1, F1, LEFT ...
-    static ControlDefLoad __READONLY_DATA arKeyCodes [];
+    static ControlDefLoad const arKeyCodes [];
 
 private:
     String WandleKeyEventString( String aKeys );    // Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>
 
     using CmdBaseStream::Write;
-    void Write( comm_USHORT nNr ){CmdBaseStream::Write( nNr );}
-    void Write( comm_ULONG nNr ){CmdBaseStream::Write( nNr );}
-    void Write( const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
+    void Write( comm_UINT16 nNr ){CmdBaseStream::Write( nNr );}
+    void Write( comm_UINT32 nNr ){CmdBaseStream::Write( nNr );}
+    void Write( const comm_UniChar* aString, comm_UINT16 nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
 //  new
     void Write( String aString, sal_Bool IsKeyString = sal_False );
@@ -76,3 +77,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

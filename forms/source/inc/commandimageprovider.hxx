@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -53,8 +54,7 @@ namespace frm
     public:
         virtual CommandImages   getCommandImages(
                                     const CommandURLs& _rCommandURLs,
-                                    const bool _bLarge,
-                                    const bool _bHiContrast
+                                    const bool _bLarge
                                 ) const = 0;
 
         virtual ~ICommandImageProvider() { }
@@ -76,3 +76,5 @@ namespace frm
 //........................................................................
 
 #endif // COMMANDIMAGEPROVIDER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

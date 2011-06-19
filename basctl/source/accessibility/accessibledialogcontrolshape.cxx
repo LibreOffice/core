@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -220,7 +221,7 @@ Window* AccessibleDialogControlShape::GetWindow() const
     }
     catch ( const Exception& )
     {
-        OSL_ENSURE( sal_False, "AccessibleDialogControlShape::GetModelStringProperty: caught an exception!" );
+        OSL_FAIL( "AccessibleDialogControlShape::GetModelStringProperty: caught an exception!" );
     }
 
     return sReturn;
@@ -328,7 +329,7 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
 
 ::rtl::OUString AccessibleDialogControlShape::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.basctl.AccessibleShape" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleShape" ));
 }
 
 // -----------------------------------------------------------------------------
@@ -349,7 +350,7 @@ sal_Bool AccessibleDialogControlShape::supportsService( const ::rtl::OUString& r
 Sequence< ::rtl::OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.drawing.AccessibleShape" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AccessibleShape" ));
     return aNames;
 }
 
@@ -443,7 +444,7 @@ sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  ) throw (RuntimeExce
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogControlShape::getAccessibleDescription( ) throw (RuntimeException)
+::rtl::OUString AccessibleDialogControlShape::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -617,3 +618,4 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  ) throw (Runtime
 
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

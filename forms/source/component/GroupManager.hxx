@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,12 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
+
+#include <algorithm>
+
 using namespace comphelper;
 
 /*========================================================================
@@ -71,7 +74,7 @@ namespace frm
     template <class ELEMENT, class LESS_COMPARE>
     sal_Int32 insert_sorted(::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, const LESS_COMPARE& _rCompareOp)
     {
-        typename ::std::vector<ELEMENT>::iterator aInsertPos = lower_bound(
+        typename ::std::vector<ELEMENT>::iterator aInsertPos = ::std::lower_bound(
             _rArray.begin(),
             _rArray.end(),
             _rNewElement,
@@ -84,7 +87,7 @@ namespace frm
     template <class ELEMENT, class LESS_COMPARE>
     sal_Bool seek_entry(const ::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, sal_Int32& nPos, const LESS_COMPARE& _rCompareOp)
     {
-        typename ::std::vector<ELEMENT>::const_iterator aExistentPos = lower_bound(
+        typename ::std::vector<ELEMENT>::const_iterator aExistentPos = ::std::lower_bound(
             _rArray.begin(),
             _rArray.end(),
             _rNewElement,
@@ -217,6 +220,8 @@ public:
     void getGroup(sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup, ::rtl::OUString& Name);
     void getGroupByName(const ::rtl::OUString& Name, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> > getControlModels();
+
+    static ::rtl::OUString GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent );
 };
 
 
@@ -226,3 +231,4 @@ public:
 
 #endif // _FRM_GROUPMANAGER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

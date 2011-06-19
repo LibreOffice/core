@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -843,16 +844,14 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 
 //------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL
-component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
 {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" void *
-component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {
     return cppu::component_getFactoryHelper(
         pszImplementationName,
@@ -861,3 +860,4 @@ component_getFactory(const sal_Char *pszImplementationName, void *pServiceManage
         kImplementations_entries) ;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

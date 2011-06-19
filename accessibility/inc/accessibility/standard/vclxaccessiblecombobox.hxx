@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 
 #include <map>
 #include <accessibility/standard/vclxaccessiblebox.hxx>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_STANDARD_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 
 /** The accessible combobox has two children.  The first is the text field
@@ -67,3 +64,4 @@ protected:
 
 #endif // ACCESSIBILITY_STANDARD_VCLXACCESSIBLECHECKBOX_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

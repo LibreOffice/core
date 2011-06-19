@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,21 +31,11 @@
 #include <ManifestWriter.hxx>
 #include <ManifestExport.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_SAXEXCEPTION_HPP
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#endif
 
 #include <osl/diagnose.hxx>
 
@@ -133,3 +124,5 @@ Reference < XSingleServiceFactory > ManifestWriter::createServiceFactory( Refere
                                            ManifestWriter_createInstance,
                                            static_getSupportedServiceNames());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

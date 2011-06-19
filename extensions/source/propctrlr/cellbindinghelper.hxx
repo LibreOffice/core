@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,7 +121,7 @@ namespace pcr
             @precond
                 The binding is a valid cell binding, or <NULL/>
             @return
-                <FALSE/> if and only if an error occured and no valid address could be obtained
+                <FALSE/> if and only if an error occurred and no valid address could be obtained
             @see isCellBinding
         */
         bool            getAddressFromCellBinding(
@@ -204,7 +205,7 @@ namespace pcr
                         ) const;
 
         /** retrieves the index of the sheet which our control belongs to
-            @return the index of the sheet which our control belongs to or -1, if an error occured
+            @return the index of the sheet which our control belongs to or -1, if an error occurred
         */
         sal_Int16       getControlSheetIndex(
                             ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >& _out_rxSheet
@@ -288,3 +289,5 @@ namespace pcr
 //............................................................................
 
 #endif // EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

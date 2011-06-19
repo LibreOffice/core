@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,15 +68,15 @@ sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& x
 uno::Sequence< ::rtl::OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.StorageFactory");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory") );
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.StorageFactory") );
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.StorageFactory");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.StorageFactory") );
 }
 
 //-------------------------------------------------------------------------
@@ -92,7 +93,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(
-                        m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                        m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
                         uno::UNO_QUERY );
 
     if ( !xTempStream.is() )
@@ -133,7 +134,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     {
         if( !( aArguments[1] >>= nStorageMode ) )
         {
-            OSL_ENSURE( sal_False, "Wrong second argument!\n" );
+            OSL_FAIL( "Wrong second argument!\n" );
             throw lang::IllegalArgumentException(); // TODO:
         }
         // it's allways possible to read written storage in this implementation
@@ -153,19 +154,19 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     {
         if ( !aURL.getLength() )
         {
-            OSL_ENSURE( sal_False, "Empty URL is provided!\n" );
+            OSL_FAIL( "Empty URL is provided!\n" );
             throw lang::IllegalArgumentException(); // TODO:
         }
 
         if ( aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.pkg", 16 ) )
         {
-            OSL_ENSURE( sal_False, "Packages URL's are not valid for storages!\n" ); // ???
+            OSL_FAIL( "Packages URL's are not valid for storages!\n" ); // ???
             throw lang::IllegalArgumentException(); // TODO:
         }
 
         uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
                 m_xFactory->createInstance (
-                        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
                 uno::UNO_QUERY );
 
         if ( !xTempAccess.is() )
@@ -178,7 +179,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     }
     else if ( !( aArguments[0] >>= xStream ) && !( aArguments[0] >>= xInputStream ) )
     {
-        OSL_ENSURE( sal_False, "Wrong first argument!\n" );
+        OSL_FAIL( "Wrong first argument!\n" );
         throw uno::Exception(); // TODO: Illegal argument
     }
 
@@ -195,23 +196,23 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             if ( aURL.getLength() )
             {
                 aPropsToSet.realloc(1);
-                aPropsToSet[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+                aPropsToSet[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
                 aPropsToSet[0].Value <<= aURL;
             }
 
             for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )
             {
-                if ( aDescr[nInd].Name.equalsAscii( "InteractionHandler" )
-                  || aDescr[nInd].Name.equalsAscii( "Password" )
-                  || aDescr[nInd].Name.equalsAscii( "RepairPackage" )
-                  || aDescr[nInd].Name.equalsAscii( "StatusIndicator" ) )
-                  // || aDescr[nInd].Name.equalsAscii( "Unpacked" ) // TODO:
+                if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) )
+                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) )
+                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) )
+                  || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
+                  // || aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Unpacked" ) ) // TODO:
                 {
                     aPropsToSet.realloc( ++nNumArgs );
                     aPropsToSet[nNumArgs-1].Name = aDescr[nInd].Name;
                     aPropsToSet[nNumArgs-1].Value = aDescr[nInd].Value;
                 }
-                else if ( aDescr[nInd].Name.equalsAscii( "StorageFormat" ) )
+                else if ( aDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StorageFormat" ) ) )
                 {
                     ::rtl::OUString aFormatName;
                     sal_Int32 nFormatID = 0;
@@ -239,12 +240,12 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
                 }
                 else
-                    OSL_ENSURE( sal_False, "Unacceptable property, will be ignored!\n" );
+                    OSL_FAIL( "Unacceptable property, will be ignored!\n" );
             }
         }
         else
         {
-            OSL_ENSURE( sal_False, "Wrong third argument!\n" );
+            OSL_FAIL( "Wrong third argument!\n" );
             throw uno::Exception(); // TODO: Illegal argument
         }
 
@@ -261,7 +262,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !xSeekable.is() )
         {
             // TODO: wrap stream to let it be seekable
-            OSL_ENSURE( sal_False, "Nonseekable streams are not supported for now!\n" );
+            OSL_FAIL( "Nonseekable streams are not supported for now!\n" );
         }
 
         if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
@@ -281,7 +282,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !xSeekable.is() )
         {
             // TODO: wrap stream to let it be seekable
-            OSL_ENSURE( sal_False, "Nonseekable streams are not supported for now!\n" );
+            OSL_FAIL( "Nonseekable streams are not supported for now!\n" );
         }
 
         if ( !CheckPackageSignature_Impl( xStream->getInputStream(), xSeekable ) )
@@ -322,3 +323,4 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OStorageFactory::getSupportedServiceNa
     return impl_staticGetSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

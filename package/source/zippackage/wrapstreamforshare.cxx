@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >
     m_xSeekable = uno::Reference< io::XSeekable >( m_xInStream, uno::UNO_QUERY );
     if ( !m_rMutexRef.Is() || !m_xInStream.is() || !m_xSeekable.is() )
     {
-        OSL_ENSURE( sal_False, "Wrong initialization of wrapping stream!\n" );
+        OSL_FAIL( "Wrong initialization of wrapping stream!\n" );
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 }
@@ -178,3 +179,4 @@ sal_Int64 SAL_CALL WrapStreamForShare::getLength()
     return m_xSeekable->getLength();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // RegistryValueImpl.cpp: Implementierung der Klasse RegistryValueImpl.
 //
 //////////////////////////////////////////////////////////////////////
@@ -187,3 +188,5 @@ void RegistryValueImpl::SetValue(int NewValue)
     m_Type = REG_DWORD;
     m_IntData = NewValue;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

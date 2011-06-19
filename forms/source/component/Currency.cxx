@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,11 +121,11 @@ void OCurrencyModel::implConstruct()
                     bPrependCurrencySymbol = sal_False;
                     break;
                 case 2: // $ 1
-                    sCurrencySymbol = ::rtl::OUString(String(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString::createFromAscii(" ");
+                    sCurrencySymbol = ::rtl::OUString(String(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
                     bPrependCurrencySymbol = sal_True;
                     break;
                 case 3: // 1 $
-                    sCurrencySymbol = ::rtl::OUString::createFromAscii(" ") + ::rtl::OUString(String(aLocaleInfo.getCurrSymbol()));
+                    sCurrencySymbol = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") ) + ::rtl::OUString(String(aLocaleInfo.getCurrSymbol()));
                     bPrependCurrencySymbol = sal_False;
                     break;
             }
@@ -136,7 +137,7 @@ void OCurrencyModel::implConstruct()
         }
         catch(Exception&)
         {
-            DBG_ERROR( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
+            OSL_FAIL( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
         }
     }
 }
@@ -266,3 +267,4 @@ void OCurrencyModel::resetNoBroadcast()
 }   // namespace frm
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

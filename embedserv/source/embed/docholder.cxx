@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include <Windows.h>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
-#ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTWINDOWPERR_HPP_
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#endif
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -51,9 +50,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseAble.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -399,7 +396,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             if( xPS.is() )
             {
                 aAny = xPS->getPropertyValue(
-                    rtl::OUString::createFromAscii("LayoutManager"));
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")));
                 aAny >>= m_xLayoutManager;
             }
 
@@ -421,8 +418,8 @@ HRESULT DocumentHolder::InPlaceActivate(
             if(m_xLayoutManager.is()) {
                 uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
                     m_xLayoutManager->getElement(
-                        rtl::OUString::createFromAscii(
-                            "private:resource/menubar/menubar")));
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "private:resource/menubar/menubar"))));
                 OSL_ENSURE(xUIEl.is(),"no menubar");
                 uno::Reference<awt::XSystemDependentMenuPeer> xSDMP(
                     xUIEl->getRealInterface(),
@@ -499,17 +496,7 @@ void DocumentHolder::InPlaceDeactivate(void)
         m_xLayoutManager->setVisible(false);
 
     if (NULL!=m_pIOleIPSite)
-    {
-        // The following workaround should let the object be stored in case of inplace editing
-//        CComPtr< IOleClientSite > pClientSite;
-//
-//        m_pIOleIPSite->QueryInterface(
-//              IID_IOleClientSite, (void**)&pClientSite );
-//        if ( pClientSite )
-//            pClientSite->SaveObject();
-
         m_pIOleIPSite->OnInPlaceDeactivate();
-    }
 
     if(m_pIOleIPFrame) m_pIOleIPFrame->Release(); m_pIOleIPFrame = 0;
     if(m_pIOleIPUIWindow) m_pIOleIPUIWindow->Release(); m_pIOleIPUIWindow = 0;
@@ -789,7 +776,7 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, s
     {
         // set the document mode to embedded
         uno::Sequence< beans::PropertyValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString::createFromAscii( "SetEmbedded" );
+        aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SetEmbedded" ));
         aSeq[0].Value <<= sal_True;
         m_xDocument->attachResource(::rtl::OUString(),aSeq);
     }
@@ -932,11 +919,11 @@ void DocumentHolder::show()
             if ( xProps.is() )
             {
                 uno::Reference< frame::XLayoutManager > xLayoutManager;
-                xProps->getPropertyValue( rtl::OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager;
+                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) ) >>= xLayoutManager;
                 uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
                 if ( xLMProps.is() )
                 {
-                    xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MenuBarCloser" ),
+                    xLMProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MenuBarCloser" )),
                                                 uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
                 }
             }
@@ -958,7 +945,7 @@ void DocumentHolder::show()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not show the frame!\n" );
+        OSL_FAIL( "Can not show the frame!\n" );
     }
 
 }
@@ -1165,69 +1152,13 @@ IDispatch* DocumentHolder::GetIDispatch()
     return m_pIDispatch;
 }
 
-#if 0
-HRESULT DocumentHolder::SetVisArea( const RECTL *pRect )
-{
-    if ( pRect && m_xDocument.is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                // should allways be there
-                uno::Sequence< sal_Int32 > aRect(4);
-
-                aRect[0] = pRect->left;
-                aRect[1] = pRect->top;
-                aRect[2] = pRect->right;
-                aRect[3] = pRect->bottom;
-
-                aArgs[nInd].Value <<= aRect;
-
-                m_xDocument->attachResource( m_xDocument->getURL(), aArgs );
-                return S_OK;
-            }
-
-        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
-    }
-
-    return E_FAIL;
-}
-
-HRESULT DocumentHolder::GetVisArea( RECTL *pRect )
-{
-    if ( pRect && m_xDocument.is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                uno::Sequence< sal_Int32 > aRect;
-                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
-                {
-                    pRect->left   = aRect[0];
-                    pRect->top    = aRect[1];
-                    pRect->right  = aRect[2];
-                    pRect->bottom = aRect[3];
-
-                    return S_OK;
-                }
-
-                break;
-            }
-    }
-
-    return E_FAIL;
-}
-#endif
-
 HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
 {
     if ( pRect && m_xDocument.is() )
     {
         uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
         for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "DocumentBorder" ) )
+            if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentBorder" ) ) )
             {
                 uno::Sequence< sal_Int32 > aRect;
                 if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
@@ -1592,55 +1523,11 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
     }
 }
 
-
-
-//     if(m_pOLEInterface->GetGUID() == OID_WriterTextServer) {
-//         // edit group
-//         CopyToOLEMenu(m_nMenuHandle,1,hMenu,(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,2,hMenu,1+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,3,hMenu,2+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,4,hMenu,3+(WORD)mgw.width[0]);
-//         mgw.width[1]=4;
-
-//         // object group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,5,
-//             hMenu,4+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
-//         mgw.width[3]=1;
-
-//         // help group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,7,
-//             hMenu,5+(WORD)mgw.width[0]+(WORD)mgw.width[2]+(WORD)mgw.width[4]);
-//         mgw.width[5]=1;
-//     }
-//     else if(m_pOLEInterface->GetGUID() == OID_CalcServer) {
-//         // edit group
-//         CopyToOLEMenu(m_nMenuHandle,1,hMenu,(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,2,hMenu,1+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,3,hMenu,2+(WORD)mgw.width[0]);
-//         CopyToOLEMenu(m_nMenuHandle,4,hMenu,3+(WORD)mgw.width[0]);
-//         mgw.width[1]=4;
-
-//         // object group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,5,
-//             hMenu,4+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
-//         CopyToOLEMenu(
-//             m_nMenuHandle,6,
-//             hMenu,5+(WORD)mgw.width[0]+(WORD)mgw.width[2]);
-//         mgw.width[3]=2;
-
-//         // help group
-//         CopyToOLEMenu(
-//             m_nMenuHandle,8,
-//             hMenu,6+(WORD)mgw.width[0]+(WORD)mgw.width[2]+(WORD)mgw.width[4]);
-//         mgw.width[5]=1;
-//     }
-
 // Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

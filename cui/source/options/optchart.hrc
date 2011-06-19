@@ -34,4 +34,5 @@
 #define CT_COLOR_BOX            4
 
 #define PB_RESET_TO_DEFAULT     5
-
+#define PB_ADD_CHART_COLOR              6
+#define PB_REMOVE_CHART_COLOR           7

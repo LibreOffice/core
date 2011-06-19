@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
@@ -58,10 +56,11 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+
 #define _SVX_OPTINET2_CXX
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 #include <cuires.hrc>
 #include "optinet2.hrc"
 #include "helpid.hrc"
@@ -70,11 +69,9 @@
 #include <svx/svxids.hrc> // slot ids, mostly for changetracking
 
 // for security TP
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
 #ifdef UNX
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -86,6 +83,7 @@
 #include <osl/nlsupport.h>
 #endif
 #include <sal/types.h>
+#include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -108,7 +106,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 using ::rtl::OUString;
 
-//CHINA001 copy from multipat.hxx begin
+
 // define ----------------------------------------------------------------
 
 // different delimiter for Unix (:) and Windows (;)
@@ -118,7 +116,7 @@ using ::rtl::OUString;
 #else
 #define CLASSPATH_DELIMITER ';'
 #endif
-//CHINA001 copy from multipat.hxx end
+
 // static ----------------------------------------------------------------
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -174,12 +172,9 @@ void SvxNoSpaceEdit::Modify()
 }
 
 /********************************************************************/
-/********************************************************************/
 /*                                                                  */
 /*  SvxProxyTabPage                                                 */
 /*                                                                  */
-/*                                                                  */
-/********************************************************************/
 /********************************************************************/
 
 SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
@@ -262,26 +257,14 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     ArrangeControls_Impl();
 }
 
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
-
 SvxProxyTabPage::~SvxProxyTabPage()
 {
 }
-
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxProxyTabPage(pParent, rAttrSet);
 }
-
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::ReadConfigData_Impl()
 {
@@ -332,23 +315,19 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         }
     }
 
-    catch(container::NoSuchElementException e) {
+    catch(container::NoSuchElementException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e) {
+    catch(RuntimeException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
     }
 
 }
-
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::ReadConfigDefaults_Impl()
 {
@@ -394,24 +373,20 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
             aNoProxyForED.SetText( aStringValue );
         }
     }
-    catch(beans::UnknownPropertyException e)
+    catch(beans::UnknownPropertyException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e)
+    catch(RuntimeException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
 }
-
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::RestoreConfigDefaults_Impl()
 {
@@ -432,24 +407,20 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         xChangesBatch->commitChanges();
     }
 
-    catch(beans::UnknownPropertyException e)
+    catch(beans::UnknownPropertyException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e)
+    catch(RuntimeException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
 }
-
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::Reset(const SfxItemSet&)
 {
@@ -466,10 +437,6 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
 
     EnableControls_Impl( aProxyModeLB.GetSelectEntryPos() == 2 );
 }
-
-/*-----------------12.08.96 16.34-------------------
-
---------------------------------------------------*/
 
 sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
 {
@@ -545,23 +512,23 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
         xChangesBatch->commitChanges();
     }
 
-    catch(com::sun::star::lang::IllegalArgumentException e) {
+    catch(com::sun::star::lang::IllegalArgumentException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
 
-    catch(beans::UnknownPropertyException e) {
+    catch(beans::UnknownPropertyException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
     }
 
-    catch(beans::PropertyVetoException e) {
+    catch(beans::PropertyVetoException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e) {
+    catch(RuntimeException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
@@ -570,7 +537,7 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
 
 void SvxProxyTabPage::ArrangeControls_Impl()
 {
-    //-->Calculate dynamical width of controls, add buy wuy for i71445 Time: 2007.02.27
+    // calculate dynamic width of controls, to not cut-off translated strings #i71445#
     long nWidth = aProxyModeFT.GetCtrlTextWidth( aProxyModeFT.GetText() );
     long nTemp = aHttpProxyFT.GetCtrlTextWidth( aHttpProxyFT.GetText() );
     if ( nTemp > nWidth )
@@ -616,12 +583,8 @@ void SvxProxyTabPage::ArrangeControls_Impl()
         aNewPos.Y() = aNoProxyForED.GetPosPixel().Y();
         aNoProxyForED.SetPosSizePixel( aNewPos, aNewSize );
     }
-    //<--End buy wuy for i71445 Time: 2007.02.27
 }
 
-/*-----------------12.08.96 13.38-------------------
-
---------------------------------------------------*/
 void SvxProxyTabPage::EnableControls_Impl(sal_Bool bEnable)
 {
     aHttpProxyFT.Enable(bEnable);
@@ -673,12 +636,9 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 
 
 /********************************************************************/
-/********************************************************************/
 /*                                                                  */
 /*  SvxSearchTabPage                                                */
 /*                                                                  */
-/*                                                                  */
-/********************************************************************/
 /********************************************************************/
 
 SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
@@ -752,12 +712,12 @@ SfxTabPage* SvxSearchTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet
 
 void SvxSearchTabPage::Reset( const SfxItemSet& )
 {
-    //The two lines below are moved here from the last part of this method by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    //The two lines below are moved here from the last part of this method
     aChangePB.Disable();
     aAddPB.Disable();
 
     sal_uInt16 nCount = aSearchConfig.Count();
-    aSearchLB.Clear();  //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    aSearchLB.Clear();
     for(sal_uInt16 i = 0; i < nCount; i++)
     {
         const SvxSearchEngineData& rData = aSearchConfig.GetData(i);
@@ -791,7 +751,6 @@ void SvxSearchTabPage::ActivatePage( const SfxItemSet&  )
 
 int SvxSearchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    //Modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     if(!ConfirmLeave(String()))
         return KEEP_PAGE;
 
@@ -802,7 +761,6 @@ int SvxSearchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-//add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
 sal_Bool SvxSearchTabPage::ConfirmLeave( const String& rStringSelection)
 {
     if(aChangePB.IsEnabled())
@@ -869,7 +827,7 @@ void SvxSearchTabPage::InitControls_Impl()
     long nLabelTextWidth = 0;
     Window* pLabels[] = { &aSearchNameFT, &aSearchFT, &aURLFT, &aPostFixFT, &aSeparatorFT, &aCaseFT };
     Window** pLabel = pLabels;
-    const sal_Int32 nLabelCount = sizeof( pLabels ) / sizeof( pLabels[0] );
+    const sal_Int32 nLabelCount = SAL_N_ELEMENTS( pLabels );
     for ( ; i < nLabelCount; ++i, ++pLabel )
     {
         long nTemp = (*pLabel)->GetCtrlTextWidth( (*pLabel)->GetText() );
@@ -893,7 +851,7 @@ void SvxSearchTabPage::InitControls_Impl()
     Window* pEdits[] = { &aSearchNameED, &aAndRB, &aOrRB,
         &aExactRB, &aURLED, &aPostFixED, &aSeparatorED, &aCaseED };
     Window** pEdit = pEdits;
-    const sal_Int32 nCCount = sizeof( pEdits ) / sizeof( pEdits[ 0 ] );
+    const sal_Int32 nCCount = SAL_N_ELEMENTS( pEdits );
     for ( i = 0; i < nCCount; ++i, ++pEdit )
     {
         Point aNewPos = (*pEdit)->GetPosPixel();
@@ -909,7 +867,6 @@ void SvxSearchTabPage::InitControls_Impl()
 
 IMPL_LINK( SvxSearchTabPage, NewSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The 3 lines below is modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     SearchEntryHdl_Impl(&aSearchLB);
     if(aChangePB.IsEnabled() || aAddPB.IsEnabled())
         return 0;
@@ -926,7 +883,6 @@ IMPL_LINK( SvxSearchTabPage, NewSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, AddSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The following two lines is added by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     aAddPB.Enable(sal_False);
     aChangePB.Enable(sal_False);
     aCurrentSrchData.sEngineName = aSearchNameED.GetText();
@@ -941,7 +897,6 @@ IMPL_LINK( SvxSearchTabPage, AddSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The following two lines is added by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     aChangePB.Enable(sal_False);
     aAddPB.Enable(sal_False);
     sal_uInt16 nPos = aSearchLB.GetSelectEntryPos();
@@ -973,7 +928,7 @@ IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, DeleteSearchHdl_Impl, PushButton *, EMPTYARG)
 {
-    aChangePB.Enable(sal_False);     //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    aChangePB.Enable(sal_False);
     sal_uInt16 nPos = aSearchLB.GetSelectEntryPos();
     DBG_ASSERT(nPos != LISTBOX_ENTRY_NOTFOUND, "kein Eintrag selektiert!");
     aSearchConfig.RemoveData(aSearchLB.GetSelectEntry());
@@ -991,7 +946,6 @@ IMPL_LINK( SvxSearchTabPage, SearchEntryHdl_Impl, ListBox*, pBox )
     if ( nEntryPos != LISTBOX_ENTRY_NOTFOUND )
     {
         String sSelection(pBox->GetSelectEntry());
-        //Modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
         if(!ConfirmLeave(sSelection))
             return 0;
 
@@ -1358,7 +1312,7 @@ void SvxSecurityTabPage::InitControls()
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
                            &maShowConnectionsPB, &maMacroSecPB };
     Window** pButton = pButtons;
-    const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
+    const sal_Int32 nBCount = SAL_N_ELEMENTS( pButtons );
     for ( ; i < nBCount; ++i, ++pButton )
     {
         long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
@@ -1398,7 +1352,7 @@ void SvxSecurityTabPage::InitControls()
         Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
                                 &maMasterPasswordFI, &maMacroSecFI };
         Window** pControl = pControls;
-        const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[ 0 ] );
+        const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
         for ( i = 0; i < nCCount; ++i, ++pControl )
         {
             Size aNewSize = (*pControl)->GetSizePixel();
@@ -1509,7 +1463,6 @@ void SvxSecurityTabPage::Reset( const SfxItemSet& )
     }
 }
 
-//added by jmeng begin
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_MOZPLUGIN ), rSet ),
     aMSWordGB       ( this, CUI_RES( GB_MOZPLUGIN       ) ),
@@ -1567,7 +1520,6 @@ inline bool getDllURL(rtl::OString * path)
         return false;
     }
     dirPath = dirPath.copy(0, dirPath.lastIndexOf('/'));
-//    osl::FileBase::getAbsoluteFileURL(dirPath, libPath, dllPath);
     ::rtl::OUString sysDirPath;
     osl::FileBase::getSystemPathFromFileURL(dirPath, sysDirPath);
     *path = OUStringToOString(sysDirPath, RTL_TEXTENCODING_ASCII_US);
@@ -1700,7 +1652,6 @@ sal_Bool MozPluginTabPage::uninstallPlugin()
         return false;
 #endif
 }
-//added by jmeng end
 
 /* -------------------------------------------------------------------------*/
 
@@ -1922,3 +1873,5 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
 }
 
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

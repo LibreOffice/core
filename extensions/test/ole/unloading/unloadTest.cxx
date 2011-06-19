@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include<osl/module.hxx>
 #include <osl/time.h>
 #include <rtl/ustring.hxx>
-#include <stdio.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -171,18 +171,6 @@ sal_Bool test3()
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
 
-//  for (int i=0; i < 10; i++)
-//  {
-//      Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-//      xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
-//                             sal_False, sal_False );
-//      Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
-//      Reference<XComponent> xcomp( context, UNO_QUERY);
-//      xcomp->dispose();
-//
-//  }
-
-//  return sal_True;
     return bTest1 && bTest2;
 }
 
@@ -224,3 +212,5 @@ sal_Bool test4()
 
     return bTest1 && bTest2;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

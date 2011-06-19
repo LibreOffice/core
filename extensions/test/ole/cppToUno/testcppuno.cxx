@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,14 +54,14 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace cppu;
-using namespace rtl;
+
 HRESULT doTest();
 bool incrementMultidimensionalIndex(
     sal_Int32 dimensions,
     const sal_Int32 * parDimensionLengths,
     sal_Int32 * parMultidimensionalIndex);
 
-int __cdecl _tmain( int /*argc*/, _TCHAR * /*argv[]*/ )
+int SAL_CALL _tmain( int /*argc*/, _TCHAR * /*argv[]*/ )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))
@@ -217,3 +218,5 @@ bool incrementMultidimensionalIndex(
     }
     return ret;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

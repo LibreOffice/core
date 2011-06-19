@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 #ifndef _EMBEDDOCACCESS_HXX_
 #define _EMBEDDOCACCESS_HXX_
-
-#include <cppuhelper/weak.hxx>
 
 #define OLESERV_SAVEOBJECT      1
 #define OLESERV_CLOSE           2
@@ -83,3 +82,5 @@ class EmbeddedDocumentInstanceAccess_Impl : public ::cppu::OWeakObject
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

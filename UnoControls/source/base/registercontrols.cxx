@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,15 +52,6 @@
 //=============================================================================
 
 //______________________________________________________________________________________________________________
-//  defines
-//______________________________________________________________________________________________________________
-
-// If you will debug macros of this file ... you must define follow constant!
-// Ths switch on another macro AS_DBG_OUT(...), which will print text to "stdout".
-
-//#define AS_DBG_SWITCH
-
-//______________________________________________________________________________________________________________
 //  namespaces
 //______________________________________________________________________________________________________________
 
@@ -76,26 +68,16 @@ using namespace ::com::sun::star::registry                      ;
 //______________________________________________________________________________________________________________
 
 //******************************************************************************************************************************
-// See AS_DBG_SWITCH below !!!
-#ifdef AS_DBG_SWITCH
-    #define AS_DBG_OUT(OUTPUT)  printf( OUTPUT );
-#else
-    #define AS_DBG_OUT(OUTPUT)
-#endif
-
-//******************************************************************************************************************************
 #define CREATEINSTANCE(CLASS)                                                                                                               \
                                                                                                                                             \
     static Reference< XInterface > SAL_CALL CLASS##_createInstance ( const Reference< XMultiServiceFactory >& rServiceManager ) throw ( Exception ) \
     {                                                                                                                                       \
-        AS_DBG_OUT ( "\tCREATEINSTANCE():\tOK\n" )                                                                                          \
         return Reference< XInterface >( *(OWeakObject*)(new CLASS( rServiceManager )) );                                                    \
     }
 
 //******************************************************************************************************************************
 #define CREATEFACTORY_ONEINSTANCE(CLASS)                                                                                \
                                                                                                                         \
-    AS_DBG_OUT ( "\tCREATEFACTORY_ONEINSTANCE():\t[start]\n" )                                                          \
     /* Create right factory ... */                                                                                      \
     xFactory = Reference< XSingleServiceFactory >                                                                       \
                     (                                                                                                   \
@@ -104,12 +86,10 @@ using namespace ::com::sun::star::registry                      ;
                                                             CLASS##_createInstance                              ,       \
                                                             CLASS::impl_getStaticSupportedServiceNames  ()  )       \
                     ) ;                                                                                                 \
-    AS_DBG_OUT ( "\tCREATEFACTORY_ONEINSTANCE():\t[end]\n" )
 
 //******************************************************************************************************************************
 #define CREATEFACTORY_SINGLE(CLASS)                                                                                     \
                                                                                                                         \
-    AS_DBG_OUT ( "\tCREATEFACTORY_SINGLE():\t[start]\n" )                                                               \
     /* Create right factory ... */                                                                                      \
     xFactory = Reference< XSingleServiceFactory >                                                                       \
                     (                                                                                                   \
@@ -118,14 +98,12 @@ using namespace ::com::sun::star::registry                      ;
                                                         CLASS##_createInstance                              ,           \
                                                         CLASS::impl_getStaticSupportedServiceNames  ()  )           \
                     ) ;                                                                                                 \
-    AS_DBG_OUT ( "\tCREATEFACTORY_SINGLE():\t[end]\n" )
 
 //******************************************************************************************************************************
 #define IF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE(CLASS)                                                               \
                                                                                                                         \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
     {                                                                                                                   \
-        AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE():\timplementationname found\n" )                    \
         CREATEFACTORY_ONEINSTANCE ( CLASS )                                                                         \
     }
 
@@ -134,7 +112,6 @@ using namespace ::com::sun::star::registry                      ;
                                                                                                                         \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
     {                                                                                                                   \
-        AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_SINGLE():\timplementationname found\n" )                         \
         CREATEFACTORY_SINGLE ( CLASS )                                                                              \
     }
 
@@ -158,7 +135,7 @@ CREATEINSTANCE  ( StatusIndicator   )
 //  return environment
 //______________________________________________________________________________________________________________
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(    const   sal_Char**          ppEnvironmentTypeName   ,
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(   const   sal_Char**          ppEnvironmentTypeName   ,
                                                                             uno_Environment**   /*ppEnvironment*/           )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
@@ -168,12 +145,10 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(    const   sal_
 //  create right component factory
 //______________________________________________________________________________________________________________
 
-extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementationName ,
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,
                                                         void*       pServiceManager     ,
                                                         void*       /*pRegistryKey*/        )
 {
-    AS_DBG_OUT( "component_getFactory():\t[start]\n" )
-
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
 
@@ -182,8 +157,6 @@ extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementat
             ( pServiceManager       !=  NULL )
         )
     {
-        AS_DBG_OUT( "component_getFactory():\t\t... enter scope - pointer are valid\n" )
-
         // Define variables which are used in following macros.
         Reference< XSingleServiceFactory >  xFactory                                                                        ;
         Reference< XMultiServiceFactory >   xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
@@ -206,17 +179,13 @@ extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementat
         // Factory is valid - service was found.
         if ( xFactory.is() )
         {
-            AS_DBG_OUT( "component_getFactory():\t\t\t... xFactory valid - service was found\n" )
-
             xFactory->acquire();
             pReturn = xFactory.get();
         }
-
-        AS_DBG_OUT( "component_getFactory():\t\t... leave scope\n" )
     }
-
-    AS_DBG_OUT ( "component_getFactory():\t[end]\n" )
 
     // Return with result of this operation.
     return pReturn ;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

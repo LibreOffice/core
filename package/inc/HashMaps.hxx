@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,8 @@
 #define _HASHMAPS_HXX
 
 #include <ZipEntry.hxx>
-#include <vos/ref.hxx>
-#include <hash_map>
+#include <rtl/ref.hxx>
+#include <boost/unordered_map.hpp>
 
 struct eqFunc
 {
@@ -45,19 +46,21 @@ namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo;
 } } } }
 
-typedef std::hash_map < rtl::OUString,
+typedef boost::unordered_map < rtl::OUString,
                         ZipPackageFolder *,
                         ::rtl::OUStringHash,
                         eqFunc > FolderHash;
 
-typedef std::hash_map < rtl::OUString,
-                        vos::ORef < com::sun::star::packages::ContentInfo >,
+typedef boost::unordered_map < rtl::OUString,
+                        rtl::Reference < com::sun::star::packages::ContentInfo >,
                         ::rtl::OUStringHash,
                         eqFunc > ContentHash;
 
-typedef std::hash_map < rtl::OUString,
+typedef boost::unordered_map < rtl::OUString,
                         ZipEntry,
                         rtl::OUStringHash,
                         eqFunc > EntryHash;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

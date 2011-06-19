@@ -71,6 +71,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
             < "Right" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
             < "Justified" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
             < "Filled" ; ALIGNDLG_HORALIGN_FILL ; > ;
+            < "Distributed" ; ALIGNDLG_HORALIGN_DISTRIBUTED ; > ;
         };
     };
     FixedText FT_INDENT
@@ -112,6 +113,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
             < "Top" ; ALIGNDLG_VERALIGN_TOP ; > ;
             < "Middle" ; ALIGNDLG_VERALIGN_MID ; > ;
             < "Bottom" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
+            < "Justified" ; ALIGNDLG_VERALIGN_BLOCK ; > ;
+            < "Distributed" ; ALIGNDLG_VERALIGN_DISTRIBUTED ; > ;
         };
     };
     FixedLine FL_ORIENTATION
@@ -220,18 +223,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
     ImageList IL_LOCK_BMPS
     {
         Prefix = "lo";
-        MaskColor = IL_LOCK_MCOL ;
-        IdList =
-        {
-            IID_BOTTOMLOCK ;
-            IID_TOPLOCK ;
-            IID_CELLLOCK ;
-        };
-        IdCount = { 3 ; };
-    };
-    ImageList IL_LOCK_BMPS_HC
-    {
-        Prefix = "loh";
         MaskColor = IL_LOCK_MCOL ;
         IdList =
         {

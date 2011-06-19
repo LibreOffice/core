@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,11 +55,12 @@
 
 #include <lingutil.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
+
+using ::rtl::OUString;
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -150,3 +152,4 @@ inline OUString MacSpellChecker::getImplementationName_Static() throw()
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

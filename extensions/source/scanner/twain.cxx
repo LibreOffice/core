@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,9 @@
 #include <math.h>
 
 #if defined( WNT )
-#include <tools/svwin.h>
+#include <windows.h>
 #endif
-#ifdef OS2
-#include <svpm.h>
-#endif // OS2
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -55,9 +53,6 @@
 #if defined WNT
 #define TWAIN_LIBNAME               "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME              "DSM_Entry"
-#elif defined OS2
-#define TWAIN_LIBNAME               "twain"
-#define TWAIN_FUNCNAME              "DSM_ENTRY"
 #endif
 
 // -----------
@@ -69,18 +64,6 @@ static ImpTwain* pImpTwainInstance = NULL;
 // ---------
 // - Procs -
 // ---------
-
-#ifdef OS2
-
-    #define PTWAINMSG QMSG*
-
-    MRESULT EXPENTRY TwainWndProc( HWND hWnd, ULONG nMsg, MPARAM nParam1, MPARAM nParam2 )
-    {
-        return (MRESULT) TRUE;
-    }
-
-
-#else // OS2
 
     #define PTWAINMSG MSG*
 
@@ -112,8 +95,6 @@ static ImpTwain* pImpTwainInstance = NULL;
         }
     }
 
-#endif // OS2
-
 // ------------
 // - ImpTwain -
 // ------------
@@ -141,14 +122,6 @@ ImpTwain::ImpTwain( const Link& rNotifyLink ) :
     strcpy( aAppIdent.ProductFamily,"Office");
     strcpy( aAppIdent.ProductName, "Office");
 
-#ifdef OS2
-
-    hAB = Sysdepen::GethAB();
-    ImplFallback( TWAIN_EVENT_QUIT );
-    // hTwainWnd = WinCreateWindow( HWND_DESKTOP, WC_FRAME, "dummy", 0, 0, 0, 0, 0, HWND_DESKTOP, HWND_BOTTOM, 0, 0, 0 );
-
-#else
-
     HWND        hParentWnd = HWND_DESKTOP;
     WNDCLASS    aWc = { 0, &TwainWndProc, 0, sizeof( WNDCLASS ), GetModuleHandle( NULL ),
                         NULL, NULL, NULL, NULL, "TwainClass" };
@@ -156,8 +129,6 @@ ImpTwain::ImpTwain( const Link& rNotifyLink ) :
     RegisterClass( &aWc );
     hTwainWnd = CreateWindowEx( WS_EX_TOPMOST, aWc.lpszClassName, "TWAIN", 0, 0, 0, 0, 0, hParentWnd, NULL, aWc.hInstance, 0 );
     hTwainHook = SetWindowsHookEx( WH_GETMESSAGE, &TwainMsgProc, NULL, GetCurrentThreadId() );
-
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -239,7 +210,7 @@ void ImpTwain::ImplOpenSourceManager()
 {
     if( 1 == nCurState )
     {
-        pMod = new vos:: OModule ();
+        pMod = new osl::Module();
 
         if( pMod->load( TWAIN_LIBNAME ) )
         {
@@ -268,11 +239,6 @@ void ImpTwain::ImplOpenSource()
         if( ( PFUNC( &aAppIdent, NULL, DG_CONTROL, DAT_IDENTITY, MSG_GETDEFAULT, &aSrcIdent ) == TWRC_SUCCESS ) &&
             ( PFUNC( &aAppIdent, NULL, DG_CONTROL, DAT_IDENTITY, MSG_OPENDS, &aSrcIdent ) == TWRC_SUCCESS ) )
         {
-#ifdef OS2
-
-            // negotiate capabilities
-
-#else
 
             TW_CAPABILITY   aCap = { CAP_XFERCOUNT, TWON_ONEVALUE, GlobalAlloc( GHND, sizeof( TW_ONEVALUE ) ) };
             TW_ONEVALUE*    pVal = (TW_ONEVALUE*) GlobalLock( aCap.hContainer );
@@ -281,7 +247,6 @@ void ImpTwain::ImplOpenSource()
             GlobalUnlock( aCap.hContainer );
             PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_CAPABILITY, MSG_SET, &aCap );
             GlobalFree( aCap.hContainer );
-#endif
 
             nCurState = 4;
         }
@@ -386,11 +351,6 @@ void ImpTwain::ImplXfer()
 
             case( TWRC_XFERDONE ):
             {
-#ifdef OS2
-
-                // get OS/2-Bitmap
-
-#else // OS2
                 const ULONG nSize = GlobalSize( (HGLOBAL) hDIB );
                 char*       pBuf = (char*) GlobalLock( (HGLOBAL) hDIB );
 
@@ -403,7 +363,6 @@ void ImpTwain::ImplXfer()
                 }
 
                 GlobalFree( (HGLOBAL) hDIB );
-#endif // OS2
 
                 // set resolution of bitmap if neccessary
                 if ( ( nXRes != -1 ) && ( nYRes != - 1 ) && ( nWidth != - 1 ) && ( nHeight != - 1 ) )
@@ -505,14 +464,6 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
 
 IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, p )
 {
-#ifdef OS2
-
-    if( hWndTwain )
-        WinDestroyWindow( hWndTwain );
-
-    // unset hook
-
-#else
 
     if( hTwainWnd )
         DestroyWindow( hTwainWnd );
@@ -520,10 +471,10 @@ IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, p )
     if( hTwainHook )
         UnhookWindowsHookEx( hTwainHook );
 
-#endif
-
     delete this;
     pImpTwainInstance = NULL;
 
     return 0L;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

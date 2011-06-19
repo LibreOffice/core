@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,9 @@
 // include ---------------------------------------------------------------
 
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
 class SdrView;
@@ -66,7 +61,6 @@ private:
     CheckBox        aCB_LAENGE;
 
     Image*          mpBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
-    Image*          mpBmpCapTypesH[CAPTYPE_BITMAPS_COUNT];
 
     String          aStrHorzList;
     String          aStrVertList;
@@ -120,7 +114,6 @@ public:
 class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
-//  const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
     sal_uInt16              nAnchorCtrls;
 
@@ -142,3 +135,4 @@ public:
 
 #endif //_SVX_LABDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <bastypes.hxx>
 #include <vcl/dialog.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
@@ -72,3 +71,5 @@ public:
 };
 
 #endif  // _BRKDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

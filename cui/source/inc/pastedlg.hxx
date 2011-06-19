@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _PASTEDLG_HXX
 #define _PASTEDLG_HXX
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <sot/formats.hxx>
 #include <tools/globname.hxx>
 #include <svtools/transfer.hxx>
@@ -93,3 +92,5 @@ public:
 };
 
 #endif // _PASTEDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

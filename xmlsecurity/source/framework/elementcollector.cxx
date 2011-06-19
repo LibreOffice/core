@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,9 +83,6 @@ ElementCollector::ElementCollector(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -92,13 +90,6 @@ ElementCollector::ElementCollector(
 {
     m_type = cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR;
 }
-
-/*
-bool ElementCollector::isInternalNotificationSuppressed() const
-{
-    return m_bInternalNotificationSuppressed;
-}
-*/
 
 cssxc::sax::ElementMarkPriority ElementCollector::getPriority() const
 {
@@ -127,9 +118,6 @@ void ElementCollector::notifyListener()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -165,9 +153,6 @@ void ElementCollector::setReferenceResolvedListener(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -194,9 +179,6 @@ void ElementCollector::setSecurityId(sal_Int32 nSecurityId)
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -228,9 +210,6 @@ void ElementCollector::doNotify()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -268,9 +247,6 @@ ElementCollector* ElementCollector::clone(
  *   RESULT
  *  clone -     a new ElementCollector
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -294,3 +270,4 @@ ElementCollector* ElementCollector::clone(
     return pClonedOne;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

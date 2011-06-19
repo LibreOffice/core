@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,6 +106,7 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/wrkwin.hxx>
 #include <tools/StringListResource.hxx>
+#include <sal/macros.h>
 
 #include <limits>
 
@@ -381,8 +383,8 @@ namespace pcr
                     // StringItemList?
                     else if( eType == TypeClass_SEQUENCE )
                     {
-                        static ::rtl::OUString aDot = ::rtl::OUString::createFromAscii( "." );
-                        static ::rtl::OUString aEsc = ::rtl::OUString::createFromAscii( "&" );
+                        static ::rtl::OUString aDot(RTL_CONSTASCII_USTRINGPARAM("."));
+                        static ::rtl::OUString aEsc(RTL_CONSTASCII_USTRINGPARAM("&"));
 
                         // Put strings into resource using new ids
                         Sequence< ::rtl::OUString > aNewStrings;
@@ -616,7 +618,7 @@ namespace pcr
             case 1: nWritingMode = WritingMode2::RL_TB;      break;
             case 2: nWritingMode = WritingMode2::CONTEXT;    break;
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToPropertyValue: unexpected 'normalized value' for WritingMode!" );
+                OSL_FAIL( "FormComponentPropertyHandler::convertToPropertyValue: unexpected 'normalized value' for WritingMode!" );
                 nWritingMode = WritingMode2::CONTEXT;
                 break;
             }
@@ -752,7 +754,7 @@ namespace pcr
             case WritingMode2::RL_TB:   nNormalized = 1;    break;
             case WritingMode2::CONTEXT: nNormalized = 2;    break;
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::convertToControlValue: unsupported API value for WritingMode!" );
+                OSL_FAIL( "FormComponentPropertyHandler::convertToControlValue: unsupported API value for WritingMode!" );
                 nNormalized = 2;
                 break;
             }
@@ -998,7 +1000,7 @@ namespace pcr
         String sDisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         if ( !sDisplayName.Len() )
         {
-            DBG_ERROR( "FormComponentPropertyHandler::describePropertyLine: did getSupportedProperties not work properly?" );
+            OSL_FAIL( "FormComponentPropertyHandler::describePropertyLine: did getSupportedProperties not work properly?" );
             throw UnknownPropertyException();
         }
 
@@ -1422,7 +1424,7 @@ namespace pcr
             aDescriptor.HasSecondaryButton = sal_True;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
-        aDescriptor.Category = ::rtl::OUString::createFromAscii( bIsDataProperty ? "Data" : "General" );
+        aDescriptor.Category = bIsDataProperty ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("General"));
         return aDescriptor;
     }
 
@@ -1511,7 +1513,7 @@ namespace pcr
                 eResult = InteractiveSelectionResult_Pending;
             break;
         default:
-            DBG_ERROR( "FormComponentPropertyHandler::onInteractivePropertySelection: request for a property which does not have dedicated UI!" );
+            OSL_FAIL( "FormComponentPropertyHandler::onInteractivePropertySelection: request for a property which does not have dedicated UI!" );
             break;
         }
         return eResult;
@@ -1723,7 +1725,7 @@ namespace pcr
             // propagate the changes to the min/max/default fields
             Any aCurrentProp;
             ::rtl::OUString aAffectedProps[] = { PROPERTY_VALUE, PROPERTY_DEFAULT_VALUE, PROPERTY_VALUEMIN, PROPERTY_VALUEMAX };
-            for (sal_uInt16 i=0; i<sizeof(aAffectedProps)/sizeof(aAffectedProps[0]); ++i)
+            for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(aAffectedProps); ++i)
             {
                 Reference< XPropertyControl > xControl;
                 try
@@ -1770,7 +1772,7 @@ namespace pcr
                 ::rtl::OUString aFormattedPropertyControls[] = {
                     PROPERTY_EFFECTIVE_MIN, PROPERTY_EFFECTIVE_MAX, PROPERTY_EFFECTIVE_DEFAULT, PROPERTY_EFFECTIVE_VALUE
                 };
-                for ( sal_uInt16 i=0; i<sizeof(aFormattedPropertyControls)/sizeof(aFormattedPropertyControls[0]); ++i )
+                for ( sal_uInt16 i=0; i<SAL_N_ELEMENTS(aFormattedPropertyControls); ++i )
                 {
                     Reference< XPropertyControl > xControl;
                     try
@@ -1799,7 +1801,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "FormComponentPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
+            OSL_FAIL( "FormComponentPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
             break;
 
         }   // switch ( nActuatingPropId )
@@ -2013,14 +2015,14 @@ namespace pcr
             break;
 
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: unexpected property to update!" );
+                OSL_FAIL( "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: unexpected property to update!" );
                 break;
 
             }   // switch
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
         }
     }
 
@@ -2094,7 +2096,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_initComponentMetaData_throw: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_initComponentMetaData_throw: caught an exception!" );
         }
     }
 
@@ -2163,8 +2165,8 @@ namespace pcr
                     ControlType::PROGRESSBAR
                 };
 
-                sal_Int32 nKnownControlTypes = sizeof( aControlModelServiceNames ) / sizeof( aControlModelServiceNames[ 0 ] );
-                OSL_ENSURE( nKnownControlTypes == sizeof( nClassIDs ) / sizeof( nClassIDs[ 0 ] ),
+                sal_Int32 nKnownControlTypes = SAL_N_ELEMENTS( aControlModelServiceNames );
+                OSL_ENSURE( nKnownControlTypes == SAL_N_ELEMENTS( nClassIDs ),
                     "FormComponentPropertyHandler::impl_classifyControlModel_throw: inconsistence" );
 
                 for ( sal_Int32 i = 0; i < nKnownControlTypes; ++i )
@@ -2348,7 +2350,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_getRowSet_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_getRowSet_nothrow: caught an exception!" );
         }
         return xReturn;
     }
@@ -2387,7 +2389,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
         }
     }
 
@@ -2441,7 +2443,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
+                OSL_FAIL( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
             }
             // additional info about what happended
             String sInfo( PcrRes( RID_STR_UNABLETOCONNECT ) );
@@ -2501,7 +2503,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
+            OSL_FAIL("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
         }
     }
 
@@ -2676,7 +2678,7 @@ namespace pcr
         catch (SQLException& e) { aErrorInfo = e; }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );
         }
 
         if ( aErrorInfo.isValid() )
@@ -2768,7 +2770,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: : caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: : caught an exception!" );
         }
         return bChanged;
     }
@@ -2783,8 +2785,9 @@ namespace pcr
 
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
-        // stream ) cannot *currently* be handled by openoffice basic dialogs.
-        bool bHandleNonLink = ( m_eComponentClass == eFormControl );
+        // stream ) only if document is available
+        Reference< XModel > xModel( impl_getContextDocument_nothrow() );
+        bool bHandleNonLink = xModel.is();
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
         DBG_ASSERT(xController.is(), "FormComponentPropertyHandler::impl_browseForImage_nothrow: missing the controller interface on the file picker!");
@@ -2843,7 +2846,6 @@ namespace pcr
         if ( INET_PROT_FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            // 106126 - 2002/12/10 - fs@openoffice.org
             aFileDlg.SetDisplayDirectory( sURL );
 
         _rClearBeforeDialog.clear();
@@ -2897,7 +2899,6 @@ namespace pcr
         if ( INET_PROT_FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            // 106126 - 2002/12/10 - fs@openoffice.org
             aFileDlg.SetDisplayDirectory( sDataSource );
 
         const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
@@ -3139,7 +3140,7 @@ namespace pcr
                 return sValue;
             }
 
-            OSL_ENSURE( false, "ValueListCommandUI::getSQLCommand: unexpected property type!" );
+            OSL_FAIL( "ValueListCommandUI::getSQLCommand: unexpected property type!" );
             return sValue;
         }
 
@@ -3214,7 +3215,7 @@ namespace pcr
                 xCommandUI = new ValueListCommandUI( xComponentProperties );
                 break;
             default:
-                OSL_ENSURE( false, "FormComponentPropertyHandler::OnDesignerClosed: invalid property id!" );
+                OSL_FAIL( "FormComponentPropertyHandler::OnDesignerClosed: invalid property id!" );
                 return false;
             }
 
@@ -3295,7 +3296,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( false, "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
+                OSL_FAIL( "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
             }
         }
         return bHas;
@@ -3339,3 +3340,4 @@ namespace pcr
 } // namespace pcr
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

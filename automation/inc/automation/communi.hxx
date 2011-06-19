@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #define _COMMUNI_HXX
 
 #include <svl/svarray.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/timer.hxx>
 #include <automation/simplecm.hxx>
 
@@ -46,7 +47,7 @@ class MultiCommunicationManager : public CommunicationManager
 public:
     MultiCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
     virtual ~MultiCommunicationManager();
-    virtual sal_Bool StopCommunication();       // Hält alle CommunicationLinks an
+    virtual sal_Bool StopCommunication();
     virtual sal_Bool IsLinkValid( CommunicationLink* pCL );
     virtual sal_uInt16 GetCommunicationLinkCount();
     virtual CommunicationLinkRef GetCommunicationLink( sal_uInt16 nNr );
@@ -59,7 +60,7 @@ protected:
     CommunicationLinkList *ActiveLinks;
     CommunicationLinkList *InactiveLinks;       /// Hier sind die CommunicationLinks drin, die sich noch nicht selbst abgemeldet haben.
                                                 /// allerdings schon ein StopCommunication gekriegt haben, bzw ein ConnectionTerminated
-    virtual void DestroyingLink( CommunicationLink *pCL );  // Link trägt sich im Destruktor aus
+    virtual void DestroyingLink( CommunicationLink *pCL );
 
     sal_Bool bGracefullShutdown;
 };
@@ -76,10 +77,10 @@ public:
     CommunicationManagerClient( sal_Bool bUseMultiChannel = sal_False );
 };
 
-class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public vos::OThread
+class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
 {
 public:
-    CommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
+    CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket );
     virtual ~CommunicationLinkViaSocket();
 
     virtual sal_Bool IsCommunicationError();
@@ -101,8 +102,8 @@ protected:
     virtual sal_Bool ShutdownCommunication();
     sal_uLong nConnectionClosedEventId;
     sal_uLong nDataReceivedEventId;
-    vos::OMutex aMConnectionClosed; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
-    vos::OMutex aMDataReceived;     // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMConnectionClosed;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMDataReceived;      // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     virtual void WaitForShutdown();
 
     DECL_LINK( ShutdownLink, void* );
@@ -133,7 +134,7 @@ private:
     void AddConnection( CommunicationLink *pNewConnection );
 };
 
-class CommunicationManagerServerAcceptThread: public vos::OThread
+class CommunicationManagerServerAcceptThread: public osl::Thread
 {
 public:
     CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, sal_uLong nPort, sal_uInt16 nMaxCon = CM_UNLIMITED_CONNECTIONS );
@@ -145,11 +146,11 @@ protected:
 
 private:
     CommunicationManagerServerViaSocket* pMyServer;
-    vos::OAcceptorSocket *pAcceptorSocket;
+    osl::AcceptorSocket* pAcceptorSocket;
     sal_uLong nPortToListen;
     sal_uInt16 nMaxConnections;
     sal_uLong nAddConnectionEventId;
-    vos::OMutex aMAddConnection;    // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMAddConnection; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
 
@@ -174,7 +175,9 @@ private:
     ByteString aHostToTalk;
     sal_uLong nPortToTalk;
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

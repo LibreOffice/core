@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,9 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -134,7 +132,7 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
             break;
 
         default:
-            DBG_ERROR( "Falsche Button-Nummer!!!" );
+            OSL_FAIL( "Falsche Button-Nummer!!!" );
     }
 }
 
@@ -390,7 +388,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
     }
     else
     {
-        DBG_ERROR( "Wrong Button" );
+        OSL_FAIL( "Wrong Button" );
         return 0;
     }
 
@@ -472,7 +470,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
         }
         else
         {
-            DBG_ERROR( "Wrong Button" );
+            OSL_FAIL( "Wrong Button" );
             return 0;
         }
         pOutSet = new SfxItemSet( rSet );
@@ -496,3 +494,4 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

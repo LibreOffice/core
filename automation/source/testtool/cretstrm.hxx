@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,14 +43,14 @@ public:
     ~CRetStream();
 
     using CmdBaseStream::Read;
-    void Read ( comm_USHORT &nNr ){CmdBaseStream::Read ( nNr );}
-    void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
-//  void Read ( comm_UniChar* &aString, comm_USHORT &nLenInChars ){CmdBaseStream::Read ( aString, nLenInChars );}
+    void Read ( comm_UINT16 &nNr ){CmdBaseStream::Read ( nNr );}
+    void Read ( comm_UINT32 &nNr ){CmdBaseStream::Read ( nNr );}
     virtual void Read ( rtl::OString* &pId ){CmdBaseStream::Read ( pId );}
     void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
-//  new
     void Read( String &aString );
     void Read( SbxValue &aValue );
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,9 +71,6 @@ bool BufferNode::isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const
  *   RESULT
  *  bExist - true if a match found, false otherwise
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -117,9 +115,6 @@ void BufferNode::setReceivedAll()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -152,9 +147,6 @@ void BufferNode::addElementCollector(const ElementCollector* pElementCollector)
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -182,9 +174,6 @@ void BufferNode::removeElementCollector(const ElementCollector* pElementCollecto
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -231,9 +220,6 @@ void BufferNode::setBlocker(const ElementMark* pBlocker)
  *  Because there is only one blocker permited for a BufferNode, so the
  *  old blocker on this BufferNode, if there is one, will be overcasted.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -265,9 +251,6 @@ rtl::OUString BufferNode::printChildren() const
  *
  *   RESULT
  *  result - the information string
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -303,12 +286,6 @@ rtl::OUString BufferNode::printChildren() const
         }
 
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "(" ));
-        /*
-        if (((ElementCollector*)(*ii))->isInternalNotificationSuppressed())
-        {
-            rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*IN-Suppressed* " ));
-        }
-        */
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SecID=" ));
         rc += rtl::OUString::valueOf(((ElementCollector*)(*ii))->getSecurityId());
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
@@ -337,15 +314,12 @@ bool BufferNode::hasAnything() const
  *   RESULT
  *  bExist - true if there is, false otherwise.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    return (m_pBlocker != NULL || m_vElementCollectors.size() > 0);
+    return (m_pBlocker != NULL || !m_vElementCollectors.empty());
 }
 
 bool BufferNode::hasChildren() const
@@ -367,15 +341,12 @@ bool BufferNode::hasChildren() const
  *   RESULT
  *  bExist - true if there is, false otherwise.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    return (m_vChildren.size() > 0);
+    return (!m_vChildren.empty());
 }
 
 std::vector< const BufferNode* >* BufferNode::getChildren() const
@@ -402,9 +373,6 @@ const BufferNode* BufferNode::getFirstChild() const
  *  child - the first child BufferNode, or NULL if there is no child
  *          BufferNode.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -412,7 +380,7 @@ const BufferNode* BufferNode::getFirstChild() const
 {
     BufferNode* rc = NULL;
 
-    if (m_vChildren.size() > 0)
+    if (!m_vChildren.empty())
     {
         rc = (BufferNode*)m_vChildren.front();
     }
@@ -442,9 +410,6 @@ void BufferNode::addChild(const BufferNode* pChild, sal_Int32 nPosition)
  *   NOTES
  *  If the nPosition is -1, then the new child BufferNode is appended
  *  at the end.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -484,9 +449,6 @@ void BufferNode::addChild(const BufferNode* pChild)
  *   NOTES
  *  The new child BufferNode is appended at the end.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -512,9 +474,6 @@ void BufferNode::removeChild(const BufferNode* pChild)
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -551,9 +510,6 @@ sal_Int32 BufferNode::indexOfChild(const BufferNode* pChild) const
  *   RESULT
  *  index - the index of that child BufferNode. If that child BufferNode
  *          is not found, -1 is returned.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -602,9 +558,6 @@ const BufferNode* BufferNode::childAt(sal_Int32 nIndex) const
  *  child - the child BufferNode at index position, or NULL if the index
  *          is out of the range of children.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -648,9 +601,6 @@ const BufferNode* BufferNode::getNextSibling() const
  *   RESULT
  *  sibling - the next sibling BufferNode, or NULL if there is none.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -685,9 +635,6 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
  *   RESULT
  *  bIs -   true if this BufferNode is an ancestor of the pDescendant,
  *          false otherwise.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -741,9 +688,6 @@ bool BufferNode::isPrevious(const BufferNode* pFollowing) const
  *  bIs -   true if this BufferNode is ahead in the tree order, false
  *          otherwise.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -793,9 +737,6 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
  *  3. otherwise, if it has a parent node, the the parent's next sibling
  *     node is;
  *  4. otherwise, no "next" node exists.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -877,9 +818,6 @@ void BufferNode::notifyBranch()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -914,9 +852,6 @@ void BufferNode::notifyAncestor()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -949,15 +884,12 @@ void BufferNode::elementCollectorNotify()
  *  child - the first child BufferNode, or NULL if there is no child
  *          BufferNode.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    if (m_vElementCollectors.size()>0)
+    if (!m_vElementCollectors.empty())
     {
         cssxc::sax::ElementMarkPriority nMaxPriority = cssxc::sax::ElementMarkPriority_MINIMUM;
         cssxc::sax::ElementMarkPriority nPriority;
@@ -1042,9 +974,6 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
  *   RESULT
  *  bExist - true if a match found, false otherwise.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -1109,9 +1038,6 @@ bool BufferNode::isECOfBeforeModifyInAncestorIncluded(sal_Int32 nIgnoredSecurity
  *   RESULT
  *  bExist - true if a match found, false otherwise.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -1156,9 +1082,6 @@ bool BufferNode::isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
  *
  *   RESULT
  *  bExist - true if a match found, false otherwise.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -1211,9 +1134,6 @@ const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
  *  nextChild - the next child BufferNode after the pChild, or NULL if
  *  there is none.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -1259,9 +1179,6 @@ void BufferNode::freeAllChildren()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  30.03.2004 -    the correct the memory leak bug
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -1277,3 +1194,5 @@ void BufferNode::freeAllChildren()
 
     m_vChildren.clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

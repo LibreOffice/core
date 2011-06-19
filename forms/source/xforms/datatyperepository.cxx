@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef FORMS_SOURCE_XFORMS_DATATYPEREPOSITORY_HXX
 #include "datatyperepository.hxx"
-#endif
 #include "datatypes.hxx"
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 #include "frm_resource.hxx"
 #include "frm_strings.hxx"
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -48,6 +43,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace xforms
@@ -210,7 +206,7 @@ namespace xforms
             m_aRepository.begin(),
             m_aRepository.end(),
             aNames.getArray(),
-            ::std::select1st< Repository::value_type >()
+            ::o3tl::select1st< Repository::value_type >()
         );
         return aNames;
     }
@@ -296,3 +292,4 @@ namespace xforms
 } // namespace xforms
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

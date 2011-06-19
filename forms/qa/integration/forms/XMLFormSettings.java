@@ -112,7 +112,7 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
         // store the document
         File tempFile = File.createTempFile( "xmlforms", ".odt" );
         tempFile.deleteOnExit();
-        String fileURL = tempFile.toURL().toExternalForm();
+        String fileURL = tempFile.toURI().toURL().toExternalForm();
         XStorable store = (XStorable)UnoRuntime.queryInterface( XStorable.class,
             m_document.getDocument() );
         store.storeAsURL( fileURL, new PropertyValue[] {} );

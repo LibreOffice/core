@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,11 +26,7 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/ref.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
@@ -37,7 +34,7 @@
 #include <cuires.hrc>
 
 #include "dlgname.hxx"
-#include "defdlgname.hxx" //CHINA001
+#include "defdlgname.hxx"
 #include "dlgname.hrc"
 #include <dialmgr.hxx>
 
@@ -80,9 +77,6 @@ SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String
     }
 }
 
-/* -----------------------------27.02.2002 15:22------------------------------
-
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, EMPTYARG)
 {
     if(aCheckNameHdl.IsSet())
@@ -229,8 +223,9 @@ void SvxMessDialog::SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt )
             break;
 
         default:
-            DBG_ERROR( "Falsche Button-Nummer!!!" );
+            OSL_FAIL( "Falsche Button-Nummer!!!" );
     }
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

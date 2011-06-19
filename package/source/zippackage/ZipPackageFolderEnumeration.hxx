@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/container/XEnumeration.hpp>
-#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _HASH_MAPS_HXX
 #include <HashMaps.hxx>
-#endif
 
 class ZipPackageFolderEnumeration : public cppu::WeakImplHelper2
 <
@@ -46,7 +43,7 @@ protected:
     ContentHash& rContents;
     ContentHash::const_iterator aIterator;
 public:
-    //ZipPackageFolderEnumeration (std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rInput);
+    //ZipPackageFolderEnumeration (boost::unordered_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rInput);
     ZipPackageFolderEnumeration (ContentHash &rInput);
     virtual ~ZipPackageFolderEnumeration( void );
 
@@ -66,3 +63,5 @@ public:
 
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

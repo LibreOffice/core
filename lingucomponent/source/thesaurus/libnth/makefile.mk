@@ -37,9 +37,6 @@ USE_DEFFILE=TRUE
 .IF "$(GUI)"=="UNX"
 MYTHESLIB=-lmythes
 .ENDIF # unx
-.IF "$(GUI)"=="OS2"
-MYTHESLIB=$(SLB)\libmythes.lib
-.ENDIF # os2
 .IF "$(GUI)"=="WNT"
 MYTHESLIB=libmythes.lib
 .ENDIF # wnt
@@ -52,7 +49,7 @@ MYTHESLIB=libmythes.lib
 # --- Files --------------------------------------------------------
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell -DHUNSPELL_STATIC
 .ENDIF
 
 .IF "$(SYSTEM_MYTHES)" != "YES"

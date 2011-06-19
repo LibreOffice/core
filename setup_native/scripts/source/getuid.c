@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -133,3 +134,4 @@ int __lxstat64(int n, const char *path, struct stat64 *buf)
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

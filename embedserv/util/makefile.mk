@@ -74,11 +74,9 @@ SHL1STDLIBS+=\
         $(ATL_LIB)$/atls.lib
 .ENDIF
 
-.IF "$(WINDOWS_VISTA_PSDK)"!=""
 SHL1STDLIBS+=\
         $(ADVAPI32LIB)	\
         $(ATL_LIB)$/atls.lib
-.ENDIF # "$(WINDOWS_VISTA_PSDK)"!=""
 .ENDIF # "$(COM)"=="MSC"
 
 
