@@ -1106,7 +1106,7 @@ void IconChoiceDialog::Start_Impl()
     if ( aTabDlgOpt.Exists() )
     {
         // ggf. Position aus Konfig
-        SetWindowState( ByteString( aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+        SetWindowState(rtl::OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 
         // initiale TabPage aus Programm/Hilfe/Konfig
         nActPage = (sal_uInt16)aTabDlgOpt.GetPageID();

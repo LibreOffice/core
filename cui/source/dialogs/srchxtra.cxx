@@ -45,6 +45,7 @@
 #include "backgrnd.hxx"
 #include <svx/dialogs.hrc> // RID_SVXPAGE_...
 #include <tools/resary.hxx>
+#include <rtl/strbuf.hxx>
 
 // class SvxSearchFormatDialog -------------------------------------------
 
@@ -186,9 +187,10 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
                 pEntry = aAttrLB.SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
             else
             {
-                ByteString sError( "no resource for slot id\nslot = " );
-                sError += ByteString::CreateFromInt32( nSlot );
-                DBG_ERRORFILE( sError.GetBuffer() );
+                rtl::OStringBuffer sError(
+                    RTL_CONSTASCII_STRINGPARAM("no resource for slot id\nslot = "));
+                sError.append(nSlot);
+                DBG_ERRORFILE(sError.getStr());
             }
 
             if ( pEntry )
