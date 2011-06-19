@@ -135,6 +135,25 @@ public:
         rtl_stringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
 
+    /**
+        Constructs a string buffer so that it represents the same
+        sequence of characters as the string argument.
+
+        The initial
+        capacity of the string buffer is <code>16</code> plus length
+
+        @param    value       a character array.
+        @param    length      the number of character which should be copied.
+                              The character array length must be greater or
+                              equal than this value.
+     */
+    OStringBuffer(const sal_Char * value, sal_Int32 length)
+        : pData(NULL)
+        , nCapacity( length + 16 )
+    {
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
+    }
+
     /** Assign to this a copy of value.
      */
     OStringBuffer& operator = ( const OStringBuffer& value )
