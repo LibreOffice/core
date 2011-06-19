@@ -55,8 +55,9 @@ TARFILE_MD5=e61d0364a30146aaa3001296f853b2b9
 PATCH_FILES=libxslt-configure.patch \
             libxslt-win_manifest.patch \
             libxslt-mingw.patch \
-            libxslt-internal-symbols.patch
-
+            libxslt-internal-symbols.patch \
+            libxslt-aix.patch \
+            libxslt-vc10.patch
 
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"
@@ -96,6 +97,9 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
 
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SOLARINCDIR)$/external -I$(SYSBASE)$/usr$/include $(EXTRA_CFLAGS)
@@ -111,9 +115,25 @@ LDFLAGS+:=-L$(SOLARLIBDIR) -L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -l
 .IF "$(COMNAME)"=="sunpro5"
 CPPFLAGS+:=$(ARCH_FLAGS) -xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes
+
+.IF "$(OS)"=="IOS"
+# --with-libxml-prefix actually gives the prefix where bin/xml2-config is looked for,
+# and we want it to find our dummy one that prints the LIBXML_CFLAGS and LIBXML_LIBS that
+# the configure script found out.
+CONFIGURE_FLAGS=--disable-shared --with-libxml-prefix=$(SRC_ROOT)/$(PRJNAME)/dummy
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
+
+CONFIGURE_FLAGS+=--enable-ipv6=no --without-crypto --without-python --with-sax1=yes
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -125,6 +145,10 @@ OUT2INC=libxslt$/*.h
 OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
 OUT2LIB+=libexslt$/.libs$/libexslt.*.dylib
 OUT2BIN+=xsltproc$/.libs$/xsltproc
+OUT2BIN+=xslt-config
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID" 
+OUT2LIB+=libxslt$/.libs$/libxslt.a
+OUT2LIB+=libexslt$/.libs$/libexslt.a
 OUT2BIN+=xslt-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"

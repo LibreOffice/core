@@ -1,5 +1,5 @@
---- misc/boost_1_39_0/boost/function/function_base.hpp
-+++ misc/build/boost_1_39_0/boost/function/function_base.hpp
+--- misc/boost_1_44_0/boost/function/function_base.hpp
++++ misc/build/boost_1_44_0/boost/function/function_base.hpp
 @@ -2,6 +2,7 @@
  
  //  Copyright Douglas Gregor 2001-2006
@@ -8,7 +8,7 @@
  //  Use, modification and distribution is subject to the Boost Software License, Version 1.0.
  //  (See accompanying file LICENSE_1_0.txt or copy at
  //  http://www.boost.org/LICENSE_1_0.txt)
-@@ -41,6 +42,13 @@
+@@ -44,6 +45,13 @@
  #   pragma warning( disable : 4127 ) // "conditional expression is constant"
  #endif       
  
@@ -22,7 +22,7 @@
  // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
  #ifdef BOOST_NO_STD_TYPEINFO
  // Embedded VC++ does not have type_info in namespace std
-@@ -303,15 +311,15 @@
+@@ -314,15 +322,15 @@
          {
            if (op == clone_functor_tag || op == move_functor_tag) {
              const functor_type* in_functor = 
@@ -39,5 +39,5 @@
 -            reinterpret_cast<functor_type*>(&out_buffer.data)->~Functor();
 +            static_cast<functor_type*>(static_cast<void*>(&out_buffer.data))->~Functor();
            } else if (op == check_functor_type_tag) {
-             const BOOST_FUNCTION_STD_NS::type_info& check_type 
+             const detail::sp_typeinfo& check_type 
                = *out_buffer.type.type;

@@ -55,6 +55,17 @@ diff -ur misc/build/cairo-1.8.0.org/build/Makefile.win32.features misc/build/cai
 -CAIRO_HAS_SVG_SURFACE=1
 +CAIRO_HAS_SVG_SURFACE=0
  CAIRO_HAS_TEST_SURFACES=0
+--- misc/build/cairo-1.8.0.org/build/config.sub
++++ misc/build/cairo-1.8.0/build/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
 diff -ur misc/build/cairo-1.8.0.org/configure misc/build/cairo-1.8.0/configure
 --- misc/build/cairo-1.8.0.org/configure	2008-09-26 01:57:30.000000000 +0300
 +++ misc/build/cairo-1.8.0/configure	2008-11-04 22:21:26.000000000 +0200
@@ -186,6 +197,15 @@ diff -ur misc/build/cairo-1.8.0.org/configure misc/build/cairo-1.8.0/configure
  
  
  { echo "$as_me:$LINENO: checking for X" >&5
+@@ -31723,7 +31723,7 @@
+ 
+   if test "x$png_REQUIRES" = x; then
+     # libpng13 is GnuWin32's libpng-1.2.8 :-(
+-    for l in libpng12 libpng13 libpng10 ; do
++    for l in libpng12 libpng13 libpng14 libpng10 ; do
+       if $PKG_CONFIG --exists $l ; then
+         png_REQUIRES=$l
+         use_png=yes
 @@ -34097,7 +34129,7 @@
  
      # The ps backend requires zlib.
@@ -249,3 +269,17 @@ diff -ur misc/build/cairo-1.8.0.org/src/cairo-ps-surface.c misc/build/cairo-1.8.
  #include <errno.h>
  
  #define DEBUG_PS 0
+--- misc/build/cairo-1.8.0.org/src/cairo-output-stream.c
++++ misc/build/cairo-1.8.0/src/cairo-output-stream.c
+@@ -281,7 +281,11 @@
+ 	d = 0.0;
+ 
+     locale_data = localeconv ();
++#ifdef __ANDROID__
++    decimal_point = ".";
++#else
+     decimal_point = locale_data->decimal_point;
++#endif
+     decimal_point_len = strlen (decimal_point);
+ 
+     assert (decimal_point_len != 0);

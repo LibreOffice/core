@@ -1,0 +1,92 @@
+Index: /trunk/boost/unordered/unordered_set.hpp
+===================================================================
+--- misc/boost_1_44_0/boost/unordered/unordered_set.hpp	(revision 60754)
++++ misc/build/boost_1_44_0/boost/unordered/unordered_set.hpp	(revision 68445)
+@@ -155,4 +155,9 @@
+ 
+ #if !defined(BOOST_NO_RVALUE_REFERENCES)
++        unordered_set(unordered_set const& other)
++          : table_(other.table_)
++        {
++        }
++
+         unordered_set(unordered_set&& other)
+           : table_(other.table_, boost::unordered_detail::move_tag())
+@@ -163,4 +168,10 @@
+           : table_(other.table_, a, boost::unordered_detail::move_tag())
+         {
++        }
++
++        unordered_set& operator=(unordered_set const& x)
++        {
++            table_ = x.table_;
++            return *this;
+         }
+ 
+@@ -652,4 +663,9 @@
+ 
+ #if !defined(BOOST_NO_RVALUE_REFERENCES)
++        unordered_multiset(unordered_multiset const& other)
++          : table_(other.table_)
++        {
++        }
++
+         unordered_multiset(unordered_multiset&& other)
+           : table_(other.table_, boost::unordered_detail::move_tag())
+@@ -660,4 +676,10 @@
+           : table_(other.table_, a, boost::unordered_detail::move_tag())
+         {
++        }
++
++        unordered_multiset& operator=(unordered_multiset const& x)
++        {
++            table_ = x.table_;
++            return *this;
+         }
+ 
+Index: /trunk/boost/unordered/unordered_map.hpp
+===================================================================
+--- misc/boost_1_44_0/boost/unordered/unordered_map.hpp	(revision 60754)
++++ misc/build/boost_1_44_0/boost/unordered/unordered_map.hpp	(revision 68445)
+@@ -161,4 +161,9 @@
+ 
+ #if !defined(BOOST_NO_RVALUE_REFERENCES)
++        unordered_map(unordered_map const& other)
++          : table_(other.table_)
++        {
++        }
++
+         unordered_map(unordered_map&& other)
+           : table_(other.table_, boost::unordered_detail::move_tag())
+@@ -169,4 +174,10 @@
+           : table_(other.table_, a, boost::unordered_detail::move_tag())
+         {
++        }
++
++        unordered_map& operator=(unordered_map const& x)
++        {
++            table_ = x.table_;
++            return *this;
+         }
+ 
+@@ -706,4 +717,9 @@
+ 
+ #if !defined(BOOST_NO_RVALUE_REFERENCES)
++        unordered_multimap(unordered_multimap const& other)
++          : table_(other.table_)
++        {
++        }
++
+         unordered_multimap(unordered_multimap&& other)
+           : table_(other.table_, boost::unordered_detail::move_tag())
+@@ -714,4 +730,10 @@
+           : table_(other.table_, a, boost::unordered_detail::move_tag())
+         {
++        }
++
++        unordered_multimap& operator=(unordered_multimap const& x)
++        {
++            table_ = x.table_;
++            return *this;
+         }
+ 

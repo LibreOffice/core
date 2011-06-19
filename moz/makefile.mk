@@ -35,6 +35,7 @@ TARGET=ooo_mozab
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+
 # ----- pkg-config start -------
 .INCLUDE .IGNORE : pkgroot.mk
 .IF "$(PKGCONFIG_ROOT)"!=""
@@ -51,6 +52,11 @@ LD_LIBRARY_PATH!:=$(LD_LIBRARY_PATH)$(PATH_SEPERATOR)$(PKGCONFIG_ROOT)$/lib
 # reduce prerequisites by disabling mozilla binary
 DISABLE_MOZ_EXECUTABLE=TRUE
 .EXPORT : DISABLE_MOZ_EXECUTABLE
+
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.EXPORT : LDFLAGS
+.ENDIF
 
 .IF "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 ## hmm... rather gcc specific switches...
@@ -87,7 +93,9 @@ PATCH_FILES = \
     patches/respect_disable_pango.patch \
     patches/arm_build_fix.patch \
     patches/link_fontconfig.patch \
-    patches/brokenmakefile.patch
+    patches/brokenmakefile.patch \
+    patches/aix_build_fix.patch \
+    patches/libpr0n_build_fix.patch
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
@@ -137,10 +145,6 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
                 --disable-pango \
                 --enable-extensions="pref"
 
-#.IF "$(GUI)"!="WNT"
-#MOZILLA_CONFIGURE_FLAGS += --enable-system-cairo
-#.ENDIF
-
 #disable profilelocking to share profile with mozilla
 #disable activex and activex-scripting to remove the dependence of Microsoft_SDK\src\mfc\atlbase.h
 #disable gnomevfs to remove the needed of gnome develop files
@@ -181,10 +185,14 @@ CXXFLAGS+=-m64
 .ENDIF
 .EXPORT : CXXFLAGS
 .ENDIF          # "$(COMNAME)"=="sunpro5"
-.IF "$(COM)$(OS)$(CPUNAME)" == "GCCLINUXPOWERPC64"
-CXXFLAGS:=-mminimal-toc
-.EXPORT : CXXFLAGS
 .ENDIF
+
+.IF "$(COM)" == "GCC"
+CXXFLAGS+=-fpermissive
+.IF "$(OS)$(CPUNAME)" == "LINUXPOWERPC64"
+CXXFLAGS+=-mminimal-toc
+.ENDIF
+.EXPORT : CXXFLAGS
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"

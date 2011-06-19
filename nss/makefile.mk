@@ -41,10 +41,10 @@ all:
     @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
 .ENDIF	
 
-TARFILE_NAME=nss-3.12.6-with-nspr-4.8.4
-TARFILE_MD5=b92261a5679276c400555004937af965
-TARFILE_ROOTDIR=nss-3.12.6
-PATCH_FILES=nss.patch
+TARFILE_NAME=nss-3.12.8-with-nspr-4.8.6
+TARFILE_MD5=71474203939fafbe271e1263e61d083e
+TARFILE_ROOTDIR=nss-3.12.8
+PATCH_FILES=nss.patch nss.aix.patch
 
 .IF "$(OS)"=="MACOSX"
 PATCH_FILES+=nss_macosx.patch
@@ -143,9 +143,6 @@ moz_build:=$(shell cygpath -p $(MOZILLABUILD))
 #OS_TARGET= WINNT
 OS_TARGET=WIN95
 .EXPORT : OS_TARGET
-
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
 
 #To build nss one has to call "make nss_build_all" in 
 #mozilla/security/nss

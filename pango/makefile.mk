@@ -36,8 +36,8 @@ TARGET=so_pango
 
 .IF "$(SYSTEM_PANGO)" == "YES"
 all:
-    @echo "An already available installation of pango should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of pango should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -56,18 +56,26 @@ PATCH_FILES=pango-1.28.3.patch
 CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                 .$/configure --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
-                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 ./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) --disable-dependency-tracking --disable-doc-cross-references \
+                 CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
+                 CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  LDFLAGS="$(CONFIGURE_LDFLAGS)" \
-                 CAIRO_CFLAGS="-I$(SOLARINCDIR) -I$(SOLARINCDIR)$/cairo" \
+                 CAIRO_CFLAGS="-I$(SOLARINCDIR) -I$(SOLARINCDIR)/cairo" \
                  CAIRO_LIBS="-lcairo" \
-                 GLIB_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 GLIB_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \
                  GLIB_LIBS="-lgthread-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 -lintl"
-CONFIGURE_FLAGS=--with-included-modules=yes
+CONFIGURE_FLAGS=--with-included-modules=yes $(eq,$(VERBOSE),$(NULL) --enable-silent-rules --disable-silent-rules)
 CONFIGURE_FLAGS+= CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS)"
 CONFIGURE_ACTION+="--without-x"
 
-BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
+.IF "$(VERBOSE)"!=""
+VFLAG=V=1
+.ENDIF
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) $(VFLAG)
 BUILD_DIR=$(CONFIGURE_DIR)
 
 EXTRPATH=LOADER
@@ -118,9 +126,9 @@ OUT2LIB+=pango/pango-1.0.lib
 OUT2LIB+=pango/pangocairo-1.0.lib
 OUT2LIB+=pango/pangowin32-1.0.lib
 
-OUT2BIN+=pango/libpango-1.0-0.dll
-OUT2BIN+=pango/libpangocairo-1.0-0.dll
-OUT2BIN+=pango/libpangowin32-1.0-0.dll
+OUT2BIN+=pango/pangolo.dll
+OUT2BIN+=pango/pangocairolo.dll
+OUT2BIN+=pango/pangowin32lo.dll
 OUT2BIN+=pango/querymodules.exe
 
 OUT2INC+=pango/pango.h

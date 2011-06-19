@@ -85,6 +85,9 @@ CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no CPPFLAGS="$(EXTRA_CDEFS)"
 CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS) $(EXTRA_CDEFS)"
 .ENDIF # "$(EXTRA_CDEFS)"!=""
 .ENDIF # "$(SYSBASE)"!=""
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -92,7 +95,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-z,noexecstack
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)$(COM)"=="SOLARISC52"
@@ -120,14 +123,15 @@ pixman_CFLAGS+=-fPIC
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-.IF "$(CPUNAME)"=="X86_64"
-# static builds tend to fail on 64bit
-CONFIGURE_FLAGS=--enable-static=no --enable-shared=yes
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
 .ELSE
-# use static lib to avoid linking problems with older system pixman libs
-CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no
+CONFIGURE_FLAGS=--disable-static
 .ENDIF
 CONFIGURE_FLAGS+=CFLAGS="$(pixman_CFLAGS)"
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -148,12 +152,10 @@ OUT2LIB+=pixman$/.libs$/*.a
 .ELSE
 OUT2LIB+=pixman$/release$/*.lib
 .ENDIF
-.ELSE
-.IF "$(CPUNAME)"=="X86_64"
-OUT2LIB+=pixman$/.libs$/libpixman-1.so
-.ELSE
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
 OUT2LIB+=pixman$/.libs$/libpixman-1.a
-.ENDIF
+.ELSE
+OUT2LIB+=pixman$/.libs$/libpixman-1.so*
 .ENDIF
 
 # --- Targets ------------------------------------------------------

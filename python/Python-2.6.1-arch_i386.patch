@@ -1,0 +1,11 @@
+--- misc/Python-2.6.1/configure	2010-05-06 20:24:36.000000000 +0200
++++ misc/build/Python-2.6.1/configure	2010-05-06 20:25:17.000000000 +0200
+@@ -4653,7 +4653,7 @@
+ 	    if test "${enable_universalsdk}"; then
+ 		UNIVERSAL_ARCH_FLAGS=""
+ 	        if test "$UNIVERSAL_ARCHS" = "32-bit" ; then
+-		   UNIVERSAL_ARCH_FLAGS="-arch ppc -arch i386"
++		   UNIVERSAL_ARCH_FLAGS="-arch i386"
+ 		   ARCH_RUN_32BIT=""
+ 
+ 	         elif test "$UNIVERSAL_ARCHS" = "64-bit" ; then

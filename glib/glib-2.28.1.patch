@@ -39,3 +39,115 @@
  #include "gthreadprivate.h"
  
  /**
+--- misc/glib-2.28.1/glib/gconvert.c
++++ misc/build/glib-2.28.1/glib/gconvert.c
+@@ -58,13 +58,6 @@
+ 
+ #include "glibintl.h"
+ 
+-#if defined(USE_LIBICONV_GNU) && !defined (_LIBICONV_H)
+-#error GNU libiconv in use but included iconv.h not from libiconv
+-#endif
+-#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H)
+-#error GNU libiconv not in use but included iconv.h is from libiconv
+-#endif
+-
+ 
+ /**
+  * SECTION:conversions
+
+--- misc/glib-2.28.1/configure
++++ misc/build/glib-2.28.1/configure
+@@ -7097,6 +7097,7 @@
+ fi
+ 
+ 
++if false; then
+ # Need suitable python path for greport
+ 
+ 
+@@ -7325,6 +7326,7 @@
+ 
+ 
+ 
++fi
+ 
+ 
+ 
+@@ -7988,6 +7988,7 @@
+ CONFIG_STATUS_DEPENDENCIES='$(top_srcdir)/po/LINGUAS'
+ 
+ 
++ if false; then
+    for ac_header in locale.h
+ do :
+   ac_fn_c_check_header_mongrel "$LINENO" "locale.h" "ac_cv_header_locale_h" "$ac_includes_default"
+@@ -8701,6 +8701,8 @@
+ 
+ LIBS="$INTLLIBS $LIBS"
+ 
++fi
++
+ GETTEXT_PACKAGE=glib20
+ 
+ 
+--- misc/glib-2.28.1/Makefile.in
++++ misc/build/glib-2.28.1/Makefile.in
+@@ -422,7 +422,7 @@
+ 	gio-2.0-uninstalled.pc.in gio-unix-2.0-uninstalled.pc.in
+ TEST_PROGS = 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio tests
+ DIST_SUBDIRS = $(SUBDIRS) build
+ bin_SCRIPTS = glib-gettextize
+ AM_CPPFLAGS = \
+--- misc/glib-2.28.1/glib/gi18n.h
++++ misc/build/glib-2.28.1/glib/gi18n.h
+@@ -20,15 +20,10 @@
+ #ifndef __G_I18N_H__
+ #define __G_I18N_H__
+ 
+-#include <glib.h>
+-
+-#include <libintl.h>
+-#include <string.h>
+-
+-#define  _(String) gettext (String)
+-#define Q_(String) g_dpgettext (NULL, String, 0)
+-#define N_(String) (String)
+-#define C_(Context,String) g_dpgettext (NULL, Context "\004" String, strlen (Context) + 1)
++#define _(String) (String)
++#define Q_(String) (String)
++#define N_(String) (String)
++#define C_(Context,String) (String)
+ #define NC_(Context, String) (String)
+ 
+ #endif  /* __G_I18N_H__ */
+--- misc/glib-2.28.1/gio/tests/gsettings.c
++++ misc/build/glib-2.28.1/gio/tests/gsettings.c
+@@ -1,7 +1,9 @@
++#include "config.h"
++
+ #include <stdlib.h>
+ #include <locale.h>
+-#include <libintl.h>
+ #include <gio/gio.h>
++#include "glibintl.h"
+ #include <gstdio.h>
+ #define G_SETTINGS_ENABLE_BACKEND
+ #include <gio/gsettingsbackend.h>
+--- misc/glib-2.28.1/gio/tests/gschema-compile.c
++++ misc/build/glib-2.28.1/gio/tests/gschema-compile.c
+@@ -1,8 +1,10 @@
++#include "config.h"
++
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <locale.h>
+-#include <libintl.h>
+ #include <gio/gio.h>
++#include "glibintl.h"
+ #include <gstdio.h>
+ 
+ typedef struct {

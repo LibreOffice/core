@@ -109,6 +109,9 @@ cairo_CPPFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
 CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 cairo_CPPFLAGS+=$(EXTRA_CDEFS)
 cairo_LDFLAGS+=$(EXTRA_LINKFLAGS)
 BUILD_ACTION=$(GNUMAKE)
@@ -120,7 +123,7 @@ OUT2INC+=src$/cairo-quartz.h
 .ELSE
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-cairo_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
+cairo_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-z,noexecstack
 .ELIF "$(OS)$(COM)"=="SOLARISC52"
 cairo_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
@@ -144,8 +147,32 @@ cairo_CFLAGS+=-march=i486
 .ENDIF
 
 CONFIGURE_DIR=
+
+.IF "$(OS)"=="ANDROID"
+# No pkg-config in the Android NDK
+CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
+.ELSE
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-xlib --enable-ft --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+.ENDIF
+
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static --enable-xlib
+.ENDIF
+
+.IF "$(OS)"=="ANDROID"
+CONFIGURE_FLAGS+=--disable-ft
+.ELSE
+CONFIGURE_FLAGS+=--enable-ft
+.ENDIF
+
+CONFIGURE_FLAGS+=--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -167,6 +194,11 @@ OUT2INC+=src$/cairo-xlib.h \
 # We include paths to this module also in LDFLAGS/CFLAGS to guarantee search order.
 # However pixman_* vars need to be also set for configure to work properly on all platforms.
 CONFIGURE_FLAGS+=pixman_CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc" pixman_LIBS="-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib -lpixman-1"
+.ENDIF
+
+.IF "$(debug)"!=""
+cairo_CFLAGS+=-g
+CONFIGURE_FLAGS+= STRIP=" "
 .ENDIF
 
 CONFIGURE_FLAGS+=CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc $(cairo_CFLAGS)" LDFLAGS="-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib $(cairo_LDFLAGS)" CPPFLAGS="$(cairo_CPPFLAGS)"
@@ -196,6 +228,8 @@ OUT2BIN+=src$/.libs$/*.dll
 OUT2LIB+=src$/release$/*.lib
 OUT2BIN+=src$/release$/*.dll
 .ENDIF
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+OUT2LIB+=src$/.libs$/libcairo-1.a
 .ELSE
 OUT2LIB+=src$/.libs$/libcairo.so*
 .ENDIF

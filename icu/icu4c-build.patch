@@ -1,0 +1,212 @@
+--- misc/icu/source/config.sub
++++ misc/build/icu/source/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+--- misc/icu/source/configure
++++ misc/build/icu/source/configure
+@@ -5438,7 +5438,7 @@
+ 	else
+ 		icu_cv_host_frag=mh-linux-va
+ 	fi ;;
+-*-*-linux*|*-pc-gnu) icu_cv_host_frag=mh-linux ;;
++*-*-linux*|*-pc-gnu|*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
+ *-*-cygwin|*-*-mingw32)
+ 	if test "$GCC" = yes; then
+ 		cat >conftest.$ac_ext <<_ACEOF
+@@ -7429,6 +7429,9 @@
+ # Check to see if genccode can generate simple assembly.
+ GENCCODE_ASSEMBLY=
+ case "${host}" in
++*-linux-androideabi)
++    GENCCODE_ASSEMBLY="-a gcc-android"
++    ;;
+ *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
+     if test "$GCC" = yes; then
+         # We're using gcc, and the simple -a gcc command line works for genccode
+@@ -11115,6 +1115,10 @@
+     # wchar_t can be used
+     CHECK_UTF16_STRING_RESULT="available"
+     ;;
++*-*-androideabi*)
++    # no UTF-16 strings thanks, I think, this is to avoid the -std=c++0x which causes trouble with uint64_t
++    CHECK_UTF16_STRING_RESULT="nope"
++    ;;
+ *)
+     ;;
+ esac
+--- misc/icu/source/tools/toolutil/pkg_genc.c
++++ misc/build/icu/source/tools/toolutil/pkg_genc.c
+@@ -145,6 +145,28 @@
+ 
+         ".long ","",HEX_0X
+     },
++    {"gcc-android",
++	"\t.arch armv5te\n"
++	"\t.fpu softvfp\n"
++	"\t.eabi_attribute 20, 1\n"
++	"\t.eabi_attribute 21, 1\n"
++	"\t.eabi_attribute 23, 3\n"
++	"\t.eabi_attribute 24, 1\n"
++	"\t.eabi_attribute 25, 1\n"
++	"\t.eabi_attribute 26, 2\n"
++	"\t.eabi_attribute 30, 6\n"
++	"\t.eabi_attribute 18, 4\n"
++	"\t.file \"%s.s\"\n"
++	"\t.global %s\n"
++	"\t.section .rodata\n"
++	"\t.align 2\n"
++	"\t.type %s, %%object\n"
++	"%s:\n",
++
++	"\t.word ",
++	"\t.section .note.GNU-stack,\"\",%%progbits\n",
++	HEX_0X
++    },
+     {"sun",
+         "\t.section \".rodata\"\n"
+         "\t.align   8\n"
+--- misc/icu/source/tools/pkgdata/pkgdata.cpp
++++ misc/build/icu/source/tools/pkgdata/pkgdata.cpp
+@@ -97,7 +97,7 @@
+ #endif
+ 
+ #define LARGE_BUFFER_MAX_SIZE 2048
+-#define SMALL_BUFFER_MAX_SIZE 512
++#define SMALL_BUFFER_MAX_SIZE 2048
+ 
+ static void loadLists(UPKGOptions *o, UErrorCode *status);
+ 
+--- misc/icu/source/common/putil.c	2010-09-29 20:37:22.000000000 +0200
++++ misc/build/icu/source/common/putil.c	2011-03-15 10:58:44.054592942 +0100
+@@ -52,7 +52,7 @@
+ Poorly upgraded Solaris machines can't have this defined.
+ Cleanly installed Solaris can use this #define.
+ */
+-#if !defined(_XOPEN_SOURCE_EXTENDED) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ >= 199901L)
++#if !defined(_XOPEN_SOURCE_EXTENDED) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L)
+ #define _XOPEN_SOURCE_EXTENDED 1
+ #endif
+ 
+--- misc/icu/source/common/stringpiece.cpp	2010-09-29 20:37:20.000000000 +0200
++++ misc/build/icu/source/common/stringpiece.cpp	2011-03-15 10:57:24.722045561 +0100
+@@ -71,7 +71,7 @@
+  * Visual Studios 9.0.
+  * Cygwin with MSVC 9.0 also complains here about redefinition.
+  */
+-#if (!defined(_MSC_VER) || (_MSC_VER >= 1500)) && !defined(CYGWINMSVC)
++#if (!defined(_MSC_VER) && !defined(CYGWINMSVC))
+ const int32_t StringPiece::npos;
+ #endif
+ 
+--- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
++++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
+@@ -25,7 +25,7 @@
+ SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
+ 
+ ## Compiler switches to embed a library name and version information
+-LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
++LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @executable_path/$(notdir $(MIDDLE_SO_TARGET))
+ 
+ ## Compiler switch to embed a runtime search path
+ LD_RPATH=
+@@ -41,10 +41,6 @@
+ ## Non-shared intermediate object suffix
+ STATIC_O = ao
+ 
+-## Override Versioned target for a shared library.
+-FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
+-MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
+-
+ ## Compilation rules
+ %.$(STATIC_O): $(srcdir)/%.c
+ 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+@@ -76,16 +72,10 @@
+ 
+ ## Versioned libraries rules
+ 
+-%.$(SO_TARGET_VERSION_MAJOR).$(SO): %.$(SO_TARGET_VERSION).$(SO)
++%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+ 	$(RM) $@ && ln -s ${<F} $@
+-%.$(SO): %.$(SO_TARGET_VERSION_MAJOR).$(SO)
+-	$(RM) $@ && ln -s ${*F}.$(SO_TARGET_VERSION).$(SO) $@
+-
+-# tzcode option
+-TZORIG_EXTRA_CFLAGS=-DSTD_INSPIRED
+-
+-# genren opts
+-GENREN_PL_OPTS=-x Mach-O -n '-g' -p '| c++filt'
++%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
++	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
+ 
+ ## Remove shared library 's'
+ STATIC_PREFIX_WHEN_USED = 
+--- misc/icu/source/config/mh-linux	2010-09-29 20:37:36.000000000 +0200
++++ misc/build/icu/source/config/mh-linux	2011-03-15 10:56:26.653056004 +0100
+@@ -20,6 +20,11 @@
+ LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN
+ LD_RPATH_PRE = -Wl,-rpath,
+ 
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++## (incl. the C++ runtime libs potentially found in the URE lib dir):
++ENABLE_RPATH=YES
++RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'
++
+ ## These are the library specific LDFLAGS
+ LDFLAGSICUDT=-nodefaultlibs -nostdlib
+ 
+--- misc/icu/source/config/mh-solaris	2010-09-29 20:37:36.000000000 +0200
++++ misc/build/icu/source/config/mh-solaris	2011-03-15 11:01:04.370475053 +0100
+@@ -36,17 +36,21 @@
+ 
+ ## Commands to link
+ ## For Sun Workshop, use CC to link to bring in C++ runtime
+-LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
+-LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
++LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
++LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -norunpath
+ 
+ ## Commands to make a shared library
+ SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
+-SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G
++SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G -norunpath
+ 
+ ## Compiler switch to embed a runtime search path
+ LD_RPATH=       -R'$$'ORIGIN
+ LD_RPATH_PRE=   -R
+ 
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++ENABLE_RPATH=YES
++RPATHLDFLAGS=${LD_RPATH}'$$ORIGIN'
++
+ #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
+ 
+ ## Compiler switch to embed a library name
+--- misc/icu/source/layout/ArabicShaping.cpp	2010-09-29 20:38:38.000000000 +0200
++++ misc/build/icu/source/layout/ArabicShaping.cpp	2011-03-15 10:56:26.655056238 +0100
+@@ -79,7 +79,6 @@
+ #define markFeatureMask 0x00040000UL
+ #define mkmkFeatureMask 0x00020000UL
+ 
+-#define NO_FEATURES   0
+ #define ISOL_FEATURES (isolFeatureMask | ligaFeatureMask | msetFeatureMask | markFeatureMask | ccmpFeatureMask | rligFeatureMask | caltFeatureMask | dligFeatureMask | cswhFeatureMask | cursFeatureMask | kernFeatureMask | mkmkFeatureMask)
+ 
+ #define SHAPE_MASK 0xF0000000UL
+@@ -174,11 +173,7 @@
+         LEUnicode c = chars[in];
+         ShapeType t = getShapeType(c);
+ 
+-        if (t == ST_NOSHAPE_NONE) {
+-            glyphStorage.setAuxData(out, NO_FEATURES, success);
+-        } else {
+             glyphStorage.setAuxData(out, ISOL_FEATURES, success);
+-        }
+ 
+         if ((t & MASK_TRANSPARENT) != 0) {
+             continue;

@@ -43,7 +43,9 @@ all:
 
 TARFILE_NAME=curl-7.19.7
 TARFILE_MD5=ecb2e37e45c9933e2a963cabe03670ab
-PATCH_FILES=curl-7.19.7.patch
+PATCH_FILES=\
+    curl-7.19.7.patch \
+    curl-aix.patch
 
 .IF "$(GUI)"=="WNT"
     PATCH_FILES+=curl-7.19.7_win.patch
@@ -70,16 +72,33 @@ curl_CFLAGS+:=$(ARCH_FLAGS)
 curl_LDFLAGS+:=$(ARCH_FLAGS)
 .ENDIF
 
+.IF "$(OS)"=="AIX"
+curl_LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
+
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
+CONFIGURE_FLAGS+= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl.a
+.ELSE
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).4
+.ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 
 
@@ -102,8 +121,6 @@ BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
 OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.a
 .ELSE
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
 
 .IF "$(CCNUMVER)" > "001399999999"
 EXCFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
@@ -112,10 +129,17 @@ EXCFLAGS="/EHsc /YX"
 .ENDIF
 
 BUILD_DIR=.$/lib
-.IF "$(debug)"==""
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
+
+.IF "$(CPU)" == "I"
+MACHINE=X86
 .ELSE
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
+MACHINE=X64
+.ENDIF
+
+.IF "$(debug)"==""
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
+.ELSE
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
 .ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
@@ -123,22 +147,6 @@ OUT2LIB=$(BUILD_DIR)$/libcurl.lib
 
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
-
-.IF "$(GUI)"=="OS2"
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
-
-BUILD_DIR=.$/lib
-.IF "$(debug)"==""
-BUILD_ACTION=make -f Makefile.os2
-.ELSE
-BUILD_ACTION=make -f Makefile.os2
-.ENDIF
-
-OUT2BIN=$(BUILD_DIR)$/libcurl.dll
-OUT2LIB=$(BUILD_DIR)$/libcurl.lib
-
-.ENDIF			# "$(GUI)"=="OS2"
 
 OUT2INC= \
     include$/curl$/easy.h  			\

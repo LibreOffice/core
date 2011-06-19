@@ -7,14 +7,13 @@ PYVERSION=$(PYMAJOR).$(PYMINOR).$(PYMICRO)
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "MACOSX"
-PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dylib
+PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).a
+PYTHONLIB=-F$(SOLARLIBDIR) -framework OOoPython
+CFLAGS+=-I$(SOLARLIBDIR)/OOoPython.framework/Versions/$(PYMAJOR).$(PYMINOR)/include/python$(PYMAJOR).$(PYMINOR)
 .ELSE
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).so.1.0
-.ENDIF
 PYTHONLIB=-lpython$(PYMAJOR).$(PYMINOR)
-.ELIF "$(GUI)" == "OS2"
-PY_FULL_DLL_NAME=python$(PYMAJOR)$(PYMINOR).dll
-PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
+.ENDIF
 .ELSE
 .IF "$(COM)" == "GCC"
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dll

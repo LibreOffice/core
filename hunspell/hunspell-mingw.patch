@@ -1,5 +1,5 @@
---- misc/hunspell-1.2.9/src/tools/hunspell.cxx	2010-02-27 23:37:14.000000000 +0900
-+++ misc/build/hunspell-1.2.9/src/tools/hunspell.cxx	2010-04-25 07:57:39.233875000 +0900
+--- misc/hunspell-1.3.1/src/tools/hunspell.cxx	2010-02-27 23:37:14.000000000 +0900
++++ misc/build/hunspell-1.3.1/src/tools/hunspell.cxx	2010-04-25 07:57:39.233875000 +0900
 @@ -27,7 +27,9 @@
  
  #ifdef WIN32

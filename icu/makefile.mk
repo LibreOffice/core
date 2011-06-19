@@ -37,26 +37,23 @@ TARGET=so_icu
 
 .INCLUDE :	icuversion.mk
 
-.IF "$(ICU_MICRO)"!="0"
-TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)_$(ICU_MICRO)-src
-TARFILE_MD5=2f6ecca935948f7db92d925d88d0d078
-.ELSE
-TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)-src
-TARFILE_MD5=
-.ENDIF
+TARFILE_NAME=icu4c-4_4_2-src
+TARFILE_MD5=314e582264c36b3735466c522899aa07
 TARFILE_ROOTDIR=icu
 
-PATCH_FILES=${TARFILE_NAME}.patch icu-mp.patch
+#icu4c.8320.freeserif.crash.patch, see
+#http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
 
-# ADDITIONAL_FILES=
+PATCH_FILES=\
+    icu4c-build.patch \
+    icu4c-rpath.patch \
+    icu4c.8320.freeserif.crash.patch \
+    icu4c-aix.patch \
+    icu4c-4_4_2-wchar_t.patch \
+    icu4c-warnings.patch \
+    icu4c-escapespace.patch
 
 .IF "$(GUI)"=="UNX"
-.IF "$(COMNAME)"=="sunpro5"
-#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-#CC:=$(COMPATH)$/bin$/cc
-#CXX:=$(COMPATH)$/bin$/CC
-#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-.ENDIF          # "$(COMNAME)"=="sunpro5"
 
 .IF "$(SYSBASE)"!=""
 icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
@@ -78,20 +75,37 @@ CC:=gcc $(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
 
-icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+icu_CFLAGS+=-O $(ARCH_FLAGS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
-icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
-
-# remove conversion and transliteration data to reduce binary size.
-CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
+icu_CXXFLAGS+=-O $(ARCH_FLAGS)
 
 # until someone introduces SOLARIS 64-bit builds
 .IF "$(OS)"=="SOLARIS"
 DISABLE_64BIT=--enable-64bit-libs=no
 .ENDIF			# "$(OS)"=="SOLARIS"
 
+.IF "$(OS)"=="AIX"
+DISABLE_64BIT=--enable-64bit-libs=no
+LDFLAGSADD+=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF                  # "$(OS)"=="AIX"
+
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
 LDFLAGSADD += -Wl,--hash-style=both
+.ENDIF
+
+.IF "$(OS)"=="IOS"
+# Let's try this...
+icu_CFLAGS+=-DUCONFIG_NO_FILE_IO
+.ENDIF
+
+.IF "$(OS)"=="ANDROID"
+# Problems with uint64_t on Android unless disabling strictness
+DISABLE_STRICT=--disable-strict
+.ENDIF
+
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+# Problems with uint64_t on Android unless disabling strictness
+DISABLE_DYLOAD=--disable-dyload
 .ENDIF
 
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
@@ -100,9 +114,20 @@ LDFLAGSADD += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-
 
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
+.IF "$(OS)"=="IOS"
+STATIC_OR_SHARED=--enable-static --disable-shared
+.ELSE
+STATIC_OR_SHARED=--disable-static --enable-shared
+.ENDIF
 
-#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
+.IF "$(CROSS_COMPILING)"=="YES"
+# We require that the cross-build-toolset target from the top Makefile(.in) has bee built
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(posix_PWD)/$(INPATH_FOR_BUILD)/misc/build/icu/source
+.ENDIF
+
+CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
+./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT) $(DISABLE_STRICT) $(DISABLE_DYLOAD) '
+
 CONFIGURE_FLAGS=
 
 # Use of
@@ -114,6 +139,14 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
+.IF "$(OS)"=="IOS"
+OUT2LIB= \
+    $(BUILD_DIR)$/lib$/libicudata.a \
+    $(BUILD_DIR)$/lib$/libicuuc.a \
+    $(BUILD_DIR)$/lib$/libicui18n.a \
+    $(BUILD_DIR)$/lib$/libicule.a \
+    $(BUILD_DIR)$/lib$/libicutu.a
+.ELSE
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
@@ -135,13 +168,13 @@ OUT2BIN= \
     $(BUILD_DIR)$/bin$/genccode \
     $(BUILD_DIR)$/bin$/genbrk \
     $(BUILD_DIR)$/bin$/gencmn
+.ENDIF
 
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
-CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 icu_LDFLAGS+=-shared-libgcc
 .ENDIF
@@ -154,9 +187,9 @@ icu_LIBS=
 icu_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 icu_LDFLAGS+=-Wl,--enable-runtime-pseudo-reloc-v2
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
+./configure --build=i586-pc-mingw32 --enable-layout --disable-static --enable-shared --enable-64bit-libs=no'
 
-#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
 
 # Use of
@@ -209,16 +242,20 @@ ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
 
-CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmak.cfg .
-
-.IF "$(CCNUMVER)"<="001400000000"
-BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHsc" && cd ..$/..
+.IF "$(CPU)" == "I"
+ICU_BUILD_ARCH=Win32
 .ELSE
-BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHa -Zc:wchar_t-" && cd ..$/..
+ICU_BUILD_ARCH=x64
+.ENDIF
+
+.IF "$(CCNUMVER)" >= "001600000000"
+BUILD_ACTION=cd allinone && MSBuild.exe allinone.sln /p:Configuration=$(ICU_BUILD_VERSION) /p:Platform=$(ICU_BUILD_ARCH)
+.ELSE
+BUILD_ACTION=cd allinone && $(COMPATH)$/vcpackages$/vcbuild.exe allinone.sln "$(ICU_BUILD_VERSION)|$(ICU_BUILD_ARCH)"
 .ENDIF
 
 OUT2LIB= \
-    $(BUILD_DIR)$/..$/lib$/icudata.lib \
+    $(BUILD_DIR)$/..$/lib$/icudt.lib \
     $(BUILD_DIR)$/..$/lib$/icuin$(ICU_BUILD_LIBPOST).lib \
     $(BUILD_DIR)$/..$/lib$/icuuc$(ICU_BUILD_LIBPOST).lib \
     $(BUILD_DIR)$/..$/lib$/icule$(ICU_BUILD_LIBPOST).lib \

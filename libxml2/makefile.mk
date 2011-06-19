@@ -36,8 +36,8 @@ TARGET=so_libxml2
 
 .IF "$(SYSTEM_LIBXML)" == "YES"
 all:
-    @echo "An already available installation of libxml should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of libxml should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -53,6 +53,8 @@ PATCH_FILES=libxml2-configure.patch \
             libxml2-gnome599717.patch \
             libxml2-xpath.patch \
             libxml2-global-symbols.patch \
+            libxml2-aix.patch \
+            libxml2-vc10.patch
 
 .IF "$(OS)" == "WNT"
 PATCH_FILES+= libxml2-long-path.patch
@@ -95,16 +97,22 @@ xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
 CONFIGURE_DIR=
-.IF "$(OS)"=="OS2"
-CONFIGURE_ACTION=sh .$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=yes --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
-.ELSE
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
 .ENDIF
+CONFIGURE_FLAGS+=--enable-ipv6=no --without-python --without-zlib --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
+.IF "$(debug)"!=""
+CONFIGURE_FLAGS+=--with-mem-debug --with-run-debug
+.ENDIF
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 .ENDIF
 
 
@@ -114,6 +122,9 @@ OUTDIR2INC=include$/libxml
 EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
 OUT2BIN+=.libs$/xmllint
+OUT2BIN+=xml2-config
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+OUT2LIB+=.libs$/libxml2.a
 OUT2BIN+=xml2-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"

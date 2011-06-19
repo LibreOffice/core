@@ -195,14 +195,6 @@
  	mv $(_MDDEPFILE) $(_MDDEPFILE).old && \
  	cat $(_MDDEPFILE).old | sed -e "s|^$(<D)/||g" > $(_MDDEPFILE) && rm -f $(_MDDEPFILE).old ; \
  fi
-@@ -1325,6 +1352,7 @@
- 
- $(XPIDL_GEN_DIR)/%.h: %.idl $(XPIDL_COMPILE) $(XPIDL_GEN_DIR)/.done
- 	$(REPORT_BUILD)
-+	echo "PATH=" $(PATH)
- 	$(ELOG) $(XPIDL_COMPILE) -m header -w -I$(srcdir) -I$(IDL_DIR) -o $(XPIDL_GEN_DIR)/$* $(_VPATH_SRCS)
- 	@if test -n "$(findstring $*.h, $(EXPORTS) $(SDK_HEADERS))"; \
- 	  then echo "*** WARNING: file $*.h generated from $*.idl overrides $(srcdir)/$*.h"; else true; fi
 @@ -1696,14 +1724,14 @@
  define MAKE_DEPS_NOAUTO
  	set -e ; \

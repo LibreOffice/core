@@ -60,7 +60,9 @@ ADDITIONAL_FILES= \
 .IF "$(GUI)$(COM)"=="WNTGCC"
 PATCH_FILES=db-4.7.25-mingw.patch
 .ELSE
-PATCH_FILES=db-4.7.25.patch
+PATCH_FILES=\
+    db-4.7.25.patch \
+    db-aix.patch
 .ENDIF
 
 # clean compiler flags
@@ -84,10 +86,6 @@ LDFLAGSVERSION:= -Wl,--version-script=../db_4_7_gcc4.map
 .EXPORT: LDFLAGSVERSION
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
-#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-#CC:=$(COMPATH)$/bin$/cc
-#CXX:=$(COMPATH)$/bin$/CC
-#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 LDFLAGS:=$(ARCH_FLAGS) -R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
@@ -96,10 +94,19 @@ CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION= \
     ..$/dist$/configure
-CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185 CC='$(CC) $(SOLARLIB)'
+CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-compat185 CC='$(CC) $(SOLARLIB)'
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+= --disable-shared
+.ELSE
+CONFIGURE_FLAGS+= --enable-shared
+.ENDIF
 .IF "$(OS)"=="MACOSX"
 CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
 .ENDIF
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 # just pass ARCH_FLAGS to native build
 CFLAGS+:=$(ARCH_FLAGS)
 CXXFLAGS+:=$(ARCH_FLAGS)
@@ -109,7 +116,11 @@ BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
+.IF "$(OS)"=="IOS" || "$(OS)" == "ANDROID"
+OUT2LIB=$(BUILD_DIR)$/libdb*.a
+.ELSE
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
+.ENDIF
 OUT2INC= \
     $(BUILD_DIR)$/db.h
 
@@ -137,7 +148,7 @@ db_LIBS=
 CFLAGS+=-D_GLIBCXX_DLL
 db_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
-db_LIBXSO_LIBS=$(LIBSTLPORT) $(db_LIBS)
+db_LIBXSO_LIBS=$(db_LIBS)
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 db_LIBXSO_LIBS+=-lgcc_s
 .ENDIF
@@ -158,16 +169,10 @@ OUT2INC= \
 .ENDIF
 
 .ELSE
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
-
 BUILD_DIR=
 BUILD_ACTION=dmake
 
 BUILD_DIR_OUT=build_windows
-#OUT2LIB= \
-#	$(BUILD_DIR_OUT)$/Release$/libdb42.lib
-#OUT2BIN=$(BUILD_DIR_OUT)$/Release$/libdb42.dll
 OUT2INC= \
     $(BUILD_DIR_OUT)$/db.h
 .ENDIF

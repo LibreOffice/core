@@ -1,0 +1,11 @@
+--- misc/icu/source/tools/icuinfo/Makefile.in	2011-03-15 21:41:25.647780036 +0000
++++ misc/build/icu/source/tools/icuinfo/Makefile.in	2011-03-15 21:41:25.647780036 +0000
+@@ -36,7 +36,7 @@
+ 
+ ICUINFO_OPTS=-i ../../data/out/build/$(ICUDATA_PLATFORM_NAME)
+ 
+-CPPFLAGS+=  -DU_PLATFORM=\"@platform@\"  -DU_BUILD=\"@build@\" -DU_HOST=\"@host@\" -DU_CC=\"@CC@\" -DU_CXX=\"@CXX@\"
++CPPFLAGS+=  -DU_PLATFORM="\"@platform@\""  -DU_BUILD="\"@build@\"" -DU_HOST="\"@host@\"" -DU_CC="\"@CC@\"" -DU_CXX="\"@CXX@\""
+ # -DENABLE_RELEASE=@ENABLE_RELEASE@ -DENABLE_DEBUG=@ENABLE_DEBUG@ "
+ 
+ 
