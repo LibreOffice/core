@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -61,14 +62,14 @@ extern "C"
                 sal_Int32                   nPos;
 
                 xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PPPOptimizer_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
                 const Sequence< OUString > & rSNL1 = PPPOptimizer_getSupportedServiceNames();
                 const OUString * pArray1 = rSNL1.getConstArray();
                 for ( nPos = rSNL1.getLength(); nPos--; )
                     xNewKey->createKey( pArray1[nPos] );
 
                 xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PPPOptimizerDialog_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
                 const Sequence< OUString > & rSNL2 = PPPOptimizerDialog_getSupportedServiceNames();
                 const OUString * pArray2 = rSNL2.getConstArray();
                 for ( nPos = rSNL2.getLength(); nPos--; )
@@ -78,7 +79,7 @@ extern "C"
             }
             catch (InvalidRegistryException &)
             {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+                OSL_FAIL( "### InvalidRegistryException!" );
             }
         }
         return sal_False;
@@ -86,7 +87,7 @@ extern "C"
 
     // -------------------------------------------------------------------------
 
-    void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );
         void*       pRet = 0;
@@ -118,3 +119,5 @@ extern "C"
         return pRet;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

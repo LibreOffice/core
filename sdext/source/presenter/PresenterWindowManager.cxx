@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -452,7 +453,7 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(sal_False);
+            OSL_FAIL("paint failed!");
         }
     }
 }
@@ -600,7 +601,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(sal_False);
+            OSL_FAIL("paint children failed!");
         }
     }
 
@@ -753,7 +754,7 @@ void PresenterWindowManager::RestoreViewMode (void)
     sal_Int32 nMode (0);
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
         PresenterConfigurationAccess::READ_ONLY);
     aConfiguration.GetConfigurationNode(A2S("Presenter/InitialViewMode")) >>= nMode;
     switch (nMode)
@@ -782,7 +783,7 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
     {
         PresenterConfigurationAccess aConfiguration (
             mxComponentContext,
-            OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
             PresenterConfigurationAccess::READ_WRITE);
         aConfiguration.GoToChild(A2S("Presenter"));
         Any aValue;
@@ -1639,3 +1640,5 @@ void SAL_CALL ModeChangeAnimationStarter::disposing (
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

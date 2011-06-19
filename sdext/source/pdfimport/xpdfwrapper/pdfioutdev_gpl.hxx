@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +58,7 @@
 #pragma warning(pop)
 #endif
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 class GfxPath;
@@ -146,7 +147,7 @@ namespace pdfi
     {
         // not owned by this class
         PDFDoc*                                 m_pDoc;
-        mutable std::hash_map< long long,
+        mutable boost::unordered_map< long long,
                                FontAttributes > m_aFontMap;
         UnicodeMap*                             m_pUtf8Map;
 
@@ -288,3 +289,4 @@ typedef std::vector< Output_t > OutputBuffer;
 
 #endif /* INCLUDED_PDFI_OUTDEV_HXX */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -777,7 +778,7 @@ void PresenterToolBar::CreateControls (
     // Expand the macro in the bitmap file names.
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
         PresenterConfigurationAccess::READ_ONLY);
 
     const OUString sBasePath (PresenterComponent::GetBasePath(mxComponentContext));
@@ -839,19 +840,19 @@ void PresenterToolBar::ProcessEntry (
 
     // Create new element.
     ::rtl::Reference<Element> pElement;
-    if (sType.equalsAscii("Button"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Button")))
         pElement = Button::Create(this);
-    else if (sType.equalsAscii("CurrentTimeLabel"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CurrentTimeLabel")))
         pElement = CurrentTimeLabel::Create(this);
-    else if (sType.equalsAscii("PresentationTimeLabel"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PresentationTimeLabel")))
         pElement = PresentationTimeLabel::Create(this);
-    else if (sType.equalsAscii("VerticalSeparator"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VerticalSeparator")))
         pElement = ::rtl::Reference<Element>(new VerticalSeparator(this));
-    else if (sType.equalsAscii("HorizontalSeparator"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HorizontalSeparator")))
         pElement = ::rtl::Reference<Element>(new HorizontalSeparator(this));
-    else if (sType.equalsAscii("Label"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")))
         pElement = ::rtl::Reference<Element>(new Label(this));
-    else if (sType.equalsAscii("ChangeOrientation"))
+    else if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ChangeOrientation")))
     {
         mpCurrentContainerPart.reset(new ElementContainerPart());
         maElementContainer.push_back(mpCurrentContainerPart);
@@ -2091,7 +2092,7 @@ void ProgressLabel::CurrentSlideHasChanged (void)
         if (nCurrentSlideIndex >= 0 && nSlideCount > 0)
             SetText(
                 OUString::valueOf(nCurrentSlideIndex)
-                    + OUString::createFromAscii(" / ")
+                    + OUString(RTL_CONSTASCII_USTRINGPARAM(" / "))
                         + OUString::valueOf(nSlideCount));
         else
             SetText(A2S(""));
@@ -2456,3 +2457,5 @@ bool HorizontalSeparator::IsFilling (void) const
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,15 +140,17 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
         std::find_if(pAry,pAry+nLen,
                      boost::bind(comphelper::TPropertyValueEqualFunctor(),
                                  _1,
-                                 rtl::OUString::createFromAscii("InputSequence"))));
+                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputSequence")))));
     OSL_ENSURE( pValue != pAry+nLen,
                 "InputSequence not found" );
 
     uno::Sequence<sal_Int8> aData;
     if( !(pValue->Value >>= aData) )
-        OSL_ENSURE(false,"Wrong data type");
+        OSL_FAIL("Wrong data type");
 
     rContext.rEmitter.write( encodeBase64( aData.getConstArray(), aData.getLength() ));
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

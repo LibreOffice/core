@@ -1,13 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: mysqlc_resultsetmetadata.cxx,v $
-*
-* $Revision: 1.1.2.4 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -466,3 +463,4 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
  * vim<600: noet sw=4 ts=4
  */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,8 +37,10 @@
 
 #include <algorithm>
 
-using namespace rtl;
 using namespace pdfi;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 #define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
@@ -59,7 +62,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
         aSearchStyle.SubStyles.push_back( impl_getStyleId( *rStyle.SubStyles[n], true ) );
 
-    std::hash_map< HashedStyle, sal_Int32, StyleHash >::iterator it =
+    boost::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator it =
         m_aStyleToId.find( aSearchStyle );
 
     if( it != m_aStyleToId.end() )
@@ -97,7 +100,7 @@ sal_Int32 StyleContainer::getStandardStyleId( const rtl::OString& rName )
 
 const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
 {
-    std::hash_map< sal_Int32, HashedStyle >::const_iterator it =
+    boost::unordered_map< sal_Int32, HashedStyle >::const_iterator it =
         m_aIdToStyle.find( nStyleId );
     return it != m_aIdToStyle.end() ? &(it->second.Properties) : NULL;
 }
@@ -105,7 +108,7 @@ const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
 sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& rNewProps )
 {
     sal_Int32 nRet = -1;
-    std::hash_map< sal_Int32, HashedStyle >::iterator it =
+    boost::unordered_map< sal_Int32, HashedStyle >::iterator it =
         m_aIdToStyle.find( nStyleId );
     if( it != m_aIdToStyle.end() )
     {
@@ -133,7 +136,7 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             aSearchStyle.IsSubStyle             = it->second.IsSubStyle;
 
             // find out whether this new style already exists
-            std::hash_map< HashedStyle, sal_Int32, StyleHash >::iterator new_it =
+            boost::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator new_it =
                 m_aStyleToId.find( aSearchStyle );
             if( new_it != m_aStyleToId.end() )
             {
@@ -159,7 +162,7 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
 {
     OUStringBuffer aRet( 64 );
 
-    std::hash_map< sal_Int32, HashedStyle >::const_iterator style_it =
+    boost::unordered_map< sal_Int32, HashedStyle >::const_iterator style_it =
         m_aIdToStyle.find( nStyle );
     if( style_it != m_aIdToStyle.end() )
     {
@@ -196,7 +199,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
                                      EmitContext&        rContext,
                                      ElementTreeVisitor& rContainedElemVisitor )
 {
-    std::hash_map< sal_Int32, HashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
+    boost::unordered_map< sal_Int32, HashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
     if( it != m_aIdToStyle.end() )
     {
         const HashedStyle& rStyle = it->second;
@@ -207,7 +210,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
 
         for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
             impl_emitStyle( rStyle.SubStyles[n], rContext, rContainedElemVisitor );
-        if( rStyle.Contents )
+        if( rStyle.Contents.getLength() )
             rContext.rEmitter.write( rStyle.Contents );
         if( rStyle.ContainedElement )
             rStyle.ContainedElement->visitedBy( rContainedElemVisitor,
@@ -220,14 +223,14 @@ void StyleContainer::emit( EmitContext&        rContext,
                            ElementTreeVisitor& rContainedElemVisitor )
 {
     std::vector< sal_Int32 > aMasterPageSection, aAutomaticStyleSection, aOfficeStyleSection;
-    for( std::hash_map< sal_Int32, HashedStyle >::iterator it = m_aIdToStyle.begin();
+    for( boost::unordered_map< sal_Int32, HashedStyle >::iterator it = m_aIdToStyle.begin();
          it != m_aIdToStyle.end(); ++it )
     {
         if( ! it->second.IsSubStyle )
         {
             if( it->second.Name.equals( "style:master-page" ) )
                 aMasterPageSection.push_back( it->first );
-            else if( getStyleName( it->first ).equalsAscii( "standard" ) )
+            else if( getStyleName( it->first ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "standard" ) ) )
                 aOfficeStyleSection.push_back( it->first );
             else
                 aAutomaticStyleSection.push_back( it->first );
@@ -255,3 +258,5 @@ void StyleContainer::emit( EmitContext&        rContext,
         impl_emitStyle( aMasterPageSection[n], rContext, rContainedElemVisitor );
     rContext.rEmitter.endTag( "office:master-styles" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

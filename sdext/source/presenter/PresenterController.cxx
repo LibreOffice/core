@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -998,7 +999,6 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
             }
             break;
 
-        case awt::Key::LEFT:
         case awt::Key::PAGEUP:
             if (mxSlideShowController.is())
             {
@@ -1009,6 +1009,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
             }
             break;
 
+        case awt::Key::LEFT:
         case awt::Key::UP:
         case awt::Key::P:
         case awt::Key::BACKSPACE:
@@ -1310,8 +1311,8 @@ double PresenterController::GetSlideAspectRatio (void) const
                 Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
                 sal_Int32 nWidth (28000);
                 sal_Int32 nHeight (21000);
-                if ((xProperties->getPropertyValue(OUString::createFromAscii("Width")) >>= nWidth)
-                    && (xProperties->getPropertyValue(OUString::createFromAscii("Height")) >>= nHeight)
+                if ((xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= nWidth)
+                    && (xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= nHeight)
                     && nHeight > 0)
                 {
                     nSlideAspectRatio = double(nWidth) / double(nHeight);
@@ -1376,3 +1377,4 @@ void PresenterController::ThrowIfDisposed (void) const
 
 } } // end of namespace ::sdext::presenter
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

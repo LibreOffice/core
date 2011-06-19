@@ -1,13 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: mysqlc_general.cxx,v $
-*
-* $Revision: 1.1.2.3 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -157,20 +154,22 @@ int mysqlToOOOType(int cppConnType)
             return com::sun::star::sdbc::DataType::VARCHAR;
     }
 
-    OSL_ENSURE( false, "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
+    OSL_FAIL( "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
     return com::sun::star::sdbc::DataType::VARCHAR;
 }
 
 
-::rtl::OUString convert(const ::ext_std::string& _string, const rtl_TextEncoding encoding)
+::rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {
     return ::rtl::OUString( _string.c_str(), _string.size(), encoding );
 }
 
-::ext_std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding)
+::std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding)
 {
-    return ::ext_std::string( ::rtl::OUStringToOString( _string, encoding ).getStr() );
+    return ::std::string( ::rtl::OUStringToOString( _string, encoding ).getStr() );
 }
 
 
 } /* namespace */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

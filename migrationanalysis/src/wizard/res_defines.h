@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef RES_DEFINES_H_INCLUDED
 #define RES_DEFINES_H_INCLUDED
 
@@ -148,3 +149,5 @@
 #define RID_STR_TERMINATE_YES           1832
 #define RID_STR_TERMINATE_NO            1833
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

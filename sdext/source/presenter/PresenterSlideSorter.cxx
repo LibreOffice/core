@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -374,7 +375,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         // Create the preview cache.
         mxPreviewCache = Reference<drawing::XSlidePreviewCache>(
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.drawing.PresenterPreviewCache"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPreviewCache")),
                 mxComponentContext),
             UNO_QUERY_THROW);
         Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY);
@@ -395,7 +396,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         // Listen for changes of the current slide.
         Reference<beans::XPropertySet> xControllerProperties (rxController, UNO_QUERY_THROW);
         xControllerProperties->addPropertyChangeListener(
-            OUString::createFromAscii("CurrentPage"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentPage")),
             this);
 
         // Move the current slide in the center of the window.
@@ -982,8 +983,8 @@ double PresenterSlideSorter::GetSlideAspectRatio (void) const
             Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
             sal_Int32 nWidth (28000);
             sal_Int32 nHeight (21000);
-            if ((xProperties->getPropertyValue(OUString::createFromAscii("Width")) >>= nWidth)
-                && (xProperties->getPropertyValue(OUString::createFromAscii("Height")) >>= nHeight)
+            if ((xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= nWidth)
+                && (xProperties->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= nHeight)
                 && nHeight > 0)
             {
                 nSlideAspectRatio = double(nWidth) / double(nHeight);
@@ -2065,7 +2066,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
 {
     PresenterConfigurationAccess aConfiguration (
         rxContext,
-        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XHierarchicalNameAccess> xBitmaps (
         aConfiguration.GetConfigurationNode(
@@ -2319,3 +2320,5 @@ void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapTiled(
 }
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

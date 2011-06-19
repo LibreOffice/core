@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,28 +44,28 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 const OUString PresenterHelper::msPaneURLPrefix(
-    OUString::createFromAscii("private:resource/pane/"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/"));
 const OUString PresenterHelper::msCenterPaneURL(
-    msPaneURLPrefix + OUString::createFromAscii("CenterPane"));
+    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("CenterPane")));
 const OUString PresenterHelper::msFullScreenPaneURL(
-    msPaneURLPrefix + OUString::createFromAscii("FullScreenPane"));
+    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("FullScreenPane")));
 
 const OUString PresenterHelper::msViewURLPrefix(
-    OUString::createFromAscii("private:resource/view/"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/"));
 const OUString PresenterHelper::msPresenterScreenURL(
-    msViewURLPrefix + OUString::createFromAscii("PresenterScreen"));
+    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterScreen")));
 const OUString PresenterHelper::msSlideSorterURL(
-    msViewURLPrefix + OUString::createFromAscii("SlideSorter"));
+    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("SlideSorter")));
 
 const OUString PresenterHelper::msResourceActivationEvent(
-    OUString::createFromAscii("ResourceActivation"));
+    RTL_CONSTASCII_USTRINGPARAM("ResourceActivation"));
 const OUString PresenterHelper::msResourceDeactivationEvent(
-    OUString::createFromAscii("ResourceDeactivation"));
+    RTL_CONSTASCII_USTRINGPARAM("ResourceDeactivation"));
 
 const OUString PresenterHelper::msDefaultPaneStyle (
-    OUString::createFromAscii("DefaultPaneStyle"));
+    RTL_CONSTASCII_USTRINGPARAM("DefaultPaneStyle"));
 const OUString PresenterHelper::msDefaultViewStyle (
-    OUString::createFromAscii("DefaultViewStyle"));
+    RTL_CONSTASCII_USTRINGPARAM("DefaultViewStyle"));
 
 
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (
@@ -91,3 +92,5 @@ Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowContr
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

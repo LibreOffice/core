@@ -1,2 +1,2 @@
-..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
-..\version.mk %_DEST%\bin%_EXT%\jfreereport_version.mk
+..\%__SRC%\class\*.jar %_DEST%\bin\*.jar
+..\version.mk %_DEST%\bin\jfreereport_version.mk

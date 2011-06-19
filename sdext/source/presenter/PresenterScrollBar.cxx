@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -128,7 +129,7 @@ PresenterScrollBar::PresenterScrollBar (
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
                 rxComponentContext),
             UNO_QUERY_THROW);
 
@@ -330,7 +331,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
                     try
                     {
                         mpBitmaps.reset(new PresenterBitmapContainer(
-                            OUString::createFromAscii("PresenterScreenSettings/ScrollBar/Bitmaps"),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterScreenSettings/ScrollBar/Bitmaps")),
                             ::boost::shared_ptr<PresenterBitmapContainer>(),
                             mxComponentContext,
                             mxCanvas,
@@ -1343,3 +1344,5 @@ void PresenterScrollBar::MousePressRepeater::Execute (void)
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,13 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: mysqlc_propertyids.cxx,v $
-*
-* $Revision: 1.1.2.2 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -27,9 +24,7 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 #include "mysqlc_propertyids.hxx"
 
 using ::rtl::OUString;
@@ -208,3 +203,5 @@ OUString OPropertyMap::fillValue(sal_Int32 idx)
  * vim600: noet sw=4 ts=4 fdm=marker
  * vim<600: noet sw=4 ts=4
  */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <rtl/string.hxx>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace pdfparse
 {
@@ -188,7 +189,7 @@ struct PDFArray : public PDFContainer
 
 struct PDFDict : public PDFContainer
 {
-    typedef std::hash_map<rtl::OString,PDFEntry*,rtl::OStringHash> Map;
+    typedef boost::unordered_map<rtl::OString,PDFEntry*,rtl::OStringHash> Map;
     Map m_aMap;
 
     PDFDict() {}
@@ -309,3 +310,5 @@ class PDFReader
 } // namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

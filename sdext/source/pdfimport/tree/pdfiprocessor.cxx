@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -220,7 +221,7 @@ sal_Int32 PDFIProcessor::getFontId( const FontAttributes& rAttr ) const
 // line diagnose block - start
 void PDFIProcessor::processGlyphLine()
 {
-    if( m_GlyphsList.size()<1 )
+    if( m_GlyphsList.empty() )
         return;
 
     double fPreAvarageSpaceValue= 0.0;
@@ -316,7 +317,7 @@ void PDFIProcessor::processGlyphLine()
     ParagraphElement* pPara= NULL ;
     FrameElement* pFrame= NULL ;
 
-    if(m_GlyphsList.size()>0)
+    if(!m_GlyphsList.empty())
     {
         pFrame = m_pElFactory->createFrameElement( m_GlyphsList[0].getCurElement(), getGCId( getTransformGlyphContext( m_GlyphsList[0])) );
         pFrame->ZOrder = m_nNextZOrder++;
@@ -400,7 +401,7 @@ void PDFIProcessor::processGlyphLine()
 
     }
 
-    if(m_GlyphsList.size()>1)
+    if(!m_GlyphsList.empty())
      processGlyph( 0,
                   m_GlyphsList[m_GlyphsList.size()-1],
                   pPara,
@@ -1054,7 +1055,7 @@ rtl::OUString PDFIProcessor::mirrorString( const rtl::OUString& i_rString )
     {
         m_bMirrorMapperTried = true;
         uno::Reference< lang::XMultiComponentFactory > xMSF(  m_xContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference < uno::XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.awt.StringMirror"), m_xContext);
+        uno::Reference < uno::XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.StringMirror")), m_xContext);
         m_xMirrorMapper = uno::Reference< util::XStringMapping >( xInterface, uno::UNO_QUERY );
         #if OSL_DEBUG_LEVEL > 1
         if( m_xMirrorMapper.is() )
@@ -1458,3 +1459,5 @@ void PDFIProcessor::prepareMirrorMap()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

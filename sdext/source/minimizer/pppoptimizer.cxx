@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -159,7 +160,7 @@ void SAL_CALL PPPOptimizer::addStatusListener( const Reference< XStatusListener 
     throw( RuntimeException )
 {
     // TODO
-    OSL_ENSURE( sal_False, "PPPOptimizer::addStatusListener()\nNot implemented yet!" );
+    OSL_FAIL( "PPPOptimizer::addStatusListener()\nNot implemented yet!" );
 }
 
 //===============================================
@@ -167,7 +168,7 @@ void SAL_CALL PPPOptimizer::removeStatusListener( const Reference< XStatusListen
     throw( RuntimeException )
 {
     // TODO
-    OSL_ENSURE( sal_False, "PPPOptimizer::removeStatusListener()\nNot implemented yet!" );
+    OSL_FAIL( "PPPOptimizer::removeStatusListener()\nNot implemented yet!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -207,3 +208,5 @@ Reference< XInterface > PPPOptimizer_createInstance( const Reference< XComponent
 {
     return (cppu::OWeakObject*) new PPPOptimizer( rSMgr );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

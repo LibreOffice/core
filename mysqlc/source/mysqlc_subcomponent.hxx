@@ -1,13 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: mysqlc_subcomponent.hxx,v $
-*
-* $Revision: 1.1.2.2 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -30,24 +27,12 @@
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #define _CONNECTIVITY_OSUBCOMPONENT_HXX_
 
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 
 namespace cppu {
     class IPropertyArrayHelper;
@@ -253,3 +238,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_OSUBCOMPONENT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

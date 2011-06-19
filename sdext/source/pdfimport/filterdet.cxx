@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ namespace {
             switch(nIndex)
             {
             default:
-                OSL_ENSURE(false,"Unexpected case!");
+                OSL_FAIL("Unexpected case!");
                 break;
             case DRAW_INDEX:
                 bDrawState=sal_True;
@@ -179,32 +180,6 @@ namespace {
             return aMethods;
         }
     };
-#if 0 // code currently unused (see below)
-    sal_Int32 queryDocumentTypeDialog( const uno::Reference<uno::XComponentContext>& xContext,
-                                       const rtl::OUString&                          rFilename )
-    {
-        uno::Reference<awt::XDialogProvider2> xDialogProvider(
-            xContext->getServiceManager()->createInstanceWithContext(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DialogProvider2" ) ),
-                xContext ),
-                uno::UNO_QUERY_THROW );
-        rtl::Reference<ChooserDialogHandler> xHandler(new ChooserDialogHandler);
-        uno::Reference<awt::XDialog> xDialog = xDialogProvider->createDialogWithHandler(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:PDFImport.TargetChooser?location=application") ),
-            uno::Reference<awt::XDialogEventHandler>(
-            static_cast<cppu::OWeakObject*>(xHandler.get()), uno::UNO_QUERY_THROW));
-        xHandler->initControls(
-            uno::Reference<awt::XControlContainer>(
-                xDialog,
-                uno::UNO_QUERY_THROW ),
-            rFilename );
-
-        if( !xDialog->execute() )
-            return -1;
-        else
-            return xHandler->getSelectedItem();
-    }
-#endif
 }
 
 class FileEmitContext : public pdfparse::EmitContext
@@ -380,13 +355,13 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                    rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
                    rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
-        if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
+        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             pAttribs[i].Value >>= xInput;
-        else if( pAttribs[i].Name.equalsAscii( "URL" ) )
+        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             pAttribs[i].Value >>= aURL;
-        else if( pAttribs[i].Name.equalsAscii( "FilterName" ) )
+        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
             nFilterNamePos = i;
-        else if( pAttribs[i].Name.equalsAscii( "Password" ) )
+        else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
         {
             nPwdPos = i;
             pAttribs[i].Value >>= aPwd;
@@ -468,15 +443,15 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
             osl_removeFile( aURL.pData );
         if( aEmbedMimetype.getLength() )
         {
-            if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.text" )
-                || aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.text-master" ) )
+            if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text" ) )
+                || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text-master" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.presentation" ) )
+            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.presentation" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.graphics" )
-                     || aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.drawing" ) )
+            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.graphics" ) )
+                     || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.drawing" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw_pdf_addstream_import" ) );
-            else if( aEmbedMimetype.equalsAscii( "application/vnd.oasis.opendocument.spreadsheet" ) )
+            else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.spreadsheet" ) ) )
                 aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_pdf_addstream_import" ) );
         }
     }
@@ -545,7 +520,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                     break;
 
                 default:
-                    OSL_ENSURE(false,"Unexpected case");
+                    OSL_FAIL("Unexpected case");
             }
 
             aOutTypeName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("pdf_Portable_Document_Format") );
@@ -659,7 +634,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                 if( pTrailer && pTrailer->m_pDict )
                 {
                     // search document checksum entry
-                    std::hash_map< rtl::OString,
+                    boost::unordered_map< rtl::OString,
                                    pdfparse::PDFEntry*,
                                    rtl::OStringHash >::iterator chk;
                     chk = pTrailer->m_pDict->m_aMap.find( "DocChecksum" );
@@ -676,7 +651,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                     }
 
                     // search for AdditionalStreams entry
-                    std::hash_map< rtl::OString,
+                    boost::unordered_map< rtl::OString,
                                    pdfparse::PDFEntry*,
                                    rtl::OStringHash >::iterator add_stream;
                     add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
@@ -728,7 +703,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                     uno::Reference< task::XInteractionHandler > xIntHdl;
                                     for( sal_Int32 i = 0; i < nAttribs; i++ )
                                     {
-                                        if( pAttribs[i].Name.equalsAscii( "InteractionHandler" ) )
+                                        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
                                             pAttribs[i].Value >>= xIntHdl;
                                     }
                                     if( ! bMayUseUI || ! xIntHdl.is() )
@@ -778,3 +753,5 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

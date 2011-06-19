@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,19 +132,17 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                                             const Sequence< PropertyValue >& rArguments )
     throw( RuntimeException )
 {
-    sal_Int64 nFileSizeSource = 0;
-    sal_Int64 nFileSizeDest = 0;
 
     if ( mxController.is() && ( rURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) == 0 ) )
     {
         if ( rURL.Path.compareToAscii( "execute" ) == 0 )
         {
-            sal_Bool bDialogExecuted = sal_False;
-
             try
             {
+                sal_Int64 nFileSizeSource = 0;
+                sal_Int64 nFileSizeDest = 0;
                 mpOptimizerDialog = new OptimizerDialog( mxMSF, mxFrame, this );
-                bDialogExecuted = mpOptimizerDialog->execute();
+                mpOptimizerDialog->execute();
 
                 const Any* pVal( mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeSource ) );
                 if ( pVal )
@@ -154,11 +153,11 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
 
                 if ( nFileSizeSource && nFileSizeDest )
                 {
-                    rtl::OUStringBuffer sBuf( rtl::OUString::createFromAscii( "Your Presentation has been minimized from:" ) );
+                    rtl::OUStringBuffer sBuf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Your Presentation has been minimized from:")) );
                     sBuf.append( rtl::OUString::valueOf( nFileSizeSource >> 10 ) );
-                    sBuf.append( rtl::OUString::createFromAscii( "KB to " ) );
+                    sBuf.append( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KB to ")) );
                     sBuf.append( rtl::OUString::valueOf( nFileSizeDest >> 10 ) );
-                    sBuf.append( rtl::OUString::createFromAscii( "KB." ) );
+                    sBuf.append( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KB.")) );
                     OUString sResult( sBuf.makeStringAndClear() );
 //                  mpOptimizerDialog->showMessageBox( sResult, sResult, sal_False );
                 }
@@ -182,7 +181,7 @@ void SAL_CALL PPPOptimizerDialog::addStatusListener( const Reference< XStatusLis
     throw( RuntimeException )
 {
     // TODO
-    // OSL_ENSURE( sal_False, "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
+    // OSL_FAIL( "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
 }
 
 //===============================================
@@ -190,7 +189,7 @@ void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatus
     throw( RuntimeException )
 {
     // TODO
-    // OSL_ENSURE( sal_False, "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
+    // OSL_FAIL( "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -215,3 +214,5 @@ Reference< XInterface > PPPOptimizerDialog_createInstance( const Reference< XCom
 }
 
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

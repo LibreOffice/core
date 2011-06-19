@@ -44,12 +44,16 @@ TARFILE_MD5=2a177023f9ea8ec8bd00837605c5df1b
 TARFILE_ROOTDIR=jakarta-tomcat-5.0.30-src
 
 ADDITIONAL_FILES = jakarta-servletapi-5/build.xml
-#CONVERTFILES=build$/build.xml
 
 PATCH_FILES=tomcat.patch
 
 BUILD_DIR=jakarta-servletapi-5
+
+.IF "$(JAVACISGCJ)"=="yes"
 BUILD_ACTION=$(ANT)
+.ELSE
+BUILD_ACTION=$(ANT) -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER)
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

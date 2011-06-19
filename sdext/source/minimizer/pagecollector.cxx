@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ void PageCollector::CollectCustomShowPages( const com::sun::star::uno::Reference
                         {
                             if ( *aIter == xDrawPage )
                                 break;
-                            aIter++;
+                            ++aIter;
                         }
                         if ( aIter == aEnd )
                             rUsedPageList.push_back( xDrawPage );
@@ -95,7 +96,7 @@ void PageCollector::CollectNonCustomShowPages( const com::sun::star::uno::Refere
     {
         std::vector< Reference< XDrawPage > > vUsedPageList;
         PageCollector::CollectCustomShowPages( rxModel, rCustomShowName, vUsedPageList );
-        if ( vUsedPageList.size() )
+        if ( !vUsedPageList.empty() )
         {
             Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
             Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
@@ -108,7 +109,7 @@ void PageCollector::CollectNonCustomShowPages( const com::sun::star::uno::Refere
                 {
                     if ( *aIter == xDrawPage )
                         break;
-                    aIter++;
+                    ++aIter;
                 }
                 if ( aIter == aEnd )
                     rNonUsedPageList.push_back( xDrawPage );
@@ -140,7 +141,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             {
                 if ( aIter->xMasterPage == xMasterPage )
                     break;
-                aIter++;
+                ++aIter;
             }
             if ( aIter == aEnd )
             {
@@ -167,7 +168,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
                     aIter->bUsed = sal_True;
                     break;
                 }
-                aIter++;
+                ++aIter;
             }
             if ( aIter == aEnd )
                 throw uno::RuntimeException();
@@ -178,3 +179,4 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

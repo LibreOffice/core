@@ -11,12 +11,6 @@
     <OpenOffice.org-minimal-version value="3.3" dep:name="OpenOffice.org 3.3"/>
   </dependencies>
 
-  <registration>
-    <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
-      <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
-    </simple-license>
-  </registration>
-
   <version value="1.1.0" />
 
   <platform value="UPDATED_PLATFORM" />
@@ -31,7 +25,6 @@
 
   <icon>
     <default xlink:href="bitmaps/extension_32.png" />
-    <high-contrast xlink:href="bitmaps/extension_32_h.png" />
   </icon>
 
 </description>

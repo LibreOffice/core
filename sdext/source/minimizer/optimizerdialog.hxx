@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 #ifndef OPTIMIZERDIALOG_HXX
 #define OPTIMIZERDIALOG_HXX
-#ifndef _OPTIMIZERDIALOG_HRC
 #include "optimizerdialog.hrc"
-#endif
 #include <vector>
 #include "unodialog.hxx"
 #include "pppoptimizertoken.hxx"
@@ -48,9 +47,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
-#ifndef _COM_SUN_STAR_UTIL_XCloseListener_HPP_
 #include <com/sun/star/util/XCloseListener.hpp>
-#endif
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -247,3 +244,5 @@ private:
 
 
 #endif // OPTIMIZERDIALOG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

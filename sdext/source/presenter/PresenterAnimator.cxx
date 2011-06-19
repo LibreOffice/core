@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include "PresenterTimer.hxx"
 #include <osl/diagnose.h>
 #include <osl/time.h>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 
@@ -161,7 +162,7 @@ void PresenterAnimator::ScheduleNextRun (const sal_uInt64 nStartTime)
     if (mnNextTime==0 || nStartTime<mnNextTime)
     {
         mnNextTime = nStartTime;
-        ::vos::TTimeValue aTimeValue (GetSeconds(mnNextTime), GetNanoSeconds(mnNextTime));
+        ::salhelper::TTimeValue aTimeValue (GetSeconds(mnNextTime), GetNanoSeconds(mnNextTime));
         PresenterTimer::ScheduleSingleTaskAbsolute (
             ::boost::bind(&PresenterAnimator::Process, this),
             aTimeValue);
@@ -169,3 +170,5 @@ void PresenterAnimator::ScheduleNextRun (const sal_uInt64 nStartTime)
 }
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
     {
         Reference< XComponentContext > xContext( this->m_rProcessor.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), xContext);
 
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
@@ -75,7 +76,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
     {
         Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), xContext);
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
     return mxBreakIter;
@@ -87,7 +88,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassi
     {
         Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")), xContext);
         mxCharClass = uno::Reference< i18n::XCharacterClassification >( xInterface, uno::UNO_QUERY );
     }
     return mxCharClass;
@@ -111,7 +112,7 @@ void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
     m_rEmitContext.rEmitter.endTag( pType );
 }
@@ -182,7 +183,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( "text:span" );
@@ -204,7 +205,7 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( pTagType );
@@ -291,7 +292,7 @@ void DrawXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::con
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     if( bTextBox )
@@ -392,7 +393,7 @@ void DrawXmlEmitter::visit( PageElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag("draw:page");
@@ -408,7 +409,7 @@ void DrawXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( m_bWriteDrawDocument ? "office:drawing" : "office:presentation" );
@@ -709,21 +710,14 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
 {
     if( rParent.Children.empty() ) // this should not happen
     {
-        OSL_ENSURE( 0, "empty paragraph optimized" );
+        OSL_FAIL( "empty paragraph optimized" );
         return;
     }
 
     // concatenate child elements with same font id
     std::list< Element* >::iterator next = rParent.Children.begin();
     std::list< Element* >::iterator it = next++;
-    FrameElement* pFrame = dynamic_cast<FrameElement*>(rParent.Parent);
-    bool bRotatedFrame = false;
-    if( pFrame )
-    {
-        const GraphicsContext& rFrameGC = m_rProcessor.getGraphicsContext( pFrame->GCId );
-        if( rFrameGC.isRotatedOrSkewed() )
-            bRotatedFrame = true;
-    }
+
     while( next != rParent.Children.end() )
     {
         bool bConcat = false;
@@ -936,26 +930,6 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element* 
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
 
-    // update page boundaries
-    if( elem.Parent )
-    {
-        // check for center alignement
-        // criterion: paragraph is small relative to parent and distributed around its center
-        double p_x = elem.Parent->x;
-        double p_y = elem.Parent->y;
-        double p_w = elem.Parent->w;
-        double p_h = elem.Parent->h;
-
-        PageElement* pPage = dynamic_cast<PageElement*>(elem.Parent);
-        if( pPage )
-        {
-            p_x += pPage->LeftMargin;
-            p_y += pPage->TopMargin;
-            p_w -= pPage->LeftMargin+pPage->RightMargin;
-            p_h -= pPage->TopMargin+pPage->BottomMargin;
-        }
-    }
-
     elem.applyToChildren(*this);
 }
 
@@ -1109,3 +1083,5 @@ void DrawXmlFinalizer::visit( DocumentElement& elem, const std::list< Element* >
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

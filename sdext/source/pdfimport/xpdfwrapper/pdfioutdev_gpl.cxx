@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
@@ -657,7 +658,7 @@ void PDFOutDev::updateFont(GfxState *state)
         Ref* pID = gfxFont->getID();
         // TODO(Q3): Portability problem
         long long fontID = (long long)pID->gen << 32 | (long long)pID->num;
-        std::hash_map< long long, FontAttributes >::const_iterator it =
+        boost::unordered_map< long long, FontAttributes >::const_iterator it =
             m_aFontMap.find( fontID );
         if( it == m_aFontMap.end() )
         {
@@ -904,16 +905,6 @@ void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
     printf( "drawImage %d %d 0", width, height );
     writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert, true );
     writeBinaryBuffer( aBuf );
-    #if 0
-    OutputBuffer aBuf;     initBuf(aBuf);
-    OutputBuffer aMaskBuf; initBuf(aMaskBuf);
-
-    printf( "drawMaskedImage %d %d %d %d %d", width, height, maskWidth, maskHeight, 0 /*maskInvert note: currently we do inversion here*/ );
-    writeImage( aBuf, str, width, height, colorMap );
-    writeMaskLF( aMaskBuf, maskStr, width, height, maskInvert );
-    writeBinaryBuffer(aBuf);
-    writeBinaryBuffer(aMaskBuf);
-    #endif
 }
 
 void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
@@ -927,16 +918,6 @@ void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
     printf( "drawImage %d %d 0", width, height );
     writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap, true );
     writeBinaryBuffer( aBuf );
-    #if 0
-    OutputBuffer aBuf;     initBuf(aBuf);
-    OutputBuffer aMaskBuf; initBuf(aMaskBuf);
-
-    printf( "drawSoftMaskedImage %d %d %d %d", width, height, maskWidth, maskHeight );
-    writeImage( aBuf, str, width, height, colorMap );
-    writeImageLF( aMaskBuf, maskStr, maskWidth, maskHeight, maskColorMap );
-    writeBinaryBuffer(aBuf);
-    writeBinaryBuffer(aMaskBuf);
-    #endif
 }
 
 void PDFOutDev::setPageNum( int nNumPages )
@@ -946,3 +927,5 @@ void PDFOutDev::setPageNum( int nNumPages )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

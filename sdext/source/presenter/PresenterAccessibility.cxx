@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper5 <
+    typedef ::cppu::PartialWeakComponentImplHelper5 <
         cssa::XAccessible,
         cssa::XAccessibleContext,
         cssa::XAccessibleComponent,
@@ -111,6 +112,14 @@ public:
 
     void UpdateStateSet (void);
 
+    //----- XComponent ---------------------------------------------------
+
+    virtual void SAL_CALL dispose()throw (cssu::RuntimeException)
+        { WeakComponentImplHelperBase::dispose(); }
+    virtual void SAL_CALL addEventListener(const cssu::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (cssu::RuntimeException)
+        { WeakComponentImplHelperBase::addEventListener(xListener); }
+    virtual void SAL_CALL removeEventListener(const cssu::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (cssu::RuntimeException)
+        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     //----- XAccessible -------------------------------------------------------
 
@@ -198,9 +207,6 @@ public:
     virtual void SAL_CALL removeEventListener (
             const cssu::Reference<cssa::XAccessibleEventListener>& rxListener)
         throw (cssu::RuntimeException);
-
-    using PresenterAccessibleObjectInterfaceBase::addEventListener;
-    using PresenterAccessibleObjectInterfaceBase::removeEventListener;
 
     //----- XWindowListener ---------------------------------------------------
 
@@ -466,7 +472,7 @@ public:
         OUString sName (A2S("Presenter Console"));
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
             PresenterConfigurationAccess::READ_ONLY);
         aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Console/String"))
             >>= sName;
@@ -499,7 +505,7 @@ public:
         {
             PresenterConfigurationAccess aConfiguration (
                 rxContext,
-                OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
                 PresenterConfigurationAccess::READ_ONLY);
             aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Preview/String"))
                 >>= sName;
@@ -1611,7 +1617,7 @@ void PresenterAccessible::AccessibleObject::ThrowException (
     const sal_Char* pMessage,
     const ExceptionType eExceptionType) const
 {
-    const OUString sMessage (OUString(A2S("PresenterAccessible: ")) + OUString(A2S(pMessage)));
+    const OUString sMessage (OUString(A2S("PresenterAccessible: ")) + OUString::createFromAscii(pMessage));
     const Reference<XInterface> xObject (
         const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     switch (eExceptionType)
@@ -2253,7 +2259,7 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
             PresenterConfigurationAccess::READ_ONLY);
         aConfiguration.GetConfigurationNode(A2S("Presenter/Accessibility/Notes/String"))
             >>= sName;
@@ -2485,3 +2491,5 @@ void AccessibleFocusManager::FocusObject (
 }
 
 } } // end of namespace ::sd::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

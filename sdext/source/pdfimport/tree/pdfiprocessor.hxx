@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "imagecontainer.hxx"
 #include "contentsink.hxx"
@@ -207,11 +208,11 @@ namespace pdfi
 
         void setupImage(ImageId nImage);
 
-        typedef std::hash_map<sal_Int32,FontAttributes> IdToFontMap;
-        typedef std::hash_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
+        typedef boost::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
+        typedef boost::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
-        typedef std::hash_map<sal_Int32,GraphicsContext> IdToGCMap;
-        typedef std::hash_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
+        typedef boost::unordered_map<sal_Int32,GraphicsContext> IdToGCMap;
+        typedef boost::unordered_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
 
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 
@@ -270,15 +271,17 @@ namespace pdfi
             void  setGraphicsContext (GraphicsContext&  rCurrentContext ){ m_rCurrentContext= rCurrentContext; }
             void  setCurElement( Element* pCurElement ){ m_pCurElement= pCurElement; }
 
-            double getYPrevGlyphPosition(){ return m_fYPrevGlyphPosition; }
-            double getXPrevGlyphPosition(){ return m_fXPrevGlyphPosition; }
-            double getPrevGlyphHeight(){ return m_fPrevGlyphHeight; }
-            double getPrevGlyphWidth (){ return m_fPrevGlyphWidth; }
-            double getPrevGlyphsSpace() { if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
-                                                return 0;
-                                           else
-                                            return m_rRect.X1-m_fXPrevGlyphPosition;
-                                         }
+            double getYPrevGlyphPosition() const { return m_fYPrevGlyphPosition; }
+            double getXPrevGlyphPosition() const { return m_fXPrevGlyphPosition; }
+            double getPrevGlyphHeight() const { return m_fPrevGlyphHeight; }
+            double getPrevGlyphWidth () const { return m_fPrevGlyphWidth; }
+            double getPrevGlyphsSpace() const
+            {
+                if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
+                    return 0;
+                else
+                    return m_rRect.X1-m_fXPrevGlyphPosition;
+            }
 
             void setYPrevGlyphPosition( double fYPrevTextPosition ){ m_fYPrevGlyphPosition= fYPrevTextPosition; }
             void setXPrevGlyphPosition( double fXPrevTextPosition ){ m_fXPrevGlyphPosition= fXPrevTextPosition; }
@@ -302,3 +305,5 @@ namespace pdfi
 #define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

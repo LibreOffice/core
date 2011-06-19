@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -163,6 +164,10 @@ void PolyPolyElement::updateGeometry()
     y = aRange.getMinY();
     w = aRange.getWidth();
     h = aRange.getHeight();
+
+    // fdo#32330 - non-closed paths will not show up filled in LibO
+    if( Action & (PATH_FILL | PATH_EOFILL) )
+        PolyPoly.setClosed(true);
 }
 
 void PolyPolyElement::visitedBy( ElementTreeVisitor&                          rVisitor,
@@ -487,3 +492,5 @@ void DocumentElement::visitedBy( ElementTreeVisitor&                          rV
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

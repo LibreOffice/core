@@ -38,12 +38,10 @@ EXTENSION_VERSION_BASE=1.2.1
 
 # --- Settings ----------------------------------
 .INCLUDE :  makefile.pmk
-.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 # calready set in util$/makefile.pmk
-# EXTENSIONNAME:=report-builder
 EXTENSION_ZIPNAME:=report-builder
 
 # create Extension -----------------------------
@@ -78,8 +76,7 @@ COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
     
 COMPONENT_IMAGES= \
-    $(EXTENSIONDIR)$/images$/extension_32.png \
-    $(EXTENSIONDIR)$/images$/extension_32_h.png
+    $(EXTENSIONDIR)$/images$/extension_32.png
 
 COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
             $(EXTENSIONDIR)$/readme_en-US.html \
@@ -97,6 +94,7 @@ COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/reportbuilderwizard.jar
 
 .IF "$(SYSTEM_JFREEREPORT)" != "YES"
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 COMPONENT_EXTJARFILES += \
     $(EXTENSIONDIR)$/flute-$(FLUTE_VERSION).jar				            \
     $(EXTENSIONDIR)$/libserializer-$(LIBSERIALIZER_VERSION).jar			\

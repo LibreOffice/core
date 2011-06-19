@@ -33,7 +33,7 @@ EXTNAME=PresenterScreen
 
 ENABLE_EXCEPTIONS=TRUE
 # survive zip dependencies
-MAXLINELENGTH:=80000
+MAXLINELENGTH:=100000
 
 # --- Settings ----------------------------------
 
@@ -42,13 +42,13 @@ MAXLINELENGTH:=80000
 
 PACKAGE=com.sun.PresenterScreen-$(PLATFORMID)
 
-.IF "$(L10N_framework)"==""
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
 @all:
     @echo "Presenter Screen build disabled."
 .ELSE
+
+.IF "$(L10N_framework)"==""
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 DLLPRE=
 common_build_zip=
@@ -126,12 +126,6 @@ ZIP1LIST=		*
 
 DESCRIPTION:=$(ZIP1DIR)$/description.xml
 
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/license_$i)
-.ELSE
-PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/LICENSE_$i)
-.ENDIF
-
 .IF "$(WITH_LANG)"==""
 FIND_XCU=registry/data
 .ELSE			# "$(WITH_LANG)"==""
@@ -143,9 +137,6 @@ COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu				\
     $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   	\
     $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
-
-#COMPONENT_MERGED_XCU= \
-#	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
 COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/BorderTop.png							\
@@ -245,8 +236,7 @@ COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverRight.png
 
 COMPONENT_IMAGES=\
-    $(ZIP1DIR)$/bitmaps$/extension_32.png \
-    $(ZIP1DIR)$/bitmaps$/extension_32_h.png
+    $(ZIP1DIR)$/bitmaps$/extension_32.png
 
 COMPONENT_MANIFEST= 							\
     $(ZIP1DIR)$/META-INF$/manifest.xml
@@ -261,7 +251,6 @@ COMPONENT_HELP= 								\
     $(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
 
 ZIP1DEPS=					\
-    $(PACKLICS) 			\
     $(DESCRIPTION)			\
     $(COMPONENT_MANIFEST)	\
     $(COMPONENT_FILES)		\
@@ -269,9 +258,6 @@ ZIP1DEPS=					\
     $(COMPONENT_IMAGES)    	\
     $(COMPONENT_LIBRARY)	\
     $(COMPONENT_HELP)
-
-#	$(COMPONENT_MERGED_XCU) \
-
 
 LINKNAME:=help
 XHPLINKSRC:=$(ZIP1DIR)/help
@@ -323,7 +309,7 @@ $(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
 $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(COPY) $< $@
-.IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
  .IF "$(COM)"=="GCC"
     $(GNUCOPY) $(SOLARBINDIR)$/mingwm10.dll $(ZIP1DIR)
  .ELSE
@@ -363,18 +349,8 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
         .ENDIF
     .ENDIF         # "$(PACKMS)"!=""
  .ENDIF	#"$(COM)"=="GCC"
-.ENDIF
+.ENDIF #"$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
 
-
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/license$$(@:b:s/_/./:e:s/./_/)$$(@:e).txt
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ELSE
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ENDIF
 
 
 $(ZIP1DIR)/%.xcu : %.xcu
@@ -385,24 +361,18 @@ $(ZIP1DIR)$/%.xcs : %.xcs
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
 
-# Temporary file that is used to replace some placeholders in description.xml.
-DESCRIPTION_TMP:=$(ZIP1DIR)$/description.xml.tmp
-
 .INCLUDE .IGNORE : $(ZIP1DIR)_lang_track.mk
 .IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
 PHONYDESC=.PHONY
 .ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
 $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
-    $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $(DESCRIPTION_TMP)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
-    $(TYPE) $(DESCRIPTION_TMP) | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
-    @@-$(RM) $(DESCRIPTION_TMP)
+    $(TYPE) description.xml | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
 
-
-.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
 .ELSE
 ivo:
     $(ECHO)
 .ENDIF # L10N_framework
 
+.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +30,6 @@
  ************************************************************************/
 
 #include "pdfioutdev_gpl.hxx"
-//#include "SecurityHandler.h"
 #ifdef WNT
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
@@ -159,11 +159,7 @@ int main(int argc, char **argv)
 
 
    // Check various permissions.
-   if ( !aDoc.isOk()||
-        !aDoc.okToPrint() ||
-        !aDoc.okToChange()||
-        !aDoc.okToCopy()||
-        !aDoc.okToAddNotes() )
+   if ( !aDoc.isOk() )
    {
         pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aErrDoc) );
 
@@ -211,3 +207,4 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

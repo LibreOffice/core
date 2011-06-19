@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -93,3 +94,5 @@ private:
 } } // end of namespace ::sdext::presenter
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

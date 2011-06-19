@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ void WriterXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* 
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
     m_rEmitContext.rEmitter.endTag( pType );
 }
@@ -84,7 +85,7 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< Element* >::co
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( "text:span" );
@@ -106,7 +107,7 @@ void WriterXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* 
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( pTagType );
@@ -217,7 +218,7 @@ void WriterXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::c
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     if( bTextBox )
@@ -310,7 +311,7 @@ void WriterXmlEmitter::visit( PageElement& elem, const std::list< Element* >::co
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 }
 
@@ -728,7 +729,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
 {
     if( rParent.Children.empty() ) // this should not happen
     {
-        OSL_ENSURE( 0, "empty paragraph optimized" );
+        OSL_FAIL( "empty paragraph optimized" );
         return;
     }
 
@@ -1216,3 +1217,5 @@ void WriterXmlFinalizer::visit( DocumentElement& elem, const std::list< Element*
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

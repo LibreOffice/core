@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,9 +85,9 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                        rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
                        rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
             #endif
-            if( pAttribs[i].Name.equalsAscii( "EmbeddedSubstream" ) )
+            if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedSubstream" ) ) )
                 pAttribs[i].Value >>= xSubStream;
-            else if( pAttribs[i].Name.equalsAscii( "Password" ) )
+            else if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
             {
                 nPwPos = i;
                 pAttribs[i].Value >>= aPwd;
@@ -98,7 +99,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             uno::Reference< io::XInputStream > xInput;
             for( sal_Int32 i = 0; i < nAttribs; i++ )
             {
-                if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
+                if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
                 {
                     pAttribs[i].Value >>= xInput;
                     break;
@@ -250,7 +251,7 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
 
     bool bSuccess=false;
 
-    if( xInput.is() && (!rURL.getLength() || rURL.compareToAscii( "file:", 5 ) != 0) )
+    if( xInput.is() )
         bSuccess = xpdf_ImportFromStream( xInput, pSink, xIHdl, rPwd, m_xContext );
     else
         bSuccess = xpdf_ImportFromFile( rURL, pSink, xIHdl, rPwd, m_xContext );
@@ -293,15 +294,15 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
     {
         OSL_TRACE("importer Attrib: %s\n", OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
-        if( pAttribs->Name.equalsAscii( "InputStream" ) )
+        if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             pAttribs->Value >>= xInput;
-        else if( pAttribs->Name.equalsAscii( "URL" ) )
+        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             pAttribs->Value >>= aURL;
-        else if( pAttribs->Name.equalsAscii( "StatusIndicator" ) )
+        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
             pAttribs->Value >>= xStatus;
-        else if( pAttribs->Name.equalsAscii( "InteractionHandler" ) )
+        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InteractionHandler" ) ) )
             pAttribs->Value >>= xInteractionHandler;
-        else if( pAttribs->Name.equalsAscii( "Password" ) )
+        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Password" ) ) )
             pAttribs->Value >>= aPwd;
     }
     if( !xInput.is() )
@@ -327,3 +328,5 @@ void SAL_CALL PDFIRawAdaptor::setTargetDocument( const uno::Reference< lang::XCo
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

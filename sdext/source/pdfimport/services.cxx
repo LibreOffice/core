@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,7 @@ namespace
     }
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char **ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -137,7 +138,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
     {
         ::rtl::OUString sMainKeyName( sRootKey );
         sMainKeyName += ::rtl::OUString::createFromAscii( pComponents->pAsciiImplementationName );
-        sMainKeyName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+        sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
         try
         {
@@ -146,7 +147,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
         }
         catch( Exception& )
         {
-            OSL_ASSERT( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
+            OSL_FAIL( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
             return sal_False;
         }
         ++pComponents;
@@ -154,7 +155,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
     return sal_True;
 }
 
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName, void* /*pServiceManager*/, void* /*pRegistryKey*/ )
 {
     ::rtl::OUString sImplementationName( ::rtl::OUString::createFromAscii( pImplementationName ) );
@@ -186,3 +187,4 @@ extern "C" void* SAL_CALL component_getFactory(
     return xFactory.get();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

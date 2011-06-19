@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -5,9 +6,6 @@
 *
 * OpenOffice.org - a multi-platform office productivity suite
 *
-* $RCSfile: mysqlc_connection.cxx,v $
-*
-* $Revision: 1.1.2.6 $*
 * This file is part of OpenOffice.org.
 *
 * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -35,13 +33,11 @@
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_general.hxx"
 
-#include <preextstl.h>
 #include <cppconn/driver.h>
 #include <cppconn/connection.h>
 #include <cppconn/statement.h>
 #include <cppconn/metadata.h>
 #include <cppconn/exception.h>
-#include <postextstl.h>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -134,7 +130,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     // parse url. Url has the following format:
     // external server: sdbc:mysqlc:[hostname]:[port]/[dbname]
 
-    if (!url.compareTo(OUString::createFromAscii(MYSQLC_URI_PREFIX), sizeof(MYSQLC_URI_PREFIX)-1)) {
+    if (!url.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM(MYSQLC_URI_PREFIX)), sizeof(MYSQLC_URI_PREFIX)-1)) {
         nIndex = 12;
     } else {
         bEmbedded = sal_True;
@@ -188,10 +184,10 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     if (bEmbedded == sal_False) {
         try {
             sql::ConnectOptionsMap connProps;
-            ext_std::string host_str = OUStringToOString(aHostName, m_settings.encoding).getStr();
-            ext_std::string user_str = OUStringToOString(aUser, m_settings.encoding).getStr();
-            ext_std::string pass_str = OUStringToOString(aPass, m_settings.encoding).getStr();
-            ext_std::string schema_str = OUStringToOString(aDbName, m_settings.encoding).getStr();
+            std::string host_str = OUStringToOString(aHostName, m_settings.encoding).getStr();
+            std::string user_str = OUStringToOString(aUser, m_settings.encoding).getStr();
+            std::string pass_str = OUStringToOString(aPass, m_settings.encoding).getStr();
+            std::string schema_str = OUStringToOString(aDbName, m_settings.encoding).getStr();
             connProps["hostName"] = sql::ConnectPropertyVal(host_str);
             connProps["userName"] = sql::ConnectPropertyVal(user_str);
             connProps["password"] = sql::ConnectPropertyVal(pass_str);
@@ -221,7 +217,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             #if OSL_DEBUG_LEVEL > 0
                 ::rtl::OString sMessage( "OConnection::construct: malformed URI: " );
                 sMessage += ::rtl::OUStringToOString( e.getMessage(), osl_getThreadTextEncoding() );
-                OSL_ENSURE( false, sMessage.getStr() );
+                OSL_FAIL( sMessage.getStr() );
             #endif
             }
 
@@ -249,7 +245,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     }
 
     m_settings.schema = aDbName;
-    OSL_TRACE(OUStringToOString(m_settings.schema, getConnectionEncoding()).getStr());
+    OSL_TRACE("%s", OUStringToOString(m_settings.schema, getConnectionEncoding()).getStr());
 
     // Check if the server is 4.1 or above
     if (this->getMysqlVersion() < 40100) {
@@ -791,3 +787,5 @@ sal_Int32 OConnection::getMysqlVersion()
  * vim600: noet sw=4 ts=4 fdm=marker
  * vim<600: noet sw=4 ts=4
  */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

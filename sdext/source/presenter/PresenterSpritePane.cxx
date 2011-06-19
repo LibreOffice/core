@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
     mxPresenterHelper = Reference<drawing::XPresenterHelper>(
         xFactory->createInstanceWithContext(
-            OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
             mxComponentContext),
         UNO_QUERY_THROW);
 }
@@ -258,3 +259,5 @@ void PresenterSpritePane::CreateCanvases (
 
 
 } } // end of namespace ::sd::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

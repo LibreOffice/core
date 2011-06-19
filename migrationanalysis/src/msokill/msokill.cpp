@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -257,3 +258,4 @@ void printUsage() {
     printf("            MSO apps so Application.Quit() can succeed\n");
     printf("   --kill : Kill any open MSO apps. Use with caution and only as a last resort\n\n");
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

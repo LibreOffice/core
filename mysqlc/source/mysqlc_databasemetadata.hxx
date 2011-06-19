@@ -1,13 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: mysqlc_databasemetadata.hxx,v $
-*
-* $Revision: 1.1.2.3 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -32,16 +29,10 @@
 
 #include "mysqlc_connection.hxx"
 
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
-#include <preextstl.h>
 #include <cppconn/metadata.h>
-#include <postextstl.h>
 
 namespace connectivity
 {
@@ -69,8 +60,8 @@ namespace connectivity
             bool            identifier_quote_string_set;
 
         private:
-            OUString impl_getStringMetaData( const sal_Char* _methodName, const ext_std::string& (sql::DatabaseMetaData::*_Method)() );
-            OUString impl_getStringMetaData( const sal_Char* _methodName, ext_std::string (sql::DatabaseMetaData::*_Method)() );
+            OUString impl_getStringMetaData( const sal_Char* _methodName, const std::string& (sql::DatabaseMetaData::*_Method)() );
+            OUString impl_getStringMetaData( const sal_Char* _methodName, std::string (sql::DatabaseMetaData::*_Method)() );
             OUString impl_getStringMetaData( const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*_Method)() );
             OUString impl_getStringMetaData( const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*_Method)() );
             sal_Int32 impl_getInt32MetaData( const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*_Method)() );
@@ -243,3 +234,5 @@ namespace connectivity
 }
 
 #endif // CONNECTIVITY_SDATABASEMETADATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

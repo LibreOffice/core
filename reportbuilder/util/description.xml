@@ -6,11 +6,6 @@
     <name lang="en-US">Report Builder</name>
     <!-- <name lang="en-US">Oracle(TM) Report Builder</name> -->
   </display-name>
-  <registration>
-    <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
-            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
-    </simple-license>
-  </registration>
   <version value="#VERSION#"/>
   <identifier value="com.sun.reportdesigner"/>
   <dependencies>
@@ -21,7 +16,6 @@
   </publisher>
   <icon>
     <default xlink:href="images/extension_32.png" />
-    <high-contrast xlink:href="images/extension_32_h.png" />
   </icon>
   <extension-description>
     <src xlink:href="help/component.txt" lang="en" />

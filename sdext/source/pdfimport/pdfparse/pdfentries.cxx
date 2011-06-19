@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,11 @@
 
 #include <stdio.h>
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
+using ::rtl::OStringBuffer;
+
 
 namespace pdfparse
 {
@@ -545,7 +550,7 @@ void PDFDict::insertValue( const OString& rName, PDFEntry* pValue )
     if( ! pValue )
         eraseValue( rName );
 
-    std::hash_map<OString,PDFEntry*,OStringHash>::iterator it = m_aMap.find( rName );
+    boost::unordered_map<OString,PDFEntry*,OStringHash>::iterator it = m_aMap.find( rName );
     if( it == m_aMap.end() )
     {
         // new name/value, pair, append it
@@ -639,7 +644,7 @@ unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
     if( ! m_pDict )
         return 0;
     // find /Length entry, can either be a direct or indirect number object
-    std::hash_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+    boost::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
         m_pDict->m_aMap.find( "Length" );
     if( it == m_pDict->m_aMap.end() )
         return 0;
@@ -694,7 +699,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
             return false;
         }
         // is there a filter entry ?
-        std::hash_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+        boost::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
             m_pStream->m_pDict->m_aMap.find( "Filter" );
         if( it != m_pStream->m_pDict->m_aMap.end() )
         {
@@ -859,7 +864,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 if( bDeflate && rWriteContext.m_bDeflate )
                 {
                     // delete flatedecode filter
-                    std::hash_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+                    boost::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
                     pClone->m_pStream->m_pDict->m_aMap.find( "Filter" );
                     if( it != pClone->m_pStream->m_pDict->m_aMap.end() )
                     {
@@ -1369,7 +1374,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 m_pData->m_nKeyLength = static_cast<sal_uInt32>(pNum->m_fValue) / 8;
                         }
                         PDFName* pFilter = dynamic_cast<PDFName*>(filter->second);
-                        if( pFilter && pFilter->getFilteredName().equalsAscii( "Standard" ) )
+                        if( pFilter && pFilter->getFilteredName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) )
                             m_pData->m_bStandardHandler = true;
                         if( o_ent != pDict->m_aMap.end() )
                         {
@@ -1479,3 +1484,4 @@ PDFEntry* PDFPart::clone() const
     return pNewPt;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

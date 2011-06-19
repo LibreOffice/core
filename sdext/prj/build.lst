@@ -1,4 +1,4 @@
-dx	sdext	:	L10N:l10n offuh comphelper unotools readlicense_oo cppu tools cppuhelper sal javaunohelper officecfg XPDF:xpdf LIBXSLT:libxslt xmlhelp NULL
+dx	sdext	:	TRANSLATIONS:translations offuh comphelper unotools readlicense_oo cppu tools cppuhelper sal javaunohelper officecfg XPDF:xpdf LIBXSLT:libxslt xmlhelp NULL
 dx	sdext									usr1	-	all	sdext_mkout NULL
 dx	sdext\prj								get		-	all	sdext_prj NULL
 dx	sdext\source\minimizer					nmake	-	all sdext_minimizer sdext_minimizer_rdoooe sdext_minimizer_rdooo sdext_inc NULL

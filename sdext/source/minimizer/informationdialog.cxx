@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
 
@@ -87,7 +89,7 @@ rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl:
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -116,7 +118,7 @@ rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString
         Any( nPosY ),
         Any( sal_True ),
         Any( nWidth ) };
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -149,7 +151,7 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -186,7 +188,7 @@ rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUStrin
         Any( nWidth ) };
 
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -213,15 +215,15 @@ OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
     rtl::OUString sURL;
     try
     {
-        mxTempFile = Reference< XStream >( mxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), mxMSF ), UNO_QUERY_THROW );
+        mxTempFile = Reference< XStream >( mxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), mxMSF ), UNO_QUERY_THROW );
         Reference< XPropertySet > xPropSet( mxTempFile, UNO_QUERY );
         Reference< XOutputStream > xOutputStream( mxTempFile->getOutputStream() );
         if ( xOutputStream.is() && xPropSet.is() )
         {
             Reference< graphic::XGraphicProvider > xGraphicProvider( mxMSF->getServiceManager()->createInstanceWithContext(
-                        OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), mxMSF ), UNO_QUERY_THROW );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")), mxMSF ), UNO_QUERY_THROW );
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[ 0 ].Name = OUString::createFromAscii( "URL" );
+            aArgs[ 0 ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
             aArgs[ 0 ].Value <<= sPrivateURL;
             Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aArgs ) );
             if ( xGraphic.is() )
@@ -234,7 +236,7 @@ OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
                 aArgs2[ 1 ].Value <<= xOutputStream;
                 xGraphicProvider->storeGraphic( xGraphic, aArgs2 );
             }
-            xPropSet->getPropertyValue( OUString::createFromAscii( "Uri" ) ) >>= sURL;
+            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")) ) >>= sURL;
         }
     }
     catch( Exception& )
@@ -268,7 +270,7 @@ void InformationDialog::InitDialog()
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -320,7 +322,8 @@ void InformationDialog::InitDialog()
     OUString aInfoString( getString( eInfoString ) );
     const OUString aOldSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%OLDFILESIZE" ) );
     const OUString aNewSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%NEWFILESIZE" ) );
-    const OUString aTitlePlaceholder( aTitle.getLength() ? OUString::createFromAscii( "%TITLE" ) : OUString::createFromAscii( "'%TITLE'" ) );
+    const OUString aTitlePlaceholder( aTitle.getLength() ? OUString(RTL_CONSTASCII_USTRINGPARAM("%TITLE"  ))
+                                                         : OUString(RTL_CONSTASCII_USTRINGPARAM("'%TITLE'")) );
 
     sal_Int32 i = aInfoString.indexOf( aOldSizePlaceholder, 0 );
     if ( i >= 0 )
@@ -335,11 +338,11 @@ void InformationDialog::InitDialog()
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
-    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), ImpGetStandardImage( rtl::OUString::createFromAscii( "private:standardimage/query" ) ), 5, 5, 25, 25 );
-    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
+    InsertImage( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("aboutimage")) ), ImpGetStandardImage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:standardimage/query")) ), 5, 5, 25, 25 );
+    InsertFixedText( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fixedtext")) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
     if ( maSaveAsURL.getLength() )
         InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+    InsertButton( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("button")) ), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 
     sal_Bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
@@ -397,7 +400,7 @@ sal_Bool InformationDialog::execute()
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    if ( rEvent.ActionCommand == rtl::OUString( rtl::OUString::createFromAscii( "button" ) ) )
+    if ( rEvent.ActionCommand == rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("button")) ) )
     {
         mrInformationDialog.endExecute( sal_True );
     }
@@ -406,3 +409,5 @@ void OKActionListener::disposing( const ::com::sun::star::lang::EventObject& /* 
     throw ( com::sun::star::uno::RuntimeException )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

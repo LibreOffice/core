@@ -49,16 +49,17 @@ TARFILE_ROOTDIR=commons-codec-1.3
 
 PATCH_FILES=$(PRJ)$/patches$/codec.patch
 
-#CONVERTFILES=build.xml
-                
 OUT2CLASS=dist$/commons-codec-1.3.jar
+
+ANT_OPTS+="-Dfile.encoding=ISO-8859-1"
+.EXPORT : ANT_OPTS
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""

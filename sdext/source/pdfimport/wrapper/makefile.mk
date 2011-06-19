@@ -51,3 +51,9 @@ SLOFILES=\
 .ENDIF
 
 .INCLUDE :  target.mk
+
+$(SLO)$/wrapper.obj: $(INCCOM)$/hash.cxx
+
+$(INCCOM)$/hash.cxx: keyword_list
+    $(GPERF) -C -t -l -L C++ -m 20 -Z PdfKeywordHash -k'4-5,$$' keyword_list > $@
+

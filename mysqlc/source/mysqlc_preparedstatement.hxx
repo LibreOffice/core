@@ -1,13 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: mysqlc_preparedstatement.hxx,v $
-*
-* $Revision: 1.1.2.4 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -32,25 +29,13 @@
 #include "mysqlc_statement.hxx"
 #include "mysqlc_resultset.hxx"
 
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HPP_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
-#include <preextstl.h>
 #include <cppconn/prepared_statement.h>
-#include <postextstl.h>
 
 namespace connectivity
 {
@@ -194,3 +179,5 @@ namespace connectivity
  * vim<600: noet sw=4 ts=4
  */
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

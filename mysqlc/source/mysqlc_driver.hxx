@@ -1,13 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: mysqlc_driver.hxx,v $
-*
-* $Revision: 1.1.2.4 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -36,9 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/compbase2.hxx>
-#include <preextstl.h>
 #include <cppconn/driver.h>
-#include <postextstl.h>
 #include <osl/module.h>
 
 namespace connectivity
@@ -118,3 +113,5 @@ namespace connectivity
  * vim600: noet sw=4 ts=4 fdm=marker
  * vim<600: noet sw=4 ts=4
  */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

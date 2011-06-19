@@ -51,7 +51,6 @@ LIBSALCPPRT=
 APP1NOSAL=		TRUE
 APP1TARGET=		msokill
 
-#APP1STDLIB
 STDLIB1=msi.lib\
     shell32.lib\
     oleaut32.lib\

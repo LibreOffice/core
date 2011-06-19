@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -915,12 +916,8 @@ void PresenterTextParagraph::AddWord (
     const PresenterTheme::SharedFontDescriptor& rpFont)
 {
     sal_Int32 nLineStart (0);
-    sal_Int32 nLineEnd (0);
     if ( ! maLines.empty())
-    {
         nLineStart = rCurrentLine.startPos;
-        nLineEnd = rCurrentLine.endPos;
-    }
 
     const ::rtl::OUString sLineCandidate (
         msParagraphText.copy(nLineStart, nWordBoundary-nLineStart));
@@ -1185,14 +1182,12 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
 {
     // Find the line that contains the requested character and accumulate
     // the previous line heights.
-    sal_Int32 nFirstCharacterIndex (0);
-    sal_Int32 nEndCharacterIndex (0);
     double nX (mnXOrigin);
     double nY (mnYOrigin + mnVerticalOffset + mnAscent);
     const sal_Int8 nTextDirection (GetTextDirection());
     for (sal_Int32 nLineIndex=0,nLineCount=maLines.size();
          nLineIndex<nLineCount;
-         ++nLineIndex, nFirstCharacterIndex=nEndCharacterIndex, nY+=mnLineHeight)
+         ++nLineIndex, nY+=mnLineHeight)
     {
         Line& rLine (maLines[nLineIndex]);
         // Skip lines before the indexed character.
@@ -1595,3 +1590,5 @@ bool PresenterTextParagraph::Line::IsEmpty (void) const
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5,11 +5,6 @@
     <display-name>
         <name lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</name>
     </display-name>
-    <registration>
-        <simple-license accept-by="admin" default-license-id="lic-en-US">
-            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
-        </simple-license>
-    </registration>
     <dependencies>
         <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0 or StarOffice 9"/>
     </dependencies>

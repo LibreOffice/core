@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <com/sun/star/rendering/XColorSpace.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // virtual resolution of the PDF OutputDev in dpi
 #define PDFI_OUTDEV_RESOLUTION 7200
@@ -50,7 +51,7 @@ namespace com { namespace sun { namespace star { namespace task
 
 namespace pdfi
 {
-    typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > PropertyMap;
+    typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > PropertyMap;
     typedef sal_Int32 ImageId;
 
     /// What to do with a polygon. values can be ORed together
@@ -200,3 +201,5 @@ namespace pdfi
 #define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

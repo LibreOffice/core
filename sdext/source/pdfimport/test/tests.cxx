@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 using namespace ::pdfparse;
@@ -110,7 +111,7 @@ namespace
                                     rtl::math::approxEqual(m_aHyperlinkBounds.X2,166.7) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y2,406.2) );
             CPPUNIT_ASSERT_MESSAGE( "Correct hyperlink URI",
-                                    m_aURI == ::rtl::OUString::createFromAscii( "http://download.openoffice.org/" ) );
+                                    m_aURI == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://download.openoffice.org/")) );
 
             const char* sText = " \n \nThis is a testtext\nNew paragraph,\nnew line\n"
                 "Hyperlink, this is\n?\nThis is more text\noutline mode\n?\nNew paragraph\n";
@@ -370,7 +371,7 @@ namespace
 
         virtual void endText()
         {
-            m_aTextOut.append( ::rtl::OUString::createFromAscii("\n") );
+            m_aTextOut.append( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")) );
         }
 
         virtual void drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -446,11 +447,11 @@ namespace
         {
         }
 
-        typedef std::hash_map<sal_Int32,FontAttributes> IdToFontMap;
-        typedef std::hash_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
+        typedef boost::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
+        typedef boost::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
-        typedef std::hash_map<sal_Int32,GraphicsContext> IdToGCMap;
-        typedef std::hash_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
+        typedef boost::unordered_map<sal_Int32,GraphicsContext> IdToGCMap;
+        typedef boost::unordered_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
 
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 
@@ -496,7 +497,7 @@ namespace
                     CPPUNIT_ASSERT_MESSAGE(
                         "Converting ini file to URL",
                         osl_getFileURLFromSystemPath(
-                            (msBaseDir+rtl::OUString::createFromAscii("pdfi_unittest_test.ini")).pData,
+                            (msBaseDir+rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.ini"))).pData,
                             &aIniUrl.pData ) == osl_File_E_None );
 
                     mxCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
@@ -517,7 +518,7 @@ namespace
         void testXPDFParser()
         {
             pdfi::ContentSinkSharedPtr pSink( new TestSink() );
-            pdfi::xpdf_ImportFromFile( msBaseDir + rtl::OUString::createFromAscii("pdfi_unittest_test.pdf"),
+            pdfi::xpdf_ImportFromFile( msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.pdf")),
                                        pSink,
                                        uno::Reference< task::XInteractionHandler >(),
                                        rtl::OUString(),
@@ -534,12 +535,12 @@ namespace
             aAdaptor.setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
             ::rtl::OUString aURL, aAbsURL, aBaseURL;
-            osl_getFileURLFromSystemPath( (msBaseDir + rtl::OUString::createFromAscii("pdfi_unittest_draw.xml")).pData,
+            osl_getFileURLFromSystemPath( (msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_draw.xml"))).pData,
                                           &aURL.pData );
             osl_getProcessWorkingDir(&aBaseURL.pData);
             osl_getAbsoluteFileURL(aBaseURL.pData,aURL.pData,&aAbsURL.pData);
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   aAdaptor.odfConvert( msBaseDir + rtl::OUString::createFromAscii("pdfi_unittest_test.pdf"),
+                                   aAdaptor.odfConvert( msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.pdf")),
                                                         new OutputWrap(aAbsURL),
                                                         NULL ));
         }
@@ -550,12 +551,12 @@ namespace
             aAdaptor.setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
             ::rtl::OUString aURL, aAbsURL, aBaseURL;
-            osl_getFileURLFromSystemPath( (msBaseDir + rtl::OUString::createFromAscii("pdfi_unittest_writer.xml")).pData,
+            osl_getFileURLFromSystemPath( (msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_writer.xml"))).pData,
                                           &aURL.pData );
             osl_getProcessWorkingDir(&aBaseURL.pData);
             osl_getAbsoluteFileURL(aBaseURL.pData,aURL.pData,&aAbsURL.pData);
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   aAdaptor.odfConvert( msBaseDir + rtl::OUString::createFromAscii("pdfi_unittest_test.pdf"),
+                                   aAdaptor.odfConvert( msBaseDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_test.pdf")),
                                                         new OutputWrap(aAbsURL),
                                                         NULL ));
         }
@@ -579,3 +580,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(PDFITest, "PDFITest");
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

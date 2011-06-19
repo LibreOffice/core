@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 #include "pdfparse.hxx"
 
 // workaround windows compiler: do not include multi_pass.hpp
-//#include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_error_handling.hpp>
@@ -57,8 +57,10 @@
 #endif
 
 using namespace boost::spirit;
-using namespace rtl;
 using namespace pdfparse;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 class StringEmitContext : public EmitContext
 {
@@ -113,7 +115,7 @@ public:
         typedef nil_t result_t;
         template <typename ScannerT>
         std::ptrdiff_t
-        operator()(ScannerT const& scan, result_t& result) const
+        operator()(ScannerT const& scan, result_t&) const
         {
             std::ptrdiff_t len = 0;
 
@@ -562,7 +564,9 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 
     try
     {
+        #if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info<const char*> aInfo =
+        #endif
             boost::spirit::parse( pBuffer,
                                   pBuffer+nLen,
                                   aGrammar,
@@ -640,7 +644,9 @@ PDFEntry* PDFReader::read( const char* pFileName )
 
     try
     {
+        #if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info< file_iterator<> > aInfo =
+        #endif
             boost::spirit::parse( file_start,
                                   file_end,
                                   aGrammar,
@@ -699,3 +705,4 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_LANG_XMULTI_COMPONENT_FACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -116,9 +115,7 @@ public :
 
     void setControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName, const com::sun::star::uno::Any& rPropertyValue );
     com::sun::star::uno::Any getControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName );
-#if 0
-    void showMessageBox( const rtl::OUString& rTitle, const rtl::OUString& rMessage, sal_Bool bErrorBox ) const;
-#endif
+
     void enableControl( const rtl::OUString& rControlName );
     void disableControl( const rtl::OUString& rControlName );
 
@@ -147,3 +144,5 @@ public :
 };
 
 #endif // UNODIALOG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

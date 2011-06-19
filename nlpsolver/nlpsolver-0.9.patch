@@ -1,0 +1,62 @@
+--- misc/nlpsolver-0.9/nbproject/build-uno-impl.xml.old	2009-03-30 18:32:00.000000000 +0200
++++ misc/build/nlpsolver-0.9/nbproject/build-uno-impl.xml	2009-10-28 18:22:40.000000000 +0100
+@@ -197,7 +197,7 @@
+     <!-- enter the class path with external jars, if external jars exit and the user did not enter his own -->
+     <target name="-do-class-path" depends="-external-jars,-check-class-path" unless="class.path.exists">
+         <manifest file="${build.dir}/MANIFEST.MF" mode="update">
+-            <attribute name="Class-Path" value="${external.jars}"/> 
++            <attribute name="Class-Path" value="${external.jar.dir}/EvolutionarySolver.jar"/> 
+         </manifest>            
+     </target>
+     <target name="-check-class-path">
+--- misc/nlpsolver-0.9/nbproject/project.properties.old	2009-03-30 18:32:00.000000000 +0200
++++ misc/build/nlpsolver-0.9/nbproject/project.properties	2009-10-28 18:09:01.000000000 +0100
+@@ -27,8 +27,10 @@ file.reference.EvolutionarySolver.jar=Th
+ includes=**
+ jar.compress=false
+ javac.classpath=\
+-    ${libs.StarOffice 9.classpath}:\
+-    ${libs.OpenOffice.org 3.0.classpath}:\
++    ${solar.jar}/juh.jar:\
++    ${solar.jar}/jurt.jar:\
++    ${solar.jar}/ridl.jar:\
++    ${solar.jar}/unoil.jar:\
+     ${reference.EvolutionarySolver.jar}
+ # Space-separated list of extra javac options
+ javac.compilerargs=
+--- misc/nlpsolver-0.9/nbproject/build-impl.xml.old	2009-03-30 18:32:00.000000000 +0200
++++ misc/build/nlpsolver-0.9/nbproject/build-impl.xml	2009-10-28 18:19:53.000000000 +0100
+@@ -360,6 +360,8 @@ is divided into following sections:
+             -->
+     <target depends="init" name="deps-jar" unless="no.deps">
+         <ant antfile="${project.EvolutionarySolver}/build.xml" inheritall="false" target="jar"/>
++	<mkdir dir="${dist.dir}/${external.jar.dir}"/>
++	<copy file="${reference.EvolutionarySolver.jar}" todir="${dist.dir}/${external.jar.dir}"/>
+     </target>
+     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
+     <target depends="init" name="-check-automatic-build">
+--- misc/nlpsolver-0.9/src/description.xml.old	2009-03-30 16:56:42.000000000 +0200
++++ misc/build/nlpsolver-0.9/src/description.xml	2009-10-28 18:29:13.000000000 +0100
+@@ -12,11 +12,6 @@
+     <extension-description>
+         <src lang="en" xlink:href="description/extensiondescription.txt"/>
+     </extension-description>
+-    <registration>
+-        <simple-license accept-by="admin" default-license-id="en">
+-            <license-text lang="en" license-id="en" xlink:href="licenses/lgpl-3.0.txt"/>
+-        </simple-license>
+-    </registration>
+     <dependencies>
+         <OpenOffice.org-minimal-version xmlns:d="http://openoffice.org/extensions/description/2006" d:name="OpenOffice.org 3.0" value="3.0"/>
+     </dependencies>
+--- misc/build/nlpsolver-0.9/src/locale/NLPSolverCommon_en_US.properties.old	2009-03-30 18:20:06.000000000 +0200
++++ misc/build/nlpsolver-0.9/src/locale/NLPSolverCommon_en_US.properties	2010-12-18 22:08:47.084693100 +0100
+@@ -2,7 +2,7 @@
+ NLPSolverCommon.Properties.AssumeNonNegative=Assume Non-Negative Variables
+ 
+ #BaseEvolutionarySolver
+-NLPSolverCommon.Properties.SwarmSize=Size of Swam
++NLPSolverCommon.Properties.SwarmSize=Size of Swarm
+ NLPSolverCommon.Properties.LibrarySize=Size of Library
+ NLPSolverCommon.Properties.LearningCycles=Learning Cycles
+ NLPSolverCommon.Properties.GuessVariableRange=Variable Bounds Guessing

@@ -74,7 +74,7 @@
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Default Formatting</value>
+                    <value xml:lang="en-US">~Clear Direct Formatting</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertPageNumberField" oor:op="replace">
@@ -257,7 +257,7 @@
                 </prop>
             </node>
 
-            <!-- U will find corresponding icons in default_images/res/commandimagelist. -->
+            <!-- U will find corresponding icons in default_images/cmd. -->
             <!-- The name has no .uno: prefix but lc_ or lch_ or sc_ or sch_ -->
 
             <node oor:name=".uno:EditShapeMenu" oor:op="replace">
@@ -385,7 +385,7 @@
             </node>
             <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Guides</value>
+                    <value xml:lang="en-US">~Snap Lines</value>
                 </prop>
             </node>
             <node oor:name=".uno:ObjectResize" oor:op="replace">

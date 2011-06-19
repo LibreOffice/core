@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define INCLUDED_PDFI_STYLE_HXX
 
 #include "pdfihelper.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -132,16 +133,16 @@ namespace pdfi
         friend struct StyleIdNameSort;
         struct StyleIdNameSort
         {
-            const std::hash_map< sal_Int32, HashedStyle >* m_pMap;
+            const boost::unordered_map< sal_Int32, HashedStyle >* m_pMap;
 
-            StyleIdNameSort( const std::hash_map< sal_Int32, HashedStyle >* pMap ) :
+            StyleIdNameSort( const boost::unordered_map< sal_Int32, HashedStyle >* pMap ) :
                 m_pMap(pMap)
             {}
             bool operator()( sal_Int32 nLeft, sal_Int32 nRight )
             {
-                const std::hash_map< sal_Int32, HashedStyle >::const_iterator left_it =
+                const boost::unordered_map< sal_Int32, HashedStyle >::const_iterator left_it =
                     m_pMap->find( nLeft );
-                const std::hash_map< sal_Int32, HashedStyle >::const_iterator right_it =
+                const boost::unordered_map< sal_Int32, HashedStyle >::const_iterator right_it =
                     m_pMap->find( nRight );
                 if( left_it == m_pMap->end() )
                     return false;
@@ -153,8 +154,8 @@ namespace pdfi
         };
 
         sal_Int32                                               m_nNextId;
-        std::hash_map< sal_Int32, HashedStyle >                 m_aIdToStyle;
-        std::hash_map< HashedStyle, sal_Int32, StyleHash >      m_aStyleToId;
+        boost::unordered_map< sal_Int32, HashedStyle >                 m_aIdToStyle;
+        boost::unordered_map< HashedStyle, sal_Int32, StyleHash >      m_aStyleToId;
 
         void impl_emitStyle( sal_Int32           nStyleId,
                              EmitContext&        rContext,
@@ -179,3 +180,5 @@ namespace pdfi
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

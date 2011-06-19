@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/ref.hxx>
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <boost/bind.hpp>
 #include <cmath>
 
@@ -63,7 +64,7 @@ namespace sdext { namespace presenter {
 
 /** Wrapper around a library timer.
 */
-class PresenterClock::Timer : public vos::OTimer
+class PresenterClock::Timer : public salhelper::Timer
 {
 public:
     explicit Timer (const ::rtl::Reference<PresenterClock>& rpClock);
@@ -349,7 +350,6 @@ void PresenterClock::LateInit (void)
 
 void SAL_CALL PresenterClock::disposing (void)
 {
-    //    osl::MutexGuard aGuard (m_aMutex);
     if (mpTimer != NULL)
     {
         mpTimer->Stop();
@@ -397,9 +397,6 @@ void PresenterClock::UpdateTime (void)
 void SAL_CALL PresenterClock::disposing (const lang::EventObject& rEventObject)
     throw (RuntimeException)
 {
-    //    ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
-    //    osl::MutexGuard aGuard (m_aMutex);
-
     if (rEventObject.Source == mxWindow)
     {
         mxWindow = NULL;
@@ -416,9 +413,7 @@ void SAL_CALL PresenterClock::disposing (const lang::EventObject& rEventObject)
 void SAL_CALL PresenterClock::windowPaint (const awt::PaintEvent& rEvent)
     throw (RuntimeException)
 {
-    (void)rEvent;
     ThrowIfDisposed();
-    ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
     Paint(rEvent.UpdateRect);
 }
 
@@ -471,7 +466,6 @@ void SAL_CALL PresenterClock::windowHidden (const lang::EventObject& rEvent)
 void SAL_CALL PresenterClock::mousePressed (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
-    (void)rEvent;
     if (rEvent.Buttons == awt::MouseButton::LEFT)
     {
         SetMode(mnMode+1);
@@ -634,7 +628,7 @@ void PresenterClock::SetMode (const sal_Int32 nMode)
             mpClockPainter.reset(
                 new AnalogBitmapPainter(
                     mxComponentContext,
-                    OUString::createFromAscii("ClockTheme")));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("ClockTheme"))));
             mpClockPainter2.reset();
             break;
 
@@ -652,7 +646,7 @@ void PresenterClock::SetMode (const sal_Int32 nMode)
             mpClockPainter.reset(
                 new AnalogBitmapPainter(
                     mxComponentContext,
-                    OUString::createFromAscii("ClockTheme")));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("ClockTheme"))));
             mpClockPainter2.reset(new AnalogDefaultPainter());
             break;
     }
@@ -680,7 +674,7 @@ void PresenterClock::ThrowIfDisposed (void)
 //===== Timer =================================================================
 
 PresenterClock::Timer::Timer (const ::rtl::Reference<PresenterClock>& rpClock)
-    : OTimer(vos::TTimeValue(10), vos::TTimeValue(100/*ms*/)),
+    : salhelper::Timer(salhelper::TTimeValue(10), salhelper::TTimeValue(100/*ms*/)),
       mpClock(rpClock)
 {
     acquire();
@@ -1040,7 +1034,7 @@ void AnalogBitmapPainter::PrepareBitmaps (const Reference<rendering::XCanvas>& r
         // Get access to the clock bitmaps in the configuration.
         PresenterConfigurationAccess aConfiguration (
             mxComponentContext,
-            OUString::createFromAscii("org.openoffice.Office.extension.PresenterScreen"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.extension.PresenterScreen")),
             PresenterConfigurationAccess::READ_ONLY);
 
         Reference<container::XNameAccess> xTheme (GetTheme(aConfiguration));
@@ -1064,20 +1058,20 @@ Reference<container::XNameAccess> AnalogBitmapPainter::GetTheme (
     // Get root of clock themes.
     Reference<container::XHierarchicalNameAccess> xClock (
         rConfiguration.GetConfigurationNode(
-            OUString::createFromAscii("PresenterScreenSettings/AnalogBitmapClock")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterScreenSettings/AnalogBitmapClock"))),
         UNO_QUERY);
 
     // Determine the name of the theme to use.
-    OUString sCurrentThemeName (OUString::createFromAscii("DefaultTheme"));
+    OUString sCurrentThemeName (RTL_CONSTASCII_USTRINGPARAM("DefaultTheme"));
     rConfiguration.GetConfigurationNode(
         xClock,
-        OUString::createFromAscii("CurrentTheme")) >>= sCurrentThemeName;
+        OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentTheme"))) >>= sCurrentThemeName;
 
     // Load the clock theme.
     Reference<container::XNameAccess> xThemes (
         rConfiguration.GetConfigurationNode(
             xClock,
-            OUString::createFromAscii("Themes")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Themes"))),
         UNO_QUERY);
     if (xThemes.is())
     {
@@ -1104,7 +1098,7 @@ bool AnalogBitmapPainter::ThemeNameComparator (
     if (rxCandidate.is())
     {
         OUString sThemeName;
-        if (rxCandidate->getByName(OUString::createFromAscii("ThemeName")) >>= sThemeName)
+        if (rxCandidate->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("ThemeName"))) >>= sThemeName)
         {
             return sThemeName == rsCurrentThemeName;
         }
@@ -1125,13 +1119,13 @@ void AnalogBitmapPainter::LoadBitmaps (
 
     // Get base path to bitmaps.
     Reference<deployment::XPackageInformationProvider> xInformationProvider (
-        mxComponentContext->getValueByName(OUString::createFromAscii(
-            "/singletons/com.sun.star.deployment.PackageInformationProvider")),
+        mxComponentContext->getValueByName(OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "/singletons/com.sun.star.deployment.PackageInformationProvider"))),
         UNO_QUERY);
     OUString sLocation;
     if (xInformationProvider.is())
         sLocation = xInformationProvider->getPackageLocation(gsExtensionIdentifier);
-    sLocation += OUString::createFromAscii("/");
+    sLocation += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     // Create the bitmap loader.
     Reference<lang::XMultiComponentFactory> xFactory (
@@ -1142,7 +1136,7 @@ void AnalogBitmapPainter::LoadBitmaps (
     aArguments[0] <<= rxCanvas;
     Reference<container::XNameAccess> xBitmapLoader(
         xFactory->createInstanceWithArgumentsAndContext(
-            OUString::createFromAscii("com.sun.star.drawing.PresenterWorkaroundService"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterWorkaroundService")),
             aArguments,
             mxComponentContext),
         UNO_QUERY);
@@ -1152,12 +1146,12 @@ void AnalogBitmapPainter::LoadBitmaps (
 
     // Iterate over all entries in the bitmap list and load the bitmaps.
     Reference<container::XNameAccess> xBitmaps (
-        rxClockTheme->getByName(OUString::createFromAscii("Bitmaps")),
+        rxClockTheme->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmaps"))),
         UNO_QUERY);
     ::std::vector<rtl::OUString> aBitmapProperties (3);
-    aBitmapProperties[0] = OUString::createFromAscii("FileName");
-    aBitmapProperties[1] = OUString::createFromAscii("XOffset");
-    aBitmapProperties[2] = OUString::createFromAscii("YOffset");
+    aBitmapProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
+    aBitmapProperties[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("XOffset"));
+    aBitmapProperties[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("YOffset"));
     PresenterConfigurationAccess::ForAll(
         xBitmaps,
         aBitmapProperties,
@@ -1181,11 +1175,11 @@ void AnalogBitmapPainter::LoadBitmap (
     if (rValues.size() == 3)
     {
         BitmapDescriptor* pDescriptor = NULL;
-        if (rsKey == OUString::createFromAscii("Face"))
+        if (rsKey == OUString(RTL_CONSTASCII_USTRINGPARAM("Face")))
             pDescriptor = &maFace;
-        else if (rsKey == OUString::createFromAscii("HourHand"))
+        else if (rsKey == OUString(RTL_CONSTASCII_USTRINGPARAM("HourHand")))
             pDescriptor = &maHourHand;
-        else if (rsKey == OUString::createFromAscii("MinuteHand"))
+        else if (rsKey == OUString(RTL_CONSTASCII_USTRINGPARAM("MinuteHand")))
             pDescriptor = &maMinuteHand;
 
         if (pDescriptor == NULL)
@@ -1290,12 +1284,12 @@ void DigitalDefaultPainter::Paint (
     {
         sText = OUString::valueOf(nHour>12 ? nHour-12 : nHour);
     }
-    sText += OUString::createFromAscii(":");
+    sText += OUString(RTL_CONSTASCII_USTRINGPARAM(":"));
     const OUString sMinutes (OUString::valueOf(nMinute));
     switch (sMinutes.getLength())
     {
         case 1 :
-            sText += OUString::createFromAscii("0") + sMinutes;
+            sText += OUString(RTL_CONSTASCII_USTRINGPARAM("0")) + sMinutes;
             break;
         case 2:
             sText += sMinutes;
@@ -1306,12 +1300,12 @@ void DigitalDefaultPainter::Paint (
     }
     if (bIsShowSeconds)
     {
-        sText += OUString::createFromAscii(":");
+        sText += OUString(RTL_CONSTASCII_USTRINGPARAM(":"));
         const OUString sSeconds (OUString::valueOf(nSecond));
         switch (sSeconds.getLength())
         {
             case 1 :
-                sText += OUString::createFromAscii("0") + sSeconds;
+                sText += OUString(RTL_CONSTASCII_USTRINGPARAM("0")) + sSeconds;
                 break;
             case 2:
                 sText += sSeconds;
@@ -1387,13 +1381,13 @@ void DigitalDefaultPainter::CreateFont (
         // For the case that not all digits have the same width, create
         // different templates for 12 and 24 hour mode.
         if (mbIs24HourFormat)
-            sTimeTemplate = OUString::createFromAscii("20");
+            sTimeTemplate = OUString(RTL_CONSTASCII_USTRINGPARAM("20"));
         else
-            sTimeTemplate = OUString::createFromAscii("10");
+            sTimeTemplate = OUString(RTL_CONSTASCII_USTRINGPARAM("10"));
         if (bIsShowSeconds)
-            sTimeTemplate += OUString::createFromAscii(":00:00");
+            sTimeTemplate += OUString(RTL_CONSTASCII_USTRINGPARAM(":00:00"));
         else
-            sTimeTemplate += OUString::createFromAscii(":00");
+            sTimeTemplate += OUString(RTL_CONSTASCII_USTRINGPARAM(":00"));
 
         rendering::StringContext aContext (
             sTimeTemplate,
@@ -1447,3 +1441,5 @@ void DigitalDefaultPainter::CreateFont (
 
 
 } } // end of namespace ::sdext::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
