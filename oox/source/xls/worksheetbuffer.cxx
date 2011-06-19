@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -237,7 +238,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
+        OSL_FAIL( "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
     }
     return IndexNamePair( -1, OUString() );
 }
@@ -256,3 +257,5 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

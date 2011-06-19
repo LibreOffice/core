@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
-//#include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
 
 namespace writerfilter {
 namespace dmapper
@@ -40,12 +39,13 @@ class TablePropertyMap;
 class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
 {
 public:
+    enum OutputFormat { Form, Paragraph, Character }; // for what part of the document
+private:
     sal_Int32 m_nShadowType;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
-    bool      m_bParagraph;
+    OutputFormat m_OutputFormat;
 
-private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
     virtual void lcl_sprm(Sprm & sprm);
@@ -56,9 +56,11 @@ public:
 
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
-    void setParagraph() { m_bParagraph = true; }
+    void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}
 
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

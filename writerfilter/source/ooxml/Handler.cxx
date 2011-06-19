@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ void OOXMLFootnoteHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_FtnEdnRef_id:
-        mpFastContext->resolveFootnote(val.getString());
+        mpFastContext->resolveFootnote(sal_Int32(val.getInt()));
         break;
     default:
         break;
@@ -78,7 +79,7 @@ void OOXMLEndnoteHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_FtnEdnRef_id:
-        mpFastContext->resolveEndnote(val.getString());
+        mpFastContext->resolveEndnote(sal_Int32(val.getInt()));
         break;
     default:
         break;
@@ -106,7 +107,7 @@ void OOXMLCommentHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_Markup_id:
-        mpFastContext->resolveComment(val.getString());
+        mpFastContext->resolveComment(val.getInt());
         break;
     default:
         ;
@@ -308,7 +309,7 @@ OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
     sReturn += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
     sReturn += mFieldCode;
 
-    mpFastContext->characters(sReturn);
+    mpFastContext->text(sReturn);
 }
 
 void OOXMLHyperlinkHandler::attribute(Id name, Value & val)
@@ -346,3 +347,5 @@ void OOXMLHyperlinkHandler::sprm(Sprm & /*rSprm*/)
 {
 }
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

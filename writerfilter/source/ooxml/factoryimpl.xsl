@@ -7,10 +7,6 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
-  $RCSfile: fastresources_wml.xsl,v $
- 
-  $Revision: 1.3 $
- 
   This file is part of OpenOffice.org.
  
   OpenOffice.org is free software: you can redistribute it and/or modify
@@ -342,8 +338,8 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
             (mxContext->getServiceManager());
 
         mxFastParser.set(xFactory->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii
-                ( "com.sun.star.xml.sax.FastParser" ), 
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                ( "com.sun.star.xml.sax.FastParser" )), 
                     mxContext ), uno::UNO_QUERY_THROW);
 </xsl:text>
 <xsl:for-each select="//namespace-alias">

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,7 +248,7 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "OleStorage::initStorage - cannot create temporary copy of input stream" );
+        OSL_FAIL( "OleStorage::initStorage - cannot create temporary copy of input stream" );
     }
 
     // create base storage object
@@ -302,7 +303,7 @@ bool OleStorage::implIsStorage() const
 
 Reference< XStorage > OleStorage::implGetXStorage() const
 {
-    OSL_ENSURE( false, "OleStorage::getXStorage - not implemented" );
+    OSL_FAIL( "OleStorage::getXStorage - not implemented" );
     return Reference< XStorage >();
 }
 
@@ -408,3 +409,5 @@ void OleStorage::implCommit() const
 
 } // namespace ole
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

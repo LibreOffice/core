@@ -1,7 +1,7 @@
 /* DocumentElement: The items we are collecting to be put into the Writer
  * document: paragraph and spans of text, as well as section breaks.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,7 @@
  */
 
 #include "DocumentElement.hxx"
+#include "OdfDocumentHandler.hxx"
 #include "FilterInternal.hxx"
 #include <string.h>
 
@@ -36,7 +37,7 @@ void TagElement::print() const
     WRITER_DEBUG_MSG(("%s\n", msTagName.cstr()));
 }
 
-void TagOpenElement::write(DocumentHandler *pHandler) const
+void TagOpenElement::write(OdfDocumentHandler *pHandler) const
 {
     pHandler->startElement(getTagName().cstr(), maAttrList);
 }
@@ -46,57 +47,27 @@ void TagOpenElement::print() const
     TagElement::print();
 }
 
-void TagOpenElement::addAttribute(const char *szAttributeName, const WPXString &sAttributeValue)
+void TagOpenElement::addAttribute(const WPXString &szAttributeName, const WPXString &sAttributeValue)
 {
-        maAttrList.insert(szAttributeName, sAttributeValue);
+        maAttrList.insert(szAttributeName.cstr(), sAttributeValue);
 }
 
-void TagCloseElement::write(DocumentHandler *pHandler) const
+void TagCloseElement::write(OdfDocumentHandler *pHandler) const
 {
     WRITER_DEBUG_MSG(("TagCloseElement: write (%s)\n", getTagName().cstr()));
 
     pHandler->endElement(getTagName().cstr());
 }
 
-void CharDataElement::write(DocumentHandler *pHandler) const
+void CharDataElement::write(OdfDocumentHandler *pHandler) const
 {
     WRITER_DEBUG_MSG(("TextElement: write\n"));
     pHandler->characters(msData);
 }
 
-TextElement::TextElement(const WPXString & sTextBuf) :
-    msTextBuf(sTextBuf, false)
+void TextElement::write(OdfDocumentHandler *pHandler) const
 {
-}
-
-// write: writes a text run, appropriately converting spaces to <text:s>
-// elements
-void TextElement::write(DocumentHandler *pHandler) const
-{
-    WPXPropertyList xBlankAttrList;
-
-    WPXString sTemp;
-
-    int iNumConsecutiveSpaces = 0;
-        WPXString::Iter i(msTextBuf);
-    for (i.rewind(); i.next();)
-        {
-        if (*(i()) == ASCII_SPACE)
-            iNumConsecutiveSpaces++;
-        else
-            iNumConsecutiveSpaces = 0;
-
-        if (iNumConsecutiveSpaces > 1) {
-            if (sTemp.len() > 0) {
-                pHandler->characters(sTemp);
-                sTemp.clear();
-            }
-            pHandler->startElement("text:s", xBlankAttrList);
-            pHandler->endElement("text:s");
-        }
-        else {
-                        sTemp.append(i());
-        }
-    }
-    pHandler->characters(sTemp);
+    if (msTextBuf.len() <= 0)
+        return;
+    pHandler->characters(msTextBuf);
 }

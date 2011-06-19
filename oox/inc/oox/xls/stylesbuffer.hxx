@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
-#include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include "oox/drawingml/color.hxx"
 #include "oox/helper/graphichelper.hxx"
@@ -363,11 +364,12 @@ struct AlignmentModel
 struct ApiAlignmentData
 {
     typedef ::com::sun::star::table::CellHoriJustify ApiCellHoriJustify;
-    typedef ::com::sun::star::table::CellVertJustify ApiCellVertJustify;
     typedef ::com::sun::star::table::CellOrientation ApiCellOrientation;
 
     ApiCellHoriJustify  meHorJustify;       /// Horizontal alignment.
-    ApiCellVertJustify  meVerJustify;       /// Vertical alignment.
+    sal_Int32           mnHorJustifyMethod;
+    sal_Int32           mnVerJustify;       /// Vertical alignment.
+    sal_Int32           mnVerJustifyMethod;
     ApiCellOrientation  meOrientation;      /// Normal or stacked text.
     sal_Int32           mnRotation;         /// Text rotation angle.
     sal_Int16           mnWritingMode;      /// CTL text direction.
@@ -519,10 +521,12 @@ struct BorderModel
 /** Contains API attributes of a complete cell border. */
 struct ApiBorderData
 {
-    typedef ::com::sun::star::table::TableBorder    ApiTableBorder;
-    typedef ::com::sun::star::table::BorderLine     ApiBorderLine;
+    typedef ::com::sun::star::table::BorderLine2     ApiBorderLine;
 
-    ApiTableBorder      maBorder;           /// Left/right/top/bottom line format.
+    ApiBorderLine       maLeft;             /// Left line format
+    ApiBorderLine       maRight;            /// Right line format
+    ApiBorderLine       maTop;              /// Top line format
+    ApiBorderLine       maBottom;           /// Bottom line format
     ApiBorderLine       maTLtoBR;           /// Diagonal top-left to bottom-right line format.
     ApiBorderLine       maBLtoTR;           /// Diagonal bottom-left to top-right line format.
     bool                mbBorderUsed;       /// True = left/right/top/bottom line format used.
@@ -577,13 +581,15 @@ public:
     /** Writes all border attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
+    bool                hasBorder() const;
+
 private:
     /** Returns the border line struct specified by the passed XML token identifier. */
     BorderLineModel*    getBorderLine( sal_Int32 nElement );
 
     /** Converts border line data to an API struct, returns true, if the line is marked as used. */
     bool                convertBorderLine(
-                            ::com::sun::star::table::BorderLine& rBorderLine,
+                            ::com::sun::star::table::BorderLine2& rBorderLine,
                             const BorderLineModel& rModel );
 
 private:
@@ -1075,6 +1081,7 @@ public:
     /** Writes the cell formatting attributes of the specified style XF to the passed property set. */
     void                writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
 
+    bool                hasBorder( sal_Int32 nBorderId ) const;
 private:
     typedef RefVector< Font >                           FontVector;
     typedef RefVector< Border >                         BorderVector;
@@ -1101,3 +1108,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

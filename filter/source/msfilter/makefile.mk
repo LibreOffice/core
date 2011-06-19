@@ -54,7 +54,8 @@ SLOFILES= \
     $(SLO)$/services.obj	\
     $(SLO)$/svdfppt.obj		\
     $(SLO)$/svxmsbas.obj	\
-    $(SLO)$/svxmsbas2.obj
+    $(SLO)$/svxmsbas2.obj       \
+    $(SLO)$/mstoolbar.obj
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
 SHL1IMPLIB=	i$(TARGET)
@@ -63,6 +64,7 @@ SHL1USE_EXPORTS=name
 SHL1STDLIBS= \
              $(EDITENGLIB) \
              $(SVXCORELIB) \
+             $(SVTOOLLIB) \
              $(SFX2LIB) \
              $(XMLOFFLIB) \
              $(BASEGFXLIB) \

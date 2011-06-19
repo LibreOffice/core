@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <osl/process.h>
 #include <rtl/string.hxx>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <assert.h>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -74,7 +75,7 @@ struct ScannerTestServiceHelper
     }
 };
 
-typedef ::std::hash_set< ::rtl::OString, ScannerTestServiceHelper, ScannerTestServiceHelper > ScannerTestServiceTokenMap;
+typedef ::boost::unordered_set< ::rtl::OString, ScannerTestServiceHelper, ScannerTestServiceHelper > ScannerTestServiceTokenMap;
 
 class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
 {
@@ -92,7 +93,6 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
     void dest(char* token, char* /*value*/)
     {
         destMap.insert(rtl::OString(token));
-//      printf("{\\*\\%s%s ", token, value);
         if (strcmp(token, "objdata")==0)
         {
             binBuffer.clear();
@@ -103,11 +103,9 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
     void ctrl(char*token, char* /*value*/)
     {
         ctrlMap.insert(rtl::OString(token));
-//      printf("\\%s%s ", token, value);
     }
     void lbrace(void)
     {
-//      printf("{");
     }
     void rbrace(void)
     {
@@ -126,34 +124,18 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             o+=4; // dummy2
             unsigned int binLen=((unsigned int)binBuffer[o]) | ((unsigned int)binBuffer[o+1])<<8 | ((unsigned int)binBuffer[o+2])<<16 | ((unsigned int)binBuffer[o+3]<<24); o+=4;
             printf("OLE%i \"%s\" type=%i recType=%i binBuffer.size()=%u len=%u\n", numOfOLEs, str, type, recType, (unsigned int)(binBuffer.size()), o+binLen);
-            //assert(binBuffer.size()==o+binLen);
             char buf[100];
             sprintf(buf, "ole%02i.ole", numOfOLEs);
-/*          if 0{
-            FILE *f=fopen(buf, "w+b");
-            unsigned char *data=binBuffer.begin();
-            fwrite(data+o, 1, binLen, f);
-            fclose(f);
-            }*/
-/*
-            rtl_uString *dir=NULL;
-            osl_getProcessWorkingDir(&dir);
-            rtl::OUString absFileUrl;
-            rtl::OUString fileUrl=rtl::OUString::createFromAscii(buf);
-            osl_getAbsoluteFileURL(dir, fileUrl.pData, &absFileUrl.pData);
-            rtl_uString_release(dir);
-*/
+
                 comphelper::ByteSequence seq(binLen);
                 unsigned char *data0=binBufferStr;
                 memcpy(seq.getArray(), data0+o, binLen);
                 uno::Reference<io::XInputStream> myStream=new comphelper::SequenceInputStream(seq);
-//          uno::Reference<io::XStream> myStream=xFileAccess->openFileReadWrite(absFileUrl);
-//          uno::Reference<io::XStream> myStream(new MyStreamImpl(binBuffer, o));
             uno::Sequence< uno::Any > aArgs0( 1 );
             aArgs0[0] <<= myStream;
             uno::Reference< container::XNameContainer > xNameContainer(
             xServiceFactory->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii("com.sun.star.embed.OLESimpleStorage" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OLESimpleStorage")),
                     aArgs0 ),
             uno::UNO_QUERY_THROW );
             try {
@@ -170,7 +152,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
                 uno::Reference< io::XStream > xContentStream = xStorage->openStreamElement(
                     rtl::OUString::createFromAscii(buf), embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
                 uno::Reference<beans::XPropertySet> xContentStreamPropSet(xContentStream, uno::UNO_QUERY_THROW);
-                xContentStreamPropSet->setPropertyValue(rtl::OUString::createFromAscii("MediaType"), uno::makeAny(rtl::OUString::createFromAscii("application/vnd.sun.star.oleobject")));
+                xContentStreamPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.oleobject"))));
                 uno::Reference<io::XOutputStream> myOutStream=xContentStream->getOutputStream();
                 uno::Sequence< ::sal_Int8 > seq1(binLen);
                 unsigned char *data1=binBufferStr;
@@ -183,7 +165,6 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             {
                 printf("NOT OK\n");
                 comphelper::ByteSequence seq2(4+binLen);
-                //              memcpy(seq2.getArray(), &binLen, 4); assert(0); //TODO linux
                 seq2[0]= sal::static_int_cast<sal_Int8>(binLen&0xFF);
                 seq2[1]= sal::static_int_cast<sal_Int8>((binLen>>8)&0xFF);
                 seq2[2]= sal::static_int_cast<sal_Int8>((binLen>>16)&0xFF);
@@ -196,21 +177,21 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
                 uno::Reference< io::XStream > xContentStream = xStorage->openStreamElement(
                     rtl::OUString::createFromAscii(buf), embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
                 uno::Reference<beans::XPropertySet> xContentStreamPropSet(xContentStream, uno::UNO_QUERY_THROW);
-                xContentStreamPropSet->setPropertyValue(rtl::OUString::createFromAscii("MediaType"), uno::makeAny(rtl::OUString::createFromAscii("application/vnd.sun.star.oleobject")));
+                xContentStreamPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.star.oleobject"))));
                 printf("CONTENT STREAM OK\n");
 
                 uno::Sequence< uno::Any > aArgs1( 1 );
                 aArgs1[0] <<= xContentStream;
                 uno::Reference< container::XNameContainer > xNameContainer2(
                     xServiceFactory->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii("com.sun.star.embed.OLESimpleStorage" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OLESimpleStorage")),
                     aArgs1 ),
                     uno::UNO_QUERY_THROW );
                 printf("OLE STORAGE OK\n");
 
                 uno::Any anyStream;
                 anyStream <<= myInStream;
-                xNameContainer2->insertByName(rtl::OUString::createFromAscii("\1Ole10Native"), anyStream);
+                xNameContainer2->insertByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\1Ole10Native")), anyStream);
                 printf("INSERT OK\n");
 
                 uno::Reference<embed::XTransactedObject> xTransact(xNameContainer2, uno::UNO_QUERY);
@@ -220,21 +201,15 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             numOfOLEs++;
         }
 #endif
-//      printf("}");
     }
     void addSpaces(int /*count*/)
     {
-//      for(int i=0;i<count;i++)
-//          printf(" ");
-
     }
     void addBinData(unsigned char /*data*/)
     {
-//      printf("%02Xh", data);
     }
     void addChar(char ch)
     {
-//      printf("%c", ch);
         if (objDataLevel)
         {
             if (numOfOLEChars%2==0)
@@ -257,17 +232,15 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
     }
     void addCharU(sal_Unicode /*ch*/)
     {
-//      printf("\\u%i ", ch);
     }
     void addHexChar(char* /*hexch*/)
     {
-//      printf("\'%s ", hexch);
     }
 
 
 public:
     MyRtfScannerHandler(uno::Reference<lang::XMultiServiceFactory> &xServiceFactory_, uno::Reference<com::sun::star::ucb::XSimpleFileAccess> &xFileAccess_, uno::Reference<embed::XStorage> &xStorage_) :
-            objDataLevel(0), numOfOLEs(0), hb(' '), numOfOLEChars(0),
+    objDataLevel(0), numOfOLEs(0),hb(0), numOfOLEChars(0),
     xServiceFactory(xServiceFactory_),
     xFileAccess(xFileAccess_),
     xStorage(xStorage_)
@@ -310,7 +283,7 @@ public:
             bytesTotal=xSeekable->getLength();
         if (xStatusIndicator.is() && xSeekable.is())
         {
-            xStatusIndicator->start(::rtl::OUString::createFromAscii("Converting"), 100);
+            xStatusIndicator->start(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Converting")), 100);
         }
     }
 
@@ -385,7 +358,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             rtl_uString_release(dir);
 
             uno::Reference <lang::XSingleServiceFactory> xStorageFactory(
-                xServiceFactory->createInstance (rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory")), uno::UNO_QUERY_THROW);
+                xServiceFactory->createInstance (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"))), uno::UNO_QUERY_THROW);
 
             rtl::OUString outFileUrl;
             {
@@ -400,7 +373,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             aArgs2[1] <<= embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
             uno::Reference<embed::XStorage> xStorage(xStorageFactory->createInstanceWithArguments(aArgs2), uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
-            xPropSet->setPropertyValue(rtl::OUString::createFromAscii("MediaType"), uno::makeAny(rtl::OUString::createFromAscii("application/vnd.oasis.opendocument.text")));
+            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.opendocument.text"))));
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             uno::Reference< task::XStatusIndicator > xStatusIndicator;
 
@@ -416,7 +389,6 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         TimeValue t2; osl_getSystemTime(&t2);
         printf("time=%" SAL_PRIuUINT32 "s\n", t2.Seconds-t1.Seconds);
 
-//          eventHandler.dump();
             uno::Reference<embed::XTransactedObject> xTransact(xStorage, uno::UNO_QUERY);
             xTransact->commit();
 
@@ -432,18 +404,18 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
 ::rtl::OUString ScannerTestService_getImplementationName ()
 {
-    return rtl::OUString::createFromAscii ( ScannerTestService::IMPLEMENTATION_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( ScannerTestService::IMPLEMENTATION_NAME ));
 }
 
 sal_Bool SAL_CALL ScannerTestService_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString::createFromAscii( ScannerTestService::SERVICE_NAME ) );
+    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ScannerTestService::SERVICE_NAME )) );
 }
 uno::Sequence< rtl::OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString::createFromAscii ( ScannerTestService::SERVICE_NAME );
+    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( ScannerTestService::SERVICE_NAME ));
     return aRet;
 }
 
@@ -453,3 +425,5 @@ uno::Reference< uno::XInterface > SAL_CALL ScannerTestService_createInstance( co
 }
 
 } } /* end namespace writerfilter::rtftok */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

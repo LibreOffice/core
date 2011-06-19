@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -374,7 +375,7 @@ bool ExternalName::getDdeLinkData( OUString& orDdeServer, OUString& orDdeTopic, 
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "ExternalName::getDdeLinkData - cannot create DDE link" );
+            OSL_FAIL( "ExternalName::getDdeLinkData - cannot create DDE link" );
         }
         // get link data from created DDE link
         if( mxDdeLink.is() )
@@ -583,7 +584,7 @@ void ExternalLink::importExternalBook( const Relations& rRelations, SequenceInpu
         }
         break;
         default:
-            OSL_ENSURE( false, "ExternalLink::importExternalBook - unknown link type" );
+            OSL_FAIL( "ExternalLink::importExternalBook - unknown link type" );
     }
 }
 
@@ -1137,3 +1138,5 @@ const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

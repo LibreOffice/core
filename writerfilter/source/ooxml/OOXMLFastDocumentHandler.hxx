@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@ public:
 
     void setStream(Stream * pStream);
     void setDocument(OOXMLDocument * pDocument);
-    void setXNoteId(const ::rtl::OUString & rXNoteId);
+    void setXNoteId(const sal_Int32 nXNoteId);
 
     void setIsSubstream( bool bSubstream );
 
@@ -108,10 +109,12 @@ private:
     Stream::Pointer_t mpTmpStream;
 #endif
     OOXMLDocument * mpDocument;
-    ::rtl::OUString msXNoteId;
+    sal_Int32 mnXNoteId;
     mutable boost::shared_ptr<OOXMLFastContextHandler> mpContextHandler;
     boost::shared_ptr<OOXMLFastContextHandler> getContextHandler() const;
 };
 }}
 
 #endif // INCLUDED_OOXML_FAST_DOCUMENT_HANDLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

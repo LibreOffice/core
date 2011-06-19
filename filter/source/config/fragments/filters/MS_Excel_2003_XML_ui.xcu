@@ -1,12 +1,5 @@
     <node oor:name="MS Excel 2003 XML">
         <prop oor:name="UIName">
-            <value xml:lang="el">Microsoft Excel 2003 XML</value>
             <value xml:lang="en-US">Microsoft Excel 2003 XML</value>
-            <value xml:lang="hu">Microsoft Excel 2003 XML</value>
-            <value xml:lang="cs">Microsoft Excel 2003 XML</value>
-            <value xml:lang="sk">Microsoft Excel 2003 XML</value>
-            <value xml:lang="sl">Microsoft Excel 2003 XML</value>
-            <value xml:lang="nl">Microsoft Excel 2003 XML</value>
-            <value xml:lang="da">Microsoft Excel 2003 XML</value>
-                    </prop>
+        </prop>
     </node>

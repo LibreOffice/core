@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,13 +42,15 @@
 #endif
 
 #include <resourcemodel/TagLogger.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <oox/helper/graphichelper.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using ::comphelper::MediaDescriptor;
 
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
    throw (uno::RuntimeException)
 {
@@ -103,7 +106,9 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
     writerfilter::dmapper::SourceDocumentType eType =
         (m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ) ||
-         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007_Template" ) )) ?
+         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007_Template" ) ) ||
+         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_OOXML" ) ) ||
+         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_OOXML_Text_Template" ) )) ?
                 writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
     writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, eType));
     //create the tokenizer and domain mapper
@@ -122,6 +127,23 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->setDrawPage(xDrawPage);
 
         pDocument->resolve(*pStream);
+        writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
+        oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( m_xContext, pVBAProjectStream->getDocumentStream(), false ) );
+        if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
+        {
+            ::oox::ole::VbaProject aVbaProject( m_xContext, xModel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Writer" ) ) );
+            uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
+
+            // if no XFrame try fallback to what we can glean from the Model
+            if ( !xFrame.is() )
+            {
+                uno::Reference< frame::XController > xController =  xModel->getCurrentController();
+                xFrame =  xController.is() ? xController->getFrame() : NULL;
+            }
+
+            oox::GraphicHelper gHelper( m_xContext, xFrame, xVbaPrjStrg );
+            aVbaProject.importVbaProject( *xVbaPrjStrg, gHelper );
+        }
     }
     else
     {
@@ -131,10 +153,10 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->resolve(*pStream);
     }
 
+    pStream.reset();
 #ifdef DEBUG_IMPORT
-    writerfilter::TagLogger::dump("DOMAINMAPPER");
+
     dmapperLogger->endDocument();
-    writerfilter::TagLogger::dump("DEBUG");
     debugLogger->endDocument();
 #endif
 
@@ -142,16 +164,14 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     }
     return sal_False;
 }
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void WriterFilter::cancel(  ) throw (uno::RuntimeException)
 {
 }
 
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -164,9 +184,8 @@ void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& 
    m_xSrcDoc = xDoc;
 }
 
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void WriterFilter::initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException)
 {
    uno::Sequence < beans::PropertyValue > aAnySeq;
@@ -185,9 +204,8 @@ void WriterFilter::initialize( const uno::Sequence< uno::Any >& aArguments ) thr
        }
    }
 }
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
 {
    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WriterFilter" ) );
@@ -195,17 +213,15 @@ OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExportFilter"
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Bool WriterFilter_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
    return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
            ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ));
 }
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Sequence< OUString > WriterFilter_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
    uno::Sequence < OUString > aRet(2);
@@ -217,34 +233,31 @@ uno::Sequence< OUString > WriterFilter_getSupportedServiceNames(  ) throw (uno::
 #undef SERVICE_NAME1
 #undef SERVICE_NAME2
 
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< uno::XInterface > WriterFilter_createInstance( const uno::Reference< uno::XComponentContext >& xContext)
                 throw( uno::Exception )
 {
    return (cppu::OWeakObject*) new WriterFilter( xContext );
 }
 
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OUString WriterFilter::getImplementationName(  ) throw (uno::RuntimeException)
 {
    return WriterFilter_getImplementationName();
 }
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Bool WriterFilter::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
     return WriterFilter_supportsService( rServiceName );
 }
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Sequence< OUString > WriterFilter::getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     return WriterFilter_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

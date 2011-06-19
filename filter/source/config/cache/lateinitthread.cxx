@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,23 +45,20 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    14.08.2003 09:31
------------------------------------------------*/
+
+
 LateInitThread::LateInitThread()
 {
 }
 
-/*-----------------------------------------------
-    14.08.2003 08:42
------------------------------------------------*/
+
+
 LateInitThread::~LateInitThread()
 {
 }
 
-/*-----------------------------------------------
-    28.10.2003 09:30
------------------------------------------------*/
+
+
 void SAL_CALL LateInitThread::run()
 {
     // sal_True => It indicates using of this method by this thread
@@ -83,3 +81,5 @@ void SAL_CALL LateInitThread::onTerminated()
 
     } // namespace config
 } // namespace filter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

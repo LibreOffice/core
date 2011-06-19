@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -186,7 +187,7 @@ namespace oox { namespace ppt {
     {
         Any aAny;
         for( AnimationConditionList::const_iterator iter = l.begin();
-             iter != l.end(); iter++)
+             iter != l.end(); ++iter)
         {
             aAny = addToSequence( aAny, iter->convert(pSlide) );
         }
@@ -196,3 +197,4 @@ namespace oox { namespace ppt {
 } }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

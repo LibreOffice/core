@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vector>
 #include <map>
 
@@ -98,6 +100,9 @@ public:
 
     table::TablePropertiesPtr       getTableProperties();
 
+    void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
+    void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
+
     void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
     void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
@@ -108,6 +113,7 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
+    ::rtl::OUString                 getId() { return msId; }
     void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
     sal_Bool                        getHidden() const { return mbHidden; };
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
@@ -137,6 +143,7 @@ public:
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            basegfx::B2DHomMatrix& aTransformation,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
@@ -156,7 +163,8 @@ protected:
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
-                            sal_Bool bClearText );
+                            sal_Bool bClearText,
+                            basegfx::B2DHomMatrix& aTransformation );
 
     void                addChildren(
                             ::oox::core::XmlFilterBase& rFilterBase,
@@ -164,7 +172,8 @@ protected:
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
-                            ShapeIdMap* pShapeMap );
+                            ShapeIdMap* pShapeMap,
+                            basegfx::B2DHomMatrix& aTransformation );
 
     virtual ::rtl::OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,
@@ -176,6 +185,12 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
+    com::sun::star::awt::Size   maChSize;                 // only used for group shapes
+    com::sun::star::awt::Point  maChPosition;             // only used for group shapes
+    com::sun::star::awt::Size   maAbsoluteSize;           // only used for group shapes
+    com::sun::star::awt::Point  maAbsolutePosition;       // only used for group shapes
+    sal_Bool                    mbIsChild;
+
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;
     FillPropertiesPtr           mpFillPropertiesPtr;
@@ -183,6 +198,7 @@ protected:
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
     table::TablePropertiesPtr   mpTablePropertiesPtr;
     PropertyMap                 maShapeProperties;
+    PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
@@ -227,3 +243,5 @@ private:
 } }
 
 #endif  //  OOX_DRAWINGML_SHAPE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

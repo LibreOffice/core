@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ namespace doctok
 {
 using namespace ::com::sun::star;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 #endif
 
@@ -59,8 +60,8 @@ WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
 
     xOLESimpleStorage = uno::Reference<container::XNameContainer>
         (xFactory->createInstanceWithArgumentsAndContext
-         (::rtl::OUString::createFromAscii
-          ("com.sun.star.embed.OLESimpleStorage"),
+         (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+          ("com.sun.star.embed.OLESimpleStorage")),
           aArgs, mrComponentContext ),
          uno::UNO_QUERY );
 
@@ -204,3 +205,5 @@ void WW8StreamImpl::dump(OutputWithDepth<string> & o) const
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

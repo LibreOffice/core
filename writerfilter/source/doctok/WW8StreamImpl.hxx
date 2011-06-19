@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <doctok/WW8Document.hxx>
-#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
 #include <resourcemodel/OutputWithDepth.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok
@@ -55,11 +54,11 @@ public:
     virtual Sequence get(sal_uInt32 nOffset, sal_uInt32 nCount)
         const;
 
-    //virtual bool put(sal_uInt32 nOffset, const Sequence & rSeq);
-
     virtual string getSubStreamNames() const;
     virtual uno::Sequence<rtl::OUString> getSubStreamUNames() const;
 
     virtual void dump(OutputWithDepth<string> & o) const;
 };
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

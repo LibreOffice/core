@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ FilterTracer::FilterTracer( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr 
     mpStream    ( NULL ),
     mnLogLevel  ( NMSP_LOGGING::LogLevel::ALL )
 {
-    REF( NMSP_UNO::XInterface ) xObj( rxMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.TextSearch" ) ) );
+    REF( NMSP_UNO::XInterface ) xObj( rxMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.TextSearch" )) ) );
     mxTextSearch = REF( NMSP_UTIL::XTextSearch )( xObj, ::com::sun::star::uno::UNO_QUERY );
 }
 FilterTracer::~FilterTracer()
@@ -117,19 +118,19 @@ void SAL_CALL FilterTracer::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
     for ( i = 0; i < aParameter.getLength(); i++ )
     {
         const NMSP_BEANS::PropertyValue& rProp = aParameter[ i ];
-        if ( rProp.Name.equalsAscii( "LogLevel" ) )
+        if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LogLevel" ) ) )
             rProp.Value >>= mnLogLevel;
-        else if ( rProp.Name.equalsAscii( "ClassFilter" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ClassFilter" ) ) )
             rProp.Value >>= msClassFilter;
-        else if ( rProp.Name.equalsAscii( "MethodFilter" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MethodFilter" ) ) )
             rProp.Value >>= msMethodFilter;
-        else if ( rProp.Name.equalsAscii( "MessageFilter" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MessageFilter" ) ) )
             rProp.Value >>= msMessageFilter;
-        else if ( rProp.Name.equalsAscii( "OutputStream" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
             rProp.Value >>= mxOutputStream;
-        else if ( rProp.Name.equalsAscii( "URL" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             rProp.Value >>= msURL;
-        else if ( rProp.Name.equalsAscii( "DocumentHandler" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentHandler" ) ) )
             rProp.Value >>= mxDocumentHandler;
     }
 
@@ -254,3 +255,4 @@ NMSP_UTIL::SearchResult SAL_CALL FilterTracer::searchBackward( const rtl::OUStri
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

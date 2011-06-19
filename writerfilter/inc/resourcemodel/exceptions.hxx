@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 namespace writerfilter {
 using namespace ::std;
 
-class WRITERFILTER_DLLPUBLIC Exception
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Exception
 {
     string mText;
 
@@ -44,13 +45,13 @@ public:
     const string & getText() const { return mText; }
 };
 
-class WRITERFILTER_DLLPUBLIC ExceptionNotFound : public Exception
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC ExceptionNotFound : public Exception
 {
 public:
     ExceptionNotFound(string text) : Exception(text) {}
 };
 
-class WRITERFILTER_DLLPUBLIC ExceptionOutOfBounds : public Exception
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC ExceptionOutOfBounds : public Exception
 {
 public:
     ExceptionOutOfBounds(string text) : Exception(text) {}
@@ -58,3 +59,5 @@ public:
 }
 
 #endif // _DOCTOK_EXCEPTIONS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

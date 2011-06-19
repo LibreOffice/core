@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ class XPMWriter {
 
 private:
 
-    SvStream*           mpOStm;             // Die auszugebende XPM-Datei
+    SvStream&           m_rOStm;            // Die auszugebende XPM-Datei
     sal_uInt16              mpOStmOldModus;
 
     sal_Bool                mbStatus;
@@ -55,21 +56,22 @@ private:
     void                ImplWriteColor( sal_uInt16 );
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
-    void                ImplWritePixel( sal_uLong );
+    void                ImplWritePixel( sal_uLong ) const;
 
 public:
-                        XPMWriter();
-                        ~XPMWriter();
+    XPMWriter(SvStream& rOStm);
+    ~XPMWriter();
 
-    sal_Bool                WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigItem* pFilterConfigItem );
+    sal_Bool                WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von XPMWriter ==============================
 
-XPMWriter::XPMWriter() :
-    mbStatus    ( sal_True ),
-    mbTrans     ( sal_False ),
-    mpAcc       ( NULL )
+XPMWriter::XPMWriter(SvStream& rOStm)
+    : m_rOStm(rOStm)
+    , mbStatus(sal_True)
+    , mbTrans(sal_False)
+    , mpAcc(NULL)
 {
 }
 
@@ -92,11 +94,9 @@ void XPMWriter::ImplCallback( sal_uInt16 nPercent )
 
 //  ------------------------------------------------------------------------
 
-sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterConfigItem* pFilterConfigItem)
+sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
-
-    mpOStm = &rXPM;
 
     if ( pFilterConfigItem )
     {
@@ -129,21 +129,21 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM, FilterCon
     if ( mpAcc )
     {
         mnColors = mpAcc->GetPaletteEntryCount();
-        mpOStmOldModus = mpOStm->GetNumberFormatInt();
-        mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+        m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
         if ( ImplWriteHeader() )
         {
             ImplWritePalette();
             ImplWriteBody();
-            *mpOStm << "\x22XPMENDEXT\x22\x0a};";
+            m_rOStm << "\x22XPMENDEXT\x22\x0a};";
         }
         aBmp.ReleaseAccess( mpAcc );
     }
     else
         mbStatus = sal_False;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -159,15 +159,15 @@ sal_Bool XPMWriter::ImplWriteHeader()
     mnHeight = mpAcc->Height();
     if ( mnWidth && mnHeight && mnColors )
     {
-        *mpOStm << "/* XPM */\x0astatic char * image[] = \x0a{\x0a\x22";
+        m_rOStm << "/* XPM */\x0astatic char * image[] = \x0a{\x0a\x22";
         ImplWriteNumber( mnWidth );
-        *mpOStm << (sal_uInt8)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( mnHeight );
-        *mpOStm << (sal_uInt8)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( mnColors );
-        *mpOStm << (sal_uInt8)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( ( mnColors > 26 ) ? 2 : 1 );
-        *mpOStm << "\x22,\x0a";
+        m_rOStm << "\x22,\x0a";
     }
     else mbStatus = sal_False;
     return mbStatus;
@@ -183,16 +183,16 @@ void XPMWriter::ImplWritePalette()
         nTransIndex = mpAcc->GetBestMatchingColor( BMP_COL_TRANS );
     for ( sal_uInt16 i = 0; i < mnColors; i++ )
     {
-        *mpOStm << "\x22";
+        m_rOStm << "\x22";
         ImplWritePixel( i );
-        *mpOStm << (sal_uInt8)32;
+        m_rOStm << (sal_uInt8)32;
         if ( nTransIndex != i )
         {
             ImplWriteColor( i );
-            *mpOStm << "\x22,\x0a";
+            m_rOStm << "\x22,\x0a";
         }
         else
-            *mpOStm << "c none\x22,\x0a";
+            m_rOStm << "c none\x22,\x0a";
     }
 }
 
@@ -203,12 +203,12 @@ void XPMWriter::ImplWriteBody()
     for ( sal_uLong y = 0; y < mnHeight; y++ )
     {
         ImplCallback( (sal_uInt16)( ( 100 * y ) / mnHeight ) );         // processing output in percent
-        *mpOStm << (sal_uInt8)0x22;
+        m_rOStm << (sal_uInt8)0x22;
         for ( sal_uLong x = 0; x < mnWidth; x++ )
         {
             ImplWritePixel( (sal_uInt8)(mpAcc->GetPixel( y, x ) ) );
         }
-        *mpOStm << "\x22,\x0a";
+        m_rOStm << "\x22,\x0a";
     }
 }
 
@@ -219,23 +219,23 @@ void XPMWriter::ImplWriteNumber( sal_Int32 nNumber )
 {
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
-    for( sal_Int16 n = 0UL, nLen = aNum.Len(); n < nLen; n++  )
-        *mpOStm << aNum.GetChar( n );
+    for( sal_Int16 n = 0UL, nLen = aNum.Len(); n < nLen; ++n  )
+        m_rOStm << aNum.GetChar( n );
 
 }
 
 // ------------------------------------------------------------------------
 
-void XPMWriter::ImplWritePixel( sal_uLong nCol )
+void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
 {
     if ( mnColors > 26 )
     {
         sal_uInt8 nDiff = (sal_uInt8) ( nCol / 26 );
-        *mpOStm << (sal_uInt8)( nDiff + 'A' );
-        *mpOStm << (sal_uInt8)( nCol - ( nDiff*26 ) + 'A' );
+        m_rOStm << (sal_uInt8)( nDiff + 'A' );
+        m_rOStm << (sal_uInt8)( nCol - ( nDiff*26 ) + 'A' );
     }
     else
-        *mpOStm << (sal_uInt8)( nCol + 'A' );
+        m_rOStm << (sal_uInt8)( nCol + 'A' );
 }
 
 // ------------------------------------------------------------------------
@@ -245,7 +245,7 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
     sal_uLong   nTmp;
     sal_uInt8   j;
 
-    *mpOStm << "c #";   // # zeigt einen folgenden Hexwert an
+    m_rOStm << "c #";   // # zeigt einen folgenden Hexwert an
     const BitmapColor& rColor = mpAcc->GetPaletteColor( nNumber );
     nTmp = ( rColor.GetRed() << 16 ) | ( rColor.GetGreen() << 8 ) | rColor.GetBlue();
     for ( signed char i = 20; i >= 0 ; i-=4 )
@@ -254,7 +254,7 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
             j += 'A' - 10;
         else
             j += '0';
-        *mpOStm << j;
+        m_rOStm << j;
     }
 }
 
@@ -266,8 +266,10 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
-    XPMWriter aXPMWriter;
+    XPMWriter aXPMWriter(rStream);
 
-    return aXPMWriter.WriteXPM( rGraphic, rStream, pFilterConfigItem );
+    return aXPMWriter.WriteXPM( rGraphic, pFilterConfigItem );
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

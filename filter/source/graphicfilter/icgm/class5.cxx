@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,10 +40,10 @@ void CGM::ImplDoClass5()
 {
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_LEVEL1, "Line Bundle Index" )
+        case 0x01 : /*Line Bundle Index*/
             pElement->pLineBundle = (LineBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aLineList, pElement->aLineBundle );
         break;
-        case 0x02 : ComOut( CGM_LEVEL1, "Line Type" )
+        case 0x02 : /*Line Type*/
         {
             if ( pElement->nAspectSourceFlags & ASF_LINETYPE )
                 pElement->pLineBundle->eLineType = (LineType)ImplGetI( pElement->nIndexPrecision );
@@ -50,7 +51,7 @@ void CGM::ImplDoClass5()
                 pElement->aLineBundle.eLineType = (LineType)ImplGetI( pElement->nIndexPrecision );
         }
         break;
-        case 0x03 : ComOut( CGM_LEVEL1, "Line Width" )
+        case 0x03 : /*Line Width*/
         {
             double nWidth;
             if ( pElement->eLineWidthSpecMode == SM_ABSOLUTE )
@@ -70,7 +71,7 @@ void CGM::ImplDoClass5()
                     : pElement->aLineBundle.nLineWidth = nWidth;
         }
         break;
-        case 0x04 : ComOut( CGM_LEVEL1, "Line Color" )
+        case 0x04 : /*Line Color*/
         {
             if ( pElement->nAspectSourceFlags & ASF_LINECOLOR )
                 pElement->pLineBundle->SetColor( ImplGetBitmapColor() );
@@ -78,10 +79,10 @@ void CGM::ImplDoClass5()
                 pElement->aLineBundle.SetColor( ImplGetBitmapColor() );
         }
         break;
-        case 0x05 : ComOut( CGM_LEVEL1, "Marker Bundle Index" )
+        case 0x05 : /*Marker Bundle Index*/
             pElement->pMarkerBundle = (MarkerBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aMarkerList, pElement->aMarkerBundle );
         break;
-        case 0x06 : ComOut( CGM_LEVEL1, "Marker Type" )
+        case 0x06 : /*Marker Type*/
         {
             if ( pElement->nAspectSourceFlags & ASF_MARKERTYPE )
                 pElement->pMarkerBundle->eMarkerType = (MarkerType)ImplGetI( pElement->nIndexPrecision );
@@ -89,7 +90,7 @@ void CGM::ImplDoClass5()
                 pElement->aMarkerBundle.eMarkerType = (MarkerType)ImplGetI( pElement->nIndexPrecision );
         }
         break;
-        case 0x07 : ComOut( CGM_LEVEL1, "Marker Size" )
+        case 0x07 : /*Marker Size*/
         {
             double nWidth;
             if ( pElement->eMarkerSizeSpecMode == SM_ABSOLUTE )
@@ -107,7 +108,7 @@ void CGM::ImplDoClass5()
                     : pElement->aMarkerBundle.nMarkerSize = nWidth;
         }
         break;
-        case 0x08 : ComOut( CGM_LEVEL1, "Marker Color" )
+        case 0x08 : /*Marker Color*/
         {
             if ( pElement->nAspectSourceFlags & ASF_MARKERCOLOR )
                 pElement->pMarkerBundle->SetColor( ImplGetBitmapColor() );
@@ -115,10 +116,10 @@ void CGM::ImplDoClass5()
                 pElement->aMarkerBundle.SetColor( ImplGetBitmapColor() );
         }
         break;
-        case 0x09 : ComOut( CGM_LEVEL1, "Text Bundle Index" )
+        case 0x09 : /*Text Bundle Index*/
             pElement->pTextBundle = (TextBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aTextList, pElement->aTextBundle );
         break;
-        case 0x0a : ComOut( CGM_LEVEL1, "Text Font Index" )
+        case 0x0a : /*Text Font Index*/
         {
             if ( pElement->nAspectSourceFlags & ASF_TEXTFONTINDEX )
                 pElement->pTextBundle->nTextFontIndex = ImplGetI( pElement->nIndexPrecision );
@@ -126,7 +127,7 @@ void CGM::ImplDoClass5()
                 pElement->aTextBundle.nTextFontIndex = ImplGetI( pElement->nIndexPrecision );
         }
         break;
-        case 0x0b : ComOut( CGM_LEVEL1, "Text Precision" )
+        case 0x0b : /*Text Precision*/
         {
             TextBundle* pBundle;
             if ( pElement->nAspectSourceFlags & ASF_TEXTPRECISION )
@@ -142,7 +143,7 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x0c : ComOut( CGM_LEVEL1, "Character Expansion Factor" )
+        case 0x0c : /*Character Expansion Factor*/
         {
             if ( pElement->nAspectSourceFlags & ASF_CHARACTEREXPANSION )
                 pElement->pTextBundle->nCharacterExpansion = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
@@ -150,7 +151,7 @@ void CGM::ImplDoClass5()
                 pElement->aTextBundle.nCharacterExpansion = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
         }
         break;
-        case 0x0d : ComOut( CGM_LEVEL1, "Character Spacing" )
+        case 0x0d : /*Character Spacing*/
         {
             if ( pElement->nAspectSourceFlags & ASF_CHARACTERSPACING )
                 pElement->pTextBundle->nCharacterSpacing = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
@@ -158,7 +159,7 @@ void CGM::ImplDoClass5()
                 pElement->aTextBundle.nCharacterSpacing = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
         }
         break;
-        case 0x0e : ComOut( CGM_LEVEL1, "Text Color" )
+        case 0x0e : /*Text Color*/
         {
             if ( pElement->nAspectSourceFlags & ASF_TEXTCOLOR )
                 pElement->pTextBundle->SetColor( ImplGetBitmapColor() );
@@ -166,7 +167,7 @@ void CGM::ImplDoClass5()
                 pElement->aTextBundle.SetColor( ImplGetBitmapColor() );
         }
         break;
-        case 0x0f : ComOut( CGM_LEVEL1, "Character Height" )
+        case 0x0f : /*Character Height*/
         {
                 if ( pElement->eVDCType == VDC_INTEGER )
                     pElement->nCharacterHeight = ImplGetI( pElement->nVDCIntegerPrecision );
@@ -176,7 +177,7 @@ void CGM::ImplDoClass5()
                 pElement->nCharacterHeight /= 18.0;
         }
         break;
-        case 0x10 : ComOut( CGM_LEVEL1, "Character Orientation" )
+        case 0x10 : /*Character Orientation*/
         {
             if ( pElement->eVDCType == VDC_INTEGER )
             {
@@ -194,7 +195,7 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x11 : ComOut( CGM_LEVEL1, "Text Path" )
+        case 0x11 : /*Text Path*/
         {
             switch( ImplGetUI16() )
             {
@@ -206,7 +207,7 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x12 : ComOut( CGM_LEVEL1, "Text Alignment" )
+        case 0x12 : /*Text Alignment*/
         {
             pElement->eTextAlignmentH = (TextAlignmentH)ImplGetUI16();
             pElement->eTextAlignmentV = (TextAlignmentV)ImplGetUI16( 8 );
@@ -214,16 +215,16 @@ void CGM::ImplDoClass5()
             pElement->nTextAlignmentVCont = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
         }
         break;
-        case 0x13 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Character Set Index" )
+        case 0x13 : /*Character Set Index*/
             pElement->nCharacterSetIndex = ImplGetI( pElement->nIndexPrecision );
         break;
-        case 0x14 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Alternate Character Set Index" )
+        case 0x14 : /*Alternate Character Set Index*/
             pElement->nAlternateCharacterSetIndex = ImplGetI( pElement->nIndexPrecision );
         break;
-        case 0x15 : ComOut( CGM_LEVEL1, "Fill Bundle Index" )
+        case 0x15 : /*Fill Bundle Index*/
             pElement->pFillBundle = (FillBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aFillList, pElement->aFillBundle );
         break;
-        case 0x16 : ComOut( CGM_LEVEL1, "Fill Interior Style" )
+        case 0x16 : /*Fill Interior Style*/
         {
             if ( pElement->nAspectSourceFlags & ASF_FILLINTERIORSTYLE )
                 pElement->pFillBundle->eFillInteriorStyle = (FillInteriorStyle)ImplGetUI16();
@@ -231,7 +232,7 @@ void CGM::ImplDoClass5()
                 pElement->aFillBundle.eFillInteriorStyle = (FillInteriorStyle)ImplGetUI16();
         }
         break;
-        case 0x17 : ComOut( CGM_LEVEL1, "Fill Color" )
+        case 0x17 : /*Fill Color*/
         {
             if ( pElement->nAspectSourceFlags & ASF_FILLCOLOR )
                 pElement->pFillBundle->SetColor( ImplGetBitmapColor() );
@@ -239,7 +240,7 @@ void CGM::ImplDoClass5()
                 pElement->aFillBundle.SetColor( ImplGetBitmapColor() );
         }
         break;
-        case 0x18 : ComOut( CGM_LEVEL1, "Fill Hatch Index" )
+        case 0x18 : /*Fill Hatch Index*/
         {
             if ( pElement->nAspectSourceFlags & ASF_HATCHINDEX )
                 pElement->pFillBundle->nFillHatchIndex = ImplGetI( pElement->nIndexPrecision );
@@ -247,7 +248,7 @@ void CGM::ImplDoClass5()
                 pElement->aFillBundle.nFillHatchIndex = ImplGetI( pElement->nIndexPrecision );
         }
         break;
-        case 0x19 : ComOut( CGM_LEVEL1, "Fill Pattern Index" )
+        case 0x19 : /*Fill Pattern Index*/
         {
             if ( pElement->nAspectSourceFlags & ASF_PATTERNINDEX )
                 pElement->pFillBundle->nFillPatternIndex = ImplGetI( pElement->nIndexPrecision );
@@ -255,10 +256,10 @@ void CGM::ImplDoClass5()
                 pElement->aFillBundle.nFillPatternIndex = ImplGetI( pElement->nIndexPrecision );
         }
         break;
-        case 0x1a : ComOut( CGM_LEVEL1, "Edge Bundle Index" )
+        case 0x1a : /*Edge Bundle Index*/
             pElement->pEdgeBundle = (EdgeBundle*)pElement->GetBundleIndex( ImplGetI( pElement->nIndexPrecision ), pElement->aEdgeList, pElement->aEdgeBundle );
         break;
-        case 0x1b : ComOut( CGM_LEVEL1, "Edge Type" )
+        case 0x1b : /*Edge Type*/
         {
             if ( pElement->nAspectSourceFlags & ASF_EDGETYPE )
                 pElement->pEdgeBundle->eEdgeType = (EdgeType)ImplGetI( pElement->nIndexPrecision );
@@ -266,7 +267,7 @@ void CGM::ImplDoClass5()
                 pElement->aEdgeBundle.eEdgeType = (EdgeType)ImplGetI( pElement->nIndexPrecision );
         }
         break;
-        case 0x1c : ComOut( CGM_LEVEL1, "Edge Width" )
+        case 0x1c : /*Edge Width*/
         {
             double nWidth;
             if ( pElement->eEdgeWidthSpecMode == SM_ABSOLUTE )
@@ -285,7 +286,7 @@ void CGM::ImplDoClass5()
                     : pElement->aEdgeBundle.nEdgeWidth = nWidth;
         }
         break;
-        case 0x1d : ComOut( CGM_LEVEL1, "Edge Color" )
+        case 0x1d : /*Edge Color*/
         {
             if ( pElement->nAspectSourceFlags & ASF_EDGECOLOR )
                 pElement->pEdgeBundle->SetColor( ImplGetBitmapColor() );
@@ -293,7 +294,7 @@ void CGM::ImplDoClass5()
                 pElement->aEdgeBundle.SetColor( ImplGetBitmapColor() );
         }
         break;
-        case 0x1e : ComOut( CGM_LEVEL1, "Edge Visibility" )
+        case 0x1e : /*Edge Visibility*/
         {
             switch( ImplGetUI16() )
             {
@@ -303,12 +304,12 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x1f : ComOut( CGM_LEVEL1, "Fill Reference Point" )
+        case 0x1f : /*Fill Reference Point*/
             ImplGetPoint( pElement->aFillRefPoint );
         break;
-        case 0x20 : ComOut( CGM_LEVEL1, "Pattern Table" ) break;
-        case 0x21 : ComOut( CGM_LEVEL1, "Pattern Size" ) break;
-        case 0x22 : ComOut( CGM_LEVEL1, "Color Table" )
+        case 0x20 : /*Pattern Table" )*/ break;
+        case 0x21 : /*Pattern Size" )*/ break;
+        case 0x22 : /*Color Table*/
         {
             sal_uInt32 nColorStartIndex = ImplGetUI( pElement->nColorIndexPrecision );
             if ( ( nColorStartIndex > 255 ) ||
@@ -350,7 +351,7 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x23 : ComOut( CGM_LEVEL1, "Aspect Source Flags" )
+        case 0x23 : /*Aspect Source Flags*/
         {
             int nFlags = mnElementSize >> 2;
             while ( nFlags-- > 0 )
@@ -389,8 +390,8 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x24 : ComOut( CGM_LEVEL2, "Pick Identifier" ) break;
-        case 0x25 : ComOut( CGM_LEVEL3, "Line Cap" )
+        case 0x24 : /*Pick Identifier" ) bre*/
+        case 0x25 : /*Line Cap*/
         {
             switch( ImplGetUI16() )
             {
@@ -403,7 +404,7 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x26 : ComOut( CGM_LEVEL3, "Line Join" )
+        case 0x26 : /*Line Join*/
         {
             switch( ImplGetUI16() )
             {
@@ -414,38 +415,38 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x27 : ComOut( CGM_LEVEL3, "Line Type Continuation" ) break;           // NS
-        case 0x28 : ComOut( CGM_LEVEL3, "Line Type Initial Offset" ) break;         // NS
-        case 0x29 : ComOut( CGM_LEVEL3, "Text Score Type" ) break;
-        case 0x2a : ComOut( CGM_LEVEL3, "Restricted Text Type" ) break;
-        case 0x2b : ComOut( CGM_LEVEL3, "Interpolated interior" ) break;
-        case 0x2c : ComOut( CGM_LEVEL3, "Edge Cap" ) break;                         // NS
-        case 0x2d : ComOut( CGM_LEVEL3, "Edge Join" ) break;
-        case 0x2e : ComOut( CGM_LEVEL3, "Edge Type Continuation" ) break;           // NS
-        case 0x2f : ComOut( CGM_LEVEL3, "Edge Type Initial Offset" ) break;         // NS
-        case 0x30 : ComOut( CGM_LEVEL3, "Symbol Library Index" ) break;             // NS
-        case 0x31 : ComOut( CGM_LEVEL3, "Symbol Color" ) break;                     // NS
-        case 0x32 : ComOut( CGM_LEVEL3, "Symbol Size" ) break;                      // NS
-        case 0x33 : ComOut( CGM_LEVEL3, "Symbol Orientation" ) break;               // NS
-        case 0x50 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Region Margins" ) break;
-        case 0x51 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Region Expansion" ) break;
-        case 0x52 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Region Anchor" ) break;
-        case 0x53 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Horizontal Alignment" ) break;
-        case 0x54 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Vertical Alignment" ) break;
-        case 0x55 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Line Flow" ) break;
-        case 0x60 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Spacing" ) break;
-        case 0x61 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Indent" ) break;
-        case 0x62 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Tabs" ) break;
-        case 0x63 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Bullets" ) break;
-        case 0x64 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Bullet Level" ) break;
-        case 0x65 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Line Horizontal Alignment" ) break;
-        case 0x66 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Line Vertical Alignment" ) break;
-        case 0x67 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragragh Line Spacing" ) break;
-        case 0x68 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Paragraph Word Wrap" ) break;
-        case 0x70 : ComOut( CGM_UNKNOWN_LEVEL, "Block Text Forward Advance Distance" ) break;
-        case 0x71 : ComOut( CGM_UNKNOWN_LEVEL, "Word Spacing" ) break;
-        case 0x72 : ComOut( CGM_UNKNOWN_LEVEL, "External Leading" ) break;
-        case 0x7a : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Offset" )
+        case 0x27 : /*Line Type Continuation*/ break;           // NS
+        case 0x28 : /*Line Type Initial Offset*/ break;         // NS
+        case 0x29 : /*Text Score Type*/ break;
+        case 0x2a : /*Restricted Text Type*/ break;
+        case 0x2b : /*Interpolated interior*/ break;
+        case 0x2c : /*Edge Cap*/ break;                         // NS
+        case 0x2d : /*Edge Join*/ break;
+        case 0x2e : /*Edge Type Continuation*/ break;           // NS
+        case 0x2f : /*Edge Type Initial Offset*/ break;         // NS
+        case 0x30 : /*Symbol Library Index*/ break;             // NS
+        case 0x31 : /*Symbol Color*/ break;                     // NS
+        case 0x32 : /*Symbol Size*/ break;                      // NS
+        case 0x33 : /*Symbol Orientation*/ break;               // NS
+        case 0x50 : /*Block Text Region Margins*/ break;
+        case 0x51 : /*Block Text Region Expansion*/ break;
+        case 0x52 : /*Block Text Region Anchor*/ break;
+        case 0x53 : /*Block Text Paragraph Horizontal Alignment*/ break;
+        case 0x54 : /*Block Text Paragraph Vertical Alignment*/ break;
+        case 0x55 : /*Block Text Line Flow*/ break;
+        case 0x60 : /*Block Text Paragraph Spacing*/ break;
+        case 0x61 : /*Block Text Paragraph Indent*/ break;
+        case 0x62 : /*Block Text Paragraph Tabs*/ break;
+        case 0x63 : /*Block Text Paragraph Bullets*/ break;
+        case 0x64 : /*Block Text Paragraph Bullet Level*/ break;
+        case 0x65 : /*Block Text Paragraph Line Horizontal Alignment*/ break;
+        case 0x66 : /*Block Text Paragraph Line Vertical Alignment*/ break;
+        case 0x67 : /*Block Text Paragragh Line Spacing*/ break;
+        case 0x68 : /*Block Text Paragraph Word Wrap*/ break;
+        case 0x70 : /*Block Text Forward Advance Distance*/ break;
+        case 0x71 : /*Word Spacing*/ break;
+        case 0x72 : /*External Leading*/ break;
+        case 0x7a : /*set Gradient Offset*/
         {
             long nHorzOffset = ImplGetI( pElement->nIndexPrecision );
             long nVertOffset = ImplGetI( pElement->nIndexPrecision );
@@ -454,18 +455,18 @@ void CGM::ImplDoClass5()
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;
-        case 0x7b : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Edge" )
+        case 0x7b : /*set Gradient Edge*/
         {
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;
-        case 0x7c : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Angle" )
+        case 0x7c : /*set Gradient Angle*/
         {
             mpOutAct->SetGradientAngle( ImplGetI( pElement->nIndexPrecision ) );
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;
-        case 0x7d : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Description" )
+        case 0x7d : /*set Gradient Description*/
         {
             ImplGetI( pElement->nIndexPrecision ); // -Wall is this needed?
             sal_uInt32  nNumberOfStages = ImplGetI( pElement->nIndexPrecision );
@@ -497,7 +498,7 @@ void CGM::ImplDoClass5()
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;
-        case 0x7e : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Style" )
+        case 0x7e : /*set Gradient Style*/
         {
             sal_uInt32 nStyle = ImplGetUI16( 8 );
             double fRatio = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
@@ -505,20 +506,21 @@ void CGM::ImplDoClass5()
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;
-        case 0xff : ComOut( CGM_GDSF_ONLY, "inquire Font metrics" ) break;
-        case 0xfe : ComOut( CGM_GDSF_ONLY, "inquire character widths" ) break;
-        case 0xfd : ComOut( CGM_GDSF_ONLY, "set Text Font" ) break;
-        case 0xfc : ComOut( CGM_GDSF_ONLY, "set current position" ) break;
-        case 0xfb : ComOut( CGM_GDSF_ONLY, "set current position mode" ) break;
-        case 0xfa : ComOut( CGM_GDSF_ONLY, "set character height mode" ) break;
-        case 0xf9 : ComOut( CGM_GDSF_ONLY, "set Transform matrix 2D" ) break;
-        case 0xf8 : ComOut( CGM_GDSF_ONLY, "set Transform matrix 3D" ) break;
-        case 0xf7 : ComOut( CGM_GDSF_ONLY, "pop transformation state" ) break;
-        case 0xf6 : ComOut( CGM_GDSF_ONLY, "clear transformation state" ) break;
-        case 0xf5 : ComOut( CGM_GDSF_ONLY, "set character widths" ) break;
-        case 0xf4 : ComOut( CGM_GDSF_ONLY, "set color name - for Pantone support" ) break;
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
+        case 0xff : /*inquire Font metrics*/ break;
+        case 0xfe : /*inquire character widths*/ break;
+        case 0xfd : /*set Text Font*/ break;
+        case 0xfc : /*set current position*/ break;
+        case 0xfb : /*set current position mode*/ break;
+        case 0xfa : /*set character height mode*/ break;
+        case 0xf9 : /*set Transform matrix 2D*/ break;
+        case 0xf8 : /*set Transform matrix 3D*/ break;
+        case 0xf7 : /*pop transformation state*/ break;
+        case 0xf6 : /*clear transformation state*/ break;
+        case 0xf5 : /*set character widths*/ break;
+        case 0xf4 : /*set color name - for Pantone support*/ break;
+        default: break;
     }
 };
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,7 +37,7 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 /**
  * This Helper class provides a simplified interface to conversion between PocketXL formula representation
  * and Calc formula representation.<p>
- * The class is used by {@link org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Formula}
+ * The class is used by {@link org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Formula}
  */
 public class FormulaHelper {
 

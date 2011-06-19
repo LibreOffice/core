@@ -2,7 +2,7 @@
  * (e.g.: a paragraph might be bold) that is needed at the head of an OO
  * document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
@@ -29,26 +29,20 @@
 
 #ifndef _TEXTRUNSTYLE_H
 #define _TEXTRUNSTYLE_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
 #include <libwpd/libwpd.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 
 #include "Style.hxx"
 
 class TagOpenElement;
 class DocumentElement;
-class DocumentHandler;
+class OdfDocumentHandler;
 
 class ParagraphStyle
 {
 public:
     ParagraphStyle(WPXPropertyList *propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
     virtual ~ParagraphStyle();
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
     WPXString getName() const { return msName; }
 private:
     WPXPropertyList *mpPropList;
@@ -61,7 +55,7 @@ class SpanStyle : public Style
 {
 public:
     SpanStyle(const char *psName, const WPXPropertyList &xPropList);
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
 
 private:
         WPXPropertyList mPropList;

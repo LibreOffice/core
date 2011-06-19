@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
+#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -140,6 +142,8 @@ public:
     Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
     /** Creates and returns a database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
+    /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
+    Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
 
@@ -249,7 +253,7 @@ private:
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
     StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
-    sal_Int16           mnCurrSheet;            /// Current sheet index in Calc dcument.
+    sal_Int16           mnCurrSheet;            /// Current sheet index in Calc document.
     bool                mbWorkbook;             /// True = multi-sheet file.
 
     // buffers
@@ -397,6 +401,28 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
     {
     }
     OSL_ENSURE( xDatabaseRange.is(), "WorkbookGlobals::createDatabaseRangeObject - cannot create database range" );
+    return xDatabaseRange;
+}
+
+Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
+{
+    // validate cell range
+    CellRangeAddress aDestRange = rRangeAddr;
+    bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
+
+    // create database range and insert it into the Calc document
+    Reference< XDatabaseRange > xDatabaseRange;
+    PropertySet aDocProps( mxDoc );
+    Reference< XUnnamedDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_UnnamedDatabaseRanges ), UNO_QUERY_THROW );
+    if( bValidRange ) try
+    {
+        xDatabaseRanges->setByTable( aDestRange );
+        xDatabaseRange.set( xDatabaseRanges->getByTable( aDestRange.Sheet ), UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( xDatabaseRange.is(), "WorkbookData::createDatabaseRangeObject - cannot create database range" );
     return xDatabaseRange;
 }
 
@@ -752,6 +778,11 @@ Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString&
     return mrBookGlob.createDatabaseRangeObject( orName, rRangeAddr );
 }
 
+Reference< XDatabaseRange > WorkbookHelper::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
+{
+    return mrBookGlob.createUnnamedDatabaseRangeObject( rRangeAddr );
+}
+
 Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
     return mrBookGlob.createStyleObject( orStyleName, bPageStyle );
@@ -916,3 +947,5 @@ BiffCodecHelper& WorkbookHelper::getCodecHelper() const
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

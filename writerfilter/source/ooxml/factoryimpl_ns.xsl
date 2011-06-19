@@ -7,10 +7,6 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
-  $RCSfile: fastresources_wml.xsl,v $
- 
-  $Revision: 1.3 $
- 
   This file is part of OpenOffice.org.
  
   OpenOffice.org is free software: you can redistribute it and/or modify
@@ -181,6 +177,12 @@ OOXMLFactory_ns::Pointer_t </xsl:text>
   </xsl:for-each>
   <xsl:for-each select=".//rng:data[@type='int']">
     <xsl:text>Integer</xsl:text>
+  </xsl:for-each>
+  <xsl:for-each select=".//rng:data[@type='integer']">
+    <xsl:text>Integer</xsl:text>
+  </xsl:for-each>
+  <xsl:for-each select=".//rng:data[@type='string']">
+    <xsl:text>String</xsl:text>
   </xsl:for-each>
 </xsl:template>
 
@@ -522,6 +524,15 @@ CreateElementMapPointer </xsl:text>
         <xsl:when test="@action='text'">
     pHandler-&gt;text(sText);
         </xsl:when>
+        <xsl:when test="@action='positionOffset'">
+    pHandler-&gt;positionOffset(sText);
+        </xsl:when>
+        <xsl:when test="@action='alignH'">
+    pHandler-&gt;alignH(sText);
+        </xsl:when>
+        <xsl:when test="@action='alignV'">
+    pHandler-&gt;alignV(sText);
+        </xsl:when>
         <xsl:when test="@action='newProperty'">
           <xsl:text>
     OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(pHandler, </xsl:text>
@@ -629,7 +640,6 @@ CreateElementMapPointer </xsl:text>
     <xsl:text>    }&#xa;</xsl:text>
   </xsl:if>
   <xsl:if test="string-length($switchblock2) > 0">
-    <xsl:text>    OOXMLFastContextHandlerValue * pValueHandler = dynamic_cast&lt;OOXMLFastContextHandlerValue *&gt;(pHandler);&#xa;</xsl:text>
     <xsl:text>    switch (nDefine)&#xa;</xsl:text>
     <xsl:text>    {&#xa;</xsl:text>
     <xsl:value-of select="$switchblock2"/>

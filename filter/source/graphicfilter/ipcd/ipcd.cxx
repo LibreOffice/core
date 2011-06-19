@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ private:
 
     sal_uLong               nLastPercent;
 
-    SvStream*           pPCD;
+    SvStream &m_rPCD;
     BitmapWriteAccess*  mpAcc;
 
     sal_uInt8               nOrientation;   // Ausrichtung des Bildes in der PCD-Datei:
@@ -88,21 +89,23 @@ private:
 
 public:
 
-    PCDReader() {}
+    PCDReader(SvStream &rStream)
+        : m_rPCD(rStream)
+    {
+    }
     ~PCDReader() {}
 
-    sal_Bool ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* pConfigItem );
+    sal_Bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von PCDReader ==============================
 
-sal_Bool PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* pConfigItem )
+sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
     Bitmap       aBmp;
 
     bStatus      = sal_True;
     nLastPercent = 0;
-    pPCD         = &rPCD;
 
     MayCallback( 0 );
 
@@ -193,8 +196,8 @@ void PCDReader::CheckPCDImagePacFile()
 {
     char Buf[ 8 ];
 
-    pPCD->Seek( 2048 );
-    pPCD->Read( Buf, 7 );
+    m_rPCD.Seek( 2048 );
+    m_rPCD.Read( Buf, 7 );
     Buf[ 7 ] = 0;
     if ( ByteString( Buf ).CompareTo( "PCD_IPI" ) != COMPARE_EQUAL )
         bStatus = sal_False;
@@ -206,8 +209,8 @@ void PCDReader::ReadOrientation()
 {
     if ( bStatus == sal_False )
         return;
-    pPCD->Seek( 194635 );
-    *pPCD >> nOrientation;
+    m_rPCD.Seek( 194635 );
+    m_rPCD >> nOrientation;
     nOrientation &= 0x03;
 }
 
@@ -254,13 +257,13 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
         return;
     }
 
-    pPCD->Seek( nImagePos );
+    m_rPCD.Seek( nImagePos );
 
     // naechstes Zeilen-Paar := erstes Zeile-Paar:
-    pPCD->Read( pL0N, nWidth );
-    pPCD->Read( pL1N, nWidth );
-    pPCD->Read( pCbN, nW2 );
-    pPCD->Read( pCrN, nW2 );
+    m_rPCD.Read( pL0N, nWidth );
+    m_rPCD.Read( pL1N, nWidth );
+    m_rPCD.Read( pCbN, nW2 );
+    m_rPCD.Read( pCrN, nW2 );
     pCbN[ nW2 ] = pCbN[ nW2 - 1 ];
     pCrN[ nW2 ] = pCrN[ nW2 - 1 ];
 
@@ -275,10 +278,10 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
         // naechstes Zeilen-Paar holen:
         if ( nYPair < nH2 - 1 )
         {
-            pPCD->Read( pL0N, nWidth );
-            pPCD->Read( pL1N, nWidth );
-            pPCD->Read( pCbN, nW2 );
-            pPCD->Read( pCrN, nW2 );
+            m_rPCD.Read( pL0N, nWidth );
+            m_rPCD.Read( pL1N, nWidth );
+            m_rPCD.Read( pCbN, nW2 );
+            m_rPCD.Read( pCrN, nW2 );
             pCbN[nW2]=pCbN[ nW2 - 1 ];
             pCrN[nW2]=pCrN[ nW2 - 1 ];
         }
@@ -368,7 +371,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
             }
         }
 
-        if ( pPCD->GetError() )
+        if ( m_rPCD.GetError() )
             bStatus = sal_False;
         MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * nYPair / nH2 );
         if ( bStatus == sal_False )
@@ -388,7 +391,8 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool )
 {
-    PCDReader aPCDReader;
-    return aPCDReader.ReadPCD( rStream, rGraphic, pConfigItem );
+    PCDReader aPCDReader(rStream);
+    return aPCDReader.ReadPCD(rGraphic, pConfigItem);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

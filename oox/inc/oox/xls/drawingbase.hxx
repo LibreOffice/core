@@ -118,7 +118,8 @@ private:
         ANCHOR_INVALID,         /// Anchor type is unknown.
         ANCHOR_ABSOLUTE,        /// Absolute anchor (top-left corner and size in absolute units).
         ANCHOR_ONECELL,         /// One-cell anchor (top-left corner at cell, size in absolute units).
-        ANCHOR_TWOCELL          /// Two-cell anchor (top-left and bottom-right corner at cell).
+        ANCHOR_TWOCELL,         /// Two-cell anchor (top-left and bottom-right corner at cell).
+        ANCHOR_VML
     };
 
     /** Specifies how cell positions from CellAnchorModel have to be processed. */

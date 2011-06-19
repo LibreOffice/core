@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#ifndef _COM_SUN_STAR_PRESENTATION_PRESENTATIONPAGE_HPP_
 #include <com/sun/star/presentation/XPresentationPage.hpp>
-#endif
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -277,7 +276,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
     osl::File::RC nRC;
     sal_uInt64 nTemp;
 
-    nRC = aInfoFile.open( OpenFlag_Write );
+    nRC = aInfoFile.open( osl_File_OpenFlag_Write );
     if( osl::File::E_None == nRC )
     {
         nRC = aInfoFile.write( aInfo.getStr(), aInfo.getLength(), nTemp );
@@ -514,3 +513,5 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
 
     return pEntry;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

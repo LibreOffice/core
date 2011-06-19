@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,20 +39,14 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#ifdef SOLAR_JAVA
 #include <com/sun/star/document/XImporter.hpp>
-#endif // SOLAR_JAVA
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase1.hxx>
-#ifdef SOLAR_JAVA
-#include <cppuhelper/implbase5.hxx>
-#else // !SOLAR_JAVA
 #include <cppuhelper/implbase4.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -64,7 +59,7 @@
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -203,20 +198,12 @@ class SVGFontExport;
 class SVGActionWriter;
 class EditFieldInfo;
 
-#ifdef SOLAR_JAVA
-class SVGFilter : public cppu::WeakImplHelper5 < XFilter,
+class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
                                                  XImporter,
                                                  XExporter,
-                                                 XInitialization,
-                                                 XServiceInfo >
-#else // !SOLAR_JAVA
-class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
-                                                 XExporter,
-                                                 XInitialization,
-                                                 XServiceInfo >
-#endif
+                                                 XExtendedFilterDetection >
 {
-    typedef ::std::hash_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
+    typedef ::boost::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
     typedef ::std::vector< ::rtl::OUString > UniqueIdVector;
 
 private:
@@ -232,9 +219,7 @@ private:
 
     ObjectMap*                          mpObjects;
     Reference< XComponent >             mxSrcDoc;
-#ifdef SOLAR_JAVA
     Reference< XComponent >             mxDstDoc;
-#endif
     Reference< XDrawPage >              mxDefaultPage;
     Sequence< PropertyValue >           maFilterData;
     UniqueIdVector                      maUniqueIdVector;
@@ -244,9 +229,7 @@ private:
     sal_Int32                           mnDrawingId;
     Link                                maOldFieldHdl;
 
-#ifdef SOLAR_JAVA
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
-#endif
 
     sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
     Reference< XDocumentHandler >       implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
@@ -274,10 +257,8 @@ private:
     sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
-    ::rtl::OUString                     implGetDescriptionFromShape( const Reference< XShape >& rxShape );
+    ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
     ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf, sal_Bool bUnique = sal_False );
-
-    sal_Bool                                implHasText( const GDIMetaFile& rMtf ) const;
 
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );
 
@@ -287,47 +268,28 @@ protected:
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException);
     virtual void SAL_CALL cancel( ) throw (RuntimeException);
 
-#ifdef SOLAR_JAVA
     // XImporter
     virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
-#endif
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
 
-    // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
-
-    // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
+    // XExtendedFilterDetection
+    virtual rtl::OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException);
 
 public:
 
-                SVGFilter( const Reference< XMultiServiceFactory > &rxMSF );
-    virtual     ~SVGFilter();
+    explicit SVGFilter( const Reference< XComponentContext >& rxCtx );
+    virtual ~SVGFilter();
 };
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SVGFilter_getImplementationName ()
-    throw ( ::com::sun::star::uno::RuntimeException );
+class SvStream;
+class Graphic;
 
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL SVGFilter_supportsService( const ::rtl::OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
-
-// -----------------------------------------------------------------------------
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SVGFilter_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
-
-// -----------------------------------------------------------------------------
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL SVGFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( ::com::sun::star::uno::Exception );
+bool importSvg(SvStream & rStream, Graphic & rGraphic );
 
 #endif // SVGFILTER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

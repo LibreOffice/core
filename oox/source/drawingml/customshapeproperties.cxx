@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::drawing;
+
+# define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 
 namespace oox { namespace drawingml {
 
@@ -93,10 +96,1823 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 {
     if ( maShapePresetType.getLength() )
     {
-        //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
-        Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
-        if( xDefaulter.is() )
-            xDefaulter->createCustomShapeDefaults( maShapePresetType );
+        OSL_TRACE("preset: %s", USS(maShapePresetType));
+
+        static OUString sLeftRightArrow = CREATE_OUSTRING("left-right-arrow");
+        static OUString sRightArrow = CREATE_OUSTRING("right-arrow");
+        static OUString sStripedRightArrow = CREATE_OUSTRING("striped-right-arrow");
+        static OUString sWedgeRoundedRectCallout = CREATE_OUSTRING("round-rectangular-callout");
+
+if ( maShapePresetType.equals( sWedgeRoundedRectCallout ) ) {
+    PropertyMap aPropertyMap;
+
+    Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (3);
+    {
+        Any aAny ((sal_Int32) -4166);
+        aAdjSequence [0].Value = aAny;
+    }
+    {
+        Any aAny ((sal_Int32) 12500);
+        aAdjSequence [1].Value = aAny;
+    }
+    {
+        Any aAny ((sal_Int32) 3333);
+        aAdjSequence [2].Value = aAny;
+    }
+    aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+
+    Sequence< OUString > aStringSequence (43);
+    aStringSequence[0] = CREATE_OUSTRING ("width*$0 /20000");
+    aStringSequence[1] = CREATE_OUSTRING ("height*$1 /20000");
+    aStringSequence[2] = CREATE_OUSTRING ("width/2");
+    aStringSequence[3] = CREATE_OUSTRING ("?2 +?0 -0");
+    aStringSequence[4] = CREATE_OUSTRING ("height/2");
+    aStringSequence[5] = CREATE_OUSTRING ("?4 +?1 -0");
+    aStringSequence[6] = CREATE_OUSTRING ("?0 *height/width");
+    aStringSequence[7] = CREATE_OUSTRING ("abs(?1 )");
+    aStringSequence[8] = CREATE_OUSTRING ("abs(?6 )");
+    aStringSequence[9] = CREATE_OUSTRING ("?7 +0-?8 ");
+    aStringSequence[10] = CREATE_OUSTRING ("");
+    aStringSequence[11] = CREATE_OUSTRING ("");
+    aStringSequence[12] = CREATE_OUSTRING ("width*?10 /2");
+    aStringSequence[13] = CREATE_OUSTRING ("width*?11 /2");
+    aStringSequence[14] = CREATE_OUSTRING ("");
+    aStringSequence[15] = CREATE_OUSTRING ("");
+    aStringSequence[16] = CREATE_OUSTRING ("height*?14 /2");
+    aStringSequence[17] = CREATE_OUSTRING ("height*?15 /2");
+    aStringSequence[18] = CREATE_OUSTRING ("");
+    aStringSequence[19] = CREATE_OUSTRING ("");
+    aStringSequence[20] = CREATE_OUSTRING ("");
+    aStringSequence[21] = CREATE_OUSTRING ("");
+    aStringSequence[22] = CREATE_OUSTRING ("");
+    aStringSequence[23] = CREATE_OUSTRING ("");
+    aStringSequence[24] = CREATE_OUSTRING ("");
+    aStringSequence[25] = CREATE_OUSTRING ("");
+    aStringSequence[26] = CREATE_OUSTRING ("");
+    aStringSequence[27] = CREATE_OUSTRING ("");
+    aStringSequence[28] = CREATE_OUSTRING ("");
+    aStringSequence[29] = CREATE_OUSTRING ("");
+    aStringSequence[30] = CREATE_OUSTRING ("");
+    aStringSequence[31] = CREATE_OUSTRING ("");
+    aStringSequence[32] = CREATE_OUSTRING ("");
+    aStringSequence[33] = CREATE_OUSTRING ("");
+    aStringSequence[34] = CREATE_OUSTRING ("min(width,height)");
+    aStringSequence[35] = CREATE_OUSTRING ("?34 *$2 /20000");
+    aStringSequence[36] = CREATE_OUSTRING ("width+0-?35 ");
+    aStringSequence[37] = CREATE_OUSTRING ("height+0-?35 ");
+    aStringSequence[38] = CREATE_OUSTRING ("?35 *5857/20000");
+    aStringSequence[39] = CREATE_OUSTRING ("width+0-?38 ");
+    aStringSequence[40] = CREATE_OUSTRING ("height+0-?38 ");
+    aStringSequence[41] = CREATE_OUSTRING ("height");
+    aStringSequence[42] = CREATE_OUSTRING ("width");
+    aPropertyMap [PROP_Equations] <<= aStringSequence;
+
+    Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
+    {
+        Sequence< PropertyValue > aPropSequence (7);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 3);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeXMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 429496729);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeXMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) -429496729);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RangeYMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 429496729);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [3].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [4].Name = CREATE_OUSTRING ("RangeYMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) -429496729);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [4].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [5].Name = CREATE_OUSTRING ("RefX");
+            Any aAny ((sal_Int32) 0);
+            aPropSequence [5].Value = makeAny (aAny);
+        }
+        {
+            aPropSequence [6].Name = CREATE_OUSTRING ("RefY");
+            Any aAny ((sal_Int32) 1);
+            aPropSequence [6].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [0] = aPropSequence;
+    }
+    aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+
+    aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+
+    aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+
+    Sequence< PropertyValue > aPropSequence (2);
+    {
+        aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
+        Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (32);
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 35);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [0] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [1] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [2] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [3] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [4] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 12);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [5] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 21);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 29);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [6] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 13);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [7] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 36);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [8] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [9] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [10] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [11] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [12] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 42);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 16);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [13] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 23);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 31);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [14] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 42);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 17);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [15] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 42);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 37);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [16] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [17] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [18] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [19] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [20] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 13);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 41);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [21] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 25);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 33);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [22] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 12);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 41);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [23] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 35);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 41);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [24] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [25] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [26] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [27] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [28] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 17);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [29] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 19);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 27);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [30] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 16);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [31] = aParameterPair;
+        }
+        aPropSequence [0].Value = makeAny (aParameterPairSeq);
+    }
+    {
+        aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
+        Sequence< EnhancedCustomShapeSegment > aSegmentSeq (11);
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 1;
+            aSegment.Count = 1;
+            aSegmentSeq [0] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 10;
+            aSegment.Count = 1;
+            aSegmentSeq [1] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 4;
+            aSegmentSeq [2] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 10;
+            aSegment.Count = 1;
+            aSegmentSeq [3] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 4;
+            aSegmentSeq [4] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 10;
+            aSegment.Count = 1;
+            aSegmentSeq [5] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 4;
+            aSegmentSeq [6] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 10;
+            aSegment.Count = 1;
+            aSegmentSeq [7] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 3;
+            aSegmentSeq [8] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 4;
+            aSegment.Count = 0;
+            aSegmentSeq [9] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 5;
+            aSegment.Count = 0;
+            aSegmentSeq [10] = aSegment;
+        }
+        aPropSequence [1].Value = makeAny (aSegmentSeq);
+    }
+    aPropertyMap [PROP_Path] <<= aPropSequence;
+
+    awt::Rectangle aRectangle;
+    aRectangle.X = 0;
+    aRectangle.Y = 0;
+    aRectangle.Width = 4663800;
+    aRectangle.Height = 283680;
+    aPropertyMap [PROP_ViewBox] <<= aRectangle;
+
+            aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-wedge-round-rect-callout");
+
+            Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
+            PropertySet aPropSet( xPropSet );
+            aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
+            OSL_TRACE("created ooxml preset for ooxml-wedge-round-rect-callout");
+    }
+    else if ( maShapePresetType.equals( sLeftRightArrow ) ) {
+            PropertyMap aPropertyMap;
+
+    Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+    {
+        Any aAny ((sal_Int32) 10000);
+        aAdjSequence [0].Value = aAny;
+    }
+    {
+        Any aAny ((sal_Int32) 10000);
+        aAdjSequence [1].Value = aAny;
+    }
+    aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+
+    Sequence< OUString > aStringSequence (16);
+    aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+    aStringSequence[1] = CREATE_OUSTRING ("10000*width/?0 ");
+    aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(20000-$0 ,$0 ,20000))");
+    aStringSequence[3] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
+    aStringSequence[4] = CREATE_OUSTRING ("?0 *?3 /20000");
+    aStringSequence[5] = CREATE_OUSTRING ("width+0-?4 ");
+    aStringSequence[6] = CREATE_OUSTRING ("height*?2 /40000");
+    aStringSequence[7] = CREATE_OUSTRING ("height/2");
+    aStringSequence[8] = CREATE_OUSTRING ("?7 +0-?6 ");
+    aStringSequence[9] = CREATE_OUSTRING ("?7 +?6 -0");
+    aStringSequence[10] = CREATE_OUSTRING ("height/2");
+    aStringSequence[11] = CREATE_OUSTRING ("?8 *?4 /?10 ");
+    aStringSequence[12] = CREATE_OUSTRING ("?4 +0-?11 ");
+    aStringSequence[13] = CREATE_OUSTRING ("?5 +?11 -0");
+    aStringSequence[14] = CREATE_OUSTRING ("width");
+    aStringSequence[15] = CREATE_OUSTRING ("height");
+    aPropertyMap [PROP_Equations] <<= aStringSequence;
+
+    Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeYMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 20000);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeYMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefY");
+            Any aAny ((sal_Int32) 0);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [0] = aPropSequence;
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeXMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 1);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeXMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefX");
+            Any aAny ((sal_Int32) 1);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [1] = aPropSequence;
+    }
+    aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+
+    aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+
+    aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+
+    Sequence< PropertyValue > aPropSequence (2);
+    {
+        aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
+        Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (10);
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 7);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [0] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [1] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [2] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [3] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [4] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 14);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 7);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [5] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 15);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [6] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [7] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [8] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 15);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [9] = aParameterPair;
+        }
+        aPropSequence [0].Value = makeAny (aParameterPairSeq);
+    }
+    {
+        aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
+        Sequence< EnhancedCustomShapeSegment > aSegmentSeq (4);
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 1;
+            aSegment.Count = 1;
+            aSegmentSeq [0] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 9;
+            aSegmentSeq [1] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 4;
+            aSegment.Count = 0;
+            aSegmentSeq [2] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 5;
+            aSegment.Count = 0;
+            aSegmentSeq [3] = aSegment;
+        }
+        aPropSequence [1].Value = makeAny (aSegmentSeq);
+    }
+    aPropertyMap [PROP_Path] <<= aPropSequence;
+
+    awt::Rectangle aRectangle;
+    aRectangle.X = 0;
+    aRectangle.Y = 0;
+    aRectangle.Width = 4663800;
+    aRectangle.Height = 283680;
+    aPropertyMap [PROP_ViewBox] <<= aRectangle;
+
+            aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-left-right-arrow");
+
+            Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
+            PropertySet aPropSet( xPropSet );
+            aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
+            OSL_TRACE("created ooxml preset for ooxml-left-right-arrow");
+
+        } else if ( maShapePresetType.equals( sStripedRightArrow ) ) {
+            PropertyMap aPropertyMap;
+
+    Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+    {
+        Any aAny ((sal_Int32) 10000);
+        aAdjSequence [0].Value = aAny;
+    }
+    {
+        Any aAny ((sal_Int32) 10000);
+        aAdjSequence [1].Value = aAny;
+    }
+    aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+
+    Sequence< OUString > aStringSequence (17);
+    aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+    aStringSequence[1] = CREATE_OUSTRING ("16875*width/?0 ");
+    aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(20000-$0 ,$0 ,20000))");
+    aStringSequence[3] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
+    aStringSequence[4] = CREATE_OUSTRING ("?0 *1/6");
+    aStringSequence[5] = CREATE_OUSTRING ("?0 *?3 /20000");
+    aStringSequence[6] = CREATE_OUSTRING ("width+0-?5 ");
+    aStringSequence[7] = CREATE_OUSTRING ("height*?2 /40000");
+    aStringSequence[8] = CREATE_OUSTRING ("height/2");
+    aStringSequence[9] = CREATE_OUSTRING ("?8 +0-?7 ");
+    aStringSequence[10] = CREATE_OUSTRING ("?8 +?7 -0");
+    aStringSequence[11] = CREATE_OUSTRING ("height/2");
+    aStringSequence[12] = CREATE_OUSTRING ("?7 *?5 /?11 ");
+    aStringSequence[13] = CREATE_OUSTRING ("width+0-?12 ");
+    aStringSequence[14] = CREATE_OUSTRING ("height");
+    aStringSequence[15] = CREATE_OUSTRING ("width");
+    aStringSequence[16] = CREATE_OUSTRING ("min(width,height)/8");
+    aPropertyMap [PROP_Equations] <<= aStringSequence;
+
+    Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeYMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 20000);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeYMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefY");
+            Any aAny ((sal_Int32) 0);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [0] = aPropSequence;
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 6);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeXMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 1);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeXMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefX");
+            Any aAny ((sal_Int32) 1);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [1] = aPropSequence;
+    }
+    aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+
+    aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+
+    aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+
+    Sequence< PropertyValue > aPropSequence (2);
+    {
+        aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
+        Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (15);
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [0] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                OUString str = CREATE_OUSTRING ("ssd32");
+                aParameter.Value = makeAny (str);
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [1] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                OUString str = CREATE_OUSTRING ("ssd32");
+                aParameter.Value = makeAny (str);
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 10);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [2] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 10);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [3] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                OUString str = CREATE_OUSTRING ("ssd16");
+                aParameter.Value = makeAny (str);
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [4] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 16);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [5] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 16);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 10);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [6] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                OUString str = CREATE_OUSTRING ("ssd16");
+                aParameter.Value = makeAny (str);
+                aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 10);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [7] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [8] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 6);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [9] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 6);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [10] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 15);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [11] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 6);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 14);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [12] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 6);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 10);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [13] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 4);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 10);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [14] = aParameterPair;
+        }
+        aPropSequence [0].Value = makeAny (aParameterPairSeq);
+    }
+    {
+        aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
+        Sequence< EnhancedCustomShapeSegment > aSegmentSeq (10);
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 1;
+            aSegment.Count = 1;
+            aSegmentSeq [0] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 3;
+            aSegmentSeq [1] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 4;
+            aSegment.Count = 0;
+            aSegmentSeq [2] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 1;
+            aSegment.Count = 1;
+            aSegmentSeq [3] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 3;
+            aSegmentSeq [4] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 4;
+            aSegment.Count = 0;
+            aSegmentSeq [5] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 1;
+            aSegment.Count = 1;
+            aSegmentSeq [6] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 6;
+            aSegmentSeq [7] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 4;
+            aSegment.Count = 0;
+            aSegmentSeq [8] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 5;
+            aSegment.Count = 0;
+            aSegmentSeq [9] = aSegment;
+        }
+        aPropSequence [1].Value = makeAny (aSegmentSeq);
+    }
+    aPropertyMap [PROP_Path] <<= aPropSequence;
+
+    awt::Rectangle aRectangle;
+    aRectangle.X = 0;
+    aRectangle.Y = 0;
+    aRectangle.Width = 4663800;
+    aRectangle.Height = 283680;
+    aPropertyMap [PROP_ViewBox] <<= aRectangle;
+
+            aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-striped-right-arrow");
+
+            Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
+            PropertySet aPropSet( xPropSet );
+            aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
+            OSL_TRACE("created ooxml preset for ooxml-striped-right-arrow");
+
+        } else if ( maShapePresetType.equals( sRightArrow ) ) {
+            PropertyMap aPropertyMap;
+
+    Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (2);
+    {
+        Any aAny ((sal_Int32) 18000);
+        aAdjSequence [0].Value = aAny;
+    }
+    {
+        Any aAny ((sal_Int32) 10000);
+        aAdjSequence [1].Value = aAny;
+    }
+    aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+
+    Sequence< OUString > aStringSequence (15);
+    aStringSequence[0] = CREATE_OUSTRING ("min(width,height)");
+    aStringSequence[1] = CREATE_OUSTRING ("20000*width/?0 ");
+    aStringSequence[2] = CREATE_OUSTRING ("if(0-$0 ,0,if(20000-$0 ,$0 ,20000))");
+    aStringSequence[3] = CREATE_OUSTRING ("if(0-$1 ,0,if(?1 -$1 ,$1 ,?1 ))");
+    aStringSequence[4] = CREATE_OUSTRING ("?0 *?3 /20000");
+    aStringSequence[5] = CREATE_OUSTRING ("width+0-?4 ");
+    aStringSequence[6] = CREATE_OUSTRING ("height*?2 /40000");
+    aStringSequence[7] = CREATE_OUSTRING ("height/2");
+    aStringSequence[8] = CREATE_OUSTRING ("?7 +0-?6 ");
+    aStringSequence[9] = CREATE_OUSTRING ("?7 +?6 -0");
+    aStringSequence[10] = CREATE_OUSTRING ("height/2");
+    aStringSequence[11] = CREATE_OUSTRING ("?8 *?4 /?10 ");
+    aStringSequence[12] = CREATE_OUSTRING ("?5 +?11 -0");
+    aStringSequence[13] = CREATE_OUSTRING ("height");
+    aStringSequence[14] = CREATE_OUSTRING ("width");
+    aPropertyMap [PROP_Equations] <<= aStringSequence;
+
+    Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeYMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 20000);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeYMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefY");
+            Any aAny ((sal_Int32) 0);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [0] = aPropSequence;
+    }
+    {
+        Sequence< PropertyValue > aPropSequence (4);
+        {
+            aPropSequence [0].Name = CREATE_OUSTRING ("Position");
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aPropSequence [0].Value = makeAny (aParameterPair);
+        }
+        {
+            aPropSequence [1].Name = CREATE_OUSTRING ("RangeXMaximum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 1);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+            aPropSequence [1].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [2].Name = CREATE_OUSTRING ("RangeXMinimum");
+            EnhancedCustomShapeParameter aParameter;
+            Any aAny ((sal_Int32) 0);
+            aParameter.Value = aAny;
+            aParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+            aPropSequence [2].Value = makeAny (aParameter);
+        }
+        {
+            aPropSequence [3].Name = CREATE_OUSTRING ("RefX");
+            Any aAny ((sal_Int32) 1);
+            aPropSequence [3].Value = makeAny (aAny);
+        }
+        aPropSequenceSequence [1] = aPropSequence;
+    }
+    aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+
+    aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+
+    aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+
+    Sequence< PropertyValue > aPropSequence (2);
+    {
+        aPropSequence [0].Name = CREATE_OUSTRING ("Coordinates");
+        Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (7);
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [0] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 8);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [1] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [2] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 14);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 7);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [3] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 13);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [4] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 5);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [5] = aParameterPair;
+        }
+        {
+            EnhancedCustomShapeParameterPair aParameterPair;
+            {
+                EnhancedCustomShapeParameter aParameter;
+                aParameterPair.First = aParameter;
+            }
+            {
+                EnhancedCustomShapeParameter aParameter;
+                Any aAny ((sal_Int32) 9);
+                aParameter.Value = aAny;
+                aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aParameterPair.Second = aParameter;
+            }
+            aParameterPairSeq [6] = aParameterPair;
+        }
+        aPropSequence [0].Value = makeAny (aParameterPairSeq);
+    }
+    {
+        aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
+        Sequence< EnhancedCustomShapeSegment > aSegmentSeq (4);
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 1;
+            aSegment.Count = 1;
+            aSegmentSeq [0] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 2;
+            aSegment.Count = 6;
+            aSegmentSeq [1] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 4;
+            aSegment.Count = 0;
+            aSegmentSeq [2] = aSegment;
+        }
+        {
+            EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = 5;
+            aSegment.Count = 0;
+            aSegmentSeq [3] = aSegment;
+        }
+        aPropSequence [1].Value = makeAny (aSegmentSeq);
+    }
+    aPropertyMap [PROP_Path] <<= aPropSequence;
+
+    awt::Rectangle aRectangle;
+    aRectangle.X = 0;
+    aRectangle.Y = 0;
+    aRectangle.Width = 1050480;
+    aRectangle.Height = 456840;
+    aPropertyMap [PROP_ViewBox] <<= aRectangle;
+
+
+            aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-right-arrow");
+            //aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
+
+            Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
+            PropertySet aPropSet( xPropSet );
+            aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
+            OSL_TRACE("created ooxml preset");
+
+#ifdef DEBUG
+            aPropertyMap.dump();
+            aPropertyMap.dumpCode();
+#endif
+        } else {
+            //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
+            Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
+            if( xDefaulter.is() )
+                xDefaulter->createCustomShapeDefaults( maShapePresetType );
+        }
 
         if ( maAdjustmentGuideList.size() )
         {
@@ -128,6 +1944,11 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                         aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
+                                } else if ( aAdjustmentSeq.getLength() > 0 ) {
+                                    EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+                                    aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
+                                    aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                                    aAdjustmentSeq[ 0 ] = aAdjustmentVal;
                                 }
                                 aIter++;
                             }
@@ -135,7 +1956,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                             xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
                         }
                     }
-                    else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
+                    else if ( aGeoPropSeq[ i ].Name.equals( sType ) && !maShapePresetType.equals ( CREATE_OUSTRING ( "right-arrow" ) ) )
                     {
                         aGeoPropSeq[ i ].Value <<= maShapePresetType;
                     }
@@ -202,7 +2023,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             // to determine the correct adjustment handle that should be updated with the adjustment
             // position. here is the solution: the adjustment value that is used within the position
             // has to be updated, in case the position is a formula the first usage of a
-            // adjument value is decisive
+            // adjustment value is decisive
             if ( maAdjustHandleList[ i ].polar )
             {
                 aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
@@ -248,6 +2069,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         }
         aPropertyMap[ PROP_Handles ] <<= aHandles;
 
+#ifdef DEBUG
+        aPropertyMap.dump();
+        aPropertyMap.dumpCode();
+#endif
         // converting the vector to a sequence
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         PropertySet aPropSet( xPropSet );
@@ -266,3 +2091,5 @@ double CustomShapeProperties::getValue( const std::vector< CustomShapeGuide >& r
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

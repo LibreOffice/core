@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 #ifndef CGM_CHART_HXX_
 #define CGM_CHART_HXX_
-
-#include <tools/list.hxx>
 
 /* FILE TYPE CONSTANTS: */
 #define NOCHART         0       /* Undefined chart.         */
@@ -189,8 +188,8 @@ class CGMChart
 
     protected:
         CGM*                    mpCGM;
-        sal_Int8                    mnCurrentFileType;
-        List                    maTextEntryList;
+        sal_Int8                mnCurrentFileType;
+        ::std::vector< TextEntry* > maTextEntryList;
         DataNode                mDataNode[ 7 ];
         ChartZone               mChartZone;
         PageOrientDim           mPageOrientDim;
@@ -212,3 +211,4 @@ class CGMChart
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

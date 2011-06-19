@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,11 +60,11 @@ namespace oox {
     persistent graphic objects internally and store them in an internal
     container to prevent their early destruction. This makes it possible to use
     the returned URL of the graphic object in any way (e.g. insert it into a
-    property map) without needing to store it immediatly at an object that
+    property map) without needing to store it immediately at an object that
     resolves the graphic object from the passed URL and thus prevents it from
     being destroyed.
  */
-class GraphicHelper
+class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(
@@ -175,3 +176,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,11 +41,6 @@
     #error "who already defined such macro :-("
 #endif
 
-/*
-//#define _FILTER_CONFIG_FROM_ASCII_(ASCII_STRING)            \
-//            ::rtl::OUString::createFromAscii(ASCII_STRING)
-*/
-
 #define _FILTER_CONFIG_FROM_ASCII_(ASCII_STRING)            \
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ASCII_STRING))
 
@@ -56,77 +52,6 @@
 #define _FILTER_CONFIG_LOG_2_(FORMAT, ARG1, ARG2)
 #define _FILTER_CONFIG_LOG_3_(FORMAT, ARG1, ARG2, ARG3)
 
-/*
-#include <rtl/ustrbuf.hxx>
-
-#include <stdio.h>
-
-//_______________________________________________
-
-    #ifdef _FILTER_CONFIG_LOG_
-        #error "who already defined such macro :-("
-    #endif
-
-    #ifdef _FILTER_CONFIG_LOG_1_
-        #error "who already defined such macro :-("
-    #endif
-
-    #ifdef _FILTER_CONFIG_LOG_2_
-        #error "who already defined such macro :-("
-    #endif
-
-    #ifdef _FILTER_CONFIG_LOG_3_
-        #error "who already defined such macro :-("
-    #endif
-
-    //-------------------------------------------
-    // @short  append given text to the log file
-    //
-    //    @param  TEXT [const char*]
-    //            contains the text, which should be logged
-    //
-    #define _FILTER_CONFIG_LOG_(TEXT)                           \
-                {                                               \
-                    FILE* pFile = fopen("filtercache.log", "a");\
-                    fprintf(pFile, "%s", TEXT);                 \
-                    fclose(pFile);                              \
-                }
-
-    //-------------------------------------------
-    // @short  append given text to the log file
-    //            and supports using one optional argument.
-    //
-    //    @descr  The syntax of FORMAT and ARG1 follows the
-    //            mechanism of e.g. sprintf();
-    //
-    //    @param  FORMAT [const char*]
-    //            specify the format of the log message
-    //
-    //    @param  ARGn
-    //            points to any argument(s), which will be used
-    //            inside the FORMAT string to replace place holder(s).
-    //
-    #define _FILTER_CONFIG_LOG_1_(FORMAT, ARG1)                 \
-                {                                               \
-                    FILE* pFile = fopen("filtercache.log", "a");\
-                    fprintf(pFile, FORMAT, ARG1);               \
-                    fclose(pFile);                              \
-                }
-
-    #define _FILTER_CONFIG_LOG_2_(FORMAT, ARG1, ARG2)           \
-                {                                               \
-                    FILE* pFile = fopen("filtercache.log", "a");\
-                    fprintf(pFile, FORMAT, ARG1, ARG2);         \
-                    fclose(pFile);                              \
-                }
-
-    #define _FILTER_CONFIG_LOG_3_(FORMAT, ARG1, ARG2, ARG3)     \
-                {                                               \
-                    FILE* pFile = fopen("filtercache.log", "a");\
-                    fprintf(pFile, FORMAT, ARG1, ARG2, ARG3);   \
-                    fclose(pFile);                              \
-                }
-
-#endif // OSL_DEBUG_LEVEL < 2
-*/
 #endif // _FILTER_CONFIG_MACROS_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

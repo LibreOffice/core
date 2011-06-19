@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -304,7 +305,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
 {
     const MetaAction* pMA;
 
-    for( sal_uLong nAction = 0, nActionCount=pMTF->GetActionCount(); nAction < nActionCount; nAction++ )
+    for( size_t nAction = 0, nActionCount=pMTF->GetActionSize(); nAction < nActionCount; nAction++ )
     {
         pMA =  pMTF->GetAction(nAction);
 
@@ -313,8 +314,8 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
             case META_EPS_ACTION :
             {
                 const GDIMetaFile aGDIMetaFile( ((const MetaEPSAction*)pMA)->GetSubstitute() );
-                sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                sal_Int32 i;
+                size_t nCount = aGDIMetaFile.GetActionSize();
+                size_t i;
                 for ( i = 0; i < nCount; i++ )
                     if ( ((const MetaAction*)aGDIMetaFile.GetAction( i ))->GetType() == META_BMPSCALE_ACTION )
                         break;
@@ -392,15 +393,15 @@ void METWriter::WriteFieldId(sal_uLong nId)
 
 void METWriter::CreateChrSets(const GDIMetaFile * pMTF)
 {
-    sal_uLong nAction, nActionCount;
+    size_t nAction, nActionCount;
     const MetaAction * pMA;
 
     if (bStatus==sal_False)
         return;
 
-    nActionCount=pMTF->GetActionCount();
+    nActionCount = pMTF->GetActionSize();
 
-    for (nAction=0; nAction<nActionCount; nAction++)
+    for (nAction = 0; nAction < nActionCount; nAction++)
     {
         pMA = pMTF->GetAction(nAction);
 
@@ -733,7 +734,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
     if (bStatus==sal_False)
         return;
 
-    for ( sal_uLong nAction = 0, nActionCount = pMTF->GetActionCount(); nAction < nActionCount; nAction++)
+    for ( size_t nAction = 0, nActionCount = pMTF->GetActionSize(); nAction < nActionCount; nAction++)
     {
         pMA = pMTF->GetAction(nAction);
 
@@ -786,8 +787,8 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
                 const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
-                sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                for ( sal_Int32 i = 0; i < nCount; i++ )
+                size_t nCount = aGDIMetaFile.GetActionSize();
+                for ( size_t i = 0; i < nCount; i++ )
                 {
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                     if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
@@ -1462,7 +1463,6 @@ void METWriter::METSetChrCellSize(Size aSize)
 
 void METWriter::METSetChrAngle(short nAngle)
 {
-    double fa;
     long nax,nay;
 
     if (nMETChrAngle==nAngle) return;
@@ -1475,7 +1475,7 @@ void METWriter::METSetChrAngle(short nAngle)
     }
     else
     {
-        fa=((double)nAngle)/1800.0*3.14159265359;
+        double fa=((double)nAngle)/1800.0*3.14159265359;
         nax=(long)(256.0*cos(fa)+0.5);
         nay=(long)(256.0*sin(fa)+0.5);
     }
@@ -1501,7 +1501,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
     if(bStatus==sal_False)
         return;
 
-    for( sal_uLong nA = 0, nACount = pMTF->GetActionCount(); nA < nACount; nA++ )
+    for( size_t nA = 0, nACount = pMTF->GetActionSize(); nA < nACount; nA++ )
     {
         const MetaAction* pMA = pMTF->GetAction( nA );
 
@@ -1990,7 +1990,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTRECT_ACTION:
             {
-//              DBG_ERROR( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
+//              OSL_FAIL( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
             }
             break;
 
@@ -2060,8 +2060,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
-                sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                for ( sal_Int32 i = 0; i < nCount; i++ )
+                size_t nCount = aGDIMetaFile.GetActionSize();
+                for ( size_t i = 0; i < nCount; i++ )
                 {
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                     if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
@@ -2076,21 +2076,12 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_MASK_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MASK_ACTION!" );
-            }
             break;
 
             case META_MASKSCALE_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MASKSCALE_ACTION!" );
-            }
             break;
 
             case META_MASKSCALEPART_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MASKSCALEPART_ACTION!" );
-            }
             break;
 
             case META_GRADIENT_ACTION:
@@ -2118,15 +2109,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_WALLPAPER_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_WALLPAPER_ACTION!" );
-            }
             break;
 
             case META_CLIPREGION_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_CLIPREGION_ACTION!" );
-            }
             break;
 
             case META_ISECTRECTCLIPREGION_ACTION:
@@ -2137,15 +2122,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_ISECTREGIONCLIPREGION_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
-            }
             break;
 
             case META_MOVECLIPREGION_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MOVECLIPREGION_ACTION!" );
-            }
             break;
 
             case META_LINECOLOR_ACTION:
@@ -2189,9 +2168,6 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_TEXTALIGN_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_TEXTALIGN_ACTION!" );
-            }
             break;
 
             case META_MAPMODE_ACTION:
@@ -2629,3 +2605,5 @@ extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic &
         return aMETWriter.WriteMET( aMTF, rStream, pFilterConfigItem );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

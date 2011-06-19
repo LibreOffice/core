@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 #include <oox/dllapi.h>
 #include <sax/fshelper.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 namespace rtl {
     class OString;
@@ -77,6 +78,9 @@ protected:
     /// added attribute is preserved.
     void                AddShapeAttribute( sal_Int32 nAttribute, const rtl::OString& sValue );
 
+    using EscherEx::StartShape;
+    using EscherEx::EndShape;
+
     /// Start the shape for which we just collected the information.
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.
@@ -91,13 +95,13 @@ protected:
 
 private:
 
-    virtual void OpenContainer( UINT16 nEscherContainer, int nRecInstance = 0 );
+    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );
     virtual void CloseContainer();
 
-    virtual UINT32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
+    virtual sal_uInt32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
     virtual void LeaveGroup();
 
-    virtual void AddShape( UINT32 nShapeType, UINT32 nShapeFlags, UINT32 nShapeId = 0 );
+    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 );
 
 private:
     /// Create an OString representing the id from a numerical id.
@@ -113,3 +117,5 @@ private:
 } // namespace vml
 
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

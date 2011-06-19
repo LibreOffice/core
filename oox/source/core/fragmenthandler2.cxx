@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,7 @@
  ************************************************************************/
 
 #include "oox/core/fragmenthandler2.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 
 namespace oox {
 namespace core {
@@ -36,6 +38,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 using ::rtl::OUString;
+
+
+using ::com::sun::star::uno::Sequence;
 
 // ============================================================================
 
@@ -61,11 +66,58 @@ void SAL_CALL FragmentHandler2::endDocument() throw( SAXException, RuntimeExcept
     finalizeImport();
 }
 
+bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( nElement )
+    {
+        case MCE_TOKEN( AlternateContent ):
+            aMceState.push_back( MCE_STARTED );
+            break;
+
+        case MCE_TOKEN( Choice ):
+            {
+                OUString aRequires = rAttribs.getString( ( XML_Requires ), OUString(RTL_CONSTASCII_USTRINGPARAM("none")) );
+                aRequires = getFilter().getNamespaceURL( aRequires );
+                if( getFilter().getNamespaceId( aRequires ) > 0 && !aMceState.empty() && aMceState.back() == MCE_STARTED )
+                    aMceState.back() = MCE_FOUND_CHOICE;
+                else
+                    return false;
+            }
+            break;
+
+        case MCE_TOKEN( Fallback ):
+            if( !aMceState.empty() && aMceState.back() == MCE_STARTED )
+                break;
+            return false;
+        default:
+            {
+                OUString str = rAttribs.getString( MCE_TOKEN( Ignorable ), OUString() );
+                if( !str.isEmpty() )
+                {
+                    Sequence< ::com::sun::star::xml::FastAttribute > attrs = rAttribs.getFastAttributeList()->getFastAttributes();
+                    // printf("MCE: %s\n", ::rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    // TODO: Check & Get the namespaces in "Ignorable"
+                    // printf("NS: %d : %s\n", attrs.getLength(), ::rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
+            return false;
+    }
+    return true;
+}
+
+
+
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------
 
 Reference< XFastContextHandler > SAL_CALL FragmentHandler2::createFastChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException )
 {
+    if( getNamespace( nElement ) == NMSP_mce ) // TODO for checking 'Ignorable'
+    {
+        if( prepareMceContext( nElement, AttributeList( rxAttribs ) ) )
+            return getFastContextHandler();
+        return NULL;
+    }
     return implCreateChildContext( nElement, rxAttribs );
 }
 
@@ -82,6 +134,14 @@ void SAL_CALL FragmentHandler2::characters( const OUString& rChars ) throw( SAXE
 
 void SAL_CALL FragmentHandler2::endFastElement( sal_Int32 nElement ) throw( SAXException, RuntimeException )
 {
+    /* If MCE */
+    switch( nElement )
+    {
+        case MCE_TOKEN( AlternateContent ):
+            aMceState.pop_back();
+            break;
+    }
+
     implEndElement( nElement );
 }
 
@@ -148,3 +208,5 @@ void FragmentHandler2::finalizeImport()
 
 } // namespace core
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

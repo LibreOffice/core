@@ -1,7 +1,7 @@
 /* Style: A base class from which all other styles are inherited, includes
  * a name.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,13 +27,8 @@
 
 #ifndef _STYLE_H
 #define _STYLE_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
+#include <cstdlib>
 #include <libwpd/libwpd.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 #include "DocumentElement.hxx"
 
 class TopLevelElementStyle
@@ -54,7 +49,7 @@ class Style
     Style(const WPXString &psName) : msName(psName) {}
     virtual ~Style() {}
 
-    virtual void write(DocumentHandler * /* pHandler */) const {};
+    virtual void write(OdfDocumentHandler *) const {};
     const WPXString &getName() const { return msName; }
 
  private:

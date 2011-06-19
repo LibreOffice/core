@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -591,7 +592,7 @@ void Color::toRgb() const
         }
         break;
         default:
-            OSL_ENSURE( false, "Color::toRgb - unexpected color mode" );
+            OSL_FAIL( "Color::toRgb - unexpected color mode" );
     }
 }
 
@@ -612,7 +613,7 @@ void Color::toCrgb() const
             // nothing to do
         break;
         default:
-            OSL_ENSURE( false, "Color::toCrgb - unexpected color mode" );
+            OSL_FAIL( "Color::toCrgb - unexpected color mode" );
     }
 }
 
@@ -659,7 +660,7 @@ void Color::toHsl() const
             // nothing to do
         break;
         default:
-            OSL_ENSURE( false, "Color::toHsl - unexpected color mode" );
+            OSL_FAIL( "Color::toHsl - unexpected color mode" );
     }
 }
 
@@ -668,3 +669,4 @@ void Color::toHsl() const
 } // namespace drawingml
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

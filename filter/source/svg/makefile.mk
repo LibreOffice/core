@@ -30,27 +30,40 @@
 #*************************************************************************
 
 PRJ=..$/..
+
 PRJNAME=filter
 TARGET=svgfilter
-
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE :  	settings.mk
+.INCLUDE :  settings.mk
+.INCLUDE :	libs.mk
 
 # --- Types -------------------------------------
 
-SLOFILES=	$(SLO)$/svguno.obj			\
+SLOFILES= \
+            $(SLO)$/b2dellipse.obj	\
+            $(SLO)$/parserfragments.obj \
             $(SLO)$/svgdialog.obj		\
             $(SLO)$/impsvgdialog.obj	\
-            $(SLO)$/svgfilter.obj		\
             $(SLO)$/svgexport.obj		\
+            $(SLO)$/svgfilter.obj		\
             $(SLO)$/svgfontexport.obj	\
-            $(SLO)$/svgwriter.obj	
-.IF "$(SOLAR_JAVA)"!=""
-SLOFILES+=		$(SLO)$/svgimport.obj
+            $(SLO)$/svgimport.obj		\
+            $(SLO)$/svgreader.obj		\
+            $(SLO)$/svgwriter.obj		\
+            $(SLO)$/tokenmap.obj        \
+            $(SLO)$/units.obj
+
+.IF "$(COMID)"=="gcc3"
+.IF "$(CCNUMVER)">="000400000000" || "$(SYSTEM_BOOST)"=="YES"
+CFLAGS+=-DUSE_MODERN_SPIRIT
+.ENDIF
+.ENDIF
+.IF "$(SYSTEM_BOOST)"=="NO"
+CFLAGS+=-DUSE_MODERN_SPIRIT
 .ENDIF
 
 # --- Library -----------------------------------
@@ -59,28 +72,24 @@ SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
     $(SVXCORELIB)			\
-    $(EDITENGLIB)			\
+    $(BASEGFXLIB)		\
     $(XMLOFFLIB)		\
+    $(SVTOOLLIB)	    \
+    $(EDITENGLIB)			\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
+    $(SVTOOLLIB)	    \
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB) 			\
-    $(BASEGFXLIB) 		\
-    $(SVTOOLLIB)		
-
-.IF "$(SOLAR_JAVA)"!=""
-SHL1STDLIBS+=\
-    $(JVMACCESSLIB)
-.ENDIF
-
+    $(SALLIB)			\
+    $(LIBXML)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+SHL1VERSIONMAP=exports.map
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
@@ -89,6 +98,13 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
+# Generate gperf files - from oox/source/token
+$(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf : tokens.txt gentoken.pl
+         $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(MISC)$/tokens.gperf
+
+$(INCCOM)$/tokens.cxx : $(MISC)$/tokens.gperf makefile.mk
+         $(GPERF) --compare-strncmp -C -m 20 $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" >$(INCCOM)$/tokens.cxx
+
 ALLTAR : $(MISC)/svgfilter.component
 
 $(MISC)/svgfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
@@ -96,3 +112,8 @@ $(MISC)/svgfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt svgfilter.component
+$(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx
+
+$(SLO)$/parserfragments.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx
+
+$(SLO)$/svgreader.obj : $(INCCOM)$/tokens.cxx $(INCCOM)$/tokens.hxx

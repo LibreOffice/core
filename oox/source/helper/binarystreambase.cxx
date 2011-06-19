@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,7 @@ sal_Int64 BinaryXSeekableStream::size() const
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXSeekableStream::size - exception caught" );
+        OSL_FAIL( "BinaryXSeekableStream::size - exception caught" );
     }
     return -1;
 }
@@ -98,7 +99,7 @@ sal_Int64 BinaryXSeekableStream::tell() const
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXSeekableStream::tell - exception caught" );
+        OSL_FAIL( "BinaryXSeekableStream::tell - exception caught" );
     }
     return -1;
 }
@@ -159,3 +160,5 @@ void SequenceSeekableStream::close()
 // ============================================================================
 
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

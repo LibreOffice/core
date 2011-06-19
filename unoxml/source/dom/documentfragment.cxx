@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,10 +55,12 @@ namespace DOM
 
     OUString SAL_CALL CDocumentFragment::getNodeName()throw (RuntimeException)
     {
-        return OUString::createFromAscii("#document-fragment");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("#document-fragment"));
     }
     OUString SAL_CALL CDocumentFragment::getNodeValue() throw (RuntimeException)
     {
         return OUString();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

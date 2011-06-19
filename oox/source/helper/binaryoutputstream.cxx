@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,12 +69,11 @@ void BinaryXOutputStream::close()
     if( mxOutStrm.is() ) try
     {
         mxOutStrm->flush();
-        if( mbAutoClose )
-            mxOutStrm->closeOutput();
+        mxOutStrm->closeOutput();
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXOutputStream::close - closing output stream failed" );
+        OSL_FAIL( "BinaryXOutputStream::close - closing output stream failed" );
     }
     mxOutStrm.clear();
     mbAutoClose = false;
@@ -88,7 +88,7 @@ void BinaryXOutputStream::writeData( const StreamDataSequence& rData, size_t /*n
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXOutputStream::writeData - stream read error" );
+        OSL_FAIL( "BinaryXOutputStream::writeData - stream read error" );
     }
 }
 
@@ -139,3 +139,4 @@ void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size
 
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

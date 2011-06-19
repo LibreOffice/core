@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,11 +30,9 @@
 #define INCLUDED_WW8_CP_AND_FC_HXX
 
 #include <sal/types.h>
-#ifndef INCLUDED_DOCUMENT_HXX
 #include <doctok/WW8Document.hxx>
-#endif
 #include <set>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <iostream>
 
 namespace writerfilter {
@@ -352,9 +351,11 @@ struct CpAndFcHash
     }
 };
 
-typedef hash_map<Cp, Fc, CpHash, CpEq> Cp2FcHashMap_t;
+typedef boost::unordered_map<Cp, Fc, CpHash, CpEq> Cp2FcHashMap_t;
 
 } // namespace doctok
 } // namespace writerfilter
 
 #endif // INCLUDED_WW8_CP_AND_FC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

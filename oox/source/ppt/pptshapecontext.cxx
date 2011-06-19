@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,7 +80,7 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, sa
         aShapePtr = findPlaceholder( nMasterPlaceholder, nSubTypeIndex, rChildren );
         if ( aShapePtr.get() )
             break;
-        aRevIter++;
+        ++aRevIter;
     }
     return aShapePtr;
 }
@@ -113,7 +114,8 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
         {
             sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
             mpShapePtr->setSubType( nSubType );
-            mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+            if( xAttribs->hasAttribute( XML_idx ) )
+                mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
             if ( nSubType )
             {
                 PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
@@ -163,20 +165,30 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                           {
                               oox::drawingml::ShapePtr pPlaceholder;
                               if ( eShapeLocation == Layout )       // for layout objects the referenced object can be found within the same shape tree
-                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, -1, mpSlidePersistPtr->getShapes()->getChildren() );
+                              {
+                                  pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex(), mpSlidePersistPtr->getShapes()->getChildren() );
+                                  if ( !pPlaceholder.get() )
+                                      pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, pPPTShapePtr->getSubTypeIndex(),
+                                                                      mpSlidePersistPtr->getShapes()->getChildren() );
+                              }
                               else if ( eShapeLocation == Slide )   // normal slide shapes have to search within the corresponding master tree for referenced objects
                               {
                                   SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                                  if ( pMasterPersist.get() )
-                                    pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
-                                pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                                  if ( pMasterPersist.get() ) {
+                                      pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                                      if ( !pPlaceholder.get() )
+                                          pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
+                                                                          pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                                  }
                               }
                               if ( pPlaceholder.get() )
                               {
+                                  OSL_TRACE("shape %s will get shape reference %s applied", rtl::OUStringToOString(mpShapePtr->getId(), RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
                                   mpShapePtr->applyShapeReference( *pPlaceholder.get() );
                                   PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                                   if ( pPPTShape )
                                       pPPTShape->setReferenced( sal_True );
+                                  pPPTShapePtr->setPlaceholder( pPlaceholder );
                               }
                           }
                     }
@@ -198,7 +210,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
 
         case PPT_TOKEN( txBody ):
         {
-            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody( mpShapePtr->getTextBody() ) );
             xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );
             mpShapePtr->setTextBody( xTextBody );
             xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
@@ -214,3 +226,5 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
 
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

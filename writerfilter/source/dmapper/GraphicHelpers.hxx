@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_GRAPHICHELPERS_HXX
 #define INCLUDED_GRAPHICHELPERS_HXX
 
@@ -15,8 +16,11 @@ namespace dmapper
 class WRITERFILTER_DLLPRIVATE PositionHandler: public LoggedProperties
 {
 public:
-    PositionHandler( );
+    PositionHandler( bool vertical );
     ~PositionHandler( );
+    static void setPositionOffset(const ::rtl::OUString & sText, bool vertical);
+    static void setAlignH(const ::rtl::OUString & sText);
+    static void setAlignV(const ::rtl::OUString & sText);
 
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
@@ -25,6 +29,8 @@ public:
  private:
     virtual void lcl_attribute( Id aName, Value& rVal );
     virtual void lcl_sprm( Sprm& rSprm );
+    static int savedPositionOffsetV, savedPositionOffsetH;
+    static int savedAlignV, savedAlignH;
 };
 typedef boost::shared_ptr<PositionHandler> PositionHandlerPtr;
 
@@ -48,3 +54,5 @@ typedef boost::shared_ptr<WrapHandler> WrapHandlerPtr;
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

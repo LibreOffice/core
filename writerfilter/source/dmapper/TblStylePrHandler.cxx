@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <TblStylePrHandler.hxx>
 #include <PropertyMap.hxx>
 #include <ooxml/resourceids.hxx>
@@ -31,7 +32,7 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
     dmapper_logger->startElement("TblStylePrHandler.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(rName));
     dmapper_logger->chars(rVal.toString());
-    dmapper_logger->endElement("TblStylePrHandler.attribute");
+    dmapper_logger->endElement();
 #endif
 
     switch ( rName )
@@ -78,7 +79,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
     }
 
 #ifdef DEBUG_DMAPPER_TBL_STYLE_HANDLER
-    dmapper_logger->endElement("TblStylePrHandler.sprm");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -90,3 +91,5 @@ void TblStylePrHandler::resolveSprmProps(Sprm & rSprm)
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

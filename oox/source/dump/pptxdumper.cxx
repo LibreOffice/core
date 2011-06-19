@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,17 +93,17 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
     }
     else if( aExt.equalsIgnoreAsciiCaseAscii( "bin" ) )
     {
-        if( rStrgPath.equalsAscii( "ppt" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
+        if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt" ) ) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vbaProject.bin" ) ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAscii( "ppt/embeddings" ) )
+        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt/embeddings" ) ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAscii( "ppt/activeX" ) )
+        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ppt/activeX" ) ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, true ) );
             ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();
@@ -147,3 +148,5 @@ void Dumper::implDump()
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/sheet/ConditionOperator.hpp>
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -390,7 +391,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
             maModel.mnType = XML_iconSet;
         break;
         default:
-            OSL_ENSURE( false, "CondFormatRule::importCfRule - unknown rule type" );
+            OSL_FAIL( "CondFormatRule::importCfRule - unknown rule type" );
     }
 }
 
@@ -430,7 +431,7 @@ void CondFormatRule::importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority )
 
 void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >& rxEntries )
 {
-    ConditionOperator eOperator = ConditionOperator_NONE;
+    sal_Int32 eOperator = ::com::sun::star::sheet::ConditionOperator2::NONE;
 
     /*  Replacement formula for unsupported rule types (text comparison rules,
         time period rules, cell type rules). The replacement formulas below may
@@ -456,8 +457,12 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         case XML_cellIs:
             eOperator = CondFormatBuffer::convertToApiOperator( maModel.mnOperator );
         break;
+        case XML_duplicateValues:
+            eOperator = CondFormatBuffer::convertToApiOperator( XML_duplicateValues );
+            aReplaceFormula = CREATE_OUSTRING( " " );
+        break;
         case XML_expression:
-            eOperator = ConditionOperator_FORMULA;
+            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
         break;
         case XML_containsText:
             OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
@@ -510,7 +515,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                     aReplaceFormula = CREATE_OUSTRING( "OR(AND(MONTH(#B)=MONTH(TODAY())+1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=1,MONTH(TODAY())=12,YEAR(#B)=YEAR(TODAY())+1))" );
                 break;
                 default:
-                    OSL_ENSURE( false, "CondFormatRule::finalizeImport - unknown time period type" );
+                    OSL_FAIL( "CondFormatRule::finalizeImport - unknown time period type" );
             }
         break;
         case XML_containsBlanks:
@@ -581,17 +586,18 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aComp );
                 break;
                 default:
-                    OSL_ENSURE( false, "CondFormatRule::finalizeImport - unknown placeholder" );
+                    OSL_FAIL( "CondFormatRule::finalizeImport - unknown placeholder" );
             }
         }
 
         // set the replacement formula
         maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
-        eOperator = ConditionOperator_FORMULA;
+        if( eOperator != ::com::sun::star::sheet::ConditionOperator2::DUPLICATE )
+            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
     }
 
-    if( rxEntries.is() && (eOperator != ConditionOperator_NONE) && !maModel.maFormulas.empty() )
+    if( rxEntries.is() && (eOperator != ::com::sun::star::sheet::ConditionOperator2::NONE) && !maModel.maFormulas.empty() )
     {
         ::std::vector< PropertyValue > aProps;
         // create condition properties
@@ -739,20 +745,21 @@ void CondFormatBuffer::finalizeImport()
     maCondFormats.forEachMem( &CondFormat::finalizeImport );
 }
 
-ConditionOperator CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
+sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
 {
     switch( nToken )
     {
-        case XML_between:               return ConditionOperator_BETWEEN;
-        case XML_equal:                 return ConditionOperator_EQUAL;
-        case XML_greaterThan:           return ConditionOperator_GREATER;
-        case XML_greaterThanOrEqual:    return ConditionOperator_GREATER_EQUAL;
-        case XML_lessThan:              return ConditionOperator_LESS;
-        case XML_lessThanOrEqual:       return ConditionOperator_LESS_EQUAL;
-        case XML_notBetween:            return ConditionOperator_NOT_BETWEEN;
-        case XML_notEqual:              return ConditionOperator_NOT_EQUAL;
+        case XML_between:               return ConditionOperator2::BETWEEN;
+        case XML_equal:                 return ConditionOperator2::EQUAL;
+        case XML_greaterThan:           return ConditionOperator2::GREATER;
+        case XML_greaterThanOrEqual:    return ConditionOperator2::GREATER_EQUAL;
+        case XML_lessThan:              return ConditionOperator2::LESS;
+        case XML_lessThanOrEqual:       return ConditionOperator2::LESS_EQUAL;
+        case XML_notBetween:            return ConditionOperator2::NOT_BETWEEN;
+        case XML_notEqual:              return ConditionOperator2::NOT_EQUAL;
+        case XML_duplicateValues:       return ConditionOperator2::DUPLICATE;
     }
-    return ConditionOperator_NONE;
+    return ConditionOperator2::NONE;
 }
 
 // private --------------------------------------------------------------------
@@ -768,3 +775,5 @@ CondFormatRef CondFormatBuffer::createCondFormat()
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

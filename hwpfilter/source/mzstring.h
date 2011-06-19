@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,8 +108,8 @@ class MzString
         bool      resize(int len);
 
 // Assignment
-        void      operator = (MzString &s);
-        void      operator = (const char *s);
+        MzString  &operator = (MzString &s);
+        MzString  &operator = (const char *s);
 
 // Appending
         MzString  &operator += (char);
@@ -185,3 +186,5 @@ inline const char* MzString::c_str() const
 // Non friend, non member operators
 //
 #endif                                            /* _MZSTRING_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

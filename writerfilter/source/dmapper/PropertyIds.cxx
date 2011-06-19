@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -306,28 +307,26 @@ void PropertyNameSupplier_Impl::add(PropertyIds aId, const ::rtl::OUString & aSt
     aNameBackwardMap[aStr] = aId;
 }
 
-/*-- 14.06.2006 11:01:31---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyNameSupplier::PropertyNameSupplier() :
     m_pImpl(new PropertyNameSupplier_Impl)
 {
 }
-/*-- 14.06.2006 11:01:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyNameSupplier::~PropertyNameSupplier()
 {
     delete m_pImpl;
 }
-/*-- 14.06.2006 11:01:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
 {
     PropertyNameMap_t::const_iterator aIt = m_pImpl->aNameMap.find(eId);
 
     return aIt->second;
+            case PROP_FRM_DIRECTION:        sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FRMDirection")); break;
 }
 
 PropertyIds PropertyNameSupplier::GetId(const ::rtl::OUString & rStr) const
@@ -474,3 +473,5 @@ uno::Sequence<beans::PropertyValue> & PropertySequence::getSequence()
 
 } //namespace dmapper
 } //namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

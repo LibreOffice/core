@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -177,7 +178,7 @@ void WW8Analyzer::dumpStats(ostream & o) const
 {
     {
         for (IdSet::const_iterator aIt = mSprmIdSet.begin();
-             aIt != mSprmIdSet.end(); aIt++)
+             aIt != mSprmIdSet.end(); ++aIt)
         {
             sal_uInt32 aId = *aIt;
 
@@ -193,7 +194,7 @@ void WW8Analyzer::dumpStats(ostream & o) const
 
     {
         for (IdSet::const_iterator aIt = mAttributeIdSet.begin();
-             aIt != mAttributeIdSet.end(); aIt++)
+             aIt != mAttributeIdSet.end(); ++aIt)
         {
             sal_uInt32 aId = *aIt;
 
@@ -214,3 +215,5 @@ Stream::Pointer_t createAnalyzer()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

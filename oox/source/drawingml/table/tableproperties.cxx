@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
 
@@ -75,7 +76,7 @@ void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector
         static const rtl::OUString  sHeight( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sHeight, Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
-        aTableRowIter++;
+        ++aTableRowIter;
     }
 }
 
@@ -127,7 +128,7 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
                 pTableStyle = &const_cast< TableStyle& >( *aIter );
                 break;  // we get the correct style
             }
-            aIter++;
+            ++aIter;
         }
     }
     if ( !pTableStyle )
@@ -176,3 +177,5 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
 }
 
 } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

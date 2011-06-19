@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
-#include <com/sun/star/sheet/XSheetCondition.hpp>
+#include <com/sun/star/sheet/XSheetCondition2.hpp>
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
@@ -1041,7 +1042,7 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( false, "WorksheetGlobals::insertHyperlink - cannot insert text field" );
+                        OSL_FAIL( "WorksheetData::insertHyperlink - cannot insert text field" );
                     }
                 }
             }
@@ -1089,7 +1090,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
                 case XML_textLength:    eType = ValidationType_TEXT_LEN;    break;
                 case XML_time:          eType = ValidationType_TIME;        break;
                 case XML_whole:         eType = ValidationType_WHOLE;       break;
-                default:    OSL_ENSURE( false, "WorksheetGlobals::finalizeValidationRanges - unknown validation type" );
+                default:    OSL_FAIL( "WorksheetData::finalizeValidationRanges - unknown validation type" );
             }
             aValProps.setProperty( PROP_Type, eType );
 
@@ -1100,7 +1101,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
                 case XML_information:   eAlertStyle = ValidationAlertStyle_INFO;    break;
                 case XML_stop:          eAlertStyle = ValidationAlertStyle_STOP;    break;
                 case XML_warning:       eAlertStyle = ValidationAlertStyle_WARNING; break;
-                default:    OSL_ENSURE( false, "WorksheetGlobals::finalizeValidationRanges - unknown error style" );
+                default:    OSL_FAIL( "WorksheetData::finalizeValidationRanges - unknown error style" );
             }
             aValProps.setProperty( PROP_ErrorAlertStyle, eAlertStyle );
 
@@ -1122,8 +1123,8 @@ void WorksheetGlobals::finalizeValidationRanges() const
             try
             {
                 // condition operator
-                Reference< XSheetCondition > xSheetCond( xValidation, UNO_QUERY_THROW );
-                xSheetCond->setOperator( CondFormatBuffer::convertToApiOperator( aIt->mnOperator ) );
+                Reference< XSheetCondition2 > xSheetCond( xValidation, UNO_QUERY_THROW );
+                xSheetCond->setConditionOperator( CondFormatBuffer::convertToApiOperator( aIt->mnOperator ) );
 
                 // condition formulas
                 Reference< XMultiFormulaTokens > xTokens( xValidation, UNO_QUERY_THROW );
@@ -1689,3 +1690,5 @@ void WorksheetHelper::finalizeWorksheetImport()
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

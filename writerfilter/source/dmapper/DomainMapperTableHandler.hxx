@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ XMLTag::Pointer_t tableSequenceToTag(TableSequence_t & rTableSequence);
 class DomainMapper_Impl;
 class TableStyleSheetEntry;
 struct TableInfo;
-class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
+class WRITERFILTER_DLLPRIVATE DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
     TextReference_t         m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;
@@ -110,3 +111,5 @@ public:
 }}
 
 #endif // INCLUDED_DOMAIN_MAPPER_TABLE_HANDLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

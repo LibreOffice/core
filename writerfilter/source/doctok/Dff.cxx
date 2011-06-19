@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -215,7 +216,7 @@ sal_uInt32 DffRecord::getShapeType()
 
     Records_t aRecords = findRecords(0xf00a);
 
-    if (aRecords.size() > 0)
+    if (!aRecords.empty())
     {
         DffFSP * pDffFSP = dynamic_cast<DffFSP*>((*aRecords.begin()).get());
         nResult = pDffFSP->get_shptype();
@@ -230,7 +231,7 @@ sal_uInt32 DffRecord::getShapeId()
 
     Records_t aRecords = findRecords(0xf00a);
 
-    if (aRecords.size() > 0)
+    if (!aRecords.empty())
     {
         DffFSP * pDffFSP = dynamic_cast<DffFSP*>((*aRecords.begin()).get());
         nResult = pDffFSP->get_shpid();
@@ -284,7 +285,7 @@ sal_uInt32 DffRecord::getShapeBid()
     {
         Records_t aRecords = findRecords(0xf00b);
 
-        if (aRecords.size() > 0)
+        if (!aRecords.empty())
         {
             DffOPTHandler aHandler;
             DffOPT * pOpts = dynamic_cast<DffOPT*>((*aRecords.begin()).get());
@@ -516,3 +517,5 @@ string DffBlock::getType() const
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,14 +65,14 @@ namespace DOM
         try {
             Reference< XEventTarget > const xTarget(
                     static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
-            OUString aType = OUString::createFromAscii("DOMSubtreeModified");
+            OUString aType(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified"));
             sal_Bool capture = sal_False;
             xTarget->addEventListener(aType,
                     Reference< XEventListener >(this), capture);
         } catch (Exception &e){
             OString aMsg("Exception caught while registering NodeList as listener:\n");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, aMsg.getStr());
+            OSL_FAIL(aMsg.getStr());
         }
     }
 
@@ -153,3 +154,5 @@ namespace DOM
         m_bRebuild = true;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

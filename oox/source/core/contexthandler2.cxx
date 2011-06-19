@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,6 +50,7 @@ struct ElementInfo
     bool                mbTrimSpaces;       /// True = trims leading/trailing spaces from text data.
 
     inline explicit     ElementInfo() : mnElement( XML_TOKEN_INVALID ), mbTrimSpaces( false ) {}
+                        ElementInfo( sal_Int32 nElement ) : mnElement( nElement ), mbTrimSpaces(false) {}
 };
 
 // ============================================================================
@@ -72,9 +74,18 @@ ContextHandler2Helper::~ContextHandler2Helper()
 {
 }
 
-sal_Int32 ContextHandler2Helper::getCurrentElement() const
+sal_Int32 ContextHandler2Helper::getCurrentElementWithMce() const
 {
     return mxContextStack->empty() ? XML_ROOT_CONTEXT : mxContextStack->back().mnElement;
+}
+
+sal_Int32 ContextHandler2Helper::getCurrentElement() const
+{
+    for ( ContextStack::reverse_iterator It = mxContextStack->rbegin();
+          It != mxContextStack->rend(); ++It )
+        if( getNamespace( It->mnElement ) != NMSP_mce )
+            return It->mnElement;
+    return XML_ROOT_CONTEXT;
 }
 
 sal_Int32 ContextHandler2Helper::getParentElement( sal_Int32 nCountBack ) const
@@ -110,13 +121,13 @@ void ContextHandler2Helper::implCharacters( const OUString& rChars )
 {
     // #i76091# collect characters until new element starts or this element ends
     if( !mxContextStack->empty() )
-        mxContextStack->back().maChars.append( rChars );
+        mxContextStack->back().maChars.append(rChars);
 }
 
 void ContextHandler2Helper::implEndElement( sal_Int32 nElement )
 {
     (void)nElement;     // prevent "unused parameter" warning in product build
-    OSL_ENSURE( getCurrentElement() == nElement, "ContextHandler2Helper::implEndElement - context stack broken" );
+    OSL_ENSURE( getCurrentElementWithMce() == nElement, "ContextHandler2Helper::implEndElement - context stack broken" );
     if( !mxContextStack->empty() )
     {
         // #i76091# process collected characters (calls onCharacters() if needed)
@@ -140,7 +151,7 @@ void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, SequenceInputStre
 void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
 {
     (void)nRecId;   // prevent "unused parameter" warning in product build
-    OSL_ENSURE( getCurrentElement() == nRecId, "ContextHandler2Helper::implEndRecord - context stack broken" );
+    OSL_ENSURE( getCurrentElementWithMce() == nRecId, "ContextHandler2Helper::implEndRecord - context stack broken" );
     if( !mxContextStack->empty() )
     {
         onEndRecord();
@@ -266,3 +277,5 @@ void ContextHandler2::onEndRecord()
 
 } // namespace core
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

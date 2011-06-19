@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,6 +70,7 @@ namespace com{ namespace sun{ namespace star{
         namespace text
         {
                 class XTextField;
+                class XFormField;
         }
         namespace beans{ class XPropertySet;}
 }}}
@@ -77,9 +79,6 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace com::sun::star;
-
-//#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-//sal_Int32 lcl_convertToMM100(sal_Int32 _t);
 
 struct _PageMar
 {
@@ -104,7 +103,7 @@ enum PageMarElement
     PAGE_MAR_GUTTER
 };
 
-/*-- 14.06.2006 07:42:52---------------------------------------------------
+/*-------------------------------------------------------------------------
     property stack element
   -----------------------------------------------------------------------*/
 enum ContextType
@@ -122,7 +121,7 @@ enum BreakType
     PAGE_BREAK,
     COLUMN_BREAK
 };
-/*-----------------29.01.2007 11:47-----------------
+/*--------------------------------------------------
    field stack element
  * --------------------------------------------------*/
 class FieldContext
@@ -133,6 +132,7 @@ class FieldContext
     ::rtl::OUString                                                                 m_sCommand;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >          m_xFormField;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
     ::rtl::OUString                                                                 m_sHyperlinkURL;
@@ -153,6 +153,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >      GetTextField() const { return m_xTextField;}
     void    SetTextField(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > xTextField) { m_xTextField = xTextField;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >      GetFormField() const { return m_xFormField;}
+    void    SetFormField(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField > xFormField) { m_xFormField = xFormField;}
 
     void    SetTOC( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xTOC ) { m_xTOC = xTOC; }
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetTOC() { return m_xTOC; }
@@ -189,9 +191,8 @@ typedef std::stack< TextAppendContext >         TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
 typedef std::stack< com::sun::star::uno::Reference< com::sun::star::text::XTextContent > >  TextContentStack;
 
-/*-- 18.07.2006 08:49:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class FIB
 {
     sal_Int32   aFIBData[ NS_rtf::LN_LCBSTTBFUSSR - NS_rtf::LN_WIDENT + 1];
@@ -209,7 +210,7 @@ class FIB
         void      SetData( Id nName, sal_Int32 nValue );
 };
 
-/*-- 17.07.2006 09:14:13---------------------------------------------------
+/*-------------------------------------------------------------------------
     extended tab stop struct
   -----------------------------------------------------------------------*/
 struct DeletableTabStop : public ::com::sun::star::style::TabStop
@@ -221,7 +222,7 @@ struct DeletableTabStop : public ::com::sun::star::style::TabStop
         TabStop( rTabStop ),
             bDeleted( false ){}
 };
-/*-- 12.06.2007 07:15:31---------------------------------------------------
+/*-------------------------------------------------------------------------
     /// helper to remember bookmark start position
   -----------------------------------------------------------------------*/
 struct BookmarkInsertPosition
@@ -245,9 +246,8 @@ struct RedlineParams
 };
 typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
 
-/*-- 03.03.2008 11:01:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct LineNumberSettings
 {
     bool        bIsOn;
@@ -264,11 +264,10 @@ struct LineNumberSettings
     {}
 
 };
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class DomainMapper;
-class DomainMapper_Impl
+class WRITERFILTER_DLLPRIVATE DomainMapper_Impl
 {
 public:
     typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
@@ -346,6 +345,7 @@ private:
 
     bool                            m_bParaChanged;
     bool                            m_bIsLastParaInSection;
+    bool                            m_bUsingEnhancedFields;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -411,8 +411,6 @@ public:
     void appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOleHandler );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
-
-//    void appendTextSection();
 
     FIB&    GetFIB() {return m_aFIB;}
     // push the new properties onto the stack and make it the 'current' property map
@@ -512,7 +510,8 @@ public:
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > xFieldProperties);
+        uno::Reference< beans::XPropertySet > xFieldProperties,
+        FieldId eFieldId);
     void handleDocProperty
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
@@ -601,3 +600,5 @@ public:
 } //namespace dmapper
 } //namespace writerfilter
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

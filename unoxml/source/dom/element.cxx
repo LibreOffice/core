@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,16 +61,16 @@ namespace DOM
         if (!i_xHandler.is()) throw RuntimeException();
         comphelper::AttributeList *pAttrs =
             new comphelper::AttributeList();
-        OUString type = OUString::createFromAscii("");
+        OUString type = OUString();
         // add namespace definitions to attributes
         for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != 0; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
             OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
-            OUString name = (prefix.equalsAscii(""))
-                ? OUString::createFromAscii("xmlns")
-                : OUString::createFromAscii("xmlns:") + prefix;
+            OUString name = (prefix.getLength() == 0)
+                ? OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns"))
+                : OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:")) + prefix;
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const sal_Char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
@@ -578,12 +579,12 @@ namespace DOM
                     reinterpret_cast<xmlNodePtr>(res)).get()),
             UNO_QUERY_THROW);
 
-        // attribute adition event
+        // attribute addition event
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-        event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified"))), UNO_QUERY);
+        event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified")),
             sal_True, sal_False, Reference< XNode >(xAttr, UNO_QUERY),
             OUString(), xAttr->getValue(), xAttr->getName(),
             AttrChangeType_ADDITION);
@@ -647,8 +648,8 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-        event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified"))), UNO_QUERY);
+        event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified")),
             sal_True, sal_False,
             Reference< XNode >(getAttributeNode(name), UNO_QUERY),
             oldValue, value, name, aChangeType);
@@ -729,9 +730,9 @@ namespace DOM
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified"))), UNO_QUERY);
         event->initMutationEvent(
-            OUString::createFromAscii("DOMAttrModified"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified")),
             sal_True, sal_False,
             Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
             oldValue, value, qualifiedName, aChangeType);
@@ -778,7 +779,7 @@ namespace DOM
         throw (RuntimeException, DOMException)
     {
         if ((aName.getLength() <= 0) ||
-            (0 <= aName.indexOf(OUString::createFromAscii(":"))))
+            (0 <= aName.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(":")))))
         {
             DOMException e;
             e.Code = DOMExceptionType_INVALID_CHARACTER_ERR;
@@ -796,3 +797,5 @@ namespace DOM
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

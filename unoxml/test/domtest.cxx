@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -310,7 +311,7 @@ struct SerializerTest : public CppUnit::TestFixture
                 CPPUNIT_ASSERT_MESSAGE(
                     "Converting ini file to URL",
                     osl_getFileURLFromSystemPath(
-                        (sBaseDir+rtl::OUString::createFromAscii("unoxml_unittest_test.ini")).pData,
+                        (sBaseDir+rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unoxml_unittest_test.ini"))).pData,
                         &aIniUrl.pData ) == osl_File_E_None );
 
                 mxCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
@@ -397,3 +398,4 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SerializerTest, "SerializerTest");
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

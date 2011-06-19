@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <WW8BinTable.hxx>
 #include <PLCF.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace writerfilter {
 namespace doctok
@@ -73,7 +74,7 @@ class WW8BinTableImpl : public WW8BinTable
 {
     /// PLCF containing the numbers of the FKPs of the binary table
     PLCF<PageNumber> mData;
-    mutable hash_map<Fc, sal_uInt32, FcHash> mPageMap;
+    mutable boost::unordered_map<Fc, sal_uInt32, FcHash> mPageMap;
 
 public:
     WW8BinTableImpl(WW8Stream & rStream, sal_uInt32 nOffset,
@@ -96,3 +97,5 @@ public:
 }}
 
 #endif // INCLUDED_WW8_BIN_TABLE_IMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

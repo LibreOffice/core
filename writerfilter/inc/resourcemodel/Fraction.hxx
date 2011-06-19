@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,12 @@
 
 #include <sal/types.h>
 
+#include <WriterFilterDllApi.hxx>
+
 namespace writerfilter {
 namespace resourcemodel {
 
-class Fraction
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Fraction
 {
 public:
     explicit Fraction(sal_Int32 nNumerator, sal_Int32 nDenominator = 1);
@@ -58,3 +61,5 @@ private:
 };
 }}
 #endif // INCLUDED_FRACTION_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

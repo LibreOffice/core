@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,22 @@
 #include "oox/vml/vmlshape.hxx"
 
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/axcontrol.hxx"
@@ -46,6 +53,13 @@
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/vml/vmltextbox.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/helper/containerhelper.hxx"
+
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::Any;
+
+using namespace ::com::sun::star::text;
 
 namespace oox {
 namespace vml {
@@ -90,6 +104,65 @@ Rectangle lclGetAbsRect( const Rectangle& rRelRect, const Rectangle& rShapeRect,
     aAbsRect.Width = static_cast< sal_Int32 >( fWidthRatio * rRelRect.Width + 0.5 );
     aAbsRect.Height = static_cast< sal_Int32 >( fHeightRatio * rRelRect.Height + 0.5 );
     return aAbsRect;
+}
+
+void lclInsertTextFrame( const XmlFilterBase& rFilter, const Reference< XShape >& rxShape )
+{
+    OSL_ENSURE( rxShape.is(), "lclInsertTextFrame - missing XShape" );
+    if ( rxShape.is( ) )
+    {
+        try
+        {
+            Reference< XTextDocument > xDoc( rFilter.getModel( ), UNO_QUERY_THROW );
+            Reference< XTextContent > xCtnt( rxShape, UNO_QUERY_THROW );
+            xCtnt->attach( xDoc->getText( )->getStart( ) );
+        }
+        catch( Exception& )
+        {
+        }
+    }
+}
+
+void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rShapeRect )
+{
+    OSL_ENSURE( rxShape.is(), "lclSetXShapeRect - missing XShape" );
+    if( rxShape.is() )
+    {
+        Reference< XTextFrame > xTextFrame( rxShape, UNO_QUERY );
+        if ( !xTextFrame.is( ) )
+        {
+            rxShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+            rxShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
+        }
+        else
+        {
+            Reference< XPropertySet > xProps( xTextFrame, UNO_QUERY_THROW );
+            try
+            {
+                // The size
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), Any( SizeType::FIX ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutomaticHeight")), Any( sal_False ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), Any( rShapeRect.Height ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), Any( rShapeRect.Width ) );
+
+                // The position
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), Any( rShapeRect.X ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")),
+                        Any( RelOrientation::FRAME ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
+                        Any( HoriOrientation::NONE ) );
+
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), Any( rShapeRect.Y ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")),
+                        Any( RelOrientation::FRAME ) );
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")),
+                        Any( VertOrientation::NONE ) );
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+    }
 }
 
 } // namespace
@@ -151,11 +224,19 @@ Rectangle ShapeType::getRectangle( const ShapeParentAnchor* pParentAnchor ) cons
 Rectangle ShapeType::getAbsRectangle() const
 {
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+
+    sal_Int32 nWidth = ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maWidth, 0, true, true );
+    if ( nWidth == 0 )
+        nWidth = 1;
+
+    sal_Int32 nHeight = ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maHeight, 0, true, true );
+    if ( nHeight == 0 )
+        nHeight = 1;
+
     return Rectangle(
         ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true ),
         ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginTop, 0, false, true ),
-        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maWidth, 0, true, true ),
-        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maHeight, 0, false, true ) );
+        nWidth, nHeight );
 }
 
 Rectangle ShapeType::getRelRectangle() const
@@ -565,3 +646,5 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
 
 } // namespace vml
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

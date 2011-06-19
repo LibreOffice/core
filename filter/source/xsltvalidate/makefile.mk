@@ -24,18 +24,18 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************  
+
 PRJ	= ..$/.. 
 PRJNAME = filter 
-#PACKAGE = com$/sun$/star$/documentconversion$/XSLTValidate
 TARGET  =XSLTValidate 
+
 # --- Settings ----------------------------------------------------- 
+
 .IF "$(XML_CLASSPATH)" != ""
 XCLASSPATH+=":$(XML_CLASSPATH)"
 .ENDIF
 .INCLUDE: settings.mk  
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
-#USE_UDK_EXTENDED_MANIFESTFILE=TRUE
-#USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar crimson.jar
 
 .IF "$(SYSTEM_XALAN)" == "YES"
@@ -52,18 +52,17 @@ JARFILES += xml-apis.jar
 
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 CUSTOMMANIFESTFILE = Manifest  
-#JARMANIFEST = Manifest
 JARCOMPRESS		= TRUE  
 JARCLASSDIRS	= XSLTValidate*.class
 JARTARGET		= $(TARGET).jar
 
 
 # --- Files --------------------------------------------------------  
+
 JAVACLASSFILES=$(CLASSDIR)$/XSLTValidate.class  
-#---Manifest -------------------------------------------------------
-#$(OUT)$/class$/$(TARGET)$/META-INF: META-INF
-#        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/META-INF
+
 # --- Targets ------------------------------------------------------  
+
 .IF "$(SOLAR_JAVA)"!=""
 .INCLUDE :  target.mk 
 $(JAVACLASSFILES) : $(CLASSDIR)

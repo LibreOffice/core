@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,8 +118,7 @@ BiffDetector::~BiffDetector()
                             case BIFF_BOF_BIFF4:    eBiff = BIFF4;  break;
                             case BIFF_BOF_BIFF5:    eBiff = BIFF5;  break;
                             case BIFF_BOF_BIFF8:    eBiff = BIFF8;  break;
-                            default:    OSL_ENSURE( false,
-                                OStringBuffer( "lclDetectStreamBiffVersion - unknown BIFF version: 0x" ).
+                            default:    OSL_FAIL( OStringBuffer( "lclDetectStreamBiffVersion - unknown BIFF version: 0x" ).
                                 append( static_cast< sal_Int32 >( nVersion ), 16 ).getStr() );
                         }
                     }
@@ -228,3 +228,5 @@ OUString SAL_CALL BiffDetector::detect( Sequence< PropertyValue >& rDescriptor )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

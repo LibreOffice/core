@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ void DiagramLayout::layout( const dgm::PointsTreePtr & pTree, const awt::Point &
     awt::Point nextPt = pt;
     nextPt.Y += 50;
     dgm::PointsTree::Childrens::const_iterator iter;
-    for( iter = pTree->beginChild(); iter != pTree->endChild(); iter++ )
+    for( iter = pTree->beginChild(); iter != pTree->endChild(); ++iter )
     {
         layout( *iter, nextPt );
         nextPt.X += 50;
@@ -241,7 +242,7 @@ void Diagram::build(  )
         mpRoot = aRoots.begin()->second;
         OSL_TRACE( "root is %s", OUSTRING_TO_CSTR( mpRoot->getPoint()->getModelId() ) );
         for( PointsTreeMap::iterator iter = aTreeMap.begin();
-             iter != aTreeMap.end(); iter++ )
+             iter != aTreeMap.end(); ++iter )
         {
             if(! iter->second->getParent() )
             {
@@ -295,3 +296,5 @@ OUString Diagram::getLayoutId() const
 
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

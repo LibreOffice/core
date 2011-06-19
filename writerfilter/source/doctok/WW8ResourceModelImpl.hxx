@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,10 @@
 
 #include <doctok/WW8Document.hxx>
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 #include <WW8StructBase.hxx>
 
-#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
 #include <resourcemodel/OutputWithDepth.hxx>
-#endif
 
 #include <map>
 
@@ -316,3 +313,5 @@ Sprm::Kind SprmKind(sal_uInt32 sprmCode);
 }}
 
 #endif // INCLUDED_WW8_RESOURCE_MODEL_IMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

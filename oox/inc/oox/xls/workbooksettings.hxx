@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,6 +58,7 @@ struct WorkbookSettingsModel
     sal_Int32           mnUpdateLinksMode;      /// Specifies how external links are updated.
     sal_Int32           mnDefaultThemeVer;      /// Default theme version.
     bool                mbDateMode1904;         /// True = null date is 1904-01-01.
+    bool                mbDateCompatibility;    /// False = null date is 1899-12-30.
     bool                mbSaveExtLinkValues;    /// True = save cached cell values for external links.
 
     explicit            WorkbookSettingsModel();
@@ -148,7 +150,7 @@ public:
 
 private:
     /** Updates date mode and unit converter nulldate. */
-    void                setDateMode( bool bDateMode1904 );
+    void                setDateMode( bool bDateMode1904, bool bDateCompatibility=true );
 
 private:
     FileSharingModel    maFileSharing;
@@ -162,3 +164,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

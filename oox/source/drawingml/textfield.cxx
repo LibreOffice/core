@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,12 +139,13 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
 
 } // namespace
 
-void TextField::insertAt(
+sal_Int32 TextField::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextCharacterStyle ) const
 {
+    sal_Int32 nCharHeight = 0;
     try
     {
         PropertyMap aioBulletList;
@@ -151,11 +153,13 @@ void TextField::insertAt(
         Reference< XPropertySet > xProps( xStart, UNO_QUERY);
         PropertySet aPropSet( xProps );
 
-        maTextParagraphProperties.pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
+        maTextParagraphProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextParagraphProperties.getTextCharacterProperties() );
         aTextCharacterProps.assignUsed( getTextCharacterProperties() );
+        if ( aTextCharacterProps.moHeight.has() )
+            nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
         std::list< Reference< XTextField > > fields;
@@ -190,6 +194,10 @@ void TextField::insertAt(
     {
         OSL_TRACE("OOX:  TextField::insertAt() exception");
     }
+
+    return nCharHeight;
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

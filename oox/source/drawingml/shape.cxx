@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,10 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -65,13 +68,15 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::style;
 
 namespace oox { namespace drawingml {
 
 // ============================================================================
 
 Shape::Shape( const sal_Char* pServiceName )
-: mpLinePropertiesPtr( new LineProperties )
+: mbIsChild( false )
+, mpLinePropertiesPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
 , mpGraphicPropertiesPtr( new GraphicProperties )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
@@ -102,13 +107,15 @@ table::TablePropertiesPtr Shape::getTableProperties()
 
 void Shape::setDefaults()
 {
-    maShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
-    maShapeProperties[ PROP_TextWordWrap ] <<= true;
-    maShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
+    maDefaultShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
+    maDefaultShapeProperties[ PROP_TextWordWrap ] <<= true;
+    maDefaultShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
+    maDefaultShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maDefaultShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
+    maDefaultShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maDefaultShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
+    maDefaultShapeProperties[ PROP_TextVerticalAdjust ] <<= TextVerticalAdjust_TOP;
+    maDefaultShapeProperties[ PROP_ParaAdjust ] <<= static_cast< sal_Int16 >( ParagraphAdjust_LEFT ); // check for RTL?
 }
 
 ::oox::vml::OleObjectInfo& Shape::setOleObjectType()
@@ -161,6 +168,7 @@ void Shape::addShape(
         ::oox::core::XmlFilterBase& rFilterBase,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
+        basegfx::B2DHomMatrix& aTransformation,
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
@@ -169,7 +177,8 @@ void Shape::addShape(
         rtl::OUString sServiceName( msServiceName );
         if( sServiceName.getLength() )
         {
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False ) );
+            basegfx::B2DHomMatrix aMatrix( aTransformation );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, aMatrix ) );
 
             if( pShapeMap && msId.getLength() )
             {
@@ -179,7 +188,7 @@ void Shape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
-                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aMatrix );
         }
         Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
         if( xLockable.is() )
@@ -192,7 +201,10 @@ void Shape::addShape(
 
 void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
-    mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
+    if ( rReferencedShape.mpTextBody.get() )
+        mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
+    else
+        mpTextBody.reset();
     maShapeProperties = rReferencedShape.maShapeProperties;
     mpLinePropertiesPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
     mpFillPropertiesPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
@@ -214,57 +226,30 @@ void Shape::addChildren(
         Shape& rMaster,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
-        const awt::Rectangle& rClientRect,
-        ShapeIdMap* pShapeMap )
+        const awt::Rectangle&,
+        ShapeIdMap* pShapeMap,
+        basegfx::B2DHomMatrix& aTransformation )
 {
-    // first the global child union needs to be calculated
-    sal_Int32 nGlobalLeft  = SAL_MAX_INT32;
-    sal_Int32 nGlobalRight = SAL_MIN_INT32;
-    sal_Int32 nGlobalTop   = SAL_MAX_INT32;
-    sal_Int32 nGlobalBottom= SAL_MIN_INT32;
+    basegfx::B2DHomMatrix aChildTransformation;
+
+    aChildTransformation.translate(-maChPosition.X, -maChPosition.Y);
+    aChildTransformation.scale(1/(maChSize.Width ? maChSize.Width : 1.0), 1/(maChSize.Height ? maChSize.Height : 1.0));
+    aChildTransformation *= aTransformation;
+
+    OSL_TRACE("parent matrix:\n%f %f %f\n%f %f %f\n%f %f %f",
+              aChildTransformation.get(0, 0),
+              aChildTransformation.get(0, 1),
+              aChildTransformation.get(0, 2),
+              aChildTransformation.get(1, 0),
+              aChildTransformation.get(1, 1),
+              aChildTransformation.get(1, 2),
+              aChildTransformation.get(2, 0),
+              aChildTransformation.get(2, 1),
+              aChildTransformation.get(2, 2));
+
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
     while( aIter != rMaster.maChildren.end() )
-    {
-        sal_Int32 l = (*aIter)->maPosition.X;
-        sal_Int32 t = (*aIter)->maPosition.Y;
-        sal_Int32 r = l + (*aIter)->maSize.Width;
-        sal_Int32 b = t + (*aIter)->maSize.Height;
-        if ( nGlobalLeft > l )
-            nGlobalLeft = l;
-        if ( nGlobalRight < r )
-            nGlobalRight = r;
-        if ( nGlobalTop > t )
-            nGlobalTop = t;
-        if ( nGlobalBottom < b )
-            nGlobalBottom = b;
-        aIter++;
-    }
-    aIter = rMaster.maChildren.begin();
-    while( aIter != rMaster.maChildren.end() )
-    {
-        awt::Rectangle aShapeRect;
-        awt::Rectangle* pShapeRect = 0;
-        if ( ( nGlobalLeft != SAL_MAX_INT32 ) && ( nGlobalRight != SAL_MIN_INT32 ) && ( nGlobalTop != SAL_MAX_INT32 ) && ( nGlobalBottom != SAL_MIN_INT32 ) )
-        {
-            sal_Int32 nGlobalWidth = nGlobalRight - nGlobalLeft;
-            sal_Int32 nGlobalHeight = nGlobalBottom - nGlobalTop;
-            if ( nGlobalWidth && nGlobalHeight )
-            {
-                double fWidth = (*aIter)->maSize.Width;
-                double fHeight= (*aIter)->maSize.Height;
-                double fXScale = (double)rClientRect.Width / (double)nGlobalWidth;
-                double fYScale = (double)rClientRect.Height / (double)nGlobalHeight;
-                aShapeRect.X = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.X - nGlobalLeft ) * fXScale ) + rClientRect.X );
-                aShapeRect.Y = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.Y - nGlobalTop  ) * fYScale ) + rClientRect.Y );
-                fWidth *= fXScale;
-                fHeight *= fYScale;
-                aShapeRect.Width = static_cast< sal_Int32 >( fWidth );
-                aShapeRect.Height = static_cast< sal_Int32 >( fHeight );
-                pShapeRect = &aShapeRect;
-            }
-        }
-        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, pShapeRect, pShapeMap );
-    }
+        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, NULL, pShapeMap );
 }
 
 Reference< XShape > Shape::createAndInsert(
@@ -272,23 +257,23 @@ Reference< XShape > Shape::createAndInsert(
         const rtl::OUString& rServiceName,
         const Theme* pTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-        const awt::Rectangle* pShapeRect,
-        sal_Bool bClearText )
+        const awt::Rectangle* /* pShapeRect */,
+        sal_Bool bClearText,
+        basegfx::B2DHomMatrix& aParentTransformation )
 {
-    awt::Size aSize( pShapeRect ? awt::Size( pShapeRect->Width, pShapeRect->Height ) : maSize );
-    awt::Point aPosition( pShapeRect ? awt::Point( pShapeRect->X, pShapeRect->Y ) : maPosition );
-    awt::Rectangle aShapeRectHmm( aPosition.X / 360, aPosition.Y / 360, aSize.Width / 360, aSize.Height / 360 );
+    awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
 
     OUString aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
-    sal_Bool bIsCustomShape = aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShape" ) );
+    sal_Bool bIsCustomShape = aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.CustomShape" ) ) || aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ConnectorShape" ) );
 
     basegfx::B2DHomMatrix aTransformation;
-    if( aSize.Width != 1 || aSize.Height != 1)
+
+    if( maSize.Width != 1 || maSize.Height != 1)
     {
         // take care there are no zeros used by error
         aTransformation.scale(
-            aSize.Width ? aSize.Width / 360.0 : 1.0,
-            aSize.Height ? aSize.Height / 360.0 : 1.0 );
+            maSize.Width ? maSize.Width : 1.0,
+            maSize.Height ? maSize.Height : 1.0 );
     }
 
     if( mbFlipH || mbFlipV || mnRotation != 0)
@@ -316,14 +301,18 @@ Reference< XShape > Shape::createAndInsert(
         aTransformation.translate( aCenter.getX(), aCenter.getY() );
     }
 
-    if( aPosition.X != 0 || aPosition.Y != 0)
+    if( maPosition.X != 0 || maPosition.Y != 0)
     {
         // if global position is used, add it to transformation
-        aTransformation.translate( aPosition.X / 360.0, aPosition.Y / 360.0 );
+        aTransformation.translate( maPosition.X, maPosition.Y );
     }
 
+    aTransformation = aParentTransformation*aTransformation;
+    aParentTransformation = aTransformation;
+    aTransformation.scale(1/360.0, 1/360.0);
+
     // special for lineshape
-    if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.LineShape" ) )
+    if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -344,7 +333,7 @@ Reference< XShape > Shape::createAndInsert(
 
         maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
     }
-    else if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.ConnectorShape" ) )
+    else if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape")) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -364,6 +353,7 @@ Reference< XShape > Shape::createAndInsert(
         // now set transformation for this object
         HomogenMatrix3 aMatrix;
 
+
         aMatrix.Line1.Column1 = aTransformation.get(0,0);
         aMatrix.Line1.Column2 = aTransformation.get(0,1);
         aMatrix.Line1.Column3 = aTransformation.get(0,2);
@@ -378,6 +368,7 @@ Reference< XShape > Shape::createAndInsert(
 
         maShapeProperties[ PROP_Transformation ] <<= aMatrix;
     }
+
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
     if ( !mxShape.is() )
         mxShape = Reference< drawing::XShape >( xServiceFact->createInstance( aServiceName ), UNO_QUERY_THROW );
@@ -456,9 +447,10 @@ Reference< XShape > Shape::createAndInsert(
 
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
-        if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
+        aShapeProps.assignUsed( maDefaultShapeProperties );
+        if ( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) )
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
-        if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
+        if ( mpTablePropertiesPtr.get() && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape")) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
         aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr );
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
@@ -473,7 +465,7 @@ Reference< XShape > Shape::createAndInsert(
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
         // do not set properties at a group shape (this causes assertions from svx)
-        if( aServiceName != OUString::createFromAscii( "com.sun.star.drawing.GroupShape" ) )
+        if( aServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape")) )
             PropertySet( xSet ).setProperties( aShapeProps );
 
         if( bIsCustomShape )
@@ -522,7 +514,7 @@ void addMissingProperties( const PropertyMap& rSource, PropertyMap& rDest )
     {
         if ( rDest.find( (*aSourceIter ).first ) == rDest.end() )
             rDest[ (*aSourceIter).first ] <<= (*aSourceIter).second;
-        aSourceIter++;
+        ++aSourceIter;
     }
 }
 
@@ -616,3 +608,5 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 // ============================================================================
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

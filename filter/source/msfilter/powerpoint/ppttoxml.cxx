@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,14 +52,6 @@ sal_Bool PptToXml::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor,
         NMSP_RTL::OUString strTemp;
         aDescriptor[ i ].Value >>= strTemp;
 
-/* we will open the document by url, so the stream is not needed
-        if( aDescriptor[i].Name == B2UCONST( "InputStream" ) )
-        {
-            REF( NMSP_IO::XInputStream ) rInputStream;
-            aDescriptor[ i].Value >>= rInputStream;
-        }
-        else
-*/
         if ( aDescriptor[ i ].Name == B2UCONST( "URL" ) )
         {
             NMSP_RTL::OUString sURL;
@@ -70,9 +63,8 @@ sal_Bool PptToXml::filter( const SEQ( NMSP_BEANS::PropertyValue )& aDescriptor,
                 if( xDocStream.Is() )
                 {
                     xDocStream->SetVersion( xStg->GetVersion() );
-                    xDocStream->SetKey( xStg->GetKey() );
+                    xDocStream->SetCryptMaskKey(xStg->GetKey());
 
-//                  xHdl->unknown( PPT_DTD_STRING );
                     xHdl->startDocument();
 
 
@@ -89,3 +81,5 @@ void PptToXml::cancel()
 {
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

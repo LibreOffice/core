@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 
 #include <libxslt/security.h>
 
-// #i114999# do not include librdf.h, it is broken in redland 1.0.11
 #include <redland.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -479,12 +479,12 @@ throw (uno::RuntimeException, container::NoSuchElementException,
 
         librdf_statement *pStmt( librdf_stream_get_object(m_pStream.get()) );
         if (!pStmt) {
-            rdf::QueryException e(::rtl::OUString::createFromAscii(
+            rdf::QueryException e(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_GraphResult::nextElement: "
-                "librdf_stream_get_object failed"), *this);
-            throw lang::WrappedTargetException(::rtl::OUString::createFromAscii(
+                "librdf_stream_get_object failed")), *this);
+            throw lang::WrappedTargetException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_GraphResult::nextElement: "
-                "librdf_stream_get_object failed"), *this,
+                "librdf_stream_get_object failed")), *this,
                     uno::makeAny(e));
         }
         // NB: pCtxt may be null here if this is result of a graph query
@@ -593,12 +593,12 @@ throw (uno::RuntimeException, container::NoSuchElementException,
         if (librdf_query_results_get_bindings(m_pQueryResult.get(), NULL,
                     pNodes.get()))
         {
-            rdf::QueryException e(::rtl::OUString::createFromAscii(
+            rdf::QueryException e(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_QuerySelectResult::nextElement: "
-                "librdf_query_results_get_bindings failed"), *this);
-            throw lang::WrappedTargetException(::rtl::OUString::createFromAscii(
+                "librdf_query_results_get_bindings failed")), *this);
+            throw lang::WrappedTargetException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_QuerySelectResult::nextElement: "
-                "librdf_query_results_get_bindings failed"), *this,
+                "librdf_query_results_get_bindings failed")), *this,
                 uno::makeAny(e));
         }
         uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
@@ -717,8 +717,8 @@ throw (uno::RuntimeException,
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
-            "librdf_NamedGraph::clear: repository is gone"), *this);
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_NamedGraph::clear: repository is gone")), *this);
     }
     try {
         m_pRep->clearGraph(m_xName);
@@ -736,8 +736,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
-            "librdf_NamedGraph::addStatement: repository is gone"), *this);
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_NamedGraph::addStatement: repository is gone")), *this);
     }
     m_pRep->addStatementGraph(i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
@@ -751,8 +751,8 @@ throw (uno::RuntimeException,
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
-            "librdf_NamedGraph::removeStatements: repository is gone"), *this);
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_NamedGraph::removeStatements: repository is gone")), *this);
     }
     m_pRep->removeStatementsGraph(i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
@@ -767,8 +767,8 @@ throw (uno::RuntimeException,
 {
     uno::Reference< rdf::XRepository > xRep( m_wRep );
     if (!xRep.is()) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
-            "librdf_NamedGraph::getStatements: repository is gone"), *this);
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_NamedGraph::getStatements: repository is gone")), *this);
     }
     return m_pRep->getStatementsGraph(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
@@ -849,15 +849,15 @@ throw (uno::RuntimeException)
         librdf_new_node_from_blank_identifier(m_pWorld.get(), NULL),
         safe_librdf_free_node);
     if (!pNode) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::createBlankNode: "
-            "librdf_new_node_from_blank_identifier failed"), *this);
+            "librdf_new_node_from_blank_identifier failed")), *this);
     }
     const unsigned char * id (librdf_node_get_blank_identifier(pNode.get()));
     if (!id) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::createBlankNode: "
-            "librdf_node_get_blank_identifier failed"), *this);
+            "librdf_node_get_blank_identifier failed")), *this);
     }
     const ::rtl::OUString nodeID(::rtl::OUString::createFromAscii(
         reinterpret_cast<const char *>(id)));
@@ -865,9 +865,9 @@ throw (uno::RuntimeException)
         return rdf::BlankNode::create(m_xContext, nodeID);
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::createBlankNode: "
-                "illegal blank node label"), *this, uno::makeAny(iae));
+                "illegal blank node label")), *this, uno::makeAny(iae));
     }
 }
 
@@ -891,44 +891,44 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::osl::MutexGuard g(m_aMutex);
     if (!i_xInStream.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
-                "stream is null"), *this, 1);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::importGraph: "
+                "stream is null")), *this, 1);
     }
     //FIXME: other formats
     if (i_Format != rdf::FileFormat::RDF_XML) {
         throw datatransfer::UnsupportedFlavorException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
-                "file format not supported"), *this);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::importGraph: "
+                "file format not supported")), *this);
     }
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
-                "graph name is null"), *this, 2);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::importGraph: "
+                "graph name is null")), *this, 2);
     }
     if (i_xGraphName->getStringValue().matchAsciiL(s_nsOOo, sizeof(s_nsOOo)-1))
     {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
-                "URI is reserved"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::importGraph: "
+                "URI is reserved")), *this, 0);
     }
     if (formatNeedsBaseURI(i_Format) && !i_xBaseURI.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
-                "base URI is null"), *this, 3);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::importGraph: "
+                "base URI is null")), *this, 3);
     }
     OSL_ENSURE(i_xBaseURI.is(), "no base uri");
     const ::rtl::OUString baseURIU( i_xBaseURI->getStringValue() );
     if (baseURIU.indexOf('#') >= 0) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
-                "base URI is not absolute"), *this, 3);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::importGraph: "
+                "base URI is not absolute")), *this, 3);
     }
 
     const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
     if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {
         throw container::ElementExistException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
-                "graph with given URI exists"), *this);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::importGraph: "
+                "graph with given URI exists")), *this);
     }
     const ::rtl::OString context(
         ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
@@ -938,9 +938,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::importGraph: "
-            "librdf_new_node_from_uri_string failed"), *this);
+            "librdf_new_node_from_uri_string failed")), *this);
     }
 
     const ::rtl::OString baseURI(
@@ -950,18 +950,18 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
         safe_librdf_free_uri);
     if (!pBaseURI) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::importGraph: "
-            "librdf_new_uri failed"), *this);
+            "librdf_new_uri failed")), *this);
     }
 
     const boost::shared_ptr<librdf_parser> pParser(
         librdf_new_parser(m_pWorld.get(), "rdfxml", NULL, NULL),
         safe_librdf_free_parser);
     if (!pParser) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::importGraph: "
-            "librdf_new_parser failed"), *this);
+            "librdf_new_parser failed")), *this);
     }
 
     uno::Sequence<sal_Int8> buf;
@@ -976,17 +976,17 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             buf.getLength(), pBaseURI.get()),
         safe_librdf_free_stream);
     if (!pStream) {
-        throw rdf::ParseException(::rtl::OUString::createFromAscii(
+        throw rdf::ParseException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::importGraph: "
-            "librdf_parser_parse_counted_string_as_stream failed"), *this);
+            "librdf_parser_parse_counted_string_as_stream failed")), *this);
     }
     m_NamedGraphs.insert(std::make_pair(contextU,
         new librdf_NamedGraph(this, i_xGraphName)));
     if (librdf_model_context_add_statements(m_pModel.get(),
             pContext.get(), pStream.get())) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::importGraph: "
-            "librdf_model_context_add_statements failed"), *this);
+            "librdf_model_context_add_statements failed")), *this);
     }
     return getGraph(i_xGraphName);
 }
@@ -1004,38 +1004,38 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::osl::MutexGuard g(m_aMutex);
     if (!i_xOutStream.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
-                "stream is null"), *this, 1);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::exportGraph: "
+                "stream is null")), *this, 1);
     }
     // FIXME: other formats
     if (i_Format != rdf::FileFormat::RDF_XML) {
         throw datatransfer::UnsupportedFlavorException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
-                "file format not supported"), *this);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::exportGraph: "
+                "file format not supported")), *this);
     }
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
-                "graph name is null"), *this, 2);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::exportGraph: "
+                "graph name is null")), *this, 2);
     }
     if (formatNeedsBaseURI(i_Format) && !i_xBaseURI.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
-                "base URI is null"), *this, 3);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::exportGraph: "
+                "base URI is null")), *this, 3);
     }
     OSL_ENSURE(i_xBaseURI.is(), "no base uri");
     const ::rtl::OUString baseURIU( i_xBaseURI->getStringValue() );
     if (baseURIU.indexOf('#') >= 0) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
-                "base URI is not absolute"), *this, 3);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::exportGraph: "
+                "base URI is not absolute")), *this, 3);
     }
 
     const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
     if (m_NamedGraphs.find(contextU) == m_NamedGraphs.end()) {
         throw container::NoSuchElementException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
-                "no graph with given URI exists"), *this);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::exportGraph: "
+                "no graph with given URI exists")), *this);
     }
     const ::rtl::OString context(
         ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
@@ -1045,9 +1045,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_new_node_from_uri_string failed"), *this);
+            "librdf_new_node_from_uri_string failed")), *this);
     }
     const ::rtl::OString baseURI(
         ::rtl::OUStringToOString(baseURIU, RTL_TEXTENCODING_UTF8) );
@@ -1056,18 +1056,18 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
         safe_librdf_free_uri);
     if (!pBaseURI) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_new_uri failed"), *this);
+            "librdf_new_uri failed")), *this);
     }
 
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_model_context_as_stream(m_pModel.get(), pContext.get()),
         safe_librdf_free_stream);
     if (!pStream) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_model_context_as_stream failed"), *this);
+            "librdf_model_context_as_stream failed")), *this);
     }
     const char *format("rdfxml");
     // #i116443#: abbrev breaks when certain URIs are used as data types
@@ -1076,9 +1076,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         librdf_new_serializer(m_pWorld.get(), format, NULL, NULL),
         safe_librdf_free_serializer);
     if (!pSerializer) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_new_serializer failed"), *this);
+            "librdf_new_serializer failed")), *this);
     }
 
     const boost::shared_ptr<librdf_uri> pRelativeURI(
@@ -1098,26 +1098,26 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             reinterpret_cast<const unsigned char*> ("1"), NULL, 0),
         safe_librdf_free_node);
     if (!pWriteBaseURI || !pRelativeURI || !p0 || !p1) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_new_uri or librdf_new_node_from_literal failed"), *this);
+            "librdf_new_uri or librdf_new_node_from_literal failed")), *this);
     }
 
     // make URIs relative to base URI
     if (librdf_serializer_set_feature(pSerializer.get(),
         pRelativeURI.get(), p1.get()))
     {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_serializer_set_feature relativeURIs failed"), *this);
+            "librdf_serializer_set_feature relativeURIs failed")), *this);
     }
     // but do not write the base URI to the file!
     if (librdf_serializer_set_feature(pSerializer.get(),
         pWriteBaseURI.get(), p0.get()))
     {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_serializer_set_feature writeBaseURI failed"), *this);
+            "librdf_serializer_set_feature writeBaseURI failed")), *this);
     }
 
     size_t length;
@@ -1125,9 +1125,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         librdf_serializer_serialize_stream_to_counted_string(
             pSerializer.get(), pBaseURI.get(), pStream.get(), &length), free);
     if (!pBuf) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::exportGraph: "
-            "librdf_serializer_serialize_stream_to_counted_string failed"),
+            "librdf_serializer_serialize_stream_to_counted_string failed")),
             *this);
     }
     const uno::Sequence<sal_Int8> buf(
@@ -1157,8 +1157,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::osl::MutexGuard g(m_aMutex);
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::getGraph: "
-                "URI is null"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::getGraph: "
+                "URI is null")), *this, 0);
     }
     const NamedGraphMap_t::iterator iter(
         m_NamedGraphs.find(i_xGraphName->getStringValue()) );
@@ -1177,14 +1177,14 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::osl::MutexGuard g(m_aMutex);
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::createGraph: "
-                "URI is null"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::createGraph: "
+                "URI is null")), *this, 0);
     }
     if (i_xGraphName->getStringValue().matchAsciiL(s_nsOOo, sizeof(s_nsOOo)-1))
     {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::createGraph: "
-                "URI is reserved"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::createGraph: "
+                "URI is reserved")), *this, 0);
     }
 
     // NB: librdf does not have a concept of graphs as such;
@@ -1193,8 +1193,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
     if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {
         throw container::ElementExistException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::createGraph: "
-            "graph with given URI exists"), *this);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::createGraph: "
+            "graph with given URI exists")), *this);
     }
     m_NamedGraphs.insert(std::make_pair(contextU,
         new librdf_NamedGraph(this, i_xGraphName)));
@@ -1247,9 +1247,9 @@ throw (uno::RuntimeException, rdf::RepositoryException)
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
         safe_librdf_free_stream);
     if (!pStream) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::getStatements: "
-            "librdf_model_find_statements failed"), *this);
+            "librdf_model_find_statements failed")), *this);
     }
 
     return new librdf_GraphResult(this, m_aMutex, pStream,
@@ -1269,17 +1269,17 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
         safe_librdf_free_query);
     if (!pQuery) {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::querySelect: "
-            "librdf_new_query failed"), *this);
+            "librdf_new_query failed")), *this);
     }
     const boost::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
         safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_bindings(pResults.get())) {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::querySelect: "
-            "query result is null or not bindings"), *this);
+            "query result is null or not bindings")), *this);
     }
 
     const int count( librdf_query_results_get_bindings_count(pResults.get()) );
@@ -1289,9 +1289,9 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
             const char* name( librdf_query_results_get_binding_name(
                 pResults.get(), i) );
             if (!name) {
-                throw rdf::QueryException(::rtl::OUString::createFromAscii(
+                throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "librdf_Repository::querySelect: "
-                    "binding is null"), *this);
+                    "binding is null")), *this);
             }
 
             names[i] = ::rtl::OUString::createFromAscii(name);
@@ -1301,9 +1301,9 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
             pQuery, pResults, names);
 
     } else {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::querySelect: "
-            "librdf_query_results_get_bindings_count failed"), *this);
+            "librdf_query_results_get_bindings_count failed")), *this);
     }
 }
 
@@ -1319,25 +1319,25 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
         safe_librdf_free_query);
     if (!pQuery) {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::queryConstruct: "
-            "librdf_new_query failed"), *this);
+            "librdf_new_query failed")), *this);
     }
     const boost::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
         safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_graph(pResults.get())) {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::queryConstruct: "
-            "query result is null or not graph"), *this);
+            "query result is null or not graph")), *this);
     }
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_query_results_as_stream(pResults.get()),
         safe_librdf_free_stream);
     if (!pStream) {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::queryConstruct: "
-            "librdf_query_results_as_stream failed"), *this);
+            "librdf_query_results_as_stream failed")), *this);
     }
 
     return new librdf_GraphResult(this, m_aMutex, pStream,
@@ -1357,17 +1357,17 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
         safe_librdf_free_query);
     if (!pQuery) {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::queryAsk: "
-            "librdf_new_query failed"), *this);
+            "librdf_new_query failed")), *this);
     }
     const boost::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
         safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_boolean(pResults.get())) {
-        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+        throw rdf::QueryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::queryAsk: "
-            "query result is null or not boolean"), *this);
+            "query result is null or not boolean")), *this);
     }
     return librdf_query_results_get_boolean(pResults.get())
         ? sal_True : sal_False;
@@ -1383,37 +1383,33 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     rdf::RepositoryException)
 {
-    static const ::rtl::OUString s_cell(
-        ::rtl::OUString::createFromAscii("com.sun.star.table.Cell"));
-    static const ::rtl::OUString s_cellprops( // for writer
-        ::rtl::OUString::createFromAscii("com.sun.star.text.CellProperties"));
-    static const ::rtl::OUString s_paragraph(
-        ::rtl::OUString::createFromAscii("com.sun.star.text.Paragraph"));
-    static const ::rtl::OUString s_bookmark(
-        ::rtl::OUString::createFromAscii("com.sun.star.text.Bookmark"));
-    static const ::rtl::OUString s_meta( ::rtl::OUString::createFromAscii(
+    static const ::rtl::OUString s_cell(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.Cell"));
+    static const ::rtl::OUString s_cellprops(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.CellProperties")); // for writer
+    static const ::rtl::OUString s_paragraph(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph"));
+    static const ::rtl::OUString s_bookmark(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark"));
+    static const ::rtl::OUString s_meta( RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.text.InContentMetadata"));
 
     if (!i_xSubject.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::setStatementRDFa: Subject is null"), *this, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::setStatementRDFa: Subject is null")), *this, 0);
     }
     if (!i_rPredicates.getLength()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::setStatementRDFa: no Predicates"),
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::setStatementRDFa: no Predicates")),
             *this, 1);
     }
     for (sal_Int32 i = 0; i < i_rPredicates.getLength(); ++i) {
         if (!i_rPredicates[i].is()) {
             throw lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii(
-                    "librdf_Repository::setStatementRDFa: Predicate is null"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "librdf_Repository::setStatementRDFa: Predicate is null")),
                 *this, 1);
         }
     }
     if (!i_xObject.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::setStatementRDFa: Object is null"), *this, 2);
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::setStatementRDFa: Object is null")), *this, 2);
     }
     const uno::Reference<lang::XServiceInfo> xService(i_xObject,
         uno::UNO_QUERY_THROW);
@@ -1432,20 +1428,20 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         xTextRange = xTextContent->getAnchor();
     }
     if (!xTextRange.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::setStatementRDFa: "
-            "Object does not support RDFa"), *this, 2);
+            "Object does not support RDFa")), *this, 2);
     }
     // ensure that the metadatable has an XML ID
     i_xObject->ensureMetadataReference();
     const beans::StringPair mdref( i_xObject->getMetadataReference() );
-    if (mdref.First.equalsAscii("") || mdref.Second.equalsAscii("")) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
+    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::setStatementRDFa: "
-                "ensureMetadataReference did not"), *this);
+                "ensureMetadataReference did not")), *this);
     }
     ::rtl::OUString const sXmlId(mdref.First +
-            ::rtl::OUString::createFromAscii("#") + mdref.Second);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#")) + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext,
@@ -1453,9 +1449,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             uno::UNO_QUERY_THROW);
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::setStatementRDFa: "
-                "cannot create URI for XML ID"), *this, uno::makeAny(iae));
+                "cannot create URI for XML ID")), *this, uno::makeAny(iae));
     }
 
     ::osl::MutexGuard g(m_aMutex);
@@ -1474,9 +1470,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         }
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::setStatementRDFa: "
-                "cannot create literal"), *this, uno::makeAny(iae));
+                "cannot create literal")), *this, uno::makeAny(iae));
     }
     removeStatementRDFa(i_xObject);
     if (i_rRDFaContent.getLength() == 0) {
@@ -1496,27 +1492,27 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     rdf::RepositoryException)
 {
     if (!i_xElement.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::removeStatementRDFa: Element is null"),
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::removeStatementRDFa: Element is null")),
             *this, 0);
     }
 
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if (mdref.First.equalsAscii("") || mdref.Second.equalsAscii("")) {
+    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
         return; // nothing to do...
     }
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext,
                 ::rtl::OUString::createFromAscii(s_nsOOo)
-                + mdref.First + ::rtl::OUString::createFromAscii("#")
+                + mdref.First + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"))
                 + mdref.Second),
             uno::UNO_QUERY_THROW);
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::removeStatementRDFa: "
-                "cannot create URI for XML ID"), *this, uno::makeAny(iae));
+                "cannot create URI for XML ID")), *this, uno::makeAny(iae));
     }
     // clearGraph does locking, not needed here
     clearGraph(xXmlId, true);
@@ -1529,15 +1525,15 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     rdf::RepositoryException)
 {
     if (!i_xElement.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::getStatementRDFa: Element is null"), *this, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::getStatementRDFa: Element is null")), *this, 0);
     }
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if (mdref.First.equalsAscii("") || mdref.Second.equalsAscii("")) {
+    if ((mdref.First.getLength() == 0) || (mdref.Second.getLength() == 0)) {
         return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >();
     }
     ::rtl::OUString const sXmlId(mdref.First +
-            ::rtl::OUString::createFromAscii("#") + mdref.Second);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#")) + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext,
@@ -1545,9 +1541,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             uno::UNO_QUERY_THROW);
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::getStatementRDFa: "
-                "cannot create URI for XML ID"), *this, uno::makeAny(iae));
+                "cannot create URI for XML ID")), *this, uno::makeAny(iae));
     }
 
     ::osl::MutexGuard g(m_aMutex);
@@ -1559,7 +1555,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     while (xIter->hasMoreElements()) {
         rdf::Statement stmt;
         if (!(xIter->nextElement() >>= stmt)) {
-            OSL_ENSURE(false, "getStatementRDFa: result of wrong type?");
+            OSL_FAIL("getStatementRDFa: result of wrong type?");
         } else {
             ret.push_back(stmt);
         }
@@ -1611,16 +1607,16 @@ throw (uno::RuntimeException, rdf::RepositoryException)
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
         safe_librdf_free_stream);
     if (!pStream) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::getStatementsRDFa: "
-            "librdf_model_find_statements failed"), *this);
+            "librdf_model_find_statements failed")), *this);
     }
 
     if (librdf_stream_add_map(pStream.get(), rdfa_context_stream_map_handler,
                 0, 0)) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::getStatementsRDFa: "
-            "librdf_stream_add_map failed"), *this);
+            "librdf_stream_add_map failed")), *this);
     }
 
     return new librdf_GraphResult(this, m_aMutex, pStream,
@@ -1650,16 +1646,16 @@ const NamedGraphMap_t::iterator SAL_CALL librdf_Repository::clearGraph(
 {
     if (!i_xGraphName.is()) {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::clearGraph: "
-                "URI is null"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::clearGraph: "
+                "URI is null")), *this, 0);
     }
     ::osl::MutexGuard g(m_aMutex);
     const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
     const NamedGraphMap_t::iterator iter( m_NamedGraphs.find(contextU) );
     if (!i_Internal && iter == m_NamedGraphs.end()) {
         throw container::NoSuchElementException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::clearGraph: "
-            "no graph with given URI exists"), *this);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::clearGraph: "
+            "no graph with given URI exists")), *this);
     }
     const ::rtl::OString context(
         ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
@@ -1669,15 +1665,15 @@ const NamedGraphMap_t::iterator SAL_CALL librdf_Repository::clearGraph(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::clearGraph: "
-            "librdf_new_node_from_uri_string failed"), *this);
+            "librdf_new_node_from_uri_string failed")), *this);
     }
     if (librdf_model_context_remove_statements(m_pModel.get(), pContext.get()))
     {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::clearGraph: "
-            "librdf_model_context_remove_statements failed"), *this);
+            "librdf_model_context_remove_statements failed")), *this);
     }
     return iter;
 }
@@ -1692,25 +1688,25 @@ void SAL_CALL librdf_Repository::addStatementGraph(
 //    container::NoSuchElementException, rdf::RepositoryException)
 {
     if (!i_xSubject.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::addStatement: Subject is null"), *this, 0);
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::addStatement: Subject is null")), *this, 0);
     }
     if (!i_xPredicate.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::addStatement: Predicate is null"),
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::addStatement: Predicate is null")),
             *this, 1);
     }
     if (!i_xObject.is()) {
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
-            "librdf_Repository::addStatement: Object is null"), *this, 2);
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_Repository::addStatement: Object is null")), *this, 2);
     }
 
     ::osl::MutexGuard g(m_aMutex);
     const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
     if (!i_Internal && (m_NamedGraphs.find(contextU) == m_NamedGraphs.end())) {
         throw container::NoSuchElementException(
-            ::rtl::OUString::createFromAscii("librdf_Repository::addStatement: "
-            "no graph with given URI exists"), *this);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("librdf_Repository::addStatement: "
+            "no graph with given URI exists")), *this);
     }
     const ::rtl::OString context(
         ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
@@ -1720,9 +1716,9 @@ void SAL_CALL librdf_Repository::addStatementGraph(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::addStatement: "
-            "librdf_new_node_from_uri_string failed"), *this);
+            "librdf_new_node_from_uri_string failed")), *this);
     }
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
@@ -1744,9 +1740,9 @@ void SAL_CALL librdf_Repository::addStatementGraph(
 
     if (librdf_model_context_add_statement(m_pModel.get(),
             pContext.get(), pStatement.get())) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::addStatement: "
-            "librdf_model_context_add_statement failed"), *this);
+            "librdf_model_context_add_statement failed")), *this);
     }
 }
 
@@ -1769,9 +1765,9 @@ void SAL_CALL librdf_Repository::removeStatementsGraph(
     const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
     if (m_NamedGraphs.find(contextU) == m_NamedGraphs.end()) {
         throw container::NoSuchElementException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::removeStatements: "
-                "no graph with given URI exists"), *this);
+                "no graph with given URI exists")), *this);
     }
     const ::rtl::OString context(
         ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
@@ -1781,9 +1777,9 @@ void SAL_CALL librdf_Repository::removeStatementsGraph(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::removeStatements: "
-            "librdf_new_node_from_uri_string failed"), *this);
+            "librdf_new_node_from_uri_string failed")), *this);
     }
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
@@ -1796,24 +1792,24 @@ void SAL_CALL librdf_Repository::removeStatementsGraph(
             pStatement.get(), pContext.get()),
         safe_librdf_free_stream);
     if (!pStream) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::removeStatements: "
-            "librdf_model_find_statements_in_context failed"), *this);
+            "librdf_model_find_statements_in_context failed")), *this);
     }
 
     if (!librdf_stream_end(pStream.get())) {
         do {
             librdf_statement *pStmt( librdf_stream_get_object(pStream.get()) );
             if (!pStmt) {
-                throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+                throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "librdf_Repository::removeStatements: "
-                    "librdf_stream_get_object failed"), *this);
+                    "librdf_stream_get_object failed")), *this);
             }
             if (librdf_model_context_remove_statement(m_pModel.get(),
                     pContext.get(), pStmt)) {
-                throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+                throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "librdf_Repository::removeStatements: "
-                    "librdf_model_context_remove_statement failed"), *this);
+                    "librdf_model_context_remove_statement failed")), *this);
             }
         } while (!librdf_stream_next(pStream.get()));
     }
@@ -1846,9 +1842,9 @@ librdf_Repository::getStatementsGraph(
     const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
     if (!i_Internal && (m_NamedGraphs.find(contextU) == m_NamedGraphs.end())) {
         throw container::NoSuchElementException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::getStatements: "
-                "no graph with given URI exists"), *this);
+                "no graph with given URI exists")), *this);
     }
     const ::rtl::OString context(
         ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
@@ -1858,9 +1854,9 @@ librdf_Repository::getStatementsGraph(
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
     if (!pContext) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::getStatements: "
-            "librdf_new_node_from_uri_string failed"), *this);
+            "librdf_new_node_from_uri_string failed")), *this);
     }
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
@@ -1873,9 +1869,9 @@ librdf_Repository::getStatementsGraph(
             pStatement.get(), pContext.get()),
         safe_librdf_free_stream);
     if (!pStream) {
-        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+        throw rdf::RepositoryException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_Repository::getStatements: "
-            "librdf_model_find_statements_in_context failed"), *this);
+            "librdf_model_find_statements_in_context failed")), *this);
     }
 
     // librdf_model_find_statements_in_context is buggy and does not put
@@ -1888,8 +1884,8 @@ librdf_world *librdf_TypeConverter::createWorld() const
     // create and initialize world
     librdf_world *pWorld( librdf_new_world() );
     if (!pWorld) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
-            "librdf_TypeConverter::createWorld: librdf_new_world failed"),
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_TypeConverter::createWorld: librdf_new_world failed")),
             m_rRep);
     }
     //FIXME logger, digest, features?
@@ -1913,8 +1909,8 @@ librdf_TypeConverter::createStorage(librdf_world *i_pWorld) const
         librdf_new_storage(i_pWorld, "hashes", NULL,
             "contexts='yes',hash-type='memory'") );
     if (!pStorage) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
-            "librdf_TypeConverter::createStorage: librdf_new_storage failed"),
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_TypeConverter::createStorage: librdf_new_storage failed")),
             m_rRep);
     }
     return pStorage;
@@ -1925,8 +1921,8 @@ librdf_model *librdf_TypeConverter::createModel(
 {
     librdf_model *pRepository( librdf_new_model(i_pWorld, i_pStorage, NULL) );
     if (!pRepository) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
-            "librdf_TypeConverter::createModel: librdf_new_model failed"),
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_TypeConverter::createModel: librdf_new_model failed")),
             m_rRep);
     }
     //FIXME
@@ -1957,8 +1953,8 @@ librdf_uri* librdf_TypeConverter::mkURI( librdf_world* i_pWorld,
     librdf_uri *pURI( librdf_new_uri(i_pWorld,
         reinterpret_cast<const unsigned char *>(uri.getStr())));
     if (!pURI) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
-            "librdf_TypeConverter::mkURI: librdf_new_uri failed"), 0);
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "librdf_TypeConverter::mkURI: librdf_new_uri failed")), 0);
     }
     return pURI;
 }
@@ -1977,9 +1973,9 @@ librdf_node* librdf_TypeConverter::mkResource( librdf_world* i_pWorld,
             librdf_new_node_from_blank_identifier(i_pWorld,
                 reinterpret_cast<const unsigned char*> (label.getStr())));
         if (!pNode) {
-            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_TypeConverter::mkResource: "
-                "librdf_new_node_from_blank_identifier failed"), 0);
+                "librdf_new_node_from_blank_identifier failed")), 0);
         }
         return pNode;
     } else { // assumption: everything else is URI
@@ -1990,9 +1986,9 @@ librdf_node* librdf_TypeConverter::mkResource( librdf_world* i_pWorld,
             librdf_new_node_from_uri_string(i_pWorld,
                 reinterpret_cast<const unsigned char*> (uri.getStr())));
         if (!pNode) {
-            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_TypeConverter::mkResource: "
-                "librdf_new_node_from_uri_string failed"), 0);
+                "librdf_new_node_from_uri_string failed")), 0);
         }
         return pNode;
     }
@@ -2038,14 +2034,14 @@ librdf_node* librdf_TypeConverter::mkNode( librdf_world* i_pWorld,
                 (lang.getStr()), 0);
 
         } else {
-            OSL_ENSURE(false, "mkNode: invalid literal");
+            OSL_FAIL("mkNode: invalid literal");
             return 0;
         }
     }
     if (!ret) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_TypeConverter::mkNode: "
-            "librdf_new_node_from_literal failed"), 0);
+            "librdf_new_node_from_literal failed")), 0);
     }
     return ret;
 }
@@ -2076,9 +2072,9 @@ librdf_statement* librdf_TypeConverter::mkStatement( librdf_world* i_pWorld,
     librdf_statement* pStatement( librdf_new_statement_from_nodes(i_pWorld,
         pSubject, pPredicate, pObject) );
     if (!pStatement) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_TypeConverter::mkStatement: "
-            "librdf_new_statement_from_nodes failed"), 0);
+            "librdf_new_statement_from_nodes failed")), 0);
     }
     return pStatement;
 }
@@ -2089,9 +2085,9 @@ librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
     if (!i_pURI) return 0;
     const unsigned char* uri( librdf_uri_as_string(i_pURI) );
     if (!uri) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_TypeConverter::convertToXURI: "
-            "librdf_uri_as_string failed"), m_rRep);
+            "librdf_uri_as_string failed")), m_rRep);
     }
     ::rtl::OUString uriU( ::rtl::OStringToOUString(
         ::rtl::OString(reinterpret_cast<const sal_Char*>(uri)),
@@ -2100,9 +2096,9 @@ librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
         return rdf::URI::create(m_xContext, uriU);
     } catch (lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_TypeConverter::convertToXURI: "
-                "illegal uri"), m_rRep, uno::makeAny(iae));
+                "illegal uri")), m_rRep, uno::makeAny(iae));
     }
 }
 
@@ -2113,13 +2109,13 @@ librdf_TypeConverter::convertToXURI(librdf_node* i_pNode) const
     if (librdf_node_is_resource(i_pNode)) {
         librdf_uri* pURI( librdf_node_get_uri(i_pNode) );
         if (!pURI) {
-            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_TypeConverter::convertToXURI: "
-                "resource has no uri"), m_rRep);
+                "resource has no uri")), m_rRep);
         }
         return convertToXURI(pURI);
     } else {
-        OSL_ENSURE(false, "convertToXURI: unknown librdf_node");
+        OSL_FAIL("convertToXURI: unknown librdf_node");
         return 0;
     }
 }
@@ -2131,9 +2127,9 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
     if (librdf_node_is_blank(i_pNode)) {
         const unsigned char* label( librdf_node_get_blank_identifier(i_pNode) );
         if (!label) {
-            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_TypeConverter::convertToXResource: "
-                "blank node has no label"), m_rRep);
+                "blank node has no label")), m_rRep);
         }
         ::rtl::OUString labelU( ::rtl::OStringToOUString(
             ::rtl::OString(reinterpret_cast<const sal_Char*>(label)),
@@ -2143,9 +2139,9 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
                 rdf::BlankNode::create(m_xContext, labelU), uno::UNO_QUERY);
         } catch (lang::IllegalArgumentException & iae) {
             throw lang::WrappedTargetRuntimeException(
-                ::rtl::OUString::createFromAscii(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "librdf_TypeConverter::convertToXResource: "
-                    "illegal blank node label"), m_rRep, uno::makeAny(iae));
+                    "illegal blank node label")), m_rRep, uno::makeAny(iae));
         }
     } else {
         return uno::Reference<rdf::XResource>(convertToXURI(i_pNode),
@@ -2163,9 +2159,9 @@ librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
     }
     const unsigned char* value( librdf_node_get_literal_value(i_pNode) );
     if (!value) {
-        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "librdf_TypeConverter::convertToXNode: "
-            "literal has no value"), m_rRep);
+            "literal has no value")), m_rRep);
     }
     const char * lang( librdf_node_get_literal_value_language(i_pNode) );
     librdf_uri* pType(
@@ -2237,3 +2233,4 @@ uno::Reference< uno::XInterface > SAL_CALL _create(
 
 } // closing component helper namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

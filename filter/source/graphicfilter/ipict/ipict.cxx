@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -901,13 +902,11 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
     else if ( nPixelSize == 16 )
     {
         sal_uInt8   nByteCountAsByte, nFlagCounterByte;
-        sal_uInt16  nByteCount, nCount, nDestBPL,nD;
+        sal_uInt16  nByteCount, nCount, nD;
         sal_uLong   nSrcBitsPos;
 
         if ( nRowBytes < 2 * nWidth )
             BITMAPERROR;
-
-        nDestBPL = ( ( 3 * nWidth ) + 0x0003 ) & 0xfffc;
 
         for ( ny = 0; ny < nHeight; ny++ )
         {
@@ -1900,3 +1899,5 @@ extern "C" sal_Bool __LOADONCALLAPI GraphicImport( SvStream& rIStm, Graphic & rG
     return bRet;
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

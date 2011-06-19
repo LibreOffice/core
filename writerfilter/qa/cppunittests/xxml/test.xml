@@ -1,2 +1,0 @@
-<?xml version="1.0"?>
-<test xmlns="http://sample.org/test" xmlns:tst="http://sample.org/test" v1="a" tst:v2="b">HALLO</test>

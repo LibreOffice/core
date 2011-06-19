@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ class PCXReader {
 
 private:
 
-    SvStream*           pPCX;               // Die einzulesende PCX-Datei
+    SvStream& m_rPCX;               // Die einzulesende PCX-Datei
 
     Bitmap              aBmp;
     BitmapWriteAccess*  pAcc;
@@ -62,16 +63,17 @@ private:
     void                ImplReadHeader();
 
 public:
-                        PCXReader();
+                        PCXReader(SvStream &rStream);
                         ~PCXReader();
-    sal_Bool                ReadPCX( SvStream & rPCX, Graphic & rGraphic );
+    sal_Bool                ReadPCX(Graphic & rGraphic );
                         // Liesst aus dem Stream eine PCX-Datei und fuellt das GDIMetaFile
 };
 
 //=================== Methoden von PCXReader ==============================
 
-PCXReader::PCXReader() :
-    pAcc        ( NULL )
+PCXReader::PCXReader(SvStream &rStream)
+    : m_rPCX(rStream)
+    , pAcc(NULL)
 {
     pPalette = new sal_uInt8[ 768 ];
 }
@@ -94,9 +96,9 @@ sal_Bool PCXReader::Callback( sal_uInt16 /*nPercent*/ )
     return sal_False;
 }
 
-sal_Bool PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic )
+sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
 {
-    if ( rPCX.GetError() )
+    if ( m_rPCX.GetError() )
         return sal_False;
 
     sal_uLong*  pDummy = new sal_uLong; delete pDummy; // damit unter OS/2
@@ -105,8 +107,7 @@ sal_Bool PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic )
                                                // in dieser DLL nur Vector-news
                                                // gibt;
 
-    pPCX = &rPCX;
-    pPCX->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    m_rPCX.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
     // Kopf einlesen:
 
@@ -139,7 +140,7 @@ sal_Bool PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic )
         if ( nDestBitsPerPixel == 8 && nStatus )
         {
             sal_uInt8* pPal = pPalette;
-            pPCX->SeekRel(1);
+            m_rPCX.SeekRel(1);
             ImplReadPalette(256);
             pAcc->SetPaletteEntryCount( 256 );
             for ( sal_uInt16 i = 0; i < 256; i++, pPal += 3 )
@@ -170,15 +171,15 @@ void PCXReader::ImplReadHeader()
     sal_uInt16 nushort;
     sal_uInt16 nMinX,nMinY,nMaxX,nMaxY;
 
-    *pPCX >> nbyte >> nVersion >> nEncoding;
+    m_rPCX >> nbyte >> nVersion >> nEncoding;
     if ( nbyte!=0x0a || (nVersion != 0 && nVersion != 2 && nVersion != 3 && nVersion != 5) || nEncoding > 1 )
     {
         nStatus = sal_False;
         return;
     }
 
-    *pPCX >> nbyte; nBitsPerPlanePix = (sal_uLong)nbyte;
-    *pPCX >> nMinX >> nMinY >> nMaxX >> nMaxY;
+    m_rPCX >> nbyte; nBitsPerPlanePix = (sal_uLong)nbyte;
+    m_rPCX >> nMinX >> nMinY >> nMaxX >> nMaxY;
 
     if ((nMinX > nMaxX) || (nMinY > nMaxY))
     {
@@ -189,19 +190,19 @@ void PCXReader::ImplReadHeader()
     nWidth = nMaxX-nMinX+1;
     nHeight = nMaxY-nMinY+1;
 
-    *pPCX >> nResX;
-    *pPCX >> nResY;
+    m_rPCX >> nResX;
+    m_rPCX >> nResY;
     if ( nResX >= nWidth || nResY >= nHeight || ( nResX != nResY ) )
         nResX = nResY = 0;
 
     ImplReadPalette( 16 );
 
-    pPCX->SeekRel( 1 );
-    *pPCX >> nbyte;   nPlanes = (sal_uLong)nbyte;
-    *pPCX >> nushort; nBytesPerPlaneLin = (sal_uLong)nushort;
-    *pPCX >> nPaletteInfo;
+    m_rPCX.SeekRel( 1 );
+    m_rPCX >> nbyte;   nPlanes = (sal_uLong)nbyte;
+    m_rPCX >> nushort; nBytesPerPlaneLin = (sal_uLong)nushort;
+    m_rPCX >> nPaletteInfo;
 
-    pPCX->SeekRel( 58 );
+    m_rPCX.SeekRel( 58 );
 
     nDestBitsPerPixel = (sal_uInt16)( nBitsPerPlanePix * nPlanes );
     if (nDestBitsPerPixel == 2 || nDestBitsPerPixel == 3) nDestBitsPerPixel = 4;
@@ -225,12 +226,9 @@ void PCXReader::ImplReadHeader()
 void PCXReader::ImplReadBody()
 {
     sal_uInt8   *pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
-    sal_uLong   i, nx, ny, np, nCount, nUsedLineSize, nLineSize, nPercent;
+    sal_uLong   i, nx, ny, np, nCount, nPercent;
     sal_uLong   nLastPercent = 0;
     sal_uInt8   nDat = 0, nCol = 0;
-
-    nUsedLineSize = (sal_uLong)( ( ( nWidth * (sal_uLong)nDestBitsPerPixel ) + 7 ) >> 3 );
-    nLineSize = ( nUsedLineSize + 3 ) & 0xfffc;
 
     for( np = 0; np < nPlanes; np++ )
         pPlane[ np ] = new sal_uInt8[ nBytesPerPlaneLin ];
@@ -238,7 +236,7 @@ void PCXReader::ImplReadBody()
     nCount = 0;
     for ( ny = 0; ny < nHeight; ny++ )
     {
-        if (pPCX->GetError() || pPCX->IsEof())
+        if (m_rPCX.GetError() || m_rPCX.IsEof())
         {
             nStatus = sal_False;
             break;
@@ -253,7 +251,7 @@ void PCXReader::ImplReadBody()
         for ( np = 0; np < nPlanes; np++)
         {
             if ( nEncoding == 0)
-                pPCX->Read( (void *)pPlane[ np ], nBytesPerPlaneLin );
+                m_rPCX.Read( (void *)pPlane[ np ], nBytesPerPlaneLin );
             else
             {
                 pDest = pPlane[ np ];
@@ -266,11 +264,11 @@ void PCXReader::ImplReadBody()
                 }
                 while ( nx > 0 )
                 {
-                    *pPCX >> nDat;
+                    m_rPCX >> nDat;
                     if ( ( nDat & 0xc0 ) == 0xc0 )
                     {
                         nCount =( (sal_uLong)nDat ) & 0x003f;
-                        *pPCX >> nDat;
+                        m_rPCX >> nDat;
                         if ( nCount < nx )
                         {
                             nx -= nCount;
@@ -411,7 +409,7 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
     sal_uInt8*  pPtr = pPalette;
     for ( sal_uLong i = 0; i < nCol; i++ )
     {
-        *pPCX >> r >> g >> b;
+        m_rPCX >> r >> g >> b;
         *pPtr++ = r;
         *pPtr++ = g;
         *pPtr++ = b;
@@ -422,10 +420,11 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
 {
-    PCXReader aPCXReader;
-    sal_Bool nRetValue = aPCXReader.ReadPCX( rStream, rGraphic );
+    PCXReader aPCXReader(rStream);
+    sal_Bool nRetValue = aPCXReader.ReadPCX(rGraphic);
     if ( nRetValue == sal_False )
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     return nRetValue;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

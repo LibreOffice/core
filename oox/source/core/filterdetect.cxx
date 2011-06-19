@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/ole/olestorage.hxx"
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 namespace oox {
 namespace core {
@@ -56,8 +58,8 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-FilterDetectDocHandler::FilterDetectDocHandler( OUString& rFilterName ) :
-    mrFilterName( rFilterName )
+FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName ) :
+    mrFilterName( rFilterName ), mxContext( rxContext )
 {
     maContextStack.reserve( 2 );
 }
@@ -161,37 +163,58 @@ void SAL_CALL FilterDetectDocHandler::processingInstruction(
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
-    if( aType.equalsAscii( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) )
-        maTargetPath = OUString( sal_Unicode( '/' ) ) + rAttribs.getString( XML_Target, OUString() );
+    if( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) ) )
+    {
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  com::sun::star::uri::UriReferenceFactory::create( mxContext );
+        try
+        {
+             // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
+             // keep the XUriReference implementation happy )
+             Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("file:///" ) ) );
+
+             Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  rAttribs.getString( XML_Target, OUString() ) );
+             Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True, com::sun::star::uri::RelativeUriExcessParentSegments_RETAIN );
+
+             if ( xAbs.is() )
+                 maTargetPath = xAbs->getPath();
+        }
+        catch( Exception& e)
+        {
+        }
+    }
 }
 
 OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType ) const
 {
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) ||
-        rContentType.equalsAscii( "application/vnd.ms-word.document.macroEnabled.main+xml" ) )
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) ) ||
+        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-word.document.macroEnabled.main+xml" ) ) )
         return CREATE_OUSTRING( "writer_MS_Word_2007" );
 
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ) ||
-        rContentType.equalsAscii( "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" ) )
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ) ) ||
+        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" ) ) )
         return CREATE_OUSTRING( "writer_MS_Word_2007_Template" );
 
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" ) ||
-        rContentType.equalsAscii( "application/vnd.ms-excel.sheet.macroEnabled.main+xml" ) )
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" ) ) ||
+        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-excel.sheet.macroEnabled.main+xml" ) ) )
         return CREATE_OUSTRING( "MS Excel 2007 XML" );
 
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ) ||
-        rContentType.equalsAscii( "application/vnd.ms-excel.template.macroEnabled.main+xml" ) )
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ) ) ||
+        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-excel.template.macroEnabled.main+xml" ) ) )
         return CREATE_OUSTRING( "MS Excel 2007 XML Template" );
 
-    if( rContentType.equalsAscii( "application/vnd.ms-excel.sheet.binary.macroEnabled.main" ) )
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-excel.sheet.binary.macroEnabled.main" ) ) )
         return CREATE_OUSTRING( "MS Excel 2007 Binary" );
 
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) ||
-        rContentType.equalsAscii( "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml" ) )
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) ) ||
+        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml" ) ) )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML" );
 
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ) ||
-        rContentType.equalsAscii( "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" ) )
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ) ) ||
+        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" ) ) )
+        return CREATE_OUSTRING( "MS PowerPoint 2007 XML AutoPlay" );
+
+    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ) ) ||
+        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" ) ) )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML Template" );
 
     return OUString();
@@ -326,9 +349,9 @@ void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKe
         pnBuffer[ i ] ^= pnHash[ i ];
 
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    rtlDigestError aError = rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
+    rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
     sal_uInt8 pnX1[ RTL_DIGEST_LENGTH_SHA1 ];
-    aError = rtl_digest_get( aDigest, pnX1, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_get( aDigest, pnX1, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     memset( pnBuffer, 0x5C, sizeof( pnBuffer ) );
@@ -336,9 +359,9 @@ void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKe
         pnBuffer[ i ] ^= pnHash[ i ];
 
     aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    aError = rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
+    rtl_digest_update( aDigest, pnBuffer, sizeof( pnBuffer ) );
     sal_uInt8 pnX2[ RTL_DIGEST_LENGTH_SHA1 ];
-    aError = rtl_digest_get( aDigest, pnX2, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_get( aDigest, pnX2, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     if( nRequiredKeyLen > RTL_DIGEST_LENGTH_SHA1 )
@@ -380,9 +403,9 @@ bool lclCheckEncryptionData( const sal_uInt8* pnKey, sal_uInt32 nKeySize, const 
         EVP_CIPHER_CTX_cleanup( &aes_ctx );
 
         rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-        rtlDigestError aError = rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
+        rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
         sal_uInt8 pnSha1Hash[ RTL_DIGEST_LENGTH_SHA1 ];
-        aError = rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
+        rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
         rtl_digest_destroy( aDigest );
 
         bResult = ( memcmp( pnSha1Hash, pnTmpVerifierHash, RTL_DIGEST_LENGTH_SHA1 ) == 0 );
@@ -405,28 +428,28 @@ Sequence< NamedValue > lclGenerateEncryptionKey( const PackageEncryptionInfo& rE
         ByteOrderConverter::writeLittleEndian( pnPasswordLoc, static_cast< sal_uInt16 >( *pStr ) );
 
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    rtlDigestError aError = rtl_digest_update( aDigest, pnBuffer, nBufferSize );
+    rtl_digest_update( aDigest, pnBuffer, nBufferSize );
     delete[] pnBuffer;
 
     size_t nHashSize = RTL_DIGEST_LENGTH_SHA1 + 4;
     sal_uInt8* pnHash = new sal_uInt8[ nHashSize ];
-    aError = rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     for( sal_uInt32 i = 0; i < 50000; ++i )
     {
         ByteOrderConverter::writeLittleEndian( pnHash, i );
         aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-        aError = rtl_digest_update( aDigest, pnHash, nHashSize );
-        aError = rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
+        rtl_digest_update( aDigest, pnHash, nHashSize );
+        rtl_digest_get( aDigest, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
         rtl_digest_destroy( aDigest );
     }
 
     memmove( pnHash, pnHash + 4, RTL_DIGEST_LENGTH_SHA1 );
     memset( pnHash + RTL_DIGEST_LENGTH_SHA1, 0, 4 );
     aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    aError = rtl_digest_update( aDigest, pnHash, nHashSize );
-    aError = rtl_digest_get( aDigest, pnHash, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_update( aDigest, pnHash, nHashSize );
+    rtl_digest_get( aDigest, pnHash, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
     lclDeriveKey( pnHash, RTL_DIGEST_LENGTH_SHA1, pnKey, nRequiredKeyLen );
@@ -526,7 +549,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         BinaryXInputStream aInfoStrm( xEncryptionInfo, true );
         bool bValidInfo = lclReadEncryptionInfo( aEncryptInfo, aInfoStrm );
 
-        // check flags and agorithm IDs, requiered are AES128 and SHA-1
+        // check flags and algorithm IDs, required are AES128 and SHA-1
         bool bImplemented = bValidInfo &&
             getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_CRYPTOAPI ) &&
             getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_AES ) &&
@@ -654,7 +677,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_packageRel );
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
-            aParser.setDocumentHandler( new FilterDetectDocHandler( aFilterName ) );
+            aParser.setDocumentHandler( new FilterDetectDocHandler( mxContext, aFilterName ) );
 
             /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
                 to determine the content type of the part at the target path. */
@@ -662,7 +685,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.parseStream( aZipStorage, CREATE_OUSTRING( "[Content_Types].xml" ) );
         }
     }
-    catch( Exception& )
+    catch( Exception& e )
     {
     }
 
@@ -675,3 +698,5 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 
 } // namespace core
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

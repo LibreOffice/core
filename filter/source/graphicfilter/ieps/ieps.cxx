@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,6 @@
 |*                      liegt. Geprueft wird NON-CASE-SENSITIVE und der Rueck-
 |*                      gabewert ist die Adresse an der die Zeichekette gefunden
 |*                      wurde oder NULL
-|*
-|*    Ersterstellung    SJ 04.03.98 ( und das an meinem Geburtstag )
-|*    Letzte Aenderung  SJ 04.03.98
 |*
 *************************************************************************/
 
@@ -197,7 +195,7 @@ static oslProcessError runProcessWithPathSearch(const rtl::OUString &rProgName,
 #endif
 }
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #    define EXESUFFIX ".exe"
 #else
 #    define EXESUFFIX ""
@@ -742,3 +740,4 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
     return ( bRetValue );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

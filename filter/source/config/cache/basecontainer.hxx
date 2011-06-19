@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ namespace filter{
                 should be available etc.
 
     @attention  The base class BaseLock must be the first of declared ones.
-                Otherwhise we cant be shure, that our own mutex member (which is
+                Otherwise we cant be shure, that our own mutex member (which is
                 present by this base class!) was full initialized inside our own
                 ctor as first!
  */
@@ -121,11 +122,6 @@ class BaseContainer : public BaseLock
 
         /** @short  holds all listener, which are registered at this instance. */
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
-
-        /** @short  hold at least on filter cache instance alive and
-                    prevent he office from unloading this cache if no filter
-                    is currently used.*/
-        static ::salhelper::SingletonRef< FilterCache >* m_pPerformanceOptimizer;
 
     //-------------------------------------------
     // native interface
@@ -217,7 +213,7 @@ class BaseContainer : public BaseLock
 
             @note   The lifetime of this pointer is restricted to the time, where
                     the mutex of this BaseContainer instance is locked.
-                    Otherwhise may be the interface method flush() will destroy
+                    Otherwise may be the interface method flush() will destroy
                     m_pFlushCache and the here returned pointer will be invalid!
 
                     Use:
@@ -321,3 +317,5 @@ class BaseContainer : public BaseLock
 } // namespace filter
 
 #endif // __FILTER_CONFIG_BASECONTAINER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

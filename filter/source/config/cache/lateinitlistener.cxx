@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,44 +47,45 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    14.08.2003 07:35
------------------------------------------------*/
+
+
 LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : BaseLock(     )
     , m_xSMGR (xSMGR)
 {
     // important to do so ...
-    // Otherwhise the temp. reference to ourselves
-    // will kill us at realeasing time!
+    // Otherwise the temp. reference to ourselves
+    // will kill us at releasing time!
     osl_incrementInterlockedCount( &m_refCount );
 
     m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(
-        m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
-        css::uno::UNO_QUERY);
+        m_xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" ))),
+        css::uno::UNO_QUERY_THROW);
 
     m_xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
 
     osl_decrementInterlockedCount( &m_refCount );
 }
 
-/*-----------------------------------------------
-    14.08.2003 07:25
------------------------------------------------*/
+
+
 LateInitListener::~LateInitListener()
 {
 }
 
-/*-----------------------------------------------
-    14.08.2003 08:45
------------------------------------------------*/
+
+
 void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // wait for events, which indicates finished open of the first document
+    // wait for events which either
+    // a) indicate completed open of the first document in which case launch thread
+    // b) indicate close of application without any documents opened, in which case skip launching thread but drop references break cyclic dependencies in
+    // case of e.g. cancel from open/new database wizard or impress wizard
     if (
-        (aEvent.EventName.equalsAscii("OnNew") ) ||
-        (aEvent.EventName.equalsAscii("OnLoad"))
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnNew"))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnLoad"))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnCloseApp")))
        )
     {
         // this thread must be started one times only ...
@@ -108,14 +110,16 @@ void SAL_CALL LateInitListener::notifyEvent(const css::document::EventObject& aE
         aLock.clear();
         // <- SAFE
 
-        LateInitThread* pThread = new LateInitThread();
-        pThread->create();
+        if (!aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnCloseApp")))
+        {
+            LateInitThread* pThread = new LateInitThread();
+            pThread->create();
+        }
     }
 }
 
-/*-----------------------------------------------
-    14.08.2003 07:48
------------------------------------------------*/
+
+
 void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEvent */ )
     throw(css::uno::RuntimeException)
 {
@@ -127,6 +131,10 @@ void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEven
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
+    if ( !m_xBroadcaster.is() )
+        return;
+
+    m_xBroadcaster->removeEventListener(static_cast< css::document::XEventListener* >(this));
     m_xBroadcaster.clear();
     aLock.clear();
     // <- SAFE
@@ -134,3 +142,5 @@ void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEven
 
     } // namespace config
 } // namespace filter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

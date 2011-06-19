@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@ namespace ole {
 
 // ============================================================================
 
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
@@ -104,3 +106,5 @@ OUString WordVbaProjectFilter::implGetImplementationName() const
 
 } // namespace ole
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

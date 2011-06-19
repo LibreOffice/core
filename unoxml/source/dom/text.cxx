@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,13 +64,15 @@ namespace DOM
 
     OUString SAL_CALL CText::getNodeName() throw (RuntimeException)
     {
-        return OUString::createFromAscii("#text");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("#text"));
     }
 
     Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
          throw (RuntimeException)
     {
-        OSL_ENSURE(false, "CText::splitText: not implemented (#i113683#)");
+        OSL_FAIL("CText::splitText: not implemented (#i113683#)");
         return Reference< XText >(this);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

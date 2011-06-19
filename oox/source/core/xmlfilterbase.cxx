@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,18 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <oox/core/filterdetect.hxx>
+#include <comphelper/storagehelper.hxx>
+using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::document::XOOXMLDocumentPropertiesImporter;
+using ::com::sun::star::document::XDocumentPropertiesSupplier;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::lang::XComponent;
 
 namespace oox {
 namespace core {
@@ -67,6 +80,10 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
+
+
+
+
 
 // ============================================================================
 
@@ -124,7 +141,27 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
 
     maFastParser.registerNamespace( NMSP_ax );
     maFastParser.registerNamespace( NMSP_xm );
+    maFastParser.registerNamespace( NMSP_mce );
+    maFastParser.registerNamespace( NMSP_mceTest );
 }
+
+
+static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiServiceFactory > aFactory)
+{
+    Reference< XComponentContext > xContext;
+    try
+    {
+        Reference< XPropertySet > xFactProp( aFactory, UNO_QUERY );
+        if( xFactProp.is() )
+            xFactProp->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext;
+    }
+    catch( Exception& )
+    {}
+
+    return xContext;
+}
+
+// ============================================================================
 
 // ============================================================================
 
@@ -141,6 +178,25 @@ XmlFilterBase::~XmlFilterBase()
 }
 
 // ----------------------------------------------------------------------------
+
+void XmlFilterBase::importDocumentProperties() throw()
+{
+    Reference< XMultiServiceFactory > xFactory( getServiceFactory(), UNO_QUERY );
+    MediaDescriptor aMediaDesc( getMediaDescriptor() );
+    Reference< XInputStream > xInputStream;
+    Reference< XComponentContext > xContext = lcl_getComponentContext(getServiceFactory());
+    ::oox::core::FilterDetect aDetector( xContext );
+    xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
+    Reference< XComponent > xModel( getModel(), UNO_QUERY );
+    Reference< XStorage > xDocumentStorage (
+            ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
+    Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OOXMLDocumentPropertiesImporter")),
+            xContext);
+    Reference< XOOXMLDocumentPropertiesImporter > xImporter( xTemp, UNO_QUERY );
+    Reference< XDocumentPropertiesSupplier > xPropSupplier( xModel, UNO_QUERY);
+    xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
+}
 
 OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
 {
@@ -208,7 +264,7 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, OStringBuffer( "XmlFilterBase::importFragment - XML parser failed in fragment '" ).
+            OSL_FAIL( OStringBuffer( "XmlFilterBase::importFragment - XML parser failed in fragment '" ).
                 append( OUStringToOString( aFragmentPath, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
         }
     }
@@ -216,6 +272,16 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     {
     }
     return false;
+}
+
+OUString XmlFilterBase::getNamespaceURL( const OUString& rPrefix )
+{
+    return mxImpl->maFastParser.getNamespaceURL( rPrefix );
+}
+
+sal_Int32 XmlFilterBase::getNamespaceId( const OUString& rUrl )
+{
+     return mxImpl->maFastParser.getNamespaceId( rUrl );
 }
 
 RelationsRef XmlFilterBase::importRelations( const OUString& rFragmentPath )
@@ -241,7 +307,11 @@ Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rS
 
 FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
 {
-    return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ) ) );
+    bool bWriteHeader = true;
+    if( rMediaType.indexOfAsciiL( "vml", 3 ) >= 0 &&
+        rMediaType.indexOfAsciiL( "+xml", 4 ) < 0 )
+        bWriteHeader = false;
+    return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ), bWriteHeader ) );
 }
 
 TextFieldStack& XmlFilterBase::getTextFieldStack() const
@@ -367,9 +437,13 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const Locale& rLocale )
 static void
 writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
 {
-    rSelf.addRelation(
-            CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" ),
-            CREATE_OUSTRING( "docProps/core.xml" ) );
+    OUString sValue;
+    if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
+        sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties" );
+    else
+        sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" );
+
+    rSelf.addRelation( sValue, CREATE_OUSTRING( "docProps/core.xml" ) );
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
             CREATE_OUSTRING( "docProps/core.xml" ),
             CREATE_OUSTRING( "application/vnd.openxmlformats-package.core-properties+xml" ) );
@@ -508,3 +582,5 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
 
 } // namespace core
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

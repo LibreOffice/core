@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <osl/process.h>
 #include <rtl/string.hxx>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <assert.h>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -144,7 +145,6 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         pDocument->resolve(*pStream);
 
 #ifdef DEBUG_ELEMENT
-        writerfilter::TagLogger::dump("DEBUG");
         debugLogger->endDocument();
 #endif
 
@@ -159,18 +159,18 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
 ::rtl::OUString ScannerTestService_getImplementationName ()
 {
-    return rtl::OUString::createFromAscii ( ScannerTestService::IMPLEMENTATION_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( ScannerTestService::IMPLEMENTATION_NAME ));
 }
 
 sal_Bool SAL_CALL ScannerTestService_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString::createFromAscii( ScannerTestService::SERVICE_NAME ) );
+    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ScannerTestService::SERVICE_NAME )) );
 }
 uno::Sequence< rtl::OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString::createFromAscii ( ScannerTestService::SERVICE_NAME );
+    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( ScannerTestService::SERVICE_NAME ));
     return aRet;
 }
 
@@ -180,3 +180,5 @@ uno::Reference< uno::XInterface > SAL_CALL ScannerTestService_createInstance( co
 }
 
 } } /* end namespace writerfilter::ooxml */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

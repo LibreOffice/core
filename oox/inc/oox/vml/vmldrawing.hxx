@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <map>
 #include <memory>
 #include <vector>
-#include "oox/ole/oleobjecthelper.hxx"
+#include <oox/ole/oleobjecthelper.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
@@ -214,3 +215,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

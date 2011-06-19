@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ void CGM::ImplDoClass7()
 {
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_LEVEL1, "Message" ) break;
+        case 0x01 : /*Message */break;
         case 0x02 :
         {
             sal_uInt8*  pAppData = mpSource + 12;
@@ -49,35 +50,35 @@ void CGM::ImplDoClass7()
             {
                 switch ( nOpcode )
                 {
-                    case 0x000 : ComOut( CGM_LEVEL1, "AppData - Beginning of File Opcodes" )
+                    case 0x000 : /*AppData - Beginning of File Opcodes*/
                     {
                         if ( mpChart == NULL )
                             mpChart = new CGMChart( *this );
                         mpChart->mnCurrentFileType = pAppData[ 3 ];
                     }
                     break;
-                    case 0x001 : ComOut( CGM_LEVEL1, "AppData - End of File Opcodes" ) break;
-                    case 0x190 : ComOut( CGM_LEVEL1, "AppData - FDESC" ) break;
-                    case 0x192 : ComOut( CGM_LEVEL1, "AppData - FNOTES" ) break;
-                    case 0x1F4 : ComOut( CGM_LEVEL1, "AppData - BOGENFILE" ) break;
-                    case 0x1F5 : ComOut( CGM_LEVEL1, "AppData - EOGENFILE" ) break;
-                    case 0x1F8 : ComOut( CGM_LEVEL1, "AppData - BOCHTGROUP" ) break;
-                    case 0x1F9 : ComOut( CGM_LEVEL1, "AppData - EOCHTGROUP" ) break;
-                    case 0x1FC : ComOut( CGM_LEVEL1, "AppData - BOCHTDATA" ) break;
-                    case 0x1FD : ComOut( CGM_LEVEL1, "AppData - EOCHTDATA" )
+                    case 0x001 : /*AppData - End of File Opcodes */break;
+                    case 0x190 : /*AppData - FDESC */break;
+                    case 0x192 : /*AppData - FNOTES */break;
+                    case 0x1F4 : /*AppData - BOGENFILE */break;
+                    case 0x1F5 : /*AppData - EOGENFILE */break;
+                    case 0x1F8 : /*AppData - BOCHTGROUP */break;
+                    case 0x1F9 : /*AppData - EOCHTGROUP */break;
+                    case 0x1FC : /*AppData - BOCHTDATA */break;
+                    case 0x1FD : /*AppData - EOCHTDATA*/
                     {
                         mpOutAct->DrawChart();
                     }
                     break;
-                    case 0x200 : ComOut( CGM_LEVEL1, "AppData - BOSYMGROUP" ) break;
-                    case 0x201 : ComOut( CGM_LEVEL1, "AppData - EOSYMGROUP" ) break;
-                    case 0x204 : ComOut( CGM_LEVEL1, "AppData - BEGSYMBOL" ) break;
-                    case 0x205 : ComOut( CGM_LEVEL1, "AppData - ENDSYMBOL" ) break;
-                    case 0x208 : ComOut( CGM_LEVEL1, "AppData - BOSHWGROUP" ) break;
-                    case 0x209 : ComOut( CGM_LEVEL1, "AppData - EOSHWGROUP" ) break;
-                    case 0x260 : ComOut( CGM_LEVEL1, "AppData - BEGGROUP" ) break;
-                    case 0x262 : ComOut( CGM_LEVEL1, "AppData - ENDGROUP" ) break;
-                    case 0x264 : ComOut( CGM_LEVEL1, "AppData - DATANODE" )
+                    case 0x200 : /*AppData - BOSYMGROUP */break;
+                    case 0x201 : /*AppData - EOSYMGROUP */break;
+                    case 0x204 : /*AppData - BEGSYMBOL */break;
+                    case 0x205 : /*AppData - ENDSYMBOL */break;
+                    case 0x208 : /*AppData - BOSHWGROUP */break;
+                    case 0x209 : /*AppData - EOSHWGROUP */break;
+                    case 0x260 : /*AppData - BEGGROUP */break;
+                    case 0x262 : /*AppData - ENDGROUP */break;
+                    case 0x264 : /*AppData - DATANODE*/
                     {
                         mpChart->mDataNode[ 0 ] = *(DataNode*)( pAppData );
                         sal_Int8 nZoneEnum = mpChart->mDataNode[ 0 ].nZoneEnum;
@@ -85,7 +86,7 @@ void CGM::ImplDoClass7()
                             mpChart->mDataNode[ nZoneEnum ] = *(DataNode*)( pAppData );
                     }
                     break;
-                    case 0x2BE : ComOut( CGM_LEVEL1, "AppData - SHWSLIDEREC" )
+                    case 0x2BE : /*AppData - SHWSLIDEREC*/
                     {
                         if ( mnMode & CGM_EXPORT_IMPRESS )
                         {
@@ -108,12 +109,12 @@ void CGM::ImplDoClass7()
                         }
                     }
                     break;
-                    case 0x2C0 : ComOut( CGM_LEVEL1, "AppData - SHWKEYTABLE" ) break;
-                    case 0x2C2 : ComOut( CGM_LEVEL1, "AppData - SHWBUTTONTAB" ) break;
-                    case 0x2C4 : ComOut( CGM_LEVEL1, "AppData - SHWGLOBAL" ) break;
-                    case 0x2C6 : ComOut( CGM_LEVEL1, "AppData - SHWTITLE" ) break;
-                    case 0x2CA : ComOut( CGM_LEVEL1, "AppData - SHWAPP" ) break;
-                    case 0x320 : ComOut( CGM_LEVEL1, "AppData - TEXT" )
+                    case 0x2C0 : /*AppData - SHWKEYTABLE */break;
+                    case 0x2C2 : /*AppData - SHWBUTTONTAB */break;
+                    case 0x2C4 : /*AppData - SHWGLOBAL */break;
+                    case 0x2C6 : /*AppData - SHWTITLE */break;
+                    case 0x2CA : /*AppData - SHWAPP */break;
+                    case 0x320 : /*AppData - TEXT*/
                     {
                         TextEntry* pTextEntry = new TextEntry;
                         pTextEntry->nTypeOfText = *((sal_uInt16*)( pAppData ) );
@@ -149,89 +150,90 @@ void CGM::ImplDoClass7()
                         mpChart->InsertTextEntry( pTextEntry );
                     }
                     break;
-                    case 0x321 : ComOut( CGM_LEVEL1, "AppData - IOC_TABS" ) break;
-                    case 0x322 : ComOut( CGM_LEVEL1, "AppData - CHARTZONE" )
+                    case 0x321 : /*AppData - IOC_TABS */break;
+                    case 0x322 : /*AppData - CHARTZONE*/
                     {
                         mpChart->mChartZone = *( ChartZone* )( pAppData );
                     }
                     break;
-                    case 0x324 : ComOut( CGM_LEVEL1, "AppData - TITLEZONE" ) break;
-                    case 0x328 : ComOut( CGM_LEVEL1, "AppData - FOOTNOTEZONE" ) break;
-                    case 0x32A : ComOut( CGM_LEVEL1, "AppData - LEGENDZONE" ) break;
-                    case 0x330 : ComOut( CGM_LEVEL1, "AppData - PAGEORIENTDIM" )
+                    case 0x324 : /*AppData - TITLEZONE */break;
+                    case 0x328 : /*AppData - FOOTNOTEZONE */break;
+                    case 0x32A : /*AppData - LEGENDZONE */break;
+                    case 0x330 : /*AppData - PAGEORIENTDIM*/
                     {
                         mpChart->mPageOrientDim = *( PageOrientDim*)( pAppData );
                     }
                     break;
-                    case 0x334 : ComOut( CGM_LEVEL1, "AppData - CHTZONEOPTN" )
+                    case 0x334 : /*AppData - CHTZONEOPTN*/
                     {
                         mpChart->mZoneOption = *( ZoneOption*)( pAppData );
                     }
                     break;
-                    case 0x336 : ComOut( CGM_LEVEL1, "AppData - CHTINTL" )
+                    case 0x336 : /*AppData - CHTINTL*/
                     {
                         mpChart->mIntSettings = *( IntSettings*)( pAppData );
                     }
                     break;
-                    case 0x338 : ComOut( CGM_LEVEL1, "AppData - CHTLINESPC" ) break;
-                    case 0x384 : ComOut( CGM_LEVEL1, "AppData - ORGGRIDSTATE" ) break;
-                    case 0x386 : ComOut( CGM_LEVEL1, "AppData - ORGSCRSTATE" ) break;
-                    case 0x388 : ComOut( CGM_LEVEL1, "AppData - ORGTREESTATE" ) break;
-                    case 0x38A : ComOut( CGM_LEVEL1, "AppData - ORGTEXTOPTN" ) break;
-                    case 0x38E : ComOut( CGM_LEVEL1, "AppData - ORGBOXOPTN" ) break;
-                    case 0x390 : ComOut( CGM_LEVEL1, "AppData - ORGBOXDIM" ) break;
-                    case 0x392 : ComOut( CGM_LEVEL1, "AppData - ORGBOX" ) break;
-                    case 0x3EA : ComOut( CGM_LEVEL1, "AppData - TTLTEXTOPTN" ) break;
-                    case 0x3EE : ComOut( CGM_LEVEL1, "AppData - TTLAUTOBUILD" ) break;
-                    case 0x44E : ComOut( CGM_LEVEL1, "AppData - BULTEXTOPTN" ) break;
-                    case 0x452 : ComOut( CGM_LEVEL1, "AppData - BULLETOPTN" )
+                    case 0x338 : /*AppData - CHTLINESPC */break;
+                    case 0x384 : /*AppData - ORGGRIDSTATE */break;
+                    case 0x386 : /*AppData - ORGSCRSTATE */break;
+                    case 0x388 : /*AppData - ORGTREESTATE */break;
+                    case 0x38A : /*AppData - ORGTEXTOPTN */break;
+                    case 0x38E : /*AppData - ORGBOXOPTN */break;
+                    case 0x390 : /*AppData - ORGBOXDIM */break;
+                    case 0x392 : /*AppData - ORGBOX */break;
+                    case 0x3EA : /*AppData - TTLTEXTOPTN */break;
+                    case 0x3EE : /*AppData - TTLAUTOBUILD */break;
+                    case 0x44E : /*AppData - BULTEXTOPTN */break;
+                    case 0x452 : /*AppData - BULLETOPTN*/
                     {
                         mpChart->mBulletOption = *( BulletOption*)( pAppData );
                     }
                     break;
-                    case 0x454 : ComOut( CGM_LEVEL1, "AppData - BULLETLINES" )
+                    case 0x454 : /*AppData - BULLETLINES*/
                     {
                         mpChart->mBulletLines = *( BulletLines*)( pAppData );
                     }
                     break;
-                    case 0x456 : ComOut( CGM_LEVEL1, "AppData - BULAUTOBUILD" ) break;
-                    case 0x4B2 : ComOut( CGM_LEVEL1, "AppData - TBLTEXTOPTN" ) break;
-                    case 0x4B6 : ComOut( CGM_LEVEL1, "AppData - TBLOPTN" ) break;
-                    case 0x4B8 : ComOut( CGM_LEVEL1, "AppData - TBLCOLOPTN" ) break;
-                    case 0x4BA : ComOut( CGM_LEVEL1, "AppData - TBLLEGENDOPTN" ) break;
-                    case 0x4BC : ComOut( CGM_LEVEL1, "AppData - TBLRANGEOPTN" ) break;
-                    case 0x4BE : ComOut( CGM_LEVEL1, "AppData - TBLROWOPTN" ) break;
-                    case 0x4C0 : ComOut( CGM_LEVEL1, "AppData - TBLAUTOBUILD" ) break;
-                    case 0x518 : ComOut( CGM_LEVEL1, "AppData - PIECHARTOPTN" ) break;
-                    case 0x51A : ComOut( CGM_LEVEL1, "AppData - PIELEGENDOPTN" ) break;
-                    case 0x51C : ComOut( CGM_LEVEL1, "AppData - PIETEXTOPTN" ) break;
-                    case 0x51E : ComOut( CGM_LEVEL1, "AppData - PIEOPTN" ) break;
-                    case 0x520 : ComOut( CGM_LEVEL1, "AppData - PIEPCTLABOPTN" ) break;
-                    case 0x522 : ComOut( CGM_LEVEL1, "AppData - PIEVALLABOPTN" ) break;
-                    case 0x524 : ComOut( CGM_LEVEL1, "AppData - PIESLICE" ) break;
-                    case 0x57A : ComOut( CGM_LEVEL1, "AppData - XYAXISOPTN" ) break;
-                    case 0x57C : ComOut( CGM_LEVEL1, "AppData - XYGRIDOPTN" ) break;
-                    case 0x57D : ComOut( CGM_LEVEL1, "AppData - XYGRIDSHOWFILL" ) break;
-                    case 0x57E : ComOut( CGM_LEVEL1, "AppData - XYSERIESOPTN" ) break;
-                    case 0x580 : ComOut( CGM_LEVEL1, "AppData - XYSTYLEOPTN" ) break;
-                    case 0x582 : ComOut( CGM_LEVEL1, "AppData - XYTABLEOPTN" ) break;
-                    case 0x584 : ComOut( CGM_LEVEL1, "AppData - XYTEXTOPTN" ) break;
-                    case 0x586 : ComOut( CGM_LEVEL1, "AppData - XYDATAOPTN" ) break;
-                    case 0x58A : ComOut( CGM_LEVEL1, "AppData - XYLEGENDOPN" ) break;
-                    case 0x58C : ComOut( CGM_LEVEL1, "AppData - XYCALCULATION" ) break;
-                    case 0x58E : ComOut( CGM_LEVEL1, "AppData - XYXVALUE" ) break;
-                    case 0x590 : ComOut( CGM_LEVEL1, "AppData - XYYVALUE" ) break;
-                    case 0x592 : ComOut( CGM_LEVEL1, "AppData - XYXEXTVALUE" ) break;
-                    case 0x618 : ComOut( CGM_LEVEL1, "AppData - IOC_CHTCOLRTAB" ) break;
-                    case 0x619 : ComOut( CGM_LEVEL1, "AppData - IOC_CHTFONTTAB" ) break;
-                    case 0x1fff : ComOut( CGM_LEVEL1, "AppData - 0x1fff" ) break;
-                    default : ComOut( CGM_LEVEL1, "UNKNOWN Application Data" ) break;
+                    case 0x456 : /*AppData - BULAUTOBUILD */break;
+                    case 0x4B2 : /*AppData - TBLTEXTOPTN */break;
+                    case 0x4B6 : /*AppData - TBLOPTN */break;
+                    case 0x4B8 : /*AppData - TBLCOLOPTN */break;
+                    case 0x4BA : /*AppData - TBLLEGENDOPTN */break;
+                    case 0x4BC : /*AppData - TBLRANGEOPTN */break;
+                    case 0x4BE : /*AppData - TBLROWOPTN */break;
+                    case 0x4C0 : /*AppData - TBLAUTOBUILD */break;
+                    case 0x518 : /*AppData - PIECHARTOPTN */break;
+                    case 0x51A : /*AppData - PIELEGENDOPTN */break;
+                    case 0x51C : /*AppData - PIETEXTOPTN */break;
+                    case 0x51E : /*AppData - PIEOPTN */break;
+                    case 0x520 : /*AppData - PIEPCTLABOPTN */break;
+                    case 0x522 : /*AppData - PIEVALLABOPTN */break;
+                    case 0x524 : /*AppData - PIESLICE */break;
+                    case 0x57A : /*AppData - XYAXISOPTN */break;
+                    case 0x57C : /*AppData - XYGRIDOPTN */break;
+                    case 0x57D : /*AppData - XYGRIDSHOWFILL */break;
+                    case 0x57E : /*AppData - XYSERIESOPTN */break;
+                    case 0x580 : /*AppData - XYSTYLEOPTN */break;
+                    case 0x582 : /*AppData - XYTABLEOPTN */break;
+                    case 0x584 : /*AppData - XYTEXTOPTN */break;
+                    case 0x586 : /*AppData - XYDATAOPTN */break;
+                    case 0x58A : /*AppData - XYLEGENDOPN */break;
+                    case 0x58C : /*AppData - XYCALCULATION */break;
+                    case 0x58E : /*AppData - XYXVALUE */break;
+                    case 0x590 : /*AppData - XYYVALUE */break;
+                    case 0x592 : /*AppData - XYXEXTVALUE */break;
+                    case 0x618 : /*AppData - IOC_CHTCOLRTAB */break;
+                    case 0x619 : /*AppData - IOC_CHTFONTTAB */break;
+                    case 0x1fff : /*AppData - 0x1fff */break;
+                    default : /*UNKNOWN Application Data */break;
                 }
             }
             mnParaSize = mnElementSize;
             break;
         }
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
+        default: break;
     }
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,29 +1,4 @@
-/*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "ConversionHelper.hxx"
 #include "NumberingManager.hxx"
 #include "StyleSheetTable.hxx"
@@ -47,8 +22,11 @@
 
 #include "dmapperLoggers.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #define MAKE_PROPVAL(NameId, Value) \
     beans::PropertyValue(aPropNameSupplier.GetName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
@@ -139,7 +117,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
             m_nTabstop = nValue;
         break;
         default:
-            OSL_ENSURE( false, "this line should never be reached");
+            OSL_FAIL( "this line should never be reached");
     }
 }
 
@@ -401,7 +379,7 @@ void AbstractListDef::SetValue( sal_uInt32 nSprmId, sal_Int32 nValue )
             m_nUnsigned = nValue;
         break;
         default:
-            OSL_ENSURE( false, "this line should never be reached");
+            OSL_FAIL( "this line should never be reached");
     }
 }
 
@@ -446,7 +424,7 @@ ListDef::~ListDef( )
 
 OUString ListDef::GetStyleName( sal_Int32 nId )
 {
-    OUString sStyleName( OUString::createFromAscii( "WWNum" ) );
+    OUString sStyleName( RTL_CONSTASCII_USTRINGPARAM("WWNum") );
     sStyleName += OUString::valueOf( nId );
 
     return sStyleName;
@@ -483,7 +461,7 @@ uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
     try
     {
         uno::Reference< style::XStyleFamiliesSupplier > xFamilies( xFactory, uno::UNO_QUERY_THROW );
-        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName( OUString::createFromAscii( "NumberingStyles" ) );
+        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName( OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles")) );
 
         oFamily >>= xStyles;
     }
@@ -509,7 +487,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             // Create the numbering style
             uno::Reference< beans::XPropertySet > xStyle (
                 xFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.style.NumberingStyle")),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.NumberingStyle"))),
                 uno::UNO_QUERY_THROW );
 
             rtl::OUString sStyleName = GetStyleName( GetId( ) );
@@ -612,7 +590,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         }
         catch( const uno::Exception& rEx)
         {
-            OSL_ENSURE( false, "ListTable::CreateNumberingRules");
+            OSL_FAIL( "ListTable::CreateNumberingRules");
         }
     }
 
@@ -644,15 +622,12 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
     ListLevel::Pointer pCurrentLvl = m_pCurrentDefinition->GetCurrentLevel( );
 
 
-    /* WRITERFILTERSTATUS: table: ListTable_attributedata */
     switch(nName)
     {
-        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_RGBXCHNUMS:
             if(pCurrentLvl.get())
                 pCurrentLvl->AddRGBXchNums( rVal.getString( ) );
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_LevelText_val:
         {
             //this strings contains the definition of the level
@@ -664,31 +639,20 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
                 pCurrentLvl->SetBulletChar( rVal.getString() );
         }
         break;
-//        case NS_rtf::LN_ISTD: break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_ISTARTAT:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_NFC:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_JC:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FLEGAL:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FNORESTART:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FIDENTSAV:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FCONVERTED:
 #if 0
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FWORD6:
 #endif
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_IXCHFOLLOW:
             if ( pCurrentLvl.get( ) )
                 pCurrentLvl->SetValue( nName, sal_Int32( nIntValue ) );
         break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_RGISTD:
             m_pCurrentDefinition->AddRGISTD( rVal.getString() );
         break;
@@ -715,7 +679,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
                 pProperties->resolve(*this);
         }
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_AbstractNum_abstractNumId:
         {
             // This one corresponds to the AbstractNum Id definition
@@ -725,17 +688,14 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         }
         break;
         case NS_ooxml::LN_CT_Ind_left:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             pCurrentLvl->Insert(
                 PROP_INDENT_AT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             pCurrentLvl->Insert(
                 PROP_FIRST_LINE_INDENT, true, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Ind_firstLine:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             pCurrentLvl->Insert(
                 PROP_FIRST_LINE_INDENT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
@@ -767,7 +727,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 16 );
-            OSL_ENSURE( false, sMessage.getStr()); //
+            OSL_FAIL( sMessage.getStr()); //
 #endif
         }
     }
@@ -782,10 +742,8 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
         nSprmId == NS_ooxml::LN_CT_Numbering_num )
     {
         sal_Int32 nIntValue = rSprm.getValue()->getInt();
-        /* WRITERFILTERSTATUS: table: ListTable_sprm */
         switch( nSprmId )
         {
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_Numbering_abstractNum:
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -801,7 +759,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_Numbering_num:
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -831,14 +788,11 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_AbstractNum_multiLevelType:
             break;
-            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
             case NS_rtf::LN_TPLC:
                 m_pCurrentDefinition->SetValue( nSprmId, nIntValue );
             break;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_AbstractNum_lvl:
             {
                 m_pCurrentDefinition->AddLevel();
@@ -847,27 +801,17 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     pProperties->resolve(*this);
                 }
             break;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             case NS_rtf::LN_RGBXCHNUMS: break;
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_ISTARTAT:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_NFC:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_JC:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FLEGAL:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FNORESTART:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FIDENTSAV:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FCONVERTED:
 #if 0
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FWORD6:
 #endif
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_IXCHFOLLOW:
                 m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
             break;
@@ -1017,10 +961,12 @@ void ListsManager::CreateNumberingRules( )
 {
     // Loop over the definitions
     std::vector< ListDef::Pointer >::iterator listIt = m_aLists.begin( );
-    for ( ; listIt != m_aLists.end( ); listIt++ )
+    for ( ; listIt != m_aLists.end( ); ++listIt )
     {
         (*listIt)->CreateNumberingRules( m_rDMapper, m_xFactory );
     }
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

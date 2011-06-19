@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,8 @@
 #include "filter/msfilter/msfilterdllapi.h"
 
 #include <sot/storage.hxx>
+#include <map>
+#include <boost/unordered_map.hpp>
 
 class SfxObjectShell;
 
@@ -49,6 +52,12 @@ class SfxObjectShell;
  * does this itself when it shows the vb code in the vbeditor, so this is
  * probably what the user expects to see when viewing the code
  */
+
+typedef boost::unordered_map< sal_Int32, String >  ObjIdToName;
+
+typedef std::map< String, ObjIdToName >  ControlAttributeInfo;
+
+class VBA_Impl;
 
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
@@ -77,22 +86,31 @@ public:
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for loosing the information.
     static sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
+    const ControlAttributeInfo& ControlNameForObjectId(){ return m_ModuleNameToObjIdHash; }
 
     static String GetMSBasicStorageName();
+        rtl::OUString GetVBAProjectName() { return msProjectName; }
 private:
     SotStorageRef xRoot;
     SfxObjectShell &rDocSh;
     sal_Bool bImport;
     sal_Bool bCopy;
+    ControlAttributeInfo m_ModuleNameToObjIdHash;
+    MSFILTER_DLLPRIVATE void extractAttribute( const String& rAttribute, const String& rModName );
 
     MSFILTER_DLLPRIVATE sal_Bool ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
                           const std::vector< String >& codeNames,
                           sal_Bool bAsComment, sal_Bool bStripped);
     MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
-        const String &rSubStorageName);
+                                              const String &rSubStorageName, sal_Bool bVBAMode);
     MSFILTER_DLLPRIVATE sal_Bool CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);
+        rtl::OUString msProjectName;
+    MSFILTER_DLLPRIVATE sal_Bool ImportCode_Impl( VBA_Impl&, const std::vector< String >&, sal_Bool, sal_Bool );
+    MSFILTER_DLLPRIVATE bool ImportForms_Impl( VBA_Impl&, const String&, const String&, sal_Bool);
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

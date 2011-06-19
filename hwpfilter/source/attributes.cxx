@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #include "precompiled_hwpfilter.hxx"
 
 #include <assert.h>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include "attributes.hxx"
-
-//using namespace ::std;
 
 struct TagAttribute
 {
@@ -113,7 +110,7 @@ OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw (Runtim
 {
     std::vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ )
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
     {
         if( (*ii).sName == sName )
         {
@@ -128,7 +125,7 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw (Runtime
 {
     std::vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ )
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
     {
         if( (*ii).sName == sName )
         {
@@ -166,3 +163,5 @@ void AttributeListImpl::clear()
 
     assert( ! getLength() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

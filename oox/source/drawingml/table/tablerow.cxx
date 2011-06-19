@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include "oox/helper/propertyset.hxx"
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -51,3 +52,5 @@ TableRow::~TableRow()
 }
 
 } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

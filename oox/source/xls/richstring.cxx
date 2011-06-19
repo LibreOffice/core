@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,6 +118,17 @@ void RichStringPortion::convert( const Reference< XText >& rxText, const Font* p
             pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
     }
+}
+
+void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, const Font* pFont ) const
+{
+    PropertySet aPropSet(rxText);
+
+    if (mxFont.get())
+        mxFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
+
+    if (lclNeedsRichTextFormat(pFont))
+        pFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
 }
 
 // ----------------------------------------------------------------------------
@@ -529,6 +541,16 @@ bool RichString::extractPlainString( OUString& orString, const Font* pFirstPorti
 
 void RichString::convert( const Reference< XText >& rxText, const Font* pFirstPortionFont ) const
 {
+    if (maTextPortions.size() == 1)
+    {
+        // Set text directly to the cell when the string has only one portion.
+        // It's much faster this way.
+        RichStringPortion& rPtn = *maTextPortions.front();
+        rxText->setString(rPtn.getText());
+        rPtn.writeFontProperties(rxText, pFirstPortionFont);
+        return;
+    }
+
     bool bReplace = true;
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {
@@ -642,3 +664,5 @@ void RichString::createPhoneticPortions( const ::rtl::OUString& rText, PhoneticP
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

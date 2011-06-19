@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include "oox/helper/refvector.hxx"
 #include "oox/helper/storagebase.hxx"
-#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -50,7 +50,7 @@ namespace ole {
 
 // ============================================================================
 
-class OOX_DLLPUBLIC VbaFilterConfig
+class VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
@@ -145,6 +145,8 @@ public:
     /** Returns true, if the document contains the specified dialog. */
     bool                hasDialog( const ::rtl::OUString& rDialogName ) const;
 
+    void                setOleOverridesSink( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
+
 protected:
     /** Registers a dummy module that will be created when the VBA project is
         imported. */
@@ -199,6 +201,8 @@ private:
     MacroAttacherVector maMacroAttachers;   /// Objects that want to attach a VBA macro to an action.
     DummyModuleMap      maDummyModules;     /// Additional empty modules created on import.
     ::rtl::OUString     maPrjName;          /// Name of the VBA project.
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                        mxOleOverridesSink;
 };
 
 // ============================================================================
@@ -207,3 +211,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

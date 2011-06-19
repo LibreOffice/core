@@ -280,8 +280,8 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     /**
      * Compare two ExtendedFormat to see if the font index is the same
      *
-     * @param the ExtendedFormat to be used in the comaprison
-     * @return boolean if the two are the same otherwise false
+     * @param  rhs The ExtendedFormat to be used in the comaprison
+     * @return True if the two are the same otherwise false
      */
     public boolean compareTo(ExtendedFormat rhs) {
 

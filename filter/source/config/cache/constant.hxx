@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,7 +101,7 @@ extern rtl::OUString pFilterStrings[];
 #define  CFGSET_FRAMELOADERS        _FILTER_CONFIG_FROM_ASCII_("FrameLoaders"   )
 #define  CFGSET_CONTENTHANDLERS     _FILTER_CONFIG_FROM_ASCII_("ContentHandlers")
 
-/** @short  used to adress some configuration keys directly.
+/** @short  used to address some configuration keys directly.
 
     @descr  Such direct keys should be used with function
             FilterCache::impl_getDirectCFGValue() only!
@@ -132,6 +133,7 @@ extern rtl::OUString pFilterStrings[];
 #define  FLAGNAME_PACKED            _FILTER_CONFIG_FROM_ASCII_("PACKED"           )
 #define  FLAGNAME_PASSWORDTOMODIFY  _FILTER_CONFIG_FROM_ASCII_("PASSWORDTOMODIFY" )
 #define  FLAGNAME_PREFERRED         _FILTER_CONFIG_FROM_ASCII_("PREFERRED"        )
+#define  FLAGNAME_STARTPRESENTATION _FILTER_CONFIG_FROM_ASCII_("STARTPRESENTATION")
 #define  FLAGNAME_READONLY          _FILTER_CONFIG_FROM_ASCII_("READONLY"         )
 #define  FLAGNAME_SUPPORTSSELECTION _FILTER_CONFIG_FROM_ASCII_("SUPPORTSSELECTION")
 #define  FLAGNAME_TEMPLATE          _FILTER_CONFIG_FROM_ASCII_("TEMPLATE"         )
@@ -163,6 +165,7 @@ extern rtl::OUString pFilterStrings[];
 #define  FLAGVAL_ENCRYPTION        0x01000000 // 16777216
 #define  FLAGVAL_PASSWORDTOMODIFY  0x02000000 // 33554432
 #define  FLAGVAL_PREFERRED         0x10000000 // 268435456
+#define  FLAGVAL_STARTPRESENTATION 0x20000000 // 268435456
 #define  FLAGVAL_ALL               0xffffffff // 4294967295
 
 /** @short  uno service names of our document services
@@ -185,7 +188,7 @@ extern rtl::OUString pFilterStrings[];
 #define  SERVICE_URLTRANSFORMER             _FILTER_CONFIG_FROM_ASCII_("com.sun.star.util.URLTransformer"                     )
 #define  SERVICE_FILTERCONFIGREFRESH        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.document.FilterConfigRefresh"            )
 
-/** @short  some configuration pathes.
+/** @short  some configuration paths.
  */
 #define  CFGPACKAGE_TD_TYPES           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Types" )
 #define  CFGPACKAGE_TD_FILTERS         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Filter")
@@ -213,3 +216,5 @@ extern rtl::OUString pFilterStrings[];
 #define  QUERY_CONSTVALUE_ALL                       _FILTER_CONFIG_FROM_ASCII_("all")
 
 #endif // _FILTER_CONFIG_CONSTANT_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

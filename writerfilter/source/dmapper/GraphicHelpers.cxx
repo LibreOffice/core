@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "ConversionHelper.hxx"
 #include "GraphicHelpers.hxx"
 
@@ -18,12 +19,29 @@ namespace dmapper {
 
 using namespace com::sun::star;
 
-PositionHandler::PositionHandler( ) :
+int PositionHandler::savedPositionOffsetV = 0;
+int PositionHandler::savedPositionOffsetH = 0;
+int PositionHandler::savedAlignV = text::VertOrientation::NONE;
+int PositionHandler::savedAlignH = text::HoriOrientation::NONE;
+
+PositionHandler::PositionHandler( bool vertical ) :
 LoggedProperties(dmapper_logger, "PositionHandler")
 {
-    m_nOrient = text::VertOrientation::NONE;
     m_nRelation = text::RelOrientation::FRAME;
-    m_nPosition = 0;
+    if( vertical )
+    {
+        m_nPosition = savedPositionOffsetV;
+        m_nOrient = savedAlignV;
+        savedPositionOffsetV = 0;
+        savedAlignV = text::VertOrientation::NONE;
+    }
+    else
+    {
+        m_nPosition = savedPositionOffsetH;
+        m_nOrient = savedAlignH;
+        savedPositionOffsetH = 0;
+        savedAlignH = text::HoriOrientation::NONE;
+    }
 }
 
 PositionHandler::~PositionHandler( )
@@ -95,76 +113,44 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
     }
 }
 
-void PositionHandler::lcl_sprm( Sprm& rSprm )
+void PositionHandler::lcl_sprm( Sprm& )
 {
-    Value::Pointer_t pValue = rSprm.getValue();
-    sal_Int32 nIntValue = pValue->getInt();
+}
 
-    switch ( rSprm.getId( ) )
-    {
-        case NS_ooxml::LN_CT_PosV_align:
-            {
-                static Id pVertValues[] =
-                {
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_top,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_bottom,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_center,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_inside,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_outside
-                };
+void PositionHandler::setPositionOffset(const ::rtl::OUString & sText, bool vertical)
+{
+    if( vertical )
+        savedPositionOffsetV = ConversionHelper::convertEMUToMM100( sText.toInt32());
+    else
+        savedPositionOffsetH = ConversionHelper::convertEMUToMM100( sText.toInt32());
+}
 
-                static sal_Int16 pVertOrients[] =
-                {
-                    text::VertOrientation::TOP,
-                    text::VertOrientation::BOTTOM,
-                    text::VertOrientation::CENTER,
-                    text::VertOrientation::NONE,
-                    text::VertOrientation::NONE
-                };
+void PositionHandler::setAlignH(const ::rtl::OUString & sText)
+{
+    if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "left" )))
+        savedAlignH = text::HoriOrientation::LEFT;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "right" )))
+        savedAlignH = text::HoriOrientation::RIGHT;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "center" )))
+        savedAlignH = text::HoriOrientation::CENTER;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "inside" )))
+        savedAlignH = text::HoriOrientation::INSIDE;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "outside" )))
+        savedAlignH = text::HoriOrientation::OUTSIDE;
+}
 
-                for ( int i = 0; i < 5; i++ )
-                {
-                    if ( pVertValues[i] == sal_uInt32( nIntValue ) )
-                        m_nOrient = pVertOrients[i];
-                }
-            }
-            break;
-        case NS_ooxml::LN_CT_PosH_align:
-            {
-                static Id pHoriValues[] =
-                {
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_left,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_right,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_center,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_inside,
-                    NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_outside
-                };
-
-                static sal_Int16 pHoriOrients[] =
-                {
-                    text::HoriOrientation::LEFT,
-                    text::HoriOrientation::RIGHT,
-                    text::HoriOrientation::CENTER,
-                    text::HoriOrientation::INSIDE,
-                    text::HoriOrientation::OUTSIDE
-                };
-
-                for ( int i = 0; i < 5; i++ )
-                {
-                    if ( pHoriValues[i] == sal_uInt32( nIntValue ) )
-                        m_nOrient = pHoriOrients[i];
-                }
-            }
-            break;
-        case NS_ooxml::LN_CT_PosH_posOffset:
-        case NS_ooxml::LN_CT_PosV_posOffset:
-            m_nPosition = ConversionHelper::convertEMUToMM100( nIntValue );
-        default:
-#ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("PositionHandler.unhandled");
-#endif
-            break;
-    }
+void PositionHandler::setAlignV(const ::rtl::OUString & sText)
+{
+    if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "top" )))
+        savedAlignV = text::VertOrientation::TOP;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bottom" )))
+        savedAlignV = text::VertOrientation::BOTTOM;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "center" )))
+        savedAlignV = text::VertOrientation::CENTER;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "inside" )))
+        savedAlignV = text::VertOrientation::NONE;
+    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "outside" )))
+        savedAlignV = text::VertOrientation::NONE;
 }
 
 WrapHandler::WrapHandler( ) :
@@ -231,3 +217,5 @@ sal_Int32 WrapHandler::getWrapMode( )
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

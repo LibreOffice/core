@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef INCLUDED_TABLE_DATA
 #define INCLUDED_TABLE_DATA
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -42,7 +41,7 @@ template <typename T, typename PropertiesPointer>
 /**
    Class containing the data to describe a table cell.
  */
-class WRITERFILTER_DLLPUBLIC CellData
+class CellData
 {
     /**
        Handle to start of cell.
@@ -127,7 +126,7 @@ template <typename T, typename PropertiesPointer>
 /**
    Class to handle data of a table row.
  */
-class WRITERFILTER_DLLPUBLIC RowData
+class RowData
 {
     typedef typename CellData<T, PropertiesPointer>::Pointer_t
         CellDataPointer_t;
@@ -276,7 +275,7 @@ template <typename T, typename PropertiesPointer>
 /**
    Class that holds the data of a table.
  */
-class WRITERFILTER_DLLPUBLIC TableData
+class TableData
 {
     typedef typename RowData<T, PropertiesPointer>::Pointer_t RowPointer_t;
     typedef ::std::vector<RowPointer_t> Rows;
@@ -424,3 +423,5 @@ public:
 }
 
 #endif // INCLUDED_TABLE_DATA
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,15 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* NAME $Id: htags.h,v 1.3 2008-04-10 12:08:00 rt Exp $
- * PURPOSE
- *
- * NOTES
- *
- * HISTORY
- *        frog - Aug 6, 1998: Created.
- */
 
 #ifndef _HTAGS_H_
 #define _HTAGS_H_
@@ -87,3 +79,5 @@ struct OlePicture
     bool Read(HWPFile& hwpf);
 };
 #endif                                            /* _HTAGS_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

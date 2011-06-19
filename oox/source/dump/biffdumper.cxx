@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2506,7 +2507,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_HYPERLINK:
             dumpRange();
-            if( cfg().getStringOption( dumpGuid( "guid" ), OUString() ).equalsAscii( "StdHlink" ) )
+            if( cfg().getStringOption( dumpGuid( "guid" ), OUString() ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StdHlink" ) ) )
                 StdHlinkObject( *this ).dump();
         break;
 
@@ -4526,11 +4527,11 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
 
 void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( (rStrgPath.getLength() == 0) && (rStrmName.equalsAscii( "Book" ) || rStrmName.equalsAscii( "Workbook" )) )
+    if( (rStrgPath.getLength() == 0) && (rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Book" ) ) || rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Workbook" ) )) )
         WorkbookStreamObject( *this, rxStrm, rSysFileName ).dump();
-    else if( rStrgPath.equalsAscii( "_SX_DB" ) )
+    else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "_SX_DB" ) ) )
         PivotCacheStreamObject( *this, rxStrm, BIFF5, rSysFileName ).dump();
-    else if( rStrgPath.equalsAscii( "_SX_DB_CUR" ) )
+    else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "_SX_DB_CUR" ) ) )
         PivotCacheStreamObject( *this, rxStrm, BIFF8, rSysFileName ).dump();
     else
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
@@ -4538,7 +4539,7 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
 
 void RootStorageObject::implDumpStorage( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rSysPath )
 {
-    if( rStrgPath.equalsAscii( "_VBA_PROJECT_CUR" ) )
+    if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "_VBA_PROJECT_CUR" ) ) )
         VbaProjectStorageObject( *this, rxStrg, rSysPath ).dump();
     else if( rStrgPath.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "MBD" ) ) )
         VbaContainerStorageObject( *this, rxStrg, rSysPath ).dump();
@@ -4586,3 +4587,5 @@ void Dumper::implDump()
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

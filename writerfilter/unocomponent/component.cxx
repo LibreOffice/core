@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,14 +52,12 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 };
 
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
 {
     fprintf(stderr, "Loading service: %s: ", implName);
 
@@ -70,3 +69,5 @@ component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiSe
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

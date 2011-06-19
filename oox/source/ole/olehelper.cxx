@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,8 +69,8 @@ inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
 
 // ----------------------------------------------------------------------------
 
-const sal_Char* const OLE_GUID_URLMONIKER   = "{79EAC9E0-BAF9-11CE-8C82-00AA004BA90B}";
-const sal_Char* const OLE_GUID_FILEMONIKER  = "{00000303-0000-0000-C000-000000000046}";
+const sal_Char OLE_GUID_URLMONIKER[] = "{79EAC9E0-BAF9-11CE-8C82-00AA004BA90B}";
+const sal_Char OLE_GUID_FILEMONIKER[] = "{00000303-0000-0000-C000-000000000046}";
 
 const sal_uInt32 OLE_STDPIC_ID              = 0x0000746C;
 
@@ -166,7 +167,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
         case OLE_COLORTYPE_SYSCOLOR:
             return rGraphicHelper.getSystemColor( STATIC_ARRAY_SELECT( spnSystemColors, nOleColor & OLE_SYSTEMCOLOR_MASK, XML_TOKEN_INVALID ), API_RGB_WHITE );
     }
-    OSL_ENSURE( false, "OleHelper::decodeOleColor - unknown color type" );
+    OSL_FAIL( "OleHelper::decodeOleColor - unknown color type" );
     return API_RGB_BLACK;
 }
 
@@ -198,7 +199,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 {
     if( bWithGuid )
     {
-        bool bIsStdFont = importGuid( rInStrm ).equalsAscii( OLE_GUID_STDFONT );
+        bool bIsStdFont = importGuid( rInStrm ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDFONT));
         OSL_ENSURE( bIsStdFont, "OleHelper::importStdFont - unexpected header GUID, expected StdFont" );
         if( !bIsStdFont )
             return false;
@@ -216,7 +217,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 {
     if( bWithGuid )
     {
-        bool bIsStdPic = importGuid( rInStrm ).equalsAscii( OLE_GUID_STDPIC );
+        bool bIsStdPic = importGuid( rInStrm ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDPIC));
         OSL_ENSURE( bIsStdPic, "OleHelper::importStdPic - unexpected header GUID, expected StdPic" );
         if( !bIsStdPic )
             return false;
@@ -233,7 +234,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 {
     if( bWithGuid )
     {
-        bool bIsStdHlink = importGuid( rInStrm ).equalsAscii( OLE_GUID_STDHLINK );
+        bool bIsStdHlink = importGuid( rInStrm ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDHLINK));
         OSL_ENSURE( bIsStdHlink, "OleHelper::importStdHlink - unexpected header GUID, expected StdHlink" );
         if( !bIsStdHlink )
             return false;
@@ -263,7 +264,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
         else // hyperlink moniker
         {
             OUString aGuid = importGuid( rInStrm );
-            if( aGuid.equalsAscii( OLE_GUID_FILEMONIKER ) )
+            if( aGuid.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_FILEMONIKER)) )
             {
                 // file name, maybe relative and with directory up-count
                 sal_Int16 nUpLevels;
@@ -284,7 +285,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
                     for( sal_Int16 nLevel = 0; nLevel < nUpLevels; ++nLevel )
                         orHlinkInfo.maTarget = CREATE_OUSTRING( "../" ) + orHlinkInfo.maTarget;
             }
-            else if( aGuid.equalsAscii( OLE_GUID_URLMONIKER ) )
+            else if( aGuid.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OLE_GUID_URLMONIKER)) )
             {
                 // URL, maybe relative and with leading '../'
                 sal_Int32 nBytes = rInStrm.readInt32();
@@ -294,7 +295,7 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
             }
             else
             {
-                OSL_ENSURE( false, "OleHelper::importStdHlink - unsupported hyperlink moniker" );
+                OSL_FAIL( "OleHelper::importStdHlink - unsupported hyperlink moniker" );
                 return false;
             }
         }
@@ -311,3 +312,5 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
 
 } // namespace ole
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

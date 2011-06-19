@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,11 +37,8 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-//using namespace ::std;
 
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SectionColumnHandler::SectionColumnHandler() :
 LoggedProperties(dmapper_logger, "SectionColumnHandler"),
 bEqualWidth( false ),
@@ -49,60 +47,45 @@ nNum( 0 ),
 bSep( false )
 {
 }
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SectionColumnHandler::~SectionColumnHandler()
 {
 }
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SectionColumnHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
-    /* WRITERFILTERSTATUS: table: SectionColumnHandler_attributedata */
     switch( rName )
     {
         case NS_ooxml::LN_CT_Columns_equalWidth:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             bEqualWidth = (nIntValue != 0);
             break;
         case NS_ooxml::LN_CT_Columns_space:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
             break;
         case NS_ooxml::LN_CT_Columns_num:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             nNum = nIntValue;
             break;
         case NS_ooxml::LN_CT_Columns_sep:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             bSep = (nIntValue != 0);
             break;
 
         case NS_ooxml::LN_CT_Column_w:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             aTempColumn.nWidth = ConversionHelper::convertTwipToMM100( nIntValue );
             break;
         case NS_ooxml::LN_CT_Column_space:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             aTempColumn.nSpace = ConversionHelper::convertTwipToMM100( nIntValue );
             break;
         default:
-            OSL_ENSURE( false, "SectionColumnHandler: unknown attribute");
+            OSL_FAIL( "SectionColumnHandler: unknown attribute");
     }
 }
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
 {
-    /* WRITERFILTERSTATUS: table: SectionColumnHandler_sprm */
     switch( rSprm.getId())
     {
         case NS_ooxml::LN_CT_Columns_col:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             aTempColumn.nWidth = aTempColumn.nSpace = 0;
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -114,8 +97,10 @@ void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
         }
         break;
         default:
-            OSL_ENSURE( false, "SectionColumnHandler: unknown sprm");
+            OSL_FAIL( "SectionColumnHandler: unknown sprm");
     }
 }
 } //namespace dmapper
 } //namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

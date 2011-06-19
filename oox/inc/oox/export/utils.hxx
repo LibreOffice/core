@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,14 +49,14 @@
 
 // ---------------------------------------------------------------------------------------------
 
-static inline sal_Int64 PPTtoEMU( INT32 nPPT )
+static inline sal_Int64 PPTtoEMU( sal_Int32 nPPT )
 {
     return (sal_Int64)( (double)nPPT * 1587.5 );
 }
 
 // ---------------------------------------------------------------------------------------------
 
-static inline sal_Int64 MM100toEMU( INT32 nMM100 )
+static inline sal_Int64 MM100toEMU( sal_Int32 nMM100 )
 {
     return (sal_Int64)nMM100 * 360;
 }
@@ -68,3 +69,5 @@ static inline sal_Int64 TwipsToEMU( sal_Int32 nTwips )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

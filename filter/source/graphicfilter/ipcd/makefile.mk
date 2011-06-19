@@ -41,7 +41,8 @@ DEPTARGET=vipcd
 CDEFS+= -DEDITDEBUG
 .ENDIF
 .IF "$(L10N_framework)"==""
-SLOFILES =  $(SLO)$/ipcd.obj
+SLOFILES =  $(EXCEPTIONSFILES)
+EXCEPTIONSFILES = $(SLO)$/ipcd.obj
 
 # ==========================================================================
 

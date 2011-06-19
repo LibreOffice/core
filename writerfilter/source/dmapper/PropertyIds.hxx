@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -294,6 +295,7 @@ enum PropertyIds
         ,PROP_WIDTH
         ,PROP_WIDTH_TYPE
         ,PROP_WRITING_MODE
+/*253*/ ,PROP_FRM_DIRECTION
     };
 struct PropertyNameSupplier_Impl;
 
@@ -349,3 +351,5 @@ public:
 } //namespace dmapper
 } // namespace writerfilter
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

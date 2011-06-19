@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,6 @@ void CGM::ImplCGMInit()
 
 CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
     mpGraphic               ( NULL ),
-    mpCommentOut            ( NULL ),
     mbStatus                ( sal_True ),
     mpOutAct                ( new CGMImpressOutAct( *this, rModel ) ),
     mnMode                  ( nMode )
@@ -75,75 +75,6 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
     ImplCGMInit();
 }
 #endif
-
-// ---------------------------------------------------------------
-
-void CGM::ImplComment( sal_uInt32 Level, const char* Description )
-{
-    if ( mpCommentOut )
-    {
-        if ( Level == CGM_DESCRIPTION )
-        {
-            *mpCommentOut << "                                  " << Description << "\n";
-        }
-        else
-        {
-            sal_Int8 nFirst, nSecond, i, nCount = 0;
-            if ( mnActCount < 10000 )
-                nCount++;
-            if ( mnActCount < 1000 )
-                nCount++;
-            if ( mnActCount < 100 )
-                nCount++;
-            if ( mnActCount < 10 )
-                nCount++;
-            for ( i = 0; i <= nCount; i++ )
-                *mpCommentOut << " ";
-            mpCommentOut->WriteNumber( mnActCount );
-
-            switch( Level & 0xff )
-            {
-                case CGM_UNKNOWN_LEVEL :
-                    *mpCommentOut << " L?";
-                break;
-                case CGM_UNKNOWN_COMMAND :
-                    *mpCommentOut << " UNKNOWN COMMAND";
-                break;
-                case CGM_GDSF_ONLY :
-                    *mpCommentOut << " LI";
-                break;
-                default:
-                    *mpCommentOut << " L";
-                    mpCommentOut->WriteNumber( Level & 0xff );
-                break;
-            }
-            *mpCommentOut << " C";
-            mpCommentOut->WriteNumber( mnElementClass );
-            *mpCommentOut << " ID-0x";
-            nFirst = ( mnElementID  > 0x9F ) ? (sal_Int8)( mnElementID >> 4 ) + 'A' - 10: (sal_Int8)( mnElementID >> 4 ) + '0';
-            nSecond = ( ( mnElementID & 15 ) > 9 ) ? (sal_Int8)( mnElementID & 15 ) + 'A' - 10 : (sal_Int8)( mnElementID & 15 ) + '0';
-            *mpCommentOut << nFirst << nSecond;
-             *mpCommentOut << " Size";
-            nCount = 1;
-            if ( mnElementSize < 1000000 )
-                nCount++;
-            if ( mnElementSize < 100000 )
-                nCount++;
-            if ( mnElementSize < 10000 )
-                nCount++;
-            if ( mnElementSize < 1000 )
-                nCount++;
-            if ( mnElementSize < 100 )
-                nCount++;
-            if ( mnElementSize < 10 )
-                nCount++;
-            for ( i = 0; i < nCount; i++ )
-                *mpCommentOut << " ";
-            mpCommentOut->WriteNumber( mnElementSize );
-            *mpCommentOut << " " << Description << "\n";
-        }
-    }
-}
 
 // ---------------------------------------------------------------
 
@@ -160,15 +91,11 @@ CGM::~CGM()
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
 #endif
-    sal_Int8* pBuf = (sal_Int8*)maDefRepList.First();
-    while( pBuf )
-    {
-        delete pBuf;
-        pBuf = (sal_Int8*)maDefRepList.Next();
-    }
-    maDefRepList.Clear();
+    for( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
+        delete maDefRepList[ i ];
+    maDefRepList.clear();
+    maDefRepSizeList.clear();
     delete mpBitmapInUse;
-    delete mpCommentOut;
     delete mpChart;
     delete mpOutAct;
     delete pCopyOfE;
@@ -741,7 +668,7 @@ void CGM::ImplDoClass()
         case 8 : ImplDoClass8(); break;
         case 9 : ImplDoClass9(); break;
         case 15 :ImplDoClass15(); break;
-        default : ComOut( CGM_UNKNOWN_COMMAND, "" ); break;
+        default: break;
     }
     mnActCount++;
 };
@@ -750,17 +677,18 @@ void CGM::ImplDoClass()
 
 void CGM::ImplDefaultReplacement()
 {
-    sal_uInt8*  pBuf = (sal_uInt8*)maDefRepList.First();
-    if ( pBuf )
+    if ( !maDefRepList.empty() )
     {
-        sal_uInt32  nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.First();
         sal_uInt32  nOldEscape = mnEscape;
         sal_uInt32  nOldElementClass = mnElementClass;
         sal_uInt32  nOldElementID = mnElementID;
         sal_uInt32  nOldElementSize = mnElementSize;
         sal_uInt8*  pOldBuf = mpSource;
-        while( pBuf )
+
+        for ( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
         {
+            sal_uInt8*  pBuf = maDefRepList[ i ];
+            sal_uInt32  nElementSize = maDefRepSizeList[ i ];
             sal_uInt32  nCount = 0;
             while ( mbStatus && ( nCount < nElementSize ) )
             {
@@ -783,8 +711,6 @@ void CGM::ImplDefaultReplacement()
                 if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // rekursion hier nicht moeglich!!
                     ImplDoClass();
             }
-            nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.Next();
-            pBuf = (sal_uInt8*)maDefRepList.Next();
         }
         mnEscape = nOldEscape;
         mnElementClass = nOldElementClass;
@@ -881,7 +807,7 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
                             aXStatInd = *(uno::Reference< task::XStatusIndicator > *)pProgressBar;
                         bProgressBar = aXStatInd.is();
                         if ( bProgressBar )
-                            aXStatInd->start( rtl::OUString::createFromAscii("CGM Import"), nInSize );
+                            aXStatInd->start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CGM Import" )), nInSize );
 #endif
 
                         while ( pCGM->IsValid() && ( pIn->Tell() < nInSize ) && !pCGM->IsFinished() )
@@ -925,3 +851,5 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
     }
     return nStatus;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

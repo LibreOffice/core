@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,9 +52,9 @@ namespace DOM
     {
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString::createFromAscii("DOMCharacterDataModified")), UNO_QUERY);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMCharacterDataModified"))), UNO_QUERY);
         event->initMutationEvent(
-                OUString::createFromAscii("DOMCharacterDataModified"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("DOMCharacterDataModified")),
                 sal_True, sal_False, Reference< XNode >(),
                 prevValue, newValue, OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
@@ -93,7 +94,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -164,7 +165,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -199,7 +200,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0 || count < 0){
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -254,7 +255,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(aData, aData.getLength(), RTL_TEXTENCODING_UTF8);
+            OUString tmp(rtl::OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -268,3 +269,4 @@ namespace DOM
 
 } // namspace DOM
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

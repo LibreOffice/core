@@ -31,4 +31,7 @@
   <implementation name="com.sun.star.comp.documentconversion.XSLTFilter">
     <service name="com.sun.star.documentconversion.XSLTFilter"/>
   </implementation>
+  <implementation name="com.sun.star.comp.documentconversion.LibXSLTTransformer">
+    <service name="com.sun.star.documentconversion.LibXSLTTransformer"/>
+  </implementation>
 </component>

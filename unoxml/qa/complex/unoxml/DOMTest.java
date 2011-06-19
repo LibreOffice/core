@@ -98,7 +98,8 @@ public class DOMTest
         //FIXME TODO
     }
 
-    @Test public void testXDocumentBuilder() throws Exception
+    @Test
+    public void testXDocumentBuilder() throws Exception
     {
         XDocumentBuilder xBuilder =
             UnoRuntime.queryInterface(XDocumentBuilder.class,

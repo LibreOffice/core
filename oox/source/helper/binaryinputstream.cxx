@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -168,13 +169,13 @@ BinaryXInputStream::~BinaryXInputStream()
 void BinaryXInputStream::close()
 {
     OSL_ENSURE( !mbAutoClose || mxInStrm.is(), "BinaryXInputStream::close - invalid call" );
-    if( mbAutoClose && mxInStrm.is() ) try
+    if( mxInStrm.is() ) try
     {
         mxInStrm->closeInput();
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "BinaryXInputStream::close - closing input stream failed" );
+        OSL_FAIL( "BinaryXInputStream::close - closing input stream failed" );
     }
     mxInStrm.clear();
     mbAutoClose = false;
@@ -355,3 +356,5 @@ void RelativeInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
 // ============================================================================
 
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ public:
     BulletList( );
     bool is() const;
     void apply( const BulletList& );
-    void pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, PropertyMap& rPropMap ) const;
+    void pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& xPropMap ) const;
     void setBulletChar( const ::rtl::OUString & sChar );
     void setStartAt( sal_Int32 nStartAt ){ mnStartAt <<= static_cast< sal_Int16 >( nStartAt ); }
     void setType( sal_Int32 nType );
@@ -103,14 +104,19 @@ public:
     boost::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
 
     void                                apply( const TextParagraphProperties& rSourceProps );
-    void                                pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
+    void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                                                 PropertyMap& rioBulletList, const BulletList* pMasterBuList, sal_Bool bApplyBulletList, float fFontSize ) const;
+    void                                pushToPropSet( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet) const;
 
     /** Returns the largest character size of this paragraph. If possible the
         masterstyle should have been applied before, otherwise the character
         size can be zero and the default value is returned. */
     float                               getCharHeightPoints( float fDefault ) const;
+
+#if OSL_DEBUG_LEVEL > 0
+    void dump() const;
+#endif
 
 protected:
 
@@ -127,3 +133,5 @@ protected:
 } }
 
 #endif  //  OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

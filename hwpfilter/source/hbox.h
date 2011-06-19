@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hbox.h,v 1.6 2008-06-04 09:56:30 vg Exp $ */
 
 #ifndef _HBOX_H_
 #define _HBOX_H_
@@ -83,14 +82,14 @@ struct HBox
 /**
  * @short Class for saving data to be skipped.
  */
-struct SkipBlock: public HBox
+struct SkipData: public HBox
 {
     ulong data_block_len;
     hchar dummy;
     char  *data_block;
 
-    SkipBlock(hchar);
-    virtual ~SkipBlock();
+    SkipData(hchar);
+    virtual ~SkipData();
     virtual int Read(HWPFile &hwpf);
 };
 struct DateCode;
@@ -1039,3 +1038,5 @@ struct FixedSpace: public HBox
     virtual int Read(HWPFile &hwpf);
 };
 #endif                                            /* _HBOX_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 #ifndef OOX_DRAWINGML_TEXTBODY_HXX
 #define OOX_DRAWINGML_TEXTBODY_HXX
 
+#include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
@@ -47,6 +49,7 @@ class TextBody
 {
 public:
     TextBody();
+    TextBody( TextBodyPtr pBody );
     ~TextBody();
 
     inline const TextParagraphVector&   getParagraphs() const { return maParagraphs; }
@@ -74,3 +77,5 @@ protected:
 } }
 
 #endif  //  OOX_DRAWINGML_TEXTBODY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,21 +96,21 @@ namespace DOM { namespace events
     void SAL_CALL CTestListener::initialize(const Sequence< Any >& args) throw(RuntimeException)
     {
         if (args.getLength() < 3) throw IllegalArgumentException(
-            OUString::createFromAscii("Wrong number of arguments"), Reference< XInterface >(), 0);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong number of arguments")), Reference< XInterface >(), 0);
 
         Reference <XEventTarget> aTarget;
         if(! (args[0] >>= aTarget)) throw IllegalArgumentException(
-                OUString::createFromAscii("Illegal argument 1"), Reference< XInterface >(), 1);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Illegal argument 1")), Reference< XInterface >(), 1);
 
         OUString aType;
         if (! (args[1] >>= aType))
-            throw IllegalArgumentException(OUString::createFromAscii("Illegal argument 2"), Reference< XInterface >(), 2);
+            throw IllegalArgumentException(OUString(RTL_CONSTASCII_USTRINGPARAM("Illegal argument 2")), Reference< XInterface >(), 2);
 
         sal_Bool bCapture = sal_False;
         if(! (args[2]  >>=  bCapture)) throw IllegalArgumentException(
-            OUString::createFromAscii("Illegal argument 3"), Reference< XInterface >(), 3);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Illegal argument 3")), Reference< XInterface >(), 3);
 
-        if(! (args[3] >>= m_name)) m_name = OUString::createFromAscii("<unnamed listener>");
+        if(! (args[3] >>= m_name)) m_name = OUString(RTL_CONSTASCII_USTRINGPARAM("<unnamed listener>"));
 
         m_target = aTarget;
         m_type = aType;
@@ -139,3 +140,5 @@ namespace DOM { namespace events
     }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

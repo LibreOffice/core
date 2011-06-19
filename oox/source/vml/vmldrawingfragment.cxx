@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
     {
         // DOCX filter handles plain shape elements with this fragment handler
         case VMLDRAWING_WORD:
-            if( isRootElement() )
+            if ( getNamespace( nElement ) == NMSP_vml )
                 return ShapeContextBase::createShapeContext( *this, mrDrawing.getShapes(), nElement, rAttribs );
         break;
 
@@ -93,3 +94,5 @@ void DrawingFragment::finalizeImport()
 
 } // namespace vml
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

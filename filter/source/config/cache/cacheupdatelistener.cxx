@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,30 +51,24 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    05.03.2004 08:36
------------------------------------------------*/
-CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
-                                         const css::uno::Reference< css::uno::XInterface >&            xConfigAccess,
-                                               FilterCache::EItemType                                  eConfigType  )
-    : BaseLock     (             )
-    , m_xSMGR      (xSMGR        )
-    , m_rCache     (             )
-    , m_xConfig    (xConfigAccess)
-    , m_eConfigType(eConfigType  )
+
+
+CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
+                                         FilterCache &rFilterCache,
+                                         const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
+                                         FilterCache::EItemType eConfigType)
+    : BaseLock()
+    , m_xSMGR(xSMGR)
+    , m_rCache(rFilterCache)
+    , m_xConfig(xConfigAccess)
+    , m_eConfigType(eConfigType)
 {
 }
 
-/*-----------------------------------------------
-    05.03.2004 08:37
------------------------------------------------*/
 CacheUpdateListener::~CacheUpdateListener()
 {
 }
 
-/*-----------------------------------------------
-    07.03.2004 07:59
------------------------------------------------*/
 void CacheUpdateListener::startListening()
 {
     // SAFE ->
@@ -98,9 +93,8 @@ void CacheUpdateListener::startListening()
 */
 }
 
-/*-----------------------------------------------
-    07.03.2004 07:59
------------------------------------------------*/
+
+
 void CacheUpdateListener::stopListening()
 {
     // SAFE ->
@@ -125,9 +119,8 @@ void CacheUpdateListener::stopListening()
 */
 }
 
-/*-----------------------------------------------
-    07.03.2004 08:17
------------------------------------------------*/
+
+
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -205,15 +198,15 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
         const ::rtl::OUString& sItem = *pIt;
         try
         {
-            m_rCache->refreshItem(eType, sItem);
+            m_rCache.refreshItem(eType, sItem);
         }
         catch(const css::container::NoSuchElementException&)
             {
                 // can be ignored! Because we must be aware that
-                // sItem was removed from the condfiguration and we forced an update of the cache.
+                // sItem was removed from the configuration and we forced an update of the cache.
                 // But we know, that the cache is up-to-date know and has thrown this exception afterwards .-)
             }
-        // NO FLUSH! Otherwhise we start a never ending story here .-)
+        // NO FLUSH! Otherwise we start a never ending story here .-)
         bNotifyRefresh = sal_True;
     }
 
@@ -228,9 +221,8 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
     }
 }
 
-/*-----------------------------------------------
-    05.03.2004 08:44
------------------------------------------------*/
+
+
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -244,3 +236,5 @@ void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEven
 
     } // namespace config
 } // namespace filter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

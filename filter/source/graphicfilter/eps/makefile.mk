@@ -31,8 +31,6 @@ PRJNAME=filter
 TARGET=eps
 DEPTARGET=veps
 
-#GEN_HID=TRUE
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -57,7 +55,7 @@ RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 .IF "$(L10N_framework)"==""
 SHL1TARGET= 	eps$(DLLPOSTFIX)
 SHL1IMPLIB= 	eps
-SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(VCLLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
+SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(VCLLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB) $(UNOTOOLSLIB)
 
 SHL1LIBS=		$(SLB)$/eps.lib
 

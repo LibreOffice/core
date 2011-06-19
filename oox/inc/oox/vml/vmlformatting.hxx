@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -191,12 +192,12 @@ struct FillModel
     OptValue< ::rtl::OUString > moColor;        /// Solid fill color.
     OptValue< double >  moOpacity;              /// Solid fill color opacity.
     OptValue< ::rtl::OUString > moColor2;       /// End color of gradient.
-    OptValue< double >  moOpacity2;             /// End color opycity of gradient.
+    OptValue< double >  moOpacity2;             /// End color opacity of gradient.
     OptValue< sal_Int32 > moType;               /// Fill type.
     OptValue< sal_Int32 > moAngle;              /// Gradient rotation angle.
     OptValue< double >  moFocus;                /// Linear gradient focus of second color.
-    OptValue< DoublePair > moFocusPos;          /// Rectanguar gradient focus position of second color.
-    OptValue< DoublePair > moFocusSize;         /// Rectanguar gradient focus size of second color.
+    OptValue< DoublePair > moFocusPos;          /// Rectangular gradient focus position of second color.
+    OptValue< DoublePair > moFocusSize;         /// Rectangular gradient focus size of second color.
     OptValue< ::rtl::OUString > moBitmapPath;   /// Path to fill bitmap fragment.
     OptValue< bool >    moRotate;               /// True = rotate gradient/bitmap with shape.
 
@@ -214,3 +215,5 @@ struct FillModel
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

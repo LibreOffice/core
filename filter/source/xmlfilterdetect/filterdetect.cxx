@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,14 +99,13 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 ::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
 {
-        ::rtl::OUString sTypeName = OUString::createFromAscii("");
-        ::rtl::OUString sUrl = OUString::createFromAscii("");
+        ::rtl::OUString sTypeName;
+        ::rtl::OUString sUrl;
         ::rtl::OUString originalTypeName;
         Sequence<PropertyValue > lProps ;
 
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
         ::rtl::OUString temp;
-        //OSL_ENSURE( sal_False, " starting Detect" );
         const PropertyValue * pValue = aArguments.getConstArray();
         sal_Int32 nLength;
         ::rtl::OString resultString;
@@ -114,20 +114,13 @@ Reference< com::sun::star::frame::XModel > xModel;
         sal_Int32 location=nLength;
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-              //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(pValue[i].Name,RTL_TEXTENCODING_ASCII_US).getStr() );
             if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
             {
-                  //pValue[i].Value >>= originalTypeName;
-                    location=i;
-                   // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
-
+                location=i;
             }
             else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
             {
-
                 pValue[i].Value >>= sUrl;
-                   //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sUrl,RTL_TEXTENCODING_ASCII_US).getStr() );
-
             }
             else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
             {
@@ -155,25 +148,25 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 
              // test typedetect code
-            Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString::createFromAscii("com.sun.star.document.TypeDetection")),UNO_QUERY);
+            Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),UNO_QUERY);
             Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
             nLength = myTypes.getLength();
 
 
             sal_Int32 new_nlength=0;
             sal_Int32 i = 0 ;
-             while(  (i < nLength) && (sTypeName.equalsAscii("")))
+             while(  (i < nLength) && (sTypeName.getLength() == 0))
             {
 
                 Any elem = xTypeCont->getByName(myTypes[i]);
                 elem >>=lProps;
                 new_nlength = lProps.getLength();
                 sal_Int32 j =0;
-                while( j < new_nlength && sTypeName.equalsAscii(""))
+                while( j < new_nlength && (sTypeName.getLength() == 0))
                 {
-                    ::rtl::OUString tmpStr =OUString::createFromAscii("");
+                    ::rtl::OUString tmpStr;
                     lProps[j].Value >>=tmpStr;
-                    if((lProps[j].Name.equalsAscii("ClipboardFormat")) && (!tmpStr.equalsAscii("")) )
+                    if((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && tmpStr.getLength() )
                     {
                         sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
                     }
@@ -186,23 +179,17 @@ Reference< com::sun::star::frame::XModel > xModel;
         }
         catch(Exception &)
         {
-                 OSL_ENSURE( sal_False, "An Exception occured while opening File stream" );
+                 OSL_FAIL( "An Exception occurred while opening File stream" );
         }
-        if(sTypeName.equalsAscii(""))
-        {
-            //sTypeName=::rtl::OUString::createFromAscii("writer_Flat_XML_File");
-        }
-        else
+        if (sTypeName.getLength())
         {
             if ( location == aArguments.getLength() )
             {
                 aArguments.realloc(nLength+1);
-                aArguments[location].Name = ::rtl::OUString::createFromAscii( "TypeName" );
+                aArguments[location].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TypeName" ));
             }
             aArguments[location].Value <<=sTypeName;
         }
-       // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
-
 
     return sTypeName;
 }
@@ -212,11 +199,10 @@ Reference< com::sun::star::frame::XModel > xModel;
 ::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
 {
 
-    ::rtl::OUString sTypeName= OUString::createFromAscii("");
-    if((clipBoardFormat.match(OUString::createFromAscii("doctype:"))))
+    ::rtl::OUString sTypeName;
+    if((clipBoardFormat.match(OUString( RTL_CONSTASCII_USTRINGPARAM( "doctype:" )))))
     {
             ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
-            // OSL_ENSURE( sal_False, tryStr);
             if (resultString.indexOf(tryStr) >= 0)
             {
                     sTypeName = checkType;
@@ -307,3 +293,5 @@ Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
 {
     return FilterDetect_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

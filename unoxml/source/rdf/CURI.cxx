@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -737,8 +738,8 @@ void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
 
         default:
             throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("CURI::initialize: "
-                    "invalid URIs constant argument"), *this, 0);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                    "invalid URIs constant argument")), *this, 0);
     }
     m_Namespace = ::rtl::OUString::createFromAscii(ns).intern();
     m_LocalName = ::rtl::OUString::createFromAscii(ln).intern();
@@ -751,8 +752,8 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::
     sal_Int32 len = aArguments.getLength();
     if ((len < 1) || (len > 2)) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CURI::initialize: "
-                "must give 1 or 2 argument(s)"), *this, 2);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                "must give 1 or 2 argument(s)")), *this, 2);
     }
 
     sal_Int16 arg(0);
@@ -762,22 +763,22 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::
         // integer argument: constant from rdf::URIs
         if (len != 1) {
             throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("CURI::initialize: "
-                    "must give 1 int argument"), *this, 1);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                    "must give 1 int argument")), *this, 1);
         }
         initFromConstant(arg);
         return;
     }
     if (!(aArguments[0] >>= arg0)) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CURI::initialize: "
-                "argument must be string or short"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                "argument must be string or short")), *this, 0);
     }
     if (len > 1) {
         if (!(aArguments[1] >>= arg1)) {
             throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("CURI::initialize: "
-                    "argument must be string"), *this, 1);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                    "argument must be string")), *this, 1);
         }
         // just append the parameters and then split them again; seems simplest
         arg0 = arg0 + arg1;
@@ -797,8 +798,8 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::
         }
     } else {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CURI::initialize: "
-                "argument not splittable: no separator [#/:]"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                "argument not splittable: no separator [#/:]")), *this, 0);
     }
 
     //FIXME: what is legal?
@@ -806,16 +807,16 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::
         m_Namespace = arg0;
     } else {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CURI::initialize: "
-                "argument is not valid namespace"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                "argument is not valid namespace")), *this, 0);
     }
     //FIXME: what is legal?
     if (true) {
         m_LocalName = arg1;
     } else {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CURI::initialize: "
-                "argument is not valid local name"), *this, 1);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CURI::initialize: "
+                "argument is not valid local name")), *this, 1);
     }
 }
 
@@ -865,3 +866,4 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
 
 } // closing component helper namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

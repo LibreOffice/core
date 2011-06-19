@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,11 +30,16 @@
 #include <StyleSheetTable.hxx>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <dmapperLoggers.hxx>
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 #include <PropertyMapHelper.hxx>
+#endif
+
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
 #endif
 
 namespace writerfilter {
@@ -114,7 +120,7 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
             dmapper_logger->chars(aOUStr);
             dmapper_logger->endElement("entry");
 
-            table::BorderLine aLine;
+            table::BorderLine2 aLine;
             sal_Int32 nColor;
             if ( aMapIter->second >>= aLine )
             {
@@ -122,17 +128,17 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
                 dmapper_logger->attribute("color", aLine.Color);
                 dmapper_logger->attribute("inner", aLine.InnerLineWidth);
                 dmapper_logger->attribute("outer", aLine.OuterLineWidth);
-                dmapper_logger->endElement("borderline");
+                dmapper_logger->endElement();
             }
             else if ( aMapIter->second >>= nColor )
             {
                 dmapper_logger->startElement("color");
                 dmapper_logger->attribute("number", nColor);
-                dmapper_logger->endElement("color");
+                dmapper_logger->endElement();
             }
         }
 
-        dmapper_logger->endElement("properties");
+        dmapper_logger->endElement();
     }
 }
 #endif
@@ -162,13 +168,12 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
     dmapper_logger->attribute("rows", nRows);
 
     if (pProps.get() != NULL)
-        dmapper_logger->addTag(pProps->toTag());
+        pProps->dumpXml( dmapper_logger );
 #endif
 }
 
-/*-- 22.02.2008 10:18:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
     PropertyMapPtr pRet;
@@ -294,7 +299,7 @@ void lcl_debug_BorderLine(table::BorderLine & rLine)
     dmapper_logger->attribute("InnerLineWidth", rLine.InnerLineWidth);
     dmapper_logger->attribute("OuterLineWidth", rLine.OuterLineWidth);
     dmapper_logger->attribute("LineDistance", rLine.LineDistance);
-    dmapper_logger->endElement("BorderLine");
+    dmapper_logger->endElement();
 }
 
 void lcl_debug_TableBorder(table::TableBorder & rBorder)
@@ -314,7 +319,7 @@ void lcl_debug_TableBorder(table::TableBorder & rBorder)
     dmapper_logger->attribute("IsHorizontalLineValid", rBorder.IsHorizontalLineValid);
     dmapper_logger->attribute("Distance", rBorder.Distance);
     dmapper_logger->attribute("IsDistanceValid", rBorder.IsDistanceValid);
-    dmapper_logger->endElement("TableBorder");
+    dmapper_logger->endElement();
 }
 #endif
 
@@ -341,6 +346,29 @@ struct WRITERFILTER_DLLPRIVATE TableInfo
     }
 
 };
+
+namespace
+{
+
+bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const PropertyIds nId, TableInfo& rInfo, table::BorderLine2& rLine)
+{
+    PropertyMap::iterator aTblBorderIter = pTableProperties->find( PropertyDefinition(nId, false) );
+    if( aTblBorderIter != pTableProperties->end() )
+    {
+        OSL_VERIFY(aTblBorderIter->second >>= rLine);
+
+        rInfo.pTableBorders->Insert( nId, false, uno::makeAny( rLine ) );
+        PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( nId, false ) );
+        if ( pIt != rInfo.pTableDefaults->end( ) )
+            rInfo.pTableDefaults->erase( pIt );
+
+        return true;
+    }
+
+    return false;
+}
+
+}
 
 TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo)
 {
@@ -380,8 +408,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->startElement("mergedProps");
-                dmapper_logger->addTag(pMergedProperties->toTag());
-                dmapper_logger->endElement("mergedProps");
+                pMergedProperties->dumpXml( dmapper_logger );
+                dmapper_logger->endElement();
 #endif
 
                 m_aTableProperties->insert( pMergedProperties );
@@ -389,8 +417,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->startElement("TableProperties");
-                dmapper_logger->addTag(m_aTableProperties->toTag());
-                dmapper_logger->endElement("TableProperties");
+                m_aTableProperties->dumpXml( dmapper_logger );
+                dmapper_logger->endElement();
 #endif
             }
         }
@@ -400,8 +428,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
         dmapper_logger->startElement("TableDefaults");
-        dmapper_logger->addTag(rInfo.pTableDefaults->toTag());
-        dmapper_logger->endElement("TableDefaults");
+        rInfo.pTableDefaults->dumpXml( dmapper_logger );
+        dmapper_logger->endElement();
 #endif
 
         m_aTableProperties->getValue( TablePropertyMap::GAP_HALF, nGapHalf );
@@ -430,89 +458,41 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         //table border settings
         table::TableBorder aTableBorder;
+        table::BorderLine2 aBorderLine;
 
-        PropertyMap::iterator aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_TOP_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_TOP_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.TopLine;
-            aTableBorder.IsTopLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_TOP_BORDER, false,
-                                        uno::makeAny( aTableBorder.TopLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_TOP_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.TopLine = aBorderLine;
+            aTableBorder.IsTopLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_BOTTOM_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_BOTTOM_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.BottomLine;
-            aTableBorder.IsBottomLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_BOTTOM_BORDER, false,
-                                        uno::makeAny( aTableBorder.BottomLine));
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_BOTTOM_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.BottomLine = aBorderLine;
+            aTableBorder.IsBottomLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_LEFT_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_LEFT_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.LeftLine;
-            aTableBorder.IsLeftLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_LEFT_BORDER, false,
-                                        uno::makeAny( aTableBorder.LeftLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_LEFT_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.LeftLine = aBorderLine;
+            aTableBorder.IsLeftLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_RIGHT_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.RightLine;
-            aTableBorder.IsRightLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert( PROP_RIGHT_BORDER, false,
-                                        uno::makeAny( aTableBorder.RightLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( PROP_RIGHT_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.RightLine = aBorderLine;
+            aTableBorder.IsRightLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(META_PROP_HORIZONTAL_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_HORIZONTAL_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.HorizontalLine;
-            aTableBorder.IsHorizontalLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert
-                (META_PROP_HORIZONTAL_BORDER, false,
-                 uno::makeAny( aTableBorder.HorizontalLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( META_PROP_HORIZONTAL_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.HorizontalLine = aBorderLine;
+            aTableBorder.IsHorizontalLineValid = sal_True;
         }
-        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(META_PROP_VERTICAL_BORDER, false) );
-        if( aTblBorderIter != m_aTableProperties->end() )
+        if (lcl_extractTableBorderProperty(m_aTableProperties, META_PROP_VERTICAL_BORDER, rInfo, aBorderLine))
         {
-            aTblBorderIter->second >>= aTableBorder.VerticalLine;
-            aTableBorder.IsVerticalLineValid = true;
-            m_aTableProperties->erase( aTblBorderIter );
-
-            rInfo.pTableBorders->Insert
-                (META_PROP_VERTICAL_BORDER, false,
-                 uno::makeAny( aTableBorder.VerticalLine ) );
-            PropertyMap::iterator pIt = rInfo.pTableDefaults->find( PropertyDefinition( META_PROP_VERTICAL_BORDER, false ) );
-            if ( pIt != rInfo.pTableDefaults->end( ) )
-                rInfo.pTableDefaults->erase( pIt );
+            aTableBorder.VerticalLine = aBorderLine;
+            aTableBorder.IsVerticalLineValid = sal_True;
         }
+
         aTableBorder.Distance = 0;
-        aTableBorder.IsDistanceValid = false;
+        aTableBorder.IsDistanceValid = sal_False;
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER, false, uno::makeAny( aTableBorder ) );
 
@@ -536,19 +516,12 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if( aRepeatIter == m_aTableProperties->end() )
             m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, false, uno::makeAny( (sal_Int32)0 ));
 
-        // Remove the PROP_HEADER_ROW_COUNT from the table default to avoid
-        // propagating it to the cells
-        PropertyMap::iterator aDefaultRepeatIt =
-        rInfo.pTableDefaults->find( PropertyDefinition( PROP_HEADER_ROW_COUNT, false ) );
-        if ( aDefaultRepeatIt != rInfo.pTableDefaults->end( ) )
-            rInfo.pTableDefaults->erase( aDefaultRepeatIt );
-
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
         dmapper_logger->startElement("debug.tableprops");
-        dmapper_logger->addTag(m_aTableProperties->toTag());
-        dmapper_logger->endElement("debug.tableprops");
+        m_aTableProperties->dumpXml( dmapper_logger );
+        dmapper_logger->endElement();
 #endif
 
     }
@@ -564,6 +537,13 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
     CellPropertyValuesSeq_t aCellProperties( m_aCellProperties.size() );
 
+    if ( !m_aCellProperties.size() )
+    {
+        #ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->endElement();
+        #endif
+        return aCellProperties;
+    }
     // std::vector< std::vector<PropertyMapPtr> > m_aCellProperties
     PropertyMapVector2::const_iterator aRowOfCellsIterator = m_aCellProperties.begin();
     PropertyMapVector2::const_iterator aRowOfCellsIteratorEnd = m_aCellProperties.end();
@@ -633,6 +613,13 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     pAllCellProps->insert( pStyleProps );
                 }
 
+                // Remove properties from style/row that aren't allowed in cells
+                const PropertyMap::iterator aDefaultRepeatIt =
+                    pAllCellProps->find(
+                        PropertyDefinition( PROP_HEADER_ROW_COUNT, false ) );
+                if ( aDefaultRepeatIt != pAllCellProps->end( ) )
+                    pAllCellProps->erase( aDefaultRepeatIt );
+
                 // Then add the cell properties
                 pAllCellProps->insert( *aCellIterator );
                 aCellIterator->get( )->swap( *pAllCellProps.get( ) );
@@ -671,7 +658,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
                 pSingleCellProperties[nCell] = aCellIterator->get()->GetPropertyValues();
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-                dmapper_logger->endElement("cell");
+                dmapper_logger->endElement();
 #endif
             }
             ++nCell;
@@ -705,7 +692,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
     }
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-    dmapper_logger->endElement("getCellProperties");
+    dmapper_logger->endElement();
 #endif
 
     return aCellProperties;
@@ -734,19 +721,19 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-            dmapper_logger->addTag((*aRowIter)->toTag());
-            dmapper_logger->addTag(lcl_PropertyValuesToTag(aRowProperties[nRow]));
+            ((*aRowIter)->dumpXml( dmapper_logger ));
+            lcl_DumpPropertyValues(dmapper_logger, aRowProperties[nRow]);
 #endif
         }
         ++nRow;
         ++aRowIter;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-        dmapper_logger->endElement("rowProps.row");
+        dmapper_logger->endElement();
 #endif
     }
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-    dmapper_logger->endElement("getRowProperties");
+    dmapper_logger->endElement();
 #endif
 
     return aRowProperties;
@@ -767,7 +754,7 @@ void DomainMapperTableHandler::endTable()
     RowPropertyValuesSeq_t aRowProperties = endTableGetRowProperties();
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-    dmapper_logger->addTag(lcl_PropertyValueSeqToTag(aRowProperties));
+    lcl_DumpPropertyValueSeq(dmapper_logger, aRowProperties);
 #endif
 
     if (m_pTableSeq->getLength() > 0)
@@ -787,20 +774,20 @@ void DomainMapperTableHandler::endTable()
 
             m_xTableRange = xTable->getAnchor( );
         }
-        catch (lang::IllegalArgumentException e)
+        catch (lang::IllegalArgumentException)
         {
             (void) e;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->chars("failed to import table!");
 #endif
         }
-        catch ( uno::Exception e )
+        catch ( uno::Exception &e )
         {
             (void) e;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->startElement("exception");
             dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));
-            dmapper_logger->endElement("exeception");
+            dmapper_logger->endElement();
 #endif
         }
     }
@@ -810,8 +797,8 @@ void DomainMapperTableHandler::endTable()
     m_aRowProperties.clear();
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-    dmapper_logger->endElement("tablehandler.endTable");
-    dmapper_logger->endElement("tablehandler.table");
+    dmapper_logger->endElement();
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -825,7 +812,7 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
     dmapper_logger->startElement("table.row");
     dmapper_logger->attribute("cells", nCells);
     if (pProps != NULL)
-        dmapper_logger->addTag(pProps->toTag());
+        pProps->dumpXml(dmapper_logger);
 #endif
 
     m_pRowSeq = RowSequencePointer_t(new RowSequence_t(nCells));
@@ -838,7 +825,7 @@ void DomainMapperTableHandler::endRow()
     ++m_nRowIndex;
     m_nCellIndex = 0;
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
-    dmapper_logger->endElement("table.row");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -860,14 +847,11 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
     dmapper_logger->startElement("table.cell");
     dmapper_logger->startElement("table.cell.start");
     dmapper_logger->chars(toString(start));
-    dmapper_logger->endElement("table.cell.start");
+    dmapper_logger->endElement();
     lcl_printProperties( pProps );
 #endif
 
     //add a new 'row' of properties
-//    if( m_pCellProperties.size() <= sal::static_int_cast< sal_uInt32, sal_Int32>(m_nRowIndex) )
-//        m_pCellProperties.push_back( RowProperties_t() );
-//    m_pCellProperties[m_nRowIndex].push_back( pProps );
     m_pCellSeq = CellSequencePointer_t(new CellSequence_t(2));
     if (!start.get())
         return;
@@ -879,8 +863,8 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("table.cell.end");
     dmapper_logger->chars(toString(end));
-    dmapper_logger->endElement("table.cell.end");
-    dmapper_logger->endElement("table.cell");
+    dmapper_logger->endElement();
+    dmapper_logger->endElement();
 #endif
 
     if (!end.get())
@@ -891,3 +875,5 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

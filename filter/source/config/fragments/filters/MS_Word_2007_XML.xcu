@@ -1,10 +1,10 @@
     <node oor:name="MS Word 2007 XML" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.WriterFilter</value></prop>
         <prop oor:name="UserData"><value>OXML</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Microsoft Word 2007 XML</value>
+            <value xml:lang="x-default">Microsoft Word 2007/2010 XML</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MS_Word_2007</value></prop>

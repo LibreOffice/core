@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@ public:
     /** Final processing after import of the drawing fragment. */
     void                finalizeFragmentImport();
 
-    /** Returns true, if this contaikner does not contain any shapes. */
+    /** Returns true, if this container does not contain any shapes. */
     inline bool         empty() const { return maShapes.empty(); }
 
     /** Returns the shape template with the passed identifier.
@@ -98,6 +99,8 @@ public:
     void                convertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
+
+    inline void                clearShapes( ) { maShapes.clear( ); }
 
 private:
     typedef RefVector< ShapeType >                  ShapeTypeVector;
@@ -140,3 +143,5 @@ const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

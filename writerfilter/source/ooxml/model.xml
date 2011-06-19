@@ -6530,16 +6530,10 @@
           </element>
         </choice>
       </define>
-      <define name="CT_PositionOffset">
-        <ref name="ST_PositionOffset"/>
-      </define>
       <define name="ST_PositionOffset">
         <data type="int">
           <xs:documentation>Absolute Position Offset Value</xs:documentation>
         </data>
-      </define>
-      <define name="CT_AlignH">
-        <ref name="ST_AlignH"/>
       </define>
       <define name="ST_AlignH">
         <list>
@@ -6584,19 +6578,16 @@
       <define name="CT_PosH">
         <choice>
           <element name="align">
-            <ref name="CT_AlignH"/>
+            <ref name="ST_AlignH"/>
           </element>
           <element name="posOffset">
-            <ref name="CT_PositionOffset"/>
+            <ref name="ST_PositionOffset"/>
           </element>
         </choice>
         <attribute name="relativeFrom">
           <ref name="ST_RelFromH"/>
           <xs:documentation>Horizontal Position Relative Base</xs:documentation>
         </attribute>
-      </define>
-      <define name="CT_AlignV">
-        <ref name="ST_AlignV"/>
       </define>
       <define name="ST_AlignV">
         <list>
@@ -6641,10 +6632,10 @@
       <define name="CT_PosV">
         <choice>
           <element name="align">
-            <ref name="CT_AlignV"/>
+            <ref name="ST_AlignV"/>
           </element>
           <element name="posOffset">
-            <ref name="CT_PositionOffset"/>
+            <ref name="ST_PositionOffset"/>
           </element>
         </choice>
         <attribute name="relativeFrom">
@@ -6826,15 +6817,11 @@
       <element name="wrapThrough" tokenid="ooxml:EG_WrapType_wrapThrough"/>
       <element name="wrapTopAndBottom" tokenid="ooxml:EG_WrapType_wrapTopAndBottom"/>
     </resource>
-    <resource name="CT_PositionOffset" resource="Value" tag="shape"/>
-    <resource name="ST_PositionOffset" resource="Integer" generated="yes"/>
-    <resource name="CT_AlignH" resource="Value" tag="shape"/>
-    <resource name="ST_AlignH" resource="List" generated="yes" tag="shape">
-      <value name="left" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_left">left</value>
-      <value name="right" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_right">right</value>
-      <value name="center" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_center">center</value>
-      <value name="inside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_inside">inside</value>
-      <value name="outside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignH_outside">outside</value>
+    <resource name="ST_PositionOffset" resource="Value">
+      <action name="characters" action="positionOffset"/>
+    </resource>
+    <resource name="ST_AlignH" resource="Value">
+      <action name="characters" action="alignH"/>
     </resource>
     <resource name="ST_RelFromH" resource="List" generated="yes">
       <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_margin">margin</value>
@@ -6851,13 +6838,8 @@
       <element name="posOffset" tokenid="ooxml:CT_PosH_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosH_relativeFrom"/>
     </resource>
-    <resource name="CT_AlignV" resource="Value" tag="shape"/>
-    <resource name="ST_AlignV" resource="List" generated="yes">
-      <value name="top" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_top">top</value>
-      <value name="bottom" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_bottom">bottom</value>
-      <value name="center" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_center">center</value>
-      <value name="inside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_inside">inside</value>
-      <value name="outside" tokenid="ooxml:Value_wordprocessingDrawing_ST_AlignV_outside">outside</value>
+    <resource name="ST_AlignV" resource="Value">
+      <action name="characters" action="alignV"/>
     </resource>
     <resource name="ST_RelFromV" resource="List" generated="yes">
       <value name="margin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_margin">margin</value>
@@ -8013,9 +7995,13 @@
         <list>
           <xs:documentation>Justification</xs:documentation>
           <choice>
-            <!-- Left Justification -->
+            <!-- Align To Leading Edge -->
+            <value>start</value>
+            <!-- Align To Trailing Edge -->
+            <value>end</value>
+            <!-- Left Justification (ecma) -->
             <value>left</value>
-            <!-- Right -->
+            <!-- Right (ecma) -->
             <value>right</value>
             <!-- Center (Equation) -->
             <value>center</value>
@@ -8306,6 +8292,8 @@
       <attribute name="val" tokenid="ooxml:CT_Style_val" action="setValue"/>
     </resource>
     <resource name="ST_Jc" resource="List" generated="yes">
+      <value name="start" tokenid="ooxml:Value_math_ST_Jc_start">left</value>
+      <value name="end" tokenid="ooxml:Value_math_ST_Jc_end">right</value>
       <value name="left" tokenid="ooxml:Value_math_ST_Jc_left">left</value>
       <value name="right" tokenid="ooxml:Value_math_ST_Jc_right">right</value>
       <value name="center" tokenid="ooxml:Value_math_ST_Jc_center">center</value>
@@ -13726,11 +13714,15 @@
           <choice>
             <!-- No Tab Stop -->
             <value>clear</value>
-            <!-- Left Tab -->
+            <!-- Leading Tab -->
+            <value>start</value>
+            <!-- Left Tab (ecma) -->
             <value>left</value>
             <!-- Centered Tab -->
             <value>center</value>
-            <!-- Right Tab -->
+            <!-- Trailing Tab -->
+            <value>end</value>
+            <!-- Right Tab (ecma) -->
             <value>right</value>
             <!-- Decimal Tab -->
             <value>decimal</value>
@@ -13841,6 +13833,30 @@
       </define>
       <define name="CT_Ind">
         <optional>
+          <attribute name="end">
+            <ref name="ST_SignedTwipsMeasure"/>
+            <xs:documentation>Left Indentation</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endChars">
+            <ref name="ST_DecimalNumber"/>
+            <xs:documentation>Left Indentation in Character Units</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="start">
+            <ref name="ST_SignedTwipsMeasure"/>
+            <xs:documentation>Left Indentation</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startChars">
+            <ref name="ST_DecimalNumber"/>
+            <xs:documentation>Left Indentation in Character Units</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
           <attribute name="left">
             <ref name="ST_SignedTwipsMeasure"/>
             <xs:documentation>Left Indentation</xs:documentation>
@@ -13893,11 +13909,15 @@
         <list>
           <xs:documentation>Horizontal Alignment Type</xs:documentation>
           <choice>
-            <!-- Align Left -->
+            <!-- Align To Leading Edge -->
+            <value>start</value>
+            <!-- Align To Trailing Edge -->
+            <value>end</value>
+            <!-- Align Left (ecma) -->
             <value>left</value>
             <!-- Align Center -->
             <value>center</value>
-            <!-- Align Right -->
+            <!-- Align Right (ecma) -->
             <value>right</value>
             <!-- Justified -->
             <value>both</value>
@@ -15253,7 +15273,7 @@
       <define name="CT_FFDDList">
         <optional>
           <element name="result">
-            <ref name="CT_DecimalNumber"/>
+            <ref name="CT_String"/>
           </element>
         </optional>
         <optional>
@@ -17475,12 +17495,22 @@
           </element>
         </optional>
         <optional>
+          <element name="start">
+            <ref name="CT_Border"/>
+          </element>
+        </optional>
+        <optional>
           <element name="left">
             <ref name="CT_Border"/>
           </element>
         </optional>
         <optional>
           <element name="bottom">
+            <ref name="CT_Border"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="end">
             <ref name="CT_Border"/>
           </element>
         </optional>
@@ -17517,6 +17547,11 @@
           </element>
         </optional>
         <optional>
+          <element name="start">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
+        <optional>
           <element name="left">
             <ref name="CT_TblWidth"/>
           </element>
@@ -17528,6 +17563,11 @@
         </optional>
         <optional>
           <element name="right">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="end">
             <ref name="CT_TblWidth"/>
           </element>
         </optional>
@@ -17861,6 +17901,11 @@
           </element>
         </optional>
         <optional>
+          <element name="start">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
+        <optional>
           <element name="left">
             <ref name="CT_TblWidth"/>
           </element>
@@ -17875,10 +17920,20 @@
             <ref name="CT_TblWidth"/>
           </element>
         </optional>
+        <optional>
+          <element name="end">
+            <ref name="CT_TblWidth"/>
+          </element>
+        </optional>
       </define>
       <define name="CT_TblBorders">
         <optional>
           <element name="top">
+            <ref name="CT_Border"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="start">
             <ref name="CT_Border"/>
           </element>
         </optional>
@@ -17889,6 +17944,11 @@
         </optional>
         <optional>
           <element name="bottom">
+            <ref name="CT_Border"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="end">
             <ref name="CT_Border"/>
           </element>
         </optional>
@@ -18133,13 +18193,13 @@
           </attribute>
         </optional>
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID Reference</xs:documentation>
         </attribute>
       </define>
       <define name="CT_FtnEdnSepRef">
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID</xs:documentation>
         </attribute>
       </define>
@@ -18154,7 +18214,7 @@
           </attribute>
         </optional>
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID</xs:documentation>
         </attribute>
       </define>
@@ -20348,7 +20408,12 @@
           </optional>
           <optional>
             <element name="charset">
-              <ref name="CT_UcharHexNumber"/>
+              <ref name="CT_Charset"/>
+            </element>
+          </optional>
+          <optional>
+            <element name="characterSet">
+              <ref name="CT_String"/>
             </element>
           </optional>
           <optional>
@@ -20403,6 +20468,18 @@
             <ref name="CT_Font"/>
           </element>
         </zeroOrMore>
+      </define>
+      <define name="CT_Charset">
+        <optional>
+          <attribute name="val">
+            <ref name="CT_UcharHexNumber"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="characterSet">
+            <ref name="ST_String"/>
+          </attribute>
+        </optional>
       </define>
       <define name="CT_DivBdr">
         <optional>
@@ -21565,8 +21642,10 @@
     </resource>
     <resource name="ST_TabJc" resource="List">
       <value tokenid="ooxml:Value_ST_TabJc_clear">clear</value>
+      <value tokenid="0">start</value>
       <value tokenid="0">left</value>
       <value tokenid="1">center</value>
+      <value tokenid="2">end</value>
       <value tokenid="2">right</value>
       <value tokenid="3">decimal</value>
       <value tokenid="4">bar</value>
@@ -21601,19 +21680,26 @@
       <attribute name="lineRule" tokenid="ooxml:CT_Spacing_lineRule"/>
     </resource>
     <resource name="CT_Ind" resource="Properties" tag="paragraph">
-      <attribute name="left" tokenid="ooxml:CT_Ind_left"/>
-      <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
-      <attribute name="right" tokenid="ooxml:CT_Ind_right"/>
-      <attribute name="rightChars" tokenid="ooxml:CT_Ind_rightChars"/>
+      <attribute name="end" tokenid="ooxml:CT_Ind_end"/>
+      <attribute name="endChars" tokenid="ooxml:CT_Ind_endChars"/>
+      <attribute name="start" tokenid="ooxml:CT_Ind_start"/>
+      <attribute name="startChars" tokenid="ooxml:CT_Ind_startChars"/>
       <attribute name="hanging" tokenid="ooxml:CT_Ind_hanging"/>
       <attribute name="hangingChars" tokenid="ooxml:CT_Ind_hangingChars"/>
       <attribute name="firstLine" tokenid="ooxml:CT_Ind_firstLine"/>
       <attribute name="firstLineChars" tokenid="ooxml:CT_Ind_firstLineChars"/>
+      <!-- ECMA 1st version -->
+      <attribute name="left" tokenid="ooxml:CT_Ind_left"/>
+      <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
+      <attribute name="right" tokenid="ooxml:CT_Ind_right"/>
+      <attribute name="rightChars" tokenid="ooxml:CT_Ind_rightChars"/>
     </resource>
     <resource name="ST_Jc" resource="List">
       <value tokenid="0">left</value>
-      <value tokenid="1">center</value>
       <value tokenid="2">right</value>
+      <value tokenid="0">start</value>
+      <value tokenid="1">center</value>
+      <value tokenid="2">end</value>
       <value tokenid="3">both</value>
       <value tokenid="ooxml:Value_ST_Jc_mediumKashida">mediumKashida</value>
       <value tokenid="ooxml:Value_ST_Jc_distribute">distribute</value>
@@ -22619,6 +22705,17 @@
       <attribute name="element" tokenid="ooxml:CT_SmartTagRun_element"/>
     </resource>
     <resource name="EG_PContent" resource="Properties" tag="content">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtContentRun"/>
+    </resource>
+    <resource name="CT_SdtBlock" resource="Properties">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtContentBlock"/>
+    </resource>
+    <resource name="CT_SdtContentBlock" resource="Properties"/>
+    <resource name="EG_PContent" resource="Properties" tag="content">
       <element name="fldSimple" tokenid="ooxml:EG_PContent_fldSimple"/>
       <element name="hyperlink" tokenid="ooxml:EG_PContent_hyperlink"/>
       <element name="subDoc" tokenid="ooxml:EG_PContent_subDoc"/>
@@ -22659,8 +22756,10 @@
     <resource name="CT_TcBorders" resource="Properties" tag="table">
       <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TcBorders_top"/>
+      <element name="start" tokenid="ooxml:CT_TcBorders_start"/>
       <element name="left" tokenid="ooxml:CT_TcBorders_left"/>
       <element name="bottom" tokenid="ooxml:CT_TcBorders_bottom"/>
+      <element name="end" tokenid="ooxml:CT_TcBorders_end"/>
       <element name="right" tokenid="ooxml:CT_TcBorders_right"/>
       <element name="insideH" tokenid="ooxml:CT_TcBorders_insideH"/>
       <element name="insideV" tokenid="ooxml:CT_TcBorders_insideV"/>
@@ -22670,8 +22769,10 @@
     <resource name="CT_TcMar" resource="Properties" tag="table">
       <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TcMar_top"/>
+      <element name="start" tokenid="ooxml:CT_TcMar_start"/>
       <element name="left" tokenid="ooxml:CT_TcMar_left"/>
       <element name="bottom" tokenid="ooxml:CT_TcMar_bottom"/>
+      <element name="end" tokenid="ooxml:CT_TcMar_end"/>
       <element name="right" tokenid="ooxml:CT_TcMar_right"/>
     </resource>
     <resource name="ST_Merge" resource="List">
@@ -22760,15 +22861,19 @@
     </resource>
     <resource name="CT_TblCellMar" resource="Properties" tag="table">
       <element name="top" tokenid="ooxml:CT_TblCellMar_top"/>
+      <element name="start" tokenid="ooxml:CT_TblCellMar_start"/>
       <element name="left" tokenid="ooxml:CT_TblCellMar_left"/>
       <element name="bottom" tokenid="ooxml:CT_TblCellMar_bottom"/>
+      <element name="end" tokenid="ooxml:CT_TblCellMar_end"/>
       <element name="right" tokenid="ooxml:CT_TblCellMar_right"/>
     </resource>
     <resource name="CT_TblBorders" resource="Properties" tag="table">
       <kind name="table"/>
       <element name="top" tokenid="ooxml:CT_TblBorders_top"/>
+      <element name="start" tokenid="ooxml:CT_TblBorders_start"/>
       <element name="left" tokenid="ooxml:CT_TblBorders_left"/>
       <element name="bottom" tokenid="ooxml:CT_TblBorders_bottom"/>
+      <element name="end" tokenid="ooxml:CT_TblBorders_end"/>
       <element name="right" tokenid="ooxml:CT_TblBorders_right"/>
       <element name="insideH" tokenid="ooxml:CT_TblBorders_insideH"/>
       <element name="insideV" tokenid="ooxml:CT_TblBorders_insideV"/>
@@ -23285,6 +23390,10 @@
       <attribute name="val" tokenid="ooxml:CT_Panose_val" action="setValue"/>
       <action name="start" action="setDefaultHexValue"/>
     </resource>
+    <resource name="CT_Charset" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_Charset_val"/>
+      <attribute name="characterSet" tokenid="ooxml:CT_Charset_characterSet"/>
+    </resource>
     <resource name="ST_FontFamily" resource="List">
       <value tokenid="ooxml:Value_ST_FontFamily_decorative">decorative</value>
       <value tokenid="ooxml:Value_ST_FontFamily_modern">modern</value>
@@ -23321,6 +23430,7 @@
       <element name="altName" tokenid="ooxml:CT_Font_altName"/>
       <element name="panose1" tokenid="ooxml:CT_Font_panose1"/>
       <element name="charset" tokenid="ooxml:CT_Font_charset"/>
+      <element name="characterSet" tokenid="ooxml:CT_Font_characterSet"/>
       <element name="family" tokenid="ooxml:CT_Font_family"/>
       <element name="notTrueType" tokenid="ooxml:CT_Font_notTrueType"/>
       <element name="pitch" tokenid="ooxml:CT_Font_pitch"/>
@@ -23350,7 +23460,7 @@
       <action name="start" action="footnoteCont"/>
       <action name="start" action="endnoteSeparator"/>
       <action name="start" action="endnoteCont"/>
--->
+      -->
       <action name="end" action="endCharacterGroup"/>
       <action name="end" action="endParagraphGroup"/>
       <action name="end" action="endSectionGroup"/>

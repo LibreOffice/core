@@ -28,7 +28,6 @@ static const int EOF=0;
 %+
 //class istream;
 %*
-//#include <unistd.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -45,15 +44,6 @@ static const int EOF=0;
 
 #endif	/* __STDC__ */
 #endif	/* ! __cplusplus */
-
-#ifdef __TURBOC__
- #pragma warn -rch
- #pragma warn -use
-#include <io.h>
-#include <stdlib.h>
-#define YY_USE_CONST
-#define YY_USE_PROTOS
-#endif
 
 #ifdef YY_USE_CONST
 #define yyconst const

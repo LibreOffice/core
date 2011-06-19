@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -371,7 +372,7 @@ const ApiToken* FormulaFinalizer::findParameters( ParameterPosVector& rParams,
 
 void FormulaFinalizer::appendEmptyParameter( const FunctionInfo& rFuncInfo, size_t nParam )
 {
-    // remeber old size of the token array
+    // remember old size of the token array
     size_t nTokenArraySize = maTokens.size();
 
     switch( rFuncInfo.mnBiff12FuncId )
@@ -592,6 +593,7 @@ FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     mnMaxXlsRow( rParent.getAddressConverter().getMaxXlsAddress().Row ),
     mbRelativeAsOffset( false ),
     mb2dRefsAs3dRefs( false ),
+    mbSpecialTokens( false ),
     mbAllowNulChars( false )
 {
     // reserve enough space to make resize(), push_back() etc. cheap
@@ -605,19 +607,19 @@ FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
 
 ApiTokenSequence FormulaParserImpl::importOoxFormula( const CellAddress&, const OUString& )
 {
-    OSL_ENSURE( false, "FormulaParserImpl::importOoxFormula - not implemented" );
+    OSL_FAIL( "FormulaParserImpl::importOoxFormula - not implemented" );
     return ApiTokenSequence();
 }
 
 ApiTokenSequence FormulaParserImpl::importBiff12Formula( const CellAddress&, FormulaType, SequenceInputStream& )
 {
-    OSL_ENSURE( false, "FormulaParserImpl::importBiff12Formula - not implemented" );
+    OSL_FAIL( "FormulaParserImpl::importBiff12Formula - not implemented" );
     return ApiTokenSequence();
 }
 
 ApiTokenSequence FormulaParserImpl::importBiffFormula( const CellAddress&, FormulaType, BiffInputStream&, const sal_uInt16* )
 {
-    OSL_ENSURE( false, "FormulaParserImpl::importBiffFormula - not implemented" );
+    OSL_FAIL( "FormulaParserImpl::importBiffFormula - not implemented" );
     return ApiTokenSequence();
 }
 
@@ -1668,14 +1670,14 @@ bool OoxFormulaParserImpl::importArrayToken( SequenceInputStream& rStrm )
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::readString( rStrm, false );
                 break;
                 case BIFF_TOK_ARRAY_BOOL:
-                    appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
+                    appendRawToken( OPCODE_PUSH ) <<= (static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 ));
                 break;
                 case BIFF_TOK_ARRAY_ERROR:
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( rStrm.readuInt8() );
                     rStrm.skip( 3 );
                 break;
                 default:
-                    OSL_ENSURE( false, "OoxFormulaParserImpl::importArrayToken - unknown data type" );
+                    OSL_FAIL( "OoxFormulaParserImpl::importArrayToken - unknown data type" );
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( BIFF_ERR_NA );
             }
         }
@@ -2385,7 +2387,7 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
                         rStrm.readByteStringUC( false, getTextEncoding(), mbAllowNulChars );
                 break;
                 case BIFF_DATATYPE_BOOL:
-                    appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
+                    appendRawToken( OPCODE_PUSH ) <<= (static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 ));
                     rStrm.skip( 7 );
                 break;
                 case BIFF_DATATYPE_ERROR:
@@ -2393,7 +2395,7 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
                     rStrm.skip( 7 );
                 break;
                 default:
-                    OSL_ENSURE( false, "BiffFormulaParserImpl::importArrayToken - unknown data type" );
+                    OSL_FAIL( "BiffFormulaParserImpl::importArrayToken - unknown data type" );
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( BIFF_ERR_NA );
             }
         }
@@ -2974,3 +2976,5 @@ OUString FormulaParser::importMacroName( const OUString& rFormulaString )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

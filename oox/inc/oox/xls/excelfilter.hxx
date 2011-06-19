@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include "oox/core/binaryfilterbase.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/ole/vbaprojectfilter.hxx"
 
 namespace oox {
 namespace xls {
@@ -70,6 +72,8 @@ public:
     virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
+
+    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException );
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
@@ -117,3 +121,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

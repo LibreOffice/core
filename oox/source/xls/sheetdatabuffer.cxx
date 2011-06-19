@@ -545,11 +545,8 @@ void SheetDataBuffer::finalizeImport()
     // write default formatting of remaining row range
     writeXfIdRowRangeProperties( maXfIdRowRange );
 
-    // try to merge remaining inserted ranges
-    mergeXfIdRanges();
-    // write all formatting
-    for( XfIdRangeMap::const_iterator aIt = maXfIdRanges.begin(), aEnd = maXfIdRanges.end(); aIt != aEnd; ++aIt )
-        writeXfIdRangeProperties( aIt->second );
+    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
+        writeXfIdRangeListProperties( aIt->first.first, aIt->first.second, aIt->second );
 
     // merge all cached merged ranges and update right/bottom cell borders
     for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
@@ -786,34 +783,49 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
 {
     if( (rModel.mnXfId >= 0) || (nNumFmtId >= 0) )
     {
-        // try to merge existing ranges and to write some formatting properties
-        if( !maXfIdRanges.empty() )
+        ApiCellRangeList::reverse_iterator aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();
+        ApiCellRangeList::reverse_iterator aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rend();
+        /* The xlsx sheet data contains row wise information.
+         * It is sufficient to check if the row range size is one
+         */
+        if(     aIt                 != aItEnd &&
+                aIt->Sheet          == rModel.maCellAddr.Sheet &&
+                aIt->StartRow       == aIt->EndRow &&
+                aIt->StartRow       == rModel.maCellAddr.Row &&
+                (aIt->EndColumn+1)  == rModel.maCellAddr.Column )
         {
-            // get row index of last inserted cell
-            sal_Int32 nLastRow = maXfIdRanges.rbegin()->second.maRange.StartRow;
-            // row changed - try to merge ranges of last row with existing ranges
-            if( rModel.maCellAddr.Row != nLastRow )
-            {
-                mergeXfIdRanges();
-                // write format properties of all ranges above last row and remove them
-                XfIdRangeMap::iterator aIt = maXfIdRanges.begin(), aEnd = maXfIdRanges.end();
-                while( aIt != aEnd )
-                {
-                    // check that range cannot be merged with current row, and that range is not in cached row range
-                    if( (aIt->second.maRange.EndRow < nLastRow) && !maXfIdRowRange.intersects( aIt->second.maRange ) )
-                    {
-                        writeXfIdRangeProperties( aIt->second );
-                        maXfIdRanges.erase( aIt++ );
-                    }
-                    else
-                        ++aIt;
-                }
-            }
+            aIt->EndColumn++;       // Expand Column
+        }
+        else
+        {
+            maXfIdRangeLists[ XfIdNumFmtKey (rModel.mnXfId, nNumFmtId ) ].push_back(
+                              CellRangeAddress( rModel.maCellAddr.Sheet, rModel.maCellAddr.Column, rModel.maCellAddr.Row,
+                              rModel.maCellAddr.Column, rModel.maCellAddr.Row ) );
         }
 
-        // try to expand last existing range, or create new range entry
-        if( maXfIdRanges.empty() || !maXfIdRanges.rbegin()->second.tryExpand( rModel.maCellAddr, rModel.mnXfId, nNumFmtId ) )
-            maXfIdRanges[ BinAddress( rModel.maCellAddr ) ].set( rModel.maCellAddr, rModel.mnXfId, nNumFmtId );
+        aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();
+        aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rend();
+        ApiCellRangeList::reverse_iterator aItM = aIt+1;
+        while( aItM != aItEnd )
+        {
+            if( aIt->Sheet == aItM->Sheet )
+            {
+                /* Try to merge this with the previous range */
+                if( aIt->StartRow == (aItM->EndRow + 1) &&
+                        aIt->StartColumn == aItM->StartColumn &&
+                        aIt->EndColumn == aItM->EndColumn)
+                {
+                    aItM->EndRow = aIt->EndRow;
+                    maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].pop_back();
+                    break;
+                }
+                else if( aIt->StartRow > aItM->EndRow + 1 )
+                    break; // Un-necessary to check with any other rows
+            }
+            else
+                break;
+            ++aItM;
+        }
 
         // update merged ranges for 'center across selection' and 'fill'
         if( const Xf* pXf = getStyles().getCellXf( rModel.mnXfId ).get() )
@@ -846,36 +858,16 @@ void SheetDataBuffer::writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowR
     }
 }
 
-void SheetDataBuffer::writeXfIdRangeProperties( const XfIdRange& rXfIdRange ) const
+void SheetDataBuffer::writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const
 {
     StylesBuffer& rStyles = getStyles();
     PropertyMap aPropMap;
-    if( rXfIdRange.mnXfId >= 0 )
-        rStyles.writeCellXfToPropertyMap( aPropMap, rXfIdRange.mnXfId );
-    if( rXfIdRange.mnNumFmtId >= 0 )
-        rStyles.writeNumFmtToPropertyMap( aPropMap, rXfIdRange.mnNumFmtId );
-    PropertySet aPropSet( getCellRange( rXfIdRange.maRange ) );
+    if( nXfId >= 0 )
+        rStyles.writeCellXfToPropertyMap( aPropMap, nXfId );
+    if( nNumFmtId >= 0 )
+        rStyles.writeNumFmtToPropertyMap( aPropMap, nNumFmtId );
+    PropertySet aPropSet( getCellRangeList( rRanges ) );
     aPropSet.setProperties( aPropMap );
-}
-
-void SheetDataBuffer::mergeXfIdRanges()
-{
-    if( !maXfIdRanges.empty() )
-    {
-        // get row index of last range
-        sal_Int32 nLastRow = maXfIdRanges.rbegin()->second.maRange.StartRow;
-        // process all ranges located in the same row of the last range
-        XfIdRangeMap::iterator aMergeIt = maXfIdRanges.end();
-        while( (aMergeIt != maXfIdRanges.begin()) && ((--aMergeIt)->second.maRange.StartRow == nLastRow) )
-        {
-            const XfIdRange& rMergeXfIdRange = aMergeIt->second;
-            // try to find a range that can be merged with rMergeRange
-            bool bFound = false;
-            for( XfIdRangeMap::iterator aIt = maXfIdRanges.begin(); !bFound && (aIt != aMergeIt); ++aIt )
-                if( (bFound = aIt->second.tryMerge( rMergeXfIdRange )) == true )
-                    maXfIdRanges.erase( aMergeIt++ );
-        }
-    }
 }
 
 void SheetDataBuffer::finalizeMergedRange( const CellRangeAddress& rRange )

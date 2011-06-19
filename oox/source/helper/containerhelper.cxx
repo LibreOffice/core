@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -205,7 +206,7 @@ OUString ContainerHelper::insertByUnusedName(
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "ContainerHelper::insertByUnusedName - cannot rename old object" );
+            OSL_FAIL( "ContainerHelper::insertByUnusedName - cannot rename old object" );
         }
     }
 
@@ -217,3 +218,5 @@ OUString ContainerHelper::insertByUnusedName(
 // ============================================================================
 
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

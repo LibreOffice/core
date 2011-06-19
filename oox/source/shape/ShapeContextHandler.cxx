@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -240,15 +241,19 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
 
     if (mxFilterBase.is() && xShapes.is())
     {
-        if (mpDrawing.get() != NULL)
+        if ( getContextHandler() == getDrawingShapeContext() )
         {
             mpDrawing->finalizeFragmentImport();
             if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().getFirstShape() )
+            {
                 xResult = pShape->convertAndInsert( xShapes );
+                mpDrawing->getShapes( ).clearShapes( );
+            }
         }
         else if (mpShape.get() != NULL)
         {
-            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes);
+            basegfx::B2DHomMatrix aTransformation;
+            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation);
             xResult.set(mpShape->getXShape());
             mxGraphicShapeContext.clear( );
         }
@@ -350,3 +355,5 @@ uno::Sequence< ::rtl::OUString > ShapeContextHandler::getSupportedServiceNames()
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

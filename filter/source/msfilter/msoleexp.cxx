@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ sal_Bool UseOldMSExport()
         }
     }
 
-    OSL_ENSURE( sal_False, "Could not get access to configuration entry!\n" );
+    OSL_FAIL( "Could not get access to configuration entry!\n" );
     return sal_False;
 }
 
@@ -213,13 +214,18 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             //TODO/LATER: a "StoreTo" method at embedded object would be nice
             uno::Sequence < beans::PropertyValue > aSeq(2);
             SvStream* pStream = new SvMemoryStream;
-            aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+            aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ));
             ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
             aSeq[0].Value <<= xOut;
             aSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
             aSeq[1].Value <<= ::rtl::OUString( pExpFilter->GetName() );
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
-            xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+        try
+        {
+            xStor->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" )), aSeq );
+        }
+        catch( uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
+
             SotStorageRef xOLEStor = new SotStorage( pStream, sal_True );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
@@ -227,7 +233,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         catch( uno::Exception& )
         {
             // TODO/LATER: Error handling
-            DBG_ERROR( "The object could not be exported!" );
+            OSL_FAIL( "The object could not be exported!" );
         }
     }
     else if( aOwnGlobalName != SvGlobalName() )
@@ -262,23 +268,18 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     }
                     catch( embed::NoVisualAreaSizeException& )
                     {
-                        OSL_ENSURE( sal_False, "Could not get visual area size!\n" );
+                        OSL_FAIL( "Could not get visual area size!\n" );
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "Unexpected exception while getting visual area size!\n" );
+                        OSL_FAIL( "Unexpected exception while getting visual area size!\n" );
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }
 
-                    //Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
                     sal_Int32 pRect[4];
-                    //pRect[0] = aVisArea.Left();
-                    //pRect[1] = aVisArea.Right();
-                    //pRect[2] = aVisArea.Top();
-                    //pRect[3] = aVisArea.Bottom();
                     pRect[0] = 0;
                     pRect[1] = aSize.Width;
                     pRect[2] = 0;
@@ -313,23 +314,23 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                         //TODO/LATER: is stream instead of outputstream a better choice?!
                         //TODO/LATER: a "StoreTo" method at embedded object would be nice
                         uno::Sequence < beans::PropertyValue > aSeq(1);
-                        aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ));
                         ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
                         aSeq[0].Value <<= xOut;
                         uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
-                        xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+                        xStor->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" )), aSeq );
                     }
                     catch( uno::Exception& )
                     {
                         // TODO/LATER: Error handling
-                        DBG_ERROR( "The object could not be exported!" );
+                        OSL_FAIL( "The object could not be exported!" );
                     }
                 }
             }
         }
         else
         {
-            DBG_ERROR("Own binary format inside own container document!");
+            OSL_FAIL("Own binary format inside own container document!");
         }
     }
     else
@@ -342,7 +343,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         if ( xPers.is() )
         {
             uno::Sequence < beans::PropertyValue > aEmptySeq;
-            ::rtl::OUString aTempName(::rtl::OUString::createFromAscii("bla"));
+            ::rtl::OUString aTempName( RTL_CONSTASCII_USTRINGPARAM( "bla" ));
             try
             {
                 xPers->storeToEntry( xStor, aTempName, aEmptySeq, aEmptySeq );
@@ -362,3 +363,4 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

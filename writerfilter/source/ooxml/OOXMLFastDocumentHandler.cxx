@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ using namespace ::std;
 
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler
 (uno::Reference< uno::XComponentContext > const & context)
-: m_xContext(context)
+: m_xContext(context), mpStream(0), mpDocument(0)
 {}
 
 // ::com::sun::star::xml::sax::XFastContextHandler:
@@ -84,7 +85,7 @@ OOXMLFastDocumentHandler::getContextHandler() const
         (new OOXMLFastContextHandler(m_xContext));
         mpContextHandler->setStream(mpStream);
         mpContextHandler->setDocument(mpDocument);
-        mpContextHandler->setXNoteId(msXNoteId);
+        mpContextHandler->setXNoteId(mnXNoteId);
         mpContextHandler->setForwardEvents(true);
     }
 
@@ -150,9 +151,9 @@ void OOXMLFastDocumentHandler::setDocument(OOXMLDocument * pDocument)
     mpDocument = pDocument;
 }
 
-void OOXMLFastDocumentHandler::setXNoteId(const ::rtl::OUString & rXNoteId)
+void OOXMLFastDocumentHandler::setXNoteId(const sal_Int32 nXNoteId)
 {
-    msXNoteId = rXNoteId;
+    mnXNoteId = nXNoteId;
 }
 
 void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
@@ -161,3 +162,5 @@ void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,7 +157,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mnDefaultLinkAction         ( 0 ),
     mbConvertOOoTargetToPDFTarget( sal_False ),
     mbExportBmkToDest           ( sal_False )
-//<---
 {
 }
 
@@ -193,6 +193,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
             if ( nPageCount )
             {
                 sal_Int32 nSel = aMultiSelection.FirstSelected();
+                sal_Int32 nCurrentPage(0);
                 while ( nSel != sal_Int32(SFX_ENDOFSELECTION) )
                 {
                     Sequence< PropertyValue >   aRenderer( rRenderable->getRenderer( nSel - 1, rSelection, rRenderOptions ) );
@@ -204,7 +205,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                             aRenderer[ nProperty].Value >>= aPageSize;
                     }
 
-                    pPDFExtOutDevData->SetCurrentPageNumber( nSel - 1 );
+                    pPDFExtOutDevData->SetCurrentPageNumber( nCurrentPage );
 
                     GDIMetaFile                 aMtf;
                     const MapMode               aMapMode( MAP_100TH_MM );
@@ -218,20 +219,19 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     aMtf.SetPrefMapMode( aMapMode );
                     aMtf.Record( pOut );
 
-                    // --> FME 2004-10-08 #i35176#
+                    // #i35176#
                     // IsLastPage property.
                     const sal_Int32 nCurrentRenderer = nSel - 1;
                     nSel = aMultiSelection.NextSelected();
                     if ( pLastPage && sal_Int32(SFX_ENDOFSELECTION) == nSel )
                         *pLastPage <<= sal_True;
-                    // <--
 
                     rRenderable->render( nCurrentRenderer, rSelection, rRenderOptions );
 
                     aMtf.Stop();
                     aMtf.WindStart();
 
-                    if( aMtf.GetActionCount() &&
+                    if( aMtf.GetActionSize() &&
                              ( !mbSkipEmptyPages || aPageSize.Width || aPageSize.Height ) )
                         bRet = ImplExportPage( rPDFWriter, *pPDFExtOutDevData, aMtf ) || bRet;
 
@@ -243,6 +243,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                         *pFirstPage <<= sal_False;
 
                     ++mnProgressValue;
+                    ++nCurrentPage;
                 }
             }
             else
@@ -347,26 +348,26 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                         // find the related type name
                         OUString aTypeName;
                         Reference< container::XNameAccess > xFilterFactory(
-                            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
                             uno::UNO_QUERY );
 
                         Sequence< beans::PropertyValue > aFilterData;
                         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
                         for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                            if ( aFilterData[nInd].Name.equalsAscii( "Type" ) )
+                            if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                                 aFilterData[nInd].Value >>= aTypeName;
 
                         if ( aTypeName.getLength() )
                         {
                             // find the mediatype
                             Reference< container::XNameAccess > xTypeDetection(
-                                xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
                                 UNO_QUERY );
 
                             Sequence< beans::PropertyValue > aTypeData;
                             xTypeDetection->getByName( aTypeName ) >>= aTypeData;
                             for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
-                                if ( aTypeData[nInd].Name.equalsAscii( "MediaType" ) )
+                                if ( aTypeData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
                                     aTypeData[nInd].Value >>= aDocMimetype;
                         }
                     }
@@ -413,15 +414,15 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             Reference< XServiceInfo > xInfo( mxSrcDoc, UNO_QUERY );
             if ( xInfo.is() )
             {
-                if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.presentation.PresentationDocument" ) ) )
+                if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" )) ) )
                     aCreator.AppendAscii( "Impress" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.drawing.DrawingDocument" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" )) ) )
                     aCreator.AppendAscii( "Draw" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.text.TextDocument" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" )) ) )
                     aCreator.AppendAscii( "Writer" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" )) ) )
                     aCreator.AppendAscii( "Calc" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.formula.FormulaProperties" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" )) ) )
                     aCreator.AppendAscii( "Math" );
             }
 
@@ -439,14 +440,13 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             }
             // getting the string for the producer
             String aProducer;
-            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-            if ( pMgr )
             {
-                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                ::utl::ConfigManager& cMgr = ::utl::ConfigManager::GetConfigManager();
+                Any aProductName = cMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 ::rtl::OUString sProductName;
                 aProductName >>= sProductName;
                 aProducer = sProductName;
-                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+                aProductName = cMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
                 aProductName >>= sProductName;
                 aProducer.AppendAscii(" ");
                 aProducer += String( sProductName );
@@ -552,7 +552,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                      rFilterData[ nData ].Value >>= mbConvertOOoTargetToPDFTarget;
                   else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ) )
                       rFilterData[ nData ].Value >>= mbExportBmkToDest;
-//<---
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ) )
                     rFilterData[ nData ].Value >>= mbExportBookmarks;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ) )
@@ -783,7 +782,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     //and remove the remote goto action forced on PDF file
                     aContext.ForcePDFAction = sal_False;
                 }
-//<---
             }
 // all context data set, time to create the printing device
             PDFWriter*          pPDFWriter = new PDFWriter( aContext, xEnc );
@@ -1093,7 +1091,7 @@ void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
     rWriter.Push( PUSH_ALL );
     rWriter.SetMapMode( MapMode( MAP_POINT ) );
     rWriter.SetFont( aFont );
-    rWriter.SetTextColor( COL_RED );
+    rWriter.SetTextColor( COL_LIGHTGREEN );
     Point aTextPoint;
     Rectangle aTextRect;
     if( rPageSize.Width() > rPageSize.Height() )
@@ -1118,3 +1116,4 @@ void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

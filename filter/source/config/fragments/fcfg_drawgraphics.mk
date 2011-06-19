@@ -55,6 +55,7 @@ F4_DRAWGRAPHICS = \
     SGV___StarDraw_2_0 \
     SVG___Scalable_Vector_Graphics \
     SVM___StarView_Metafile \
+    SVG___Scalable_Vector_Graphics \
     TGA___Truevision_TARGA \
     TIF___Tag_Image_File \
     WMF___MS_Windows_Metafile \

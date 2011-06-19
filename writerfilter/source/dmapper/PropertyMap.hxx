@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HXX_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <PropertyIds.hxx>
@@ -58,7 +57,7 @@ namespace com{namespace sun{namespace star{
         class XFootnote;
     }
     namespace table{
-        struct BorderLine;
+        struct BorderLine2;
     }
 }}}
 
@@ -73,9 +72,8 @@ enum BorderPosition
     BORDER_TOP,
     BORDER_BOTTOM
 };
-/*-- 15.06.2006 08:22:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct PropertyDefinition
 {
     PropertyIds eId;
@@ -134,13 +132,15 @@ public:
 
     virtual void insertTableProperties( const PropertyMap* );
 
-    virtual XMLTag::Pointer_t toTag() const;
+#ifdef DEBUG_DOMAINMAPPER
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
+#endif
+
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
 
-/*-- 24.07.2006 08:26:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class SectionPropertyMap : public PropertyMap
 {
     //--> debug
@@ -157,7 +157,7 @@ class SectionPropertyMap : public PropertyMap
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFirstPageStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFollowPageStyle;
 
-    ::com::sun::star::table::BorderLine*    m_pBorderLines[4];
+    ::com::sun::star::table::BorderLine2*   m_pBorderLines[4];
     sal_Int32                               m_nBorderDistances[4];
     sal_Int32                               m_nBorderParams;
 
@@ -233,7 +233,7 @@ public:
             const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
             bool bFirst );
 
-    void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine& rBorderLine );
+    void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine2& rBorderLine );
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 
     void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
@@ -281,9 +281,8 @@ public:
 };
 typedef boost::shared_ptr<SectionPropertyMap> SectionPropertyMapPtr;
 
-/*-- 28.12.2007 08:17:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class ParagraphProperties
 {
     bool                    m_bFrameMode;
@@ -383,7 +382,7 @@ public:
 
 };
 typedef boost::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
-/*-- 14.06.2007 12:12:34---------------------------------------------------
+/*-------------------------------------------------------------------------
     property map of a stylesheet
   -----------------------------------------------------------------------*/
 
@@ -393,7 +392,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
 {
     //special table style properties
-//    sal_Int32               mnCT_Spacing_after;
     sal_Int32               mnCT_Spacing_line;
     sal_Int32               mnCT_Spacing_lineRule;
 
@@ -405,7 +403,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
     sal_Int32               mnCT_TblWidth_w;
     sal_Int32               mnCT_TblWidth_type;
 
-//    bool                    mbCT_Spacing_afterSet;
     bool                    mbCT_Spacing_lineSet;
     bool                    mbCT_Spacing_lineRuleSet;
 
@@ -424,8 +421,6 @@ public:
     explicit StyleSheetPropertyMap();
     ~StyleSheetPropertyMap();
 
-//    void SetCT_Spacing_after(      sal_Int32 nSet )
-//        {mnCT_Spacing_after = nSet;    mbCT_Spacing_afterSet = true;        }
     void SetCT_Spacing_line(       sal_Int32 nSet )
         {mnCT_Spacing_line = nSet;     mbCT_Spacing_lineSet = true;         }
     void SetCT_Spacing_lineRule(   sal_Int32  nSet )
@@ -445,12 +440,6 @@ public:
     void SetCT_TblWidth_type( sal_Int32 nSet )
         {mnCT_TblWidth_type = nSet;    mbCT_TblWidth_typeSet = true; }
 
-//    bool GetCT_Spacing_after(   sal_Int32& rToFill) const
-//    {
-//        if( mbCT_Spacing_afterSet )
-//            rToFill = mnCT_Spacing_after;
-//        return mbCT_Spacing_afterSet;
-//    }
     bool GetCT_Spacing_line(    sal_Int32& rToFill) const
     {
         if( mbCT_Spacing_lineSet )
@@ -501,9 +490,8 @@ public:
             mnOutlineLevel = nLevel;
     }
 };
-/*-- 27.12.2007 12:38:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class ParagraphPropertyMap : public PropertyMap, public ParagraphProperties
 {
 public:
@@ -511,9 +499,8 @@ public:
     ~ParagraphPropertyMap();
 
 };
-/*-- 15.02.2008 16:06:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class TablePropertyMap : public PropertyMap
 {
 public:
@@ -554,3 +541,5 @@ typedef boost::shared_ptr<TablePropertyMap>  TablePropertyMapPtr;
 } //namespace dmapper
 } //namespace writerfilter
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false, "ExcelChartConverter::createDataSequence - cannot create data sequence" );
+            OSL_FAIL( "ExcelChartConverter::createDataSequence - cannot create data sequence" );
         }
     }
     return xDataSeq;
@@ -121,3 +122,5 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,10 +61,6 @@ SHL1LIBS	=	$(SLB)$/icgm.lib
 
 DEF1NAME=$(SHL1TARGET)
 
-.IF "$(GUI)"=="OS2"
-SHL1OBJS	=	$(SLO)$/class0.obj
-.ENDIF
-
 SHL1STDLIBS = \
             $(TKLIB)		\
             $(VCLLIB)		\

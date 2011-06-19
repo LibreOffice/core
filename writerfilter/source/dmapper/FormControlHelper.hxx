@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 
 #include <FFDataHandler.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include "FieldTypes.hxx"
 
@@ -47,7 +49,8 @@ public:
     ~FormControlHelper();
 
     bool insertControl(uno::Reference<text::XTextRange> xTextRange);
-
+    bool processField(uno::Reference<text::XFormField> xFormField);
+    bool hasFFDataHandler() const { return (m_pFFData != NULL); }
 private:
     FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;
@@ -56,9 +59,13 @@ private:
 
     bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
                         const ::rtl::OUString & rControlName);
+    bool createDropdown(uno::Reference<text::XTextRange> xTextRange,
+                        const ::rtl::OUString & rControlName);
 };
 
 }
 }
 
 #endif // INCLUDED_FORM_CONTROL_HELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include "oox/xls/richstring.hxx"
 #include "oox/xls/worksheethelper.hxx"
+#include <com/sun/star/awt/Rectangle.hpp>
 
 namespace oox {
 namespace xls {
@@ -40,10 +42,19 @@ struct CommentModel
 {
     ::com::sun::star::table::CellRangeAddress
                         maRange;            /// Position of the comment in the worksheet.
-    RichStringRef       mxText;             /// Formatted text of the comment (not used in BIFF8).
+    RichStringRef       mxText;             /// Formatted text of the comment.
     ::rtl::OUString     maAuthor;           /// Comment author (BIFF8 only).
-    sal_Int32           mnAuthorId;         /// Identifier of the comment's author (OOXML and BIFF12 only).
+    sal_Int32           mnAuthorId;         /// Identifier of the comment's author.
     sal_uInt16          mnObjId;            /// Drawing object identifier (BIFF8 only).
+    sal_Bool            mbAutoFill;         /// Auto Selection of comment object's fill style
+    sal_Bool            mbAutoScale;        /// Auto Scale comment text
+    sal_Bool            mbColHidden;        /// Comment cell's Column is Hidden
+    sal_Bool            mbLocked;           /// Comment changes Locked
+    sal_Bool            mbRowHidden;        /// Comment cell's Row is Hidden
+    sal_Int32           mnTHA;              /// Horizontal Alignment
+    sal_Int32           mnTVA;              /// Vertical Alignment
+    ::com::sun::star::awt::Rectangle
+                        maAnchor;           /// Anchor parameters
     bool                mbVisible;          /// True = comment is always shown (BIFF2-BIFF8 only).
 
     explicit            CommentModel();
@@ -58,6 +69,10 @@ public:
 
     /** Imports a cell comment from the passed attributes of the comment element. */
     void                importComment( const AttributeList& rAttribs );
+    /** Imports a cell comment Properties from the passed attributes of the comment element. */
+    void                importCommentPr( const AttributeList& rAttribs );
+    /** Imports the anchor points in CommentPr */
+    void                importAnchor( bool bFrom, sal_Int32 nWhich, const ::rtl::OUString &rChars );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
     void                importComment( SequenceInputStream& rStrm );
     /** Imports a cell comment from the passed stream of a NOTE record. */
@@ -112,3 +127,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

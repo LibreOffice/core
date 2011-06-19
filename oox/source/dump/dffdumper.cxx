@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -243,13 +244,13 @@ void DffStreamObject::dumpDffOpt()
             {
                 const ItemFormat& rItemFmt = aIt->second;
                 aName = rItemFmt.maItemName;
-                if( rItemFmt.maListName.equalsAscii( "binary" ) )
+                if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "binary" ) ) )
                     eType = PROPTYPE_BINARY;
-                else if( rItemFmt.maListName.equalsAscii( "string" ) )
+                else if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "string" ) ) )
                     eType = PROPTYPE_STRING;
-                else if( rItemFmt.maListName.equalsAscii( "blip" ) )
+                else if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "blip" ) ) )
                     eType = PROPTYPE_BLIP;
-                else if( rItemFmt.maListName.equalsAscii( "colorarray" ) )
+                else if( rItemFmt.maListName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "colorarray" ) ) )
                     eType = PROPTYPE_COLORARRAY;
             }
             aPropInfos.push_back( PropInfo( aName( "property-data" ), eType, nBaseId, nValue ) );
@@ -322,3 +323,5 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

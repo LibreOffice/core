@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -191,13 +192,13 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
          (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (aStr.size() == 0)
-        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
+        debug_logger->element( "unknown-qname" );
 #endif
 
     pHandler->newProperty(nId, pVal);
 
 #ifdef DEBUG_HELPER
-    debug_logger->endElement("newProperty-from-string");
+    debug_logger->endElement();
 #endif
 
 }
@@ -217,9 +218,9 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
     debug_logger->attribute("value", pVal->toString());
 
     if (aStr.size() == 0)
-        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
+        debug_logger->element("unknown-qname");
 
-    debug_logger->endElement("helper.newProperty-from-int");
+    debug_logger->endElement();
 #endif
 
     pHandler->newProperty(nId, pVal);
@@ -243,12 +244,14 @@ void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
      (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (aStr.size() == 0)
-        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
+        debug_logger->element("unknown-qname");
 
-    debug_logger->endElement("helper.mark");
+    debug_logger->endElement();
 #endif
 
     pHandler->mark(nId, pVal);
 }
 }}
 #endif // INCLUDED_FAST_HELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,29 +34,17 @@
 #include <cppuhelper/factory.hxx>
 #include <uno/mapping.hxx>
 
-// -------------------
-// - factory methods -
-// -------------------
-
 static REF( NMSP_UNO::XInterface ) SAL_CALL create_PptImporter( const REF( NMSP_LANG::XMultiServiceFactory )& rxFact )
 {
     return REF( NMSP_UNO::XInterface )( *new PptImporter( rxFact ) );
 }
 
-// ------------------------------------------
-// - component_getImplementationEnvironment -
-// ------------------------------------------
-
-extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// ------------------------
-// - component_getFactory -
-// ------------------------
-
-extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
     REF( NMSP_LANG::XSingleServiceFactory ) xFactory;
     void*                                   pRet = 0;
@@ -77,3 +66,5 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
 
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

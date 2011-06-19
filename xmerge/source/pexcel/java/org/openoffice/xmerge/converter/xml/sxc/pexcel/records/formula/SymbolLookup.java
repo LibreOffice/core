@@ -48,7 +48,7 @@ public abstract class SymbolLookup {
     /**
      * Associate a symbol with a  numeric value in the lookup table
      * @param symbol    The symbol that will act as the key in the lookup table
-     * @param value     The value to be associated with a given symbol
+     * @param id        The ID number to be associated with a given symbol
      */
     public void addEntry(String symbol, int id) {
         Integer iObj = new Integer(id);

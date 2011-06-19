@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,3 +35,5 @@
 #define _FILTER_CONFIG_MIGRATION_Q_     // usefull for migration time, to support some old functionality temp. :-)
 
 #endif // _FILTER_CONFIG_VERSIONS_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

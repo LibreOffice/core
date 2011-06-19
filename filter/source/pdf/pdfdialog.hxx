@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,3 +90,5 @@ Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames() throw (Runtim
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
 
 #endif // PDFDIALOG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

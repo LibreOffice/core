@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,10 @@
 #include "impswfdialog.hxx"
 #include "impswfdialog.hrc"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
 
 // ----------------
 // - ImpPDFDialog -
@@ -123,3 +125,5 @@ IMPL_LINK( ImpSWFDialog, OnToggleCheckbox, CheckBox*, pBox )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

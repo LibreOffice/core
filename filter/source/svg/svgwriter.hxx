@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,28 +39,17 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stack.hxx>
-#ifndef _SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
-#endif
-#ifndef _GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
-#ifndef _METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
-#ifndef _METAACT_HXX
 #include <vcl/metric.hxx>
-#endif
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
 #include <vcl/graphictools.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmluconv.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -100,6 +90,7 @@
 #define SVGWRITER_WRITE_FILL        0x00000001
 #define SVGWRITER_WRITE_TEXT        0x00000002
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
+#define SVGWRITER_WRITE_ALL         0xFFFFFFFF
 
 // ----------------------
 // - SVGAttributeWriter -
@@ -123,7 +114,6 @@ private:
 
                             SVGAttributeWriter();
 
-    void                    ImplGetColorStr( const Color& rColor, ::rtl::OUString& rColorStr );
     double                  ImplRound( double fVal, sal_Int32 nDecs = 3 );
 
 public:
@@ -131,17 +121,17 @@ public:
                             SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport );
     virtual                 ~SVGAttributeWriter();
 
+    ::rtl::OUString         GetFontStyle( const Font& rFont );
+    ::rtl::OUString         GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo );
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
     void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, ::rtl::OUString& rGradientId );
     void                    AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
                                           const Rectangle* pObjBoundRect = NULL, const Gradient* pFillGradient = NULL );
 
     void                    SetFontAttr( const Font& rFont );
-};
 
-// ----------------------
-// - SVGShapeDescriptor -
-// ----------------------
+    static void             ImplGetColorStr( const Color& rColor, ::rtl::OUString& rColorStr );
+};
 
 struct SVGShapeDescriptor
 {
@@ -175,6 +165,9 @@ class SVGActionWriter
 {
 private:
 
+    sal_Int32                               mnCurGradientId;
+    sal_Int32                               mnCurMaskId;
+    sal_Int32                               mnCurPatternId;
     Stack                                   maContextStack;
     ::std::auto_ptr< SVGShapeDescriptor >   mapCurShape;
     SVGExport&                              mrExport;
@@ -204,13 +197,20 @@ private:
                                            sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY,
                                               sal_Bool bApplyMapping = sal_True );
+    void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
                                                   sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags,
                                                  sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
+    Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
+    Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
+    void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth,
                                            sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, sal_Bool bApplyMapping );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
                                           sal_Bool bApplyMapping = sal_True );
 
@@ -236,3 +236,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

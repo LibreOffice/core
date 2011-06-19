@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define OOX_OLE_VBACONTROL_HXX
 
 #include "oox/ole/axcontrol.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -95,6 +97,7 @@ protected:
     ::rtl::OUString     maToolTip;          /// Tool tip for the control.
     ::rtl::OUString     maControlSource;    /// Linked cell for the control value in a spreadsheet.
     ::rtl::OUString     maRowSource;        /// Source data for the control in a spreadsheet.
+
     AxPairData          maPos;              /// Position in parent container.
     sal_Int32           mnId;               /// Control identifier.
     sal_Int32           mnHelpContextId;    /// Help context identifier.
@@ -166,13 +169,7 @@ private:
     /** Imports the site models of all embedded controls from the 'f' stream. */
     bool                importEmbeddedSiteModels( BinaryInputStream& rInStrm );
     /*  Final processing of all embedded controls after import. */
-    void                finalizeEmbeddedControls();
-
-    /** Moves the control relative to its current position by the passed distance. */
-    void                moveRelative( const AxPairData& rDistance );
-    /** Moves all embedded controls from their relative position in this
-        control to an absolute position in the parent of this control. */
-    void                moveEmbeddedToAbsoluteParent();
+    void                finalizeEmbeddedControls( StorageBase& rStrg );
 
     /** Functor for comparing controls by their tab index. */
     static bool         compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight );
@@ -200,10 +197,11 @@ public:
     /** Imports the form and its embedded controls, and inserts the form with
         all its controls into the passed dialog library. */
     void                importForm(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxDialogLib,
-                            StorageBase& rVbaFormStrg,
-                            const ::rtl::OUString& rModuleName,
-                            rtl_TextEncoding eTextEnc );
+                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
+                           const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxDialogLib,
+                           StorageBase& rVbaFormStrg,
+                           const ::rtl::OUString& rModuleName,
+                           rtl_TextEncoding eTextEnc );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
@@ -217,3 +215,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

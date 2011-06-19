@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,23 +111,23 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
     const sal_Int32 len( aArguments.getLength() );
     if (len < 1 || len > 2) {
             throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("CLiteral::initialize: "
-                    "must give 1 or 2 argument(s)"), *this, 2);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
+                    "must give 1 or 2 argument(s)")), *this, 2);
     }
 
     ::rtl::OUString arg0;
     if (!(aArguments[0] >>= arg0)) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CLiteral::initialize: "
-                "argument must be string"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
+                "argument must be string")), *this, 0);
     }
     //FIXME: what is legal?
     if (true) {
         m_Value = arg0;
     } else {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CLiteral::initialize: "
-                "argument is not valid literal value"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
+                "argument is not valid literal value")), *this, 0);
     }
 
     if (len > 1) {
@@ -137,21 +138,21 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
                 m_Language = arg1;
             } else {
                 throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii("CLiteral::initialize: "
-                        "argument is not valid language"), *this, 1);
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
+                        "argument is not valid language")), *this, 1);
             }
         } else if ((aArguments[1] >>= xURI)) {
             if (xURI.is()) {
                 m_xDatatype = xURI;
             } else {
                 throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii("CLiteral::initialize: "
-                        "argument is null"), *this, 1);
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
+                        "argument is null")), *this, 1);
             }
         } else {
             throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("CLiteral::initialize: "
-                    "argument must be string or URI"), *this, 1);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLiteral::initialize: "
+                    "argument must be string or URI")), *this, 1);
         }
     }
 }
@@ -159,7 +160,7 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< ::com::sun::star::u
 // ::com::sun::star::rdf::XNode:
 ::rtl::OUString SAL_CALL CLiteral::getStringValue() throw (css::uno::RuntimeException)
 {
-    if (!m_Language.equalsAscii("")) {
+    if (m_Language.getLength()) {
         ::rtl::OUStringBuffer buf(m_Value);
         buf.appendAscii("@");
         buf.append(m_Language);
@@ -219,3 +220,4 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
 
 } // closing component helper namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

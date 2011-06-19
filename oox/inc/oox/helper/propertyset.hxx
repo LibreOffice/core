@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,7 @@ public:
                             { return getAnyProperty( nPropId ) >>= orValue; }
 
     /** Gets the specified boolean property from the property set.
-        @return  true = property contains true; false = property contains false or error occured. */
+        @return  true = property contains true; false = property contains false or error occurred. */
     inline bool         getBoolProperty( sal_Int32 nPropId ) const
                             { bool bValue = false; return getProperty( bValue, nPropId ) && bValue; }
 
@@ -131,6 +132,10 @@ public:
         @param rPropertyMap  The property map. */
     void                setProperties( const PropertyMap& rPropertyMap );
 
+#if OSL_DEBUG_LEVEL > 0
+    void dump();
+#endif
+
     // ------------------------------------------------------------------------
 private:
     /** Gets the specified property from the property set.
@@ -154,3 +159,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

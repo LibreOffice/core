@@ -64,7 +64,6 @@ SHL1STDLIBS= \
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)	 \
-        $(TESTSHL2LIB)    \
     $(CPPULIB)	\
     $(SAXLIB) \
     $(SALLIB)\

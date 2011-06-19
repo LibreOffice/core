@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,7 @@
 #include "zip.hxx"
 #include "zipfile.hxx"
 
-using namespace rtl;
-
+using ::rtl::OString;
 /** this struct describes one entry in a zip file */
 struct ZipEntry
 {
@@ -160,7 +160,7 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
 
     if(!isError())
     {
-        mnRC = mrFile.setPos( Pos_Absolut, e->offset );
+        mnRC = mrFile.setPos( osl_Pos_Absolut, e->offset );
 
         writeLong(zf_LFHSIGValue);                              // magic number
         writeShort(zf_Vers(1, 0));                              // extract version
@@ -180,7 +180,7 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
             OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
             if( !isError() )
             {
-                mnRC = mrFile.setPos( Pos_Absolut, e->endOffset );
+                mnRC = mrFile.setPos( osl_Pos_Absolut, e->endOffset );
             }
         }
     }
@@ -330,3 +330,5 @@ bool ZipFile::close()
 
     return !isError();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

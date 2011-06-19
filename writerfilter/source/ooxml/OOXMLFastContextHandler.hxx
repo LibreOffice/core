@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,9 +146,9 @@ public:
 
     void mark(const Id & rId, OOXMLValue::Pointer_t pVal);
 
-    void resolveFootnote(const rtl::OUString & rId);
-    void resolveEndnote(const rtl::OUString & rId);
-    void resolveComment(const rtl::OUString & rId);
+    void resolveFootnote(const sal_Int32 nId);
+    void resolveEndnote(const sal_Int32 nId);
+    void resolveComment(const sal_Int32 nId);
     void resolvePicture(const rtl::OUString & rId);
     void resolveHeader(const sal_Int32 type,
                                 const rtl::OUString & rId);
@@ -165,8 +166,8 @@ public:
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument();
     void setXNoteId(OOXMLValue::Pointer_t pValue);
-    void setXNoteId(const ::rtl::OUString & rId);
-    const rtl::OUString & getXNoteId() const;
+    void setXNoteId(const sal_Int32 nId);
+    sal_Int32 getXNoteId() const;
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
     virtual void setParent(OOXMLFastContextHandler * pParent);
@@ -203,6 +204,9 @@ public:
     void handleLastParagraphInSection();
     void endOfParagraph();
     void text(const ::rtl::OUString & sText);
+    void positionOffset(const ::rtl::OUString & sText);
+    void alignH(const ::rtl::OUString & sText);
+    void alignV(const ::rtl::OUString & sText);
     virtual void propagateCharacterProperties();
     virtual void propagateCharacterPropertiesAsSet(const Id & rId);
     virtual void propagateTableProperties();
@@ -224,12 +228,11 @@ public:
 
     void sendPropertyToParent();
 
-#ifdef DEBUG
-    static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
-    virtual XMLTag::Pointer_t toTag() const;
-    virtual string toString() const;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 
+    sal_uInt32 getInstanceNumber() { return mnInstanceNumber; }
 protected:
     OOXMLFastContextHandler * mpParent;
     Id mId;
@@ -279,6 +282,9 @@ protected:
 
     sal_uInt32 mnInstanceNumber;
     sal_uInt32 mnRefCount;
+
+    bool inPositionV;
+
 private:
     void operator =(OOXMLFastContextHandler &); // not defined
 
@@ -332,8 +338,8 @@ public:
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
-#ifdef DEBUG
-    virtual XMLTag::Pointer_t toTag() const;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 
 protected:
@@ -428,7 +434,7 @@ public:
 
 private:
     bool mbForwardEventsSaved;
-    ::rtl::OUString msMyXNoteId;
+    sal_Int32 mnMyXNoteId;
 
     virtual void lcl_startFastElement
     (sal_Int32 Element,
@@ -631,3 +637,5 @@ private:
 };
 }}
 #endif // INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

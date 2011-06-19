@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -188,7 +189,7 @@ void WW8PropertiesReference::resolve(Properties & rHandler)
                 ++(*pIt);
             }
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
             (void) e;
         }
@@ -497,3 +498,4 @@ WW8Value::Pointer_t createValue
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

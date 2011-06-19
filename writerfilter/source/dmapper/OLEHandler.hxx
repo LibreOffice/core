@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef INCLUDED_OLEHANDLER_HXX
 #define INCLUDED_OLEHANDLER_HXX
 
-#ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
-#endif
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -106,3 +105,5 @@ typedef boost::shared_ptr< OLEHandler >  OLEHandlerPtr;
 }}
 
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

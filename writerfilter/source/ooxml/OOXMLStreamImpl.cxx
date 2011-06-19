@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,8 @@
 #include "ooxmlLoggers.hxx"
 #include <iostream>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALSTORAGEACCESS_HPP_
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
-#endif
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 //#define DEBUG_STREAM
 
@@ -137,6 +137,11 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                                     ::rtl::OUString & rDocumentTarget)
 {
     bool bFound = false;
+    static uno::Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  ::com::sun::star::uri::UriReferenceFactory::create( mxContext );
+    // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
+    // keep the XUriReference implementation happy )
+    // add mspath to represent the 'source' of this stream
+    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("file:///" ) ) + msPath );
 
     static rtl::OUString sType(RTL_CONSTASCII_USTRINGPARAM("Type"));
     static rtl::OUString sId(RTL_CONSTASCII_USTRINGPARAM("Id"));
@@ -152,11 +157,15 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
     static rtl::OUString sTargetMode(RTL_CONSTASCII_USTRINGPARAM("TargetMode"));
     static rtl::OUString sExternal(RTL_CONSTASCII_USTRINGPARAM("External"));
+    static rtl::OUString sVBAProjectType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.microsoft.com/office/2006/relationships/vbaProject"));
 
     rtl::OUString sStreamType;
 
     switch (nStreamType)
     {
+        case VBAPROJECT:
+            sStreamType = sVBAProjectType;
+            break;
         case DOCUMENT:
             sStreamType = sDocumentType;
             break;
@@ -223,8 +232,16 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     rDocumentTarget = sMyTarget;
                 else
                 {
-                    rDocumentTarget = msPath;
-                    rDocumentTarget += lcl_normalizeTarget(sMyTarget);
+                    // 'Target' is a relative Uri, so a 'Target=/path'
+                    // with a base Uri of file://base/foo will resolve to
+                    // file://base/word. We need something more than some
+                    // simple string concatination here to handle that.
+                    uno::Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  sMyTarget );
+                    uno::Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True,  com::sun::star::uri::RelativeUriExcessParentSegments_RETAIN );
+                    rDocumentTarget = xAbs->getPath();
+                    // path will start with the fragment separator. need to
+                    // remove that
+                    rDocumentTarget = rDocumentTarget.copy( 1 );
                 }
 
                 break;
@@ -299,7 +316,7 @@ uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
 
     uno::Reference<xml::sax::XParser> xParser
         (xFactory->createInstanceWithContext
-        ( rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ),
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")),
           mxContext ),
         uno::UNO_QUERY );
 
@@ -351,3 +368,5 @@ OOXMLDocumentFactory::createStream
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

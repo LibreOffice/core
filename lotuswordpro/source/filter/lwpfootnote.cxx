@@ -1,0 +1,597 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: IBM Corporation
+ *
+ *  Copyright: 2008 by IBM Corporation
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/**
+ * @file
+ *  footnote
+ */
+/*************************************************************************
+ * Change History
+ Mar 2005           Created
+ ************************************************************************/
+#include "lwpfootnote.hxx"
+#include "lwpstory.hxx"
+#include "xfilter/xffootnote.hxx"
+#include "xfilter/xfendnote.hxx"
+#include "xfilter/xffootnoteconfig.hxx"
+#include "xfilter/xfendnoteconfig.hxx"
+#include "xfilter/xfstylemanager.hxx"
+#include "xfilter/xftextspan.hxx"
+#include "lwppara.hxx"
+#include "lwpdoc.hxx"
+#include "lwpfnlayout.hxx"
+#include "lwpglobalmgr.hxx"
+
+LwpFribFootnote::LwpFribFootnote(LwpPara* pPara ):LwpFrib(pPara)
+{
+}
+
+/**
+ * @descr  read footnote frib information
+ */
+void LwpFribFootnote::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
+{
+    m_Footnote.ReadIndexed(pObjStrm);
+}
+
+/**
+ * @descr  Register footnote style by calling LwpFootnote::RegisterStyle()
+ */
+void LwpFribFootnote::RegisterNewStyle()
+{
+    LwpFootnote* pFootnote = GetFootnote();
+    if(pFootnote)
+    {
+        //register footnote number font style
+        LwpFrib::RegisterStyle(m_pPara->GetFoundry());
+        //register footnote content style
+        pFootnote->SetFoundry(m_pPara->GetFoundry());
+        pFootnote->RegisterStyle();
+    }
+}
+
+/**
+ * @descr  Parse footnote  by calling LwpFootnote::XFConvert()
+ */
+void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
+{
+    LwpFootnote* pFootnote = GetFootnote();
+    if(pFootnote)
+    {
+        XFContentContainer* pContent = NULL;
+        if(pFootnote->GetType() == FN_FOOTNOTE)
+        {
+            pContent = new XFFootNote();
+        }
+        else
+        {
+            pContent = new XFEndNote();
+        }
+        pFootnote->XFConvert(pContent);
+        if(m_ModFlag)
+        {
+            //set footnote number font style
+            XFTextSpan *pSpan = new XFTextSpan();
+            pSpan->SetStyleName(GetStyleName());
+            //add the xffootnote into the content container
+            pSpan->Add(pContent);
+            pCont->Add(pSpan);
+        }
+        else
+        {
+            pCont->Add(pContent);
+        }
+    }
+}
+
+/**
+ * @descr  Get foonote object
+ */
+LwpFootnote* LwpFribFootnote::GetFootnote()
+{
+    return dynamic_cast<LwpFootnote*>(m_Footnote.obj());
+}
+
+
+LwpFootnote::LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+    : LwpOrderedObject(objHdr, pStrm)
+{
+}
+
+LwpFootnote::~LwpFootnote()
+{
+
+}
+
+/**
+ * @descr  Read foonote object
+ */
+void LwpFootnote::Read()
+{
+    LwpOrderedObject::Read();
+    m_nType = m_pObjStrm->QuickReaduInt16();
+    m_nRow = m_pObjStrm->QuickReaduInt16();
+    m_Content.ReadIndexed(m_pObjStrm);
+    m_pObjStrm->SkipExtra();
+}
+
+/**
+ * @descr  Register footnote style
+ */
+void LwpFootnote::RegisterStyle()
+{
+    //Only register footnote contents style,
+    //Endnote contents style registers in LwpEnSuperTableLayout::RegisterStyle
+    if(m_nType == FN_FOOTNOTE)
+    {
+        LwpContent* pContent = FindFootnoteContent();
+        if(pContent)
+        {
+            pContent->SetFoundry(m_pFoundry);
+            pContent->RegisterStyle();
+        }
+    }
+}
+
+/**
+ * @descr  Parse footnote
+ */
+void LwpFootnote::XFConvert(XFContentContainer * pCont)
+{
+    LwpContent* pContent = FindFootnoteContent();
+    if(pContent)
+    {
+        pContent->XFConvert(pCont);
+    }
+}
+
+/**
+ * @descr  Get endnote cell layout which contains current endnote content
+ */
+LwpCellLayout* LwpFootnote::GetCellLayout()
+{
+    LwpEnSuperTableLayout* pEnSuperLayout = FindFootnoteTableLayout();
+    if(pEnSuperLayout)
+    {
+        LwpTableLayout* pTableLayout = static_cast<LwpTableLayout*>(pEnSuperLayout->GetMainTableLayout());
+        if(pTableLayout)
+        {
+            LwpRowLayout* pRowLayout = pTableLayout->GetRowLayout(m_nRow);
+            if(pRowLayout)
+            {
+                return dynamic_cast<LwpCellLayout*>(pRowLayout->GetChildHead()->obj());
+            }
+        }
+    }
+    return NULL;
+}
+/**
+ * @descr  Get endnote supertable layout which contains current endnote content, not used now
+ */
+LwpEnSuperTableLayout* LwpFootnote::GetEnSuperTableLayout()
+{
+    LwpDocument* pDivision = GetFootnoteTableDivision();
+    if(pDivision)
+        return static_cast<LwpEnSuperTableLayout*>(pDivision->GetEnSuperTableLayout());
+    return NULL;
+}
+
+/**
+ * @descr  Get division which footnote table contains current footnote content, copy from lwp source code
+ */
+LwpDocument* LwpFootnote::GetFootnoteTableDivision()
+{
+    if(!m_pFoundry)
+        return NULL;
+
+    LwpDocument* pPrev =NULL;
+    LwpDocument* pDivision = NULL;
+    LwpDocument* pFootnoteDivision =NULL;
+
+    // Make sure the footnote does belong to some division
+    // The division might not have a DivisionInfo if it's being Destruct()ed
+    pPrev = m_pFoundry->GetDocument();
+    pFootnoteDivision = pPrev;
+    if (!pPrev || pPrev->GetDivInfoID()->IsNull())
+        return NULL;
+
+    switch (m_nType)
+    {
+        case FN_FOOTNOTE:
+        {
+            // Footnotes always use the source division
+            return pFootnoteDivision;
+        }
+        case FN_DIVISION:
+        {
+            // Start with the footnote's division
+            pDivision = pPrev;
+            break;
+        }
+        case FN_DIVISION_SEPARATE:
+        {
+            // It had better be the next division
+            pDivision = pPrev->GetNextDivision();
+            break;
+        }
+        case FN_DIVISIONGROUP:
+        case FN_DIVISIONGROUP_SEPARATE:
+        {
+            pDivision = pPrev->GetLastInGroupWithContents();
+            pPrev = pDivision;
+            break;
+        }
+        case FN_DOCUMENT:
+        case FN_DOCUMENT_SEPARATE:
+        {
+            pDivision = pFootnoteDivision->GetRootDocument();
+            if (pDivision)
+                pDivision = pDivision->GetLastDivisionWithContents();
+            pPrev = pDivision;
+            break;
+        }
+
+    }
+
+    // Make sure we're using the proper endnote division, if it's separate
+    if (m_nType & FN_MASK_SEPARATE)
+        pDivision = GetEndnoteDivision(pDivision);
+    // Don't use a division that's specifically for endnotes
+    else
+    {
+        while (pDivision)
+        {
+            if (pDivision->GetEndnoteType() == FN_DONTCARE)
+                break;
+            if (m_nType == FN_DIVISIONGROUP)
+                pDivision = pDivision->GetPreviousInGroup();
+            else
+                pDivision = pDivision->GetPreviousDivisionWithContents();
+        }
+    }
+    if (pDivision)
+        return pDivision;
+    return NULL;
+}
+
+/**
+ * @descr  Get division which endnote table contains current endnote content, copy from lwp source code
+ */
+LwpDocument* LwpFootnote::GetEndnoteDivision(LwpDocument* pPossible)
+{
+    LwpDocument*  pDivision = pPossible;
+    sal_uInt16 nDivType;
+
+    // In case we have multiple endnote divisions, walk backwards until
+    // we find one.
+    while (pDivision)
+    {
+        // Do we already have the right division?
+        nDivType = pDivision->GetEndnoteType();
+        if (nDivType == m_nType)
+            return pDivision;
+        // When we hit the first non-endnote division, stop looking.
+        // -- SDC 10/8/96
+        if (nDivType == FN_DONTCARE)
+            break;
+        pDivision = pDivision->GetPreviousDivision();
+    }
+    return NULL;
+}
+
+/**
+ * @descr  Get footnote table class name
+ */
+OUString LwpFootnote::GetTableClass()
+{
+    OUString strClassName;
+    switch (GetType() & FN_MASK_BASE)
+    {
+        case FN_BASE_FOOTNOTE:
+        {
+            strClassName = A2OUSTR(STR_DivisionFootnote);
+            break;
+        }
+        case FN_BASE_DOCUMENT:
+        {
+            strClassName = A2OUSTR(STR_DocumentEndnote);
+            break;
+        }
+        case FN_BASE_DIVISION:
+        {
+            strClassName = A2OUSTR(STR_DivisionEndnote);
+            break;
+        }
+        case FN_BASE_DIVISIONGROUP:
+        {
+            strClassName = A2OUSTR(STR_DivisionGroupEndnote);
+            break;
+        }
+    }
+    return strClassName;
+}
+
+/**
+ * @descr  Find footnote tablelayout, copy from lwp source code
+ */
+LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
+{
+    LwpDocument* pDivision = GetFootnoteTableDivision();
+    if(!pDivision)
+        return NULL;
+
+    LwpFoundry* pFoundry = pDivision->GetFoundry();
+    OUString strClassName = GetTableClass();
+    if(strClassName.getLength() ==0 )
+        return NULL;
+
+    LwpContent* pContent = NULL;
+
+    while ((pContent = pFoundry->EnumContents(pContent)) != NULL)
+        if (pContent->IsTable() && (strClassName.equals(pContent->GetClassName())) &&
+            pContent->IsActive() && pContent->GetLayout(NULL))
+        {
+            // Found it!
+            return (LwpEnSuperTableLayout *)
+                ((LwpTable*)pContent)->GetSuperTableLayout();
+        }
+
+    return NULL;
+}
+
+/**
+ * @descr  Find footnote table, not used now
+ */
+LwpTable* LwpFootnote::FindFootnoteTable()
+{
+    LwpEnSuperTableLayout* pLayout = FindFootnoteTableLayout();
+    //if (!ShouldBeInTable(Footnote)) return NULL;
+    return GetFootnoteTable(pLayout);
+}
+
+/**
+ * @descr  Find footnote table, not used now
+ */
+LwpTable* LwpFootnote::GetFootnoteTable(LwpEnSuperTableLayout * pLayout)
+{
+    if(pLayout)
+    {
+        LwpEndnoteLayout* pEndnoteLayout = static_cast<LwpEndnoteLayout*>(pLayout->GetMainTableLayout());
+        if(pEndnoteLayout)
+            return dynamic_cast<LwpTable*>(pEndnoteLayout->GetContent()->obj());
+    }
+    return NULL;
+}
+
+/**
+ * @descr  Find footnote contents
+ */
+LwpContent* LwpFootnote::FindFootnoteContent()
+{
+    LwpContent* pContent = dynamic_cast<LwpContent*>(m_Content.obj());
+    //if the content has layout, the content has footnote contents;
+    //or looking for the celllayout and return the footnote contents.
+    if(pContent && pContent->GetLayout(NULL))
+        return pContent;
+
+    LwpCellLayout* pCellLayout = GetCellLayout();
+    if(pCellLayout)
+    {
+        pContent = dynamic_cast<LwpContent*>(pCellLayout->GetContent()->obj());
+    }
+
+    return pContent;
+}
+
+LwpFootnoteTable::LwpFootnoteTable(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+    : LwpTable(objHdr, pStrm)
+{
+}
+
+void LwpFootnoteTable::Read()
+{
+    LwpTable::Read();
+    m_pObjStrm->SkipExtra();
+}
+
+/**
+ * @descr  Read footnote number options information
+ */
+void LwpFootnoteNumberOptions::Read(LwpObjectStream *pObjStrm)
+{
+    m_nFlag = pObjStrm->QuickReaduInt16();
+    m_nStartingNumber = pObjStrm->QuickReaduInt16();
+    m_LeadingText.Read(pObjStrm);
+    m_TrailingText.Read(pObjStrm);
+    pObjStrm->SkipExtra();
+}
+
+/**
+ * @descr  Read footnote seperator options information
+ */
+void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
+{
+    m_nFlag = pObjStrm->QuickReaduInt16();
+    m_nLength = pObjStrm->QuickReaduInt32();
+    m_nIndent = pObjStrm->QuickReaduInt32();
+    m_nAbove = pObjStrm->QuickReaduInt32();
+    m_nBelow = pObjStrm->QuickReaduInt32();
+    m_BorderStuff.Read(pObjStrm);
+    pObjStrm->SkipExtra();
+}
+
+
+LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+    : LwpObject(objHdr, pStrm)
+{
+}
+
+LwpFootnoteOptions::~LwpFootnoteOptions()
+{
+
+}
+
+/**
+ * @descr  Register footnote options object
+ */
+void LwpFootnoteOptions::Read()
+{
+    m_nFlag = m_pObjStrm->QuickReaduInt16();
+    m_FootnoteNumbering.Read(m_pObjStrm);
+    m_EndnoteDivisionNumbering.Read(m_pObjStrm);
+    m_EndnoteDivisionGroupNumbering.Read(m_pObjStrm);
+    m_EndnoteDocNumbering.Read(m_pObjStrm);
+    m_FootnoteSeparator.Read(m_pObjStrm);
+    m_FootnoteContinuedSeparator.Read(m_pObjStrm);
+    m_ContinuedOnMessage.Read(m_pObjStrm);
+    m_ContinuedFromMessage.Read(m_pObjStrm);
+    m_pObjStrm->SkipExtra();
+}
+
+/**
+ * @descr  Register footnote options style
+ */
+void LwpFootnoteOptions::RegisterStyle()
+{
+    RegisterFootnoteStyle();
+    RegisterEndnoteStyle();
+}
+
+/**
+ * @descr  Register footnote configuration information
+ */
+void LwpFootnoteOptions::RegisterFootnoteStyle()
+{
+    XFFootnoteConfig* pFootnoteConfig = new XFFootnoteConfig();
+    pFootnoteConfig->SetStartValue(m_FootnoteNumbering.GetStartingNumber() -1);
+    pFootnoteConfig->SetNumPrefix(m_FootnoteNumbering.GetLeadingText());
+    pFootnoteConfig->SetNumSuffix(m_FootnoteNumbering.GetTrailingText());
+    if(m_FootnoteNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
+    {
+        pFootnoteConfig->SetRestartOnPage();
+    }
+    if(GetContinuedFrom())
+    {
+        pFootnoteConfig->SetMessageFrom(GetContinuedFromMessage());
+    }
+    if(GetContinuedOn())
+    {
+        pFootnoteConfig->SetMessageOn(GetContinuedOnMessage());
+    }
+
+    pFootnoteConfig->SetMasterPage( m_strMasterPage);
+    XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+    pXFStyleManager->SetFootnoteConfig(pFootnoteConfig);
+
+}
+
+/**
+ * @descr  Register endnote configuration information
+ */
+void LwpFootnoteOptions::RegisterEndnoteStyle()
+{
+    XFEndnoteConfig* pEndnoteConfig = new XFEndnoteConfig();
+    pEndnoteConfig->SetStartValue(m_EndnoteDocNumbering.GetStartingNumber() -1);
+    OUString message = m_EndnoteDocNumbering.GetLeadingText();
+    if(message.getLength() == 0)
+    {
+        message = A2OUSTR("[");//default prefix
+    }
+    pEndnoteConfig->SetNumPrefix(message);
+    message = m_EndnoteDocNumbering.GetTrailingText();
+    if(message.getLength() == 0)
+    {
+        message = A2OUSTR("]");//default suffix
+    }
+    pEndnoteConfig->SetNumSuffix(message);
+    if(m_EndnoteDocNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
+    {
+        pEndnoteConfig->SetRestartOnPage();
+    }
+
+    pEndnoteConfig->SetMasterPage( m_strMasterPage);
+
+    XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+    pXFStyleManager->SetEndnoteConfig(pEndnoteConfig);
+}
+
+
+/**
+ * @descr  Get continue on message
+ */
+OUString LwpFootnoteOptions::GetContinuedOnMessage()
+{
+    if(m_ContinuedOnMessage.HasValue())
+    {
+        return m_ContinuedOnMessage.str();
+    }
+    // else reture defauls message
+    return A2OUSTR(STRID_FOOTCONTINUEDON);
+}
+
+/**
+ * @descr  Get continue from message
+ */
+OUString LwpFootnoteOptions::GetContinuedFromMessage()
+{
+    if(m_ContinuedFromMessage.HasValue())
+    {
+        return m_ContinuedFromMessage.str();
+    }
+    // else reture defauls message
+    return A2OUSTR(STRID_FOOTCONTINUEDFROM);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -199,6 +200,12 @@ public:
                             ::rtl::OUString& orName,
                             const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
 
+    /** Creates and returns an unnamed database range on-the-fly in the Calc document.
+        The range will not be buffered in the global table buffer. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >
+                        createUnnamedDatabaseRangeObject(
+                            const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
+
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
                         createStyleObject(
@@ -291,3 +298,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,8 +95,12 @@ const sal_uInt8 WINDOWS_CHARSET_OEM         = 255;
 // ----------------------------------------------------------------------------
 
 const sal_Int32 API_RGB_TRANSPARENT         = -1;       /// Transparent color for API calls.
-const sal_Int32 API_RGB_BLACK               = 0x00000;  /// Black color for API calls.
-const sal_Int32 API_RGB_WHITE               = 0xFFFFF;  /// White color for API calls.
+const sal_Int32 API_RGB_BLACK               = 0x000000;  /// Black color for API calls.
+const sal_Int32 API_RGB_WHITE               = 0xFFFFFF;  /// White color for API calls.
+
+const sal_Int16 API_LINE_SOLID              = 0;
+const sal_Int16 API_LINE_DOTTED             = 1;
+const sal_Int16 API_LINE_DASHED             = 2;
 
 const sal_Int16 API_LINE_NONE               = 0;
 const sal_Int16 API_LINE_HAIR               = 2;
@@ -334,3 +339,5 @@ inline void ByteOrderConverter::swap8( sal_uInt8* pnData )
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,3 +50,5 @@ dc                      http://purl.org/dc/elements/1.1/
 dcTerms                 http://purl.org/dc/terms/
 xm                      http://schemas.microsoft.com/office/excel/2006/main
 sprm                    http://sprm
+mce                     http://schemas.openxmlformats.org/markup-compatibility/2006
+mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "WPXSvStream.h"
 #include "filter/FilterInternal.hxx"
 #include <tools/stream.hxx>
@@ -9,7 +10,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
-        WPXInputStream(true),
+        WPXInputStream(),
         mxChildStorage(),
         mxChildStream(),
         mxStream(xStream),
@@ -41,7 +42,7 @@ WPXSvInputStream::~WPXSvInputStream()
 {
 }
 
-const uint8_t * WPXSvInputStream::read(size_t numBytes, size_t &numBytesRead)
+const unsigned char * WPXSvInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
     numBytesRead = 0;
 
@@ -52,7 +53,7 @@ const uint8_t * WPXSvInputStream::read(size_t numBytes, size_t &numBytesRead)
     if (numBytesRead == 0)
         return 0;
 
-    return (const uint8_t *)maData.getConstArray();
+    return (const unsigned char *)maData.getConstArray();
 }
 
 long WPXSvInputStream::tell()
@@ -168,7 +169,4 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream(const char * name)
         return 0;
 }
 
-WPXInputStream * WPXSvInputStream::getDocumentOLEStream()
-{
-    return getDocumentOLEStream( "PerfectOffice_MAIN" );
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

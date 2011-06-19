@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>MS Excel 97</value></prop>
         <prop oor:name="UIName">
-            <value>Microsoft Excel 97/2000/XP</value>
+            <value>Microsoft Excel 97/2000/XP/2003</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>Biff8</value></prop>
     </node>

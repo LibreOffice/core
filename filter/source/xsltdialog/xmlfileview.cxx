@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,11 +37,9 @@
 
 #include <rtl/tencinfo.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/textview.hxx>
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <osl/file.hxx>
@@ -57,7 +56,6 @@
 
 #include <deque>
 
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -65,6 +63,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 
 #define MAX_SYNTAX_HIGHLIGHT 20
@@ -105,7 +105,7 @@ XMLErrorHandler::XMLErrorHandler( XMLSourceFileDialog* pParent, ListBox& rListBo
 // XMLErrorHandler
 void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )
@@ -114,13 +114,13 @@ void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAX
         sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
         sErr += String( e.Message );
         sal_uInt16 nEntry = mrListBox.InsertEntry( sErr );
-        mrListBox.SetEntryData( nEntry, (void*)e.LineNumber );
+        mrListBox.SetEntryData( nEntry, (void*)(sal_IntPtr)e.LineNumber );
     }
 }
 
 void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw (SAXException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SAXParseException e;
     if( aSAXParseException >>= e )
@@ -129,23 +129,12 @@ void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw
         sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
         sErr += String( e.Message );
         sal_uInt16 nEntry = mrListBox.InsertEntry( sErr );
-        mrListBox.SetEntryData( nEntry, (void*)e.LineNumber );
+        mrListBox.SetEntryData( nEntry, (void*)(sal_IntPtr)e.LineNumber );
     }
 }
 
 void SAL_CALL XMLErrorHandler::warning( const Any& /* aSAXParseException */ ) throw (SAXException, RuntimeException)
 {
-/*
-    SAXParseException e;
-    if( aSAXParseException >>= e )
-    {
-        String sErr( String::CreateFromInt32( e.LineNumber ) );
-        sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
-        sErr += String( e.Message );
-        sal_uInt16 nEntry = mrListBox.InsertEntry( sErr );
-        mrListBox.SetEntryData( nEntry, (void*)e.LineNumber );
-    }
-*/
 }
 
 
@@ -365,7 +354,6 @@ void XMLFileWindow::CreateTextEngine()
     pTextEngine->EnableUndo( sal_False );
     pTextEngine->SetUpdateMode( sal_True );
 
-//  pTextView->ShowCursor( sal_True, sal_True );
     pTextView->HideCursor();
 
     InitScrollBars();
@@ -568,10 +556,6 @@ void XMLSourceFileDialog::Resize()
     Size aButton( maPBValidate.GetSizePixel() );
 
     Size aDialogSize( GetOutputSizePixel() );
-
-//  Point aButtonPos( aSpacing.X(), aSpacing.Y() );
-//  maPBValidate.SetPosSizePixel( aButtonPos, aButton );
-
     Size aOutputSize( aDialogSize.Width(), bOutputVisible ? mnOutputHeight : 0 );
 
     Point aTextWindowPos( 0, 2* aSpacing.Y() + aButton.Height() );
@@ -620,11 +604,11 @@ void XMLSourceFileDialog::onValidate()
 
     try
     {
-        Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.documentconversion.XSLTValidate" ) ), UNO_QUERY );
+        Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTValidate" )) ), UNO_QUERY );
         if( xImporter.is() )
         {
             osl::File aInputFile( maFileURL );
-            /* osl::File::RC rc = */ aInputFile.open( OpenFlag_Read );
+            /* osl::File::RC rc = */ aInputFile.open( osl_File_OpenFlag_Read );
 
             Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 
@@ -679,8 +663,6 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCloseBracket= '>';
     const sal_Unicode cSlash        = '/';
     const sal_Unicode cExclamation = '!';
-//  const sal_Unicode cQuote        = '"';
-//  const sal_Unicode cSQuote      = '\'';
     const sal_Unicode cMinus        = '-';
     const sal_Unicode cSpace        = ' ';
     const sal_Unicode cTab          = 0x09;
@@ -757,25 +739,12 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     //irgend ein String wurde gefunden
                     String sToken = rSource.Copy(nActPos + 1, nSrchPos - nActPos - 1 );
                     sToken.ToUpperAscii();
-//                  int nToken = ::GetHTMLToken(sToken);
-//                  if(nToken)
                     {
                         //Token gefunden
                         eFoundType = svtools::HTMLKEYWORD;
                         nPortEnd = nSrchPos;
                         nPortStart = nActPos;
                     }
-/*
-                    else
-                    {
-                        //was war das denn?
-#ifdef DEBUG
-                        DBG_ERROR("Token nicht erkannt!")
-                        DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer())
-#endif
-                    }
-*/
-
                 }
             }
             // jetzt muss noch '>' gesucht werden
@@ -886,7 +855,6 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff )
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
-//      sal_uInt16 nCol = r.eType;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&
             r.eType != svtools::HTMLKEYWORD &&
@@ -992,3 +960,5 @@ void XMLFileWindow::DoSyntaxHighlight( sal_uInt16 nPara )
         pTmp->ShowCursor( sal_False/*pTmp->IsAutoScroll()*/ );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

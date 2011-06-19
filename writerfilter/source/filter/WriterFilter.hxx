@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,8 @@
 #include <cppuhelper/implbase5.hxx>
 #include <WriterFilterDllApi.hxx>
 
-class WRITERFILTER_DLLPUBLIC WriterFilter : public cppu::WeakImplHelper5
+/// Common DOC/DOCX filter, calls DocxExportFilter via UNO or does the DOC (currently unused) / DOCX import.
+class WRITERFILTER_WRITERFILTER_DLLPUBLIC WriterFilter : public cppu::WeakImplHelper5
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
@@ -102,3 +104,4 @@ sal_Bool SAL_CALL WriterFilter_supportsService( const ::rtl::OUString& ServiceNa
     throw( ::com::sun::star::uno::Exception );
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

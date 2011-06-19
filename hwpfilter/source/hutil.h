@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-/* $Id: hutil.h,v 1.4 2008-06-04 10:00:41 vg Exp $ */
-
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
@@ -45,3 +44,5 @@ void    str2hstr(const char *c, hchar *i);
 int hstrlen(const hchar *s);
 
 #endif                                            /* UTIL_H_*/
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

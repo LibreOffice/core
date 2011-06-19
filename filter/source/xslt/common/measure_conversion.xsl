@@ -384,4 +384,105 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	<xsl:template name="ConvertMeasure">
+		<xsl:param name="TargetMeasure" select="'cm'"/>
+		<xsl:param name="TargetTruncate" select=" 'all' "/>
+		<xsl:param name="value"/>
+		<!-- When TargetTruncate ='all'  it returns the number whichsoever the return value is negative or positive
+			When TargetTruncate ='nonNegative' it only returns nonNegative number, all negative number to be returned as 0
+			When TargetTruncate ='positive" it only returns positive number, all nonPositive number to be returned as 1 -->
+		<xsl:variable name="return_value">
+			<xsl:choose>
+				<!-- remove the measure mark, if the value is null, the result should be 0. Must be the first case  -->
+				<xsl:when test="string-length(translate(string($value),'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ','')) = 0">0</xsl:when>
+				<xsl:when test="string-length(translate(string($value),'- .0123456789','')) = 0">
+					<xsl:value-of select="$value"/>
+				</xsl:when>
+				<xsl:when test="$TargetMeasure = 'cm'">
+					<xsl:call-template name="convert2cm">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="$TargetMeasure = 'pt'">
+					<xsl:call-template name="convert2pt">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="$TargetMeasure = 'twip'">
+					<xsl:call-template name="convert2twip">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:when test="$TargetMeasure = 'in'">
+					<xsl:call-template name="convert2in">
+						<xsl:with-param name="value" select="$value"/>
+					</xsl:call-template>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="$TargetTruncate = 'all' ">
+				<xsl:choose>
+					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
+						<xsl:value-of select=" '0' "/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$return_value"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="$TargetTruncate = 'nonNegative' ">
+				<xsl:choose>
+					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
+						<xsl:value-of select=" '0' "/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test=" $return_value &lt; 0  ">
+								<xsl:value-of select=" '0' "/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$return_value"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="$TargetTruncate = 'positive' ">
+				<xsl:choose>
+					<xsl:when test="string(number($TargetMeasure)) = 'NaN' ">
+						<xsl:value-of select=" '1' "/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:choose>
+							<xsl:when test=" $return_value &lt;= 0 ">
+								<xsl:value-of select=" '1' "/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$return_value"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+	<xsl:template name="Add-With-Measure">
+		<xsl:param name="value1"/>
+		<xsl:param name="value2"/>
+		<xsl:param name="TargetMeasure" select="'in'"/>
+		<xsl:variable name="number-value1">
+			<xsl:call-template name="ConvertMeasure">
+				<xsl:with-param name="value" select="$value1"/>
+				<xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="number-value2">
+			<xsl:call-template name="ConvertMeasure">
+				<xsl:with-param name="value" select="$value2"/>
+				<xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:value-of select="$number-value1 + $number-value2"/>
+	</xsl:template>
 </xsl:stylesheet>

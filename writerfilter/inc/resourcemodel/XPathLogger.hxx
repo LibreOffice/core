@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,23 +28,22 @@
 #ifndef INCLUDED_XPATH_LOGGER_HXX
 #define INCLUDED_XPATH_LOGGER_HXX
 
-#include <hash_map>
 #include <stack>
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 #include <WriterFilterDllApi.hxx>
 
 namespace writerfilter
 {
-using ::std::hash_map;
 using ::std::stack;
 using ::std::string;
 using ::std::vector;
 
-class WRITERFILTER_DLLPUBLIC XPathLogger
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC XPathLogger
 {
-    typedef hash_map<string, unsigned int> TokenMap_t;
+    typedef boost::unordered_map<string, unsigned int> TokenMap_t;
     typedef boost::shared_ptr<TokenMap_t> TokenMapPointer_t;
 
     TokenMapPointer_t mp_tokenMap;

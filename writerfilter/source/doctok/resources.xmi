@@ -41271,8 +41271,8 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCRgLid0_80-->
-        <!--SPRM sprmCRgLid1-->
-        <UML:Class xmi.id="sprmCRgLid1" name="sprmCRgLid1">
+        <!--SPRM sprmCRgLid1_80-->
+        <UML:Class xmi.id="sprmCRgLid1_80" name="sprmCRgLid1_80">
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
@@ -41286,7 +41286,7 @@
           </UML:ModelElement.taggedValue>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmCRgLid1</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.dataValue>rtf:sprmCRgLid1_80</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
               </UML:TaggedValue.type>
@@ -41301,7 +41301,7 @@
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
         </UML:Class>
-        <!--SPRM sprmCRgLid1-->
+        <!--SPRM sprmCRgLid1_80-->
         <!--SPRM sprmCIdctHint-->
         <UML:Class xmi.id="sprmCIdctHint" name="sprmCIdctHint">
           <UML:ModelElement.stereotype>
@@ -47653,6 +47653,37 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCRgLid0-->
+        <!--SPRM sprmCRgLid1-->
+        <UML:Class xmi.id="sprmCRgLid1" name="sprmCRgLid1">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x4874</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmCRgLid1</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmCRgLid1-->
         <!--SPRM sprmTCellPaddingDefault-->
         <UML:Class xmi.id="sprmTCellPaddingDefault" name="sprmTCellPaddingDefault">
           <UML:ModelElement.stereotype>

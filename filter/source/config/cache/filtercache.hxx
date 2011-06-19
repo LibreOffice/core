@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include <com/sun/star/util/ChangesEvent.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 //_______________________________________________
@@ -49,6 +51,8 @@
 
 namespace filter{
     namespace config{
+
+class CacheUpdateListener;
 
 //_______________________________________________
 // definitions
@@ -157,7 +161,7 @@ class FilterCache : public BaseLock
          */
         enum EItemFlushState
         {
-            /// indicates an unchanged item (can occure e.g. if an item was added and(!) removed before it was flushed ...
+            /// indicates an unchanged item (can occur e.g. if an item was added and(!) removed before it was flushed ...
             E_ITEM_UNCHANGED = 0,
             /// indicates an item, which exists inside config layer but not inside our own cache
             E_ITEM_REMOVED = 1,
@@ -272,6 +276,9 @@ class FilterCache : public BaseLock
         /// readonly acccess to the module configuration of OOo
         css::uno::Reference< css::container::XNameAccess > m_xModuleCfg;
 
+        rtl::Reference< CacheUpdateListener > m_xTypesChglisteners;
+        rtl::Reference< CacheUpdateListener > m_xFiltersChgListener;
+
     //-------------------------------------------
     // interface
 
@@ -313,7 +320,7 @@ class FilterCache : public BaseLock
 
                     The original container will get these new data automaticly
                     because it listen for changes on the internal used configuration layer.
-                    If the new data are needed immediatly inside the original container,
+                    If the new data are needed immediately inside the original container,
                     the method takeOver() can be used to copy all changes back.
                     The may be following notifications of the configuration will be superflous then.
                     But they cant be stopped ...
@@ -339,7 +346,7 @@ class FilterCache : public BaseLock
 
             @descr      This method check if all requested items/properties already
                         exists. Only missing informations will be readed.
-                        Otherwhise this method does nothing!
+                        Otherwise this method does nothing!
 
                         This method must be called from every user of this cache
                         everytimes it need a filled cache. Normaly we load
@@ -586,7 +593,7 @@ class FilterCache : public BaseLock
                         attributes there.
 
             @throw      [css::uno::Exception]
-                        if an internal error occured.
+                        if an internal error occurred.
                         Note: If the item is missing inside the underlying configuration
                         no exception will be thrown. In such case the item is marked as
                         finalized/mandatory automaticly
@@ -739,7 +746,7 @@ class FilterCache : public BaseLock
 
             @return     [css::uno::Any]
                         the value of the requested key.
-                        Can be empty if an internal error occured or if the requested
+                        Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
         css::uno::Any impl_getDirectCFGValue(const ::rtl::OUString& sDirectKey);
@@ -841,7 +848,7 @@ class FilterCache : public BaseLock
                     points to the cache member, which should be filled or updated.
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occurs inside this operation.
          */
         void impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                 EItemType                                           eType  ,
@@ -863,15 +870,15 @@ class FilterCache : public BaseLock
                     specify, which container item type must be readed.
 
             @param  sItem
-                    means the internal name, which can be used to adress the item
-                    properties relativ to the given configuration set.
+                    means the internal name, which can be used to address the item
+                    properties relative to the given configuration set.
 
             @param  eOption
                     regulate, which properties of the requested item should be read.
                     See defintion of EReadOption for further informations.
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occurs inside this operation.
          */
         CacheItem impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
                                       EItemType                                           eType  ,
@@ -897,14 +904,14 @@ class FilterCache : public BaseLock
                     the set node name of the requested item.
 
             @return An iterator, which points directly to the new cached item.
-                    Is a valid iterator if no exception occured here!
+                    Is a valid iterator if no exception occurred here!
                     But to improve robustness - it should be checked :-)
 
             @throw  [css::container::NoSuchElementException]
                     if the item does not exists inside the configuration layer too!
 
             @throw  [css::uno::Exception]
-                    if an unrecoverable error occure inside this operation.
+                    if an unrecoverable error occurs inside this operation.
          */
         CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
                                                       const ::rtl::OUString& sItem)
@@ -1064,3 +1071,5 @@ class FilterCache : public BaseLock
 } // namespace filter
 
 #endif // __FILTER_CONFIG_FILTERCACHE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,6 +1,6 @@
     <node oor:name="MS Excel 97 Vorlage/Template">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft Excel 97/2000/XP Template</value>
-                        <value xml:lang="x-translate">Microsoft Excel 97/2000/XP Template</value>
+            <value xml:lang="en-US">Microsoft Excel 97/2000/XP/2003 Template</value>
+                        <value xml:lang="x-translate">Microsoft Excel 97/2000/XP/2003 Template</value>
         </prop>
     </node>

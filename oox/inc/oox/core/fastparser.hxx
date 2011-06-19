@@ -79,6 +79,11 @@ public:
     void                parseStream( StorageBase& rStorage, const ::rtl::OUString& rStreamName, bool bCloseStream = false )
                             throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
 
+     ::rtl::OUString getNamespaceURL( const ::rtl::OUString& rPrefix )
+                        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+
+     sal_Int32 getNamespaceId( const ::rtl::OUString& aUrl );
+
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastParser >
                         mxParser;

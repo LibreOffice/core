@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,16 +37,14 @@ using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 
-/*-- 22.02.2007 12:19:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 WriterFilter::WriterFilter( const uno::Reference< uno::XComponentContext >& rxContext)  :
     m_xContext( rxContext )
 {
 }
-/*-- 22.02.2007 12:19:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 WriterFilter::~WriterFilter()
 {
 }
@@ -61,14 +60,12 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
     { 0, 0, 0, 0, 0, 0 } // terminate with NULL
 };
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
 {
     return ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries );
 }
@@ -76,3 +73,4 @@ component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiSe
 } //extern "C"
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

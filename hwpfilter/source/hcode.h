@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hcode.h,v 1.3 2008-04-10 12:03:17 rt Exp $ */
 
 #ifndef _HCODE_H_
 #define _HCODE_H_
@@ -82,3 +81,5 @@ DLLEXPORT double calcAngle(int x1, int y1, int x2, int y2);
 
 
 #endif                                            /* _HCODE_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

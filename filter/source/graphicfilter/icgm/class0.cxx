@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,13 +37,13 @@ void CGM::ImplDoClass0()
 {
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_LEVEL1, "Begin Metafile" )
+        case 0x01 : /*Begin Metafile*/
         {
             ImplSetMapMode();
             mbMetaFile = sal_True;
         }
         break;
-        case 0x02 : ComOut( CGM_LEVEL1, "End MetaFile" )
+        case 0x02 : /*End MetaFile*/
         {
             if ( mpBitmapInUse )                            // vorhandene grafik verarbeiten,
             {
@@ -57,7 +58,7 @@ void CGM::ImplDoClass0()
             mbMetaFile = sal_False;
         }
         break;
-        case 0x03 : ComOut( CGM_LEVEL1, "Begin Picture" )
+        case 0x03 : /*Begin Picture*/
         {
             ImplDefaultReplacement();
             ImplSetMapMode();
@@ -74,10 +75,10 @@ void CGM::ImplDoClass0()
             }
         }
         break;
-        case 0x04 : ComOut( CGM_LEVEL1, "Begin Picture Body" )
+        case 0x04 : /*Begin Picture Body*/
             mbPictureBody = sal_True;
         break;
-        case 0x05 : ComOut( CGM_LEVEL1, "   End Picture" )
+        case 0x05 : /*  End Picture*/
         {
             if ( mbPicture )
             {
@@ -98,41 +99,42 @@ void CGM::ImplDoClass0()
                 mbStatus = sal_False;
         }
         break;
-        case 0x06 : ComOut( CGM_LEVEL2, "Begin Segment" )
+        case 0x06 : /*Begin Segment*/
             pElement->bSegmentCount = sal_True;
         break;
-        case 0x07 : ComOut( CGM_LEVEL2, "End Segment" )
+        case 0x07 : /*End Segment*/
             pElement->bSegmentCount = sal_True;
         break;
-        case 0x08 : ComOut( CGM_LEVEL2, "Begin Figure" )
+        case 0x08 : /*Begin Figure*/
             mbFigure = sal_True;
             mpOutAct->BeginFigure();
         break;
-        case 0x09 : ComOut( CGM_LEVEL2, "End Figure" )
+        case 0x09 : /*End Figure*/
             mpOutAct->EndFigure();
             mbFigure = sal_False;
         break;
-        case 0x0d : ComOut( CGM_LEVEL3, "Begin Protection Region" ) break;
-        case 0x0e : ComOut( CGM_LEVEL3, "End Protection Region" ) break;
-        case 0x0f : ComOut( CGM_LEVEL3, "Begin Compound Line" ) break;
-        case 0x10 : ComOut( CGM_LEVEL3, "End Compound Line" ) break;
-        case 0x11 : ComOut( CGM_LEVEL3, "Begin Compound Text Path" ) break;
-        case 0x12 : ComOut( CGM_LEVEL3, "End Compound Text Path" ) break;
-        case 0x13 : ComOut( CGM_LEVEL3, "Begin Tile Array" ) break;                 // NS
-        case 0x14 : ComOut( CGM_LEVEL3, "End Tile Array" ) break;                   // NS
-        case 0xff : ComOut( CGM_GDSF_ONLY, "Filter Setup" ) break;
-        case 0xfe : ComOut( CGM_GDSF_ONLY, "Begin Block Text Region" ) break;
-        case 0xfd : ComOut( CGM_GDSF_ONLY, "End Block Text Region" ) break;
-        case 0xfc : ComOut( CGM_GDSF_ONLY, "Begin Group" )
+        case 0x0d : /*Begin Protection Region */break;
+        case 0x0e : /*End Protection Region */break;
+        case 0x0f : /*Begin Compound Line */break;
+        case 0x10 : /*End Compound Line */break;
+        case 0x11 : /*Begin Compound Text Path */break;
+        case 0x12 : /*End Compound Text Path */break;
+        case 0x13 : /*Begin Tile Array */break;                 // NS
+        case 0x14 : /*End Tile Array */break;                   // NS
+        case 0xff : /*Filter Setup */break;
+        case 0xfe : /*Begin Block Text Region */break;
+        case 0xfd : /*End Block Text Region */break;
+        case 0xfc : /*Begin Group*/
             mpOutAct->BeginGroup();
         break;
-        case 0xfb : ComOut( CGM_GDSF_ONLY, "End Group" )
+        case 0xfb : /*End Group*/
             mpOutAct->EndGroup();
         break;
-        case 0xfa : ComOut( CGM_GDSF_ONLY, "Begin Patch" ) break;
-        case 0xf9 : ComOut( CGM_GDSF_ONLY, "Begin Patch" ) break;
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
+        case 0xfa : /*Begin Patch */break;
+        case 0xf9 : /*Begin Patch */break;
+        default: break;
     }
 };
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

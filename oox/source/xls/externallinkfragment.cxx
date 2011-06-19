@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -495,7 +496,7 @@ void BiffExternalSheetDataContext::importCrn( BiffInputStream& rStrm )
                 rStrm.skip( 7 );
             break;
             default:
-                OSL_ENSURE( false, "BiffExternalSheetDataContext::importCrn - unknown data type" );
+                OSL_FAIL( "BiffExternalLinkFragment::importCrn - unknown data type" );
                 bLoop = false;
         }
     }
@@ -546,3 +547,5 @@ bool BiffExternalLinkFragment::importFragment()
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

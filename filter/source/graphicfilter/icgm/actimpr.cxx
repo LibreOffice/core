@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,16 +52,11 @@
 #include <unotools/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-//#include <toolkit/unohlp.hxx>
-
 #include "main.hxx"
 #include "outact.hxx"
 
 using namespace ::com::sun::star;
 
-// ---------------------------------------------------------------
-// ---------------------------------------------------------------
-// ---------------------------------------------------------------
 // ---------------------------------------------------------------
 
 CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XModel > & rModel ) :
@@ -131,11 +127,11 @@ void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrien
 {
     uno::Any aAny;
     aAny <<= (sal_Int32)rRefPoint.X;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("RotationPointX"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotationPointX" )), aAny );
     aAny <<= (sal_Int32)rRefPoint.Y;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("RotationPointY"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotationPointY" )), aAny );
     aAny <<= (sal_Int32)( rOrientation * 100.0 );
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("RotateAngle"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" )), aAny );
 }
 
 // ---------------------------------------------------------------
@@ -163,10 +159,10 @@ void CGMImpressOutAct::ImplSetLineBundle()
         fLineWidth = mpCGM->pElement->aLineBundle.nLineWidth;
 
     aAny <<= (sal_Int32)nLineColor;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineColor"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )), aAny );
 
     aAny <<= (sal_Int32)fLineWidth;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineWidth"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" )), aAny );
 
     switch( eLineType )
     {
@@ -187,12 +183,12 @@ void CGMImpressOutAct::ImplSetLineBundle()
         break;
     }
     aAny <<= eLS;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineStyle"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" )), aAny );
     if ( eLS == drawing::LineStyle_DASH )
     {
         drawing::LineDash aLineDash( drawing::DashStyle_RECTRELATIVE, 1, 50, 3, 33, 100 );
         aAny <<= aLineDash;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineDash"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" )), aAny );
     }
 };
 
@@ -211,7 +207,6 @@ void CGMImpressOutAct::ImplSetFillBundle()
 
     sal_uInt32              nFillColor;
     FillInteriorStyle       eFillStyle;
-    long                    nPatternIndex;
     sal_uInt32              nHatchIndex;
 
     if ( mpCGM->pElement->eEdgeVisibility == EV_ON )
@@ -244,13 +239,9 @@ void CGMImpressOutAct::ImplSetFillBundle()
         nHatchIndex = (sal_uInt32)mpCGM->pElement->pFillBundle->nFillHatchIndex;
     else
         nHatchIndex = (sal_uInt32)mpCGM->pElement->aFillBundle.nFillHatchIndex;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_PATTERNINDEX )
-        nPatternIndex = mpCGM->pElement->pFillBundle->nFillPatternIndex;
-    else
-        nPatternIndex = mpCGM->pElement->aFillBundle.nFillPatternIndex;
 
     aAny <<= (sal_Int32)nFillColor;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("FillColor"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" )), aAny );
 
     switch ( eFillStyle )
     {
@@ -298,27 +289,27 @@ void CGMImpressOutAct::ImplSetFillBundle()
     if ( eFS == drawing::FillStyle_GRADIENT )
     {
         aAny <<= *mpGradient;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("FillGradient"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" )), aAny );
     }
     aAny <<= eFS;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("FillStyle"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" )), aAny );
 
     eLS = drawing::LineStyle_NONE;
     if ( eFillStyle == FIS_HOLLOW )
     {
         eLS = drawing::LineStyle_SOLID;
         aAny <<= (sal_Int32)nFillColor;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineColor"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )), aAny );
         aAny <<= (sal_Int32)0;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineWidth"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" )), aAny );
     }
     else if ( eEdgeType != ET_NONE )
     {
         aAny <<= (sal_Int32)nEdgeColor;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineColor"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )), aAny );
 
         aAny <<= (sal_Int32)fEdgeWidth;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineWidth"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" )), aAny );
 
         switch( eEdgeType )
         {
@@ -329,15 +320,6 @@ void CGMImpressOutAct::ImplSetFillBundle()
             case ET_DOTDOTSPACE :
             case ET_LONGDASH :
             case ET_DASHDASHDOT :
-//          {
-//              eLS = LineStyle_DASH;
-//              aAny.setValue( &eLS, ::getCppuType((const drawing::LineStyle*)0) );
-//              maXPropSet->setPropertyValue( L"LineStyle", aAny );
-//              drawing::LineDash   aLineDash( DashStyle_RECTRELATIVE, 1, 160, 1, 160, 190 );
-//              aAny.setValue( &aLineDash, ::getCppuType((const drawing::LineDash*)0) );
-//              maXPropSet->setPropertyValue( L"DashStyle", aAny );
-//          }
-//          break;
             default:            // case ET_SOLID :
             {
                 eLS = drawing::LineStyle_SOLID;
@@ -347,7 +329,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
     }
 
     aAny <<= eLS;
-    maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineStyle"), aAny );
+    maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" )), aAny );
 
     if ( eFS == drawing::FillStyle_HATCH )
     {
@@ -376,7 +358,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
             aHatch.Angle = 15 * ( ( nHatchIndex & 0x1f ) - 5 );
         }
         aAny <<= aHatch;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("FillHatch"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" )), aAny );
     }
 };
 
@@ -385,35 +367,20 @@ void CGMImpressOutAct::ImplSetFillBundle()
 void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XPropertySet > & rProperty )
 {
     uno::Any        aAny;
-    TextPrecision   eTextPrecision;
     sal_uInt32      nTextFontIndex;
     sal_uInt32      nTextColor;
-    double          fCharacterExpansion;
-    double          fCharacterSpacing;
 
     if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTFONTINDEX )
         nTextFontIndex = mpCGM->pElement->pTextBundle->nTextFontIndex;
     else
         nTextFontIndex = mpCGM->pElement->aTextBundle.nTextFontIndex;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTPRECISION )
-        eTextPrecision = mpCGM->pElement->pTextBundle->eTextPrecision;
-    else
-        eTextPrecision = mpCGM->pElement->aTextBundle.eTextPrecision;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_CHARACTEREXPANSION )
-        fCharacterExpansion = mpCGM->pElement->pTextBundle->nCharacterExpansion;
-    else
-        fCharacterExpansion = mpCGM->pElement->aTextBundle.nCharacterExpansion;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_CHARACTERSPACING )
-        fCharacterSpacing = mpCGM->pElement->pTextBundle->nCharacterSpacing;
-    else
-        fCharacterSpacing = mpCGM->pElement->aTextBundle.nCharacterSpacing;
     if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTCOLOR )
         nTextColor = mpCGM->pElement->pTextBundle->GetColor();
     else
         nTextColor = mpCGM->pElement->aTextBundle.GetColor();
 
     aAny <<= (sal_Int32)nTextColor;
-    rProperty->setPropertyValue( rtl::OUString::createFromAscii("CharColor"), aAny );
+    rProperty->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColor" )), aAny );
 
     sal_uInt32 nFontType = 0;
     awt::FontDescriptor aFontDescriptor;
@@ -436,7 +403,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
         aFontDescriptor.Underline = awt::FontUnderline::SINGLE;
     }
     aAny <<= aFontDescriptor;
-    rProperty->setPropertyValue( rtl::OUString::createFromAscii("FontDescriptor"), aAny );
+    rProperty->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontDescriptor" )), aAny );
 };
 
 // ---------------------------------------------------------------
@@ -484,9 +451,7 @@ void CGMImpressOutAct::EndGroup()
             if( aAny >>= aXShapeGrouper )
             {
                 uno::Reference< drawing::XShapes >  aXShapes;
-//              if ( maXServiceManagerSC->createInstance( L"stardiv.one.drawing.ShapeCollection" )->queryInterface( ::getCppuType((const Reference< drawing::XShapes >*)0), aXShapes ) )
-
-                uno::Reference< drawing::XShape >  aXShapeCollection( maXServiceManagerSC->createInstance( rtl::OUString::createFromAscii("com.sun.star.drawing.ShapeCollection") ), uno::UNO_QUERY );
+                uno::Reference< drawing::XShape >  aXShapeCollection( maXServiceManagerSC->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ShapeCollection" )) ), uno::UNO_QUERY );
                 if ( aXShapeCollection.is() )
                 {
                     aXShapes = uno::Reference< drawing::XShapes >( aXShapeCollection, uno::UNO_QUERY );
@@ -524,7 +489,7 @@ void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
 {
     if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )         // POWERPOINT HACK !!!
     {
-        if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.RectangleShape") ) )
+        if ( ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.RectangleShape" )) ) )
         {
             awt::Size aSize( (long)(rFloatRect.Right - rFloatRect.Left ), (long)(rFloatRect.Bottom-rFloatRect.Top ) );
             maXShape->setSize( aSize );
@@ -538,11 +503,11 @@ void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
 
 void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation )
 {
-    if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.EllipseShape") ) )
+    if ( ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EllipseShape" )) ) )
     {
         drawing::CircleKind eCircleKind = drawing::CircleKind_FULL;
         uno::Any aAny( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("CircleKind"), aAny );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CircleKind" )), aAny );
 
         long nXSize = (long)( rSize.X * 2.0 );      // Merkwuerdigkes Verhalten bei einer awt::Size von 0
         long nYSize = (long)( rSize.Y * 2.0 );
@@ -566,7 +531,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
 void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation,
             sal_uInt32 nType, double& fStartAngle, double& fEndAngle )
 {
-    if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.EllipseShape") ) )
+    if ( ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EllipseShape" )) ) )
     {
         uno::Any aAny;
         drawing::CircleKind eCircleKind;
@@ -605,11 +570,11 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
         else
         {
             aAny.setValue( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("CircleKind"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CircleKind" )), aAny );
             aAny <<= (sal_Int32)( (long)( fStartAngle * 100 ) );
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("CircleStartAngle"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CircleStartAngle" )), aAny );
             aAny <<= (sal_Int32)( (long)( fEndAngle * 100 ) );
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("CircleEndAngle"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CircleEndAngle" )), aAny );
         }
         maXShape->setPosition( awt::Point( (long)( rCenter.X - rSize.X ), (long)( rCenter.Y - rSize.Y ) ) );
         if ( rOrientation != 0 )
@@ -628,7 +593,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
                 ImplSetLineBundle();
                 drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
                 aAny.setValue( &eFillStyle, ::getCppuType((const drawing::FillStyle*)0) );
-                maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("FillStyle"), aAny );
+                maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" )), aAny );
             }
         }
     }
@@ -656,7 +621,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         mpCGM->ImplMapX( fdx );
         mpCGM->ImplMapY( fdy );
 
-        if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.GraphicObjectShape") ) )
+        if ( ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" )) ) )
         {
             maXShape->setSize( awt::Size( (long)fdx, (long)fdy ) );
             maXShape->setPosition( awt::Point( (long)aOrigin.X, (long)aOrigin.Y ) );
@@ -669,7 +634,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
             uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( BitmapEx( *( pBmpDesc->mpBitmap ) ) ) );
             uno::Any aAny;
             aAny <<= xBitmap;
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("GraphicObjectFillBitmap"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicObjectFillBitmap" )), aAny );
 
         }
     }
@@ -681,7 +646,7 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
 {
     sal_uInt16 nPoints = rPoly.GetSize();
 
-    if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.PolyPolygonShape") ) )
+    if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PolyPolygonShape" )) ) )
     {
         drawing::PointSequenceSequence aRetval;
 
@@ -702,7 +667,7 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
 
         uno::Any aParam;
         aParam <<= aRetval;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("PolyPolygon"), aParam );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" )), aParam );
         ImplSetFillBundle();
     }
 };
@@ -714,7 +679,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 {
     sal_uInt16 nPoints = rPoly.GetSize();
 
-    if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.PolyLineShape") ) )
+    if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PolyLineShape" )) ) )
     {
         drawing::PointSequenceSequence aRetval;
 
@@ -735,7 +700,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 
         uno::Any aParam;
         aParam <<= aRetval;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("PolyPolygon"), aParam );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" )), aParam );
         ImplSetLineBundle();
     }
 };
@@ -745,7 +710,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
-    if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.OpenBezierShape") ) )
+    if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.OpenBezierShape" )) ) )
     {
         drawing::PolyPolygonBezierCoords aRetval;
 
@@ -770,7 +735,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
         }
         uno::Any aParam;
         aParam <<= aRetval;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("PolyPolygonBezier"), aParam );
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygonBezier" )), aParam );
         ImplSetLineBundle();
     }
 };
@@ -780,7 +745,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
 {
     sal_uInt32 nNumPolys = rPolyPolygon.Count();
-    if ( nNumPolys && ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.ClosedBezierShape") ) )
+    if ( nNumPolys && ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ClosedBezierShape" )) ) )
     {
         drawing::PolyPolygonBezierCoords aRetval;
 
@@ -815,7 +780,7 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
         }
         uno::Any aParam;
         aParam <<= aRetval;
-        maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("PolyPolygonBezier"), aParam);
+        maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygonBezier" )), aParam);
         ImplSetFillBundle();
     }
 };
@@ -824,7 +789,7 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
 
 void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
 {
-    if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.TextShape") ) )
+    if ( ImplCreateShape( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TextShape" )) ) )
     {
         uno::Any    aAny;
         long    nWidth = rTextSize.Width;
@@ -877,17 +842,17 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         if ( nOrientation )
         {
             aAny <<= (sal_Int32)( aTextPos.X );
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("RotationPointX"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotationPointX" )), aAny );
             aAny <<= (sal_Int32)( aTextPos.Y + nHeight );
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("RotationPointY"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotationPointY" )), aAny );
             aAny <<= (sal_Int32)( (sal_Int32)( nOrientation * 100 ) );
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("RotateAngle"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" )), aAny );
         }
         if ( nWidth == -1 )
         {
             sal_Bool bTrue( sal_True );
             aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0 ));
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("TextAutoGrowWidth"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowWidth" )), aAny );
 
             drawing::TextAdjust eTextAdjust;
             switch ( mpCGM->pElement->eTextAlignmentH )
@@ -905,13 +870,13 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                 break;
             }
             aAny <<= eTextAdjust;
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("TextHorizontalAdjust"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" )), aAny );
         }
         if ( nHeight == -1 )
         {
             sal_Bool bTrue = sal_True;
             aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0) );
-            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("TextAutoGrowHeight"), aAny );
+            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" )), aAny );
         }
         uno::Reference< text::XText >  xText;
         uno::Any aFirstQuery( maXShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0) ));
@@ -947,13 +912,13 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                                     aAny <<= (sal_Int16)style::HorizontalAlignment_CENTER;
                                 break;
                             }
-                            aCursorPropSet->setPropertyValue( rtl::OUString::createFromAscii("ParaAdjust"), aAny );
+                            aCursorPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" )), aAny );
                         }
                         if ( nWidth > 0 && nHeight > 0 )    // restricted text
                         {
                             sal_Bool bTrue = sal_True;
                             aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0));
-                            maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("TextFitToSize"), aAny );
+                            maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextFitToSize" )), aAny );
                         }
                         aCursorText->setString( aStr );
                         aXTextCursor->gotoEnd( sal_True );
@@ -1011,120 +976,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
 // nCount != 0 -> Append Text
 sal_uInt32 CGMImpressOutAct::DrawText( TextEntry* /*pTextEntry*/, NodeFrameSet& /*rNodeFrameSet*/, sal_uInt32 /*nObjCount*/ )
 {
-
 return 0;
-
-/*
-    uno::Reference< drawing::XShape >  aShape;
-
-    if ( nObjCount )
-    {
-         aShape = (drawing::XShape*) maXShapes->getElementByIndex( nObjCount - 1 )->queryInterface( ::getCppuType((const Reference< drawing::XShape >*)0) );
-    }
-    else
-    {
-        aShape = maXShapes->insertShape( maXShapeFactory->createShape( L"ShapeText", rNodeFrameSet.nSize ), rNodeFrameSet.nTopLeft );
-    }
-    if ( aShape.is() )
-    {
-        uno::Reference< text::XText >  xText = (text::XText*)aShape->queryInterface( ::getCppuType((const Reference< text::XText >*)0) );
-        if ( xText.is() )
-        {
-            uno::Reference< text::XTextCursor >  aXTextCursor = (text::XTextCursor*)xText->createTextCursor()->queryInterface( ::getCppuType((const Reference< text::XTextCursor >*)0) );
-            if ( aXTextCursor.is() )
-            {
-                uno::Any    aAny;
-                sal_uInt32  nTextOfs = 0;
-                TextAttribute* pTAttr = pTextEntry->pAttribute;
-                do
-                {
-                    if ( pTAttr->nTextAttribSize > 0.3 )    // is text readable
-                    {
-                        aXTextCursor->gotoEnd( sal_False );
-                        char nPushedChar = pTextEntry->pText[ nTextOfs + pTAttr->nTextAttribCount ];
-                        pTextEntry->pText[ nTextOfs + pTAttr->nTextAttribCount ] = 0;
-                        UString aStr( StringToOUString( pTextEntry->pText +  nTextOfs, CHARSET_SYSTEM ) );
-
-                        uno::Reference< text::XText >  aCursorText = (text::XText*)aXTextCursor->queryInterface( ::getCppuType((const Reference< text::XText >*)0) );
-                        if ( aCursorText.is() )
-                        {
-                            uno::Reference< beans::XPropertySet >  aPropSet = (beans::XPropertySet*)aCursorText->queryInterface( ::getCppuType((const Reference< beans::XPropertySet >*)0) );
-                            if ( aPropSet.is() )
-                            {
-                                if ( pTextEntry->nRowOrLineNum )
-                                {
-                                    uno::Reference< XControlCharacterInsertable >  aCRef = (XControlCharacterInsertable*)aXTextCursor->queryInterface( ::getCppuType((const Reference< XControlCharacterInsertable >*)0) );
-                                    if ( aCRef.is() )
-                                    {
-                                        aCRef->insertControlCharacter( TEXTCONTROLCHAR_PARAGRAPH_BREAK );
-                                    }
-                                }
-                                aCursorText->setText( aStr );
-                                aXTextCursor->gotoEnd( sal_True );
-                                double nSize = mpCGM->mnOutdx;
-                                if ( mpCGM->mnOutdx < mpCGM->mnOutdy )
-                                    nSize = mpCGM->mnOutdy;
-                                nSize = ( nSize * (double)pTAttr->nTextAttribSize * (double)1.5 ) / 100;
-
-                                aAny <<= (sal_Int32)( (sal_Int32)nSize );
-                                aPropSet->setPropertyValue( L"CharHeight", aAny );
-
-                                sal_uInt32 nTextColor = pTAttr->nTextColorIndex;
-                                if ( nTextColor == 0xff )
-                                {
-                                    nTextColor = ( pTAttr->nTextColorBlue << 16 ) + ( pTAttr->nTextColorGreen << 8 ) + pTAttr->nTextColorRed;
-                                }
-                                else
-                                {
-                                    nTextColor = mpCGM->pElement->aColorTable[ nTextColor ];
-                                }
-
-                                sal_uInt32 nFontType = 0;
-
-                                if (  pTAttr->nTextFontType == 0xff )
-                                {
-                                    FontEntry* pFontEntry = mpCGM->pElement->aFontList.GetFontEntry( pTAttr->nTextFontFamily );
-                                    if ( pFontEntry )
-                                    {
-                                        nFontType = pFontEntry->nFontType;
-                                        if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTCOLOR )
-                                            nTextColor = mpCGM->pElement->pTextBundle->GetColor();
-                                        else
-                                            nTextColor = mpCGM->pElement->aTextBundle.GetColor();
-                                    }
-                                    FontItalic eFontItalic = ITALIC_NONE;
-                                    if ( nFontType & 1 )
-                                        eFontItalic = ITALIC_NORMAL;
-                                    aAny.setValue( &eFontItalic, ::getCppuType((const FontItalic*)0) );
-                                    aPropSet->setPropertyValue( L"CharPosture", aAny );
-                                }
-                                aAny <<= (sal_Int32)( (sal_Int32)nTextColor );
-                                aPropSet->setPropertyValue( L"CharColor", aAny );
-
-                                awt::FontWeight eFontWeight = WEIGHT_NORMAL;
-                                if ( nFontType & 2 )
-                                    eFontWeight = WEIGHT_BOLD;
-                                aAny.setValue( &eFontWeight, ::getCppuType((const awt::FontWeight*)0) );
-                                aPropSet->setPropertyValue( L"CharWeight", aAny );
-
-                                if ( pTAttr->nTextAttribBits & 0x4000 )
-                                {
-                                    awt::FontUnderline eUnderline = UNDERLINE_SINGLE;
-                                    aAny.setValue( &eUnderline, ::getCppuType((const awt::FontUnderline*)0) );
-                                    aPropSet->setPropertyValue( L"CharUnderline", aAny );
-                                }
-                            }
-                        }
-                        pTextEntry->pText[ nTextOfs + pTAttr->nTextAttribCount ] = nPushedChar;
-                    }
-                    nTextOfs += pTAttr->nTextAttribCount;
-                }
-                while ( ( ( pTAttr = pTAttr->pNextAttribute ) != NULL ) );
-            }
-        }
-    }
-    return ( nObjCount ) ? nObjCount : maXShapes->getCount();
-*/
 }
 
 // ---------------------------------------------------------------
@@ -1132,3 +984,5 @@ return 0;
 void CGMImpressOutAct::DrawChart()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

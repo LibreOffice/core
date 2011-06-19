@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -774,7 +775,7 @@ void ViewSettings::finalizeImport()
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ViewSettings::finalizeImport - cannot create document view settings" );
+        OSL_FAIL( "ViewSettings::finalizeImport - cannot create document view settings" );
     }
 
     /*  Set visible area to be used if this document is an embedded OLE object.
@@ -821,3 +822,5 @@ WorkbookViewModel& ViewSettings::createWorkbookView()
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

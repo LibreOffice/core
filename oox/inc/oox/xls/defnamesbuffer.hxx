@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -191,7 +192,7 @@ public:
     /** Creates all defined names in the document. */
     void                finalizeImport();
 
-    /** Returns a defined name by zero-based index (order of appearence). */
+    /** Returns a defined name by zero-based index (order of appearance). */
     DefinedNameRef      getByIndex( sal_Int32 nIndex ) const;
     /** Returns a defined name by token index (index in XDefinedNames container). */
     DefinedNameRef      getByTokenIndex( sal_Int32 nIndex ) const;
@@ -230,3 +231,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

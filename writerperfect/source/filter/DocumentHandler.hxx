@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _OODOCUMENTHANDLER_HXX_
 #define _OODOCUMENTHANDLER_HXX_
 
@@ -11,10 +12,12 @@
 #pragma warning( pop )
 #endif
 
+#include "OdfDocumentHandler.hxx"
+
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XDocumentHandler;
 
-class DocumentHandler
+class DocumentHandler: public OdfDocumentHandler
 {
 public:
         DocumentHandler(Reference < XDocumentHandler > &xHandler);
@@ -29,3 +32,5 @@ private:
 };
 
 #endif // _OODOCUMENTHANDLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

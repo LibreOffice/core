@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,24 +36,21 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ModelEventListener::ModelEventListener()
 {
 }
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ModelEventListener::~ModelEventListener()
 {
 }
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
 {
-    if( rEvent.EventName.equalsAscii("OnFocus"))
+    if( rEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnFocus")))
     {
         try
         {
@@ -73,13 +71,12 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         catch( const uno::Exception& rEx )
         {
             (void)rEx;
-            OSL_ENSURE( false, "exception while updating indexes" );
+            OSL_FAIL( "exception while updating indexes" );
         }
     }
 }
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno::RuntimeException)
 {
     try
@@ -95,3 +92,5 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno
 
 } //namespace dmapper
 } //namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -184,7 +185,7 @@ sal_uInt16 DXFGroupReader::Read()
 }
 
 
-long DXFGroupReader::GetI(sal_uInt16 nG)
+long DXFGroupReader::GetI(sal_uInt16 nG) const
 {
     sal_Int32 nRetValue = 0;
     if ( ( nG >= 60 ) && ( nG <= 79 ) )
@@ -198,7 +199,7 @@ long DXFGroupReader::GetI(sal_uInt16 nG)
     return nRetValue;
 }
 
-double DXFGroupReader::GetF(sal_uInt16 nG)
+double DXFGroupReader::GetF(sal_uInt16 nG) const
 {
     nG-=10;
     if (nG<50) return F10_59[nG];
@@ -217,7 +218,7 @@ double DXFGroupReader::GetF(sal_uInt16 nG)
     }
 }
 
-const char * DXFGroupReader::GetS(sal_uInt16 nG)
+const char * DXFGroupReader::GetS(sal_uInt16 nG) const
 {
     if (nG<10) return S0_9[nG];
     else if ( nG == 100 )
@@ -359,3 +360,4 @@ void DXFGroupReader::ReadS(char * ptgt)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

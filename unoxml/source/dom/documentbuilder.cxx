@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,8 +83,8 @@ namespace DOM
                 Content aContent(sSystemId, aEnvironment);
 
                 is.aInputStream = aContent.openStream();
-            } catch (com::sun::star::uno::Exception) {
-                OSL_ENSURE(sal_False, "exception in default entity resolver");
+            } catch (const com::sun::star::uno::Exception&) {
+                OSL_FAIL("exception in default entity resolver");
                 is.aInputStream = Reference< XInputStream >();
             }
             return is;
@@ -221,7 +222,7 @@ namespace DOM
             return nread;
         } catch (com::sun::star::uno::Exception& ex) {
             (void) ex;
-            OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
         }
     }
@@ -241,7 +242,7 @@ namespace DOM
             return 0;
         } catch (com::sun::star::uno::Exception& ex) {
             (void) ex;
-            OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
         }
     }
@@ -289,30 +290,30 @@ namespace DOM
     }
 #endif
 
-    // default warning handler triggers assertion
+    // default warning handler does not trigger assertion
     static void warning_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf(OUString::createFromAscii("libxml2 warning\n"));
+        OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 warning\n")));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, msg.getStr());
+        OSL_TRACE(msg.getStr());
     }
 
     // default error handler triggers assertion
     static void error_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf(OUString::createFromAscii("libxml2 error\n"));
+        OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error\n")));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, msg.getStr());
+        OSL_FAIL(msg.getStr());
     }
 
     } // extern "C"
 
-    void throwEx(xmlParserCtxtPtr ctxt) {
-        OUString msg = make_error_message(ctxt);
+    void throwEx(xmlParserCtxtPtr ctxt)
+    {
         com::sun::star::xml::sax::SAXParseException saxex;
-        saxex.Message = msg;
+        saxex.Message = make_error_message(ctxt);
         saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
         saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
         throw saxex;
@@ -410,3 +411,5 @@ namespace DOM
         m_xErrorHandler = xEH;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

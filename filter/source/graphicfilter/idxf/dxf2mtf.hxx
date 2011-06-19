@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,8 +65,6 @@ private:
 
     sal_uLong CountEntities(const DXFEntities & rEntities);
 
-    void MayCallback(sal_uLong nMainEntitiesProcessed);
-
     Color ConvertColor(sal_uInt8 nColor);
 
     long GetEntityColor(const DXFBasicEntity & rE);
@@ -110,8 +109,7 @@ private:
     void DrawHatchEntity( const DXFHatchEntity & rE, const DXFTransform & rTransform );
 
     void DrawEntities(const DXFEntities & rEntities,
-                      const DXFTransform & rTransform,
-                      sal_Bool bTopEntities);
+                      const DXFTransform & rTransform);
 
 public:
 
@@ -126,3 +124,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

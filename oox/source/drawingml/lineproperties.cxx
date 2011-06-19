@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ void lclConvertPresetDash( LineDash& orLineDash, sal_Int32 nPresetDash )
         case XML_sysDashDotDot: lclSetDashData( orLineDash, 2, 1, 1, 3, 1 );    break;
 
         default:
-            OSL_ENSURE( false, "lclConvertPresetDash - unsupported preset dash" );
+            OSL_FAIL( "lclConvertPresetDash - unsupported preset dash" );
             lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
     }
 }
@@ -106,7 +107,7 @@ void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopV
 {
     if( rCustomDash.empty() )
     {
-        OSL_ENSURE( false, "lclConvertCustomDash - unexpected empty custom dash" );
+        OSL_FAIL( "lclConvertCustomDash - unexpected empty custom dash" );
         lclSetDashData( orLineDash, 0, 0, 1, 4, 3 );
         return;
     }
@@ -429,3 +430,4 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 } // namespace drawingml
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

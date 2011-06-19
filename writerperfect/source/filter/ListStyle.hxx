@@ -1,7 +1,7 @@
 /* ListStyle: Stores (and writes) list-based information that is
  * needed at the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,13 +26,7 @@
  */
 #ifndef _LISTSTYLE_H
 #define _LISTSTYLE_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
 #include <libwpd/libwpd.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 
 #define WP6_NUM_LIST_LEVELS 8 // see WP6FileStructure.h (we shouldn't need to reference this)
 
@@ -45,14 +39,14 @@ class ListLevelStyle
 {
 public:
     virtual ~ListLevelStyle() {};
-    virtual void write(DocumentHandler *pHandler, int iLevel) const = 0;
+    virtual void write(OdfDocumentHandler *pHandler, int iLevel) const = 0;
 };
 
 class OrderedListLevelStyle : public ListLevelStyle
 {
 public:
     OrderedListLevelStyle(const WPXPropertyList &xPropList);
-    void write(DocumentHandler *pHandler, int iLevel) const;
+    void write(OdfDocumentHandler *pHandler, int iLevel) const;
 private:
         WPXPropertyList mPropList;
 };
@@ -61,7 +55,7 @@ class UnorderedListLevelStyle : public ListLevelStyle
 {
 public:
     UnorderedListLevelStyle(const WPXPropertyList &xPropList);
-    void write(DocumentHandler *pHandler, int iLevel) const;
+    void write(OdfDocumentHandler *pHandler, int iLevel) const;
 private:
         WPXPropertyList mPropList;
 };
@@ -72,8 +66,8 @@ public:
     ListStyle(const char *psName, const int iListID);
     virtual ~ListStyle();
     virtual void updateListLevel(const int iLevel, const WPXPropertyList &xPropList) = 0;
-    virtual void write(DocumentHandler *pHandler) const;
-    int getListID() const { return miListID; }
+    virtual void write(OdfDocumentHandler *pHandler) const;
+    int getListID() { return miListID; }
     bool isListLevelDefined(int iLevel) const;
 
 protected:

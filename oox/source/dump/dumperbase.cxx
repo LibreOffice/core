@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -209,9 +210,9 @@ OUStringVector::const_iterator ItemFormat::parse( const OUStringVector& rFormatV
 
     if( meFmtType == FORMATTYPE_NONE )
     {
-        if( aFmtType.equalsAscii( "unused" ) )
+        if( aFmtType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "unused" ) ) )
             set( meDataType, FORMATTYPE_HEX, CREATE_OUSTRING( OOX_DUMP_UNUSED ) );
-        else if( aFmtType.equalsAscii( "unknown" ) )
+        else if( aFmtType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "unknown" ) ) )
             set( meDataType, FORMATTYPE_HEX, CREATE_OUSTRING( OOX_DUMP_UNKNOWN ) );
     }
 
@@ -765,25 +766,25 @@ OString StringHelper::convertToUtf8( const OUString& rStr )
 DataType StringHelper::convertToDataType( const OUString& rStr )
 {
     DataType eType = DATATYPE_VOID;
-    if( rStr.equalsAscii( "int8" ) )
+    if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "int8" ) ) )
         eType = DATATYPE_INT8;
-    else if( rStr.equalsAscii( "uint8" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "uint8" ) ) )
         eType = DATATYPE_UINT8;
-    else if( rStr.equalsAscii( "int16" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "int16" ) ) )
         eType = DATATYPE_INT16;
-    else if( rStr.equalsAscii( "uint16" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "uint16" ) ) )
         eType = DATATYPE_UINT16;
-    else if( rStr.equalsAscii( "int32" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "int32" ) ) )
         eType = DATATYPE_INT32;
-    else if( rStr.equalsAscii( "uint32" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "uint32" ) ) )
         eType = DATATYPE_UINT32;
-    else if( rStr.equalsAscii( "int64" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "int64" ) ) )
         eType = DATATYPE_INT64;
-    else if( rStr.equalsAscii( "uint64" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "uint64" ) ) )
         eType = DATATYPE_UINT64;
-    else if( rStr.equalsAscii( "float" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "float" ) ) )
         eType = DATATYPE_FLOAT;
-    else if( rStr.equalsAscii( "double" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "double" ) ) )
         eType = DATATYPE_DOUBLE;
     return eType;
 }
@@ -791,17 +792,17 @@ DataType StringHelper::convertToDataType( const OUString& rStr )
 FormatType StringHelper::convertToFormatType( const OUString& rStr )
 {
     FormatType eType = FORMATTYPE_NONE;
-    if( rStr.equalsAscii( "dec" ) )
+    if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dec" ) ) )
         eType = FORMATTYPE_DEC;
-    else if( rStr.equalsAscii( "hex" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hex" ) ) )
         eType = FORMATTYPE_HEX;
-    else if( rStr.equalsAscii( "shorthex" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "shorthex" ) ) )
         eType = FORMATTYPE_SHORTHEX;
-    else if( rStr.equalsAscii( "bin" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bin" ) ) )
         eType = FORMATTYPE_BIN;
-    else if( rStr.equalsAscii( "fix" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "fix" ) ) )
         eType = FORMATTYPE_FIX;
-    else if( rStr.equalsAscii( "bool" ) )
+    else if( rStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bool" ) ) )
         eType = FORMATTYPE_BOOL;
     return eType;
 }
@@ -865,9 +866,9 @@ bool StringHelper::convertStringToDouble( double& orfData, const OUString& rData
 
 bool StringHelper::convertStringToBool( const OUString& rData )
 {
-    if( rData.equalsAscii( "true" ) )
+    if( rData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "true" ) ) )
         return true;
-    if( rData.equalsAscii( "false" ) )
+    if( rData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "false" ) ) )
         return false;
     sal_Int64 nData;
     return convertStringToInt( nData, rData ) && (nData != 0);
@@ -1074,7 +1075,7 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
     OUStringPair aPair = StringHelper::convertStringToPair( aLine );
     orKey = aPair.first;
     orData = aPair.second;
-    return ((orKey.getLength() > 0) && ((orData.getLength() > 0) || !orKey.equalsAscii( "end" ))) ?
+    return ((orKey.getLength() > 0) && ((orData.getLength() > 0) || !orKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "end" ) ))) ?
         LINETYPE_DATA : LINETYPE_END;
 }
 
@@ -1123,9 +1124,9 @@ bool NameListBase::implIsValid() const
 void NameListBase::implProcessConfigItemStr(
         TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
-    if( rKey.equalsAscii( "include" ) )
+    if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "include" ) ) )
         include( rData );
-    else if( rKey.equalsAscii( "exclude" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "exclude" ) ) )
         exclude( rData );
     else
         ConfigItemBase::implProcessConfigItemStr( rStrm, rKey, rData );
@@ -1185,9 +1186,9 @@ ConstList::ConstList( const SharedConfigData& rCfgData ) :
 void ConstList::implProcessConfigItemStr(
         TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
-    if( rKey.equalsAscii( "default" ) )
+    if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
         setDefaultName( rData );
-    else if( rKey.equalsAscii( "quote-names" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quote-names" ) ) )
         setQuoteNames( StringHelper::convertStringToBool( rData ) );
     else
         NameListBase::implProcessConfigItemStr( rStrm, rKey, rData );
@@ -1244,7 +1245,7 @@ void MultiList::setNamesFromVec( sal_Int64 nStartKey, const OUStringVector& rNam
 void MultiList::implProcessConfigItemStr(
         TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
-    if( rKey.equalsAscii( "ignore-empty" ) )
+    if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ignore-empty" ) ) )
         mbIgnoreEmpty = StringHelper::convertStringToBool( rData );
     else
         ConstList::implProcessConfigItemStr( rStrm, rKey, rData );
@@ -1268,7 +1269,7 @@ FlagsList::FlagsList( const SharedConfigData& rCfgData ) :
 void FlagsList::implProcessConfigItemStr(
         TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
-    if( rKey.equalsAscii( "ignore" ) )
+    if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ignore" ) ) )
     {
         sal_Int64 nIgnore;
         if( StringHelper::convertStringToInt( nIgnore, rData ) )
@@ -1373,11 +1374,11 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
         for( OUStringVector::iterator aIt = aRemain.begin(), aEnd = aRemain.end(); aIt != aEnd; ++aIt )
         {
             OUStringPair aPair = StringHelper::convertStringToPair( *aIt );
-            if( aPair.first.equalsAscii( "noshift" ) )
+            if( aPair.first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "noshift" ) ) )
             {
                 aItemFmt.mbShiftValue = StringHelper::convertStringToBool( aPair.second );
             }
-            else if( aPair.first.equalsAscii( "filter" ) )
+            else if( aPair.first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "filter" ) ) )
             {
                 OUStringPair aFilter = StringHelper::convertStringToPair( aPair.second, '~' );
                 ExtItemFormatKey aKey( nKey );
@@ -1579,19 +1580,19 @@ bool SharedConfigData::implIsValid() const
 void SharedConfigData::implProcessConfigItemStr(
         TextInputStream& rStrm, const OUString& rKey, const OUString& rData )
 {
-    if( rKey.equalsAscii( "include-config-file" ) )
+    if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "include-config-file" ) ) )
         readConfigFile( maConfigPath + rData );
-    else if( rKey.equalsAscii( "constlist" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "constlist" ) ) )
         readNameList< ConstList >( rStrm, rData );
-    else if( rKey.equalsAscii( "multilist" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "multilist" ) ) )
         readNameList< MultiList >( rStrm, rData );
-    else if( rKey.equalsAscii( "flagslist" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "flagslist" ) ) )
         readNameList< FlagsList >( rStrm, rData );
-    else if( rKey.equalsAscii( "combilist" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "combilist" ) ) )
         readNameList< CombiList >( rStrm, rData );
-    else if( rKey.equalsAscii( "shortlist" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "shortlist" ) ) )
         createShortList( rData );
-    else if( rKey.equalsAscii( "unitconverter" ) )
+    else if( rKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "unitconverter" ) ) )
         createUnitConverter( rData );
     else
         setOption( rKey, rData );
@@ -3179,3 +3180,5 @@ void DumperBase::construct( const ConfigRef& rxConfig )
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hstyle.h,v 1.3 2008-04-10 12:07:29 rt Exp $ */
 
 #ifndef _HWPSTYLE_H_
 #define _HWPSTYLE_H_
@@ -59,3 +58,5 @@ class DLLEXPORT HWPStyle
 };
 #endif
 /* _HWPSTYLE+H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

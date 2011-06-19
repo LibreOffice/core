@@ -2,7 +2,7 @@
  * break needs a new section) that is needed at the head of an OO document and
  * is referenced throughout the entire document
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  * Copyright (c) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
 {
 }
 
-void SectionStyle::write(DocumentHandler *pHandler) const
+void SectionStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -53,15 +53,15 @@ void SectionStyle::write(DocumentHandler *pHandler) const
 
     // if the number of columns is <= 1, we will never come here. This is only an additional check
     // style properties
-    pHandler->startElement("style:properties", mPropList);
+    pHandler->startElement("style:section-properties", mPropList);
 
     // column properties
     WPXPropertyList columnProps;
 
     if (mColumns.count() > 1)
     {
-                columnProps.insert("fo:column-count", (int)mColumns.count());
-                pHandler->startElement("style:columns", columnProps);
+        columnProps.insert("fo:column-count", (int)mColumns.count());
+         pHandler->startElement("style:columns", columnProps);
 
                 WPXPropertyListVector::Iter i(mColumns);
                 for (i.rewind(); i.next();)
@@ -73,14 +73,14 @@ void SectionStyle::write(DocumentHandler *pHandler) const
     else
     {
         columnProps.insert("fo:column-count", 0);
-        columnProps.insert("fo:column-gap", 0.0f);
+        columnProps.insert("fo:column-gap", 0.0);
         pHandler->startElement("style:columns", columnProps);
     }
 
     pHandler->endElement("style:columns");
 
 
-    pHandler->endElement("style:properties");
+    pHandler->endElement("style:section-properties");
 
     pHandler->endElement("style:style");
 }

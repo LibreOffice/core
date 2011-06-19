@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,28 +43,28 @@ class Node;
 using namespace ::com::sun::star::xml::sax;
 // #endif
 
-
-class Formula{
+class Formula
+{
 public:
-     Formula(char *_eq, int _ishwpeq = 1) {
-          eq = _eq;
-          isHwpEQ = _ishwpeq;
-          trim();
-     }
-     virtual ~Formula(){ }
+    Formula(char *_eq, int _ishwpeq = 1)
+        : pList(NULL)
+    {
+        eq = _eq;
+        isHwpEQ = _ishwpeq;
+        trim();
+    }
+    virtual ~Formula(){ }
 
-// DVO: remove DEBUG dependency
-// #ifndef DEBUG
-     void setDocumentHandler(Reference < XDocumentHandler > xHandler ){
-          rDocumentHandler = xHandler;
-     }
-     void setAttributeListImpl( AttributeListImpl *p ){
-          pList = p;
-          rList = (XAttributeList *) pList;
-     }
-// DVO: remove DEBUG dependency
-// #endif
-     int parse();
+    void setDocumentHandler(Reference < XDocumentHandler > xHandler )
+    {
+          m_rxDocumentHandler = xHandler;
+    }
+    void setAttributeListImpl( AttributeListImpl *p )
+    {
+        pList = p;
+        rList = (XAttributeList *) pList;
+    }
+    int parse();
 private:
      void trim();
      void makeMathML(Node *res);
@@ -88,15 +89,13 @@ private:
      void makeEnd(Node *res);
 
 private:
-// DVO: remove DEBUG dependency
-// #ifndef DEBUG
-     Reference< XDocumentHandler >   rDocumentHandler;
+     Reference< XDocumentHandler >  m_rxDocumentHandler;
      Reference< XAttributeList > rList;
      AttributeListImpl *pList;
-// DVO: remove DEBUG dependency
-// #endif
      char *eq;
      int isHwpEQ;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

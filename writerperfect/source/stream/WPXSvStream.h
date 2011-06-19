@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef WPXSVSTREAM_H
 #define WPXSVSTREAM_H
 
@@ -12,7 +13,7 @@
 #if defined _MSC_VER
 #pragma warning( push, 1 )
 #endif
-#include <libwpd/WPXStream.h>
+#include <libwpd-stream/WPXStream.h>
 #if defined _MSC_VER
 #pragma warning( pop )
 #endif
@@ -25,10 +26,9 @@ public:
     virtual ~WPXSvInputStream();
 
     virtual bool isOLEStream();
-    virtual WPXInputStream * getDocumentOLEStream();
     virtual WPXInputStream * getDocumentOLEStream(const char *name);
 
-    virtual const uint8_t *read(size_t numBytes, size_t &numBytesRead);
+    virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
     virtual int seek(long offset, WPX_SEEK_TYPE seekType);
     virtual long tell();
     virtual bool atEOS();
@@ -45,3 +45,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

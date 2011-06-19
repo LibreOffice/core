@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,6 +49,8 @@
 namespace oox {
 namespace xls {
 
+using ::rtl::OUString;
+
 // ============================================================================
 
 using namespace ::com::sun::star::awt;
@@ -70,6 +73,21 @@ using ::rtl::OUStringToOString;
 
 // ============================================================================
 // DrawingML
+// ============================================================================
+
+namespace {
+
+/** Converts the passed 64-bit integer value from the passed unit to EMUs. */
+sal_Int64 lclCalcEmu( const UnitConverter& rUnitConv, sal_Int64 nValue, Unit eFromUnit )
+{
+    return (eFromUnit == UNIT_EMU) ? nValue :
+        static_cast< sal_Int64 >( rUnitConv.scaleValue( static_cast< double >( nValue ), eFromUnit, UNIT_EMU ) + 0.5 );
+}
+
+} // namespace
+
+// ============================================================================
+
 // ============================================================================
 
 ShapeMacroAttacher::ShapeMacroAttacher( const OUString& rMacroName, const Reference< XShape >& rxShape ) :
@@ -265,13 +283,11 @@ void DrawingFragment::onEndElement()
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRectEmu32 );
-                    /*  Collect all shape positions in the WorksheetHelper base
-                        class. But first, scale EMUs to 1/100 mm. */
-                    Rectangle aShapeRectHmm(
-                        convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
-                        convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
-                    extendShapeBoundingBox( aShapeRectHmm );
+                    basegfx::B2DHomMatrix aTransformation;
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, &aShapeRectEmu32 );
+
+                    // collect all shape positions in the WorksheetHelper base class
+                    extendShapeBoundingBox( aShapeRectEmu32 );
                 }
             }
             mxShape.reset();
@@ -759,3 +775,5 @@ void VmlDrawingFragment::finalizeImport()
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

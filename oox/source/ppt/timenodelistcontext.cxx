@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -202,7 +203,7 @@ namespace oox { namespace ppt {
                     if( maTo >>= aString )
                     {
                         OSL_TRACE( "Magic conversion %s", OUSTRING_TO_CSTR( aString ) );
-                        maTo = makeAny( aString.equalsAscii( "visible" ) ? sal_True : sal_False );
+                        maTo = makeAny( aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visible" ) ) ? sal_True : sal_False );
                         if( !maTo.has<sal_Bool>() )
                             OSL_TRACE( "conversion failed" );
                     }
@@ -646,7 +647,7 @@ namespace oox { namespace ppt {
 
                     NodePropertyMap & aProps( mpNode->getNodeProperties() );
                     end = maTavList.end();
-                    for(iter = maTavList.begin(), i=0; iter != end; iter++,i++)
+                    for(iter = maTavList.begin(), i=0; iter != end; ++iter,++i)
                     {
                         // TODO what to do if it is Timing_INFINITE ?
                         Any aTime = GetTimeAnimateValueTime( iter->msTime );
@@ -938,6 +939,7 @@ namespace oox { namespace ppt {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
                     // TODO push
+                    (void)p;
                     break;
                 }
                 default:
@@ -1161,3 +1163,5 @@ namespace oox { namespace ppt {
 
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

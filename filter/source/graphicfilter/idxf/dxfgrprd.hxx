@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ public:
 
     DXFGroupReader( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent );
 
-    sal_Bool GetStatus();
+    sal_Bool GetStatus() const;
 
     void SetError();
 
@@ -52,20 +53,20 @@ public:
         // Im Falle eines Fehlers liefert GetStatus() sal_False, Gruppencode wird 0
         // gesetzt, und es wird SetS(0,"EOF") ausgefuehrt.
 
-    sal_uInt16 GetG();
+    sal_uInt16 GetG() const;
         // Liefert den letzten Gruppencode (also was Read() zuletzt lieferte)
 
-    long   GetI();
+    long   GetI() const;
         // Liefert den Integer-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp Integer
         // gehandelt haben, wenn nicht, wird 0 gelieferet.
 
-    double GetF();
+    double GetF() const;
         // Liefert den Floatingpoint-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp Floatingpoint
         // gehandelt haben, wenn nicht, wird 0 geliefert.
 
-    const char * GetS();
+    const char * GetS() const;
         // Liefert den String zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp String
         // gehandelt haben, wenn nicht, wird NULL geliefert.
@@ -74,9 +75,9 @@ public:
     // aktuelle Gruppencode angegeben werden. (DXFGroupReader speichert die Parameter
     // zu allen Gruppencodes. Dadurch ist es moeglich, dass zunaechst mit Read() einige
     // verschiedene Gruppen eingelesen werden, bevor sie ausgewertet werden.)
-    long         GetI(sal_uInt16 nG);
-    double       GetF(sal_uInt16 nG);
-    const char * GetS(sal_uInt16 nG);
+    long         GetI(sal_uInt16 nG) const;
+    double       GetF(sal_uInt16 nG) const;
+    const char * GetS(sal_uInt16 nG) const;
 
     // Mit folgenden Methoden koennen die aktuell gespeicherten Werte zu den
     // Gruppencodes veraendert werden. (z.B. um Defaultwerte zu setzen, bevor
@@ -92,7 +93,6 @@ private:
     void   ReadS(char * ptgt);
 
     SvStream & rIS;
-    char sIBuff[1024];
     sal_uInt16 nIBuffSize,nIBuffPos;
     sal_Bool bStatus;
     sal_uInt16 nLastG;
@@ -119,7 +119,7 @@ private:
 };
 
 
-inline sal_Bool DXFGroupReader::GetStatus()
+inline sal_Bool DXFGroupReader::GetStatus() const
 {
     return bStatus;
 }
@@ -130,22 +130,22 @@ inline void DXFGroupReader::SetError()
     bStatus=sal_False;
 }
 
-inline sal_uInt16 DXFGroupReader::GetG()
+inline sal_uInt16 DXFGroupReader::GetG() const
 {
     return nLastG;
 }
 
-inline long DXFGroupReader::GetI()
+inline long DXFGroupReader::GetI() const
 {
     return GetI(nLastG);
 }
 
-inline double DXFGroupReader::GetF()
+inline double DXFGroupReader::GetF() const
 {
     return GetF(nLastG);
 }
 
-inline const char * DXFGroupReader::GetS()
+inline const char * DXFGroupReader::GetS() const
 {
     return GetS(nLastG);
 }
@@ -153,3 +153,4 @@ inline const char * DXFGroupReader::GetS()
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

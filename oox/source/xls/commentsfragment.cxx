@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,9 +63,21 @@ ContextHandlerRef CommentsFragment::onCreateContext( sal_Int32 nElement, const A
         case XLS_TOKEN( commentList ):
             if( nElement == XLS_TOKEN( comment ) ) { importComment( rAttribs ); return this; }
         break;
+        case XLS_TOKEN( commentPr ):
+            if( nElement == XLS_TOKEN( anchor ) )
+                return this;
+            break;
+        case XLS_TOKEN( anchor ):
+            if( nElement == XDR_TOKEN( from ) || nElement == XDR_TOKEN( to ) )
+                return this;
+            break;
+        case XDR_TOKEN( from ):
+        case XDR_TOKEN( to ):
+            return this;
         case XLS_TOKEN( comment ):
             if( (nElement == XLS_TOKEN( text )) && mxComment.get() )
                 return new RichStringContext( *this, mxComment->createText() );
+            if( nElement == XLS_TOKEN( commentPr ) ) { mxComment->importCommentPr( rAttribs ); return this; }
         break;
     }
     return 0;
@@ -144,3 +157,5 @@ void CommentsFragment::importComment( SequenceInputStream& rStrm )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

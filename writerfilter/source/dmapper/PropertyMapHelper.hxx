@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +26,7 @@
  *
  ************************************************************************/
 
+#if OSL_DEBUG_LEVEL > 1
 #include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 
@@ -36,13 +35,20 @@ namespace writerfilter
 namespace dmapper
 {
 
-XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(const uno::Any & rTableColumnSeparators);
-XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues);
+void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger,
+        const uno::Any & rTableColumnSeparators);
+void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger,
+        beans::PropertyValues & rValues);
 
 typedef uno::Sequence<beans::PropertyValues> PropertyValueSeq_t;
-XMLTag::Pointer_t lcl_PropertyValueSeqToTag(PropertyValueSeq_t & rPropValSeq);
+void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger,
+     PropertyValueSeq_t & rPropValSeq);
 
 typedef uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
-XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t & rPropValSeqSeq);
+void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger,
+        PropertyValueSeqSeq_t & rPropValSeqSeq);
 }
 }
+#endif // DEBUG
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

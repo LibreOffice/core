@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -328,13 +329,13 @@ BiffDecoderRef lclReadFilePassBiff8( BiffInputStream& rStrm )
                     xDecoder = lclReadFilePass_CryptoApi( rStrm );
                 break;
                 default:
-                    OSL_ENSURE( false, "lclReadFilePassBiff8 - unknown BIFF8 encryption sub mode" );
+                    OSL_FAIL( "lclReadFilePassBiff8 - unknown BIFF8 encryption sub mode" );
             }
         }
         break;
 
         default:
-            OSL_ENSURE( false, "lclReadFilePassBiff8 - unknown encryption mode" );
+            OSL_FAIL( "lclReadFilePassBiff8 - unknown encryption mode" );
     }
     return xDecoder;
 }
@@ -377,3 +378,5 @@ void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

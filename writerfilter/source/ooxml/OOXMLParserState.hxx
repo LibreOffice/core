@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <ooxml/OOXMLDocument.hxx>
 #include "OOXMLPropertySetImpl.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <resourcemodel/TagLogger.hxx>
 #include <resourcemodel/XPathLogger.hxx>
 #endif
@@ -52,13 +53,13 @@ class OOXMLParserState
     unsigned int mnContexts;
     unsigned int mnHandle;
     OOXMLDocument * mpDocument;
-    rtl::OUString msXNoteId;
+    sal_Int32 mnXNoteId;
     rtl::OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     XPathLogger m_xPathLogger;
 #endif
 
@@ -89,8 +90,8 @@ public:
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument() const;
 
-    void setXNoteId(const rtl::OUString & rId);
-    const rtl::OUString & getXNoteId() const;
+    void setXNoteId(const sal_Int32 rId);
+    sal_Int32 getXNoteId() const;
 
     const rtl::OUString & getTarget() const;
 
@@ -108,11 +109,10 @@ public:
 
     void incContextCount();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 public:
     unsigned int getContextCount() const;
-    string toString() const;
-    XMLTag::Pointer_t toTag() const;
+    void dumpXml( const TagLogger::Pointer_t& pLogger );
     XPathLogger & getXPathLogger();
 #endif
 
@@ -121,3 +121,5 @@ public:
 }}
 
 #endif // INCLUDE_OOXML_PARSER_STATE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

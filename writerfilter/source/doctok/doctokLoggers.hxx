@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef INCLUDED_DOCTOK_LOGGERS_HXX
 #define INCLUDED_DOCTOK_LOGGERS_HXX
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 #include <resourcemodel/TagLogger.hxx>
 
@@ -40,3 +41,5 @@ namespace writerfilter {
 
 #endif // DEBUG
 #endif // INCLUDED_DOCTOK_LOGGERS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

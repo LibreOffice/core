@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,12 @@ bool ExcelFilter::importDocument() throw()
         the class WorkbookHelper, and execute the import filter by constructing
         an instance of WorkbookFragment and loading the file. */
     WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this );
-    return xBookGlob.get() && importFragment( new WorkbookFragment( *xBookGlob, aWorkbookPath ) );
+    if ( xBookGlob.get() && importFragment( new WorkbookFragment( *xBookGlob, aWorkbookPath ) ) )
+    {
+        importDocumentProperties();
+        return true;
+    }
+    return false;
 }
 
 bool ExcelFilter::exportDocument() throw()
@@ -165,6 +171,33 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
 ::oox::ole::VbaProject* ExcelFilter::implCreateVbaProject() const
 {
     return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+}
+
+
+sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
+{
+    if ( XmlFilterBase::filter( rDescriptor ) )
+        return true;
+
+    if ( isExportFilter() )
+    {
+        Reference< XExporter > xExporter( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilterExport" ) ), UNO_QUERY );
+
+        if ( xExporter.is() )
+        {
+            Reference< XComponent > xDocument( getModel(), UNO_QUERY );
+            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
+
+            if ( xFilter.is() )
+            {
+                xExporter->setSourceDocument( xDocument );
+                if ( xFilter->filter( rDescriptor ) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 OUString ExcelFilter::implGetImplementationName() const
@@ -323,3 +356,5 @@ OUString ExcelVbaProjectFilter::implGetImplementationName() const
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

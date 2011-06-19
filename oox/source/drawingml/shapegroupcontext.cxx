@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,8 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
     }
     case XML_ph:
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        if( xAttribs->hasAttribute( XML_idx ) )
+            mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
@@ -117,3 +119,5 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

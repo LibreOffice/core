@@ -1,7 +1,7 @@
 /* WriterProperties: A grab bag of writer-specific properties which we use
  * define here for later use.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,6 @@
 #define IMP_DEFAULT_SUPER_SUB_SCRIPT "58%"
 #define IMP_NUM_CENTIMETERES_PER_INCH 2.54f
 #define IMP_DEFAULT_FONT_NAME "Times New Roman"
-#define IMP_DEFAULT_FONT_SIZE 12.0f
+#define IMP_DEFAULT_FONT_SIZE 12.0
 #define IMP_DEFAULT_FONT_PITCH "variable"
-#define IMP_DEFAULT_FONT_COLOR (new RGBSColor(0x00,0x00,0x00,0x64))
 #endif

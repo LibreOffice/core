@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <boost/shared_ptr.hpp>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <svtools/grfmgr.hxx>
@@ -45,6 +45,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <svx/msdffdef.hxx>
+#include <memory>
 #include "filter/msfilter/msfilterdllapi.h"
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
@@ -310,7 +311,7 @@
 
 enum ESCHER_BlibType
 {                           // GEL provided types...
-   ERROR = 0,               // An error occured during loading
+   ERROR = 0,               // An error occurred during loading
    UNKNOWN,                 // An unknown blip type
    EMF,                     // Windows Enhanced Metafile
    WMF,                     // Windows Metafile
@@ -1305,6 +1306,19 @@ public:
                                     const Rectangle& rRect ) = 0;
 };
 
+class InteractionInfo
+{
+    bool mbHasInteraction;
+    std::auto_ptr<SvMemoryStream>       mpHyperlinkRecord;
+    InteractionInfo();
+public:
+    InteractionInfo( SvMemoryStream* pStream, bool bInteraction ) : mbHasInteraction( bInteraction )
+    {
+        mpHyperlinkRecord.reset( pStream );
+    }
+    bool    hasInteraction() { return mbHasInteraction; }
+    const std::auto_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
+};
 
 class EscherExHostAppData
 {
@@ -1312,14 +1326,17 @@ private:
         EscherExClientAnchor_Base*  pClientAnchor;
         EscherExClientRecord_Base*  pClientData;
         EscherExClientRecord_Base*  pClientTextbox;
+        InteractionInfo*        pInteractionInfo;
         // ignore single shape if entire pages are written
         sal_Bool                        bDontWriteShape;
 
 public:
         EscherExHostAppData() : pClientAnchor(0), pClientData(0),
-                                pClientTextbox(0), bDontWriteShape(sal_False)
+                pClientTextbox(0), pInteractionInfo(0), bDontWriteShape(sal_False)
         {}
 
+        void SetInteractionInfo( InteractionInfo* p )
+            { pInteractionInfo = p; }
         void SetClientAnchor( EscherExClientAnchor_Base* p )
             { pClientAnchor = p; }
         void SetClientData( EscherExClientRecord_Base* p )
@@ -1328,6 +1345,8 @@ public:
             { pClientTextbox = p; }
         void SetDontWriteShape( sal_Bool b )
             { bDontWriteShape = b; }
+        InteractionInfo* GetInteractionInfo() const
+            { return pInteractionInfo; }
         EscherExClientAnchor_Base* GetClientAnchor() const
             { return pClientAnchor; }
         EscherExClientRecord_Base* GetClientData() const
@@ -1336,11 +1355,11 @@ public:
             { return pClientTextbox; }
 
         void WriteClientAnchor( EscherEx& rEx, const Rectangle& rRect )
-            { if( pClientAnchor )   pClientAnchor->WriteData( rEx, rRect ); }
+            { if( pClientAnchor )  pClientAnchor->WriteData( rEx, rRect ); }
         void WriteClientData( EscherEx& rEx )
-            { if( pClientData )     pClientData->WriteData( rEx ); }
+            { if( pClientData ) pClientData->WriteData( rEx ); }
         void WriteClientTextbox( EscherEx& rEx )
-            { if( pClientTextbox )  pClientTextbox->WriteData( rEx ); }
+            { if( pClientTextbox ) pClientTextbox->WriteData( rEx ); }
 
         sal_Bool DontWriteShape() const { return bDontWriteShape; }
 };
@@ -1611,3 +1630,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -175,7 +176,7 @@ namespace DOM
             throw SAXException();
 
         Reference< XDocumentBuilder > aBuilder(m_aServiceManager->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY_THROW);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder"))), UNO_QUERY_THROW);
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(Reference< XNode >(aDocument, UNO_QUERY));
         m_aDocument = aDocument;
@@ -225,12 +226,12 @@ namespace DOM
             attr_qname = attribs->getNameByIndex(i);
             attr_value = attribs->getValueByIndex(i);
             // new prefix mapping
-            if (attr_qname.indexOf(OUString::createFromAscii("xmlns:")) == 0)
+            if (attr_qname.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:"))) == 0)
             {
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
                 aNSMap.insert(NSMap::value_type(newprefix, attr_value));
             }
-            else if (attr_qname == OUString::createFromAscii("xmlns"))
+            else if (attr_qname == OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns")))
             {
                 // new default prefix
                 aNSMap.insert(NSMap::value_type(OUString(), attr_value));
@@ -279,10 +280,8 @@ namespace DOM
             attr_qname = a->first;
             attr_value = a->second;
             idx = attr_qname.indexOf(':');
-            if(idx != -1)
-            {
+            if (idx != -1)
                 aPrefix = attr_qname.copy(0, idx);
-            }
             else
                 aPrefix = OUString();
 
@@ -291,11 +290,13 @@ namespace DOM
             {
                 // set attribute with namespace
                 aElement->setAttributeNS(result->second, attr_qname, attr_value);
-            } else {
+            }
+            else
+            {
                 // set attribute without namespace
                 aElement->setAttribute(attr_qname, attr_value);
-           }
-            a++;
+            }
+            ++a;
         }
         m_aNSStack.push(aNSMap);
     }
@@ -318,7 +319,7 @@ namespace DOM
         OUString aRefName;
         OUString aPrefix = aElement->getPrefix();
         if (aPrefix.getLength() > 0)
-            aRefName = aPrefix + OUString::createFromAscii(":") + aElement->getTagName();
+            aRefName = aPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aElement->getTagName();
         else
             aRefName = aElement->getTagName();
         if (aRefName != aName) // consistency check
@@ -378,3 +379,5 @@ namespace DOM
         m_aLocator = aLocator;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

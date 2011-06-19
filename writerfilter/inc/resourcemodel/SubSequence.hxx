@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ void dumpLine(OutputWithDepth<string> & o, SubSequence<T> & rSeq,
               sal_uInt32 nOffset, sal_uInt32 nStep);
 
 template <class T>
-class WRITERFILTER_DLLPUBLIC SubSequence
+class SubSequence
 {
     typedef boost::shared_ptr<com::sun::star::uno::Sequence<T> >
     SequencePointer;
@@ -349,3 +350,5 @@ void dumpLine(OutputWithDepth<string> & o, SubSequence<T> & rSeq,
 }
 
 #endif // INCLUDED_SUB_SEQUENCE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
     <prop oor:name="FilterService"/>
     <prop oor:name="UserData"/>
     <prop oor:name="UIName">
-        <value xml:lang="x-default">Microsoft Excel 97/2000/XP</value>
+        <value xml:lang="x-default">Microsoft Excel 97/2000/XP/2003</value>
     </prop>
     <prop oor:name="FileFormatVersion"><value>0</value></prop>
     <prop oor:name="Type"><value>calc_MS_Excel_97</value></prop>

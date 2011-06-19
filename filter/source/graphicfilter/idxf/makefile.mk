@@ -42,17 +42,17 @@ CDEFS+= -DEDITDEBUG
 .ENDIF
 .IF "$(L10N_framework)"==""
 EXCEPTIONSFILES=\
-            $(SLO)$/dxfentrd.obj \
-            $(SLO)$/dxf2mtf.obj
-
-SLOFILES =  $(SLO)$/dxfgrprd.obj \
-            $(SLO)$/dxfvec.obj   \
-            $(SLO)$/dxfentrd.obj \
-            $(SLO)$/dxfblkrd.obj \
-            $(SLO)$/dxftblrd.obj \
-            $(SLO)$/dxfreprd.obj \
             $(SLO)$/dxf2mtf.obj  \
+            $(SLO)$/dxfblkrd.obj \
+            $(SLO)$/dxfentrd.obj \
+            $(SLO)$/dxfgrprd.obj \
+            $(SLO)$/dxfreprd.obj \
+            $(SLO)$/dxftblrd.obj \
             $(SLO)$/idxf.obj
+
+SLOFILES =  \
+            $(EXCEPTIONSFILES)   \
+            $(SLO)$/dxfvec.obj
 
 # ==========================================================================
 

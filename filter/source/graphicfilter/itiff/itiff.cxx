@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_filter.hxx"
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#ifndef _SV_FLTCALL_HXX
 #include <svtools/fltcall.hxx>
-#endif
 #include <vcl/animate.hxx>
 #include "lzwdecom.hxx"
 #include "ccidecom.hxx"
@@ -64,6 +63,8 @@ private:
     Bitmap              aBitmap;
     BitmapWriteAccess*  pAcc;
     sal_uInt16              nDstBitsPerPixel;
+    AlphaMask*          pAlphaMask;
+    BitmapWriteAccess*  pMaskAcc;
 
     sal_uLong               nOrigPos;                   // Anfaengliche Position in pTIFF
     sal_uInt16              nOrigNumberFormat;          // Anfaengliches Nummern-Format von pTIFF
@@ -131,10 +132,14 @@ private:
     sal_Bool    ConvertScanline( sal_uLong nY );
         // Konvertiert eine Scanline in das Windows-BMP-Format
 
+    bool HasAlphaChannel() const;
 public:
 
-    TIFFReader() {}
-    ~TIFFReader() {}
+    TIFFReader() : pAlphaMask(0), pMaskAcc(0) {}
+    ~TIFFReader()
+    {
+        delete pAlphaMask;
+    }
 
     sal_Bool ReadTIFF( SvStream & rTIFF, Graphic & rGraphic );
 };
@@ -305,6 +310,8 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0102:   // Bits Per Sample
             nBitsPerSample = ReadIntData();
             OOODEBUG("BitsPerSample",nBitsPerSample);
+            if ( nBitsPerSample >= 32 ) // 32 bit and larger samples are not supported
+                bStatus = sal_False;
             break;
 
         case 0x0103:   // Compression
@@ -457,7 +464,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0140: { // Color Map
             sal_uInt16 nVal;
             sal_uLong i;
-            nNumColors= ( 1 << nBitsPerSample );
+            nNumColors= ( 1UL << nBitsPerSample );
             if ( nDataType == 3 && nNumColors <= 256)
             {
                 pColorMap = new sal_uLong[ 256 ];
@@ -482,6 +489,13 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             else
                 bStatus = sal_False;
             OOODEBUG("ColorMap (Anzahl Farben:)", nNumColors);
+            break;
+        }
+
+        case 0x0153: { // SampleFormat
+            sal_uLong nSampleFormat = ReadIntData();
+            if ( nSampleFormat == 3 ) // IEEE floating point samples are not supported yet
+                bStatus = sal_False;
             break;
         }
     }
@@ -746,12 +760,18 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                 sal_uInt8  nLRed = 0;
                 sal_uInt8  nLGreen = 0;
                 sal_uInt8  nLBlue = 0;
+                sal_uInt8  nLAlpha = 0;
                 for ( nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel )
                 {
                     nLRed = nLRed + pt[ 0 ];
                     nLGreen = nLGreen + pt[ 1 ];
                     nLBlue = nLBlue + pt[ 2 ];
                     pAcc->SetPixel( nY, nx, Color( nLRed, nLGreen, nLBlue ) );
+                    if (nSamplesPerPixel >= 4 && pMaskAcc)
+                    {
+                        nLAlpha = nLAlpha + pt[ 3 ];
+                        pMaskAcc->SetPixel( nY, nx, ~nLAlpha );
+                    }
                 }
             }
             else
@@ -759,6 +779,11 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                 for ( nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel )
                 {
                     pAcc->SetPixel( nY, nx, Color( pt[0], pt[1], pt[2] ) );
+                    if (nSamplesPerPixel >= 4 && pMaskAcc)
+                    {
+                        sal_uInt8 nAlpha = pt[3];
+                        pMaskAcc->SetPixel( nY, nx, ~nAlpha );
+                    }
                 }
             }
         }
@@ -1035,7 +1060,7 @@ void TIFFReader::MakePalCol( void )
             pColorMap = new sal_uLong[ 256 ];
         if ( nPhotometricInterpretation <= 1 )
         {
-            nNumColors = 1 << nBitsPerSample;
+            nNumColors = 1UL << nBitsPerSample;
             if ( nNumColors > 256 )
                 nNumColors = 256;
             pAcc->SetPaletteEntryCount( (sal_uInt16)nNumColors );
@@ -1091,6 +1116,18 @@ void TIFFReader::ReadHeader()
     *pTIFF >> nbyte2 >> nushort;
     if ( nbyte1 != nbyte2 || ( nbyte1 != 'I' && nbyte1 != 'M' ) || nushort != 0x002a )
         bStatus = sal_False;
+}
+
+bool TIFFReader::HasAlphaChannel() const
+{
+    /*There are undoubtedly more variants we could support, but keep it simple for now*/
+    return (
+             nDstBitsPerPixel == 24 &&
+             nBitsPerSample == 8 &&
+             nSamplesPerPixel >= 4 &&
+             nPlanes == 1 &&
+             nPhotometricInterpretation == 2
+           );
 }
 
 // ---------------------------------------------------------------------------------
@@ -1241,7 +1278,8 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 else
                     nDstBitsPerPixel = 8;
 
-                aBitmap = Bitmap( Size( nImageWidth, nImageLength ), nDstBitsPerPixel );
+                Size aTargetSize( nImageWidth, nImageLength );
+                aBitmap = Bitmap( aTargetSize, nDstBitsPerPixel );
                 pAcc = aBitmap.AcquireWriteAccess();
                 if ( pAcc )
                 {
@@ -1262,12 +1300,18 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         {
                             pMap[ j ] = new sal_uInt8[ nBytesPerRow ];
                         }
-                            catch (std::bad_alloc)
+                        catch (std::bad_alloc)
                         {
                             pMap[ j ] = NULL;
                             bStatus = sal_False;
                             break;
                         }
+                    }
+
+                    if (HasAlphaChannel())
+                    {
+                        pAlphaMask = new AlphaMask( aTargetSize );
+                        pMaskAcc = pAlphaMask->AcquireWriteAccess();
                     }
 
                     if ( bStatus && ReadMap( 10, 60 ) )
@@ -1282,9 +1326,24 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if( pAcc )
                     {
                         aBitmap.ReleaseAccess( pAcc );
+
+                        if ( pMaskAcc )
+                        {
+                            if ( pAlphaMask )
+                                pAlphaMask->ReleaseAccess( pMaskAcc );
+                            pMaskAcc = NULL;
+                        }
+
                         if ( bStatus )
                         {
-                            AnimationBitmap aAnimationBitmap( aBitmap, Point( 0, 0 ), aBitmap.GetSizePixel(),
+                            BitmapEx aImage;
+
+                            if (pAlphaMask)
+                                aImage = BitmapEx( aBitmap, *pAlphaMask );
+                            else
+                                aImage = aBitmap;
+
+                            AnimationBitmap aAnimationBitmap( aImage, Point( 0, 0 ), aBitmap.GetSizePixel(),
                                                               ANIMATION_TIMEOUT_ON_CLICK, DISPOSE_BACK );
 
                             aAnimation.Insert( aAnimationBitmap );
@@ -1332,3 +1391,4 @@ extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & 
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

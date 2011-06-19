@@ -1,13 +1,5 @@
     <node oor:name="UOF presentation" oor:op="replace">
          <prop oor:name="UIName">
-            <value xml:lang="el">Unified Office Format presentation</value>
             <value xml:lang="en-US">Unified Office Format presentation</value>
-            <value xml:lang="hu">Unified Office Format presentation</value>
-            <value xml:lang="cs">Unified Office Format presentation</value>
-            <value xml:lang="sk">Unified Office Format presentation</value>
-            <value xml:lang="sl">Unified Office Format presentation</value>
-            <value xml:lang="nl">Unified Office Format presentation</value>
-            <value xml:lang="da">Unified Office Format presentation</value>
-            <value xml:lang="de">Unified Office Format presentation</value>
         </prop>
     </node>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -255,7 +256,7 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
                 case XLS_TOKEN( b ):    aItem.readBool( rAttribs );                         break;
                 case XLS_TOKEN( e ):    aItem.readError( rAttribs, getUnitConverter() );    break;
                 case XLS_TOKEN( x ):    aItem.readIndex( rAttribs );                        break;
-                default:    OSL_ENSURE( false, "PivotCacheRecordsFragment::onCreateContext - unexpected element" );
+                default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::onCreateContext - unexpected element" );
             }
             mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
             ++mnColIdx;
@@ -325,7 +326,7 @@ void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceIn
             case BIFF12_ID_PCITEM_BOOL:     aItem.readBool( rStrm );    break;
             case BIFF12_ID_PCITEM_ERROR:    aItem.readError( rStrm );   break;
             case BIFF12_ID_PCITEM_INDEX:    aItem.readIndex( rStrm );   break;
-            default:    OSL_ENSURE( false, "PivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
+            default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
         }
         mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
         ++mnColIdx;
@@ -473,3 +474,5 @@ void BiffPivotCacheRecordsContext::startNextRow()
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

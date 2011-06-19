@@ -361,7 +361,8 @@ public class RDFRepositoryTest
         }
     }
 
-    @Test public void checkSPARQL()
+    @Test
+    public void checkSPARQL()
     {
         try {
 

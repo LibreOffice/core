@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_PAGEBORDERSHANDLER_HXX
 #define INCLUDED_PAGEBORDERSHANDLER_HXX
 
@@ -8,7 +9,7 @@
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <vector>
 
@@ -19,7 +20,7 @@ namespace dmapper {
 class _PgBorder
 {
 public:
-    com::sun::star::table::BorderLine m_rLine;
+    com::sun::star::table::BorderLine2 m_rLine;
     sal_Int32   m_nDistance;
     BorderPosition m_ePos;
 
@@ -55,3 +56,5 @@ typedef boost::shared_ptr< PageBordersHandler > PageBordersHandlerPtr;
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

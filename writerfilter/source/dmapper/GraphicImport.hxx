@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,11 +28,8 @@
 #ifndef INCLUDED_GRAPHICIMPORT_HXX
 #define INCLUDED_GRAPHICIMPORT_HXX
 
-//#ifndef INCLUDED_WRITERFILTERDLLAPI_H
-//#include <WriterFilterDllApi.hxx>
-//#endif
 #include <resourcemodel/LoggedResources.hxx>
-//#include <com/sun/star/lang/XComponent.hpp>
+
 namespace com{ namespace sun { namespace star {
     namespace uno{
         class XComponentContext;
@@ -130,3 +128,5 @@ typedef boost::shared_ptr< GraphicImport >          GraphicImportPtr;
 }}
 
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

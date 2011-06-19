@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ void logger(string prefix, string message)
         return result;
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 {
     string sResult;
@@ -425,3 +426,5 @@ string toString(const string & rString)
 }
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

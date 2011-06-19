@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@ void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUSt
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "PropertySet::getProperties - cannot get all property values - fallback to single mode" );
+        OSL_FAIL( "PropertySet::getProperties - cannot get all property values - fallback to single mode" );
     }
 
     if( mxPropSet.is() )
@@ -121,7 +122,7 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
+        OSL_FAIL( "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
     }
 
     if( mxPropSet.is() )
@@ -156,7 +157,7 @@ bool PropertySet::implGetPropertyValue( Any& orValue, const OUString& rPropName 
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::implGetPropertyValue - cannot get property \"" ).
+        OSL_FAIL( OStringBuffer( "PropertySet::implGetPropertyValue - cannot get property \"" ).
             append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
     return false;
@@ -171,12 +172,21 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::implSetPropertyValue - cannot set property \"" ).
+        OSL_FAIL( OStringBuffer( "PropertySet::implSetPropertyValue - cannot set property \"" ).
             append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
     return false;
 }
 
+#if OSL_DEBUG_LEVEL > 0
+void PropertySet::dump()
+{
+    PropertyMap::dump( Reference< XPropertySet >( getXPropertySet(), UNO_QUERY ) );
+}
+#endif
+
 // ============================================================================
 
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

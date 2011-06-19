@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/ppt/pptshape.hxx"
+#include "oox/ppt/pptgraphicshapecontext.hxx"
 #include "oox/ppt/pptshapecontext.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
@@ -79,7 +81,8 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
     }
     case PPT_TOKEN( ph ):
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        if( xAttribs->hasAttribute( XML_idx ) )
+            mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
@@ -104,7 +107,7 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
         xRet.set( new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) ) ) );
         break;
     case PPT_TOKEN( pic ):          // CT_Picture
-        xRet.set( new oox::drawingml::GraphicShapeContext( *this, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
+        xRet.set( new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
     case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
         xRet.set( new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) ), true ) );
@@ -119,3 +122,5 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

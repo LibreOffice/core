@@ -1,5 +1,5 @@
 <node oor:name="Calc MS Excel 2007 XML" oor:op="replace">
-    <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
+    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
     <prop oor:name="UIComponent"/>
     <prop oor:name="FilterService"><value>com.sun.star.comp.oox.xls.ExcelFilter</value></prop>
     <prop oor:name="UserData"/>

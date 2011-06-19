@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,15 +26,6 @@
  *
  ************************************************************************/
 
-/* NAME $Id: hwpeq.h,v 1.3 2008-04-10 12:09:03 rt Exp $
- * PURPOSE
- *
- * NOTES
- *
- * HISTORY
- *        frog - Sep 29, 1998: Created.
- */
-
 #ifndef _HWPEQ_H_
 #define _HWPEQ_H_
 
@@ -42,3 +34,5 @@
 void eq2latex(MzString &mstr, char *str);
 
 #endif /* _HWPEQ_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

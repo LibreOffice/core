@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,6 @@
 #include "typedetectionexport.hxx"
 #include "typedetectionimport.hxx"
 
-using namespace rtl;
 using namespace osl;
 using namespace comphelper;
 using namespace com::sun::star;
@@ -67,6 +67,9 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
+
+using ::rtl::OUString;
+using ::rtl::Uri;
 
 XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF )
 : mxMSF( xMSF ),
@@ -80,7 +83,7 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
 {
     try
     {
-        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             sProgPath = xCfgMgr->substituteVariables( sProgPath );
@@ -186,8 +189,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
-                                "com.sun.star.packages.comp.ZipPackage" ),
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -223,14 +225,14 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                     {
                     // in case of same named import / export XSLT the latter
                     // is ignored
-                        DBG_ERROR( "XMLFilterJarHelper::same named xslt filter exception!" );
+                        OSL_FAIL( "XMLFilterJarHelper::same named xslt filter exception!" );
                     }
 
                     if( pFilter->maImportTemplate.getLength() )
                         addFile( xFilterRoot, xFactory, pFilter->maImportTemplate );
                 }
 
-                aIter++;
+                ++aIter;
             }
 
             // create TypeDetection.xcu
@@ -240,7 +242,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
             {
                 osl::File aOutputFile( aTempFileURL );
-                /* osl::File::RC rc = */ aOutputFile.open( OpenFlag_Write );
+                /* osl::File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
 
                 TypeDetectionExporter aExporter( mxMSF );
@@ -260,7 +262,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
+        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
     }
 
     osl::File::remove( rPackageURL );
@@ -289,8 +291,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
-                                "com.sun.star.packages.comp.ZipPackage" ),
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -329,7 +330,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                             // failed to copy all files
                             delete (*aIter);
                         }
-                        aIter++;
+                        ++aIter;
                     }
                 }
             }
@@ -337,7 +338,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterJarHelper::savePackage exception catched!" );
+        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
     }
 }
 
@@ -391,9 +392,9 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
 
                     ::osl::File file(rURL);
                     ::osl::FileBase::RC rc =
-                        file.open(OpenFlag_Write|OpenFlag_Create);
+                        file.open(osl_File_OpenFlag_Write|osl_File_OpenFlag_Create);
                     if (::osl::FileBase::E_EXIST == rc) {
-                        rc = file.open(OpenFlag_Write);
+                        rc = file.open(osl_File_OpenFlag_Write);
                         if (::osl::FileBase::E_None == rc) {
                             file.setSize(0); // #i97170# truncate
                         }
@@ -411,7 +412,9 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
     }
     catch( Exception& )
     {
-        DBG_ERROR( "XMLFilterJarHelper::copyFile exception catched" );
+        OSL_FAIL( "XMLFilterJarHelper::copyFile exception catched" );
     }
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

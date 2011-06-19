@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ void TextFont::assignIfUsed( const TextFont& rTextFont )
         *this = rTextFont;
 }
 
-bool TextFont::getFontData( OUString& rFontName, sal_Int16 rnFontPitch, sal_Int16& rnFontFamily, const XmlFilterBase& rFilter ) const
+bool TextFont::getFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily, const XmlFilterBase& rFilter ) const
 {
     if( const Theme* pTheme = rFilter.getCurrentTheme() )
         if( const TextFont* pFont = pTheme->resolveFont( maTypeface ) )
@@ -88,7 +89,7 @@ bool TextFont::getFontData( OUString& rFontName, sal_Int16 rnFontPitch, sal_Int1
     return implGetFontData( rFontName, rnFontPitch, rnFontFamily );
 }
 
-bool TextFont::implGetFontData( OUString& rFontName, sal_Int16 rnFontPitch, sal_Int16& rnFontFamily ) const
+bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily ) const
 {
     rFontName = maTypeface;
     rnFontPitch = lclGetFontPitch( extractValue< sal_Int16 >( mnPitch, 0, 4 ) );
@@ -101,3 +102,4 @@ bool TextFont::implGetFontData( OUString& rFontName, sal_Int16 rnFontPitch, sal_
 } // namespace drawingml
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

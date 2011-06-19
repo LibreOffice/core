@@ -1,0 +1,5 @@
+<node oor:name="Calc Office Open XML">
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Office Open XML Spreadsheet</value>
+    </prop>
+</node>

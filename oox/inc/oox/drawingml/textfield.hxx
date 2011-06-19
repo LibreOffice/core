@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ public:
     inline void setType( const ::rtl::OUString& sType ) { msType = sType; }
     inline void setUuid( const ::rtl::OUString & sUuid ) { msUuid = sUuid; }
 
-    virtual void    insertAt(
+    virtual sal_Int32    insertAt(
                         const ::oox::core::XmlFilterBase& rFilterBase,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
@@ -66,3 +67,5 @@ typedef boost::shared_ptr< TextField > TextFieldPtr;
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

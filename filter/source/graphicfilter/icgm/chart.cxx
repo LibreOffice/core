@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,10 +52,9 @@ CGMChart::~CGMChart()
 {
     // delete the whole textentry structure
 
-    TextEntry* pTextEntry;
-    while( ( pTextEntry = (TextEntry*)maTextEntryList.First() ) != NULL )
+    while( !maTextEntryList.empty() )
     {
-        DeleteTextEntry( pTextEntry );
+        DeleteTextEntry( maTextEntryList[ 0 ] );
     }
 };
 
@@ -72,7 +72,15 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
             delete pTempTAttr;
         }
         delete pTextEntry;
-        maTextEntryList.Remove( pTextEntry );
+        ::std::vector< TextEntry* >::iterator it;
+        for ( it = maTextEntryList.begin(); it < maTextEntryList.end(); ++it )
+        {
+            if ( *it == pTextEntry )
+            {
+                maTextEntryList.erase( it );
+                break;
+            }
+        }
     }
 };
 
@@ -80,7 +88,7 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
 
 void CGMChart::InsertTextEntry( TextEntry* pTextEntry )
 {
-    maTextEntryList.Insert( pTextEntry );
+    maTextEntryList.push_back( pTextEntry );
 };
 
 // ---------------------------------------------------------------
@@ -98,3 +106,4 @@ sal_Bool CGMChart::IsAnnotation()
     return ( mDataNode[ 0 ].nZoneEnum == 0 );
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

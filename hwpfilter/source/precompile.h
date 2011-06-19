@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,20 +26,17 @@
  *
  ************************************************************************/
 
-/*
-  $Id: precompile.h,v 1.5 2008-04-10 12:13:09 rt Exp $
-*/
-
 #ifdef _WIN32
     #if defined _MSC_VER
         #pragma warning(push, 1)
     #endif
 #include "windows.h"
 #ifndef __MINGW32__
-//#include "stdafx.h"
 #include "crtdbg.h"
     #if defined _MSC_VER
         #pragma warning(pop)
     #endif
 #endif
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,9 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -85,23 +87,26 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     }
 
     // ST_TextAnchoringType
-    drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
-    switch( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) )
-    {
-        case XML_b :    eVA = drawing::TextVerticalAdjust_BOTTOM; break;
-        case XML_dist :
-        case XML_just :
-        case XML_ctr :  eVA = drawing::TextVerticalAdjust_CENTER; break;
-        default:
-        case XML_t :    eVA = drawing::TextVerticalAdjust_TOP; break;
+    if( xAttributes->hasAttribute( XML_anchor ) ) {
+        drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
+        switch( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) )
+        {
+            case XML_b :    eVA = drawing::TextVerticalAdjust_BOTTOM; break;
+            case XML_dist :
+            case XML_just :
+            case XML_ctr :  eVA = drawing::TextVerticalAdjust_CENTER; break;
+            default:
+            case XML_t :    eVA = drawing::TextVerticalAdjust_TOP; break;
+        }
+        mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
     }
-    mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
 
     bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
-    if( bAnchorCenter )
-    mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
-        TextHorizontalAdjust_CENTER;
-
+    if( xAttributes->hasAttribute( XML_anchorCtr ) ) {
+        if( bAnchorCenter )
+            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+                TextHorizontalAdjust_CENTER;
+    }
 //   bool bCompatLineSpacing = aAttribs.getBool( XML_compatLnSpc, false );
 //   bool bForceAA = aAttribs.getBool( XML_forceAA, false );
 //   bool bFromWordArt = aAttribs.getBool( XML_fromWordArt, false );
@@ -124,19 +129,21 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 //   bool bUpRight = aAttribs.getBool( XML_upright, 0 );
 
     // ST_TextVerticalType
-    mrTextBodyProp.moVert = aAttribs.getToken( XML_vert );
-    bool bRtl = aAttribs.getBool( XML_rtl, false );
-    sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
-    if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert ) {
-      mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
-    <<= WritingMode_TB_RL;
-      // workaround for TB_LR as using WritingMode2 doesn't work
-        if( !bAnchorCenter )
-            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
-            TextHorizontalAdjust_LEFT;
-    } else
-      mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
-    <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
+    if( xAttributes->hasAttribute( XML_vert ) ) {
+        mrTextBodyProp.moVert = aAttribs.getToken( XML_vert );
+        bool bRtl = aAttribs.getBool( XML_rtl, false );
+        sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
+        if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert ) {
+            mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
+                <<= WritingMode_TB_RL;
+            // workaround for TB_LR as using WritingMode2 doesn't work
+            if( !bAnchorCenter )
+                mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
+                    TextHorizontalAdjust_LEFT;
+        } else
+            mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
+                <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
+    }
 }
 
 // --------------------------------------------------------------------
@@ -162,7 +169,7 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
             case A_TOKEN( normAutofit ):    // CT_TextNormalAutofit
-                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= true;
+                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= TextFitToSizeType_AUTOFIT;
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
                 break;
             case A_TOKEN( spAutoFit ):
@@ -185,3 +192,4 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

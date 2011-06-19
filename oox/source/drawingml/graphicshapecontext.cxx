@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -124,11 +125,11 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
         case XML_graphicData :          // CT_GraphicalObjectData
         {
             OUString sUri( xAttribs->getOptionalValue( XML_uri ) );
-            if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/presentationml/2006/ole" ) )
+            if ( sUri.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/presentationml/2006/ole" ) ) )
                 xRet.set( new OleObjectGraphicDataContext( *this, mpShapePtr ) );
-            else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ) )
+            else if ( sUri.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ) ) )
                 xRet.set( new DiagramGraphicDataContext( *this, mpShapePtr ) );
-            else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/chart" ) )
+            else if ( sUri.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/drawingml/2006/chart" ) ) )
                 xRet.set( new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart ) );
             else if ( sUri.compareToAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) == 0 )
                 xRet.set( new table::TableContext( *this, mpShapePtr ) );
@@ -315,3 +316,4 @@ Reference< XFastContextHandler > ChartGraphicDataContext::createFastChildContext
 } // namespace drawingml
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,9 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
 #include <vector>
 namespace com{ namespace sun{ namespace star{namespace table {
-    struct BorderLine;
+    struct BorderLine2;
 }}}}
 
 namespace writerfilter {
@@ -49,14 +49,14 @@ private:
     ::std::vector<sal_Int32>                                m_aCellBorderPositions;
     ::std::vector<sal_Int32>                                m_aCellVertAlign;
 
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aLeftBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aRightBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTopBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aBottomBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aInsideHBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aInsideVBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTl2brBorderLines;
-    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTr2blBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aLeftBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aRightBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aTopBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aBottomBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aInsideHBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aInsideVBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aTl2brBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine2 >    m_aTr2blBorderLines;
 
     //values of the current border
     sal_Int32                                           m_nLineWidth;
@@ -85,3 +85,5 @@ typedef boost::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;
 }}
 
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

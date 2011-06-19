@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -226,6 +227,7 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
         case VML_TOKEN( shape ):
             return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
         case VML_TOKEN( rect ):
+            return new RectangleShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( roundrect ):
             return new ShapeContext( rParent, rShapes.createShape< RectangleShape >(), rAttribs );
         case VML_TOKEN( oval ):
@@ -310,7 +312,10 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
         break;
         case VML_TOKEN( imagedata ):
-            mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, O_TOKEN( relid ) );
+            // shapes in docx use r:id for the relationship id
+            // in xlsx it they use o:relid
+            bool bHasORelId = rAttribs.hasAttribute( O_TOKEN( relid ) );
+            mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, bHasORelId ? O_TOKEN( relid ) : R_TOKEN( id ) );
             mrTypeModel.moGraphicTitle = rAttribs.getString( O_TOKEN( title ) );
         break;
     }
@@ -334,13 +339,13 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
         OUString aName, aValue;
         if( ConversionHelper::separatePair( aName, aValue, rStyle.getToken( 0, ';', nIndex ), ':' ) )
         {
-                 if( aName.equalsAscii( "position" ) )      mrTypeModel.maPosition = aValue;
-            else if( aName.equalsAscii( "left" ) )          mrTypeModel.maLeft = aValue;
-            else if( aName.equalsAscii( "top" ) )           mrTypeModel.maTop = aValue;
-            else if( aName.equalsAscii( "width" ) )         mrTypeModel.maWidth = aValue;
-            else if( aName.equalsAscii( "height" ) )        mrTypeModel.maHeight = aValue;
-            else if( aName.equalsAscii( "margin-left" ) )   mrTypeModel.maMarginLeft = aValue;
-            else if( aName.equalsAscii( "margin-top" ) )    mrTypeModel.maMarginTop = aValue;
+                 if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "position" ) ) )      mrTypeModel.maPosition = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "left" ) ) )          mrTypeModel.maLeft = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "top" ) ) )           mrTypeModel.maTop = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "width" ) ) )         mrTypeModel.maWidth = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "height" ) ) )        mrTypeModel.maHeight = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-left" ) ) )   mrTypeModel.maMarginLeft = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-top" ) ) )    mrTypeModel.maMarginTop = aValue;
         }
     }
 }
@@ -349,6 +354,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
 
 ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, const AttributeList& rAttribs ) :
     ShapeTypeContext( rParent, rShape, rAttribs ),
+    mrShape( rShape ),
     mrShapeModel( rShape.getShapeModel() )
 {
     // collect shape specific attributes
@@ -359,6 +365,11 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, c
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    // Custom shape in Writer with a textbox are transformed into a frame
+    if ( nElement == ( NMSP_vml + XML_textbox ) )
+        dynamic_cast<SimpleShape&>( mrShape ).setService(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
+
     // Excel specific shape client data
     if( isRootElement() ) switch( nElement )
     {
@@ -401,6 +412,23 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
 
 // ============================================================================
 
+RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
+    ShapeContext( rParent, rShape, rAttribs )
+{
+}
+
+ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if ( nElement == ( NMSP_vml + XML_textbox ) )
+        dynamic_cast< SimpleShape &>( mrShape ).setService(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
+
+    // The parent class's context is fine
+    return ShapeContext::onCreateContext( nElement, rAttribs );
+}
+// ============================================================================
+
 } // namespace vml
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,7 +184,7 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 
     for( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
             break;
     }
 
@@ -205,7 +206,7 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
     for( sal_Int32 i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
         {
             maMediaDescriptor[ i ].Value >>= maFilterData;
             break;
@@ -220,3 +221,5 @@ void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc 
 {
     mxSrcDoc = xDoc;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

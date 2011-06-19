@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,10 @@
 #endif
 #include "dmapperLoggers.hxx"
 
+#if DEBUG_DOMAINMAPPER
+#include <resourcemodel/QNameToString.hxx>
+#endif
+
 namespace writerfilter {
 namespace dmapper
 {
@@ -54,6 +59,7 @@ ThemeTable::ThemeTable()
 , LoggedTable(dmapper_logger, "ThemeTable")
 , m_pImpl( new ThemeTable_Impl )
 {
+
 }
 
 ThemeTable::~ThemeTable()
@@ -68,12 +74,9 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
     dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
     dmapper_logger->attribute("value", val.toString());
 #endif
-    // int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
-    /* WRITERFILTERSTATUS: table: ThemeTable_attributedata */
     switch(Name)
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TextFont_typeface:
          if (sValue.getLength())
              m_pImpl->m_currentFontThemeEntry[m_pImpl->m_currentThemeFontId] = sValue;
@@ -86,7 +89,7 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
         }
     }
 #ifdef DEBUG_DMAPPER_THEME_TABLE
-    dmapper_logger->endElement("ThemeTable.attribute");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -105,10 +108,8 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
 
-    /* WRITERFILTERSTATUS: table: ThemeTable_sprm */
     switch(nSprmId)
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_BaseStyles_fontScheme:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -116,9 +117,7 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
                 pProperties->resolve(*this);
     }
     break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontScheme_majorFont:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontScheme_minorFont:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -128,11 +127,8 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
             m_pImpl->m_themeFontMap[nSprmId] = m_pImpl->m_currentFontThemeEntry;
     }
     break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_latin:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_ea:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_cs:
         {
         m_pImpl->m_currentThemeFontId = nSprmId;
@@ -149,7 +145,7 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
         }
     }
 #ifdef DEBUG_DMAPPER_THEME_TABLE
-    dmapper_logger->endElement("ThemeTable.sprm");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -162,7 +158,7 @@ void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Poi
     ref->resolve(*this);
 
 #ifdef DEBUG_DMAPPER_THEME_TABLE
-    dmapper_logger->endElement("ThemeTable.entry");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -222,3 +218,5 @@ const ::rtl::OUString ThemeTable::getFontNameForTheme(const Id id) const
 
 }//namespace dmapper
 } //namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

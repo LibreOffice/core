@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ZipStorage::ZipStorage - cannot open output storage" );
+        OSL_FAIL( "ZipStorage::ZipStorage - cannot open output storage" );
     }
 }
 
@@ -207,3 +208,5 @@ void ZipStorage::implCommit() const
 // ============================================================================
 
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

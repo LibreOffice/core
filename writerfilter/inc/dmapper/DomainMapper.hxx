@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ enum SourceDocumentType
     DOCUMENT_OOXML,
     DOCUMENT_RTF
 };
-class WRITERFILTER_DLLPUBLIC DomainMapper : public LoggedProperties, public LoggedTable,
+class WRITERFILTER_OOXML_DLLPUBLIC DomainMapper : public LoggedProperties, public LoggedTable,
                     public BinaryObj, public LoggedStream
 {
     DomainMapper_Impl   *m_pImpl;
@@ -110,7 +111,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetCurrentTextRange();
 
     ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
-    boost::shared_ptr< ListsManager > GetListTable( );
     boost::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
 
 private:
@@ -154,3 +154,5 @@ private:
 } // namespace dmapper
 } // namespace writerfilter
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

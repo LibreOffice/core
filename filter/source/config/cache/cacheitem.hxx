@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 //_______________________________________________
 // includes
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <deque>
 #include <list>
 #include <com/sun/star/uno/Any.h>
@@ -162,7 +163,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 
             @param  sActLocale
                     must specify the current office locale.
-                    Its needed to adress the UIName property inside
+                    Its needed to address the UIName property inside
                     the list of possible ones.
          */
         void validateUINames(const ::rtl::OUString& sActLocale);
@@ -189,7 +190,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 /** @short  represent an item list of a FilterCache
             instance.
  */
-typedef ::std::hash_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          CacheItem                          ,
                          ::rtl::OUStringHash                ,
                          ::std::equal_to< ::rtl::OUString > > CacheItemList;
@@ -201,14 +202,14 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
 
     @descr  E.g. a list of internal type names can be registered
             to an extension. Organization as an hash makes it
-            faster then searching inside vectors.
+            faster than searching inside vectors.
 
-            On the other side e.g. URLPattern cant be realy adressed
+            On the other side e.g. URLPattern cant be really addressed
             by a hash value ... because the use wildcards. But
             there we need key-value pairs too, which cant be provided
-            by a pur vector!
+            by a pure vector!
  */
-typedef ::std::hash_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          OUStringList                       ,
                          ::rtl::OUStringHash                ,
                          ::std::equal_to< ::rtl::OUString > > CacheItemRegistration;
@@ -221,7 +222,7 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
     @descr  Every type in this list is combined with an information,
             which property matched to the given URL. The user of this
             structure can decide then, if a deep detection should be
-            supressed e.g. if an URLPattern was used.
+            suppressed e.g. if an URLPattern was used.
  */
 struct  FlatDetectionInfo
 {
@@ -259,3 +260,5 @@ typedef ::std::list< FlatDetectionInfo > FlatDetection;
 } // namespace filter
 
 #endif // __FILTER_CONFIG_CACHEITEM_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ import org.openoffice.xmerge.Document;
 
 /**
  *  <p> A <code>PalmDocument</code> is palm implementaion of the
- *  <code>Docuemnt</code> interface.</p>
+ *  <code>Document</code> interface.</p>
  *
  *  <p>This implementation allows the Palm device format to be
  *  read via an <code>InputStream</code> and written via an
@@ -120,7 +120,7 @@ public class PalmDocument
     /**
      *  Writes the <code>PalmDocument</code> to an <code>OutputStream</code>.
      *
-     *  @param  is  The <code>OutputStream</code> to write the content.
+     *  @param  os  The <code>OutputStream</code> to write the content.
      *
      *  @throws  IOException  If any I/O error occurs.
      */

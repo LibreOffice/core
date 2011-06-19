@@ -55,9 +55,10 @@ public class DefinedName implements BIFFRecord {
     private Workbook wb;
 
     /**
-      * Constructs a Defined Name from the <code>InputStream</code>
+      * Constructs a Defined Name from an existing <code>NameDefinition</code>
       *
-      * @param  is InputStream containing the record data
+      * @param  nd The name definition.
+      * @param  wb The workbook we are defined in.
       */
     public DefinedName(NameDefinition nd, Workbook wb) throws IOException {
 
@@ -74,10 +75,12 @@ public class DefinedName implements BIFFRecord {
         grbit = EndianConverter.writeShort((short)0);
         ixals[0] = (byte)0xFF;ixals[1] = (byte)0xFF;
     }
+
     /**
       * Constructs a Defined Name from the <code>InputStream</code>
       *
       * @param  is InputStream containing the record data
+      * @param  wb The workbook we are defined in.
       */
     public DefinedName(InputStream is, Workbook wb) throws IOException {
 
@@ -99,7 +102,7 @@ public class DefinedName implements BIFFRecord {
       * Reads a Defined Name from the <code>InputStream</code> The byte array
      * must be twice the size of the String as it uses unicode.
       *
-      * @param  is InputStream containing the record data
+      * @param  input InputStream containing the record data
       */
     public int read(InputStream input) throws IOException {
 
@@ -115,8 +118,6 @@ public class DefinedName implements BIFFRecord {
         rgce = new byte[EndianConverter.readShort(cce)];
         input.read(rgce, 0, EndianConverter.readShort(cce));
 
-
-
         Debug.log(Debug.TRACE, "\tgrbit : "+ EndianConverter.readShort(grbit) +
                             " cch : " + cch +
                             " cce : " + EndianConverter.readShort(cce) +
@@ -130,7 +131,7 @@ public class DefinedName implements BIFFRecord {
      /**
      * Write this particular <code>BIFFRecord</code> to the <code>OutputStream</code>
      *
-     * @param ouput the <code>OutputStream</code>
+     * @param output the <code>OutputStream</code>
      */
     public void write(OutputStream output) throws IOException {
 
@@ -142,7 +143,6 @@ public class DefinedName implements BIFFRecord {
             Debug.log(Debug.TRACE,"Error in Parsing Name Definition");
             cce = EndianConverter.writeShort((short) 0);
         }
-
 
         output.write(getBiffType());
         output.write(grbit);

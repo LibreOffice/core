@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -349,7 +350,7 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
             @descr      This method works together with impl_validateAndSetTypeOnDescriptor()/
                         impl_validateAndSetFilterOnDescriptor(). All informations, which can be
-                        set by these two operations must be "removeable" by this method.
+                        set by these two operations must be "removable" by this method.
 
             @param      rDescriptor
                         reference to the MediaDescriptor (represented by an easy-to-use
@@ -457,3 +458,5 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 } // namespace filter
 
 #endif // __FILTER_CONFIG_TYPEDETECTION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

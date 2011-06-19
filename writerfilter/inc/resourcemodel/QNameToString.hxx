@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ namespace writerfilter
 {
 using namespace ::std;
 
-class WRITERFILTER_DLLPUBLIC QNameToString
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString
 {
     typedef boost::shared_ptr<QNameToString> Pointer_t;
     typedef map < Id, string > Map;
@@ -62,7 +63,7 @@ public:
     string operator()(Id qName);
 };
 
-class WRITERFILTER_DLLPUBLIC SprmIdToString
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC SprmIdToString
 {
     typedef boost::shared_ptr<SprmIdToString> Pointer_t;
 
@@ -86,3 +87,5 @@ public:
 }
 
 #endif // INCLUDED_QNAME_TO_STRING_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

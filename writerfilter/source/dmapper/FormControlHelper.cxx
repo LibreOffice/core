@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -43,6 +45,8 @@
 #include <com/sun/star/uno/Type.hxx>
 
 #include "FormControlHelper.hxx"
+#include <xmloff/odffields.hxx>
+#include <comphelper/stlunosequence.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -155,6 +159,8 @@ FormControlHelper::~FormControlHelper()
 bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRange,
                                        const ::rtl::OUString & rControlName)
 {
+    if ( !m_pFFData )
+        return false;
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(m_pImpl->getServiceFactory());
 
@@ -185,7 +191,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
             static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
             float fCheckBoxHeight = 0.0;
             xTextRangeProps->getPropertyValue(sCharHeight) >>= fCheckBoxHeight;
-            nCheckBoxHeight = floor(fCheckBoxHeight * 35.3);
+            nCheckBoxHeight = static_cast<sal_uInt32>(floor(fCheckBoxHeight * 35.3));
         }
         catch (beans::UnknownPropertyException & rException)
         {
@@ -219,10 +225,66 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
     return true;
 }
 
+bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField)
+{
+    bool bRes = true;
+    uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
+    uno::Reference<container::XNamed> xNamed( xFormField, uno::UNO_QUERY );
+    if ( m_pFFData && xNamed.is() && xNameCont.is() )
+    {
+
+        if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
+        {
+            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
+            if (  m_pFFData->getName().getLength() )
+            {
+                xNamed->setName( m_pFFData->getName() );
+            }
+        }
+        else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+        {
+            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX)));
+            uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
+            uno::Any aAny;
+            aAny <<= m_pFFData->getCheckboxChecked();
+            if ( xPropSet.is() )
+                xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Checked")), aAny);
+            rtl::OUString sName;
+        }
+        else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+        {
+            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
+            uno::Sequence< rtl::OUString > sItems;
+            sItems.realloc( m_pFFData->getDropDownEntries().size() );
+            ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), ::comphelper::stl_begin(sItems));
+            if ( sItems.getLength() )
+            {
+                if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)) ) )
+                    xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)), uno::makeAny( sItems ) );
+                else
+                    xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)), uno::makeAny( sItems ) );
+
+                sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
+                if ( nResult )
+                {
+                    if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)) ) )
+                        xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)), uno::makeAny( nResult ) );
+                    else
+                        xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)), uno::makeAny( nResult ) );
+                }
+            }
+        }
+    }
+    else
+        bRes = false;
+    return bRes;
+}
+
 bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRange)
 {
     bool bCreated = false;
-
+    if ( !m_pFFData )
+        return false;
     uno::Reference<container::XNameContainer> xFormCompsByName(m_pImpl->getForm(), uno::UNO_QUERY);
     uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
     if (! xFormComps.is())
@@ -308,3 +370,5 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

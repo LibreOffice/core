@@ -37,6 +37,7 @@ AbbreviatedCaseNumber
 Accel
 Accel2
 AlbumTitle
+AlternateContent
 Always
 Anchor
 AppVersion
@@ -79,6 +80,7 @@ Characters
 CharactersWithSpaces
 Checkbox
 Checked
+Choice
 City
 ClientData
 ColHidden
@@ -142,6 +144,7 @@ EnhancedMetaFile
 Extend
 Extension
 External
+Fallback
 False
 FieldCodes
 FileBinding
@@ -183,6 +186,7 @@ IDREF
 IDREFS
 Icon
 Id
+Ignorable
 Inc
 Institution
 Internal
@@ -324,6 +328,7 @@ Relationships
 RelationshipsGroupReference
 Report
 Reporter
+Requires
 Right
 RootElement
 Row
@@ -495,6 +500,7 @@ alg
 algIdExt
 algIdExtSource
 algn
+algorithmName
 alias
 aliases
 aliceBlue
@@ -665,11 +671,13 @@ autoCaptions
 autoCompressPictures
 autoEnd
 autoExp
+autoFill
 autoFilter
 autoFilterDateGrouping
 autoFormatId
 autoFormatOverride
 autoHyphenation
+autoLine
 autoLoad
 autoNoTable
 autoPage
@@ -678,6 +686,7 @@ autoRecover
 autoRedefine
 autoRepublish
 autoRev
+autoScale
 autoShow
 autoSortScope
 autoSpaceDE
@@ -1111,6 +1120,7 @@ char
 charRg
 charSpace
 character
+characterSet
 characterSpacingControl
 characteristic
 charset
@@ -1221,6 +1231,7 @@ colFields
 colFirst
 colGrandTotals
 colHeaderCaption
+colHidden
 colHierarchiesUsage
 colHierarchyUsage
 colId
@@ -1259,6 +1270,7 @@ command
 commandType
 comment
 commentList
+commentPr
 commentRangeEnd
 commentRangeStart
 commentReference
@@ -1290,6 +1302,7 @@ confettiGrays
 confettiOutline
 confettiStreamers
 confettiWhite
+conformance
 conn
 connDist
 connRout
@@ -1596,6 +1609,7 @@ date
 date1904
 dateAx
 dateBetween
+dateCompatibility
 dateEqual
 dateFormat
 dateGroupItem
@@ -1659,6 +1673,7 @@ defaultGridColor
 defaultMemberUniqueName
 defaultPivotStyle
 defaultRowHeight
+defaultSize
 defaultSubtotal
 defaultTabStop
 defaultTableStyle
@@ -2002,6 +2017,7 @@ encoding
 end
 endA
 endAngle
+endChars
 endChr
 endCnv
 endCondLst
@@ -2517,6 +2533,7 @@ harsh
 hasCustomPrompt
 hash
 hashData
+hashValue
 hc
 hd2
 hd4
@@ -3358,6 +3375,7 @@ moveTo
 moveToRangeEnd
 moveToRangeStart
 moveWith
+moveWithCells
 movie
 movingAvg
 mp
@@ -3729,8 +3747,11 @@ panose
 panose1
 papayaWhip
 paperClips
+paperHeight
 paperSize
 paperSrc
+paperUnits
+paperWidth
 papyrus
 par
 parOf
@@ -4246,6 +4267,7 @@ rowDrillCount
 rowFields
 rowGrandTotals
 rowHeaderCaption
+rowHidden
 rowHierarchiesUsage
 rowHierarchyUsage
 rowItems
@@ -4306,6 +4328,7 @@ saka
 salmon
 salt
 saltData
+saltValue
 sameClick
 sameDir
 sampData
@@ -4605,6 +4628,7 @@ singleclick
 size
 sizeAuto
 sizeRepresents
+sizeWithCells
 skew
 skewamt
 skewangle
@@ -4797,6 +4821,7 @@ starsTop
 start
 startAngle
 startAt
+startChars
 startDate
 startNum
 startOverride
@@ -5065,6 +5090,7 @@ textField
 textFields
 textFile
 textFit
+textHAlign
 textInflate
 textInflateBottom
 textInflateTop
@@ -5081,6 +5107,7 @@ textSlantUp
 textStop
 textTriangle
 textTriangleInverted
+textVAlign
 textWave1
 textWave2
 textWave4
@@ -5433,6 +5460,7 @@ userhidden
 users
 uturnArrow
 v
+v2
 v3
 v3v4
 v4

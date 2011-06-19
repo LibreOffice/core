@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 #ifndef DOM_NODE_HXX
 #define DOM_NODE_HXX
 
-#include <hash_map>
-
 #include <libxml/tree.h>
 
 #include <sal/types.h>
@@ -54,6 +53,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
+#include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -89,7 +89,7 @@ namespace DOM
         };
 
         typedef std::vector< std::vector<Namespace> > NamespaceVectorType;
-        typedef std::hash_map< OUString,
+        typedef boost::unordered_map< OUString,
                                sal_Int32,
                                rtl::OUStringHash > NamespaceMapType;
 
@@ -349,3 +349,5 @@ namespace DOM
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

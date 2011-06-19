@@ -1,7 +1,7 @@
 /* FontStyle: Stores (and writes) font-based information that is needed at
  * the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,13 +26,7 @@
  */
 #ifndef _FONTSTYLE_H
 #define _FONTSTYLE_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
 #include <libwpd/libwpd.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
@@ -42,7 +36,7 @@ class FontStyle : public Style
 public:
     FontStyle(const char *psName, const char *psFontFamily);
     ~FontStyle();
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual void write(OdfDocumentHandler *pHandler) const;
     const WPXString &getFontFamily() const { return msFontFamily; }
 
 private:

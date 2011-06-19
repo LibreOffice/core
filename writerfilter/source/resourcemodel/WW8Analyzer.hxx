@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <map>
 
 namespace writerfilter
@@ -47,7 +48,7 @@ class WW8Analyzer : public Properties, public Table,
 {
     typedef map<sal_uInt32, sal_uInt32> SprmMap;
 
-    typedef hash_set<sal_uInt32, hash<sal_uInt32>, eqSalUInt32> IdSet;
+    typedef boost::unordered_set<sal_uInt32, boost::hash<sal_uInt32>, eqSalUInt32> IdSet;
     typedef map<Id, sal_uInt32> AttributeMap;
 
     mutable SprmMap mSprmMap;
@@ -97,3 +98,5 @@ public:
 }
 
 #endif // INCLUDED_WW8_ANALYZER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

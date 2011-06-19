@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hinfo.h,v 1.5 2008-06-04 09:59:14 vg Exp $ */
 
 #ifndef _HWPINFO_H_
 #define _HWPINFO_H_
@@ -262,3 +261,5 @@ struct ParaShape
 //  virtual ~ParaShape();
 };
 #endif                                            /* _HWPINFO_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HXX
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/urlobj.hxx>
 
@@ -42,12 +39,13 @@
 
 #include <comphelper/attributelist.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 TypeDetectionExporter::TypeDetectionExporter( Reference< XMultiServiceFactory >& xMSF )
 : mxMSF( xMSF )
@@ -113,10 +111,10 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
         xDocSrc->setOutputStream( xOS );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( OUString::createFromAscii( "xmlns:oor" ), sCdataAttribute, OUString::createFromAscii( "http://openoffice.org/2001/registry" ) );
-        pAttrList->AddAttribute ( OUString::createFromAscii( "xmlns:xs" ), sCdataAttribute, OUString::createFromAscii( "http://www.w3.org/2001/XMLSchema" ) );
-        pAttrList->AddAttribute ( sName, sCdataAttribute, OUString::createFromAscii( "TypeDetection" ) );
-        pAttrList->AddAttribute ( OUString::createFromAscii( "oor:package" ), sCdataAttribute, OUString::createFromAscii( "org.openoffice.Office" ) );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:oor" )), sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "http://openoffice.org/2001/registry" )) );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:xs" )), sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "http://www.w3.org/2001/XMLSchema" )) );
+        pAttrList->AddAttribute ( sName, sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "TypeDetection" )) );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "oor:package" )), sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office" )) );
         Reference < XAttributeList > xAttrList (pAttrList);
 
         xHandler->startDocument();
@@ -126,7 +124,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
         // export types
         {
             xAttrList = pAttrList = new ::comphelper::AttributeList;
-            pAttrList->AddAttribute ( sName, sCdataAttribute, OUString::createFromAscii( "Types" ) );
+            pAttrList->AddAttribute ( sName, sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "Types" )) );
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, xAttrList );
 
@@ -159,7 +157,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );
 
-                aIter++;
+                ++aIter;
             }
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -169,7 +167,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
         // export filters
         {
             xAttrList = pAttrList = new ::comphelper::AttributeList;
-            pAttrList->AddAttribute ( sName, sCdataAttribute, OUString::createFromAscii( "Filters" ) );
+            pAttrList->AddAttribute ( sName, sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "Filters" )) );
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, xAttrList );
 
@@ -218,7 +216,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 addProperty( xHandler, sData, sValue );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );
-                aIter++;
+                ++aIter;
             }
 
             xHandler->endElement( sNode );
@@ -231,7 +229,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::doExport exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::doExport exception catched!" );
     }
 }
 
@@ -245,8 +243,8 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
         const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( OUString::createFromAscii( "oor:name" ), sCdataAttribute, rName );
-        pAttrList->AddAttribute ( OUString::createFromAscii( "oor:type" ), sCdataAttribute, OUString::createFromAscii( "xs:string" ) );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "oor:name" )), sCdataAttribute, rName );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "oor:type" )), sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "xs:string" )) );
         Reference < XAttributeList > xAttrList (pAttrList);
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -261,7 +259,7 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::addProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addProperty exception catched!" );
     }
 }
 
@@ -275,14 +273,14 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHa
         const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( OUString::createFromAscii( "oor:name" ), sCdataAttribute, rName );
-        pAttrList->AddAttribute ( OUString::createFromAscii( "oor:type" ), sCdataAttribute, OUString::createFromAscii( "xs:string" ) );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "oor:name" )), sCdataAttribute, rName );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "oor:type" )), sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "xs:string" )) );
         Reference < XAttributeList > xAttrList (pAttrList);
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sProp, xAttrList );
         xAttrList = pAttrList = new ::comphelper::AttributeList;
-        pAttrList->AddAttribute ( OUString::createFromAscii( "xml:lang" ), sCdataAttribute, OUString::createFromAscii( "en-US" ) );
+        pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "xml:lang" )), sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" )) );
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sValue, xAttrList );
         xHandler->characters( rValue );
@@ -292,7 +290,8 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHa
     }
     catch( Exception& )
     {
-        DBG_ERROR( "TypeDetectionExporter::addLocaleProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addLocaleProperty exception catched!" );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

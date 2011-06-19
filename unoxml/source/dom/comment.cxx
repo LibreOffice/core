@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ namespace DOM
 
     OUString SAL_CALL CComment::getNodeName()throw (RuntimeException)
     {
-        return OUString::createFromAscii("#comment");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("#comment"));
     }
 
     OUString SAL_CALL CComment::getNodeValue() throw (RuntimeException)
@@ -57,3 +58,5 @@ namespace DOM
         return CCharacterData::getData();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

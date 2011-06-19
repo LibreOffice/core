@@ -45,6 +45,7 @@ CDEFS+= -DEDITDEBUG
 .IF "$(L10N_framework)"==""
 SLOFILES =  $(SLO)$/eos2met.obj
 
+
 .ENDIF
 # ==========================================================================
 

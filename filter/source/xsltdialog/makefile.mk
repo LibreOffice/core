@@ -31,7 +31,6 @@ TARGET=xsltdlg
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-#GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 
 # --- Settings ----------------------------------

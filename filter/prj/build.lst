@@ -1,4 +1,4 @@
-fl      filter  :    L10N:l10n svtools unotools xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx NULL
+fl      filter  :    TRANSLATIONS:translations svtools unotools xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx package NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\inc								nmake	-	all	fl_inc				NULL
@@ -11,6 +11,7 @@ fl	filter\source\svg						nmake	-	all	fl_svg				fl_inc NULL
 fl	filter\source\placeware					nmake	-	all	fl_placeware		fl_inc NULL
 fl	filter\source\flash						nmake	-	all	fl_flash fl_pdf		fl_inc NULL
 fl	filter\source\filtertracer				nmake	-	all fl_filtertracer		fl_inc NULL
+fl  filter\source\odfflatxml                nmake   -   all fl_odfflatxml       fl_inc NULL
 fl	filter\source\xsltfilter				nmake	-	all fl_xsltfilter		fl_inc NULL
 fl	filter\source\xsltvalidate				nmake	-	all fl_xsltvalidate fl_xsltfilter   fl_inc NULL
 fl	filter\source\xsltdialog				nmake	-	all fl_xsltdialog fl_flash  fl_inc NULL

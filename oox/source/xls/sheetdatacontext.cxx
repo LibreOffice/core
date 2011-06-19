@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -806,9 +807,10 @@ void BiffSheetDataContext::importBoolErr( BiffInputStream& rStrm )
                 mrSheetData.setErrorCell( maCellData, nValue );
             break;
             default:
-                OSL_ENSURE( false, "BiffSheetDataContext::importBoolErr - unknown cell type" );
+                OSL_FAIL( "BiffSheetDataContext::importBoolErr - unknown cell type" );
                 maCellData.mnCellType = XML_TOKEN_INVALID;
                 mrSheetData.setBlankCell( maCellData );
+            break;
         }
     }
 }
@@ -972,7 +974,7 @@ void BiffSheetDataContext::importDataTable( BiffInputStream& rStrm )
             }
             break;
             default:
-                OSL_ENSURE( false, "BiffSheetDataContext::importDataTable - unknown record id" );
+                OSL_FAIL( "BiffSheetDataContext::importDataTable - unknown record id" );
         }
         aModel.maRef1 = FormulaProcessorBase::generateAddress2dString( aRef1, false );
         aModel.maRef2 = FormulaProcessorBase::generateAddress2dString( aRef2, false );
@@ -994,3 +996,5 @@ void BiffSheetDataContext::importSharedFmla( BiffInputStream& rStrm )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

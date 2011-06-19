@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,6 +56,7 @@ namespace oox { namespace ppt {
         , mnAnimationSpeed( AnimationSpeed_FAST )
         , mnFadeColor( 0 )
         , mbMode( true )
+        , mnAdvanceTime( -1 )
     {
 
     }
@@ -67,6 +69,7 @@ namespace oox { namespace ppt {
         , mnAnimationSpeed( AnimationSpeed_FAST )
         , mnFadeColor( 0 )
         , mbMode( true )
+        , mnAdvanceTime( -1 )
     {
         const transition *p = transition::find( sFilterName );
         if( p )
@@ -87,11 +90,15 @@ namespace oox { namespace ppt {
             aProps[ PROP_TransitionDirection ] <<= mbTransitionDirectionNormal;
             aProps[ PROP_Speed ] <<= mnAnimationSpeed;
             aProps[ PROP_TransitionFadeColor ] <<= mnFadeColor;
+        if( mnAdvanceTime != -1 ) {
+        aProps[ PROP_Duration ] <<= mnAdvanceTime/1000;
+        aProps[ PROP_Change ] <<= static_cast<sal_Int32>(1);
+        }
         }
         catch( Exception& )
         {
             // should not happen
-            OSL_ENSURE( false, "exception raised" );
+            OSL_FAIL( "exception raised" );
         }
     }
 
@@ -108,7 +115,7 @@ namespace oox { namespace ppt {
         catch( Exception& )
         {
             // should not happen
-            OSL_ENSURE( false, "exception raised" );
+            OSL_FAIL( "exception raised" );
         }
     }
 
@@ -136,8 +143,6 @@ namespace oox { namespace ppt {
             break;
         }
     }
-
-
 
     sal_Int16 SlideTransition::ooxToOdpEightDirections( ::sal_Int32 nOoxType )
     {
@@ -416,3 +421,5 @@ namespace oox { namespace ppt {
 
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

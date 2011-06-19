@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <vector>
 #include <WW8CpAndFc.hxx>
-#ifndef INCLUDE_WW8_PIECE_TABLE_HXX
 #include <WW8PieceTable.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok
@@ -73,3 +72,5 @@ public:
 }}
 
 #endif // INCLUDED_WW8_PIECE_TABLE_IMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

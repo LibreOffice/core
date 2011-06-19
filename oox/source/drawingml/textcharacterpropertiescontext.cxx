@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,6 +59,8 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moLang = aAttribs.getString( XML_lang );
     if ( aAttribs.hasAttribute( XML_sz ) )
         mrTextCharacterProperties.moHeight = aAttribs.getInteger( XML_sz );
+    if ( aAttribs.hasAttribute( XML_spc ) )
+        mrTextCharacterProperties.moSpacing = aAttribs.getInteger( XML_spc );
     if ( aAttribs.hasAttribute( XML_u ) )
         mrTextCharacterProperties.moUnderline = aAttribs.getToken( XML_u );
     if ( aAttribs.hasAttribute( XML_strike ) )
@@ -175,3 +178,4 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,19 +32,13 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <svtools/xtextedt.hxx>
 #include <vcl/timer.hxx>
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <vcl/wrkwin.hxx>
 #include <vcl/ctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 
 class ScrollBar;
@@ -175,3 +170,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

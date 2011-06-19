@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,11 +52,12 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/servicefactory.hxx>
 
 using namespace ::rtl;
@@ -68,8 +70,11 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::document;
 
 #include <assert.h>
+
+#include <comphelper/mediadescriptor.hxx>
 
 #include "hwpfile.h"
 #include "hcode.h"
@@ -79,42 +84,10 @@ using namespace ::com::sun::star::xml::sax;
 #include "drawdef.h"
 #include "attributes.hxx"
 
-
 #define IMPLEMENTATION_NAME "com.sun.comp.hwpimport.HwpImportFilter"
-#define  SERVICE_NAME       "com.sun.star.document.ImportFilter"
-#define WRITER_IMPORTER_NAME    "com.sun.star.comp.Writer.XMLImporter"
-
-class MyDataSink : public ::cppu::WeakImplHelper2< XActiveDataControl, XActiveDataSink >
-{
-  Reference < XInputStream >    m_xInputStream;
-public:
-
-  // XActiveDataControl.
-  virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &)
-    throw(RuntimeException) {}
-  virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &)
-    throw(RuntimeException) {}
-  virtual void SAL_CALL   start (void) throw(RuntimeException) {}
-  virtual void SAL_CALL   terminate (void) throw(RuntimeException) {}
-
-  // XActiveDataSink.
-  virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream)
-    throw(RuntimeException);
-  virtual Reference<XInputStream> SAL_CALL getInputStream (void)
-    throw(RuntimeException);
-};
-
-void SAL_CALL MyDataSink::setInputStream ( const Reference<XInputStream> &rxInputStream)
-  throw(RuntimeException )
-{
-  m_xInputStream = rxInputStream;
-}
-
-Reference < XInputStream > SAL_CALL MyDataSink::getInputStream (void)
-  throw(RuntimeException)
-{
-  return m_xInputStream;
-}
+#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
+#define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
+#define WRITER_IMPORTER_NAME "com.sun.star.comp.Writer.XMLImporter"
 
 struct HwpReaderPrivate;
 /**
@@ -133,21 +106,21 @@ public:
      */
     virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException);
     virtual void SAL_CALL cancel() throw(RuntimeException) {}
-    virtual void SAL_CALL setDocumentHandler(Reference< XDocumentHandler >  xHandler)
+    virtual void SAL_CALL setDocumentHandler(Reference< XDocumentHandler > xHandler)
     {
-        rDocumentHandler = xHandler;
+        m_rxDocumentHandler = xHandler;
     }
-     void setUCB( Reference< XInterface > xUCB ){
+    void setUCB( Reference< XInterface > xUCB )
+    {
          rUCB = xUCB;
-     }
+    }
 private:
-    Reference< XDocumentHandler >   rDocumentHandler;
-     Reference< XInterface > rUCB;
+    Reference< XDocumentHandler > m_rxDocumentHandler;
+    Reference< XInterface > rUCB;
     Reference< XAttributeList > rList;
     AttributeListImpl *pList;
     HWPFile hwpfile;
-     HwpReaderPrivate *d;
-
+    HwpReaderPrivate *d;
 private:
     /* -------- Document Parsing --------- */
     void makeMeta();
@@ -192,7 +165,7 @@ private:
 
     /* --------- Styles Parsing ------------ */
     void makePageStyle();
-     void makeColumns(ColumnDef *);
+    void makeColumns(ColumnDef *);
     void makeTStyle(CharShape *);
     void makePStyle(ParaShape *);
     void makeFStyle(FBoxStyle *);
@@ -205,28 +178,33 @@ private:
     char* getPStyleName(int, char *);
 };
 
-class HwpImportFilter : public WeakImplHelper3< XFilter, XImporter, XServiceInfo >
+class HwpImportFilter : public WeakImplHelper4< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {
 public:
     HwpImportFilter( const Reference< XMultiServiceFactory > xFact );
     ~HwpImportFilter();
 
 public:
-    static Sequence< OUString > getSupportedServiceNames_Static( void ) throw();
+    static Sequence< OUString > getSupportedServiceNames_Static() throw();
     static OUString getImplementationName_Static() throw();
 
 public:
-        // XFilter
+    // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
         throw( RuntimeException );
     virtual void SAL_CALL cancel() throw(RuntimeException);
-        // XImporter
+
+    // XImporter
     virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc)
         throw( IllegalArgumentException, RuntimeException );
-        // XServiceInfo
+
+    // XServiceInfo
     OUString SAL_CALL getImplementationName() throw (RuntimeException);
     Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
+
+    //XExtendedFilterDetection
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException);
 
 public:
     Reference< XFilter > rFilter;
@@ -241,15 +219,16 @@ Reference< XInterface > HwpImportFilter_CreateInstance(
     return Reference< XInterface > ( (OWeakObject* )p );
 }
 
-Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static( void ) throw ()
+Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
 {
     Sequence< OUString > aRet(1);
     aRet.getArray()[0] = HwpImportFilter::getImplementationName_Static();
     return aRet;
 }
+
 HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact )
 {
-    OUString sService = OUString::createFromAscii( WRITER_IMPORTER_NAME );
+    OUString sService(RTL_CONSTASCII_USTRINGPARAM( WRITER_IMPORTER_NAME ));
     try {
         Reference< XDocumentHandler >
             xHandler( xFact->createInstance( sService ), UNO_QUERY );
@@ -257,15 +236,14 @@ HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact 
         HwpReader *p = new HwpReader;
         p->setDocumentHandler( xHandler );
 
-          Sequence< Any > aArgs( 2 );
-          aArgs[0] <<= OUString::createFromAscii( "Local" );
-          aArgs[1] <<= OUString::createFromAscii( "Office" );
-          Reference< XInterface > xUCB
-              ( xFact->createInstanceWithArguments
-                 (OUString::createFromAscii("com.sun.star.ucb.UniversalContentBroker"),
-                  aArgs));
-          p->setUCB( xUCB );
-
+        Sequence< Any > aArgs( 2 );
+        aArgs[0] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+        aArgs[1] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+        Reference< XInterface > xUCB
+            ( xFact->createInstanceWithArguments
+               (OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.UniversalContentBroker")),
+                aArgs));
+        p->setUCB( xUCB );
 
         Reference< XImporter > xImporter = Reference< XImporter >( xHandler, UNO_QUERY );
         rImporter = xImporter;
@@ -286,10 +264,8 @@ HwpImportFilter::~HwpImportFilter()
 sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw( RuntimeException )
 {
-        // delegate to IchitaroImpoter
-    rFilter->filter( aDescriptor );
-
-    return sal_True;
+    // delegate to IchitaroImpoter
+    return rFilter->filter( aDescriptor );
 }
 
 void HwpImportFilter::cancel() throw(::com::sun::star::uno::RuntimeException)
@@ -306,13 +282,14 @@ void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
 
 OUString HwpImportFilter::getImplementationName_Static() throw()
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
 }
 
 OUString HwpImportFilter::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
 }
+
 sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
@@ -325,11 +302,40 @@ sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(:
     return sal_False;
 }
 
-Sequence< OUString> HwpImportFilter::getSupportedServiceNames( void ) throw(::com::sun::star::uno::RuntimeException)
+//XExtendedFilterDetection
+OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > seq(1);
-    seq.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
-    return seq;
+    rtl::OUString sTypeName;
+
+    comphelper::MediaDescriptor aDescriptor(rDescriptor);
+    aDescriptor.addInputStream();
+
+    Reference< XInputStream > xInputStream(
+        aDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+
+    if (xInputStream.is())
+    {
+        Sequence< sal_Int8 > aData;
+        sal_Int32 nLen = HWPIDLen;
+        if (
+             nLen == xInputStream->readBytes(aData, nLen) &&
+             detect_hwp_version(reinterpret_cast<const char*>(aData.getConstArray()))
+           )
+        {
+            sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("writer_MIZI_Hwp_97"));
+        }
+    }
+
+    return sTypeName;
+}
+
+Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+{
+    Sequence < OUString > aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME1));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME2));
+    return aRet;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -339,13 +345,13 @@ Sequence< OUString> HwpImportFilter::getSupportedServiceNames( void ) throw(::co
 extern "C"
 {
 
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment **  )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
     {
         void * pRet = 0;
 
@@ -356,7 +362,7 @@ extern "C"
 
             OUString aImplementationName = OUString::createFromAscii( pImplName );
 
-            if (aImplementationName == OUString::createFromAscii( IMPLEMENTATION_NAME ) )
+            if (aImplementationName == OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME )) )
             {
                 xRet = createSingleFactory( xSMgr, aImplementationName,
                                             HwpImportFilter_CreateInstance,
@@ -375,3 +381,4 @@ extern "C"
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

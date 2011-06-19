@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hwplib.h,v 1.5 2008-04-10 12:09:50 rt Exp $ */
 
 #ifndef _HWPLIB_H_
 #define _HWPLIB_H_
@@ -242,3 +241,5 @@ enum DebugMask
 #  define DIRSEP '/'
 #endif
 #endif                                            /* _HWPLIB_H_*/
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

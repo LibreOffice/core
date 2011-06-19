@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,9 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/table/CellVertJustify2.hpp>
+#include <com/sun/star/table/CellJustifyMethod.hpp>
+#include <com/sun/star/table/TableBorder.hpp>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
@@ -55,6 +59,7 @@
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
+using ::com::sun::star::table::BorderLine2;
 namespace oox {
 namespace xls {
 
@@ -207,7 +212,7 @@ const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
 const sal_uInt16 BIFF_XF_LOCKED             = 0x0001;
 const sal_uInt16 BIFF_XF_HIDDEN             = 0x0002;
 const sal_uInt16 BIFF_XF_STYLE              = 0x0004;
-const sal_uInt16 BIFF_XF_STYLEPARENT        = 0x0FFF;   /// Syles don't have a parent.
+const sal_uInt16 BIFF_XF_STYLEPARENT        = 0x0FFF;   /// Styles don't have a parent.
 const sal_uInt16 BIFF_XF_WRAPTEXT           = 0x0008;   /// Automatic line break.
 const sal_uInt16 BIFF_XF_JUSTLASTLINE       = 0x0080;
 const sal_uInt16 BIFF_XF_SHRINK             = 0x0010;   /// Shrink to fit into cell.
@@ -361,7 +366,7 @@ void Color::importColor( const AttributeList& rAttribs )
         setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else
     {
-        OSL_ENSURE( false, "Color::importColor - unknown color type" );
+        OSL_FAIL( "Color::importColor - unknown color type" );
         setAuto();
     }
 }
@@ -397,7 +402,7 @@ void Color::importColor( SequenceInputStream& rStrm )
             rStrm.skip( 4 );
         break;
         default:
-            OSL_ENSURE( false, "Color::importColor - unknown color type" );
+            OSL_FAIL( "Color::importColor - unknown color type" );
             setAuto();
             rStrm.skip( 4 );
     }
@@ -571,7 +576,7 @@ sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
         case OOX_COLOR_NOTEBACK:        nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_infoBk );       break;
         case OOX_COLOR_NOTETEXT:        nColor = getBaseFilter().getGraphicHelper().getSystemColor( XML_infoText );     break;
         case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;                                                   break;
-        default:                        OSL_ENSURE( false, "ColorPalette::getColor - unknown color index" );
+        default:                        OSL_FAIL( "ColorPalette::getColor - unknown color index" );
     }
     return nColor;
 }
@@ -888,7 +893,7 @@ void Font::importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm )
             maUsedFlags.mbShadowUsed = true;
         break;
         default:
-            OSL_ENSURE( false, "Font::importDxfFlag - unexpected element identifier" );
+            OSL_FAIL( "Font::importDxfFlag - unexpected element identifier" );
     }
 }
 
@@ -1163,10 +1168,11 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
     if( maUsedFlags.mbShadowUsed )
         rPropMap[ PROP_CharShadowed ] <<= maApiData.mbShadow;
     // escapement
-    if( maUsedFlags.mbEscapementUsed && (ePropType == FONT_PROPTYPE_TEXT) )
+    if( maUsedFlags.mbEscapementUsed )
     {
         rPropMap[ PROP_CharEscapement ] <<= maApiData.mnEscapement;
-        rPropMap[ PROP_CharEscapementHeight ] <<= maApiData.mnEscapeHeight;
+        if( ePropType == FONT_PROPTYPE_TEXT )
+            rPropMap[ PROP_CharEscapementHeight ] <<= maApiData.mnEscapeHeight;
     }
 }
 
@@ -1260,7 +1266,9 @@ void AlignmentModel::setBiffTextOrient( sal_uInt8 nTextOrient )
 
 ApiAlignmentData::ApiAlignmentData() :
     meHorJustify( ::com::sun::star::table::CellHoriJustify_STANDARD ),
-    meVerJustify( ::com::sun::star::table::CellVertJustify_STANDARD ),
+    mnHorJustifyMethod( ::com::sun::star::table::CellJustifyMethod::AUTO ),
+    mnVerJustify( ::com::sun::star::table::CellVertJustify2::STANDARD ),
+    mnVerJustifyMethod( ::com::sun::star::table::CellJustifyMethod::AUTO ),
     meOrientation( ::com::sun::star::table::CellOrientation_STANDARD ),
     mnRotation( 0 ),
     mnWritingMode( ::com::sun::star::text::WritingMode2::PAGE ),
@@ -1274,7 +1282,9 @@ bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight )
 {
     return
         (rLeft.meHorJustify  == rRight.meHorJustify) &&
-        (rLeft.meVerJustify  == rRight.meVerJustify) &&
+        (rLeft.mnHorJustifyMethod == rRight.mnHorJustifyMethod) &&
+        (rLeft.mnVerJustify  == rRight.mnVerJustify) &&
+        (rLeft.mnVerJustifyMethod == rRight.mnVerJustifyMethod) &&
         (rLeft.meOrientation == rRight.meOrientation) &&
         (rLeft.mnRotation    == rRight.mnRotation) &&
         (rLeft.mnWritingMode == rRight.mnWritingMode) &&
@@ -1371,15 +1381,21 @@ void Alignment::finalizeImport()
         case XML_right:             maApiData.meHorJustify = csstab::CellHoriJustify_RIGHT;     break;
     }
 
+    if (maModel.mnHorAlign == XML_distributed)
+        maApiData.mnHorJustifyMethod = csstab::CellJustifyMethod::DISTRIBUTE;
+
     // vertical alignment
     switch( maModel.mnVerAlign )
     {
-        case XML_bottom:        maApiData.meVerJustify = csstab::CellVertJustify_BOTTOM;    break;
-        case XML_center:        maApiData.meVerJustify = csstab::CellVertJustify_CENTER;    break;
-        case XML_distributed:   maApiData.meVerJustify = csstab::CellVertJustify_TOP;       break;
-        case XML_justify:       maApiData.meVerJustify = csstab::CellVertJustify_TOP;       break;
-        case XML_top:           maApiData.meVerJustify = csstab::CellVertJustify_TOP;       break;
+        case XML_bottom:        maApiData.mnVerJustify = csstab::CellVertJustify2::BOTTOM;    break;
+        case XML_center:        maApiData.mnVerJustify = csstab::CellVertJustify2::CENTER;    break;
+        case XML_distributed:   maApiData.mnVerJustify = csstab::CellVertJustify2::BLOCK;     break;
+        case XML_justify:       maApiData.mnVerJustify = csstab::CellVertJustify2::BLOCK;     break;
+        case XML_top:           maApiData.mnVerJustify = csstab::CellVertJustify2::TOP;       break;
     }
+
+    if (maModel.mnVerAlign == XML_distributed)
+        maApiData.mnVerJustifyMethod = csstab::CellJustifyMethod::DISTRIBUTE;
 
     /*  indentation: expressed as number of blocks of 3 space characters in
         OOXML/BIFF12, and as multiple of 10 points in BIFF8. */
@@ -1420,7 +1436,9 @@ void Alignment::finalizeImport()
 void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     rPropMap[ PROP_HoriJustify ]     <<= maApiData.meHorJustify;
-    rPropMap[ PROP_VertJustify ]     <<= maApiData.meVerJustify;
+    rPropMap[ PROP_HoriJustifyMethod ] <<= maApiData.mnHorJustifyMethod;
+    rPropMap[ PROP_VertJustify ]     <<= maApiData.mnVerJustify;
+    rPropMap[ PROP_VertJustifyMethod ] <<= maApiData.mnVerJustifyMethod;
     rPropMap[ PROP_WritingMode ]     <<= maApiData.mnWritingMode;
     rPropMap[ PROP_RotateAngle ]     <<= maApiData.mnRotation;
     rPropMap[ PROP_Orientation ]     <<= maApiData.meOrientation;
@@ -1497,6 +1515,15 @@ void Protection::writeToPropertyMap( PropertyMap& rPropMap ) const
 
 // ============================================================================
 
+namespace {
+
+bool lcl_isBorder(const ::com::sun::star::table::BorderLine& rBorder)
+{
+    return (rBorder.InnerLineWidth > 0) || (rBorder.OuterLineWidth > 0);
+}
+
+}
+
 BorderLineModel::BorderLineModel( bool bDxf ) :
     mnStyle( XML_none ),
     mbUsed( !bDxf )
@@ -1544,10 +1571,10 @@ ApiBorderData::ApiBorderData() :
 bool ApiBorderData::hasAnyOuterBorder() const
 {
     return
-        (maBorder.IsTopLineValid    && (maBorder.TopLine.OuterLineWidth > 0)) ||
-        (maBorder.IsBottomLineValid && (maBorder.BottomLine.OuterLineWidth > 0)) ||
-        (maBorder.IsLeftLineValid   && (maBorder.LeftLine.OuterLineWidth > 0)) ||
-        (maBorder.IsRightLineValid  && (maBorder.RightLine.OuterLineWidth > 0));
+        ( ( lcl_isBorder( maTop ) &&  maTop.OuterLineWidth > 0 ) ) ||
+        ( ( lcl_isBorder( maBottom ) && maBottom.OuterLineWidth > 0 ) ) ||
+        ( ( lcl_isBorder( maLeft ) && maLeft.OuterLineWidth > 0 ) ) ||
+        ( ( lcl_isBorder( maRight ) && maRight.OuterLineWidth > 0 ) );
 }
 
 namespace {
@@ -1585,7 +1612,10 @@ bool operator==( const TableBorder& rLeft, const TableBorder& rRight )
 bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
 {
     return
-        (rLeft.maBorder     == rRight.maBorder) &&
+        (rLeft.maLeft       == rRight.maLeft)   &&
+        (rLeft.maRight      == rRight.maRight)  &&
+        (rLeft.maTop        == rRight.maTop)    &&
+        (rLeft.maBottom     == rRight.maBottom) &&
         (rLeft.maTLtoBR     == rRight.maTLtoBR) &&
         (rLeft.maBLtoTR     == rRight.maBLtoTR) &&
         (rLeft.mbBorderUsed == rRight.mbBorderUsed) &&
@@ -1609,7 +1639,7 @@ inline sal_Int32 lclGetBorderLineWidth( const BorderLine& rBorderLine )
     return rBorderLine.OuterLineWidth + rBorderLine.LineDistance + rBorderLine.InnerLineWidth;
 }
 
-const BorderLine* lclGetThickerLine( const BorderLine& rBorderLine1, sal_Bool bValid1, const BorderLine& rBorderLine2, sal_Bool bValid2 )
+const BorderLine2* lclGetThickerLine( const BorderLine2& rBorderLine1, sal_Bool bValid1, const BorderLine2& rBorderLine2, sal_Bool bValid2 )
 {
     if( bValid1 && bValid2 )
         return (lclGetBorderLineWidth( rBorderLine1 ) < lclGetBorderLineWidth( rBorderLine2 )) ? &rBorderLine2 : &rBorderLine1;
@@ -1747,21 +1777,10 @@ void Border::finalizeImport()
     maApiData.mbBorderUsed = maModel.maLeft.mbUsed || maModel.maRight.mbUsed || maModel.maTop.mbUsed || maModel.maBottom.mbUsed;
     maApiData.mbDiagUsed   = maModel.maDiagonal.mbUsed;
 
-    maApiData.maBorder.IsLeftLineValid   = convertBorderLine( maApiData.maBorder.LeftLine,   maModel.maLeft );
-    maApiData.maBorder.IsRightLineValid  = convertBorderLine( maApiData.maBorder.RightLine,  maModel.maRight );
-    maApiData.maBorder.IsTopLineValid    = convertBorderLine( maApiData.maBorder.TopLine,    maModel.maTop );
-    maApiData.maBorder.IsBottomLineValid = convertBorderLine( maApiData.maBorder.BottomLine, maModel.maBottom );
-
-    if( !mbDxf )
-    {
-        maApiData.maBorder.IsVerticalLineValid = maApiData.maBorder.IsLeftLineValid || maApiData.maBorder.IsRightLineValid;
-        if( const BorderLine* pVertLine = lclGetThickerLine( maApiData.maBorder.LeftLine, maApiData.maBorder.IsLeftLineValid, maApiData.maBorder.RightLine, maApiData.maBorder.IsRightLineValid ) )
-            maApiData.maBorder.VerticalLine = *pVertLine;
-
-        maApiData.maBorder.IsHorizontalLineValid = maApiData.maBorder.IsTopLineValid || maApiData.maBorder.IsBottomLineValid;
-        if( const BorderLine* pHorLine = lclGetThickerLine( maApiData.maBorder.TopLine, maApiData.maBorder.IsTopLineValid, maApiData.maBorder.BottomLine, maApiData.maBorder.IsBottomLineValid ) )
-            maApiData.maBorder.HorizontalLine = *pHorLine;
-    }
+    convertBorderLine( maApiData.maLeft,   maModel.maLeft );
+    convertBorderLine( maApiData.maRight,  maModel.maRight );
+    convertBorderLine( maApiData.maTop,    maModel.maTop );
+    convertBorderLine( maApiData.maBottom, maModel.maBottom );
 
     if( maModel.mbDiagTLtoBR )
         convertBorderLine( maApiData.maTLtoBR, maModel.maDiagonal );
@@ -1772,12 +1791,34 @@ void Border::finalizeImport()
 void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     if( maApiData.mbBorderUsed )
-        rPropMap[ PROP_TableBorder ] <<= maApiData.maBorder;
+    {
+        rPropMap[ PROP_LeftBorder ]   <<= maApiData.maLeft;
+        rPropMap[ PROP_RightBorder ]  <<= maApiData.maRight;
+        rPropMap[ PROP_TopBorder ]    <<= maApiData.maTop;
+        rPropMap[ PROP_BottomBorder ] <<= maApiData.maBottom;
+    }
     if( maApiData.mbDiagUsed )
     {
         rPropMap[ PROP_DiagonalTLBR ] <<= maApiData.maTLtoBR;
         rPropMap[ PROP_DiagonalBLTR ] <<= maApiData.maBLtoTR;
     }
+}
+
+bool Border::hasBorder() const
+{
+    if (lcl_isBorder(maApiData.maBottom))
+        return true;
+
+    if (lcl_isBorder(maApiData.maTop))
+        return true;
+
+    if (lcl_isBorder(maApiData.maLeft))
+        return true;
+
+    if (lcl_isBorder(maApiData.maRight))
+        return true;
+
+    return false;
 }
 
 BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
@@ -1793,15 +1834,25 @@ BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
     return 0;
 }
 
-bool Border::convertBorderLine( BorderLine& rBorderLine, const BorderLineModel& rModel )
+bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel& rModel )
 {
     rBorderLine.Color = rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK );
     switch( rModel.mnStyle )
     {
         case XML_dashDot:           lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
         case XML_dashDotDot:        lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
-        case XML_dashed:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
-        case XML_dotted:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
+        case XML_dashed:
+        {
+                                    lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+                                    rBorderLine.LineStyle = API_LINE_DASHED;
+                                    break;
+        }
+        case XML_dotted:
+        {
+                                    lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+                                    rBorderLine.LineStyle = API_LINE_DOTTED;
+                                    break;
+        }
         case XML_double:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN, API_LINE_THIN, API_LINE_THIN ); break;
         case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
         case XML_medium:            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
@@ -2475,6 +2526,11 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
         rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
     if( maModel.mbAlignUsed || maModel.mbBorderUsed )
         rPropMap[ PROP_RotateReference ] <<= meRotationRef;
+
+    ::com::sun::star::table::CellVertJustify eRotRef = ::com::sun::star::table::CellVertJustify_STANDARD;
+    if (maModel.mbBorderUsed && rStyles.hasBorder(maModel.mnBorderId) && maAlignment.getApiData().mnRotation)
+        eRotRef = ::com::sun::star::table::CellVertJustify_BOTTOM;
+    rPropMap[ PROP_RotateReference ] <<= eRotRef;
 }
 
 void Xf::writeToPropertySet( PropertySet& rPropSet ) const
@@ -3043,6 +3099,9 @@ void CellStyleBuffer::finalizeImport()
     for( CellStyleVector::iterator aIt = maBuiltinStyles.begin(), aEnd = maBuiltinStyles.end(); aIt != aEnd; ++aIt )
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
+        if (rModel.isDefaultStyle())
+            continue;
+
         OUString aStyleName = lclGetBuiltinStyleName( rModel.mnBuiltinId, rModel.maName, rModel.mnLevel );
         OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
             "CellStyleBuffer::finalizeImport - multiple styles with equal built-in identifier" );
@@ -3083,6 +3142,16 @@ void CellStyleBuffer::finalizeImport()
 
     // set final names and create user-defined and modified built-in cell styles
     aCellStyles.forEachMemWithKey( &CellStyle::finalizeImport );
+
+    if (mxDefStyle)
+    {
+        Reference<XNameAccess> xNA(getStyleFamily(false), UNO_QUERY_THROW);
+        if (xNA->hasByName(CREATE_OUSTRING("Default")))
+        {
+            PropertySet aPropSet(xNA->getByName(CREATE_OUSTRING("Default")));
+            getStyles().writeStyleXfToPropertySet(aPropSet, mxDefStyle->getModel().mnXfId);
+        }
+    }
 }
 
 sal_Int32 CellStyleBuffer::getDefaultXfId() const
@@ -3494,6 +3563,12 @@ void StylesBuffer::writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nX
         pXf->writeToPropertySet( rPropSet );
 }
 
+bool StylesBuffer::hasBorder( sal_Int32 nBorderId ) const
+{
+    Border* pBorder = maBorders.get( nBorderId ).get();
+    return pBorder && pBorder->hasBorder();
+}
+
 void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const
 {
     if( Xf* pXf = maStyleXfs.get( nXfId ).get() )
@@ -3504,3 +3579,5 @@ void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 n
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

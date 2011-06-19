@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <WW8PieceTable.hxx>
 #include <WW8BinTable.hxx>
 #include <resources.hxx>
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 #include <PLCF.hxx>
 #include <WW8Sttbf.hxx>
 #include <XNoteHelper.hxx>
@@ -168,7 +167,7 @@ public:
 class ShapeHelper
 {
 public:
-    typedef hash_map<CpAndFc, WW8FSPA::Pointer_t, CpAndFcHash> Map_t;
+    typedef boost::unordered_map<CpAndFc, WW8FSPA::Pointer_t, CpAndFcHash> Map_t;
 
 private:
     WW8DocumentImpl * mpDoc;
@@ -193,7 +192,7 @@ public:
 class FieldHelper
 {
 public:
-    typedef hash_map<CpAndFc, WW8FLD::Pointer_t,
+    typedef boost::unordered_map<CpAndFc, WW8FLD::Pointer_t,
                      CpAndFcHash> Map_t;
 
 private:
@@ -219,7 +218,7 @@ public:
 class BreakHelper
 {
 public:
-    typedef hash_map<CpAndFc, WW8BKD::Pointer_t,
+    typedef boost::unordered_map<CpAndFc, WW8BKD::Pointer_t,
                      CpAndFcHash> Map_t;
 private:
     WW8DocumentImpl * mpDoc;
@@ -846,3 +845,5 @@ string propertyTypeToString(PropertyType nType);
 
 }}
 #endif // INCLUDED_WW8_DOCUMENT_IMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

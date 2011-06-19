@@ -1,0 +1,13 @@
+    <node oor:name="MS PowerPoint 97 AutoPlay" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN STARTPRESENTATION</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>sdfilt</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">Microsoft PowerPoint 97/2000/XP/2003 AutoPlay</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>impress_MS_PowerPoint_97_AutoPlay</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+    </node>

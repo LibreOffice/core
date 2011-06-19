@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ struct FontEntry
     FontEntry() :
         bTrueType(false),
         nPitchRequest( 0 ),
-        nTextEncoding( 0 ),
+        nTextEncoding( RTL_TEXTENCODING_DONTKNOW ),
         nFontFamilyId( 0 ),
         nBaseWeight( 0 ),
         nAltFontIndex( 0 )
@@ -79,6 +80,7 @@ class WRITERFILTER_DLLPRIVATE FontTable : public LoggedProperties, public Logged
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
     virtual void lcl_sprm(Sprm & sprm);
+    void resolveSprm(Sprm & r_sprm);
 
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
@@ -106,3 +108,5 @@ typedef boost::shared_ptr< FontTable >          FontTablePtr;
 }}
 
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

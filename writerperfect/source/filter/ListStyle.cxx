@@ -1,7 +1,7 @@
 /* ListStyle: Stores (and writes) list-based information that is
  * needed at the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,7 @@
 #include "DocumentElement.hxx"
 
 OrderedListLevelStyle::OrderedListLevelStyle(const WPXPropertyList &xPropList) :
-        mPropList(xPropList)
+    mPropList(xPropList)
 {
 }
 
@@ -41,34 +41,46 @@ void OrderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList &
         setListLevel(iLevel, new OrderedListLevelStyle(xPropList));
 }
 
-void OrderedListLevelStyle::write(DocumentHandler *pHandler, int iLevel) const
+void OrderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) const
 {
     WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
 
     TagOpenElement listLevelStyleOpen("text:list-level-style-number");
     listLevelStyleOpen.addAttribute("text:level", sLevel);
-    listLevelStyleOpen.addAttribute("text:style-name", "Numbering Symbols");
-        if (mPropList["style:num-prefix"])
-                listLevelStyleOpen.addAttribute("style:num-prefix", mPropList["style:num-prefix"]->getStr());
-        if (mPropList["style:num-suffix"])
-                listLevelStyleOpen.addAttribute("style:num-suffix", mPropList["style:num-suffix"]->getStr());
-        if (mPropList["style:num-format"])
-                listLevelStyleOpen.addAttribute("style:num-format", mPropList["style:num-format"]->getStr());
-        if (mPropList["text:start-value"])
-                listLevelStyleOpen.addAttribute("text:start-value", mPropList["text:start-value"]->getStr());
+    listLevelStyleOpen.addAttribute("text:style-name", "Numbering_Symbols");
+    if (mPropList["style:num-prefix"])
+    {
+        WPXString sEscapedString(mPropList["style:num-prefix"]->getStr(), true);
+        listLevelStyleOpen.addAttribute("style:num-prefix", sEscapedString);
+    }
+    if (mPropList["style:num-suffix"])
+    {
+        WPXString sEscapedString(mPropList["style:num-suffix"]->getStr(), true);
+        listLevelStyleOpen.addAttribute("style:num-suffix", sEscapedString);
+    }
+    if (mPropList["style:num-format"])
+        listLevelStyleOpen.addAttribute("style:num-format", mPropList["style:num-format"]->getStr());
+    if (mPropList["text:start-value"])
+    {
+        // odf as to the version 1.1 does require the text:start-value to be a positive integer, means > 0
+        if (mPropList["text:start-value"]->getInt() > 0)
+            listLevelStyleOpen.addAttribute("text:start-value", mPropList["text:start-value"]->getStr());
+        else
+            listLevelStyleOpen.addAttribute("text:start-value", "1");
+    }
     listLevelStyleOpen.write(pHandler);
 
-    TagOpenElement stylePropertiesOpen("style:properties");
-        if (mPropList["text:space-before"])
-                stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
-    if (mPropList["text:min-label-width"])
+    TagOpenElement stylePropertiesOpen("style:list-level-properties");
+    if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0)
+        stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
+    if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
-    if (mPropList["text:min-label-distance"])
+    if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
     stylePropertiesOpen.write(pHandler);
 
-    pHandler->endElement("style:properties");
+    pHandler->endElement("style:list-level-properties");
     pHandler->endElement("text:list-level-style-number");
 }
 
@@ -85,34 +97,44 @@ void UnorderedListStyle::updateListLevel(const int iLevel, const WPXPropertyList
         setListLevel(iLevel, new UnorderedListLevelStyle(xPropList));
 }
 
-void UnorderedListLevelStyle::write(DocumentHandler *pHandler, int iLevel) const
+void UnorderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) const
 {
     WPXString sLevel;
     sLevel.sprintf("%i", (iLevel+1));
     TagOpenElement listLevelStyleOpen("text:list-level-style-bullet");
     listLevelStyleOpen.addAttribute("text:level", sLevel);
-    listLevelStyleOpen.addAttribute("text:style-name", "Bullet Symbols");
-    listLevelStyleOpen.addAttribute("style:num-suffice", ".");
-        if (mPropList["text:bullet-char"])
-                listLevelStyleOpen.addAttribute("text:bullet-char", mPropList["text:bullet-char"]->getStr());
+    listLevelStyleOpen.addAttribute("text:style-name", "Bullet_Symbols");
+    if (mPropList["text:bullet-char"] && (mPropList["text:bullet-char"]->getStr().len()))
+    {
+        // The following is needed because the odf format does not accept bullet chars longer than one character
+        WPXString::Iter i(mPropList["text:bullet-char"]->getStr()); i.rewind();
+        WPXString sEscapedString(".");
+        if (i.next())
+            sEscapedString = WPXString(i(), true);
+        listLevelStyleOpen.addAttribute("text:bullet-char", sEscapedString);
+
+    }
+    else
+        listLevelStyleOpen.addAttribute("text:bullet-char", ".");
     listLevelStyleOpen.write(pHandler);
 
-    TagOpenElement stylePropertiesOpen("style:properties");
-        if (mPropList["text:space-before"])
-                stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
-    if (mPropList["text:min-label-width"])
+    TagOpenElement stylePropertiesOpen("style:list-level-properties");
+    if (mPropList["text:space-before"] && mPropList["text:space-before"]->getDouble() > 0.0)
+        stylePropertiesOpen.addAttribute("text:space-before", mPropList["text:space-before"]->getStr());
+    if (mPropList["text:min-label-width"] && mPropList["text:min-label-width"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
-    if (mPropList["text:min-label-distance"])
+    if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
     stylePropertiesOpen.addAttribute("style:font-name", "OpenSymbol");
     stylePropertiesOpen.write(pHandler);
 
-    pHandler->endElement("style:properties");
+    pHandler->endElement("style:list-level-properties");
     pHandler->endElement("text:list-level-style-bullet");
 }
 
 ListStyle::ListStyle(const char *psName, const int iListID) :
     Style(psName),
+    miNumListLevels(0),
     miListID(iListID)
 {
     for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
@@ -146,7 +168,7 @@ void ListStyle::setListLevel(int iLevel, ListLevelStyle *iListLevelStyle)
         mppListLevels[iLevel] = iListLevelStyle;
 }
 
-void ListStyle::write(DocumentHandler *pHandler) const
+void ListStyle::write(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement listStyleOpenElement("text:list-style");
     listStyleOpenElement.addAttribute("style:name", getName());

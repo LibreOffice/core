@@ -37,7 +37,7 @@ public class SOTranscoder
         PNGTranscoder   aTranscoder = new PNGTranscoder();
         OutputStream    aOStm = new FileOutputStream( args[ 1 ] );
 
-        aTranscoder.transcode( new TranscoderInput( new File( args[ 0 ] ).toURL().toString() ), new TranscoderOutput( aOStm ) );
+        aTranscoder.transcode( new TranscoderInput( new File( args[ 0 ] ).toURI().toURL().toString() ), new TranscoderOutput( aOStm ) );
 
         aOStm.flush();
         aOStm.close();

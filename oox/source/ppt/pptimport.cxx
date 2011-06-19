@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace oox::core;
 
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::lang::XComponent;
+
 namespace oox { namespace ppt {
 
 OUString SAL_CALL PowerPointImport_getImplementationName() throw()
@@ -58,10 +62,18 @@ uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( cons
     return static_cast< ::cppu::OWeakObject* >( new PowerPointImport( rxContext ) );
 }
 
+#if OSL_DEBUG_LEVEL > 0
+XmlFilterBase* PowerPointImport::mpDebugFilterBase = NULL;
+#endif
+
 PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     XmlFilterBase( rxContext ),
     mxChartConv( new ::oox::drawingml::chart::ChartConverter )
+
 {
+#if OSL_DEBUG_LEVEL > 0
+    mpDebugFilterBase = this;
+#endif
 }
 
 PowerPointImport::~PowerPointImport()
@@ -132,6 +144,29 @@ const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const
     return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : 0;
 }
 
+sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDescriptor ) throw( RuntimeException )
+{
+    if( XmlFilterBase::filter( rDescriptor ) )
+        return true;
+
+    if( isExportFilter() ) {
+        Reference< XExporter > xExporter( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.Impress.oox.PowerPointExport" ) ), UNO_QUERY );
+
+        if( xExporter.is() ) {
+            Reference< XComponent > xDocument( getModel(), UNO_QUERY );
+            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
+
+            if( xFilter.is() ) {
+                xExporter->setSourceDocument( xDocument );
+                if( xFilter->filter( rDescriptor ) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 ::oox::vml::Drawing* PowerPointImport::getVmlDrawing()
 {
     return mpActualSlidePersist ? mpActualSlidePersist->getDrawing() : 0;
@@ -193,3 +228,5 @@ OUString PowerPointImport::implGetImplementationName() const
 }
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

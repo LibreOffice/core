@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include <sal/macros.h>
 #include "dmapperLoggers.hxx"
 
 #define OOXML_COLOR_AUTO 0x0a //todo: AutoColor needs symbol
@@ -38,48 +40,33 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::writerfilter;
-//using namespace ::std;
 
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellColorHandler::CellColorHandler() :
 LoggedProperties(dmapper_logger, "CellColorHandler"),
 m_nShadowType( 0 ),
 m_nColor( 0xffffffff ),
 m_nFillColor( 0xffffffff ),
-m_bParagraph( false )
+    m_OutputFormat( Form )
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellColorHandler::~CellColorHandler()
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
-    (void)nIntValue;
-    (void)rName;
-    /* WRITERFILTERSTATUS: table: CellColor_attributedata */
     switch( rName )
     {
         case NS_rtf::LN_cellTopColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellLeftColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellBottomColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellRightColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             // nIntValue contains the color, directly
         break;
         case NS_ooxml::LN_CT_Shd_val:
-            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         {
             //might be clear, pct5...90, some hatch types
             //TODO: The values need symbolic names!
@@ -87,47 +74,31 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0xffffff; //fill color auto means white
             m_nFillColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_color:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
             m_nColor = nIntValue;
         break;
-//        case NS_rtf::LN_rgbrc:
-//        {
-//            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
-//            if( pProperties.get())
-//            {
-//                pProperties->resolve(*this);
-//                //
-//            }
-//        }
-//        break;
         case NS_ooxml::LN_CT_Shd_themeFill:
         case NS_ooxml::LN_CT_Shd_themeFillTint:
         case NS_ooxml::LN_CT_Shd_themeFillShade:
             // ignored
             break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellColorHandler::lcl_sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }
-/*-- 24.04.2007 09:09:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 TablePropertyMapPtr  CellColorHandler::getProperties()
 {
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
@@ -204,7 +175,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
          // und zu guter Letzt:
          970
     };// 62
-    if( m_nShadowType >= (sal_Int32)(sizeof( eMSGrayScale ) / sizeof ( eMSGrayScale[ 0 ] )) )
+    if( m_nShadowType >= (sal_Int32)SAL_N_ELEMENTS( eMSGrayScale ) )
         m_nShadowType = 0;
 
     sal_Int32 nWW8BrushStyle = eMSGrayScale[m_nShadowType];
@@ -229,9 +200,12 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
     }
 
-    pPropertyMap->Insert( m_bParagraph ? PROP_PARA_BACK_COLOR : PROP_BACK_COLOR, false,
-                            uno::makeAny( nApplyColor ));
+    pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
+                        : m_OutputFormat == Paragraph ? PROP_PARA_BACK_COLOR
+                        : PROP_CHAR_BACK_COLOR, false, uno::makeAny( nApplyColor ));
     return pPropertyMap;
 }
 } //namespace dmapper
 } //namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

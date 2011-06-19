@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,12 +73,14 @@ struct TextCharacterProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::XmlFilterBase& rFilter ) const;
+                            const ::oox::core::XmlFilterBase& rFilter,
+                            bool bUseOptional = false ) const;
 
     /** Writes the properties to the passed property set. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const ::oox::core::XmlFilterBase& rFilter ) const;
+                            const ::oox::core::XmlFilterBase& rFilter,
+                            bool bUseOptional = false ) const;
 };
 
 // ============================================================================
@@ -87,3 +90,4 @@ struct TextCharacterProperties
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

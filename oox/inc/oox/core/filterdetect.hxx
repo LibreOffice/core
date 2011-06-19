@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ namespace core {
 class FilterDetectDocHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastDocumentHandler >
 {
 public:
-    explicit            FilterDetectDocHandler( ::rtl::OUString& rFilter );
+    explicit            FilterDetectDocHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, ::rtl::OUString& rFilter );
     virtual             ~FilterDetectDocHandler();
 
     // XFastDocumentHandler
@@ -90,6 +91,7 @@ private:
     ::rtl::OUString&    mrFilterName;
     ContextVector       maContextStack;
     ::rtl::OUString     maTargetPath;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 };
 
 // ============================================================================
@@ -165,3 +167,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

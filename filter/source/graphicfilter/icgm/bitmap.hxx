@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,20 +54,26 @@ class CGMBitmapDescriptor
         sal_uInt32              mnX, mnY;
         long                    mnLocalColorPrecision;
         sal_uInt32              mnCompressionMode;
-                                CGMBitmapDescriptor() :
-                                mpBuf       ( NULL ),
-                                mpBitmap    ( NULL ),
-                                mpAcc       ( NULL ),
-                                mbStatus    ( sal_False ),
-                                mbVMirror   ( sal_False ),
-                                mbHMirror   ( sal_False ) { };
-                                ~CGMBitmapDescriptor()
-                                {
-                                    if ( mpAcc )
-                                        mpBitmap->ReleaseAccess( mpAcc );
-                                    if ( mpBitmap )
-                                        delete mpBitmap;
-                                };
+
+        CGMBitmapDescriptor()
+            : mpBuf(NULL)
+            , mpBitmap(NULL)
+            , mpAcc(NULL)
+            , mbStatus(sal_False)
+            , mbVMirror(sal_False)
+            , mbHMirror(sal_False)
+            , mndx(0.0)
+            , mndy(0.0)
+            , mnOrientation(0.0)
+            , mnLocalColorPrecision(0)
+            { };
+        ~CGMBitmapDescriptor()
+        {
+            if ( mpAcc )
+                mpBitmap->ReleaseAccess( mpAcc );
+            if ( mpBitmap )
+                delete mpBitmap;
+        };
 };
 
 class CGMBitmap
@@ -85,3 +92,4 @@ class CGMBitmap
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,11 +74,11 @@ namespace DOM { namespace events {
                 if ((iter->second).is() && iter->second == aListener)
                 {
                     ListenerMap::iterator tmp_iter = iter;
-                    iter++;
+                    ++iter;
                     pMap->erase(tmp_iter);
                 }
                 else
-                    iter++;
+                    ++iter;
             }
         }
     }
@@ -93,7 +94,7 @@ namespace DOM { namespace events {
             ListenerMap *pMap = tIter->second;
             ListenerMap::const_iterator iter = pMap->lower_bound(pNode);
             ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
-            for( ; iter != ibound; iter++ )
+            for( ; iter != ibound; ++iter )
             {
                 if((iter->second).is())
                     (iter->second)->handleEvent(xEvent);
@@ -214,7 +215,7 @@ namespace DOM { namespace events {
                 pEvent->m_currentTarget = rinode->first;
                 callListeners(captureListeners, rinode->second, aType, xEvent);
                 if  (pEvent->m_canceled) return sal_True;
-                rinode++;
+                ++rinode;
             }
 
             NodeVector_t::const_iterator inode = captureVector.begin();
@@ -225,7 +226,7 @@ namespace DOM { namespace events {
             callListeners(targetListeners, inode->second, aType, xEvent);
             if  (pEvent->m_canceled) return sal_True;
             // bubbeling phase
-            inode++;
+            ++inode;
             if (i_xEvent->getBubbles()) {
                 pEvent->m_phase = PhaseType_BUBBLING_PHASE;
                 while (inode != captureVector.end())
@@ -234,10 +235,12 @@ namespace DOM { namespace events {
                     callListeners(targetListeners,
                             inode->second, aType, xEvent);
                     if  (pEvent->m_canceled) return sal_True;
-                    inode++;
+                    ++inode;
                 }
             }
         }
         return sal_True;
     }
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

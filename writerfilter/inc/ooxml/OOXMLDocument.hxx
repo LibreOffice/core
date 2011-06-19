@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,17 +31,12 @@
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEX_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HOO_
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
@@ -84,11 +80,11 @@ namespace ooxml
 
 using namespace com::sun::star;
 
-class WRITERFILTER_DLLPUBLIC OOXMLStream
+class WRITERFILTER_OOXML_DLLPUBLIC OOXMLStream
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING,
-        FOOTNOTES, ENDNOTES, COMMENTS, THEME, SETTINGS };
+        FOOTNOTES, ENDNOTES, COMMENTS, THEME, SETTINGS, VBAPROJECT };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
@@ -128,7 +124,7 @@ public:
 
 };
 
-class WRITERFILTER_DLLPUBLIC OOXMLDocument : public writerfilter::Reference<Stream>
+class WRITERFILTER_OOXML_DLLPUBLIC OOXMLDocument : public writerfilter::Reference<Stream>
 {
 public:
     /**
@@ -164,7 +160,7 @@ public:
      */
     virtual void resolveFootnote(Stream & rStream,
                                  const Id & rNoteType,
-                                 const rtl::OUString & rNoteId) = 0;
+                                 const sal_Int32 nNoteId) = 0;
     /**
        Resolves an endnote to a stream handler.
 
@@ -177,7 +173,7 @@ public:
      */
     virtual void resolveEndnote(Stream & rStream,
                                 const Id & rNoteType,
-                                const rtl::OUString & rNoteId) = 0;
+                                const sal_Int32 NoteId) = 0;
 
     /**
        Resolves a comment to a stream handler.
@@ -186,7 +182,7 @@ public:
        @param rComment      id of the comment to resolve
      */
     virtual void resolveComment(Stream & rStream,
-                                const rtl::OUString & rCommentId) = 0;
+                                const sal_Int32 nCommentId) = 0;
 
     /**
        Resolves a picture to a stream handler.
@@ -245,15 +241,17 @@ public:
     virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
     virtual uno::Reference<io::XInputStream> getInputStreamForId
     (const ::rtl::OUString & rId) = 0;
-    virtual void setXNoteId(const rtl::OUString & rId) = 0;
-    virtual const ::rtl::OUString & getXNoteId() const = 0;
+    virtual void setXNoteId(const sal_Int32 nId) = 0;
+    virtual sal_Int32 getXNoteId() const = 0;
     virtual void setXNoteType(const Id & nId) = 0;
     virtual const Id & getXNoteType() const = 0;
     virtual const ::rtl::OUString & getTarget() const = 0;
+    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
+    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) = 0;
 };
 
 
-class WRITERFILTER_DLLPUBLIC OOXMLDocumentFactory
+class WRITERFILTER_OOXML_DLLPUBLIC OOXMLDocumentFactory
 {
 public:
     static OOXMLStream::Pointer_t
@@ -277,3 +275,5 @@ void ooxmlidsToXML(::std::iostream & out);
 
 }}
 #endif // INCLUDED_OOXML_DOCUMENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

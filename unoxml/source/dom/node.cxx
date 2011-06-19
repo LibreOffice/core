@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,8 @@
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
+#include <comphelper/servicehelper.hxx>
+
 #include <document.hxx>
 #include <attr.hxx>
 #include <childlist.hxx>
@@ -53,19 +56,9 @@
 
 using namespace ::com::sun::star;
 
-
-namespace {
-    struct UnoTunnelId
-        : public ::rtl::StaticWithInit< Sequence<sal_Int8>, UnoTunnelId >
-    {
-        Sequence<sal_Int8> operator() ()
-        {
-            Sequence<sal_Int8> ret(16);
-            rtl_createUuid(
-                reinterpret_cast<sal_uInt8*>(ret.getArray()), 0, sal_True);
-            return ret;
-        }
-    };
+namespace
+{
+    class theCNodeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theCNodeUnoTunnelId > {};
 }
 
 namespace DOM
@@ -86,8 +79,9 @@ namespace DOM
         // add node's namespaces to current context
         for (xmlNsPtr pNs = pNode->nsDef; pNs != 0; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
+            // prefix can be NULL when xmlns attribute is empty (xmlns="")
             OString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
-                           strlen(reinterpret_cast<const char*>(pPrefix)));
+                           pPrefix ? strlen(reinterpret_cast<const char*>(pPrefix)) : 0);
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const sal_Char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
@@ -190,7 +184,7 @@ namespace DOM
         if (!xUnoTunnel.is()) { return 0; }
         CNode *const pCNode( reinterpret_cast< CNode* >(
                         ::sal::static_int_cast< sal_IntPtr >(
-                            xUnoTunnel->getSomething(UnoTunnelId::get()))));
+                            xUnoTunnel->getSomething(theCNodeUnoTunnelId::get().getSeq()))));
         return pCNode;
     }
 
@@ -382,8 +376,8 @@ namespace DOM
         pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString::createFromAscii("DOMNodeInserted")), UNO_QUERY);
-        event->initMutationEvent(OUString::createFromAscii("DOMNodeInserted")
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInserted"))), UNO_QUERY);
+        event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInserted"))
             , sal_True, sal_False,
             this,
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
@@ -822,8 +816,8 @@ namespace DOM
          */
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString::createFromAscii("DOMNodeRemoved")), UNO_QUERY);
-        event->initMutationEvent(OUString::createFromAscii("DOMNodeRemoved"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeRemoved"))), UNO_QUERY);
+            event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeRemoved")),
             sal_True,
             sal_False,
             this,
@@ -956,9 +950,9 @@ namespace DOM
         // target is _this_ node
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString::createFromAscii("DOMSubtreeModified")), UNO_QUERY);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified"))), UNO_QUERY);
         event->initMutationEvent(
-            OUString::createFromAscii("DOMSubtreeModified"), sal_True,
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified")), sal_True,
             sal_False, Reference< XNode >(),
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
@@ -1051,7 +1045,7 @@ namespace DOM
         throw (RuntimeException)
     {
         if ((rId.getLength() == 16) &&
-            (0 == rtl_compareMemory(UnoTunnelId::get().getConstArray(),
+            (0 == rtl_compareMemory(theCNodeUnoTunnelId::get().getSeq().getConstArray(),
                                     rId.getConstArray(), 16)))
         {
             return ::sal::static_int_cast< sal_Int64 >(
@@ -1061,3 +1055,4 @@ namespace DOM
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

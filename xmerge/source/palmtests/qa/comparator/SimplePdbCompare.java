@@ -25,12 +25,6 @@
  *
  ************************************************************************/
 
-/*
- * SimplePdbCompare.java
- *
- * Created on September 21, 2001, 10:23 AM
- */
-
 /**
  *
  * @author  mh101528
@@ -80,13 +74,11 @@ public final class SimplePdbCompare {
 
         if (pdb1.equals(pdb2))
         {
-            //writeToLog("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are equal");
             System.out.println("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are equal");
             return true;
         }
         else
         {
-            //writeToLog("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are not equal");
             System.out.println("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are not equal");
             return false;
         }

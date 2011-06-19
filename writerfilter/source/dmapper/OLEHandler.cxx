@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,33 +51,28 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OLEHandler::OLEHandler() :
 LoggedProperties(dmapper_logger, "OLEHandler"),
 m_nDxaOrig(0),
 m_nDyaOrig(0),
-m_nWrapMode(0)
+    m_nWrapMode(1)
 {
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OLEHandler::~OLEHandler()
 {
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 {
     rtl::OUString sStringValue = rVal.getString();
     (void)rName;
-    /* WRITERFILTERSTATUS: table: OLEHandler_attributedata */
     switch( rName )
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_OLEObject_Type:
             m_sObjectType = sStringValue;
         break;
@@ -105,7 +101,6 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
             m_nDyaOrig = rVal.getInt();
         break;
         case NS_ooxml::LN_shape:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         {
             uno::Reference< drawing::XShape > xTempShape;
             rVal.getAny() >>= xTempShape;
@@ -140,12 +135,11 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
         }
         break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void OLEHandler::lcl_sprm(Sprm & rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
@@ -193,13 +187,12 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
         break;
         default:
         {
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
         }
     }
 }
-/*-- 23.04.2008 11:15:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
 {
     ::rtl::OUString sRet;
@@ -244,10 +237,12 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
     catch( const uno::Exception& rEx)
     {
         (void)rEx;
-        OSL_ENSURE(false, "exception in OLEHandler::createOLEObject");
+        OSL_FAIL("exception in OLEHandler::createOLEObject");
     }
     return sRet;
 }
 
 } //namespace dmapper
 } //namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ class RASWriter {
 
 private:
 
-    SvStream*           mpOStm;
+    SvStream & m_rOStm;
     sal_uInt16              mpOStmOldModus;
 
     sal_Bool                mbStatus;
@@ -60,18 +61,19 @@ private:
     void                ImplPutByte( sal_uInt8 );   // RLE decoding
 
 public:
-                        RASWriter();
-                        ~RASWriter();
+    RASWriter(SvStream &rStream);
+    ~RASWriter();
 
-    sal_Bool                WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem );
+    sal_Bool WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von RASWriter ==============================
 
-RASWriter::RASWriter() :
-    mbStatus    ( sal_True ),
-    mpAcc       ( NULL ),
-    mnRepCount  ( 0xffffffff )
+RASWriter::RASWriter(SvStream &rStream)
+    : m_rOStm(rStream)
+    , mbStatus(sal_True)
+    , mpAcc(NULL)
+    , mnRepCount( 0xffffffff )
 {
 }
 
@@ -91,11 +93,9 @@ void RASWriter::ImplCallback( sal_uLong nYPos )
 
 //  ------------------------------------------------------------------------
 
-sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem)
+sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
-
-    mpOStm = &rRAS;
 
     if ( pFilterConfigItem )
     {
@@ -121,8 +121,8 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterCon
     mpAcc = aBmp.AcquireReadAccess();
     if ( mpAcc )
     {
-        mpOStmOldModus = mpOStm->GetNumberFormatInt();
-        mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+        m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
         if ( ImplWriteHeader() )
         {
@@ -135,7 +135,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterCon
     else
         mbStatus = sal_False;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -157,17 +157,17 @@ sal_Bool RASWriter::ImplWriteHeader()
     }
         if ( mbStatus && mnWidth && mnHeight && mnDepth )
     {
-        *mpOStm << (sal_uInt32)0x59a66a95 << (sal_uInt32)mnWidth << (sal_uInt32)mnHeight
+        m_rOStm << (sal_uInt32)0x59a66a95 << (sal_uInt32)mnWidth << (sal_uInt32)mnHeight
             << (sal_uInt32)mnDepth
             << (sal_uInt32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight)
             << (sal_uInt32)2;
 
         if ( mnDepth > 8 )
-            *mpOStm << (sal_uInt32)0 << (sal_uInt32)0;
+            m_rOStm << (sal_uInt32)0 << (sal_uInt32)0;
         else
         {
 
-            *mpOStm << (sal_uInt32)1 << (sal_uInt32)( mnColors * 3 );
+            m_rOStm << (sal_uInt32)1 << (sal_uInt32)( mnColors * 3 );
         }
     }
     else mbStatus = sal_False;
@@ -181,9 +181,9 @@ void RASWriter::ImplWritePalette()
 {
     sal_uInt16 i;
 
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetRed() ) ;
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetGreen() ) ;
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetBlue() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetRed() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetGreen() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetBlue() ) ;
 }
 
 // ------------------------------------------------------------------------
@@ -258,15 +258,15 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
         {
             if ( mnRepCount == 0 )
             {
-                *mpOStm << (sal_uInt8)mnRepVal;
+                m_rOStm << (sal_uInt8)mnRepVal;
                 if ( mnRepVal == 0x80 )
-                    *mpOStm << (sal_uInt8)0;
+                    m_rOStm << (sal_uInt8)0;
             }
             else
             {
-                *mpOStm << (sal_uInt8)0x80;
-                *mpOStm << (sal_uInt8)mnRepCount;
-                *mpOStm << (sal_uInt8)mnRepVal;
+                m_rOStm << (sal_uInt8)0x80;
+                m_rOStm << (sal_uInt8)mnRepCount;
+                m_rOStm << (sal_uInt8)mnRepVal;
             }
             mnRepVal = nPutThis;
             mnRepCount = 0;
@@ -282,7 +282,9 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
-    RASWriter aRASWriter;
+    RASWriter aRASWriter(rStream);
 
-    return aRASWriter.WriteRAS( rGraphic, rStream, pFilterConfigItem );
+    return aRASWriter.WriteRAS( rGraphic, pFilterConfigItem );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
-
 /**
  * Reperesent a BIFF Record descibing a cell containing a string
  */
@@ -47,10 +46,10 @@ public class LabelCell extends CellValue {
     /**
       * Constructs a <code>LabelCell</code> using specified attributes
      *
-     * @param row row number
-     * @param col column number
+     * @param row          row number
+     * @param column       column number
      * @param cellContents contents of the cell
-     * @param ixfe font index
+     * @param ixfe         font index
       */
     public LabelCell(int row, int column, String cellContents, int ixfe)
     throws IOException {
@@ -73,7 +72,7 @@ public class LabelCell extends CellValue {
     /**
      * Writes a <code>LabelCell</code> to the specified <code>Outputstream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param output The <code>OutputStream</code> to write to
      */
     public void write(OutputStream output) throws IOException {
 
@@ -116,7 +115,6 @@ public class LabelCell extends CellValue {
 
         return numOfBytesRead;
     }
-
 
     /**
      * Gets the <code>String</code> representing the cells contents

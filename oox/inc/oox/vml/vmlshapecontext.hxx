@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@ struct ClientData;
 struct ShapeModel;
 class ShapeBase;
 class GroupShape;
+class RectangleShape;
 
 class ShapeContainer;
 
@@ -138,6 +140,9 @@ private:
     /** Processes the 'points' attribute. */
     void                setPoints( const ::rtl::OUString& rPoints );
 
+protected:
+    ShapeBase&          mrShape;
+
 private:
     ShapeModel&         mrShapeModel;
 };
@@ -161,7 +166,22 @@ private:
 
 // ============================================================================
 
+class RectangleShapeContext : public ShapeContext
+{
+public:
+    explicit            RectangleShapeContext(
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const AttributeList& rAttribs,
+                            RectangleShape& rShape );
+
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+// ============================================================================
+
 } // namespace vml
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

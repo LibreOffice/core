@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_TABLEPROPERTIESHANDLER_HXX
 #define INCLUDED_TABLEPROPERTIESHANDLER_HXX
 
@@ -81,3 +82,5 @@ typedef boost::shared_ptr<TablePropertiesHandler> TablePropertiesHandlerPtr;
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

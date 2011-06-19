@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,8 +144,11 @@ public:
 
     // helpers ----------------------------------------------------------------
 
-    /** Returns the identifier of the currently processed element. */
+    /** Returns the identifier of the currently processed element. Ignores MCE elements in stack */
     sal_Int32           getCurrentElement() const;
+
+    /** Returns the identifier of the currently processed element - Including MCE root elements */
+    sal_Int32           getCurrentElementWithMce() const;
 
     /** Returns true, if nElement contains the identifier of the currently
         processed element. */
@@ -272,3 +276,5 @@ public:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

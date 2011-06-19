@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hfont.h,v 1.4 2008-06-04 09:57:04 vg Exp $ */
 
 #ifndef _HWPFONTS_H_
 #define _HWPFONTS_H_
@@ -75,3 +74,5 @@ class DLLEXPORT HWPFont
         bool Read( HWPFile &hwpf );
 };
 #endif                                            /* _HWPFONTS+H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

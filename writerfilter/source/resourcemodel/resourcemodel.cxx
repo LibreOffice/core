@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -382,7 +383,7 @@ void WW8StreamHandler::table(Id name, writerfilter::Reference<Table>::Pointer_t 
     {
         ref->resolve(aHandler);
     }
-    catch (Exception e)
+    catch (Exception &e)
     {
         output.addItem("<exception>" + e.getText() + "</exception>");
     }
@@ -441,7 +442,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
         {
             pProps->resolve(*this);
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
             output.addItem("<exception/>");
         }
@@ -459,7 +460,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
 
             pStream->resolve(aHandler);
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
             output.addItem("<exception>Out Of Bounds</exception>");
         }
@@ -475,7 +476,7 @@ void WW8PropertiesHandler::attribute(Id name, Value & val)
 
             pBinObj->resolve(aHandler);
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
             output.addItem("<exception>Out Of Bounds</exception>");
         }
@@ -541,12 +542,12 @@ void WW8TableHandler::entry(int /*pos*/,
     {
         ref->resolve(aHandler);
     }
-    catch (Exception e)
+    catch (Exception &e)
     {
         output.addItem("<exception>" + e.getText() + "</exception>");
         output.addItem("</tableentry>");
 
-        throw e;
+        throw;
     }
 
     output.addItem("</tableentry>");
@@ -564,3 +565,5 @@ void WW8BinaryObjHandler::data
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

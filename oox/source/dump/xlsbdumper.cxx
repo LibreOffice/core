@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -2268,31 +2269,31 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
     }
     else if( aExt.equalsIgnoreAsciiCaseAscii( "bin" ) )
     {
-        if( rStrgPath.equalsAscii( "xl" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
+        if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl" ) ) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "vbaProject.bin" ) ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAscii( "xl/embeddings" ) )
+        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/embeddings" ) ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if(
-            rStrgPath.equalsAscii( "xl" ) ||
-            rStrgPath.equalsAscii( "xl/chartsheets" ) ||
-            rStrgPath.equalsAscii( "xl/dialogsheets" ) ||
-            rStrgPath.equalsAscii( "xl/externalLinks" ) ||
-            rStrgPath.equalsAscii( "xl/macrosheets" ) ||
-            rStrgPath.equalsAscii( "xl/pivotCache" ) ||
-            rStrgPath.equalsAscii( "xl/pivotTables" ) ||
-            rStrgPath.equalsAscii( "xl/queryTables" ) ||
-            rStrgPath.equalsAscii( "xl/tables" ) ||
-            rStrgPath.equalsAscii( "xl/worksheets" ) )
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/chartsheets" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/dialogsheets" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/externalLinks" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/macrosheets" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/pivotCache" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/pivotTables" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/queryTables" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/tables" ) ) ||
+            rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/worksheets" ) ) )
         {
             RecordStreamObject( *this, rxStrm, rSysFileName ).dump();
         }
-        else if( rStrgPath.equalsAscii( "xl/activeX" ) )
+        else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "xl/activeX" ) ) )
         {
             StorageRef xStrg( new ::oox::ole::OleStorage( getContext(), rxStrm, true ) );
             ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();
@@ -2337,3 +2338,5 @@ void Dumper::implDump()
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

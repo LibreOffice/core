@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <osl/process.h>
 #include <rtl/string.hxx>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <assert.h>
 #include <string>
 #include <cppuhelper/implbase2.hxx>
@@ -168,7 +169,7 @@ class XmlRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
 
 public:
     XmlRtfScannerHandler(uno::Reference<lang::XMultiServiceFactory> &xServiceFactory_, uno::Reference<com::sun::star::ucb::XSimpleFileAccess> &xFileAccess_) :
-            objDataLevel(0), numOfOLEs(0), hb(' '), numOfOLEChars(0),
+    objDataLevel(0), numOfOLEs(0),hb(0),numOfOLEChars(0),
     xServiceFactory(xServiceFactory_),
     xFileAccess(xFileAccess_)
     {
@@ -200,7 +201,7 @@ public:
             bytesTotal=xSeekable->getLength();
         if (xStatusIndicator.is() && xSeekable.is())
         {
-            xStatusIndicator->start(::rtl::OUString::createFromAscii("Converting"), 100);
+            xStatusIndicator->start(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Converting")), 100);
         }
     }
 
@@ -269,7 +270,7 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
             rtl_uString_release(dir);
 
             uno::Reference <lang::XSingleServiceFactory> xStorageFactory(
-                xServiceFactory->createInstance (rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory")), uno::UNO_QUERY_THROW);
+                xServiceFactory->createInstance (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"))), uno::UNO_QUERY_THROW);
 
 #if 0
             rtl::OUString outFileUrl;
@@ -285,7 +286,7 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
             aArgs[1] <<= embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
             uno::Reference<embed::XStorage> xStorage(xStorageFactory->createInstanceWithArguments(aArgs), uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
-            xPropSet->setPropertyValue(rtl::OUString::createFromAscii("MediaType"), uno::makeAny(rtl::OUString::createFromAscii("application/vnd.oasis.opendocument.text")));
+            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.opendocument.text"))));
 #endif
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             uno::Reference< task::XStatusIndicator > xStatusIndicator;
@@ -310,18 +311,18 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
 
 ::rtl::OUString XMLScanner_getImplementationName ()
 {
-    return rtl::OUString::createFromAscii ( XMLScanner::IMPLEMENTATION_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( XMLScanner::IMPLEMENTATION_NAME ));
 }
 
 sal_Bool SAL_CALL XMLScanner_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString::createFromAscii( XMLScanner::SERVICE_NAME ) );
+    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLScanner::SERVICE_NAME )) );
 }
 uno::Sequence< rtl::OUString > SAL_CALL XMLScanner_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString::createFromAscii ( XMLScanner::SERVICE_NAME );
+    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( XMLScanner::SERVICE_NAME ));
     return aRet;
 }
 
@@ -331,3 +332,5 @@ uno::Reference< uno::XInterface > SAL_CALL XMLScanner_createInstance( const uno:
 }
 
 } } /* end namespace writerfilter::rtftok */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

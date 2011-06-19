@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef OOX_XLS_CONDFORMATBUFFER_HXX
 #define OOX_XLS_CONDFORMATBUFFER_HXX
 
-#include <com/sun/star/sheet/ConditionOperator.hpp>
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
@@ -174,8 +175,7 @@ public:
     void                finalizeImport();
 
     /** Converts an OOXML condition operator token to the API constant. */
-    static ::com::sun::star::sheet::ConditionOperator
-                        convertToApiOperator( sal_Int32 nToken );
+    static sal_Int32    convertToApiOperator( sal_Int32 nToken );
 
 private:
     CondFormatRef       createCondFormat();
@@ -191,3 +191,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

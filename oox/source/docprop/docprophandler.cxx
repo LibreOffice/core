@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,7 +90,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "Can not add custom property!" );
+            OSL_FAIL( "Can not add custom property!" );
         }
     }
 }
@@ -241,7 +242,7 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const ::rtl::OUString& aChars )
             break;
 
         default:
-            OSL_ASSERT( "Unexpected statistic!" );
+            OSL_FAIL( "Unexpected statistic!" );
             break;
     }
 
@@ -305,7 +306,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
         }
         else
         {
-                OSL_ASSERT( "Unexpected file format!" );
+                OSL_FAIL( "Unexpected file format!" );
         }
     }
     else if ( m_nState && m_nInBlock == 1 ) // that tag should contain the property name
@@ -324,7 +325,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
     }
     else
     {
-        OSL_ASSERT( "For now unexpected tags are ignored!" );
+        OSL_FAIL( "For now unexpected tags are ignored!" );
     }
 
     if ( m_nInBlock == SAL_MAX_INT32 )
@@ -341,7 +342,7 @@ void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const ::rtl::OUString& a
     aUnknown += aNamespace;
     aUnknown += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
     aUnknown += aName;
-    OSL_ASSERT( ::rtl::OUStringToOString( aUnknown, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_FAIL( ::rtl::OUStringToOString( aUnknown, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     if ( m_nInBlock == SAL_MAX_INT32 )
         throw uno::RuntimeException();
@@ -486,7 +487,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         break;
 
                     default:
-                        OSL_ASSERT( "Unexpected core property!" );
+                        OSL_FAIL( "Unexpected core property!" );
                 }
             }
             else if ( m_nState == EXTPR_TOKEN( Properties ) )
@@ -599,7 +600,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         break;
 
                     default:
-                        OSL_ASSERT( "Unexpected extended property!" );
+                        OSL_FAIL( "Unexpected extended property!" );
                 }
             }
             else if ( m_nState == CUSTPR_TOKEN( Properties ) )
@@ -652,7 +653,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                 }
                 else
                 {
-                    OSL_ASSERT( "Unexpected tag in custom property!" );
+                    OSL_FAIL( "Unexpected tag in custom property!" );
                 }
             }
         }
@@ -689,3 +690,4 @@ void SAL_CALL OOXMLDocPropHandler::processingInstruction( const ::rtl::OUString&
 } // namespace docprop
 } // namespace oox
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

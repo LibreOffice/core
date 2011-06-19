@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,7 +146,7 @@ public:
             this size.
 
         @return
-            True = decoding was successful (no error occured).
+            True = decoding was successful (no error occurred).
     */
     bool                decode(
                             sal_uInt8* pnDestData,
@@ -165,7 +166,7 @@ public:
             Number of bytes to be skipped (cipher "seeks" forward).
 
         @return
-            True = skip was successful (no error occured).
+            True = skip was successful (no error occurred).
      */
     bool                skip( sal_Int32 nBytes );
 
@@ -278,7 +279,7 @@ public:
             this size.
 
         @return
-            True = decoding was successful (no error occured).
+            True = decoding was successful (no error occurred).
     */
     bool                decode(
                             sal_uInt8* pnDestData,
@@ -298,7 +299,7 @@ public:
             Number of bytes to be skipped (cipher "seeks" forward).
 
         @return
-            True = skip was successful (no error occured).
+            True = skip was successful (no error occurred).
      */
     bool                skip( sal_Int32 nBytes );
 
@@ -319,3 +320,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

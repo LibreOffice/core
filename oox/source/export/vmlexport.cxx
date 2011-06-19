@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 #include <oox/export/vmlexport.hxx>
 
-#include <tokens.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -64,7 +65,7 @@ public:
 };
 
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer )
-    : EscherEx( *( new SvNullStream ), 0 ),
+    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), *( new SvNullStream ) ),
       m_pSerializer( pSerializer ),
       m_pShapeAttrList( NULL ),
       m_nShapeType( ESCHER_ShpInst_Nil ),
@@ -82,7 +83,7 @@ VMLExport::~VMLExport()
     delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = NULL;
 }
 
-void VMLExport::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
+void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
     EscherEx::OpenContainer( nEscherContainer, nRecInstance );
 
@@ -101,7 +102,7 @@ void VMLExport::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
 
         m_pShapeStyle->ensureCapacity( 200 );
 
-        // postpone the ouput so that we are able to write even the elements
+        // postpone the output so that we are able to write even the elements
         // that we learn inside Commit()
         m_pSerializer->mark();
     }
@@ -126,9 +127,9 @@ void VMLExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-UINT32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
+sal_uInt32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
 {
-    UINT32 nShapeId = GetShapeID();
+    sal_uInt32 nShapeId = GenerateShapeId();
 
     OStringBuffer aStyle( 200 );
     FastAttributeList *pAttrList = m_pSerializer->createAttrList();
@@ -171,7 +172,7 @@ void VMLExport::LeaveGroup()
     m_pSerializer->endElementNS( XML_v, XML_group );
 }
 
-void VMLExport::AddShape( UINT32 nShapeType, UINT32 nShapeFlags, UINT32 nShapeId )
+void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId )
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
@@ -362,8 +363,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         case ESCHER_WrapThrough:   pWrapType = "through"; break;
                     }
                     if ( pWrapType )
-                        m_pSerializer->singleElementNS( XML_w10, XML_wrap,
-                                FSNS( XML_w10, XML_type ), pWrapType,
+                        m_pSerializer->singleElementNS( XML_v, XML_wrap,
+                                FSNS( XML_v, XML_type ), pWrapType,
                                 FSEND );
                 }
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
@@ -665,7 +666,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 break;
             default:
 #if OSL_DEBUG_LEVEL > 0
-                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %d, data: [%d, %p]\n",
+                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
                         it->nPropId, it->nPropValue, it->nPropSize, it->pBuf );
                 if ( it->nPropSize )
                 {
@@ -835,3 +836,5 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         m_pSerializer->endElementNS( XML_v, nShapeElement );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

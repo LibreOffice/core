@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,10 +38,10 @@ namespace writerfilter
     using namespace ::std;
     using namespace ::com::sun::star;
 
-    string WRITERFILTER_DLLPUBLIC xmlify(const string & str);
+    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC xmlify(const string & str);
 
-#ifdef DEBUG
-    string WRITERFILTER_DLLPUBLIC propertysetToString
+#if OSL_DEBUG_LEVEL > 1
+    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC propertysetToString
     (uno::Reference<beans::XPropertySet> const & rProps);
 
     string toString(uno::Reference< text::XTextRange > textRange);
@@ -48,3 +49,5 @@ namespace writerfilter
 #endif
 }
 #endif // INCLUDED_RESOURCEMODEL_UTIL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

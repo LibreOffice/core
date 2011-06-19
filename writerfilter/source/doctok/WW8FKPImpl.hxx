@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <deque>
 #include <WW8FKP.hxx>
 
-#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
 #include <resourcemodel/OutputWithDepth.hxx>
-#endif
 
 namespace writerfilter {
 namespace doctok
@@ -212,3 +211,5 @@ public:
 }}
 
 #endif // INCLUDED_WW8_FKP_IMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

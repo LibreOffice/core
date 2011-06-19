@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +28,7 @@
 #ifndef INCLUDE_WRITERFILTER_PROTOCOL_HXX
 #define INCLUDE_WRITERFILTER_PROTOCOL_HXX
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 #include <boost/shared_ptr.hpp>
 #include "WW8ResourceModel.hxx"
@@ -100,3 +98,5 @@ public:
 
 #endif // DEBUG
 #endif // INCLUDE_WRITERFILTER_PROTOCOL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

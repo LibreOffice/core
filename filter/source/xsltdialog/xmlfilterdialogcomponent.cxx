@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <osl/thread.h>
@@ -47,12 +48,12 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/instance.hxx>
 
 #include <svl/solar.hrc>
 
 #include "xmlfiltersettingsdialog.hxx"
 
-//using namespace ::comphelper;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
@@ -130,7 +131,7 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::R
     mxMSF( rxMSF ),
     mpDialog( NULL )
 {
-    Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+    Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
     if( xDesktop.is() )
     {
         Reference< XTerminateListener > xListener( this );
@@ -236,32 +237,25 @@ Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const 
 
 //-------------------------------------------------------------------------
 
+namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
 Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId( void ) throw( RuntimeException )
 {
-    static OImplementationId* pId = 0;
-    if( !pId )
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if( !pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    ::cppu::OImplementationId &rID = lcl_ImplId::get();
+    return rID.getImplementationId();
 }
 
 //-------------------------------------------------------------------------
 
-Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
+namespace
 {
-    static OTypeCollection * s_pTypes = 0;
-    if (! s_pTypes)
+    class DialogComponentTypes
     {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pTypes)
-        {
-            static OTypeCollection s_aTypes(
+    private:
+        OTypeCollection m_aTypes;
+    public:
+        DialogComponentTypes() :
+            m_aTypes(
                 ::getCppuType( (const Reference< XComponent > *)0 ),
                 ::getCppuType( (const Reference< XTypeProvider > *)0 ),
                 ::getCppuType( (const Reference< XAggregation > *)0 ),
@@ -269,11 +263,18 @@ Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
                 ::getCppuType( (const Reference< XServiceInfo > *)0 ),
                 ::getCppuType( (const Reference< XInitialization > *)0 ),
                 ::getCppuType( (const Reference< XTerminateListener > *)0 ),
-                ::getCppuType( (const Reference< ::com::sun::star::ui::dialogs::XExecutableDialog > *)0 ));
-            s_pTypes = &s_aTypes;
+                ::getCppuType( (const Reference< ::com::sun::star::ui::dialogs::XExecutableDialog > *)0 ))
+        {
         }
-    }
-    return s_pTypes->getTypes();
+        OTypeCollection& getTypeCollection() { return m_aTypes; }
+    };
+
+    struct theDialogComponentTypes : rtl::Static<DialogComponentTypes, theDialogComponentTypes> {};
+}
+
+Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
+{
+    return theDialogComponentTypes::get().getTypeCollection().getTypes();
 }
 
 //-------------------------------------------------------------------------
@@ -295,7 +296,7 @@ sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const ::rtl::OUStrin
 */
 void SAL_CALL XMLFilterDialogComponent::disposing()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( mpDialog )
     {
@@ -315,7 +316,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 // XTerminateListener
 void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ ) throw (TerminationVetoException, RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     // we will never give a veto here
     if( mpDialog && !mpDialog->isClosable() )
@@ -345,7 +346,7 @@ void SAL_CALL XMLFilterDialogComponent::setTitle( const ::rtl::OUString& /* _rTi
 //-------------------------------------------------------------------------
 sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( NULL == mpResMgr )
     {
@@ -398,14 +399,14 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
 extern "C"
 {
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
@@ -434,3 +435,5 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

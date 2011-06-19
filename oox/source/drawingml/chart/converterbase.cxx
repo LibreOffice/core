@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <tools/solar.h>    // for F_PI180
+#include "basegfx/numeric/ftools.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
 
@@ -309,11 +310,11 @@ sal_Int32 lclCalcPosition( sal_Int32 nChartSize, double fPos, sal_Int32 nPosMode
         case XML_edge:      // absolute start position as factor of chart size
             return getLimitedValue< sal_Int32, double >( nChartSize * fPos + 0.5, 0, nChartSize );
         case XML_factor:    // position relative to object default position
-            OSL_ENSURE( false, "lclCalcPosition - relative positioning not supported" );
+            OSL_FAIL( "lclCalcPosition - relative positioning not supported" );
             return -1;
     };
 
-    OSL_ENSURE( false, "lclCalcPosition - unknown positioning mode" );
+    OSL_FAIL( "lclCalcPosition - unknown positioning mode" );
     return -1;
 }
 
@@ -329,7 +330,7 @@ sal_Int32 lclCalcSize( sal_Int32 nPos, sal_Int32 nChartSize, double fSize, sal_I
             return nValue - nPos + 1;
     };
 
-    OSL_ENSURE( false, "lclCalcSize - unknown size mode" );
+    OSL_FAIL( "lclCalcSize - unknown size mode" );
     return -1;
 }
 
@@ -437,3 +438,5 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

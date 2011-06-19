@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,13 +74,13 @@ void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OU
             pAnchorPos = &maTo;
         break;
         default:
-            OSL_ENSURE( false, "ShapeAnchor::setPos - unexpected parent element" );
+            OSL_FAIL( "ShapeAnchor::setPos - unexpected parent element" );
     }
     if( pAnchorPos ) switch( nElement )
     {
         case CDR_TOKEN( x ):    pAnchorPos->mfX = rValue.toDouble();    break;
         case CDR_TOKEN( y ):    pAnchorPos->mfY = rValue.toDouble();    break;
-        default:    OSL_ENSURE( false, "ShapeAnchor::setPos - unexpected element" );
+        default:    OSL_FAIL( "ShapeAnchor::setPos - unexpected element" );
     }
 }
 
@@ -224,7 +225,8 @@ void ChartDrawingFragment::onEndElement()
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
-                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, &aShapeRectEmu32 );
+                basegfx::B2DHomMatrix aMatrix;
+                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, &aShapeRectEmu32 );
             }
         }
         mxShape.reset();
@@ -237,3 +239,5 @@ void ChartDrawingFragment::onEndElement()
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

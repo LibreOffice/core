@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,6 @@ WW8PAPFKPImpl::getProperties(const Fc & rFc) const
             }
 
             sal_uInt32 nOffsetEnd = nOffset + nCbPapx;
-            //sal_uInt32 nOffsetSprms = nOffsetIStd + 2;
 
             if (nCbPapx > 1 && nOffset + nCbPapx <= 511)
             {
@@ -238,3 +238,5 @@ WW8FKP::Pointer_t WW8PAPFKPCacheImpl::createFKP(sal_uInt32 nPageNumber,
                              (*mpStream, nPageNumber, bComplex));
 }
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

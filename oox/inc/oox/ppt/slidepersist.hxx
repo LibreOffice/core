@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,6 +70,10 @@ public:
     ~SlidePersist();
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    getPage() const { return mxPage; };
+
+#if OSL_DEBUG_LEVEL > 0
+    static com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxDebugPage;
+#endif
 
     void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
     SlidePersistPtr getMasterPersist() const { return mpMasterPagePtr; }
@@ -152,3 +157,5 @@ private:
 } }
 
 #endif // OOX_POWERPOINT_SLIDEPERSIST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

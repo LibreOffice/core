@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,11 +65,11 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
     {
-        if( pValue[ i ].Name.equalsAscii( "OutputStream" ) )
+        if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
             pValue[ i ].Value >>= xOStm;
-        else if( pValue[ i ].Name.equalsAscii( "FilterData" ) )
+        else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
             pValue[ i ].Value >>= aFilterData;
-        else if ( pValue[ i ].Name.equalsAscii( "StatusIndicator" ) )
+        else if ( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
             pValue[ i ].Value >>= xStatusIndicator;
         else if( pValue[i].Name.equalsAscii( "InteractionHandler" ) )
             pValue[i].Value >>= xIH;
@@ -268,3 +269,5 @@ sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
 {
     return PDFFilter_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

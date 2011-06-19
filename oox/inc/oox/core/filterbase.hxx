@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,6 +80,12 @@ namespace core {
 
 // ============================================================================
 
+enum OoxmlVersion
+{
+    ECMA_DIALECT,
+    ISOIEC_29500_2008
+};
+
 struct FilterBaseImpl;
 
 typedef ::cppu::WeakImplHelper5<
@@ -102,6 +109,8 @@ public:
     bool                isImportFilter() const;
     /** Returns true, if filter is an export filter. */
     bool                isExportFilter() const;
+
+    OoxmlVersion getVersion() const;
 
     /** Derived classes implement import of the entire document. */
     virtual bool        importDocument() = 0;
@@ -204,7 +213,7 @@ public:
         the imported document. */
     ModelObjectHelper&  getModelObjectHelper() const;
 
-    /** Returns a helper for the handling of OLE obejcts. */
+    /** Returns a helper for the handling of OLE objects. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
     /** Returns the VBA project manager. */
@@ -308,3 +317,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

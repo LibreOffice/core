@@ -124,9 +124,11 @@ public class Pane implements BIFFRecord {
     }
 
     /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
+     * Set the pane number
+     * 0 - bottom right, 1 - top right
+     * 2 - bottom left, 3 - top left
      *
-     * @return the hex code for <code>Pane</code>
+     * @param paneNumber the pane number
      */
     public void setPaneNumber(int paneNumber) {
         pnnAcct = (byte) paneNumber;

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -283,7 +284,7 @@ public:
             Size of the destination buffer.
 
         @return
-            true = Encoding was successful (no error occured).
+            true = Encoding was successful (no error occurred).
     */
     bool                Encode(
                             const void* pData, sal_Size nDatLen,
@@ -309,7 +310,7 @@ public:
             Size of the destination buffer.
 
         @return
-            true = Decoding was successful (no error occured).
+            true = Decoding was successful (no error occurred).
     */
     bool                Decode(
                             const void* pData, sal_Size nDatLen,
@@ -375,3 +376,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

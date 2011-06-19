@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,7 +184,7 @@ bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
     OUString aGuid = OleHelper::importGuid( rInStrm );
     if( aGuid.equalsAscii( AX_GUID_CFONT ) )
         return importBinaryModel( rInStrm );
-    if( aGuid.equalsAscii( OLE_GUID_STDFONT ) )
+    if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(OLE_GUID_STDFONT) ) )
         return importStdFont( rInStrm );
     return false;
 }
@@ -371,3 +372,5 @@ bool AxBinaryPropertyReader::startNextProperty()
 
 } // namespace ole
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

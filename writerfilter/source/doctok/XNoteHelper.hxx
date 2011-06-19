@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef INCLUDED_X_NOTE_HELPER_HXX
 #define INCLUDED_X_NOTE_HELPER_HXX
 
-#ifndef INLCUED_PLCF_HXX
 #include <PLCF.hxx>
-#endif
 #include <WW8DocumentImpl.hxx>
 
 namespace writerfilter {
@@ -141,3 +140,5 @@ public:
 }}
 
 #endif // INCLUDED_X_NOTE_HELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,9 @@
 
 
 #include <osl/file.h>
+#include <sal/macros.h>
 
-#if defined( UNX) || defined(OS2)
+#if defined( UNX)
 
 #include <stdio.h>
 #include <string.h>
@@ -87,20 +89,18 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 #pragma warning(pop)
 #endif
 
-#define elementsof(arr) (sizeof(arr)/sizeof(arr[0]))
-
 oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 {
     WCHAR   szBuffer[MAX_PATH];
     LPWSTR  lpBuffer = szBuffer;
-    DWORD   nBufferLength = elementsof(szBuffer) - 1;
+    DWORD   nBufferLength = SAL_N_ELEMENTS(szBuffer) - 1;
 
     DWORD           nLength;
     oslFileError    error;
 
     do
     {
-        nLength = GetTempPathW( elementsof(szBuffer), lpBuffer );
+        nLength = GetTempPathW( SAL_N_ELEMENTS(szBuffer), lpBuffer );
         if ( nLength > nBufferLength )
         {
             nLength++;
@@ -131,8 +131,7 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 
 #include "tempfile.hxx"
 
-using namespace rtl;
-
+using ::rtl::OUString;
 TempFile::TempFile( const OUString& rTempFileURL )
 :osl::File( rTempFileURL ), maURL( rTempFileURL )
 {
@@ -163,7 +162,7 @@ OUString TempFile::createTempFileURL()
         if( aTmp.getStr()[ aTmp.getLength() - 1 ] != sal_Unicode( '/' ) )
             aTmp += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
         aTmp += OUString::valueOf( (sal_Int32) (unsigned) u, nRadix );
-        aTmp += OUString::createFromAscii( ".tmp" );
+        aTmp += OUString( RTL_CONSTASCII_USTRINGPARAM( ".tmp" ));
 
         osl::File aFile( aTmp );
         osl::FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
@@ -187,3 +186,5 @@ OUString TempFile::getFileURL()
 {
     return maURL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

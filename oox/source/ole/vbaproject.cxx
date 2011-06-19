@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,8 +162,6 @@ VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
 {
     OSL_ENSURE( mxContext.is(), "VbaProject::VbaProject - missing component context" );
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
-    mxBasicLib = openLibrary( PROP_BasicLibraries, false );
-    mxDialogLib = openLibrary( PROP_DialogLibraries, false );
 }
 
 VbaProject::~VbaProject()
@@ -239,9 +238,9 @@ Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId, bool bCr
     try
     {
         Reference< XLibraryContainer > xLibContainer( getLibraryContainer( nPropId ), UNO_SET_THROW );
-        if( bCreateMissing && !xLibContainer->hasByName( CREATE_OUSTRING( "Standard" ) /*maPrjName*/ ) )
-            xLibContainer->createLibrary( CREATE_OUSTRING( "Standard" ) /*maPrjName*/ );
-        xLibrary.set( xLibContainer->getByName( CREATE_OUSTRING( "Standard" ) /*maPrjName*/ ), UNO_QUERY_THROW );
+        if( bCreateMissing && !xLibContainer->hasByName( maPrjName ) )
+            xLibContainer->createLibrary( maPrjName );
+        xLibrary.set( xLibContainer->getByName( maPrjName ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -432,7 +431,10 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             document. */
         try
         {
-            Reference< XVBACompatibility >( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW )->setVBACompatibilityMode( sal_True );
+            Reference< XVBACompatibility > xVBACompat( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW );
+            xVBACompat->setVBACompatibilityMode( sal_True );
+            xVBACompat->setProjectName( maPrjName );
+
         }
         catch( Exception& )
         {
@@ -454,7 +456,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
             aModules.forEachMem( &VbaModule::createAndImportModule,
                 ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ),
-                ::boost::cref( xDocObjectNA ) );
+                ::boost::cref( xDocObjectNA ), ::boost::cref( mxOleOverridesSink ) );
 
             // create empty dummy modules
             aDummyModules.forEachMem( &VbaModule::createEmptyModule,
@@ -490,7 +492,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
                 VbaUserForm aForm( mxContext, mxDocModel, rGraphicHelper, bDefaultColorBgr );
-                aForm.importForm( xDialogLib, *xSubStrg, aModuleName, eTextEnc );
+                aForm.importForm( mxDocModel, xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch( Exception& )
             {
@@ -545,3 +547,5 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
 
 } // namespace ole
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

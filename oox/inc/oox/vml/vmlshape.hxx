@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -257,6 +258,8 @@ class SimpleShape : public ShapeBase
 public:
     explicit            SimpleShape( Drawing& rDrawing, const ::rtl::OUString& rService );
 
+    void setService( rtl::OUString aService ) { maService = aService; }
+
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
@@ -375,3 +378,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

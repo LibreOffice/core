@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hgzip.h,v 1.5 2008-06-04 09:57:59 vg Exp $ */
 
 #ifndef _HWPGZIP_H_
 #define _HWPGZIP_H_
@@ -112,3 +111,5 @@ int     gz_read     ( gz_stream *file, voidp  buf, unsigned len );
  */
 int     gz_flush    ( gz_stream *file, int flush );
 #endif                                            /* _HWPGZIP_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

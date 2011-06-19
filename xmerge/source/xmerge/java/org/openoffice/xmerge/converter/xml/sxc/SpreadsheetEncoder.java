@@ -105,24 +105,22 @@ public abstract class SpreadsheetEncoder {
     /**
      *  Set the width of the columns in the WorkBook.
      *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
+     *  @param  columnRows  An <code>IntArrayList</code> of column
      *                        widths.
      */
     public abstract void setColumnRows(Vector columnRows) throws IOException;
 
     /**
-     *  Set the width of the columns in the WorkBook.
+     *  Set the name definition of this spreadsheet
      *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
-     *                        widths.
+     *  @param  nd  The <code>NameDefinition</code> to use.
      */
     public abstract void setNameDefinition(NameDefinition nd) throws IOException;
 
     /**
-     *  Set the width of the columns in the WorkBook.
+     *  Adds settings to the WorkBook.
      *
-     *  @param  columnWidths  An <code>IntArrayList</code> of column
-     *                        widths.
+     *  @param  s  The <code>BookSettings</code> to add.
      */
     public abstract void addSettings(BookSettings s) throws IOException;
 }

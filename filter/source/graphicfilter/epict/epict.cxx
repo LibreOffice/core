@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,8 +138,8 @@ private:
     void WritePolygon(const Polygon & rPoly);
     void WriteArcAngles(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
 
-    void ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible);
-    void ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible);
+    void ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible) const;
+    void ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible) const;
 
     void WriteOpcode_TxFace(const Font & rFont);
     void WriteOpcode_TxMode(RasterOp eMode);
@@ -210,12 +211,12 @@ void PictWriter::MayCallback()
 
 void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 {
-    sal_uLong               nAction, nActionCount;
+    size_t              nAction, nActionCount;
     const MetaAction*   pMA;
 
-    nActionCount = rMTF.GetActionCount();
+    nActionCount = rMTF.GetActionSize();
 
-    for (nAction=0; nAction<nActionCount; nAction++)
+    for (nAction=0; nAction < nActionCount; nAction++)
     {
         pMA = rMTF.GetAction( nAction );
 
@@ -442,7 +443,7 @@ void PictWriter::WriteArcAngles(const Rectangle & rRect, const Point & rStartPt,
 }
 
 
-void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible)
+void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible) const
 {
     if( bVisible )
     {
@@ -456,7 +457,7 @@ void PictWriter::ConvertLinePattern(PictPattern & rPat, sal_Bool bVisible)
     }
 }
 
-void PictWriter::ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible)
+void PictWriter::ConvertFillPattern(PictPattern & rPat, sal_Bool bVisible) const
 {
     if( bVisible )
     {
@@ -1432,15 +1433,15 @@ void PictWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx
 
 void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 {
-    sal_uLong nA, nACount;
+    size_t nA, nACount;
     const MetaAction* pMA;
 
     if( !bStatus)
         return;
 
-    nACount=rMTF.GetActionCount();
+    nACount = rMTF.GetActionSize();
 
-    for (nA=0; nA<nACount; nA++)
+    for (nA=0; nA < nACount; nA++)
     {
         pMA = rMTF.GetAction(nA);
 
@@ -1628,7 +1629,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_CHORD_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_CHORD_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_CHORD_ACTION!" );
             }
             break;
 
@@ -1803,7 +1804,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_TEXTRECT_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_TEXTRECT_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_TEXTRECT_ACTION!" );
             }
             break;
 
@@ -1868,8 +1869,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
-                sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                for ( sal_Int32 i = 0; i < nCount; i++ )
+                size_t nCount = aGDIMetaFile.GetActionSize();
+                for ( size_t i = 0; i < nCount; i++ )
                 {
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                     if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
@@ -1886,7 +1887,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             case META_MASKSCALE_ACTION:
             case META_MASKSCALEPART_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_MASK..._ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_MASK..._ACTION!" );
             }
             break;
 
@@ -1916,13 +1917,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_WALLPAPER_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_WALLPAPER_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_WALLPAPER_ACTION!" );
             }
             break;
 
             case META_CLIPREGION_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_CLIPREGION_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_CLIPREGION_ACTION!" );
             }
             break;
 
@@ -1935,13 +1936,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_ISECTREGIONCLIPREGION_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
             }
             break;
 
             case META_MOVECLIPREGION_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_MOVECLIPREGION_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_MOVECLIPREGION_ACTION!" );
             }
             break;
 
@@ -1987,7 +1988,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_TEXTALIGN_ACTION:
             {
-//                DBG_ERROR( "Unsupported PICT-Action: META_TEXTALIGN_ACTION!" );
+//                OSL_FAIL( "Unsupported PICT-Action: META_TEXTALIGN_ACTION!" );
             }
             break;
 
@@ -2346,3 +2347,4 @@ extern "C" sal_Bool __LOADONCALLAPI GraphicExport(SvStream & rStream, Graphic & 
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

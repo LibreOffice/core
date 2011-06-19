@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -180,15 +181,15 @@ bool StdHlinkObject::dumpGuidAndMoniker()
     bool bValidMoniker = true;
     OUString aGuid = cfg().getStringOption( dumpGuid( "moniker" ), OUString() );
     IndentGuard aIndGuard( mxOut );
-    if( aGuid.equalsAscii( "URLMoniker" ) )
+    if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URLMoniker" ) ) )
         dumpUrlMoniker();
-    else if( aGuid.equalsAscii( "FileMoniker" ) )
+    else if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileMoniker" ) ) )
         dumpFileMoniker();
-    else if( aGuid.equalsAscii( "ItemMoniker" ) )
+    else if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemMoniker" ) ) )
         dumpItemMoniker();
-    else if( aGuid.equalsAscii( "AntiMoniker" ) )
+    else if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AntiMoniker" ) ) )
         dumpAntiMoniker();
-    else if( aGuid.equalsAscii( "CompositeMoniker" ) )
+    else if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CompositeMoniker" ) ) )
         dumpCompositeMoniker();
     else
         bValidMoniker = false;
@@ -386,9 +387,9 @@ void OlePropertyStreamObject::dumpSection( const OUString& rGuid, sal_uInt32 nSt
     // property ID names
     mxPropIds = cfg().createNameList< ConstList >( "OLEPROP-IDS" );
     OUString aGuidName = cfg().getStringOption( rGuid, OUString() );
-    if( aGuidName.equalsAscii( "GlobalDocProp" ) )
+    if( aGuidName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalDocProp" ) ) )
         mxPropIds->includeList( cfg().getNameList( "OLEPROP-GLOBALIDS" ) );
-    else if( aGuidName.equalsAscii( "BuiltinDocProp" ) )
+    else if( aGuidName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BuiltinDocProp" ) ) )
         mxPropIds->includeList( cfg().getNameList( "OLEPROP-BUILTINIDS" ) );
     else
         mxPropIds->includeList( cfg().getNameList( "OLEPROP-BASEIDS" ) );
@@ -677,9 +678,9 @@ void OleStorageObject::construct( const ObjectBase& rParent )
 
 void OleStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( rStrmName.equalsAscii( "\001CompObj" ) )
+    if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\001CompObj" ) ) )
         OleCompObjObject( *this, rxStrm, rSysFileName ).dump();
-    else if( rStrmName.equalsAscii( "\005SummaryInformation" ) || rStrmName.equalsAscii( "\005DocumentSummaryInformation" ) )
+    else if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\005SummaryInformation" ) ) || rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\005DocumentSummaryInformation" ) ) )
         OlePropertyStreamObject( *this, rxStrm, rSysFileName ).dump();
     else
         BinaryStreamObject( *this, rxStrm, rSysFileName ).dump();
@@ -778,7 +779,7 @@ bool ComCtlObjectBase::dumpComCtlComplex()
             writeEmptyItem( "font" );
             IndentGuard aIndGuard2( mxOut );
             OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
-            if( aClassName.equalsAscii( "StdFont" ) )
+            if( aClassName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StdFont" ) ) )
                 StdFontObject( *this ).dump();
         }
         if( !mxStrm->isEof() && (nFlags & 0x02) )
@@ -786,7 +787,7 @@ bool ComCtlObjectBase::dumpComCtlComplex()
             writeEmptyItem( "mouse-icon" );
             IndentGuard aIndGuard2( mxOut );
             OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
-            if( aClassName.equalsAscii( "StdPic" ) )
+            if( aClassName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StdPic" ) ) )
                 StdPicObject( *this ).dump();
         }
         return !mxStrm->isEof();
@@ -1340,11 +1341,11 @@ void AxPropertyObjectBase::dumpLargeProperties()
             {
                 IndentGuard aIndGuard2( mxOut );
                 OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
-                if( aClassName.equalsAscii( "StdFont" ) )
+                if( aClassName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StdFont" ) ) )
                     StdFontObject( *this ).dump();
-                else if( aClassName.equalsAscii( "StdPic" ) )
+                else if( aClassName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StdPic" ) ) )
                     StdPicObject( *this ).dump();
-                else if( aClassName.equalsAscii( "CFontNew" ) )
+                else if( aClassName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CFontNew" ) ) )
                     AxCFontNewObject( *this ).dump();
                 else
                     ensureValid( false );
@@ -1655,55 +1656,55 @@ void FormControlStreamObject::implDump()
 
     if( (maProgId.getLength() > 0) && !mxStrm->isEof() )
     {
-        if( maProgId.equalsAscii( "Forms.CommandButton.1" ) )
+        if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.CommandButton.1" ) ) )
             AxCommandButtonObject( *this ).dump();
-        else if( maProgId.equalsAscii( "Forms.TextBox.1" ) ||
-                 maProgId.equalsAscii( "Forms.ListBox.1" ) ||
-                 maProgId.equalsAscii( "Forms.ComboBox.1" ) ||
-                 maProgId.equalsAscii( "Forms.CheckBox.1" ) ||
-                 maProgId.equalsAscii( "Forms.OptionButton.1" ) ||
-                 maProgId.equalsAscii( "Forms.ToggleButton.1" ) ||
-                 maProgId.equalsAscii( "RefEdit.Ctrl" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.TextBox.1" ) ) ||
+                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ListBox.1" ) ) ||
+                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ComboBox.1" ) ) ||
+                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.CheckBox.1" ) ) ||
+                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.OptionButton.1" ) ) ||
+                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ToggleButton.1" ) ) ||
+                 maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RefEdit.Ctrl" ) ) )
             AxMorphControlObject( *this ).dump();
-        else if( maProgId.equalsAscii( "Forms.Label.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.Label.1" ) ) )
             AxLabelObject( *this ).dump();
-        else if( maProgId.equalsAscii( "Forms.Image.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.Image.1" ) ) )
             AxImageObject( *this ).dump();
-        else if( maProgId.equalsAscii( "Forms.ScrollBar.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ScrollBar.1" ) ) )
             AxScrollBarObject( *this ).dump();
-        else if( maProgId.equalsAscii( "Forms.SpinButton.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.SpinButton.1" ) ) )
             AxSpinButtonObject( *this ).dump();
-        else if( maProgId.equalsAscii( "Forms.TabStrip.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.TabStrip.1" ) ) )
             AxTabStripObject( *this ).dump();
-        else if( maProgId.equalsAscii( "MSComCtl2.FlatScrollBar.2" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MSComCtl2.FlatScrollBar.2" ) ) )
             ComCtlScrollBarObject( *this, 6 ).dump();
-        else if( maProgId.equalsAscii( "COMCTL.ProgCtrl.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "COMCTL.ProgCtrl.1" ) ) )
             ComCtlProgressBarObject( *this, 5 ).dump();
-        else if( maProgId.equalsAscii( "MSComctlLib.ProgCtrl.2" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MSComctlLib.ProgCtrl.2" ) ) )
             ComCtlProgressBarObject( *this, 6 ).dump();
-        else if( maProgId.equalsAscii( "COMCTL.Slider.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "COMCTL.Slider.1" ) ) )
             ComCtlSliderObject( *this, 5 ).dump();
-        else if( maProgId.equalsAscii( "MSComctlLib.Slider.2" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MSComctlLib.Slider.2" ) ) )
             ComCtlSliderObject( *this, 6 ).dump();
-        else if( maProgId.equalsAscii( "ComCtl2.UpDown.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ComCtl2.UpDown.1" ) ) )
             ComCtlUpDownObject( *this, 5 ).dump();
-        else if( maProgId.equalsAscii( "MSComCtl2.UpDown.2" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MSComCtl2.UpDown.2" ) ) )
             ComCtlUpDownObject( *this, 6 ).dump();
-        else if( maProgId.equalsAscii( "COMCTL.ImageListCtrl.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "COMCTL.ImageListCtrl.1" ) ) )
             ComCtlImageListObject( *this, 5 ).dump();
-        else if( maProgId.equalsAscii( "MSComctlLib.ImageListCtrl.2" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MSComctlLib.ImageListCtrl.2" ) ) )
             ComCtlImageListObject( *this, 6 ).dump();
-        else if( maProgId.equalsAscii( "COMCTL.TabStrip.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "COMCTL.TabStrip.1" ) ) )
             ComCtlTabStripObject( *this, 5 ).dump();
-        else if( maProgId.equalsAscii( "MSComctlLib.TabStrip.2" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MSComctlLib.TabStrip.2" ) ) )
             ComCtlTabStripObject( *this, 6 ).dump();
-        else if( maProgId.equalsAscii( "COMCTL.TreeCtrl.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "COMCTL.TreeCtrl.1" ) ) )
             ComCtlTreeViewObject( *this, 5 ).dump();
-        else if( maProgId.equalsAscii( "MSComctlLib.TreeCtrl.2" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MSComctlLib.TreeCtrl.2" ) ) )
             ComCtlTreeViewObject( *this, 6 ).dump();
-        else if( maProgId.equalsAscii( "COMCTL.SBarCtrl.1" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "COMCTL.SBarCtrl.1" ) ) )
             ComCtlStatusBarObject( *this, 5 ).dump();
-        else if( maProgId.equalsAscii( "StdPic" ) )
+        else if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StdPic" ) ) )
             StdPicObject( *this ).dump();
     }
     dumpRemainingStream();
@@ -2058,11 +2059,11 @@ VbaContainerStorageObject::VbaContainerStorageObject( const ObjectBase& rParent,
 
 void VbaContainerStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( rStrmName.equalsAscii( "f" ) )
+    if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "f" ) ) )
         VbaFStreamObject( *this, rxStrm, rSysFileName, maFormData ).dump();
-    else if( rStrmName.equalsAscii( "o" ) )
+    else if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "o" ) ) )
         VbaOStreamObject( *this, rxStrm, rSysFileName, maFormData ).dump();
-    else if( rStrmName.equalsAscii( "x" ) )
+    else if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "x" ) ) )
         VbaXStreamObject( *this, rxStrm, rSysFileName, maFormData ).dump();
     else
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
@@ -2282,7 +2283,7 @@ VbaStorageObject::VbaStorageObject( const ObjectBase& rParent, const StorageRef&
 
 void VbaStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( (rStrgPath.getLength() == 0) && rStrmName.equalsAscii( "dir" ) )
+    if( (rStrgPath.getLength() == 0) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dir" ) ) )
         VbaDirStreamObject( *this, rxStrm, rSysFileName, mrVbaData ).dump();
     else if( mrVbaData.isModuleStream( rStrmName ) )
         VbaModuleStreamObject( *this, rxStrm, rSysFileName, mrVbaData, mrVbaData.getStreamOffset( rStrmName ) ).dump();
@@ -2300,7 +2301,7 @@ VbaFormStorageObject::VbaFormStorageObject( const ObjectBase& rParent, const Sto
 
 void VbaFormStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( rStrmName.equalsAscii( "\003VBFrame" ) )
+    if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\003VBFrame" ) ) )
         TextLineStreamObject( *this, rxStrm, mrVbaData.meTextEnc, rSysFileName ).dump();
     else
         VbaContainerStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
@@ -2316,7 +2317,7 @@ VbaProjectStorageObject::VbaProjectStorageObject( const ObjectBase& rParent, con
 
 void VbaProjectStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( (rStrgPath.getLength() == 0) && rStrmName.equalsAscii( "PROJECT" ) )
+    if( (rStrgPath.getLength() == 0) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PROJECT" ) ) )
         TextLineStreamObject( *this, rxStrm, maVbaData.meTextEnc, rSysFileName ).dump();
     else
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
@@ -2324,7 +2325,7 @@ void VbaProjectStorageObject::implDumpStream( const Reference< XInputStream >& r
 
 void VbaProjectStorageObject::implDumpStorage( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rSysPath )
 {
-    if( rStrgPath.equalsAscii( "VBA" ) )
+    if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VBA" ) ) )
         VbaStorageObject( *this, rxStrg, rSysPath, maVbaData ).dump();
     else
         VbaFormStorageObject( *this, rxStrg, rSysPath, maVbaData ).dump();
@@ -2350,3 +2351,5 @@ void ActiveXStorageObject::implDumpBaseStream( const BinaryInputStreamRef& rxStr
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

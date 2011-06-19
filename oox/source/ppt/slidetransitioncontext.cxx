@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,12 +65,9 @@ SlideTransitionContext::SlideTransitionContext( ContextHandler& rParent, const R
     attribs.getBool( XML_advClick, true );
 
     // careful. if missing, no auto advance... 0 looks like a valid value
-  // for auto advance
+    // for auto advance
     if(attribs.hasAttribute( XML_advTm ))
-    {
-        // TODO
-        xAttribs->getOptionalValue( XML_advTm );
-    }
+        maTransition.setOoxAdvanceTime( attribs.getInteger( XML_advTm, -1 ) );
 }
 
 SlideTransitionContext::~SlideTransitionContext() throw()
@@ -198,3 +196,4 @@ void SlideTransitionContext::endFastElement( sal_Int32 aElement ) throw (::com::
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

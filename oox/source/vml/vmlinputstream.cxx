@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@ inline void lclAppendToBuffer( OStringBuffer& rBuffer, const sal_Char* pcBeg, co
 void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal_Char* pcEnd )
 {
     /*  Map attribute names to char-pointer of all attributes. This map is used
-        to find multiple occurences of attributes with the same name. The
+        to find multiple occurrences of attributes with the same name. The
         mapped pointers are used as map key in the next map below. */
     typedef ::std::map< OString, const sal_Char* > AttributeNameMap;
     AttributeNameMap aAttributeNames;
@@ -144,7 +145,7 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
         }
     }
 
-    // if no error has occured, build the resulting attribute list
+    // if no error has occurred, build the resulting attribute list
     if( bOk )
         for( AttributeDataMap::iterator aIt = aAttributes.begin(), aEnd = aAttributes.end(); aIt != aEnd; ++aIt )
             rBuffer.append( ' ' ).append( aIt->second );
@@ -399,3 +400,5 @@ OString InputStream::readToElementEnd() throw (IOException, RuntimeException)
 
 } // namespace vml
 } // namespave oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

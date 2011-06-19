@@ -100,7 +100,7 @@ public class ActiveSyncDriver {
             pluginJar = new File(ooClassDir + "pexcel.jar");
         }
 
-        ConverterInfoReader cirPlugin = new ConverterInfoReader(pluginJar.toURL().toString(), false);
+        ConverterInfoReader cirPlugin = new ConverterInfoReader(pluginJar.toURI().toURL().toString(), false);
 
         ConverterInfoMgr.addPlugIn(cirPlugin.getConverterInfoEnumeration());
 

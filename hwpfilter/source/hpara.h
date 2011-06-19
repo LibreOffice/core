@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: hpara.h,v 1.5 2008-06-04 09:59:48 vg Exp $ */
 
 #ifndef _HWPPARA_H_
 #define _HWPPARA_H_
@@ -180,3 +179,5 @@ inline int HWPPara::LineLen(int line) const
     return EndPos(line) - HomePos(line);
 }
 #endif                                            /* _HWPPARA_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

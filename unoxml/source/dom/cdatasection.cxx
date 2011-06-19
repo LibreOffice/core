@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ namespace DOM
 
     OUString SAL_CALL CCDATASection::getNodeName()throw (RuntimeException)
     {
-        return OUString::createFromAscii("#cdata-section");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("#cdata-section"));
     }
 
     OUString SAL_CALL CCDATASection::getNodeValue() throw (RuntimeException)
@@ -60,3 +61,5 @@ namespace DOM
         return CCharacterData::getData();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

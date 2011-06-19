@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 //_______________________________________________
 // includes
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 
 //_______________________________________________
@@ -60,7 +61,7 @@ namespace filter{
     @attention  This class is not threadsafe implemented. Because its not neccessary.
                 But you have to make shure, that ist not used as such :-)
  */
-class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                    ,
+class QueryTokenizer : public ::boost::unordered_map< ::rtl::OUString                    ,
                                                ::rtl::OUString                    ,
                                                ::rtl::OUStringHash                ,
                                                ::std::equal_to< ::rtl::OUString > >
@@ -113,3 +114,5 @@ class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                  
 } // namespace filter
 
 #endif // _FILTER_CONFIG_QUERYTOKENIZER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

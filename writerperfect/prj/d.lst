@@ -1,5 +1,5 @@
-..\%__SRC%\lib\libwpft*.so %_DEST%\lib%_EXT%
-..\%__SRC%\bin\wpft*.dll %_DEST%\bin%_EXT%
-..\%__SRC%\bin\wpftgo.dll %_DEST%\bin%_EXT%\wpftgo.dll
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\misc\wpft.component %_DEST%\xml%_EXT%\wpft.component
+..\%__SRC%\lib\lib*.so %_DEST%\lib
+..\%__SRC%\bin\*.dll %_DEST%\bin
+..\%__SRC%\bin\wpftgo.dll %_DEST%\bin\wpftgo.dll
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\misc\*.component %_DEST%\xml\*.component

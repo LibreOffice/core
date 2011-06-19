@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -198,7 +199,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                                 pMasterPersistPtr = *aIter;
                                 break;
                             }
-                            aIter++;
+                            ++aIter;
                         }
                         if ( aIter == rMasterPages.end() )
                         {   // masterpersist not found, we have to load it
@@ -245,11 +246,13 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 }
 
                 // importing slide page
-                pSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
-                pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme() );
-                Reference< drawing::XMasterPageTarget > xMasterPageTarget( pSlidePersistPtr->getPage(), UNO_QUERY );
-                if( xMasterPageTarget.is() )
-                    xMasterPageTarget->setMasterPage( pMasterPersistPtr->getPage() );
+                if (pMasterPersistPtr.get()) {
+                    pSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
+                    pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme() );
+                    Reference< drawing::XMasterPageTarget > xMasterPageTarget( pSlidePersistPtr->getPage(), UNO_QUERY );
+                    if( xMasterPageTarget.is() )
+                        xMasterPageTarget->setMasterPage( pMasterPersistPtr->getPage() );
+                }
                 rFilter.getDrawPages().push_back( pSlidePersistPtr );
                 rFilter.setActualSlidePersist( pSlidePersistPtr );
                 importSlide( xSlideFragmentHandler, pSlidePersistPtr );
@@ -283,8 +286,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-            (rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
+        OSL_FAIL( (rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -388,3 +390,4 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,6 @@ private:
     sal_Int32               mnDefaultLinkAction;
     sal_Bool                mbConvertOOoTargetToPDFTarget;
     sal_Bool                mbExportBmkToDest;
-//<---
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
@@ -134,3 +134,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

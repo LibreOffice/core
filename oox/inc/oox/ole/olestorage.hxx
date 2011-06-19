@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ namespace ole {
 // ============================================================================
 
 /** Implements stream access for binary OLE storages. */
-class OleStorage : public StorageBase
+class OOX_DLLPUBLIC OleStorage : public StorageBase
 {
 public:
     explicit            OleStorage(
@@ -114,3 +115,5 @@ private:
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -192,8 +193,7 @@ void SAL_CALL SlideFragmentHandler::endDocument(  ) throw (::com::sun::star::xml
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-            (rtl::OString("oox::ppt::SlideFragmentHandler::EndElement(), "
+        OSL_FAIL( (rtl::OString("oox::ppt::SlideFragmentHandler::EndElement(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -203,3 +203,4 @@ void SAL_CALL SlideFragmentHandler::endDocument(  ) throw (::com::sun::star::xml
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

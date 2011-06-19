@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,6 +78,10 @@ public:
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
                             const Font* pFont, bool bReplace );
+
+    void                writeFontProperties(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
+        const Font* pFont ) const;
 
 private:
     ::rtl::OUString     maText;         /// Portion text.
@@ -303,3 +308,5 @@ typedef ::boost::shared_ptr< RichString > RichStringRef;
 } // namespace oox
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

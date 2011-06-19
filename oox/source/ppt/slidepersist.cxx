@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,14 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
     */
         maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
     }
+#if OSL_DEBUG_LEVEL > 0
+    mxDebugPage = mxPage;
+#endif
 }
+
+#if OSL_DEBUG_LEVEL > 0
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SlidePersist::mxDebugPage;
+#endif
 
 SlidePersist::~SlidePersist()
 {
@@ -143,10 +151,11 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
         while( aChildIter != rChildren.end() )
         {
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter).get() );
+            basegfx::B2DHomMatrix aTransformation;
             if ( pPPTShape )
-                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, 0, &getShapeMap() );
+                pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, 0, &getShapeMap() );
             else
-                (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, 0, &getShapeMap() );
+                (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, 0, &getShapeMap() );
             aChildIter++;
         }
     }
@@ -296,7 +305,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                 }
             }
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
         }
     }
@@ -304,3 +313,4 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

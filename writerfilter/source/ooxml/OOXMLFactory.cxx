@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,7 +146,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
         AttributeToResourceMap::const_iterator aIt;
         AttributeToResourceMap::const_iterator aEndIt = pMap->end();
 
-        for (aIt = pMap->begin(); aIt != aEndIt; aIt++)
+        for (aIt = pMap->begin(); aIt != aEndIt; ++aIt)
         {
             Id nId = (*pTokenToIdMap)[aIt->first];
 #ifdef DEBUG_FACTORY
@@ -235,7 +236,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                             pFactory->attributeAction(pHandler, aIt->first, pValue);
                         }
 #ifdef DEBUG_FACTORY
-                        debug_logger->endElement("list");
+                        debug_logger->endElement();
 #endif
                     }
                     break;
@@ -247,12 +248,12 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 }
             }
 #ifdef DEBUG_FACTORY
-            debug_logger->endElement("factory.attribute");
+            debug_logger->endElement();
 #endif
         }
 
 #ifdef DEBUG_FACTORY
-        debug_logger->endElement("factory.attributes");
+        debug_logger->endElement();
 #endif
     }
 }
@@ -316,7 +317,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, sal_Int32 /*n
 #endif
         pFactory->startAction(pHandler);
 #ifdef DEBUG_FACTORY
-        debug_logger->endElement("factory.startAction");
+        debug_logger->endElement();
 #endif
     }
 }
@@ -333,7 +334,7 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, sal_Int32 /*nTo
 #endif
         pFactory->endAction(pHandler);
 #ifdef DEBUG_FACTORY
-        debug_logger->endElement("factory.endAction");
+        debug_logger->endElement();
 #endif
     }
 }
@@ -364,3 +365,4 @@ string OOXMLFactory_ns::getName() const
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

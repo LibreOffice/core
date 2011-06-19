@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,10 +68,7 @@ WW8sprmPChgTabsPapx::get_tbdAdd(sal_uInt32 pos)
                     0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
                     + pos, 1));
     return pRet;
-
-/*    return writerfilter::Reference<Properties>::Pointer_t
-        (new WW8TBD(this,
-                    0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
-                    + pos, 1));*/
 }
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@ class TIFFWriter
 {
 private:
 
-    SvStream*           mpOStm;
+    SvStream& m_rOStm;
     sal_uInt32              mnStreamOfs;
 
     sal_Bool                mbStatus;
@@ -118,24 +119,25 @@ private:
 
 public:
 
-                        TIFFWriter();
-                        ~TIFFWriter();
+    TIFFWriter(SvStream &rStream);
+    ~TIFFWriter();
 
-    sal_Bool                WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConfigItem* pFilterConfigItem );
+    sal_Bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 // ------------------------------------------------------------------------
 
-TIFFWriter::TIFFWriter() :
-        mbStatus            ( sal_True ),
-        mpAcc               ( NULL ),
-        mnCurAllPictHeight  ( 0 ),
-        mnSumOfAllPictHeight( 0 ),
-        mnLastPercent       ( 0 ),
-        mnXResPos           ( 0 ),
-        mnYResPos           ( 0 ),
-        mnBitmapPos         ( 0 ),
-        mnStripByteCountPos ( 0 )
+TIFFWriter::TIFFWriter(SvStream &rStream)
+    : m_rOStm(rStream)
+    , mbStatus(sal_True)
+    , mpAcc(NULL)
+    , mnCurAllPictHeight(0)
+    , mnSumOfAllPictHeight(0)
+    , mnLastPercent(0)
+    , mnXResPos(0)
+    , mnYResPos(0)
+    , mnBitmapPos(0)
+    , mnStripByteCountPos(0)
 {
 }
 
@@ -147,7 +149,7 @@ TIFFWriter::~TIFFWriter()
 
 // ------------------------------------------------------------------------
 
-sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, FilterConfigItem* pFilterConfigItem)
+sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     sal_uLong*  pDummy = new sal_uLong; delete pDummy; // damit unter OS/2
                                                // das richtige (Tools-)new
@@ -165,18 +167,15 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, Filter
         }
     }
 
-    // #i69169# copy stream
-    mpOStm = &rTIFF;
-
-    const sal_uInt16    nOldFormat = mpOStm->GetNumberFormatInt();
-    mnStreamOfs = mpOStm->Tell();
+    const sal_uInt16    nOldFormat = m_rOStm.GetNumberFormatInt();
+    mnStreamOfs = m_rOStm.Tell();
 
     // we will use the BIG Endian Mode
     // TIFF header
-    mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    *mpOStm << (sal_uInt32)0x4d4d002a;      // TIFF identifier
-    mnLatestIfdPos = mpOStm->Tell();
-    *mpOStm << (sal_uInt32)0;
+    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    m_rOStm << (sal_uInt32)0x4d4d002a;      // TIFF identifier
+    mnLatestIfdPos = m_rOStm.Tell();
+    m_rOStm << (sal_uInt32)0;
 
     Animation   aAnimation;
     Bitmap      aBmp;
@@ -224,10 +223,10 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, Filter
                         ImplWritePalette();
                     ImplWriteBody();
                 }
-                sal_uInt32 nCurPos = mpOStm->Tell();
-                mpOStm->Seek( mnCurrentTagCountPos );
-                *mpOStm << mnTagCount;
-                mpOStm->Seek( nCurPos );
+                sal_uInt32 nCurPos = m_rOStm.Tell();
+                m_rOStm.Seek( mnCurrentTagCountPos );
+                m_rOStm << mnTagCount;
+                m_rOStm.Seek( nCurPos );
 
                 aBmp.ReleaseAccess( mpAcc );
             }
@@ -235,7 +234,7 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, SvStream& rTIFF, Filter
                 mbStatus = sal_False;
         }
     }
-    mpOStm->SetNumberFormatInt( nOldFormat );
+    m_rOStm.SetNumberFormatInt( nOldFormat );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -269,14 +268,14 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
 
     if ( mnWidth && mnHeight && mnBitsPerPixel && mbStatus )
     {
-        sal_uInt32 nCurrentPos = mpOStm->Tell();
-        mpOStm->Seek( mnLatestIfdPos );
-        *mpOStm << (sal_uInt32)( nCurrentPos - mnStreamOfs );   // offset to the IFD
-        mpOStm->Seek( nCurrentPos );
+        sal_uInt32 nCurrentPos = m_rOStm.Tell();
+        m_rOStm.Seek( mnLatestIfdPos );
+        m_rOStm << (sal_uInt32)( nCurrentPos - mnStreamOfs );   // offset to the IFD
+        m_rOStm.Seek( nCurrentPos );
 
         // (OFS8) TIFF image file directory (IFD)
-        mnCurrentTagCountPos = mpOStm->Tell();
-        *mpOStm << (sal_uInt16)0;               // the number of tagentrys is to insert later
+        mnCurrentTagCountPos = m_rOStm.Tell();
+        m_rOStm << (sal_uInt16)0;               // the number of tagentrys is to insert later
 
         sal_uInt32 nSubFileFlags = 0;
         if ( bMultiPage )
@@ -304,15 +303,15 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
                 break;
         }
         ImplWriteTag( PhotometricInterpretation, 3, 1, nTemp );
-        mnBitmapPos = mpOStm->Tell();
+        mnBitmapPos = m_rOStm.Tell();
         ImplWriteTag( StripOffsets, 4, 1, 0 );
         ImplWriteTag( SamplesPerPixel, 3, 1, ( mnBitsPerPixel == 24 ) ? 3 : 1 );
         ImplWriteTag( RowsPerStrip, 4, 1, mnHeight );   //0xffffffff );
-        mnStripByteCountPos = mpOStm->Tell();
+        mnStripByteCountPos = m_rOStm.Tell();
         ImplWriteTag( StripByteCounts, 4, 1, ( ( mnWidth * mnBitsPerPixel * mnHeight ) + 7 ) >> 3 );
-        mnXResPos = mpOStm->Tell();
+        mnXResPos = m_rOStm.Tell();
         ImplWriteTag( XResolution, 5, 1, 0 );
-        mnYResPos = mpOStm->Tell();
+        mnYResPos = m_rOStm.Tell();
         ImplWriteTag( YResolution, 5, 1, 0 );
         if ( mnBitsPerPixel != 1 )
             ImplWriteTag( PlanarConfiguration, 3, 1, 1 );   //  ( RGB ORDER )
@@ -320,13 +319,13 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
         if ( ( mnBitsPerPixel == 4 ) || ( mnBitsPerPixel == 8 ) )
         {
             mnColors = mpAcc->GetPaletteEntryCount();
-            mnPalPos = mpOStm->Tell();
+            mnPalPos = m_rOStm.Tell();
             ImplWriteTag( ColorMap, 3, 3 * mnColors, 0 );
         }
 
         // and last we write zero to close the num dir entries list
-        mnLatestIfdPos = mpOStm->Tell();
-        *mpOStm << (sal_uInt32)0;               // there are no more IFD
+        mnLatestIfdPos = m_rOStm.Tell();
+        m_rOStm << (sal_uInt32)0;               // there are no more IFD
     }
     else
         mbStatus = sal_False;
@@ -339,25 +338,25 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
 void TIFFWriter::ImplWritePalette()
 {
     sal_uInt16 i;
-    sal_uLong nCurrentPos = mpOStm->Tell();
-    mpOStm->Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
-    *mpOStm << static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs);  // to the palette colors
-    mpOStm->Seek( nCurrentPos );
+    sal_uLong nCurrentPos = m_rOStm.Tell();
+    m_rOStm.Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
+    m_rOStm << static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs);  // to the palette colors
+    m_rOStm.Seek( nCurrentPos );
 
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        *mpOStm << (sal_uInt16)( rColor.GetRed() << 8 );
+        m_rOStm << (sal_uInt16)( rColor.GetRed() << 8 );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        *mpOStm << (sal_uInt16)( rColor.GetGreen() << 8 );
+        m_rOStm << (sal_uInt16)( rColor.GetGreen() << 8 );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        *mpOStm << (sal_uInt16)( rColor.GetBlue() << 8 );
+        m_rOStm << (sal_uInt16)( rColor.GetBlue() << 8 );
     }
 }
 
@@ -369,10 +368,10 @@ sal_Bool TIFFWriter::ImplWriteBody()
     sal_uInt8    nShift;
     sal_uLong   j, x, y;
 
-    sal_uLong nGfxBegin = mpOStm->Tell();
-    mpOStm->Seek( mnBitmapPos + 8 );        // the strip offset tag entry needs the offset
-    *mpOStm << static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs);        // to the bitmap data
-    mpOStm->Seek( nGfxBegin );
+    sal_uLong nGfxBegin = m_rOStm.Tell();
+    m_rOStm.Seek( mnBitmapPos + 8 );        // the strip offset tag entry needs the offset
+    m_rOStm << static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs);        // to the bitmap data
+    m_rOStm.Seek( nGfxBegin );
 
     StartCompression();
 
@@ -461,10 +460,10 @@ sal_Bool TIFFWriter::ImplWriteBody()
 
     if ( mnStripByteCountPos && mbStatus )
     {
-        sal_uLong nGfxEnd = mpOStm->Tell();
-        mpOStm->Seek( mnStripByteCountPos + 8 );
-        *mpOStm << static_cast<sal_uInt32>( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
-        mpOStm->Seek( nGfxEnd );
+        sal_uLong nGfxEnd = m_rOStm.Tell();
+        m_rOStm.Seek( mnStripByteCountPos + 8 );
+        m_rOStm << static_cast<sal_uInt32>( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
+        m_rOStm.Seek( nGfxEnd );
     }
     return mbStatus;
 }
@@ -473,12 +472,12 @@ sal_Bool TIFFWriter::ImplWriteBody()
 
 void TIFFWriter::ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResolutionUnit )
 {
-    sal_uLong nCurrentPos = mpOStm->Tell();
-    mpOStm->Seek( nStreamPos + 8 );
-    *mpOStm << (sal_uInt32)nCurrentPos - mnStreamOfs;
-    mpOStm->Seek( nCurrentPos );
-    *mpOStm << (sal_uInt32)1;
-    *mpOStm << nResolutionUnit;
+    sal_uLong nCurrentPos = m_rOStm.Tell();
+    m_rOStm.Seek( nStreamPos + 8 );
+    m_rOStm << (sal_uInt32)nCurrentPos - mnStreamOfs;
+    m_rOStm.Seek( nCurrentPos );
+    m_rOStm << (sal_uInt32)1;
+    m_rOStm << nResolutionUnit;
 }
 
 // ------------------------------------------------------------------------
@@ -487,12 +486,12 @@ void TIFFWriter::ImplWriteTag( sal_uInt16 nTagID, sal_uInt16 nDataType, sal_uInt
 {
         mnTagCount++;
 
-        *mpOStm << nTagID;
-        *mpOStm << nDataType;
-        *mpOStm << nNumberOfItems;
+        m_rOStm << nTagID;
+        m_rOStm << nDataType;
+        m_rOStm << nNumberOfItems;
         if ( nDataType == 3 )
             nValue <<=16;           // in Big Endian Mode WORDS needed to be shifted to a DWORD
-        *mpOStm << nValue;
+        m_rOStm << nValue;
 }
 
 // ------------------------------------------------------------------------
@@ -503,13 +502,13 @@ inline void TIFFWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
     nOffset -= nCodeLen;
     while ( nOffset < 24 )
     {
-        *mpOStm << (sal_uInt8)( dwShift >> 24 );
+        m_rOStm << (sal_uInt8)( dwShift >> 24 );
         dwShift <<= 8;
         nOffset += 8;
     }
     if ( nCode == 257 && nOffset != 32 )
     {
-        *mpOStm << (sal_uInt8)( dwShift >> 24 );
+        m_rOStm << (sal_uInt8)( dwShift >> 24 );
     }
 }
 
@@ -613,6 +612,8 @@ void TIFFWriter::EndCompression()
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
-    return TIFFWriter().WriteTIFF( rGraphic, rStream, pFilterConfigItem );
+    TIFFWriter aWriter(rStream);
+    return aWriter.WriteTIFF( rGraphic, pFilterConfigItem );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

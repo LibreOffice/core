@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ class PGMWriter {
 
 private:
 
-    SvStream*           mpOStm;             // Die auszugebende PGM-Datei
+    SvStream& m_rOStm;          // Die auszugebende PGM-Datei
     sal_uInt16              mpOStmOldModus;
 
     sal_Bool                mbStatus;
@@ -57,17 +58,18 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
-                        PGMWriter();
-                        ~PGMWriter();
+    PGMWriter(SvStream &rStream);
+    ~PGMWriter();
 
-    sal_Bool                WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigItem* pFilterConfigItem );
+    sal_Bool WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PGMWriter ==============================
 
-PGMWriter::PGMWriter() :
-    mbStatus    ( sal_True ),
-    mpAcc       ( NULL )
+PGMWriter::PGMWriter(SvStream &rStream)
+    : m_rOStm(rStream)
+    , mbStatus(sal_True)
+    , mpAcc(NULL)
 {
 }
 
@@ -79,11 +81,8 @@ PGMWriter::~PGMWriter()
 
 // ------------------------------------------------------------------------
 
-sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterConfigItem* pFilterConfigItem )
+sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
-
-    mpOStm = &rPGM;
-
     if ( pFilterConfigItem )
     {
         mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
@@ -100,8 +99,8 @@ sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterCon
     Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
 
-    mpOStmOldModus = mpOStm->GetNumberFormatInt();
-    mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -115,7 +114,7 @@ sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, SvStream& rPGM, FilterCon
     else
         mbStatus = sal_False;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -132,16 +131,16 @@ sal_Bool PGMWriter::ImplWriteHeader()
     if ( mnWidth && mnHeight )
     {
         if ( mnMode == 0 )
-            *mpOStm << "P5\x0a";
+            m_rOStm << "P5\x0a";
         else
-            *mpOStm << "P2\x0a";
+            m_rOStm << "P2\x0a";
 
         ImplWriteNumber( mnWidth );
-        *mpOStm << (sal_uInt8)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( mnHeight );
-        *mpOStm << (sal_uInt8)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( 255 );         // max. gray value
-        *mpOStm << (sal_uInt8)10;
+        m_rOStm << (sal_uInt8)10;
     }
     else
         mbStatus = sal_False;
@@ -159,7 +158,7 @@ void PGMWriter::ImplWriteBody()
         {
             for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
-                *mpOStm << (sal_uInt8)( mpAcc->GetPixel( y, x ) );
+                m_rOStm << (sal_uInt8)( mpAcc->GetPixel( y, x ) );
             }
         }
     }
@@ -174,18 +173,18 @@ void PGMWriter::ImplWriteBody()
                 if ( nCount < 0 )
                 {
                     nCount = 69;
-                    *mpOStm << (sal_uInt8)10;
+                    m_rOStm << (sal_uInt8)10;
                 }
                 nDat = (sal_uInt8)mpAcc->GetPixel( y, x );
                 nNumb = nDat / 100;
                 if ( nNumb )
                 {
-                    *mpOStm << (sal_uInt8)( nNumb + '0' );
+                    m_rOStm << (sal_uInt8)( nNumb + '0' );
                     nDat -= ( nNumb * 100 );
                     nNumb = nDat / 10;
-                    *mpOStm << (sal_uInt8)( nNumb + '0' );
+                    m_rOStm << (sal_uInt8)( nNumb + '0' );
                     nDat -= ( nNumb * 10 );
-                    *mpOStm << (sal_uInt8)( nDat + '0' );
+                    m_rOStm << (sal_uInt8)( nDat + '0' );
                     nCount -= 4;
                 }
                 else
@@ -193,20 +192,20 @@ void PGMWriter::ImplWriteBody()
                     nNumb = nDat / 10;
                     if ( nNumb )
                     {
-                        *mpOStm << (sal_uInt8)( nNumb + '0' );
+                        m_rOStm << (sal_uInt8)( nNumb + '0' );
                         nDat -= ( nNumb * 10 );
-                        *mpOStm << (sal_uInt8)( nDat + '0' );
+                        m_rOStm << (sal_uInt8)( nDat + '0' );
                         nCount -= 3;
                     }
                     else
                     {
-                        *mpOStm << (sal_uInt8)( nDat + '0' );
+                        m_rOStm << (sal_uInt8)( nDat + '0' );
                         nCount -= 2;
                     }
                 }
-                *mpOStm << (sal_uInt8)' ';
+                m_rOStm << (sal_uInt8)' ';
             }
-            *mpOStm << (sal_uInt8)10;
+            m_rOStm << (sal_uInt8)10;
         }
     }
 }
@@ -219,7 +218,7 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
     for( sal_Int16 n = 0UL, nLen = aNum.Len(); n < nLen; n++  )
-        *mpOStm << aNum.GetChar( n );
+        m_rOStm << aNum.GetChar( n );
 
 }
 
@@ -231,9 +230,12 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
-    PGMWriter aPGMWriter;
+    PGMWriter aPGMWriter(rStream);
 
-    return aPGMWriter.WritePGM( rGraphic, rStream, pFilterConfigItem );
+    return aPGMWriter.WritePGM( rGraphic, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

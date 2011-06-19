@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,7 +146,7 @@ namespace XPath
             p = (xmlChar*)oprefix.getStr();
             u = (xmlChar*)ouri.getStr();
             xmlXPathRegisterNs(ctx, p, u);
-            i++;
+            ++i;
         }
     }
 
@@ -215,7 +216,7 @@ namespace XPath
                     reinterpret_cast<void*>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.variableData)));
             }
-            i++;
+            ++i;
         }
     }
 
@@ -309,26 +310,26 @@ namespace XPath
             va_end(args);
 
             ::rtl::OUStringBuffer buf(
-                OUString::createFromAscii("libxml2 error:\n"));
+                OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error:\n")));
             buf.appendAscii(str);
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, msg.getStr());
+            OSL_FAIL(msg.getStr());
         }
 
         static void structured_error_func(void * userData, xmlErrorPtr error)
         {
             (void) userData;
             ::rtl::OUStringBuffer buf(
-                OUString::createFromAscii("libxml2 error:\n"));
+                OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error:\n")));
             if (error) {
                 buf.append(make_error_message(error));
             } else {
-                buf.append(OUString::createFromAscii("no error argument!"));
+                buf.append(OUString(RTL_CONSTASCII_USTRINGPARAM("no error argument!")));
             }
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, msg.getStr());
+            OSL_FAIL(msg.getStr());
         }
 
     } // extern "C"
@@ -453,3 +454,5 @@ namespace XPath
         m_extensions.push_back( xExtension );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
-
 /**
  * Represents s BIFF Record that describes the format of a column
  */
@@ -94,7 +93,7 @@ public class Row implements BIFFRecord {
     }
 
     /**
-     * Get the rown number for this style
+     * Get the row number
      *
      * @return the row this style applies to
      */
@@ -105,7 +104,7 @@ public class Row implements BIFFRecord {
     /**
      * Reads a Row from an <code>InputStream</code>
      *
-     * @param   is InputStream containing a Pane Record
+     * @param   input InputStream containing a Row Record
      */
     public int read(InputStream input) throws IOException {
 

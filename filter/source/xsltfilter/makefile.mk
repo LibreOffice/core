@@ -33,9 +33,17 @@ LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
+
 .INCLUDE: settings.mk
 
-SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+CFLAGS+= $(LIBXSLT_CFLAGS)
+.ELSE
+LIBXSLTINCDIR=external$/libxslt
+CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
+.ENDIF
+
+SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/LibXSLTTransformer.obj $(SLO)/OleHandler.obj
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
@@ -46,16 +54,19 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
-    $(TOOLSLIB)         \
-    $(CPPUHELPERLIB)    \
-    $(CPPULIB)          \
+    $(TOOLSLIB) \
+    $(CPPUHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(COMPHELPERLIB) \
+    $(CPPULIB) \
     $(XMLOFFLIB) \
-    $(SALLIB)
+    $(SALLIB) \
+    $(LIBXML2LIB) \
+    $(XSLTLIB) \
+    $(PACKAGE2LIB)
 
 .IF "$(SOLAR_JAVA)"!=""
 
-#USE_UDK_EXTENDED_MANIFESTFILE=TRUE
-#USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
 
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES)))

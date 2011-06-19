@@ -288,7 +288,7 @@ $path_h = 1;
     201 => 'hostControl', # should not be used
     202 => 'textBox'
 );
-# An error occured, we have to ignore this shape
+# An error occurred, we have to ignore this shape
 sub error( $ )
 {
     my ( $msg ) = @_;
@@ -853,7 +853,7 @@ sub start_element( $% )
             $path .= "x";
         }
         elsif ( $element eq "pt" ) {
-            # rememeber the last position for the arcTo
+            # remember the last position for the arcTo
             $last_pos_x = value( $attr{'x'} );
             $last_pos_y = value( $attr{'y'} );
 
@@ -1204,7 +1204,7 @@ print <<EOF;
 //   '$src_text'
 // which are part of the OOXML documentation
 
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 const char* pShapeTypes[ ESCHER_ShpInst_COUNT ] =
 {

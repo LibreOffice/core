@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,9 +62,12 @@ public:
     ~ImplEESdrObject();
 
     sal_Bool ImplGetPropertyValue( const sal_Unicode* pString );
+    sal_Bool ImplGetPropertyValue( const rtl::OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
 
     sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr, sal_uInt32 nDef = 0 )
     { return ImplGetPropertyValue( pStr ) ? *(sal_Int32*)mAny.getValue() : nDef; }
+    sal_Int32 ImplGetInt32PropertyValue( const rtl::OUString& rStr, sal_uInt32 nDef = 0 )
+    { return ImplGetInt32PropertyValue(rStr.getStr(), nDef); }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
     const ::com::sun::star::uno::Any&       GetUsrAny() const       { return mAny; }
@@ -204,3 +208,5 @@ public:
 
 
 #endif // _ESCHESDO_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

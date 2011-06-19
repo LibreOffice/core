@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,18 +38,16 @@
 
 #define CGM_EXPORT_IMPRESS  0x00000100
 #define CGM_EXPORT_META     0x00000200
-//#define CGM_EXPORT_COMMENT    0x00000400
 
 // ---------------------------------------------------------------
 
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
-#include <tools/list.hxx>
+#include <vector>
 #include "cgmtypes.hxx"
 
 // ---------------------------------------------------------------
 
-class   List;
 class   Bundle;
 class   Graphic;
 class   SvStream;
@@ -82,7 +81,6 @@ class CGM
         sal_Bool                mbAngReverse;           // AngularDirection
 
         Graphic*            mpGraphic;              // ifdef CGM_EXPORT_META
-        SvStream*           mpCommentOut;           // ifdef CGM_EXPORT_COMMENT
 
         sal_Bool                mbStatus;
         sal_Bool                mbMetaFile;
@@ -99,8 +97,8 @@ class CGM
         CGMElements*        pElement;
         CGMElements*        pCopyOfE;
         CGMOutAct*          mpOutAct;
-        List                maDefRepList;
-        List                maDefRepSizeList;
+        ::std::vector< sal_uInt8 * > maDefRepList;
+        ::std::vector< sal_uInt32  > maDefRepSizeList;
 
         sal_uInt8*              mpSource;       // source buffer that is not increased
                                             // ( instead use mnParaCount to index )
@@ -165,10 +163,9 @@ class CGM
         VirtualDevice*      mpVirDev;
         GDIMetaFile*        mpGDIMetaFile;
 #endif
-        void                ImplComment( sal_uInt32, const char* );
         sal_uInt32              GetBackGroundColor();
-        sal_Bool                IsValid() { return mbStatus; };
-        sal_Bool                IsFinished() { return mbIsFinished; };
+        sal_Bool                IsValid() const { return mbStatus; };
+        sal_Bool                IsFinished() const { return mbIsFinished; };
         sal_Bool                Write( SvStream& rIStm );
 
         friend SvStream& operator>>( SvStream& rOStm, CGM& rCGM );
@@ -176,3 +173,4 @@ class CGM
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

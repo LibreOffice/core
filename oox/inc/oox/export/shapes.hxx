@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star {
 namespace beans {
@@ -48,14 +49,8 @@ namespace drawing {
 namespace oox { namespace drawingml {
 
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
+
 private:
-    sal_Int32           mnXmlNamespace;
-    sal_Int32           mnShapeIdMax, mnPictureIdMax;
-    Fraction            maFraction;
-    MapMode             maMapModeSrc, maMapModeDest;
-
-    ::com::sun::star::awt::Size MapSize( const ::com::sun::star::awt::Size& ) const;
-
     struct ShapeCheck
     {
         bool operator()( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s1, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s2 ) const
@@ -66,22 +61,34 @@ private:
 
     struct ShapeHash
     {
-        std::hash<const char*> maHashFunction;
-
         size_t operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > ) const;
     };
 
-    typedef std::hash_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
+public:
+    typedef boost::unordered_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
+
+protected:
+    sal_Int32           mnShapeIdMax, mnPictureIdMax;
+
+private:
+    sal_Int32           mnXmlNamespace;
+    Fraction            maFraction;
+    MapMode             maMapModeSrc, maMapModeDest;
+
+    ::com::sun::star::awt::Size MapSize( const ::com::sun::star::awt::Size& ) const;
+
     ShapeHashMap maShapeMap;
+    ShapeHashMap* mpShapeMap;
 
 public:
-    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX );
+
+    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = NULL, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX );
     virtual ~ShapeExport() {}
 
     sal_Int32           GetXmlNamespace() const;
     ShapeExport&        SetXmlNamespace( sal_Int32 nXmlNamespace );
 
-    static sal_Bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    static sal_Bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface );
 
     virtual ShapeExport&
                         WriteBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, sal_Bool bClosed );
@@ -93,8 +100,6 @@ public:
                         WriteCustomShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
                         WriteEllipseShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
-                        WriteFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
     virtual ShapeExport&
                         WriteGraphicObjectShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
@@ -128,6 +133,7 @@ public:
      *   <tr><td><tt>com.sun.star.drawing.LineShape</tt></td>            <td>ShapeExport::WriteLineShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.OpenBezierShape</tt></td>      <td>ShapeExport::WriteOpenBezierShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.RectangleShape</tt></td>       <td>ShapeExport::WriteRectangleShape</td></tr>
+     *   <tr><td><tt>com.sun.star.drawing.TableShape</tt></td>           <td>ShapeExport::WriteTableShape</td></tr>
      *   <tr><td><tt>com.sun.star.drawing.TextShape</tt></td>            <td>ShapeExport::WriteTextShape</td></tr>
      *   <tr><td><tt>com.sun.star.presentation.DateTimeShape</tt></td>   <td>ShapeExport::WriteTextShape</td></tr>
      *   <tr><td><tt>com.sun.star.presentation.FooterShape</tt></td>     <td>ShapeExport::WriteTextShape</td></tr>
@@ -147,16 +153,27 @@ public:
     virtual ShapeExport&
                         WriteShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
-                        WriteTextBox( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+        WriteTextBox( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface, sal_Int32 nXmlNamespace );
     virtual ShapeExport&
                         WriteTextShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
+                        WriteTableShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual ShapeExport&
+                        WriteOLE2Shape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual ShapeExport&
                         WriteUnknownShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
+    void WriteTable( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape );
+
+
     sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
+    sal_Int32 GetNewShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ::oox::core::XmlFilterBase* pFB );
     sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape );
+    static sal_Int32 GetShapeID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rShape, ShapeHashMap* pShapeMap );
 };
 
 }}
 
 #endif /* ndef _OOX_EXPORT_SHAPES_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

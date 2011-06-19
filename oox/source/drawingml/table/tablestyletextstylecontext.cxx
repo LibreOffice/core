@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,17 +45,21 @@ TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler& rParent,
 : ContextHandler( rParent )
 , mrTableStylePart( rTableStylePart )
 {
-    sal_Int32 nB = xAttribs->getOptionalValueToken( XML_b, XML_def );
-    if ( nB == XML_on )
-        mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_True );
-    else if ( nB == XML_off )
-        mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_False );
+    if( xAttribs->hasAttribute( XML_b ) ) {
+        sal_Int32 nB = xAttribs->getOptionalValueToken( XML_b, XML_def );
+        if ( nB == XML_on )
+            mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_True );
+        else if ( nB == XML_off )
+            mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_False );
+    }
 
-    sal_Int32 nI = xAttribs->getOptionalValueToken( XML_i, XML_def );
-    if ( nI == XML_on )
-        mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( sal_True );
-    else if ( nI == XML_off )
-        mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( sal_False );
+    if( xAttribs->hasAttribute( XML_i ) ) {
+        sal_Int32 nI = xAttribs->getOptionalValueToken( XML_i, XML_def );
+        if ( nI == XML_on )
+            mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( sal_True );
+        else if ( nI == XML_off )
+            mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( sal_False );
+    }
 }
 
 TableStyleTextStyleContext::~TableStyleTextStyleContext()
@@ -106,3 +111,5 @@ TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
 }
 
 } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

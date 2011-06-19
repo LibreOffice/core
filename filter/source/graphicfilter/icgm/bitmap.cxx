@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@ CGMBitmap::~CGMBitmap()
 void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 {
     rDesc.mbStatus = sal_True;
-    long    nx, ny, nxC, nxCount, nyCount;
 
     if ( ImplGetDimensions( rDesc ) && rDesc.mpBuf )
     {
@@ -62,8 +62,9 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
                 // the picture may either be read from left to right or right to left, from top to bottom ...
 
-                nxCount = rDesc.mnX + 1;    // +1 because we are using prefix decreasing
-                nyCount = rDesc.mnY + 1;
+                long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
+                long nyCount = rDesc.mnY + 1;
+                long    nx, ny, nxC;
 
                 switch ( rDesc.mnDstBitsPerPixel )
                 {
@@ -408,3 +409,4 @@ CGMBitmapDescriptor* CGMBitmap::GetBitmap()
     return pCGMBitmapDescriptor;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

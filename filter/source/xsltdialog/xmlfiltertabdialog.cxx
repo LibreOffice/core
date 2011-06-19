@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <tools/resid.hxx>
 #include <vcl/msgbox.hxx>
 #include <osl/file.hxx>
@@ -46,11 +45,12 @@
 #include "xmlfiltersettingsdialog.hrc"
 #include "xmlfilterhelpids.hrc"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
 
 XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF, const filter_info_impl* pInfo ) :
     TabDialog( pParent, ResId( DLG_XML_FILTER_TABDIALOG, rResMgr ) ),
@@ -147,7 +147,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
@@ -162,7 +162,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
             }
         }
     }
@@ -179,7 +179,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
@@ -201,7 +201,7 @@ bool XMLFilterTabDialog::onOk()
 
                         for( nValue = 0; (nValue < nValueCount) && (nErrorId == 0); nValue++, pValues++ )
                         {
-                            if( pValues->Name.equalsAscii( "UIName" ) )
+                            if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UIName" ) ) )
                             {
                                 OUString aInterfaceName;
                                 pValues->Value >>= aInterfaceName;
@@ -220,7 +220,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( Exception& )
             {
-                DBG_ERROR( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
             }
         }
     }
@@ -231,7 +231,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maDTD != mpOldInfo->maDTD) && isFileURL( mpNewInfo->maDTD ) )
         {
             osl::File aFile( mpNewInfo->maDTD );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_DTD_NOT_FOUND;
@@ -247,7 +247,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maExportXSLT != mpOldInfo->maExportXSLT) && isFileURL( mpNewInfo->maExportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maExportXSLT );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
@@ -263,7 +263,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maImportXSLT != mpOldInfo->maImportXSLT) && isFileURL( mpNewInfo->maImportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maImportXSLT );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
@@ -287,7 +287,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maImportTemplate != mpOldInfo->maImportTemplate) && isFileURL( mpNewInfo->maImportTemplate ) )
         {
             osl::File aFile( mpNewInfo->maImportTemplate );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;
@@ -371,3 +371,5 @@ IMPL_LINK( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, /* pTabCtrl */ )
 {
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

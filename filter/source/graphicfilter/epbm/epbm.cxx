@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ class PBMWriter {
 
 private:
 
-    SvStream*           mpOStm;             // Die auszugebende PBM-Datei
+    SvStream& m_rOStm;          // Die auszugebende PBM-Datei
     sal_uInt16              mpOStmOldModus;
 
     sal_Bool                mbStatus;
@@ -57,17 +58,18 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
 public:
-                        PBMWriter();
-                        ~PBMWriter();
+    PBMWriter(SvStream &rPBM);
+    ~PBMWriter();
 
-    sal_Bool                WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem );
+    sal_Bool WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PBMWriter ==============================
 
-PBMWriter::PBMWriter() :
-    mbStatus    ( sal_True ),
-    mpAcc       ( NULL )
+PBMWriter::PBMWriter(SvStream &rPBM)
+    : m_rOStm(rPBM)
+    , mbStatus(sal_True)
+    , mpAcc(NULL)
 {
 }
 
@@ -79,11 +81,8 @@ PBMWriter::~PBMWriter()
 
 // ------------------------------------------------------------------------
 
-sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem )
+sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
-
-    mpOStm = &rPBM;
-
     if ( pFilterConfigItem )
     {
         mnMode = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 0 );
@@ -100,8 +99,8 @@ sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterCon
     Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
-    mpOStmOldModus = mpOStm->GetNumberFormatInt();
-    mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -114,7 +113,7 @@ sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterCon
     else
         mbStatus = sal_False;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -131,14 +130,14 @@ sal_Bool PBMWriter::ImplWriteHeader()
     if ( mnWidth && mnHeight )
     {
         if ( mnMode == 0 )
-            *mpOStm << "P4\x0a";
+            m_rOStm << "P4\x0a";
         else
-            *mpOStm << "P1\x0a";
+            m_rOStm << "P1\x0a";
 
         ImplWriteNumber( mnWidth );
-        *mpOStm << (sal_uInt8)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( mnHeight );
-        *mpOStm << (sal_uInt8)10;
+        m_rOStm << (sal_uInt8)10;
     }
     else mbStatus = sal_False;
     return mbStatus;
@@ -160,10 +159,10 @@ void PBMWriter::ImplWriteBody()
                 if (!(mpAcc->GetPixel( y, x ) & 1 ) )
                     nBYTE++;
                 if ( ( x & 7 ) == 7 )
-                    *mpOStm << nBYTE;
+                    m_rOStm << nBYTE;
             }
             if ( ( x & 7 ) != 0 )
-                *mpOStm << (sal_uInt8)( nBYTE << ( ( x ^ 7 ) + 1 ) );
+                m_rOStm << (sal_uInt8)( nBYTE << ( ( x ^ 7 ) + 1 ) );
         }
     }
     else
@@ -177,11 +176,11 @@ void PBMWriter::ImplWriteBody()
                 if (!( --nxCount ) )
                 {
                     nxCount = 69;
-                    *mpOStm << (sal_uInt8)10;
+                    m_rOStm << (sal_uInt8)10;
                 }
-                *mpOStm << (sal_uInt8)( ( mpAcc->GetPixel( y, x ) ^ 1 ) + '0' ) ;
+                m_rOStm << (sal_uInt8)( ( mpAcc->GetPixel( y, x ) ^ 1 ) + '0' ) ;
             }
-            *mpOStm << (sal_uInt8)10;
+            m_rOStm << (sal_uInt8)10;
         }
     }
 }
@@ -194,7 +193,7 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
     for( sal_Int16 n = 0, nLen = aNum.Len(); n < nLen; n++ )
-        *mpOStm << aNum.GetChar( n );
+        m_rOStm << aNum.GetChar( n );
 
 }
 
@@ -206,9 +205,12 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
-    PBMWriter aPBMWriter;
+    PBMWriter aPBMWriter(rStream);
 
-    return aPBMWriter.WritePBM( rGraphic, rStream, pFilterConfigItem );
+    return aPBMWriter.WritePBM( rGraphic, pFilterConfigItem );
 }
 
 // ------------------------------------------------------------------------
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

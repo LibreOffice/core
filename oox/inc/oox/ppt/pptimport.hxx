@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,14 @@ public:
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
+    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence<   ::com::sun::star::beans::PropertyValue >& rDescriptor )
+        throw( ::com::sun::star::uno::RuntimeException );
+
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
+
+#if OSL_DEBUG_LEVEL > 0
+    static XmlFilterBase* mpDebugFilterBase;
+#endif
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
@@ -88,3 +96,5 @@ private:
 } }
 
 #endif // OOX_POWERPOINT_POWERPOINTIMPORT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

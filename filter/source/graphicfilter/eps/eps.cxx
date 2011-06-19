@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
+#include <unotools/configmgr.hxx>
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
@@ -51,6 +53,8 @@
 #include "strings.hrc"
 
 #include <math.h>
+
+using namespace ::com::sun::star::uno;
 
 #define POSTSCRIPT_BOUNDINGSEARCH   0x1000  // we only try to get the BoundingBox
                                             // in the first 4096 bytes
@@ -292,7 +296,11 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     // default values for the dialog options
     mnLevel = 2;
     mbGrayScale = sal_False;
+#ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
+    mbCompression = sal_False;
+#else
     mbCompression = sal_True;
+#endif
     mnTextMode = 0;         // default0 : export glyph outlines
 
     // try to get the dialog selection
@@ -309,12 +317,20 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
             String aVersionStr( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
             String aColorStr( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
             String aComprStr( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
+#ifdef UNX // don't put binary tiff preview ahead of postscript code by default on unix as ghostscript is unable to read it
+            mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 0 );
+#else
             mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 1 );
+#endif
             mnLevel = pFilterConfigItem->ReadInt32( aVersionStr, 2 );
             if ( mnLevel != 1 )
                 mnLevel = 2;
             mbGrayScale = pFilterConfigItem->ReadInt32( aColorStr, 1 ) == 2;
+#ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
+            mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 0 ) != 0;
+#else
             mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 1 ) == 1;
+#endif
             String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
             mnTextMode = pFilterConfigItem->ReadInt32( sTextMode, 0 );
             if ( mnTextMode > 2 )
@@ -366,10 +382,21 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     ChrSet*         pCS;
     StackMember*    pGS;
 
-    if ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+    if (rGraphic.GetType() == GRAPHIC_GDIMETAFILE)
         pMTF = &rGraphic.GetGDIMetaFile();
-    else
+    else if (rGraphic.GetGDIMetaFile().GetActionSize())
         pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
+    else
+    {
+        Bitmap aBmp( rGraphic.GetBitmap() );
+        pAMTF = new GDIMetaFile();
+        VirtualDevice aTmpVDev;
+        pAMTF->Record( &aTmpVDev );
+        aTmpVDev.DrawBitmap( Point(), aBmp );
+        pAMTF->Stop();
+        pAMTF->SetPrefSize( aBmp.GetSizePixel() );
+        pMTF = pAMTF;
+    }
     aVDev.SetMapMode( pMTF->GetPrefMapMode() );
     nBoundingX1 = nBoundingY1 = 0;
     nBoundingX2 = pMTF->GetPrefSize().Width();
@@ -395,7 +422,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     pChrSetList = NULL;
     nNextChrSetId = 1;
 
-    if( pMTF->GetActionCount() )
+    if( pMTF->GetActionSize() )
     {
         ImplWriteProlog( ( mnPreview & EPS_PREVIEW_EPSI ) ? &rGraphic : NULL );
         mnCursorPos = 0;
@@ -457,7 +484,18 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
     ImplWriteLine( "%%Pages: 0" );
-    ImplWriteLine( "%%Creator: Sun Microsystems, Inc." );
+    ::rtl::OUStringBuffer aCreator;
+    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( "%%Creator: " ) );
+    ::utl::ConfigManager& rMgr = ::utl::ConfigManager::GetConfigManager();
+    Any aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    ::rtl::OUString sProductName;
+    aProductName >>= sProductName;
+    aCreator.append( sProductName );
+    aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+    aProductName >>= sProductName;
+    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
+    aCreator.append( sProductName );
+    ImplWriteLine( ::rtl::OUStringToOString( aCreator.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
     ImplWriteLine( "%%Title: none" );
     ImplWriteLine( "%%CreationDate: none" );
 
@@ -601,7 +639,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 {
     PolyPolygon aFillPath;
 
-    for( sal_uLong nCurAction = 0, nCount = rMtf.GetActionCount(); nCurAction < nCount; nCurAction++ )
+    for( size_t nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
     {
         MetaAction* pMA = rMtf.GetAction( nCurAction );
 
@@ -760,7 +798,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_TEXTRECT_ACTION:
             {
-                DBG_ERROR( "Unsupported action: TextRect...Action!" );
+                OSL_FAIL( "Unsupported action: TextRect...Action!" );
             }
             break;
 
@@ -865,7 +903,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_MASKSCALE_ACTION:
             case META_MASKSCALEPART_ACTION:
             {
-                DBG_ERROR( "Unsupported action: MetaMask...Action!" );
+                OSL_FAIL( "Unsupported action: MetaMask...Action!" );
             }
             break;
 
@@ -1528,10 +1566,10 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
 
 void PSWriter::ImplAddPath( const Polygon & rPolygon )
 {
-    sal_uInt16 i = 1;
     sal_uInt16 nPointCount = rPolygon.GetSize();
     if ( nPointCount > 1 )
     {
+        sal_uInt16 i = 1;
         ImplMoveTo( rPolygon.GetPoint( 0 ) );
         while ( i < nPointCount )
         {
@@ -2444,9 +2482,9 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     for ( sal_Int32 n = 0; n < nLength; n++ )
         *mpPS << aNumber1.GetChar( (sal_uInt16)n );
 
-    int zCount = 0;
     if ( nATemp )
     {
+        int zCount = 0;
         *mpPS << (sal_uInt8)'.';
         mnCursorPos++;
         const ByteString aNumber2( ByteString::CreateFromInt32( nATemp ) );
@@ -2756,3 +2794,5 @@ extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic &
     return aPSWriter.WritePS( rGraphic, rStream, pFilterConfigItem );
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

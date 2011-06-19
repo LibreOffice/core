@@ -1,7 +1,7 @@
 /* FontStyle: Stores (and writes) font-based information that is needed at
  * the head of an OO document.
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,7 @@
 #include "DocumentElement.hxx"
 
 FontStyle::FontStyle(const char *psName, const char *psFontFamily) : Style(psName),
-    msFontFamily(psFontFamily),
+    msFontFamily(psFontFamily, true),
     msFontPitch(IMP_DEFAULT_FONT_PITCH)
 {
 }
@@ -38,13 +38,13 @@ FontStyle::~FontStyle()
 {
 }
 
-void FontStyle::write(DocumentHandler *pHandler) const
+void FontStyle::write(OdfDocumentHandler *pHandler) const
 {
-    TagOpenElement styleOpen("style:font-decl");
+    TagOpenElement styleOpen("style:font-face");
     styleOpen.addAttribute("style:name", getName());
-    styleOpen.addAttribute("fo:font-family", msFontFamily);
-    styleOpen.addAttribute("style:font-pitch", msFontPitch);
+    styleOpen.addAttribute("svg:font-family", msFontFamily);
+//    styleOpen.addAttribute("style:font-pitch", msFontPitch);
     styleOpen.write(pHandler);
-    TagCloseElement styleClose("style:font-decl");
+    TagCloseElement styleClose("style:font-face");
     styleClose.write(pHandler);
 }

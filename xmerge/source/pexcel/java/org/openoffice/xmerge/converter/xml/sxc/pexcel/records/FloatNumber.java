@@ -43,8 +43,7 @@ public class FloatNumber extends CellValue {
     protected byte[] num  = new byte[8];
 
     /**
-      * Constructs a pocket Excel Document from the
-      * <code>InputStream</code> and assigns it the document name passed in
+      * Constructs a FloatNumber by reading from an InputStream.
      *
       * @param  is InputStream containing a Pocket Excel Data file.
       */
@@ -55,10 +54,10 @@ public class FloatNumber extends CellValue {
     /**
       * Constructs a <code>FloatNumber</code> using specified attributes
      *
-     * @param row row number
-     * @param col column number
+     * @param row          row number
+     * @param column       column number
      * @param cellContents contents of the cell
-     * @param ixfe font index
+     * @param ixfe         font index
       */
     public FloatNumber(int row, int column, String cellContents, int ixfe) throws IOException {
 
@@ -103,7 +102,6 @@ public class FloatNumber extends CellValue {
 
         Debug.log(Debug.TRACE,"Writing FloatNumber record");
     }
-
 
     /**
      * Gets the numerical value the cell represents

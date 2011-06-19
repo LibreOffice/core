@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -917,27 +918,6 @@ Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Referenc
     return (cppu::OWeakObject*) new T602ImportFilter( rSMgr );
 }
 
-/* Reference < XInterface > SAL_CALL CreateInstance( const Reference< XMultiServiceFactory > &r)
-throw ( Exception )
-{
-    return Reference< XInterface > (( OWeakObject *) new T602ImportFilter(r));
-}
-
-Sequence < OUString > getSupportedServiceNames()
-throw ( RuntimeException )
-{
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames ) {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames ) {
-            static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString::createFromAscii(IMPLEMENTATION_NAME);
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
-}*/
-
 T602ImportFilterDialog::T602ImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r ) :
     mxMSF( r ), mpResMgr( NULL ) {}
 
@@ -1040,12 +1020,12 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     ous[2] = getResStr(T602FILTER_STR_ENCODING_CP895);
     ous[3] = getResStr(T602FILTER_STR_ENCODING_KOI8CS2);
     any <<= ous;
-    xPSetCodeLB->setPropertyValue(OUString::createFromAscii("StringItemList"), any);
+    xPSetCodeLB->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( "StringItemList" )), any);
 
     Sequence < sal_Int16 > shr(1);
     shr[0] = ini.forcecode ? ((sal_Int16) ini.xcode) + 1 : 0;
     any <<= shr;
-    xPSetCodeLB->setPropertyValue(OUString::createFromAscii("SelectedItems"), any);
+    xPSetCodeLB->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedItems" )), any);
 
     Reference < XInterface > AzbCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetAzbukaCB( AzbCheckBoxModel, UNO_QUERY );
@@ -1264,3 +1244,4 @@ Reference< XInterface > SAL_CALL T602ImportFilterDialog_createInstance( const Re
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

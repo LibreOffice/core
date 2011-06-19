@@ -1,0 +1,11 @@
+<node oor:name="Impress MS PowerPoint 2007 XML AutoPlay" oor:op="replace">
+    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER PREFERRED STARTPRESENTATION</value></prop>
+    <prop oor:name="UIComponent"/>
+    <prop oor:name="FilterService"><value>com.sun.star.comp.oox.ppt.PowerPointImport</value></prop>
+    <prop oor:name="UserData"/>
+    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft PowerPoint 2007/2010 XML AutoPlay</value></prop>
+    <prop oor:name="FileFormatVersion"/>
+    <prop oor:name="Type"><value>MS PowerPoint 2007 XML AutoPlay</value></prop>
+    <prop oor:name="TemplateName"/>
+    <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+</node>

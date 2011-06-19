@@ -7,6 +7,7 @@ Adjust
 AdjustContrast
 AdjustLuminance
 AdjustmentValues
+Address
 Align
 AnchorPosition
 ApplyFormDesignMode
@@ -44,6 +45,7 @@ CellProtection
 CellStyle
 CenterHorizontally
 CenterVertically
+Change
 CharCaseMap
 CharColor
 CharContoured
@@ -125,6 +127,7 @@ DisableDataTableDialog
 DisplayLabels
 DrillDownOnDoubleClick
 Dropdown
+Duration
 EchoChar
 EnableVisible
 Enabled
@@ -209,6 +212,7 @@ Height
 HelpText
 HideInactiveSelection
 HoriJustify
+HoriJustifyMethod
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 IgnoreBlankCells
@@ -279,6 +283,7 @@ MirroredY
 MissingValueTreatment
 Model
 ModifyPasswordHash
+MoveProtect
 MultiLine
 MultiPageValue
 MultiSelection
@@ -404,6 +409,7 @@ ShrinkToFit
 Size
 Size100thMM
 SizePixel
+SizeProtect
 SkipDuplicates
 SortInfo
 Sound
@@ -462,6 +468,7 @@ TransitionType
 Transparency
 TriState
 Type
+UnnamedDatabaseRanges
 URL
 Url
 UseFilterCriteriaSource
@@ -473,6 +480,7 @@ Validation
 Value
 VaryColorsByPoint
 VertJustify
+VertJustifyMethod
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -312,7 +313,7 @@ OUString PivotCacheItem::getName() const
         case XML_b: return OUString::valueOf( static_cast< sal_Bool >( maValue.get< bool >() ) );   // !TODO
         case XML_e: return OUString();                                                              // !TODO
     }
-    OSL_ENSURE( false, "PivotCacheItem::getName - invalid data type" );
+    OSL_FAIL( "PivotCacheItem::getName - invalid data type" );
     return OUString();
 }
 
@@ -334,7 +335,7 @@ void PivotCacheItemList::importItem( sal_Int32 nElement, const AttributeList& rA
         case XLS_TOKEN( d ):    rItem.readDate( rAttribs );                         break;
         case XLS_TOKEN( b ):    rItem.readBool( rAttribs );                         break;
         case XLS_TOKEN( e ):    rItem.readError( rAttribs, getUnitConverter() );    break;
-        default:    OSL_ENSURE( false, "PivotCacheItemList::importItem - unknown element type" );
+        default:    OSL_FAIL( "PivotCacheItemList::importItem - unknown element type" );
     }
 }
 
@@ -361,7 +362,7 @@ void PivotCacheItemList::importItem( sal_Int32 nRecId, SequenceInputStream& rStr
         case BIFF12_ID_PCITEMA_BOOL:    rItem.readBool( rStrm );    break;
         case BIFF12_ID_PCITEM_ERROR:
         case BIFF12_ID_PCITEMA_ERROR:   rItem.readError( rStrm );   break;
-        default:    OSL_ENSURE( false, "PivotCacheItemList::importItem - unknown record type" );
+        default:    OSL_FAIL( "PivotCacheItemList::importItem - unknown record type" );
     }
 }
 
@@ -420,7 +421,7 @@ void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
             case BIFF12_PCITEM_ARRAY_ERROR:  createItem().readError( rStrm );    break;
             case BIFF12_PCITEM_ARRAY_DATE:   createItem().readDate( rStrm );     break;
             default:
-                OSL_ENSURE( false, "PivotCacheItemList::importArray - unknown data type" );
+                OSL_FAIL( "PivotCacheItemList::importArray - unknown data type" );
                 nIdx = nCount;
         }
     }
@@ -804,7 +805,7 @@ OUString PivotCacheField::createDateGroupField( const Reference< XDataPilotField
             case XML_hours:     aGroupInfo.GroupBy = HOURS;     break;
             case XML_minutes:   aGroupInfo.GroupBy = MINUTES;   break;
             case XML_seconds:   aGroupInfo.GroupBy = SECONDS;   break;
-            default:    OSL_ENSURE( false, "PivotCacheField::convertRangeGrouping - unknown date/time interval" );
+            default:    OSL_FAIL( "PivotCacheField::convertRangeGrouping - unknown date/time interval" );
         }
 
         try
@@ -995,7 +996,7 @@ void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
             case XML_d: rSheetData.setDateTimeCell( aModel, rItem.getValue().get< DateTime >() );                           break;
             case XML_b: rSheetData.setBooleanCell( aModel, rItem.getValue().get< bool >() );                                break;
             case XML_e: rSheetData.setErrorCell( aModel, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) ); break;
-            default:    OSL_ENSURE( false, "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );
+            default:    OSL_FAIL( "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );
         }
     }
 }
@@ -1545,7 +1546,7 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
         }
 
         case FILTER_UNKNOWN:
-            OSL_ENSURE( false, "PivotCacheBuffer::importPivotCacheFragment - unknown filter type" );
+            OSL_FAIL( "PivotCacheBuffer::importPivotCacheFragment - unknown filter type" );
     }
     return 0;
 }
@@ -1562,3 +1563,5 @@ PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

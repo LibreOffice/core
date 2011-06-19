@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,11 @@
 namespace writerfilter {
 namespace resourcemodel {
 
-void WRITERFILTER_DLLPUBLIC resolveSprmProps(Properties & rHandler, Sprm & rSprm);
-void  WRITERFILTER_DLLPUBLIC resolveAttributeProperties(Properties & rHandler, Value & rValue);
+void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC resolveSprmProps(Properties & rHandler, Sprm & rSprm);
+void  WRITERFILTER_RESOURCEMODEL_DLLPUBLIC resolveAttributeProperties(Properties & rHandler, Value & rValue);
 
 }}
 
 #endif // INCLUDED_RESOURCE_MODEL_HELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

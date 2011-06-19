@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,21 +46,6 @@ sal_uLong DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
     nRes=0;
     for (pBE=rEntities.pFirst; pBE!=NULL; pBE=pBE->pSucc) nRes++;
     return nRes;
-}
-
-
-void DXF2GDIMetaFile::MayCallback(sal_uLong /*nMainEntitiesProcessed*/)
-{
-    // sal_uLong nPercent;
-/*
-    if (pCallback!=NULL && nMainEntitiesCount!=0) {
-        nPercent=nMinPercent+(nMaxPercent-nMinPercent)*nMainEntitiesProcessed/nMainEntitiesCount;
-        if (nPercent>=nLastPercent+4) {
-            if (((*pCallback)(pCallerData,(sal_uInt16)nPercent))==sal_True) bStatus=sal_False;
-            nLastPercent=nPercent;
-        }
-    }
-*/
 }
 
 Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor)
@@ -303,7 +289,7 @@ void DXF2GDIMetaFile::DrawPointEntity(const DXFPointEntity & rE, const DXFTransf
 
 void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTransform & rTransform)
 {
-    double frx,fry,fAng;
+    double frx,fry;
     sal_uInt16 nPoints,i;
     DXFVector aC;
 
@@ -315,6 +301,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
                       (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)));
     }
     else {
+        double fAng;
         nPoints=OptPointsPerCircle;
         Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
@@ -344,7 +331,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
 
 void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform & rTransform)
 {
-    double frx,fry,fA1,fdA,fAng;
+    double frx,fry,fA1,fdA;
     sal_uInt16 nPoints,i;
     DXFVector aC;
     Point aPS,aPE;
@@ -377,6 +364,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         );
     }
     else {
+        double fAng;
         nPoints=(sal_uInt16)(fdA/360.0*(double)OptPointsPerCircle+0.5);
         if (nPoints<2) nPoints=2;
         Polygon aPoly(nPoints);
@@ -505,7 +493,7 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
                 aParentLayerDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
             }
         }
-        DrawEntities(*pB,aT,sal_False);
+        DrawEntities(*pB,aT);
         aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
         aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
         nBlockColor=nSavedBlockColor;
@@ -756,7 +744,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
                 aParentLayerDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
             }
         }
-        DrawEntities(*pB,aT,sal_False);
+        DrawEntities(*pB,aT);
         aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
         aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
         nBlockColor=nSavedBlockColor;
@@ -766,8 +754,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
 
 
 void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
-                                   const DXFTransform & rTransform,
-                                   sal_Bool bTopEntities)
+                                   const DXFTransform & rTransform)
 {
     sal_uLong nCount=0;
     DXFTransform aET;
@@ -833,7 +820,6 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
         }
         pE=pE->pSucc;
         nCount++;
-        if (bTopEntities) MayCallback(nCount);
     }
 }
 
@@ -956,7 +942,7 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
     }
 
     if (bStatus==sal_True)
-        DrawEntities(pDXF->aEntities,aTransform,sal_True);
+        DrawEntities(pDXF->aEntities,aTransform);
 
     rMTF.Stop();
 
@@ -978,3 +964,4 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

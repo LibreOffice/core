@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#ifndef _OSL_STREAM_WRAPPER_HXX_
 #include "streamwrap.hxx"
-#endif
 #include <osl/file.hxx>
 
 namespace foo
@@ -68,3 +67,4 @@ void SAL_CALL OOutputStreamWrapper::closeOutput() throw( stario::NotConnectedExc
 } // namespace utl
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

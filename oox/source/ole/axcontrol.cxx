@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -446,7 +447,7 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
         case AX_PICPOS_BELOWCENTER: nImagePos = ImagePosition::BelowCenter; break;
         case AX_PICPOS_BELOWRIGHT:  nImagePos = ImagePosition::BelowRight;  break;
         case AX_PICPOS_CENTER:      nImagePos = ImagePosition::Centered;    break;
-        default:    OSL_ENSURE( false, "ControlConverter::convertAxPicture - unknown picture position" );
+        default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture position" );
     }
     rPropMap.setProperty( PROP_ImagePosition, nImagePos );
 }
@@ -464,7 +465,7 @@ void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamData
         case AX_PICSIZE_CLIP:       nScaleMode = ImageScaleMode::None;          break;
         case AX_PICSIZE_STRETCH:    nScaleMode = ImageScaleMode::Anisotropic;   break;
         case AX_PICSIZE_ZOOM:       nScaleMode = ImageScaleMode::Isotropic;     break;
-        default:    OSL_ENSURE( false, "ControlConverter::convertAxPicture - unknown picture size mode" );
+        default:    OSL_FAIL( "ControlConverter::convertAxPicture - unknown picture size mode" );
     }
     rPropMap.setProperty( PROP_ScaleMode, nScaleMode );
 }
@@ -503,7 +504,7 @@ void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
         case AX_ORIENTATION_AUTO:       bHorizontal = rSize.first > rSize.second;   break;
         case AX_ORIENTATION_VERTICAL:   bHorizontal = false;                        break;
         case AX_ORIENTATION_HORIZONTAL: bHorizontal = true;                         break;
-        default:    OSL_ENSURE( false, "ControlConverter::convertAxOrientation - unknown orientation" );
+        default:    OSL_FAIL( "ControlConverter::convertAxOrientation - unknown orientation" );
     }
     convertOrientation( rPropMap, bHorizontal );
 }
@@ -529,17 +530,19 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_FIXEDTEXT:     return CREATE_OUSTRING( "com.sun.star.awt.UnoControlFixedTextModel" );
         case API_CONTROL_IMAGE:         return CREATE_OUSTRING( "com.sun.star.awt.UnoControlImageControlModel" );
         case API_CONTROL_CHECKBOX:      return CREATE_OUSTRING( "com.sun.star.awt.UnoControlCheckBoxModel" );
-        case API_CONTROL_RADIOBUTTON:   return CREATE_OUSTRING( "com.sun.star.awt.UnoControlRadioButtonModel" );
+        case API_CONTROL_RADIOBUTTON:   return CREATE_OUSTRING( "com.sun.star.form.component.RadioButton" );
         case API_CONTROL_EDIT:          return CREATE_OUSTRING( "com.sun.star.awt.UnoControlEditModel" );
         case API_CONTROL_NUMERIC:       return CREATE_OUSTRING( "com.sun.star.awt.UnoControlNumericFieldModel" );
-        case API_CONTROL_LISTBOX:       return CREATE_OUSTRING( "com.sun.star.awt.UnoControlListBoxModel" );
-        case API_CONTROL_COMBOBOX:      return CREATE_OUSTRING( "com.sun.star.awt.UnoControlComboBoxModel" );
-        case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.awt.UnoControlSpinButtonModel" );
-        case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.awt.UnoControlScrollBarModel" );
+        case API_CONTROL_LISTBOX:       return CREATE_OUSTRING( "com.sun.star.form.component.ListBox" );
+        case API_CONTROL_COMBOBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.ComboBox" );
+        case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
+        case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
         case API_CONTROL_PROGRESSBAR:   return CREATE_OUSTRING( "com.sun.star.awt.UnoControlProgressBarModel" );
-        case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.awt.UnoControlGroupBoxModel" );
+        case API_CONTROL_FRAME:         return CREATE_OUSTRING( "com.sun.star.awt.UnoFrameModel" );
+        case API_CONTROL_PAGE:          return CREATE_OUSTRING( "com.sun.star.awt.UnoPageModel" );
+        case API_CONTROL_MULTIPAGE:     return CREATE_OUSTRING( "com.sun.star.awt.UnoMultiPageModel" );
         case API_CONTROL_DIALOG:        return CREATE_OUSTRING( "com.sun.star.awt.UnoControlDialogModel" );
-        default:    OSL_ENSURE( false, "ControlModelBase::getServiceName - no AWT model service supported" );
+        default:    OSL_FAIL( "ControlModelBase::getServiceName - no AWT model service supported" );
     }
     else switch( eCtrlType )
     {
@@ -555,7 +558,7 @@ OUString ControlModelBase::getServiceName() const
         case API_CONTROL_SPINBUTTON:    return CREATE_OUSTRING( "com.sun.star.form.component.SpinButton" );
         case API_CONTROL_SCROLLBAR:     return CREATE_OUSTRING( "com.sun.star.form.component.ScrollBar" );
         case API_CONTROL_GROUPBOX:      return CREATE_OUSTRING( "com.sun.star.form.component.GroupBox" );
-        default:    OSL_ENSURE( false, "ControlModelBase::getServiceName - no form component service supported" );
+        default:    OSL_FAIL( "ControlModelBase::getServiceName - no form component service supported" );
     }
     return OUString();
 }
@@ -633,7 +636,7 @@ sal_uInt32 ComCtlModelBase::getDataPartId() const
         case COMCTL_VERSION_50: return mnDataPartId5;
         case COMCTL_VERSION_60: return mnDataPartId6;
     }
-    OSL_ENSURE( false, "ComCtlObjectBase::getDataPartId - unxpected version" );
+    OSL_FAIL( "ComCtlObjectBase::getDataPartId - unxpected version" );
     return SAL_MAX_UINT32;
 }
 
@@ -835,7 +838,7 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
             case AX_FONTDATA_LEFT:      nAlign = TextAlign::LEFT;   break;
             case AX_FONTDATA_RIGHT:     nAlign = TextAlign::RIGHT;  break;
             case AX_FONTDATA_CENTER:    nAlign = TextAlign::CENTER; break;
-            default:    OSL_ENSURE( false, "AxFontDataModel::convertProperties - unknown text alignment" );
+            default:    OSL_FAIL( "AxFontDataModel::convertProperties - unknown text alignment" );
         }
         // form controls expect short value
         rPropMap.setProperty( PROP_Align, static_cast< sal_Int16 >( nAlign ) );
@@ -1549,7 +1552,8 @@ ApiControlType AxTabStripModel::getControlType() const
 void AxTabStripModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     rPropMap.setProperty( PROP_Decoration, mnTabStyle != AX_TABSTRIP_NONE );
-    rPropMap.setProperty( PROP_MultiPageValue, mnSelectedTab );
+    // adjust for openoffice ( 1 based )
+    rPropMap.setProperty( PROP_MultiPageValue, mnSelectedTab + 1);
     rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
     AxFontDataModel::convertProperties( rPropMap, rConv );
 }
@@ -1673,7 +1677,7 @@ AxFrameModel::AxFrameModel() :
 
 ApiControlType AxFrameModel::getControlType() const
 {
-    return API_CONTROL_GROUPBOX;
+    return mbAwtModel ? API_CONTROL_FRAME : API_CONTROL_GROUPBOX;
 }
 
 void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
@@ -1863,3 +1867,5 @@ Reference< XIndexContainer > EmbeddedForm::createXForm()
 
 } // namespace ole
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

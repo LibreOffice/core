@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 
 Bundle& Bundle::operator=( Bundle& rSource )
 {
@@ -48,7 +48,7 @@ void Bundle::SetColor( sal_uInt32 nColor )
     mnColor = nColor;
 }
 
-sal_uInt32 Bundle::GetColor()
+sal_uInt32 Bundle::GetColor() const
 {
     return mnColor;
 }
@@ -121,7 +121,7 @@ CGMFList::CGMFList() :
     nCharSetCount       ( 0 ),
     nFontsAvailable     ( 0 )
 {
-    aFontEntryList.Clear();
+    aFontEntryList.clear();
 }
 
 CGMFList::~CGMFList()
@@ -135,11 +135,11 @@ CGMFList& CGMFList::operator=( CGMFList& rSource )
 {
     ImplDeleteList();
     nFontsAvailable = rSource.nFontsAvailable;
-    nFontNameCount = rSource.nFontNameCount;
-    nCharSetCount = rSource.nCharSetCount;
-    FontEntry* pPtr = (FontEntry*)rSource.aFontEntryList.First();
-    while( pPtr )
+    nFontNameCount  = rSource.nFontNameCount;
+    nCharSetCount   = rSource.nCharSetCount;
+    for ( size_t i = 0, n = rSource.aFontEntryList.size(); i < n; ++i )
     {
+        FontEntry* pPtr = rSource.aFontEntryList[ i ];
         FontEntry* pCFontEntry = new FontEntry;
         if ( pPtr->pFontName )
         {
@@ -155,8 +155,7 @@ CGMFList& CGMFList::operator=( CGMFList& rSource )
         }
         pCFontEntry->eCharSetType = pPtr->eCharSetType;
         pCFontEntry->nFontType = pPtr->nFontType;
-        aFontEntryList.Insert( pCFontEntry, LIST_APPEND );
-        pPtr = (FontEntry*)rSource.aFontEntryList.Next();
+        aFontEntryList.push_back( pCFontEntry );
     }
     return *this;
 }
@@ -168,7 +167,7 @@ FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
     sal_uInt32 nInd = nIndex;
     if ( nInd )
         nInd--;
-    return (FontEntry*)aFontEntryList.GetObject( nInd );
+    return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ] : NULL;
 }
 
 // ---------------------------------------------------------------
@@ -197,11 +196,11 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
     {
         nFontsAvailable++;
         pFontEntry = new FontEntry;
-        aFontEntryList.Insert( pFontEntry, LIST_APPEND );
+        aFontEntryList.push_back( pFontEntry );
     }
     else
     {
-        pFontEntry = (FontEntry*)aFontEntryList.GetObject( nFontNameCount );
+        pFontEntry = aFontEntryList[ nFontNameCount ];
     }
     nFontNameCount++;
     sal_Int8* pBuf = new sal_Int8[ nSize ];
@@ -260,11 +259,11 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_
     {
         nFontsAvailable++;
         pFontEntry = new FontEntry;
-        aFontEntryList.Insert( pFontEntry, LIST_APPEND );
+        aFontEntryList.push_back( pFontEntry );
     }
     else
     {
-        pFontEntry = (FontEntry*)aFontEntryList.GetObject( nCharSetCount );
+        pFontEntry = aFontEntryList[ nCharSetCount ];
     }
     nCharSetCount++;
     pFontEntry->eCharSetType = eCharSetType;
@@ -277,12 +276,9 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_
 
 void CGMFList::ImplDeleteList()
 {
-    FontEntry* pFontEntry = (FontEntry*)aFontEntryList.First();
-    while( pFontEntry )
-    {
-        delete pFontEntry;
-        pFontEntry = (FontEntry*)aFontEntryList.Next();
-    }
-    aFontEntryList.Clear();
+    for ( size_t i = 0, n = aFontEntryList.size(); i < n; ++i )
+        delete aFontEntryList[ i ];
+    aFontEntryList.clear();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

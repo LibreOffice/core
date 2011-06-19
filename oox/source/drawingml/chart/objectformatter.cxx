@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -190,19 +191,11 @@ static const AutoFormatEntry spNoFormats[] =
     AUTOFORMAT_END()
 };
 
-static const AutoFormatEntry spChartSpaceLines[] =
+static const AutoFormatEntry spDataTableLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 32, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 75000 ),
     AUTOFORMAT_COLORMOD( 33, 40, THEMED_STYLE_SUBTLE, XML_dk1, XML_tint, 75000 ),
     // 41...48: no line, same as Chart2
-    AUTOFORMAT_END()
-};
-
-static const AutoFormatEntry spChartSpaceFills[] =
-{
-    AUTOFORMAT_COLOR(  1, 32, THEMED_STYLE_SUBTLE, XML_bg1 ),
-    AUTOFORMAT_COLOR( 33, 40, THEMED_STYLE_SUBTLE, XML_lt1 ),
-    AUTOFORMAT_COLOR( 41, 48, THEMED_STYLE_SUBTLE, XML_dk1 ),
     AUTOFORMAT_END()
 };
 
@@ -550,7 +543,7 @@ struct ObjectTypeFormatEntry
 static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 {
     //                object type                property info      auto text          auto line            auto fill              auto effect
-    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spChartSpaceLines,   spChartSpaceFills,     0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_CHARTTITLE,     &saCommonPropInfo, spChartTitleTexts, 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         &saCommonPropInfo, spOtherTexts,      spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spPlotArea2dFills,     0 /* eq to Ch2 */ ),
@@ -575,7 +568,7 @@ static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
     TYPEFORMAT_LINE(  OBJECTTYPE_HILOLINE,       &saLinearPropInfo, 0,                 spOtherLines ),
     TYPEFORMAT_FRAME( OBJECTTYPE_UPBAR,          &saCommonPropInfo, 0,                 spUpDownBarLines,    spUpBarFills,          spUpDownBarEffects ),
     TYPEFORMAT_FRAME( OBJECTTYPE_DOWNBAR,        &saCommonPropInfo, 0,                 spUpDownBarLines,    spDownBarFills,        spUpDownBarEffects ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_DATATABLE,      &saCommonPropInfo, spOtherTexts,      spChartSpaceLines )
+    TYPEFORMAT_LINE(  OBJECTTYPE_DATATABLE,      &saCommonPropInfo, spOtherTexts,      spDataTableLines )
 };
 
 #undef TYPEFORMAT_FRAME
@@ -675,7 +668,7 @@ public:
     void                convertFormatting(
                             ShapePropertyMap& rPropMap,
                             const ModelRef< Shape >& rxShapeProp,
-                            sal_Int32 nSeriesIdx );
+                            sal_Int32 nSeriesIdx ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -930,8 +923,8 @@ EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEn
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
 }
-
-void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ )
+//TODO :
+void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ ) const
 {
 }
 
@@ -1056,7 +1049,7 @@ ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Re
 
     try
     {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( mrFilter.getModel(), UNO_QUERY_THROW );
+        Reference< XNumberFormatsSupplier > xNumFmtsSupp( rxChartDoc, UNO_QUERY_THROW );
         mxNumFmts = xNumFmtsSupp->getNumberFormats();
         mxNumTypes.set( mxNumFmts, UNO_QUERY );
     }
@@ -1162,8 +1155,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         }
         catch( Exception& )
         {
-            OSL_ENSURE( false,
-                OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
+            OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
                 append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
         }
     }
@@ -1196,3 +1188,5 @@ void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eO
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

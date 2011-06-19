@@ -38,7 +38,7 @@ import java.util.Enumeration;
  *  Loads a properties file so that registry knows which plug-ins
  *  it needs to load.
  *
- *  @author: Martin Maher
+ *  @author Martin Maher
  */
 public class ConverterInfoList {
 

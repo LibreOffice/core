@@ -5,6 +5,7 @@ all_fragments+=impress
 T4_IMPRESS = \
     draw_StarOffice_XML_Draw \
     impress_MS_PowerPoint_97 \
+    impress_MS_PowerPoint_97_AutoPlay \
     impress_MS_PowerPoint_97_Vorlage \
     impress_StarOffice_XML_Impress \
     impress_StarOffice_XML_Impress_Template \
@@ -14,12 +15,17 @@ T4_IMPRESS = \
     impress8_template\
     draw8\
     MS_PowerPoint_2007_XML\
-    MS_PowerPoint_2007_XML_Template
+    MS_PowerPoint_2007_XML_AutoPlay\
+    MS_PowerPoint_2007_XML_Template\
+    impress_OOXML_Presentation\
+    impress_OOXML_Presentation_Template\
+    impress_OOXML_Presentation_AutoPlay
 
 # -----------------------------------------------
 # count = 20
 F4_IMPRESS = \
     MS_PowerPoint_97 \
+    MS_PowerPoint_97_AutoPlay \
     MS_PowerPoint_97_Vorlage \
     impress_StarOffice_XML_Draw \
     StarOffice_XML__Impress_ \
@@ -30,7 +36,11 @@ F4_IMPRESS = \
     impress8_template\
     impress8_draw\
     impress_MS_PowerPoint_2007_XML\
-    impress_MS_PowerPoint_2007_XML_Template
+    impress_MS_PowerPoint_2007_XML_AutoPlay\
+    impress_MS_PowerPoint_2007_XML_Template\
+    impress_OOXML\
+    impress_OOXML_Template\
+    impress_OOXML_AutoPlay
 
 # -----------------------------------------------
 # count = 12
@@ -43,7 +53,8 @@ F4_UI_IMPRESS = \
     impress8_template_ui \
     impress8_draw_ui \
     impress_MS_PowerPoint_2007_XML_ui \
-    impress_MS_PowerPoint_2007_XML_Template_ui
+    impress_OOXML_ui\
+    impress_OOXML_Template_ui
 
 # -----------------------------------------------
 # count = 0

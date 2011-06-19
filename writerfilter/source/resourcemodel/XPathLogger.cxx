@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,7 @@ void XPathLogger::updateCurrentPath()
     m_currentPath = "";
 
     for (vector<string>::const_iterator aIt = m_path.begin();
-         aIt != m_path.end();
-         aIt++)
+         aIt != m_path.end(); ++aIt)
     {
         if (m_currentPath.size() > 0)
             m_currentPath += "/";
@@ -87,4 +87,6 @@ void XPathLogger::endElement()
     updateCurrentPath();
 }
 
-}
+} // namespace writerfilter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

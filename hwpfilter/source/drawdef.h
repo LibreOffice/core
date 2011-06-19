@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,12 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* NAME $Id: drawdef.h,v 1.5 2008-04-10 11:58:04 rt Exp $
- *
- * HISTORY
- *        frog - Jan 11, 1999: Created.
- */
 
 #ifndef _DRAWDEF_H_
 #define _DRAWDEF_H_
@@ -260,3 +255,5 @@ struct HWPDrawingObject
     ~HWPDrawingObject();
 };
 #endif                                            /* _DRAWDEF_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

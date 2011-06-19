@@ -52,7 +52,7 @@ public final class TextNodeIterator extends NodeIterator {
     /**
      *  Standard constructor.
      *
-     *  @param  initial  The initial root <code>Node</code>.
+     *  @param  node  The initial root <code>Node</code>.
      */
     public TextNodeIterator(Node node) {
         super(null, node);

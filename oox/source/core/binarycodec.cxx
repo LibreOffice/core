@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -198,7 +199,7 @@ bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData
         mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ), (sal_Int16)0 );
     }
     else
-        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+        OSL_FAIL( "Unexpected key size!\n" );
 
     return bResult;
 }
@@ -306,10 +307,10 @@ bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData
             bResult = sal_False;
         }
         else
-            OSL_ENSURE( sal_False, "Unexpected document ID!\n" );
+            OSL_FAIL( "Unexpected document ID!\n" );
     }
     else
-        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+        OSL_FAIL( "Unexpected key size!\n" );
 
     return bResult;
 }
@@ -425,3 +426,5 @@ bool BinaryCodec_RCF::skip( sal_Int32 nBytes )
 
 } // namespace core
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <WriterFilterDllApi.hxx>
 
-class WRITERFILTER_DLLPUBLIC WriterFilterDetection : public cppu::WeakImplHelper2
+/// File format detection service for DOC (unused) / DOCX.
+class WRITERFILTER_WRITERFILTER_DLLPUBLIC WriterFilterDetection : public cppu::WeakImplHelper2
 <
     com::sun::star::document::XExtendedFilterDetection,
     com::sun::star::lang::XServiceInfo
@@ -74,3 +76,4 @@ sal_Bool SAL_CALL WriterFilterDetection_supportsService( const ::rtl::OUString& 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

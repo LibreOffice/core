@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,11 +52,11 @@ void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, Text
         if ( aDestListStyleIter != rDestListStyle.end() )
         {
             (*aDestListStyleIter)->apply( **aSourceListStyleIter );
-            aDestListStyleIter++;
+            ++aDestListStyleIter;
         }
         else
             rDestListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties( **aSourceListStyleIter ) ) );
-        aSourceListStyleIter++;
+        ++aSourceListStyleIter;
     }
 }
 
@@ -66,3 +67,5 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

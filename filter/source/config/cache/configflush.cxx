@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,7 +146,7 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 //-----------------------------------------------
 ::rtl::OUString ConfigFlush::impl_getImplementationName()
 {
-    static ::rtl::OUString IMPLNAME = ::rtl::OUString::createFromAscii("com.sun.star.comp.filter.config.ConfigFlush");
+    static ::rtl::OUString IMPLNAME( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.ConfigFlush" ));
     return IMPLNAME;
 }
 
@@ -166,3 +167,5 @@ css::uno::Reference< css::uno::XInterface > ConfigFlush::impl_createInstance(con
 
     } // namespace config
 } // namespace filter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

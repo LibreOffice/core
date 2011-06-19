@@ -5,6 +5,6 @@
     <prop oor:name="MediaType"/>
     <prop oor:name="Preferred"><value>false</value></prop>
     <prop oor:name="PreferredFilter"><value>Calc MS Excel 2007 Binary</value></prop>
-    <prop oor:name="UIName"><value xml:lang="x-default">Microsoft Excel 2007 Binary</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft Excel 2007 Binary</value></prop>
     <prop oor:name="ClipboardFormat"/>
 </node>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <tools/solar.h>        // UINTXX
+#include <tools/solar.h>
 #include <svl/svarray.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
@@ -73,7 +74,7 @@ public:
     sal_uLong   nFilePos;
 public:
     DffRecordHeader() : nRecVer(0), nRecInstance(0), nImpVerInst(0), nRecType(0), nRecLen(0), nFilePos(0) {}
-    FASTBOOL IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
+    bool IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
     sal_uLong    GetRecBegFilePos() const { return nFilePos; }
     sal_uLong    GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
     void SeekToEndOfRecord(SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen ); }
@@ -168,13 +169,11 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
 
 // nach der Reihenfolge des Auftretens sortiert werden:
-//
 SV_DECL_PTRARR_DEL(SvxMSDffBLIPInfos,   SvxMSDffBLIPInfo_Ptr,   16,16)
 
 SV_DECL_PTRARR_DEL(SvxMSDffShapeOrders, SvxMSDffShapeOrder_Ptr, 16,16)
 
 // explizit sortiert werden:
-//
 SV_DECL_PTRARR_SORT_DEL_VISIBILITY(SvxMSDffShapeInfos,  SvxMSDffShapeInfo_Ptr,  16,16, MSFILTER_DLLPUBLIC)
 
 SV_DECL_PTRARR_SORT_VISIBILITY(SvxMSDffShapeTxBxSort,   SvxMSDffShapeOrder_Ptr, 16,16, MSFILTER_DLLPUBLIC)
@@ -257,6 +256,8 @@ struct MSDffTxId
 
 struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
 {
+    static const int RELTO_DEFAULT = 2;
+
     SdrObject*  pObj;
     Polygon*    pWrapPolygon;
     char*       pClientAnchorBuffer;
@@ -264,9 +265,9 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     char*       pClientDataBuffer;
     sal_uInt32      nClientDataLen;
     sal_uInt32      nXAlign;
-    sal_uInt32      nXRelTo;
+    sal_uInt32      *pXRelTo;
     sal_uInt32      nYAlign;
-    sal_uInt32      nYRelTo;
+    sal_uInt32      *pYRelTo;
     sal_uInt32      nLayoutInTableCell;
     sal_uInt32      nFlags;
     long        nTextRotationAngle;
@@ -287,6 +288,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_uLong       nShapeId;
     MSO_SPT     eShapeType;
     MSO_LineStyle eLineStyle;   // Umrandungs-Arten
+    MSO_LineDashing eLineDashing;
     sal_Bool        bDrawHell       :1;
     sal_Bool        bHidden         :1;
     sal_Bool        bReplaceByFly   :1;
@@ -303,6 +305,8 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     {   return nShapeId == rEntry.nShapeId; }
     sal_Bool operator<( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId < rEntry.nShapeId;  }
+private:
+    SvxMSDffImportRec &operator=(const SvxMSDffImportRec&);
 };
 typedef SvxMSDffImportRec* MSDffImportRec_Ptr;
 
@@ -466,7 +470,7 @@ protected :
     long            nEmuDiv;
     long            nPntMul;
     long            nPntDiv;
-    FASTBOOL        bNeedMap;
+    bool        bNeedMap;
     sal_uInt32          nSvxMSDffSettings;
     sal_uInt32          nSvxMSDffOLEConvFlags;
 
@@ -478,7 +482,7 @@ protected :
     void GetCtrlData( long nOffsDgg );
     void GetDrawingGroupContainerData( SvStream& rSt,
                                        sal_uLong nLenDgg );
-    // --> OD 2008-08-01 #156763#
+    // #156763#
     // Add internal drawing container id as parameter to the sub methods of
     // reading the control information about the drawing objects.
     // The drawing container id is used to distinguish the text ids of drawing
@@ -494,12 +498,11 @@ protected :
                                 sal_uLong nLenShapeCont,
                                 sal_uLong nPosGroup,
                                 const unsigned long nDrawingContainerId );
-    // <--
 
-    FASTBOOL ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
+    bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
-    SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& ) const;
-    // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
+    SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
+    // #i32596# - pass <nCalledByGroup> to method
     // Needed in the Writer Microsoft Word import to avoid import of OLE objects
     // inside groups. Instead a graphic object is created.
     virtual SdrObject* ImportOLE( long nOLEId,
@@ -508,16 +511,13 @@ protected :
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    // <--
     SdrObject* GetAutoForm( MSO_SPT eTyp ) const;
     static const GDIMetaFile* lcl_GetMetaFileFromGrf_Impl( const Graphic& rGrf, GDIMetaFile& rMtf );
-#ifndef SVX_LIGHT
     static com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
                 const Rectangle& rVisArea );
-#endif
 
 /*
         folgende Methoden sind zum Excel-Import zu ueberschreiben:
@@ -527,17 +527,14 @@ protected :
     virtual sal_Bool ProcessClientData(  SvStream& rStData, sal_uLong nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
     virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj = NULL);
     virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
-    virtual FASTBOOL GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
+    virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
-    // -----------------------------------------------------------------------
-
-    FASTBOOL ReadDffString(SvStream& rSt, String& rTxt) const;
-    FASTBOOL ReadObjText(SvStream& rSt, SdrObject* pObj) const;
+    bool ReadDffString(SvStream& rSt, String& rTxt) const;
+    bool ReadObjText(SvStream& rSt, SdrObject* pObj) const;
 
     // SJ: New implementation of ReadObjText is used by Fontwork objects, because
     // the old one does not properly import multiple paragraphs
     void ReadObjText( const String& rText, SdrObject* pObj ) const;
-    // -----------------------------------------------------------------------
 
     /*
         folgende Methode ist von allen zu ueberschreiben, die OLE-Objecte
@@ -561,7 +558,7 @@ public:
     void*               pSvxMSDffDummy1;
     void*               pSvxMSDffDummy2;
     void*               pSvxMSDffDummy3;
-    List*               pEscherBlipCache;
+    std::map<sal_uInt32,ByteString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;
@@ -572,11 +569,10 @@ public:
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nContextProperty = DFF_Prop_lineColor ) const;
     virtual sal_Bool SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
-    FASTBOOL SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
-    FASTBOOL SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
+    bool SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
+    bool SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
 
-    // -----------------------------------------------------------------------
-    static void MSDFFReadZString( SvStream& rIn, String& rStr, sal_uLong nMaxLen, FASTBOOL bUniCode = sal_False );
+    static void MSDFFReadZString( SvStream& rIn, String& rStr, sal_uLong nMaxLen, bool bUniCode = sal_False );
 
     static sal_Bool ReadCommonRecordHeader( DffRecordHeader& rRec, SvStream& rIn );
     static sal_Bool ReadCommonRecordHeader( SvStream& rSt,
@@ -652,7 +648,7 @@ public:
 
     Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
 */
-    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL );
 
 /*
     GetBLIPDirect()     -Einlesen eines BLIP aus schon positioniertem Stream
@@ -859,3 +855,4 @@ struct SvxMSDffShapeOrder
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

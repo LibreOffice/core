@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 // hwpfile.h
 // (C) 1998 Mizi Research, All rights are reserved
 //
-// $Id: hwpfile.h,v 1.5 2008-06-04 10:01:33 vg Exp $
-//
 
 #ifndef _HWPFILE_H_
 #define _HWPFILE_H_
@@ -45,9 +44,16 @@
 #include "hpara.h"
 #include "list.hxx"
 
+#define HWPIDLen    30
+#define V20SIGNATURE    "HWP Document File V2.00 \032\1\2\3\4\5"
+#define V21SIGNATURE    "HWP Document File V2.10 \032\1\2\3\4\5"
+#define V30SIGNATURE    "HWP Document File V3.00 \032\1\2\3\4\5"
+
 #define HWP_V20 20
 #define HWP_V21 21
 #define HWP_V30 30
+
+int detect_hwp_version(const char *str);
 
 struct  FBox;
 struct  EmPicture;
@@ -96,7 +102,6 @@ struct ColumnInfo{
  *
  * @short HWP file management object
  * @author Mizi Reserach
- * @version $Id: hwpfile.h,v 1.5 2008-06-04 10:01:33 vg Exp $
  */
 class DLLEXPORT HWPFile
 {
@@ -104,15 +109,10 @@ class DLLEXPORT HWPFile
 /**
  * Default constructor
  */
-        HWPFile( void );
-
-        ~HWPFile( void );
+        HWPFile();
+        ~HWPFile();
 
     public:
-/**
- * Initialize this object
- */
-        void Init();
 
 /**
  * Opens HStream to use it.
@@ -310,3 +310,5 @@ class DLLEXPORT HWPFile
 HWPFile *GetCurrentDoc(void);
 HWPFile *SetCurrentDoc(HWPFile *hwpfp);
 #endif                                            /* _HWPFILE_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

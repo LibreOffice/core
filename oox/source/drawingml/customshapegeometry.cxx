@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <comphelper/stl_types.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
@@ -90,7 +91,7 @@ static FormularCommandNameTable pFormularCommandNameTable[] =
     { "val",    FC_VAL }
 
 };
-typedef std::hash_map< rtl::OUString, FormularCommand, comphelper::UStringHash, comphelper::UStringEqual > FormulaCommandHMap;
+typedef boost::unordered_map< rtl::OUString, FormularCommand, comphelper::UStringHash, comphelper::UStringEqual > FormulaCommandHMap;
 
 static const FormulaCommandHMap* pCommandHashMap;
 
@@ -400,7 +401,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
             {   // seems to be a ST_Coordinate
-                aRet.Value = Any( rValue.toInt32() );
+                aRet.Value = Any( (sal_Int32)(rValue.toInt32() / 5) );
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
             else
@@ -482,7 +483,7 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
     while ( nIndex >= 0 );
 
     rtl::OUString aEquation;
-    if ( aTokens.size() )
+    if ( !aTokens.empty() )
     {
         sal_Int32 i, nParameters = aTokens.size() - 1;
         if ( nParameters > 3 )
@@ -1470,7 +1471,8 @@ OUString GetShapeType( sal_Int32 nType )
             sType = sBracePair;
             } break;
         case XML_straightConnector1: {
-            static const OUString sStraightConnector1 = CREATE_OUSTRING( "mso-spt32" );
+            static const OUString sStraightConnector1 = CREATE_OUSTRING( "ooxml-straight-connector-1" );
+            OSL_TRACE("preset resolved as: ooxml-straight-connector-1");
             sType = sStraightConnector1;
             } break;
         case XML_bentConnector2: {
@@ -2063,3 +2065,5 @@ Reference< XFastContextHandler > PresetTextShapeContext::createFastChildContext(
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

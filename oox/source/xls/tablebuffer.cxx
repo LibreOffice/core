@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@ void Table::finalizeImport()
     if( (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
     {
         maDBRangeName = maModel.maDisplayName;
-        Reference< XDatabaseRange > xDatabaseRange( createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW );
+        Reference< XDatabaseRange > xDatabaseRange( createUnnamedDatabaseRangeObject( maModel.maRange ), UNO_SET_THROW );
         maDestRange = xDatabaseRange->getDataArea();
 
         // get formula token index of the database range
@@ -106,7 +107,7 @@ void Table::finalizeImport()
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "Table::finalizeImport - cannot create database range" );
+        OSL_FAIL( "Table::finalizeImport - cannot create database range" );
     }
 }
 
@@ -162,3 +163,5 @@ void TableBuffer::insertTableToMaps( const TableRef& rxTable )
 
 } // namespace xls
 } // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

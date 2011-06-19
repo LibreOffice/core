@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,12 +128,12 @@ OOXMLDocument * OOXMLParserState::getDocument() const
     return mpDocument;
 }
 
-void OOXMLParserState::setXNoteId(const rtl::OUString & rId)
+void OOXMLParserState::setXNoteId(const sal_Int32 nId)
 {
-    mpDocument->setXNoteId(rId);
+    mpDocument->setXNoteId(nId);
 }
 
-const rtl::OUString & OOXMLParserState::getXNoteId() const
+sal_Int32 OOXMLParserState::getXNoteId() const
 {
     return mpDocument->getXNoteId();
 }
@@ -154,7 +155,7 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
         mpCharacterProps.reset(new OOXMLPropertySetImpl());
 
 #ifdef DEBUG_PROPERTIES
-        debug_logger->endElement("resolveCharacterProperties");
+        debug_logger->endElement();
 #endif
     }
 }
@@ -171,7 +172,7 @@ void OOXMLParserState::setCharacterProperties
 void OOXMLParserState::setCellProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mCellProps.size() > 0)
+    if (!mCellProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
 
@@ -185,7 +186,7 @@ void OOXMLParserState::setCellProperties
 void OOXMLParserState::setRowProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mRowProps.size() > 0)
+    if (!mRowProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
 
@@ -198,7 +199,7 @@ void OOXMLParserState::setRowProperties
 
 void OOXMLParserState::resolveCellProperties(Stream & rStream)
 {
-    if (mCellProps.size() > 0)
+    if (!mCellProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
 
@@ -212,7 +213,7 @@ void OOXMLParserState::resolveCellProperties(Stream & rStream)
 
 void OOXMLParserState::resolveRowProperties(Stream & rStream)
 {
-    if (mRowProps.size() > 0)
+    if (!mRowProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
 
@@ -226,7 +227,7 @@ void OOXMLParserState::resolveRowProperties(Stream & rStream)
 
 void OOXMLParserState::resolveTableProperties(Stream & rStream)
 {
-    if (mTableProps.size() > 0)
+    if (!mTableProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
 
@@ -241,7 +242,7 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
 void OOXMLParserState::setTableProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mTableProps.size() > 0)
+    if (!mTableProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
         if (rTableProps.get() == NULL)
@@ -274,20 +275,15 @@ void OOXMLParserState::incContextCount()
     mnContexts++;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 unsigned int OOXMLParserState::getContextCount() const
 {
     return mnContexts;
 }
 
-string OOXMLParserState::toString() const
+void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
 {
-    return toTag()->toString();
-}
-
-XMLTag::Pointer_t OOXMLParserState::toTag() const
-{
-    XMLTag::Pointer_t pTag(new XMLTag("parserstate"));
+    pLogger->startElement("parserstate");
 
     string sTmp;
 
@@ -311,14 +307,12 @@ XMLTag::Pointer_t OOXMLParserState::toTag() const
     else
         sTmp += "-";
 
-    pTag->addAttr("state", sTmp);
-    pTag->addAttr("XNoteId",
-                  OUStringToOString(getXNoteId(),
-                                    RTL_TEXTENCODING_ASCII_US).getStr());
+    pLogger->attribute("state", sTmp);
+    pLogger->attribute("XNoteId", getXNoteId() );
     if (mpCharacterProps != OOXMLPropertySet::Pointer_t())
-        pTag->chars(mpCharacterProps->toString());
+        pLogger->chars(mpCharacterProps->toString());
 
-    return pTag;
+    pLogger->endElement();
  }
 
 XPathLogger & OOXMLParserState::getXPathLogger()
@@ -328,3 +322,5 @@ XPathLogger & OOXMLParserState::getXPathLogger()
 #endif
 
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -274,10 +274,9 @@ private:
 
     /** Writes all cell formatting attributes to the passed row range. */
     void                writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowRange ) const;
-    /** Writes all cell formatting attributes to the passed cell range. */
-    void                writeXfIdRangeProperties( const XfIdRange& rXfIdRange ) const;
-    /** Tries to merge the ranges last inserted in maXfIdRanges with existing ranges. */
-    void                mergeXfIdRanges();
+
+    /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
+    void                writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const;
 
     /** Merges the passed merged range and updates right/bottom cell borders. */
     void                finalizeMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
@@ -317,7 +316,8 @@ private:
         bool                tryExpand( const ::com::sun::star::table::CellAddress& rCellAddr, sal_Int32 nXfId, sal_Int32 nNumFmtId );
         bool                tryMerge( const XfIdRange& rXfIdRange );
     };
-    typedef ::std::map< BinAddress, XfIdRange > XfIdRangeMap;
+    typedef ::std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
+    typedef ::std::map< XfIdNumFmtKey, ApiCellRangeList > XfIdRangeListMap;
 
     /** Stores information about a merged cell range. */
     struct MergedRange
@@ -340,7 +340,7 @@ private:
                         maSharedFmlaAddr;       /// Address of a cell containing a pending shared formula.
     BinAddress          maSharedBaseAddr;       /// Base address of the pending shared formula.
     XfIdRowRange        maXfIdRowRange;         /// Cached XF identifier for a range of rows.
-    XfIdRangeMap        maXfIdRanges;           /// Collected XF identifiers for cell ranges.
+    XfIdRangeListMap    maXfIdRangeLists;       /// Collected XF identifiers for cell rangelists.
     MergedRangeList     maMergedRanges;         /// Merged cell ranges.
     MergedRangeList     maCenterFillRanges;     /// Merged cell ranges from 'center across' or 'fill' alignment.
     bool                mbPendingSharedFmla;    /// True = maSharedFmlaAddr and maSharedBaseAddr are valid.

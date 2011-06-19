@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -517,11 +518,9 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 
         // ST_TLTimeNodePresetClassType
         nInt = xAttribs->getOptionalValueToken( XML_presetClass, 0 );
-        sal_Int16 nEffectPresetClass = 0;
-        sal_Int32 nPresetId = 0;
-        sal_Int32 nPresetSubType = 0;
         if( nInt != 0 )
         {
+            sal_Int16 nEffectPresetClass = 0;
             // TODO put that in a function
             switch( nInt )
             {
@@ -551,14 +550,14 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             aUserData[ CREATE_OUSTRING( "preset-class" ) ] = makeAny( nEffectPresetClass );
             if( attribs.hasAttribute( XML_presetID ) )
             {
-                nPresetId = attribs.getInteger( XML_presetID, 0 );
+                sal_Int32 nPresetId = attribs.getInteger( XML_presetID, 0 );
                 const preset_maping* p = gPresetMaping;
                 while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
                     p++;
 
                 aUserData[ CREATE_OUSTRING( "preset-id" ) ]
                     = makeAny( OUString::createFromAscii( p->mpStrPresetId ) );
-                nPresetSubType = attribs.getInteger( XML_presetSubtype, 0 );
+                sal_Int32 nPresetSubType = attribs.getInteger( XML_presetSubtype, 0 );
                 if( nPresetSubType )
                 {
                     aUserData[ CREATE_OUSTRING( "preset-sub-type" ) ]
@@ -706,3 +705,5 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
     }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

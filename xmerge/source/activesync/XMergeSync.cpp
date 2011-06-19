@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #include "stdafx.h"
 
@@ -814,7 +815,7 @@ STDAPI DllUnregisterServer()
 //////////////////////////////////////////////////////////////////////
 // CXMergeSyncModule methods
 //////////////////////////////////////////////////////////////////////
-CXMergeSyncModule::CXMergeSyncModule ()
+CXMergeSyncModule::CXMergeSyncModule () : m_lLocks(0), m_lObjs(0)
 {
 }
 
@@ -830,8 +831,9 @@ long CXMergeSyncModule::LockServer(BOOL fLock)
         return ::InterlockedDecrement(&m_lLocks);
 }
 
-long CXMergeSyncModule::GetLockCount()
+long CXMergeSyncModule::GetLockCount() const
 {
     return m_lLocks + m_lObjs;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
