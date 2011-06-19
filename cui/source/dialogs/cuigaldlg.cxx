@@ -116,7 +116,7 @@ void SAL_CALL SearchThread::run()
             nBeginFormat = nEndFormat = nFileNumber;
 
         for( sal_uInt16 i = nBeginFormat; i <= nEndFormat; ++i )
-            aFormats.push_back( ( (FilterEntry*) mpBrowser->aFilterEntryList.GetObject( i ) )->aFilterName.ToLowerAscii() );
+            aFormats.push_back( mpBrowser->aFilterEntryList[ i ]->aFilterName.ToLowerAscii() );
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
@@ -830,8 +830,9 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
     for ( size_t i = 0, n = aFoundList.size(); i < n; ++i )
         delete aFoundList[ i ];
 
-    for( void* pEntry = aFilterEntryList.First(); pEntry; pEntry = aFilterEntryList.Next() )
-        delete (FilterEntry*) pEntry;
+    for ( size_t i = 0, n = aFilterEntryList.size(); i < n; ++i ) {
+        delete aFilterEntryList[ i ];
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -877,7 +878,8 @@ void TPGalleryThemeProperties::FillFilterList()
     {
         aExt = rFilter.GetImportFormatShortName( i );
         aName = rFilter.GetImportFormatName( i );
-        pTestEntry = (FilterEntry*) aFilterEntryList.First();
+        size_t entryIndex = 0;
+        pTestEntry = aFilterEntryList.empty() ? NULL : aFilterEntryList[ entryIndex ];
         bInList = sal_False;
 
         String aExtensions;
@@ -904,18 +906,24 @@ void TPGalleryThemeProperties::FillFilterList()
                 bInList = sal_True;
                 break;
             }
-            pTestEntry = (FilterEntry*) aFilterEntryList.Next();
+            pTestEntry = ( ++entryIndex < aFilterEntryList.size() )
+                       ? aFilterEntryList[ entryIndex ] : NULL;
         }
         if ( !bInList )
         {
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aExt;
-            aFilterEntryList.Insert( pFilterEntry, aCbbFileType.InsertEntry( aName ) );
+            size_t pos = aCbbFileType.InsertEntry( aName );
+            if ( pos < aFilterEntryList.size() ) {
+                aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
+            } else {
+                aFilterEntryList.push_back( pFilterEntry );
+            }
         }
     }
 
     // media filters
-       static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
     ::avmedia::FilterNameVector     aFilters;
     const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
     ::rtl::OUString                 aAllTypes;
@@ -930,9 +938,20 @@ void TPGalleryThemeProperties::FillFilterList()
 
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aFilters[ l ].second.getToken( 0, ';', nIndex );
-            nFirstExtFilterPos = aCbbFileType.InsertEntry( addExtension( aFilters[ l ].first,
-                                                           aFilterWildcard += pFilterEntry->aFilterName ) );
-            aFilterEntryList.Insert( pFilterEntry, nFirstExtFilterPos );
+            nFirstExtFilterPos = aCbbFileType.InsertEntry(
+                addExtension(
+                    aFilters[ l ].first,
+                    aFilterWildcard += pFilterEntry->aFilterName
+                )
+            );
+            if ( nFirstExtFilterPos < aFilterEntryList.size() ) {
+                aFilterEntryList.insert(
+                    aFilterEntryList.begin() + nFirstExtFilterPos,
+                    pFilterEntry
+                );
+            } else {
+                aFilterEntryList.push_back( pFilterEntry );
+            }
         }
     }
 
@@ -978,8 +997,12 @@ void TPGalleryThemeProperties::FillFilterList()
     pFilterEntry = new FilterEntry;
     pFilterEntry->aFilterName = String( CUI_RES( RID_SVXSTR_GALLERY_ALLFILES ) );
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
-    aFilterEntryList.Insert(pFilterEntry, aCbbFileType. InsertEntry( pFilterEntry->aFilterName, 0 ) );
-
+    size_t pos = aCbbFileType.InsertEntry( pFilterEntry->aFilterName, 0 );
+    if ( pos < aFilterEntryList.size() ) {
+        aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
+    } else {
+        aFilterEntryList.push_back( pFilterEntry );
+    }
     aCbbFileType.SetText( pFilterEntry->aFilterName );
 }
 
