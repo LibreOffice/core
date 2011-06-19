@@ -344,12 +344,12 @@ String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
 void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const String& rValue ) const
 {
     // encode to byte string
-    ByteString aEncoded( rValue, GetTextEncoding() );
+    rtl::OString aEncoded(rtl::OUStringToOString(rValue, GetTextEncoding()));
     // write size field (including trailing NUL character)
-    sal_Int32 nSize = static_cast< sal_Int32 >( aEncoded.Len() + 1 );
+    sal_Int32 nSize = aEncoded.getLength() + 1;
     rStrm << nSize;
     // write character array with trailing NUL character
-    rStrm.Write( aEncoded.GetBuffer(), aEncoded.Len() );
+    rStrm.Write(aEncoded.getStr(), aEncoded.getLength());
     rStrm << sal_uInt8( 0 );
 }
 

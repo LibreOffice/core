@@ -91,6 +91,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/interaction.hxx>
 #include <framework/titlehelper.hxx>
@@ -2999,9 +3000,10 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
     if ( pIC )
     {
 #ifdef DBG_UTIL
-        ByteString aTmp( "SfxDocumentEvent: " );
-        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-        OSL_TRACE( aTmp.GetBuffer() );
+        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(
+            "SfxDocumentEvent: "));
+        aTmp.append(rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
+        OSL_TRACE(aTmp.getStr());
 #endif
 
         document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, uno::Any() );
@@ -3016,9 +3018,10 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
     if ( pIC )
     {
 #ifdef DBG_UTIL
-        ByteString aTmp( "SfxEvent: " );
-        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-        OSL_TRACE( "%s", aTmp.GetBuffer() );
+        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(
+            "SfxEvent: "));
+        aTmp.append(rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
+        OSL_TRACE(aTmp.getStr());
 #endif
 
         document::EventObject aEvent( (frame::XModel*)this, aName );
