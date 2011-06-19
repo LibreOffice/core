@@ -94,6 +94,7 @@ $(eval $(call gb_RdbTarget_add_components,sw_filters_test,\
 
 $(eval $(call gb_RdbTarget_add_old_components,sw_filters_test,\
     i18npool \
+    package2 \
     ucb1 \
     ucpfile1 \
 ))
