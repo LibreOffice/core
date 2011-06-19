@@ -72,7 +72,7 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
     if (!xWindow.is())
         return ::rtl::OUString();
 
-    ByteString sWindowState;
+    rtl::OString sWindowState;
     // SOLAR SAFE -> ----------------------------
     {
         SolarMutexGuard aSolarGuard;
@@ -88,7 +88,7 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
     }
     // <- SOLAR SAFE ----------------------------
 
-    return B2U_ENC(sWindowState,RTL_TEXTENCODING_UTF8);
+    return rtl::OStringToOUString(sWindowState,RTL_TEXTENCODING_UTF8);
 }
 
 //-----------------------------------------------
@@ -116,7 +116,7 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
         )
        )
     {
-        ((SystemWindow*)pWindow)->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
+        ((SystemWindow*)pWindow)->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
     }
 
     // <- SOLAR SAFE ----------------------------

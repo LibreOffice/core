@@ -93,6 +93,8 @@
 #include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>
 
+#include <rtl/strbuf.hxx>
+
 #include <algorithm>
 #include <boost/bind.hpp>
 
@@ -2313,11 +2315,11 @@ throw (RuntimeException)
 
     RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::lock lockCount=%d", nLockCount );
 #ifdef DBG_UTIL
-    ByteString aStr("LayoutManager::lock ");
-    aStr += ByteString::CreateFromInt32((long)this);
-    aStr += " - ";
-    aStr += ByteString::CreateFromInt32(nLockCount);
-    OSL_TRACE( aStr.GetBuffer() );
+    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("LayoutManager::lock "));
+    aStr.append(reinterpret_cast<sal_Int64>(this));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM(" - "));
+    aStr.append(nLockCount);
+    OSL_TRACE(aStr.getStr());
 #endif
 
     Any a( nLockCount );
@@ -2335,11 +2337,11 @@ throw (RuntimeException)
 
     RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::unlock lockCount=%d", nLockCount );
 #ifdef DBG_UTIL
-    ByteString aStr("LayoutManager::unlock ");
-    aStr += ByteString::CreateFromInt32((long)this);
-    aStr += " - ";
-    aStr += ByteString::CreateFromInt32(nLockCount);
-    OSL_TRACE( aStr.GetBuffer() );
+    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("LayoutManager::unlock "));
+    aStr.append(reinterpret_cast<sal_Int64>(this));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM(" - "));
+    aStr.append(nLockCount);
+    OSL_TRACE(aStr.getStr());
 #endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 

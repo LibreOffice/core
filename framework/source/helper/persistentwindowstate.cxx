@@ -297,7 +297,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
         {
             sal_uLong nMask  =   WINDOWSTATE_MASK_ALL;
                   nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
-            sWindowState = B2U_ENC(
+            sWindowState = rtl::OStringToOUString(
                             ((SystemWindow*)pWindow)->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
@@ -341,7 +341,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 
     ::rtl::OUString sOldWindowState = ::rtl::OStringToOUString( pSystemWindow->GetWindowState(), RTL_TEXTENCODING_ASCII_US );
     if ( sOldWindowState != sWindowState )
-        pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
+        pSystemWindow->SetWindowState(rtl::OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
     // <- SOLAR SAFE ------------------------
 }
 
