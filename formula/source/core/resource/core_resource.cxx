@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,9 +55,7 @@ namespace formula
 
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-        ByteString sFileName("for");
-
-        m_pImpl = ResMgr::CreateResMgr(sFileName.GetBuffer(), aLocale);
+        m_pImpl = ResMgr::CreateResMgr("for", aLocale);
     }
 
     //------------------------------------------------------------------
